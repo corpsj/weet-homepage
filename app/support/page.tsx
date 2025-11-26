@@ -127,17 +127,49 @@ export default function SupportPage() {
             {/* Q/A Section */}
             <div>
               <h2 className="text-[48px] md:text-[64px] lg:text-[80px] font-bold mb-6 md:mb-8">Q/A</h2>
-              <p className="text-[14px] md:text-[15px] lg:text-[16px] text-gray-600">
+              <p className="text-[14px] md:text-[15px] lg:text-[16px] text-gray-600 mb-8">
                 자주 묻는 질문들을 확인하세요
               </p>
+
+              <div className="space-y-4">
+                {[1, 2, 3].map((item) => (
+                  <div key={item} className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-bold text-lg">Q. 설치까지 얼마나 걸리나요?</span>
+                      <span className="text-yellow-500 text-xl">+</span>
+                    </div>
+                    <p className="text-gray-500 text-sm">
+                      계약 후 공장에서 제작 완료까지 약 4~6주가 소요되며, 현장 설치는 1~2일이면 충분합니다.
+                    </p>
+                  </div>
+                ))}
+              </div>
             </div>
 
             {/* F/Q Section */}
             <div>
               <h2 className="text-[48px] md:text-[64px] lg:text-[80px] font-bold mb-6 md:mb-8">F/Q</h2>
-              <p className="text-[14px] md:text-[15px] lg:text-[16px] text-gray-600">
-                자주 묻는 질문
+              <p className="text-[14px] md:text-[15px] lg:text-[16px] text-gray-600 mb-8">
+                1:1 문의하기
               </p>
+
+              <form className="space-y-4 bg-white p-6 md:p-8 rounded-lg shadow-sm">
+                <div>
+                  <label className="block text-sm font-bold mb-2">이름</label>
+                  <input type="text" className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:border-yellow-400" placeholder="홍길동" />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold mb-2">연락처</label>
+                  <input type="tel" className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:border-yellow-400" placeholder="010-0000-0000" />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold mb-2">문의내용</label>
+                  <textarea className="w-full border border-gray-300 p-3 rounded h-32 focus:outline-none focus:border-yellow-400" placeholder="문의하실 내용을 입력해주세요."></textarea>
+                </div>
+                <button className="w-full bg-black text-white py-4 rounded font-bold hover:bg-gray-800 transition-colors">
+                  문의하기
+                </button>
+              </form>
             </div>
           </div>
         </div>

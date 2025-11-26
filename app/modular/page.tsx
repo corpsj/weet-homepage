@@ -1,17 +1,24 @@
 import Image from 'next/image';
 
 export default function ModularPage() {
+  const checklistItems = [
+    "하이브리드 모듈러 형태 ( Hybrid Modular Unit )",
+    "사전제작 ( Prefabrication )",
+    "탈현장 건설 OSC ( Off-Site Construction )",
+    "조립방식의 건축 ( Prefabricated Building )"
+  ];
+
   return (
     <div className="min-h-screen bg-white">
-      {/* Section 1: Main Introduction */}
-      <section className="bg-gray-100 py-12 md:py-16 lg:py-20">
+      {/* Section 1: 모듈러(Module)건축이란? */}
+      <section className="bg-[#E8E8E8] py-16 lg:py-24">
         <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[140px]">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-start">
-            {/* Left: Illustration */}
-            <div className="order-2 lg:order-1">
-              <div className="relative w-full max-w-[563px] aspect-[563/449] mx-auto mb-6 md:mb-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
+            {/* Left: Illustration + Checklist */}
+            <div>
+              <div className="relative w-full max-w-[563px] aspect-[563/449] mx-auto lg:mx-0 mb-8">
                 <Image
-                  src="/images/modular/main-image.png"
+                  src="/images/modular/crane-illustration.png"
                   alt="모듈러 건축 크레인 일러스트"
                   fill
                   className="object-contain"
@@ -19,55 +26,32 @@ export default function ModularPage() {
                 />
               </div>
 
-              {/* Bottom Items - Moved below image */}
-              <div className="space-y-3 md:space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 flex-shrink-0">
-                    <svg className="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none">
-                      <rect x="3" y="3" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none"/>
-                      <path d="M7 12l3 3 7-7" stroke="currentColor" strokeWidth="2" fill="none"/>
+              {/* Checklist Items */}
+              <div className="space-y-3">
+                {checklistItems.map((item, index) => (
+                  <div key={index} className="flex items-center gap-3">
+                    <svg className="w-6 h-6 flex-shrink-0" viewBox="0 0 24 24" fill="none">
+                      <rect x="3" y="3" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" />
+                      <path d="M7 12l3 3 7-7" stroke="currentColor" strokeWidth="2" fill="none" />
                     </svg>
+                    <span className="text-[16px] lg:text-[18px]">{item}</span>
                   </div>
-                  <p className="text-[16px] md:text-[18px] lg:text-[20px] font-bold">모듈러 형태 ( Volumetric Module )</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 flex-shrink-0">
-                    <svg className="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none">
-                      <rect x="3" y="3" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none"/>
-                      <path d="M7 12l3 3 7-7" stroke="currentColor" strokeWidth="2" fill="none"/>
-                    </svg>
-                  </div>
-                  <p className="text-[15px] md:text-[16px] lg:text-[18px]">사전제작 ( Prefabrication )</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 flex-shrink-0">
-                    <svg className="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none">
-                      <rect x="3" y="3" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none"/>
-                      <path d="M7 12l3 3 7-7" stroke="currentColor" strokeWidth="2" fill="none"/>
-                    </svg>
-                  </div>
-                  <p className="text-[15px] md:text-[16px] lg:text-[18px]">탈현장 건설 OSC ( Off-Site Construction )</p>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 flex-shrink-0">
-                    <svg className="w-5 h-5 md:w-6 md:h-6" viewBox="0 0 24 24" fill="none">
-                      <rect x="3" y="3" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none"/>
-                      <path d="M7 12l3 3 7-7" stroke="currentColor" strokeWidth="2" fill="none"/>
-                    </svg>
-                  </div>
-                  <p className="text-[15px] md:text-[16px] lg:text-[18px]">조립방식의 건축 ( Prefabricated Building )</p>
-                </div>
+                ))}
               </div>
             </div>
 
             {/* Right: Content */}
-            <div className="order-1 lg:order-2">
-              <h1 className="text-[24px] md:text-[28px] lg:text-[32px] font-bold leading-relaxed mb-6 md:mb-8">
-                '모듈러 건축'은 빠른 속도, 정확한 품질, 유연한 공간을 모두 제공하는 가장 진보된 건축 솔루션입니다.
+            <div>
+              <h1 className="text-[32px] lg:text-[40px] font-bold mb-4">
+                모듈러(Module)건축이란?
               </h1>
 
-              <div className="text-[13px] md:text-[14px] lg:text-[15px] leading-relaxed space-y-3 md:space-y-4 mb-8 md:mb-10 lg:mb-12">
-                <p>우리의 건축 철학: 더 나은 삶을 위한 합리적 기술</p>
+              <p className="text-[18px] lg:text-[20px] font-bold text-black mb-8">
+                '모듈러 건축'은 빠른 속도, 정확한 품질, 유연한 공간을 모두 제공하는 가장 진보된 건축 솔루션입니다.
+              </p>
+
+              <div className="text-[14px] lg:text-[15px] leading-[1.8] space-y-4 text-gray-700 mb-8">
+                <p className="font-bold text-black">우리의 건축 철학: 더 나은 삶을 위한 합리적 기술</p>
 
                 <p>우리는 집이 더 합리적이고 효율적인 방식으로 지어져야 한다고 믿습니다.</p>
 
@@ -112,126 +96,98 @@ export default function ModularPage() {
                   심지어 필요시 집을 '이동'시켜 자산으로서의 가치를 이어갈 수도 있습니다.
                 </p>
 
+                <p>우리의 철학은 명확합니다.</p>
+
                 <p>
-                  우리의 철학은 명확합니다. 기술을 통해 건축의 불확실성을 제거하고,
-                  고객에게는 더 빠르고, 더 견고하며, 더 유연한 삶의 기반을 제공하는 것.
+                  기술을 통해 건축의 불확실성을 제거하고, 고객에게는 더 빠르고, 더 견고하며, 더 유연한 삶의 기반을 제공하는 것.
                 </p>
 
-                <p>이것이 우리가 모듈러 건축을 통해 구현하려는 가치입니다.</p>
+                <p className="font-bold text-black">이것이 우리가 모듈러 건축을 통해 구현하려는 가치입니다.</p>
               </div>
 
-              <div className="flex justify-end">
-                <p className="text-[12px] md:text-[13px] lg:text-[14px] font-semibold">-주식회사 위트-</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section 2: 모듈러 형태 */}
-      <section className="bg-white py-12 md:py-16 lg:py-20">
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[140px]">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-start">
-            <div className="w-full aspect-[4/3] md:aspect-video lg:aspect-[4/3] lg:h-[500px] bg-gray-300 rounded-lg flex items-center justify-center">
-              <span className="text-gray-500 text-sm md:text-base">모듈러 이미지</span>
-            </div>
-
-            <div>
-              <h2 className="text-[28px] md:text-[32px] lg:text-[36px] font-bold mb-4 md:mb-5 lg:mb-6">모듈러 형태 ( Volumetric Module )</h2>
-
-              <p className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold mb-6 md:mb-7 lg:mb-8">
-                weet의 모듈러 기술력은 '시그니처 라인'의 검증된 품질로 이미 증명되었습니다.
-              </p>
-
-              <div className="space-y-3 md:space-y-4 text-[13px] md:text-[14px] lg:text-[15px] leading-relaxed">
-                <p>
-                  • Unique Vision, Proven Tech: 시그니처 라인에서 검증된 모듈러 기술력과
-                  당신의 특별한 비전의 만남.
-                </p>
-                <p>
-                  • 1:1 전담 케어 (Dedicated Architect): 아이디어 구상부터 완공까지,
-                  전문가가 당신과 함께하며 모든 디테일을 구현합니다.
-                </p>
-                <p>
-                  • Limitless Design: 부지의 형태, 용도, 스타일에 구애받지 않는 완전한 설계의 자유.
-                </p>
-                <p>
-                  • Premium Detailing: 기본을 넘어, 당신의 기준에 맞는 최상급 자재와
-                  마감 공법을 선택할 수 있습니다.
-                </p>
+              <div className="text-right">
+                <p className="text-[14px] font-medium">-주식회사 위트-</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Section 3: 사전제작 */}
-      <section className="bg-gray-100 py-12 md:py-16 lg:py-20">
+      {/* Section 2: 하이브리드 모듈러 형태 & 사전제작 */}
+      <section className="bg-white py-16 lg:py-24">
         <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[140px]">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-start">
-            <div className="w-full aspect-[4/3] md:aspect-video lg:aspect-[4/3] lg:h-[500px] bg-gray-300 rounded-lg flex items-center justify-center">
-              <span className="text-gray-500 text-sm md:text-base">사전제작 이미지</span>
+          {/* 하이브리드 모듈러 형태 */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start mb-16 lg:mb-24">
+            {/* Left: Image */}
+            <div className="relative w-full aspect-[516/278] overflow-hidden rounded-lg">
+              <Image
+                src="/images/modular/hybrid-modular.png"
+                alt="하이브리드 모듈러 형태"
+                fill
+                className="object-cover"
+              />
             </div>
 
+            {/* Right: Content */}
             <div>
-              <h2 className="text-[28px] md:text-[32px] lg:text-[36px] font-bold mb-4 md:mb-5 lg:mb-6">사전제작 ( Prefabrication )</h2>
+              <h2 className="text-[28px] lg:text-[36px] font-bold mb-6">
+                하이브리드 모듈러 형태 ( Hybrid Modular Unit )
+              </h2>
 
-              <p className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold mb-6 md:mb-7 lg:mb-8">
-                weet의 모듈러 기술력은 '시그니처 라인'의 검증된 품질로 이미 증명되었습니다.
-              </p>
+              <h3 className="text-[18px] lg:text-[22px] font-bold mb-4">
+                구조적 안전과 쾌적함의 결합 (하이브리드 구조)
+              </h3>
 
-              <div className="space-y-3 md:space-y-4 text-[13px] md:text-[14px] lg:text-[15px] leading-relaxed">
+              <div className="text-[14px] lg:text-[15px] leading-[1.8] space-y-4 text-gray-700">
                 <p>
-                  • Unique Vision, Proven Tech: 시그니처 라인에서 검증된 모듈러 기술력과
-                  당신의 특별한 비전의 만남.
+                  우리는 단일 소재의 한계를 넘어선 '하이브리드 구조(Hybrid Structure)'를 채택했습니다.
                 </p>
                 <p>
-                  • 1:1 전담 케어 (Dedicated Architect): 아이디어 구상부터 완공까지,
-                  전문가가 당신과 함께하며 모든 디테일을 구현합니다.
+                  건물의 뼈대는 변형 없는 고강도 구조용 강철을 사용하여 내진 성능과 내구성을 극대화하고,
+                  사람이 머무는 내부는 목재로 구성하여 철이 줄 수 없는 뛰어난 단열과 습도 조절 능력을 담았습니다.
                 </p>
-                <p>
-                  • Limitless Design: 부지의 형태, 용도, 스타일에 구애받지 않는 완전한 설계의 자유.
-                </p>
-                <p>
-                  • Premium Detailing: 기본을 넘어, 당신의 기준에 맞는 최상급 자재와
-                  마감 공법을 선택할 수 있습니다.
+                <p className="font-medium text-black">
+                  Core Value: 어떤 재해에도 흔들리지 않는 강철의 안전성과 사계절 쾌적한 목재의 거주성을 동시에 제공합니다.
                 </p>
               </div>
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* Section 4: 탈현장 건설 OSC */}
-      <section className="bg-white py-12 md:py-16 lg:py-20">
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[140px]">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-start">
-            <div className="w-full aspect-[4/3] md:aspect-video lg:aspect-[4/3] lg:h-[500px] bg-gray-300 rounded-lg flex items-center justify-center">
-              <span className="text-gray-500 text-sm md:text-base">OSC 이미지</span>
+          {/* 사전제작 */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
+            {/* Left: Image */}
+            <div className="relative w-full aspect-[516/276] overflow-hidden rounded-lg">
+              <Image
+                src="/images/modular/prefabrication.png"
+                alt="사전제작"
+                fill
+                className="object-cover"
+              />
             </div>
 
+            {/* Right: Content */}
             <div>
-              <h2 className="text-[28px] md:text-[32px] lg:text-[36px] font-bold mb-4 md:mb-5 lg:mb-6">탈현장 건설 OSC ( Off-Site Construction )</h2>
+              <h2 className="text-[28px] lg:text-[36px] font-bold mb-6">
+                사전제작 ( Pre-fabrication )
+              </h2>
 
-              <p className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold mb-6 md:mb-7 lg:mb-8">
-                weet의 모듈러 기술력은 '시그니처 라인'의 검증된 품질로 이미 증명되었습니다.
-              </p>
+              <h3 className="text-[18px] lg:text-[22px] font-bold mb-4">
+                "비바람을 맞지 않는 환경에서 정성껏 만듭니다." (정밀 제조 시스템)
+              </h3>
 
-              <div className="space-y-3 md:space-y-4 text-[13px] md:text-[14px] lg:text-[15px] leading-relaxed">
+              <div className="text-[14px] lg:text-[15px] leading-[1.8] space-y-4 text-gray-700">
                 <p>
-                  • Unique Vision, Proven Tech: 시그니처 라인에서 검증된 모듈러 기술력과
-                  당신의 특별한 비전의 만남.
+                  비바람과 습기는 건축물의 수명을 단축시키는 주원인입니다.
                 </p>
                 <p>
-                  • 1:1 전담 케어 (Dedicated Architect): 아이디어 구상부터 완공까지,
-                  전문가가 당신과 함께하며 모든 디테일을 구현합니다.
+                  위트는 기후와 환경이 완벽히 제어된 위트 팩토리 내에서 전체 공정의 80% 이상을 제작합니다.
                 </p>
                 <p>
-                  • Limitless Design: 부지의 형태, 용도, 스타일에 구애받지 않는 완전한 설계의 자유.
+                  정밀한 용접이 필요한 철골과 습도 관리가 필수인 목재 모두 최적의 환경에서 가공되며,
+                  숙련된 엔지니어의 엄격한 QC(품질관리)를 거쳐 출하됩니다.
                 </p>
-                <p>
-                  • Premium Detailing: 기본을 넘어, 당신의 기준에 맞는 최상급 자재와
-                  마감 공법을 선택할 수 있습니다.
+                <p className="font-medium text-black">
+                  Core Value: 현장 숙련도에 의존하지 않는, 설계 도면의 수치를 mm 단위까지 정확하게 구현하는 엔지니어링 기반의 제조 품질입니다.
                 </p>
               </div>
             </div>
@@ -239,36 +195,82 @@ export default function ModularPage() {
         </div>
       </section>
 
-      {/* Section 5: 조립방식의 건축 */}
-      <section className="bg-gray-100 py-12 md:py-16 lg:py-20">
+      {/* Section 3: 탈현장 건설 OSC & 조립방식의 건축 */}
+      <section className="bg-[#E8E8E8] py-16 lg:py-24">
         <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[140px]">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 md:gap-12 lg:gap-16 items-start">
-            <div className="w-full aspect-[4/3] md:aspect-video lg:aspect-[4/3] lg:h-[500px] bg-gray-300 rounded-lg flex items-center justify-center">
-              <span className="text-gray-500 text-sm md:text-base">조립 이미지</span>
+          {/* 탈현장 건설 OSC */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start mb-16 lg:mb-24">
+            {/* Left: Image */}
+            <div className="relative w-full aspect-[516/278] overflow-hidden rounded-lg">
+              <Image
+                src="/images/modular/osc.png"
+                alt="탈현장 건설 OSC"
+                fill
+                className="object-cover"
+              />
             </div>
 
+            {/* Right: Content */}
             <div>
-              <h2 className="text-[28px] md:text-[32px] lg:text-[36px] font-bold mb-4 md:mb-5 lg:mb-6">조립방식의 건축 ( Prefabricated Building )</h2>
+              <h2 className="text-[28px] lg:text-[36px] font-bold mb-6">
+                탈현장 건설 OSC ( Off-Site Construction )
+              </h2>
 
-              <p className="text-[16px] md:text-[17px] lg:text-[18px] font-semibold mb-6 md:mb-7 lg:mb-8">
-                weet의 모듈러 기술력은 '시그니처 라인'의 검증된 품질로 이미 증명되었습니다.
-              </p>
+              <h3 className="text-[18px] lg:text-[22px] font-bold mb-4">
+                시간을 설계하는 병렬 프로세스 (병렬 공정 시스템)
+              </h3>
 
-              <div className="space-y-3 md:space-y-4 text-[13px] md:text-[14px] lg:text-[15px] leading-relaxed">
+              <div className="text-[14px] lg:text-[15px] leading-[1.8] space-y-4 text-gray-700">
                 <p>
-                  • Unique Vision, Proven Tech: 시그니처 라인에서 검증된 모듈러 기술력과
-                  당신의 특별한 비전의 만남.
+                  기존 건축의 고질적인 문제인 공사 지연을 시스템으로 해결했습니다.
                 </p>
                 <p>
-                  • 1:1 전담 케어 (Dedicated Architect): 아이디어 구상부터 완공까지,
-                  전문가가 당신과 함께하며 모든 디테일을 구현합니다.
+                  현장에서 기초 토목 공사가 진행되는 동안, 공장에서는 동시에 건물을 제작하는 '병렬 공정(Parallel Process)'을 도입했습니다.
                 </p>
                 <p>
-                  • Limitless Design: 부지의 형태, 용도, 스타일에 구애받지 않는 완전한 설계의 자유.
+                  순차적으로 기다릴 필요 없이 두 과정이 동시에 진행되어, 전체 공사 기간을 획기적으로 단축합니다.
+                </p>
+                <p className="font-medium text-black">
+                  Core Value: 날씨와 민원 등 현장 변수로 인한 지연이 없습니다. 약속된 일정에 정확히 입주하고, 비즈니스 기회를 앞당기는 합리적인 솔루션입니다.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* 조립방식의 건축 */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
+            {/* Left: Image */}
+            <div className="relative w-full aspect-[516/278] overflow-hidden rounded-lg">
+              <Image
+                src="/images/modular/prefabricated-building.png"
+                alt="조립방식의 건축"
+                fill
+                className="object-cover"
+              />
+            </div>
+
+            {/* Right: Content */}
+            <div>
+              <h2 className="text-[28px] lg:text-[36px] font-bold mb-6">
+                조립방식의 건축 ( Prefabricated Building )
+              </h2>
+
+              <h3 className="text-[18px] lg:text-[22px] font-bold mb-4">
+                소음 없이 완성되는 적층의 미학 (모듈 적층 공법)
+              </h3>
+
+              <div className="text-[14px] lg:text-[15px] leading-[1.8] space-y-4 text-gray-700">
+                <p>
+                  복잡하고 시끄러운 공사 현장은 없습니다.
                 </p>
                 <p>
-                  • Premium Detailing: 기본을 넘어, 당신의 기준에 맞는 최상급 자재와
-                  마감 공법을 선택할 수 있습니다.
+                  공장에서 완성된 모듈 유닛을 현장으로 운송하여, 크레인을 이용해 레고 블록처럼 '적층(Stacking)'하고 체결합니다.
+                </p>
+                <p>
+                  현장에서는 단순 조립과 마감 작업만 이루어지기에 소음, 분진, 건축 폐기물 발생을 최소화하여 주변 환경과 이웃을 배려합니다.
+                </p>
+                <p className="font-medium text-black">
+                  Core Value: 시공 과정의 스트레스를 없앤 깨끗한 현장, 그리고 훗날 건물의 확장이나 이동(Relocation)까지 가능한 지속 가능한 건축 방식입니다.
                 </p>
               </div>
             </div>

@@ -10,6 +10,7 @@ const navigation = [
   {
     name: '모듈러건축 소개',
     href: '/modular',
+    width: 145,
     submenu: [
       '모듈러건축이란?',
       '모듈러 형태',
@@ -21,6 +22,7 @@ const navigation = [
   {
     name: '제품 소개',
     href: '/products',
+    width: 75,
     submenu: [
       'S',
       'M',
@@ -33,6 +35,7 @@ const navigation = [
   {
     name: 'BESPOKE',
     href: '/bespoke',
+    width: 100,
     submenu: [
       'BESPOKE 란?',
       '제안 예시',
@@ -41,6 +44,7 @@ const navigation = [
   {
     name: 'SOLUTION',
     href: '/solution',
+    width: 155,
     submenu: [
       'CCTV (보안 솔루션)',
       '인터넷 솔루션',
@@ -51,6 +55,7 @@ const navigation = [
   {
     name: '회사소개',
     href: '/company',
+    width: 85,
     submenu: [
       '우리의 철학',
       '기업 CI',
@@ -61,6 +66,7 @@ const navigation = [
   {
     name: '고객지원',
     href: '/support',
+    width: 75,
     submenu: [
       '구매방법',
       '방문예약',
@@ -176,45 +182,29 @@ export default function Header() {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center justify-center space-x-[75px] w-full mt-[50px]">
-            {navigation.map((item) => (
-              <div
-                key={item.name}
-                className="relative"
-                onMouseEnter={() => {
-                  setShowMegaMenu(true);
-                  setActiveMenu(item.name);
-                }}
-              >
-                <Link
-                  href={item.href}
-                  className="relative inline-block text-black font-bold text-[18px] hover:text-gray-700 transition-colors whitespace-nowrap"
+          <nav
+            className="hidden lg:flex absolute left-0 right-0 top-0 bottom-0 items-center justify-center pointer-events-none"
+            onMouseEnter={() => setShowMegaMenu(true)}
+          >
+            <div className="flex pointer-events-auto gap-[60px]">
+              {navigation.map((item) => (
+                <div
+                  key={item.name}
+                  onMouseEnter={() => setActiveMenu(item.name)}
                 >
-                  {item.name}
-                  <span className={cn(
-                    "absolute bottom-[-2px] left-0 right-0 h-[8px] bg-primary transition-all duration-200 -z-10",
-                    activeMenu === item.name ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
-                  )} />
-                </Link>
-
-                {/* Individual Dropdown Menu */}
-                {showMegaMenu && (
-                  <div className="absolute top-full left-0 pt-6 z-50">
-                    <div className="space-y-2">
-                      {item.submenu.map((subitem, idx) => (
-                        <Link
-                          key={idx}
-                          href={`${item.href}#${subitem.toLowerCase().replace(/\s+/g, '-')}`}
-                          className="block whitespace-nowrap text-[14px] text-gray-700 hover:text-black transition-colors"
-                        >
-                          {subitem}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            ))}
+                  <Link
+                    href={item.href}
+                    className="relative inline-block text-black font-bold text-[18px] hover:text-gray-700 transition-colors whitespace-nowrap"
+                  >
+                    {item.name}
+                    <span className={cn(
+                      "absolute bottom-[-2px] left-0 right-0 h-[8px] bg-primary transition-all duration-200 -z-10",
+                      activeMenu === item.name ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
+                    )} />
+                  </Link>
+                </div>
+              ))}
+            </div>
           </nav>
 
           {/* Social Icons - Desktop only */}
@@ -268,9 +258,45 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Dropdown Background */}
+        {/* Mega Menu Dropdown */}
         {showMegaMenu && (
-          <div className="hidden lg:block absolute left-0 right-0 top-full bg-gray-200 shadow-lg z-30 h-[200px]"></div>
+          <div
+            className="hidden lg:block absolute left-0 right-0 z-40"
+            style={{ top: '110px' }}
+          >
+            <div className="flex justify-center w-full">
+              <div
+                className="flex py-6 gap-[60px] px-[60px] rounded-b-2xl shadow-sm"
+                style={{ backgroundColor: '#EBEBEB' }}
+              >
+                {navigation.map((item) => (
+                  <div
+                    key={item.name}
+                    className="flex flex-col items-start"
+                  >
+                    {/* Invisible Placeholder for Alignment */}
+                    <div className="text-[18px] font-bold invisible h-0 mb-5 overflow-hidden">{item.name}</div>
+
+                    {/* Submenu Items */}
+                    <div className="relative w-0">
+                      <div className="w-max flex flex-col items-start gap-3">
+                        {item.submenu.map((subitem, idx) => (
+                          <Link
+                            key={idx}
+                            href={`${item.href}#${subitem.toLowerCase().replace(/\s+/g, '-')}`}
+                            className="relative inline-block text-[14px] text-gray-600 hover:text-black transition-colors group"
+                          >
+                            <span className="relative z-10">{subitem}</span>
+                            <span className="absolute bottom-0 left-0 right-0 h-[4px] bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200 -z-0" />
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         )}
       </div>
 
