@@ -47,9 +47,10 @@ export default function ProductsPage() {
         return;
       }
 
-      if (data && data.length > 0) {
-        setProducts(data);
-        setActiveProduct(data[0].id);
+      const productsData = data as Product[] | null;
+      if (productsData && productsData.length > 0) {
+        setProducts(productsData);
+        setActiveProduct(productsData[0].id);
 
         // 사이드바 구조 생성
         const structure: SidebarStructure = {
@@ -61,7 +62,7 @@ export default function ProductsPage() {
           DESIGN: { label: "DESIGN", subtitle: "", items: [] },
         };
 
-        data.forEach((product) => {
+        productsData.forEach((product) => {
           const category = product.size_category;
           if (category === "S") {
             if (product.sub_category === "Private") {
