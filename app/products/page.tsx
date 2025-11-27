@@ -527,7 +527,7 @@ export default function ProductsPage() {
               className="min-h-screen flex flex-col lg:flex-row"
             >
               {/* Image Section - 좌측 */}
-              <div className="w-full lg:w-[65%] h-[50vh] lg:h-screen relative">
+              <div className="w-full lg:w-[75%] h-[50vh] lg:h-screen relative">
                 <Image
                   src={getProductImage(product)}
                   alt={product.name}
@@ -538,7 +538,7 @@ export default function ProductsPage() {
               </div>
 
               {/* Info Section - 우측 */}
-              <div className="w-full lg:w-[35%] bg-[#ebebeb] p-6 md:p-8 lg:p-10 flex flex-col">
+              <div className="w-full lg:w-[25%] bg-[#ebebeb] p-4 md:p-6 lg:p-8 flex flex-col">
                 {/* Category Tag with full-width line */}
                 <div className="mb-4">
                   <div className="flex justify-end mb-2">
@@ -548,12 +548,12 @@ export default function ProductsPage() {
                 </div>
 
                 {/* Product Name */}
-                <h2 className="text-[32px] md:text-[36px] font-bold mb-4 leading-tight">
+                <h2 className="text-[28px] md:text-[32px] font-bold mb-3 leading-tight">
                   {product.name}
                 </h2>
 
                 {/* Description */}
-                <div className="mb-8">
+                <div className="mb-6">
                   <p className="text-[12px] leading-[1.8] whitespace-pre-line">
                     {product.tagline}
                   </p>
@@ -566,8 +566,8 @@ export default function ProductsPage() {
 
                 {/* Floor Plan Diagram - CSS Cropped */}
                 {getFloorPlanImage(product) && (
-                  <div className="mb-8 flex justify-center">
-                    <div className="relative w-[300px] h-[150px] overflow-hidden">
+                  <div className="mb-6 flex justify-center">
+                    <div className="relative w-full max-w-[250px] h-[120px] overflow-hidden">
                       {/* CSS crop: position the large image to show only the desired portion */}
                       <img
                         src={getFloorPlanImage(product)!}
@@ -586,11 +586,11 @@ export default function ProductsPage() {
 
                 {/* Detail Section */}
                 <div className="mt-auto">
-                  <h3 className="text-[24px] font-bold mb-2">Detail</h3>
+                  <h3 className="text-[20px] font-bold mb-2">Detail</h3>
                   <div>
                     {Object.entries(getProductDetails(product)).map(([key, value]) => (
-                      <div key={key} className="border-t border-gray-400 py-2">
-                        <span className="text-[14px]">{key} : {value}</span>
+                      <div key={key} className="border-t border-gray-400 py-1.5">
+                        <span className="text-[12px]">{key} : {value}</span>
                       </div>
                     ))}
                   </div>
