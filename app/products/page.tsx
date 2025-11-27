@@ -539,12 +539,12 @@ export default function ProductsPage() {
 
               {/* Info Section - 우측 */}
               <div className="w-full lg:w-[35%] bg-[#ebebeb] p-6 md:p-8 lg:p-10 flex flex-col">
-                {/* Category Tag */}
-                <div className="flex items-center justify-end mb-2">
-                  <div className="flex items-center gap-3">
-                    <div className="h-[1px] w-[100px] bg-black"></div>
+                {/* Category Tag with full-width line */}
+                <div className="mb-4">
+                  <div className="flex justify-end mb-2">
                     <span className="text-[15px] font-medium">{product.category}</span>
                   </div>
+                  <div className="h-[1px] w-full bg-black"></div>
                 </div>
 
                 {/* Product Name */}
@@ -553,7 +553,7 @@ export default function ProductsPage() {
                 </h2>
 
                 {/* Description */}
-                <div className="mb-6">
+                <div className="mb-8">
                   <p className="text-[12px] leading-[1.8] whitespace-pre-line">
                     {product.tagline}
                   </p>
@@ -564,15 +564,21 @@ export default function ProductsPage() {
                   )}
                 </div>
 
-                {/* Floor Plan Diagram */}
+                {/* Floor Plan Diagram - CSS Cropped */}
                 {getFloorPlanImage(product) && (
-                  <div className="mb-6 flex justify-center">
-                    <div className="relative w-[280px] h-[140px]">
-                      <Image
+                  <div className="mb-8 flex justify-center">
+                    <div className="relative w-[300px] h-[150px] overflow-hidden">
+                      {/* CSS crop: position the large image to show only the desired portion */}
+                      <img
                         src={getFloorPlanImage(product)!}
                         alt={`${product.name} 도면`}
-                        fill
-                        className="object-contain"
+                        className="absolute max-w-none"
+                        style={{
+                          width: '300%',
+                          height: '440%',
+                          top: '-111%',
+                          left: '0%',
+                        }}
                       />
                     </div>
                   </div>
@@ -580,12 +586,11 @@ export default function ProductsPage() {
 
                 {/* Detail Section */}
                 <div className="mt-auto">
-                  <h3 className="text-[24px] font-bold mb-4">Detail</h3>
-                  <div className="space-y-0">
+                  <h3 className="text-[24px] font-bold mb-2">Detail</h3>
+                  <div>
                     {Object.entries(getProductDetails(product)).map(([key, value]) => (
-                      <div key={key} className="flex py-2 border-b border-gray-400">
-                        <span className="text-[14px] w-[100px] flex-shrink-0">{key} :</span>
-                        <span className="text-[14px]">{value}</span>
+                      <div key={key} className="border-t border-gray-400 py-2">
+                        <span className="text-[14px]">{key} : {value}</span>
                       </div>
                     ))}
                   </div>
