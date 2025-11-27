@@ -5,6 +5,31 @@ import Image from "next/image";
 import { Product } from "@/types/supabase";
 import { createClient } from "@supabase/supabase-js";
 
+// 로컬 도면 이미지 매핑 (제품명 기반)
+const floorPlanMap: { [key: string]: string } = {
+  "3x9": "/images/products/floor-plans/3x9-plan.png",
+  "3X9": "/images/products/floor-plans/3x9-plan.png",
+  "리트릿": "/images/products/floor-plans/retreat-plan.png",
+  "36": "/images/products/floor-plans/36-plan.png",
+};
+
+// 제품에 맞는 도면 이미지 URL 가져오기
+function getFloorPlanImage(product: Product): string | null {
+  // 1. DB의 floor_plan_url 사용
+  if (product.floor_plan_url) {
+    return product.floor_plan_url;
+  }
+
+  // 2. 로컬 도면 매핑에서 찾기 (제품명 부분 일치)
+  for (const [key, value] of Object.entries(floorPlanMap)) {
+    if (product.name.toLowerCase().includes(key.toLowerCase())) {
+      return value;
+    }
+  }
+
+  return null;
+}
+
 // 로컬 이미지 매핑 (제품명 기반)
 const localImageMap: { [key: string]: string } = {
   // Small Private
@@ -513,35 +538,53 @@ export default function ProductsPage() {
               </div>
 
               {/* Info Section - 우측 */}
-              <div className="w-full lg:w-[35%] bg-[#F5F5F5] p-6 md:p-8 lg:p-12 flex flex-col justify-center">
+              <div className="w-full lg:w-[35%] bg-[#ebebeb] p-6 md:p-8 lg:p-10 flex flex-col">
                 {/* Category Tag */}
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="h-[1px] w-8 bg-black"></div>
-                  <span className="text-[13px] font-medium">{product.category}</span>
+                <div className="flex items-center justify-end mb-2">
+                  <div className="flex items-center gap-3">
+                    <div className="h-[1px] w-[100px] bg-black"></div>
+                    <span className="text-[15px] font-medium">{product.category}</span>
+                  </div>
                 </div>
 
                 {/* Product Name */}
-                <h2 className="text-[28px] md:text-[36px] lg:text-[42px] font-bold mb-6 leading-tight">
+                <h2 className="text-[32px] md:text-[36px] font-bold mb-4 leading-tight">
                   {product.name}
                 </h2>
 
-                {/* Tagline */}
-                <div className="mb-8">
-                  <p className="text-[16px] md:text-[18px] lg:text-[20px] leading-relaxed">
+                {/* Description */}
+                <div className="mb-6">
+                  <p className="text-[12px] leading-[1.8] whitespace-pre-line">
                     {product.tagline}
                   </p>
-                  <p className="text-[16px] md:text-[18px] lg:text-[20px] leading-relaxed">
-                    {product.description}
-                  </p>
+                  {product.description && (
+                    <p className="text-[12px] leading-[1.8] mt-2 whitespace-pre-line">
+                      {product.description}
+                    </p>
+                  )}
                 </div>
 
+                {/* Floor Plan Diagram */}
+                {getFloorPlanImage(product) && (
+                  <div className="mb-6 flex justify-center">
+                    <div className="relative w-[280px] h-[140px]">
+                      <Image
+                        src={getFloorPlanImage(product)!}
+                        alt={`${product.name} 도면`}
+                        fill
+                        className="object-contain"
+                      />
+                    </div>
+                  </div>
+                )}
+
                 {/* Detail Section */}
-                <div className="border-t border-black pt-6">
-                  <h3 className="text-[18px] md:text-[20px] font-bold mb-4">Detail</h3>
-                  <div className="space-y-2">
+                <div className="mt-auto">
+                  <h3 className="text-[24px] font-bold mb-4">Detail</h3>
+                  <div className="space-y-0">
                     {Object.entries(getProductDetails(product)).map(([key, value]) => (
-                      <div key={key} className="flex border-b border-gray-300 pb-2">
-                        <span className="text-[14px] w-24 text-gray-600">{key} :</span>
+                      <div key={key} className="flex py-2 border-b border-gray-400">
+                        <span className="text-[14px] w-[100px] flex-shrink-0">{key} :</span>
                         <span className="text-[14px]">{value}</span>
                       </div>
                     ))}

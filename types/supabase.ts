@@ -25,6 +25,7 @@ export interface Database {
           exterior_finish: string | null
           interior_finish: string | null
           size: string | null
+          floor_plan_url: string | null
           display_order: number
           is_active: boolean
           created_at: string
@@ -45,6 +46,7 @@ export interface Database {
           exterior_finish?: string | null
           interior_finish?: string | null
           size?: string | null
+          floor_plan_url?: string | null
           display_order?: number
           is_active?: boolean
           created_at?: string
@@ -65,6 +67,7 @@ export interface Database {
           exterior_finish?: string | null
           interior_finish?: string | null
           size?: string | null
+          floor_plan_url?: string | null
           display_order?: number
           is_active?: boolean
           created_at?: string
