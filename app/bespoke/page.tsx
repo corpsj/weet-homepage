@@ -61,7 +61,7 @@ export default function BespokePage() {
             </div>
             <div className="lg:ml-[403px] w-full lg:w-[1517px] aspect-[16/9] lg:aspect-auto lg:h-[867px] relative">
               <Image
-                src="/images/bespoke/small-cafe.png"
+                src="/images/bespoke/small-cafe.jpg"
                 alt="Small Cafe"
                 fill
                 className="object-cover"
@@ -93,7 +93,7 @@ export default function BespokePage() {
             </div>
             <div className="lg:ml-[401px] w-full lg:w-[1514px] aspect-[16/9] lg:aspect-auto lg:h-[865px] relative">
               <Image
-                src="/images/bespoke/popup-store.png"
+                src="/images/bespoke/popup-store.jpg"
                 alt="Pop-up Store"
                 fill
                 className="object-cover"

@@ -1,17 +1,18 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function SignatureLine() {
   const products = [
-    { id: 1, name: '세컨하우스 A', category: 'S', image: null },
-    { id: 2, name: '세컨하우스 B', category: 'S', image: null },
-    { id: 3, name: '세컨하우스 C', category: 'S', image: null },
-    { id: 4, name: '세컨하우스 D', category: 'S', image: null },
-    { id: 5, name: '세컨하우스 E', category: 'S', image: null },
-    { id: 6, name: '세컨하우스 F', category: 'M', image: null },
-    { id: 7, name: '세컨하우스 G', category: 'M', image: null },
-    { id: 8, name: '세컨하우스 H', category: 'L', image: null },
-    { id: 9, name: '세컨하우스 I', category: 'L', image: null },
-    { id: 10, name: '세컨하우스 J', category: 'XL', image: null },
+    { id: 1, name: '리트릿', category: 'S', image: '/images/products/small/private/retreat.jpg' },
+    { id: 2, name: '캠퍼', category: 'S', image: '/images/products/small/private/camper.jpg' },
+    { id: 3, name: '사우나', category: 'S', image: '/images/products/small/private/sauna.jpg' },
+    { id: 4, name: '내서재', category: 'S', image: '/images/products/small/private/my-library.jpg' },
+    { id: 5, name: '맨즈케이브', category: 'S', image: '/images/products/small/private/mans-cave.jpg' },
+    { id: 6, name: 'M36 조합', category: 'M', image: '/images/products/medium/m36-combo.jpg' },
+    { id: 7, name: '미디움 하우스', category: 'M', image: '/images/products/medium/ai-render-1.jpg' },
+    { id: 8, name: '라지 하우스', category: 'L', image: '/images/products/large/l-2-render.jpg' },
+    { id: 9, name: 'L 타입', category: 'L', image: '/images/products/large/ai-render-1.jpg' },
+    { id: 10, name: '단지형', category: 'XL', image: '/images/products/xlarge/complex-render.jpg' },
   ];
 
   return (
@@ -27,14 +28,20 @@ export default function SignatureLine() {
               className="group cursor-pointer"
             >
               {/* Product Image */}
-              <div className="aspect-[3/4] bg-gray-200 rounded-lg mb-3 md:mb-4 overflow-hidden group-hover:shadow-lg transition-shadow duration-300">
-                <div className="w-full h-full flex items-center justify-center text-gray-500 bg-gradient-to-br from-gray-200 to-gray-300">
-                  {product.image ? (
-                    <img src={product.image} alt={product.name} className="w-full h-full object-cover" />
-                  ) : (
+              <div className="aspect-[3/4] bg-gray-200 rounded-lg mb-3 md:mb-4 overflow-hidden group-hover:shadow-lg transition-shadow duration-300 relative">
+                {product.image ? (
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-500 bg-gradient-to-br from-gray-200 to-gray-300">
                     <span className="text-xs md:text-sm">Product {product.id}</span>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
 
               {/* Product Name & Category */}
