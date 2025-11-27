@@ -5,6 +5,58 @@ import Image from "next/image";
 import { Product } from "@/types/supabase";
 import { createClient } from "@supabase/supabase-js";
 
+// 로컬 이미지 매핑 (제품명 기반)
+const localImageMap: { [key: string]: string } = {
+  // Small Private
+  "리트릿": "/images/products/small/private/retreat.jpg",
+  "캠퍼": "/images/products/small/private/camper.jpg",
+  "사우나": "/images/products/small/private/sauna.jpg",
+  "내서재": "/images/products/small/private/my-library.jpg",
+  "맨즈케이브": "/images/products/small/private/mans-cave.jpg",
+  "36골강판": "/images/products/small/private/36-corrugated.jpg",
+  "36렌더링": "/images/products/small/private/36-render.jpg",
+  "36스타코": "/images/products/small/private/36-stucco.jpg",
+  "3x9": "/images/products/small/private/3x9.jpg",
+  "리트릿2": "/images/products/small/private/retreat2.jpg",
+  "피터팬의모험": "/images/products/small/private/peter-pan.jpg",
+  // Small Public
+  "버스정류장": "/images/products/small/public/bus-stop.jpg",
+  "파고라": "/images/products/small/public/pergola.jpg",
+  "화장실": "/images/products/small/public/restroom.jpg",
+  // Medium
+  "M36조합": "/images/products/medium/m36-combo.jpg",
+  "M36 조합": "/images/products/medium/m36-combo.jpg",
+  // Large
+  "L-2": "/images/products/large/l-2-render.jpg",
+  // XLarge
+  "단지": "/images/products/xlarge/complex-render.jpg",
+};
+
+// 제품에 맞는 이미지 URL 가져오기
+function getProductImage(product: Product): string {
+  // 1. 로컬 이미지 매핑에서 찾기 (제품명 부분 일치)
+  for (const [key, value] of Object.entries(localImageMap)) {
+    if (product.name.includes(key)) {
+      return value;
+    }
+  }
+
+  // 2. 카테고리별 기본 이미지
+  const categoryDefaults: { [key: string]: string } = {
+    "S": "/images/products/small/private/retreat.jpg",
+    "M": "/images/products/medium/m36-combo.jpg",
+    "L": "/images/products/large/l-2-render.jpg",
+    "XL": "/images/products/xlarge/complex-render.jpg",
+  };
+
+  if (categoryDefaults[product.size_category]) {
+    return categoryDefaults[product.size_category];
+  }
+
+  // 3. DB의 image_url 사용 (폴백)
+  return product.image_url;
+}
+
 // 사이드바 구조 타입
 interface SidebarStructure {
   [key: string]: {
@@ -452,16 +504,11 @@ export default function ProductsPage() {
               {/* Image Section - 좌측 */}
               <div className="w-full lg:w-[65%] h-[50vh] lg:h-screen relative">
                 <Image
-                  src={product.image_url}
+                  src={getProductImage(product)}
                   alt={product.name}
                   fill
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 65vw"
-                  onError={(e) => {
-                    // 이미지 로드 실패 시 placeholder
-                    const target = e.target as HTMLImageElement;
-                    target.src = "https://placehold.co/1200x800/e5e5e5/999999?text=" + encodeURIComponent(product.name);
-                  }}
                 />
               </div>
 
