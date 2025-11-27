@@ -2,8 +2,8 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
-import { supabase } from "@/lib/supabase";
 import { Product } from "@/types/supabase";
+import { createClient } from "@supabase/supabase-js";
 
 // 사이드바 구조 타입
 interface SidebarStructure {
@@ -35,6 +35,17 @@ export default function ProductsPage() {
   // Supabase에서 제품 데이터 가져오기
   useEffect(() => {
     async function fetchProducts() {
+      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+      if (!supabaseUrl || !supabaseAnonKey) {
+        console.error("Supabase credentials not found");
+        setLoading(false);
+        return;
+      }
+
+      const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
       const { data, error } = await supabase
         .from("products")
         .select("*")
