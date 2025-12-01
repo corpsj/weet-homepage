@@ -6,13 +6,13 @@ export default function SignatureLine() {
     { id: 1, name: '리트릿', category: 'S', image: '/images/products/small/private/retreat.jpg' },
     { id: 2, name: '캠퍼', category: 'S', image: '/images/products/small/private/camper.jpg' },
     { id: 3, name: '사우나', category: 'S', image: '/images/products/small/private/sauna.jpg' },
-    { id: 4, name: '내서재', category: 'S', image: '/images/products/small/private/my-library.jpg' },
-    { id: 5, name: '맨즈케이브', category: 'S', image: '/images/products/small/private/mans-cave.jpg' },
-    { id: 6, name: 'M36 조합', category: 'M', image: '/images/products/medium/m36-combo.jpg' },
-    { id: 7, name: '미디움 하우스', category: 'M', image: '/images/products/medium/ai-render-1.jpg' },
-    { id: 8, name: '라지 하우스', category: 'L', image: '/images/products/large/l-2-render.jpg' },
-    { id: 9, name: 'L 타입', category: 'L', image: '/images/products/large/ai-render-1.jpg' },
-    { id: 10, name: '단지형', category: 'XL', image: '/images/products/xlarge/complex-render.jpg' },
+    { id: 4, name: '내 서재', category: 'S', image: '/images/products/small/private/my-library.jpg' },
+    { id: 5, name: '맨스케이브', category: 'S', image: '/images/products/small/private/mans-cave.jpg' },
+    { id: 6, name: '버스정류장', category: 'S', image: '/images/products/small/public/bus-stop.jpg' },
+    { id: 7, name: 'Small unit + Small unit', category: 'M', image: '/images/products/medium/m36-combo.jpg' },
+    { id: 8, name: 'Small unit + Small unit (L)', category: 'L', image: '/images/products/large/l-2-render.jpg' },
+    { id: 9, name: '+ 현장 공사', category: 'L', image: '/images/products/large/ai-render-1.jpg' },
+    { id: 10, name: '단지개념', category: 'XL', image: '/images/products/xlarge/complex-render.jpg' },
   ];
 
   return (
@@ -24,7 +24,7 @@ export default function SignatureLine() {
           {products.map((product) => (
             <Link
               key={product.id}
-              href={`/products/${product.id}`}
+              href={`/products`}
               className="group cursor-pointer"
             >
               {/* Product Image */}
@@ -63,7 +63,7 @@ export default function SignatureLine() {
           >
             <span>전체 제품 보기</span>
             <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7 4L13 10L7 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M7 4L13 10L7 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </Link>
         </div>
