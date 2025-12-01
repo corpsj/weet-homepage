@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 const slides = [
   {
@@ -68,11 +69,16 @@ export default function HeroCarousel() {
             transition={{ duration: 1 }}
             className="w-full h-full"
           >
-            <img
-              src={slides[currentSlide].image}
-              alt={slides[currentSlide].alt}
-              className="w-full h-full object-cover"
-            />
+            <div className="w-full h-full relative">
+              <Image
+                src={slides[currentSlide].image}
+                alt={slides[currentSlide].alt}
+                fill
+                priority
+                className="object-cover"
+                sizes="100vw"
+              />
+            </div>
           </motion.div>
         </AnimatePresence>
       </div>
