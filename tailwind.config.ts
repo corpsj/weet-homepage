@@ -10,7 +10,7 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#FDB813', // weet yellow
+          DEFAULT: '#FACC15', // weet yellow (matches yellow-400)
           dark: '#E5A410',
         },
         black: '#000000',
