@@ -17,7 +17,7 @@ export default function PartnersBanner() {
           {partnerLogos.map((partner, idx) => (
             <div
               key={idx}
-              className="relative h-10 md:h-12 lg:h-14 w-20 md:w-24 lg:w-28"
+              className="relative h-12 md:h-14 lg:h-16 w-32 md:w-40 lg:w-48"
             >
               <Image
                 src={partner.logo}
