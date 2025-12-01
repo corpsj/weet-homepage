@@ -6,21 +6,33 @@ import { motion, AnimatePresence } from 'framer-motion';
 const slides = [
   {
     id: 1,
-    subtitle: 'Welcome to weet:)',
-    title: 'We make dreams come true',
-    image: null, // TODO: Add actual image path
+    image: '/images/products/small/private/02-3x6-house-render.jpg',
+    alt: '3x6 House',
   },
   {
     id: 2,
-    subtitle: 'Modular Architecture',
-    title: '혁신적인 모듈러 건축',
-    image: null,
+    image: '/images/products/small/private/01-3x9-house.jpg',
+    alt: '3x9 House',
   },
   {
     id: 3,
-    subtitle: 'BESPOKE Service',
-    title: '맞춤형 건축 솔루션',
-    image: null,
+    image: '/images/products/small/private/06-3x3-sauna.jpg',
+    alt: '3x3 Sauna',
+  },
+  {
+    id: 4,
+    image: '/images/products/small/private/07-3x3-library.jpg',
+    alt: 'My Library',
+  },
+  {
+    id: 5,
+    image: '/images/products/small/private/09-3x6-manscave.jpg',
+    alt: '3x6 Man Cave',
+  },
+  {
+    id: 6,
+    image: '/images/products/small/public/12-4x8-restroom.jpg',
+    alt: '4x8 Public Restroom',
   },
 ];
 
@@ -35,11 +47,11 @@ export default function HeroCarousel() {
     setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
   };
 
-  // Auto-advance slides every 5 seconds
+  // Auto-advance slides every 10 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       nextSlide();
-    }, 5000);
+    }, 10000);
     return () => clearInterval(timer);
   }, [currentSlide]);
 
@@ -47,77 +59,56 @@ export default function HeroCarousel() {
     <section className="relative h-[60vh] md:h-[80vh] lg:h-screen bg-gray-200 overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
-        <div className="w-full h-full bg-gray-300 flex items-center justify-center text-gray-500">
-          {slides[currentSlide].image || <span className="text-sm md:text-lg lg:text-xl">Hero Image {currentSlide + 1}</span>}
-        </div>
-      </div>
-
-      {/* Content Overlay */}
-      <div className="relative h-full">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentSlide}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="absolute inset-0 flex flex-col items-start justify-center px-4 md:px-8 lg:px-[150px] max-w-[1920px] mx-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+            className="w-full h-full"
           >
-            <div className="space-y-3 md:space-y-4 max-w-full md:max-w-xl lg:max-w-2xl">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="text-[28px] md:text-[40px] lg:text-[56px] leading-tight font-medium text-black"
-              >
-                {slides[currentSlide].subtitle}
-              </motion.div>
-              <motion.h1
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.4, duration: 0.6 }}
-                className="text-[28px] md:text-[40px] lg:text-[56px] leading-tight font-medium text-black"
-              >
-                {slides[currentSlide].title}
-              </motion.h1>
-            </div>
+            <img
+              src={slides[currentSlide].image}
+              alt={slides[currentSlide].alt}
+              className="w-full h-full object-cover"
+            />
           </motion.div>
         </AnimatePresence>
+      </div>
 
-        {/* Navigation Arrows */}
-        <button
-          onClick={prevSlide}
-          className="absolute left-4 md:left-8 lg:left-[60px] top-1/2 -translate-y-1/2 w-[40px] h-[40px] md:w-[50px] md:h-[50px] lg:w-[60px] lg:h-[60px] flex items-center justify-center hover:opacity-70 transition-opacity z-10"
-          aria-label="Previous slide"
-        >
-          <svg className="w-full h-full" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M40 15L20 30L40 45V15Z" fill="black" />
-          </svg>
-        </button>
+      {/* Navigation Arrows */}
+      <button
+        onClick={prevSlide}
+        className="absolute left-4 md:left-8 lg:left-[60px] top-1/2 -translate-y-1/2 w-[50px] h-[50px] md:w-[60px] md:h-[60px] lg:w-[80px] lg:h-[80px] flex items-center justify-center hover:opacity-70 transition-opacity z-10 bg-white/20 backdrop-blur-sm rounded-full"
+        aria-label="Previous slide"
+      >
+        <svg className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M15 18L9 12L15 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
 
-        <button
-          onClick={nextSlide}
-          className="absolute right-4 md:right-8 lg:right-[60px] top-1/2 -translate-y-1/2 w-[40px] h-[40px] md:w-[50px] md:h-[50px] lg:w-[60px] lg:h-[60px] flex items-center justify-center hover:opacity-70 transition-opacity z-10"
-          aria-label="Next slide"
-        >
-          <svg className="w-full h-full" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 15L40 30L20 45V15Z" fill="black" />
-          </svg>
-        </button>
+      <button
+        onClick={nextSlide}
+        className="absolute right-4 md:right-8 lg:right-[60px] top-1/2 -translate-y-1/2 w-[50px] h-[50px] md:w-[60px] md:h-[60px] lg:w-[80px] lg:h-[80px] flex items-center justify-center hover:opacity-70 transition-opacity z-10 bg-white/20 backdrop-blur-sm rounded-full"
+        aria-label="Next slide"
+      >
+        <svg className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 18L15 12L9 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
 
-        {/* Slide Indicators */}
-        <div className="absolute bottom-8 md:bottom-12 lg:bottom-[60px] left-1/2 -translate-x-1/2 flex space-x-2 md:space-x-3 z-10">
-          {slides.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrentSlide(idx)}
-              className={`h-[10px] md:h-[12px] rounded-full transition-all duration-300 ${
-                idx === currentSlide ? 'bg-black w-[30px] md:w-[40px]' : 'bg-gray-400 hover:bg-gray-500 w-[10px] md:w-[12px]'
+      {/* Slide Indicators */}
+      <div className="absolute bottom-8 md:bottom-12 lg:bottom-[60px] left-1/2 -translate-x-1/2 flex space-x-2 md:space-x-3 z-10">
+        {slides.map((_, idx) => (
+          <button
+            key={idx}
+            onClick={() => setCurrentSlide(idx)}
+            className={`h-[3px] md:h-[4px] rounded-full transition-all duration-300 ${idx === currentSlide ? 'bg-white w-[30px] md:w-[40px]' : 'bg-white/50 hover:bg-white/80 w-[15px] md:w-[20px]'
               }`}
-              aria-label={`Go to slide ${idx + 1}`}
-            />
-          ))}
-        </div>
+            aria-label={`Go to slide ${idx + 1}`}
+          />
+        ))}
       </div>
     </section>
   );
