@@ -1,6 +1,85 @@
-import { createPortal } from 'react-dom';
+'use client';
 
-// ... (imports)
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Menu, X, Instagram, Youtube } from 'lucide-react';
+import { createPortal } from 'react-dom';
+import { cn } from '@/lib/utils';
+
+const navigation = [
+  {
+    name: '모듈러건축 소개',
+    href: '/modular',
+    width: 145,
+    submenu: [
+      '모듈러건축이란?',
+      '모듈러 형태',
+      '사전제작 탈현장 건설',
+      'OSC',
+      '조립방식의 건축',
+    ],
+  },
+  {
+    name: '제품 소개',
+    href: '/products',
+    width: 75,
+    submenu: [
+      'S',
+      'M',
+      'L',
+      'XL',
+      'Solution',
+      'Design',
+    ],
+  },
+  {
+    name: 'BESPOKE',
+    href: '/bespoke',
+    width: 100,
+    submenu: [
+      'BESPOKE 란?',
+      '제안 예시',
+    ],
+  },
+  {
+    name: 'SOLUTION',
+    href: '/solution',
+    width: 155,
+    submenu: [
+      'CCTV (보안 솔루션)',
+      '인터넷 솔루션',
+      '스마트 홈 솔루션',
+      '디자인 컨설팅 솔루션',
+    ],
+  },
+  {
+    name: '회사소개',
+    href: '/company',
+    width: 85,
+    submenu: [
+      '우리의 철학',
+      '기업 CI',
+      '위트 크루',
+      '위트 펙토리',
+    ],
+  },
+  {
+    name: '고객지원',
+    href: '/support',
+    width: 75,
+    submenu: [
+      '구매방법',
+      '방문예약',
+      '상담문의',
+      '견적문의',
+      'Q/A',
+      'A/S',
+    ],
+  },
+];
+
+const languages = ['KR', 'EN', 'ES'];
 
 export default function Header() {
   const [showMegaMenu, setShowMegaMenu] = useState(false);
