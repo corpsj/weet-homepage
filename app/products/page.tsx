@@ -429,6 +429,7 @@ export default function ProductsPage() {
                 {/* Floor Plan Diagram - CSS Cropped */}
                 <div className="mb-6 flex justify-center">
                   <div className="relative w-full max-w-[250px] h-[120px] overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={product.floorPlan.src}
                       alt={`${product.name} 도면`}

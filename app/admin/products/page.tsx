@@ -3,13 +3,16 @@ import { Plus, Edit, Trash2 } from 'lucide-react';
 import { supabaseAdmin } from '@/lib/supabase';
 import { deleteProduct } from '@/app/actions/product-actions';
 
+import { Product } from '@/types/supabase';
+
 export const dynamic = 'force-dynamic';
 
 export default async function AdminProductsPage() {
     const { data: products, error } = await supabaseAdmin
         .from('products')
         .select('*')
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .returns<Product[]>();
 
     if (error) {
         console.error('Error fetching products:', error);
@@ -53,8 +56,8 @@ export default async function AdminProductsPage() {
                                 <td className="px-6 py-4">
                                     <span
                                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${product.is_active
-                                                ? 'bg-green-100 text-green-800'
-                                                : 'bg-gray-100 text-gray-800'
+                                            ? 'bg-green-100 text-green-800'
+                                            : 'bg-gray-100 text-gray-800'
                                             }`}
                                     >
                                         {product.is_active ? '활성' : '비활성'}

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Instagram } from 'lucide-react';
+import NextImage from 'next/image';
 
 export default function SNSGallery() {
   const images = Array.from({ length: 6 }, (_, i) => ({
@@ -26,7 +27,7 @@ export default function SNSGallery() {
               {/* Image */}
               <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
                 {item.image ? (
-                  <img src={item.image} alt={item.alt} className="w-full h-full object-cover" />
+                  <NextImage src={item.image} alt={item.alt} fill className="object-cover" />
                 ) : (
                   <div className="text-center">
                     <Instagram className="w-10 h-10 md:w-14 md:h-14 lg:w-16 lg:h-16 text-gray-400 mx-auto mb-1 md:mb-2" />
