@@ -183,7 +183,7 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <nav
-            className="hidden lg:flex absolute left-0 right-0 top-0 bottom-0 items-center justify-center pointer-events-none"
+            className="hidden lg:flex absolute left-0 right-0 top-0 bottom-0 items-center justify-center pointer-events-none pr-[120px]"
             onMouseEnter={() => setShowMegaMenu(true)}
           >
             <div className="flex pointer-events-auto gap-[60px]">
@@ -264,7 +264,7 @@ export default function Header() {
             className="hidden lg:block absolute left-0 right-0 z-40"
             style={{ top: '110px' }}
           >
-            <div className="flex justify-center w-full">
+            <div className="flex justify-center w-full pr-[120px]">
               <div
                 className="flex py-6 gap-[60px] px-[60px] rounded-b-2xl shadow-sm"
                 style={{ backgroundColor: '#EBEBEB' }}

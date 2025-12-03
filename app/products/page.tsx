@@ -627,9 +627,9 @@ export default function ProductsPage() {
       </aside>
 
       {/* Main Content Area */}
-      <div className="min-h-screen">
+      <div className="min-h-screen pt-[100px] md:pt-[140px] lg:pt-[180px]">
         {/* Products List */}
-        <div className="w-full">
+        <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
           {productsData.map((product) => (
             <div
               key={product.id}
