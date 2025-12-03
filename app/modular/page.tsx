@@ -18,8 +18,8 @@ export default function ModularPage() {
             <div>
               <div className="relative w-full max-w-[563px] aspect-[1024/817] mx-auto lg:mx-0 mb-8">
                 <Image
-                  src="/images/modular/crane-illustration.png"
-                  alt="모듈러 건축 크레인 일러스트"
+                  src="/images/modular/main-image.png"
+                  alt="모듈러 건축 메인 이미지"
                   fill
                   className="object-contain"
                   priority
