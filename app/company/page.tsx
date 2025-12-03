@@ -4,13 +4,12 @@ import Image from 'next/image';
 import { useState } from 'react';
 import CrewModal from '@/components/ui/CrewModal';
 
-const CREW_DATA = {
-  interface CrewData {
-    name: string;
-role: string;
-description: string;
-sections: { title: string; items: string[] } [];
-images: string[];
+interface CrewData {
+  name: string;
+  role: string;
+  description: string;
+  sections: { title: string; items: string[] }[];
+  images: string[];
 }
 
 const CREW_DATA: Record<string, CrewData> = {
