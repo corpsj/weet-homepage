@@ -57,10 +57,10 @@ export default function CompanyPage() {
                 </p>
               </div>
 
-              <div className="mt-8">
-                <span className="relative inline-block text-[14px] md:text-[15px] font-bold text-black">
-                  주식회사 위트
-                  <span className="absolute -bottom-1 left-0 w-full h-[4px] bg-primary"></span>
+              <div className="mt-8 text-left">
+                <span className="relative inline-block font-bold text-black text-[24px] md:text-[28px]">
+                  <span className="relative z-10">주식회사 위트</span>
+                  <span className="absolute bottom-[2px] left-0 w-full h-[12px] bg-primary -z-0"></span>
                 </span>
               </div>
             </div>
