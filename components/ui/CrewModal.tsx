@@ -11,9 +11,7 @@ interface CrewModalProps {
         name: string;
         role: string;
         description: string;
-        education: string[];
-        experience: string[];
-        awards: string[];
+        sections: { title: string; items: string[] }[];
         images: string[];
     } | null;
 }
@@ -148,46 +146,21 @@ export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
 
                         <div className="w-full h-px bg-gray-100" />
 
-                        {/* Details Grid */}
+                        {/* Dynamic Details Grid */}
                         <div className="space-y-10">
-                            {/* Education */}
-                            <section>
-                                <h3 className="text-[18px] font-bold text-black mb-4 flex items-center gap-3">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                                    건축학력
-                                </h3>
-                                <ul className="space-y-2 pl-5 border-l-2 border-gray-100 ml-0.5">
-                                    {data.education.map((item, idx) => (
-                                        <li key={idx} className="text-[15px] text-gray-700 hover:text-black transition-colors">{item}</li>
-                                    ))}
-                                </ul>
-                            </section>
-
-                            {/* Experience */}
-                            <section>
-                                <h3 className="text-[18px] font-bold text-black mb-4 flex items-center gap-3">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                                    건축/디자인 경력
-                                </h3>
-                                <ul className="space-y-2 pl-5 border-l-2 border-gray-100 ml-0.5">
-                                    {data.experience.map((item, idx) => (
-                                        <li key={idx} className="text-[15px] text-gray-700 hover:text-black transition-colors">{item}</li>
-                                    ))}
-                                </ul>
-                            </section>
-
-                            {/* Awards */}
-                            <section>
-                                <h3 className="text-[18px] font-bold text-black mb-4 flex items-center gap-3">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                                    건축/디자인 공모전 수상
-                                </h3>
-                                <ul className="space-y-2 pl-5 border-l-2 border-gray-100 ml-0.5">
-                                    {data.awards.map((item, idx) => (
-                                        <li key={idx} className="text-[15px] text-gray-700 hover:text-black transition-colors">{item}</li>
-                                    ))}
-                                </ul>
-                            </section>
+                            {data.sections.map((section, idx) => (
+                                <section key={idx}>
+                                    <h3 className="text-[18px] font-bold text-black mb-4 flex items-center gap-3">
+                                        <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                        {section.title}
+                                    </h3>
+                                    <ul className="space-y-2 pl-5 border-l-2 border-gray-100 ml-0.5">
+                                        {section.items.map((item, itemIdx) => (
+                                            <li key={itemIdx} className="text-[15px] text-gray-700 hover:text-black transition-colors">{item}</li>
+                                        ))}
+                                    </ul>
+                                </section>
+                            ))}
                         </div>
                     </div>
                 </div>
