@@ -1,8 +1,52 @@
 'use client';
 
 import Image from 'next/image';
+import { useState } from 'react';
+import CrewModal from '@/components/ui/CrewModal';
+
+const CREW_DATA = {
+  design: {
+    name: "박현태",
+    role: "weet의 대표 디자이너",
+    description: `weet의 대표 디자이너로서 전반적인 디자인과 브랜딩을 담당하고 있다.
+    대학졸업 후 서울 건축설계사무소에서 경력을 쌓고, 4년간 해외 생활을 하면서 건축 관련 업무를 프리랜서로서 진행하였다.
+    팬데믹으로 귀국하여 스스로 집을 짓고, 현장목수로서 일하면서 건축시공방법과 건축재료를 몸소 이해 하였고, 그 경험을 바탕으로 합리적인 디자인과 구축법에 대해서 고민하고 발전시키고 있다.`,
+    education: [
+      "홍익대학교 건축공학과 건축학 전공(5년제)"
+    ],
+    experience: [
+      "이안디자인건축사사무소",
+      "hom건축사사무소",
+      "구중정아키텍츠 건축사사무소",
+      "스페인 바르셀로나 라발지구 도심재생 전문 가이드",
+      "한국문화예술위원회 예술더하기 건축수업 강사",
+      "전남문화재단 지역특성화 문화예술교육 '로컬투더테이블' 강사",
+      "레온디자인스튜디오 대표",
+      "문화공간 h/p1 대표"
+    ],
+    awards: [
+      "2010 광주광역시 도시관문 국민 디자인 -2등 광주광역시",
+      "2010 한국토지공사 베리어 프리 공모전 -입선 한국토지공사",
+      "2010 인천도시디자인 국제 공모전 -입선 인천광역시",
+      "2012 포스코 스틸 디자인 공모전-1등 포스코",
+      "2018 임시정부청사기념관 건축물디자인 -특선 국가보훈처",
+      "2018 임시정부청사기념관 전시콘텐츠 -입선 국가보훈처",
+      "2018 서울시 종로구 낙산공원 전망대 -1등 서울특별시",
+      "2019 인천도시공사 석산명소화 공모전 - 3등 인천광역시",
+      "2020 (주) 망치개발 조형물 디자인 -입선 (주)망치개발"
+    ],
+    images: ["/images/crew/park-1.jpg", "/images/crew/park-2.jpg"] // Placeholders
+  }
+};
 
 export default function CompanyPage() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCrew, setSelectedCrew] = useState<typeof CREW_DATA.design | null>(null);
+
+  const openModal = (crewKey: keyof typeof CREW_DATA) => {
+    setSelectedCrew(CREW_DATA[crewKey]);
+    setIsModalOpen(true);
+  };
   return (
     <div className="min-h-screen bg-white">
       {/* Section 1: Hero - '우리는 고객의 꿈을 짓습니다' */}
@@ -188,7 +232,10 @@ export default function CompanyPage() {
                   />
                 </div>
                 <h3 className="text-[16px] md:text-[18px] font-bold mb-4 text-black">설계 / 디자인 부문</h3>
-                <button className="bg-[#2D2D2D] text-white px-12 py-2.5 text-[14px] font-medium hover:bg-black transition-colors">
+                <button
+                  onClick={() => openModal('design')}
+                  className="bg-[#2D2D2D] text-white px-12 py-2.5 text-[14px] font-medium hover:bg-black transition-colors"
+                >
                   MORE
                 </button>
               </div>
@@ -279,6 +326,12 @@ export default function CompanyPage() {
           </div>
         </div>
       </section>
+
+      <CrewModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        data={selectedCrew}
+      />
     </div>
   );
 }
