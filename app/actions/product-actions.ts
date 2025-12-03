@@ -8,7 +8,7 @@ import { ProductInsert, ProductUpdate } from '@/types/supabase';
 export async function createProduct(data: ProductInsert) {
     const { error } = await supabaseAdmin
         .from('products')
-        .insert(data);
+        .insert(data as never);
 
     if (error) {
         console.error('Error creating product:', error);
@@ -23,7 +23,7 @@ export async function createProduct(data: ProductInsert) {
 export async function updateProduct(id: string, data: ProductUpdate) {
     const { error } = await supabaseAdmin
         .from('products')
-        .update(data)
+        .update(data as never)
         .eq('id', id);
 
     if (error) {

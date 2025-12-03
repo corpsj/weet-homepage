@@ -165,11 +165,14 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                         <input
                             type="text"
                             name="floor_plan_url"
-                            value={formData.floor_plan_url}
+                            value={formData.floor_plan_url || ''}
                             onChange={handleChange}
                             className="w-full px-3 py-2 border rounded-lg outline-none"
                             placeholder="/images/products/floor-plans/..."
                         />
+                        <p className="text-xs text-gray-500 mt-1">
+                            * 크롭 파라미터 포함 가능 (예: ?crop_w=300%&crop_h=440%&crop_t=-111%&crop_l=0%)
+                        </p>
                     </div>
 
                     <div>
