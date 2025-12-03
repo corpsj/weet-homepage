@@ -181,7 +181,7 @@ export default function CompanyPage() {
               <div className="flex flex-col items-center text-center">
                 <div className="w-[120px] h-[120px] mb-6 relative">
                   <Image
-                    src="/images/company/crew-1.png"
+                    src="/images/company/crew-design-new.png"
                     alt="설계/디자인 부문 캐릭터"
                     fill
                     className="object-contain"
@@ -197,7 +197,7 @@ export default function CompanyPage() {
               <div className="flex flex-col items-center text-center">
                 <div className="w-[120px] h-[120px] mb-6 relative">
                   <Image
-                    src="/images/company/crew-2.png"
+                    src="/images/company/crew-construction-new.png"
                     alt="시공/품질 부문 캐릭터"
                     fill
                     className="object-contain"
@@ -213,7 +213,7 @@ export default function CompanyPage() {
               <div className="flex flex-col items-center text-center">
                 <div className="w-[120px] h-[120px] mb-6 relative">
                   <Image
-                    src="/images/company/crew-3.png"
+                    src="/images/company/crew-solution-new.png"
                     alt="HOME SOLUTION 부문 캐릭터"
                     fill
                     className="object-contain"
