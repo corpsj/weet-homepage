@@ -58,48 +58,56 @@ export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
                 </button>
 
                 {/* Left Side: Image & Key Info (Sticky on Desktop) */}
-                <div className="w-full md:w-[40%] bg-gray-100 relative flex-shrink-0 md:h-full group">
-                    <div className="h-[300px] md:h-full relative">
-                        {/* Main Cover Image */}
-                        <div className="absolute inset-0 bg-gray-300">
+                <div className="w-full md:w-[45%] bg-black relative flex-shrink-0 md:h-full group overflow-hidden">
+                    <div className="h-[300px] md:h-full relative flex items-center justify-center">
+                        {/* Background Blur Layer (Fills the vertical space) */}
+                        <div className="absolute inset-0 opacity-40">
+                            {data.images[currentImageIndex] && (
+                                <Image
+                                    src={data.images[currentImageIndex]}
+                                    alt={data.name}
+                                    fill
+                                    className="object-cover blur-xl scale-110"
+                                />
+                            )}
+                        </div>
+
+                        {/* Main Image (Contained to show full landscape aspect) */}
+                        <div className="relative w-full h-full md:h-auto md:aspect-[4/3] z-10">
                             {data.images[currentImageIndex] ? (
-                                <div className="relative w-full h-full">
-                                    <Image
-                                        src={data.images[currentImageIndex]}
-                                        alt={data.name}
-                                        fill
-                                        className="object-cover transition-opacity duration-500"
-                                        priority
-                                    />
-                                    {/* Gradient Overlay for Text Visibility */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent md:hidden" />
-                                </div>
+                                <Image
+                                    src={data.images[currentImageIndex]}
+                                    alt={data.name}
+                                    fill
+                                    className="object-contain md:object-contain transition-opacity duration-500 drop-shadow-2xl"
+                                    priority
+                                />
                             ) : null}
                         </div>
 
-                        {/* Navigation Buttons (Only if > 1 image) */}
+                        {/* Navigation Buttons */}
                         {data.images.length > 1 && (
                             <>
                                 <button
                                     onClick={(e) => { e.stopPropagation(); prevImage(); }}
-                                    className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 bg-black/20 hover:bg-black/50 text-white rounded-full backdrop-blur-md transition-all opacity-0 group-hover:opacity-100"
                                 >
                                     <ChevronLeft className="w-6 h-6" />
                                 </button>
                                 <button
                                     onClick={(e) => { e.stopPropagation(); nextImage(); }}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 bg-black/20 hover:bg-black/50 text-white rounded-full backdrop-blur-md transition-all opacity-0 group-hover:opacity-100"
                                 >
                                     <ChevronRight className="w-6 h-6" />
                                 </button>
 
                                 {/* Dots Indicator */}
-                                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 md:bottom-8">
+                                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2 md:bottom-8">
                                     {data.images.map((_, idx) => (
                                         <button
                                             key={idx}
                                             onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(idx); }}
-                                            className={`w-2 h-2 rounded-full transition-all ${idx === currentImageIndex ? 'bg-white w-4' : 'bg-white/50 hover:bg-white/80'}`}
+                                            className={`w-2 h-2 rounded-full transition-all shadow-sm ${idx === currentImageIndex ? 'bg-white w-4' : 'bg-white/40 hover:bg-white/80'}`}
                                         />
                                     ))}
                                 </div>
