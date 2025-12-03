@@ -36,6 +36,24 @@ const CREW_DATA = {
       "2020 (주) 망치개발 조형물 디자인 -입선 (주)망치개발"
     ],
     images: ["/images/crew/park-profile.png", "/images/crew/park-action.jpg"]
+  },
+  construction: {
+    name: "장혁훈",
+    role: "시공 / 품질 부문 대표",
+    description: "준비중입니다.",
+    education: ["준비중입니다."],
+    experience: ["준비중입니다."],
+    awards: ["준비중입니다."],
+    images: []
+  },
+  solution: {
+    name: "박성주",
+    role: "HOME SOLUTION 부문 대표",
+    description: "준비중입니다.",
+    education: ["준비중입니다."],
+    experience: ["준비중입니다."],
+    awards: ["준비중입니다."],
+    images: []
   }
 };
 
@@ -251,7 +269,10 @@ export default function CompanyPage() {
                   />
                 </div>
                 <h3 className="text-[16px] md:text-[18px] font-bold mb-4 text-black">시공 / 품질 부문</h3>
-                <button className="bg-[#2D2D2D] text-white px-12 py-2.5 text-[14px] font-medium hover:bg-black transition-colors">
+                <button
+                  onClick={() => openModal('construction')}
+                  className="bg-[#2D2D2D] text-white px-12 py-2.5 text-[14px] font-medium hover:bg-black transition-colors"
+                >
                   MORE
                 </button>
               </div>
@@ -267,7 +288,10 @@ export default function CompanyPage() {
                   />
                 </div>
                 <h3 className="text-[16px] md:text-[18px] font-bold mb-4 text-black">HOME SOLUTION 부문</h3>
-                <button className="bg-[#2D2D2D] text-white px-12 py-2.5 text-[14px] font-medium hover:bg-black transition-colors">
+                <button
+                  onClick={() => openModal('solution')}
+                  className="bg-[#2D2D2D] text-white px-12 py-2.5 text-[14px] font-medium hover:bg-black transition-colors"
+                >
                   MORE
                 </button>
               </div>
