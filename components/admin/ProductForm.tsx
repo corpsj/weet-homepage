@@ -30,6 +30,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
         floor_plan_url: initialData?.floor_plan_url || '',
         display_order: initialData?.display_order || 0,
         is_active: initialData?.is_active ?? true,
+        is_signature: initialData?.is_signature ?? false,
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -140,6 +141,17 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                             className="w-4 h-4 text-black border-gray-300 rounded focus:ring-black"
                         />
                         <label className="text-sm font-medium text-gray-700">활성화 (공개)</label>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                        <input
+                            type="checkbox"
+                            name="is_signature"
+                            checked={formData.is_signature}
+                            onChange={handleChange}
+                            className="w-4 h-4 text-black border-gray-300 rounded focus:ring-black"
+                        />
+                        <label className="text-sm font-medium text-gray-700">시그니처 라인 노출</label>
                     </div>
                 </div>
 

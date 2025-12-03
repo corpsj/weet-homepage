@@ -1,19 +1,26 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { createClient } from '@/utils/supabase/server';
 
-export default function SignatureLine() {
-  const products = [
-    { id: 1, name: '리트릿', category: 'S', image: '/images/products/small/private/retreat.jpg' },
-    { id: 2, name: '캠퍼', category: 'S', image: '/images/products/small/private/camper.jpg' },
-    { id: 3, name: '사우나', category: 'S', image: '/images/products/small/private/sauna.jpg' },
-    { id: 4, name: '내 서재', category: 'S', image: '/images/products/small/private/my-library.jpg' },
-    { id: 5, name: '맨스케이브', category: 'S', image: '/images/products/small/private/mans-cave.jpg' },
-    { id: 6, name: '버스정류장', category: 'S', image: '/images/products/small/public/bus-stop.jpg' },
-    { id: 7, name: 'Small unit + Small unit', category: 'M', image: '/images/products/medium/m36-combo.jpg' },
-    { id: 8, name: 'Small unit + Small unit (L)', category: 'L', image: '/images/products/large/l-2-render.jpg' },
-    { id: 9, name: '+ 현장 공사', category: 'L', image: '/images/products/large/ai-render-1.jpg' },
-    { id: 10, name: '단지개념', category: 'XL', image: '/images/products/xlarge/complex-render.jpg' },
-  ];
+async function getSignatureProducts() {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .eq('is_active', true)
+    .eq('is_signature', true)
+    .order('display_order', { ascending: true });
+
+  if (error) {
+    console.error('Error fetching signature products:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
+export default async function SignatureLine() {
+  const products = await getSignatureProducts();
 
   return (
     <section className="py-12 md:py-16 lg:py-20 bg-white">
@@ -24,14 +31,14 @@ export default function SignatureLine() {
           {products.map((product) => (
             <Link
               key={product.id}
-              href={`/products`}
+              href={`/products#${product.id}`}
               className="group cursor-pointer"
             >
               {/* Product Image */}
               <div className="aspect-[3/4] bg-gray-200 rounded-lg mb-3 md:mb-4 overflow-hidden group-hover:shadow-lg transition-shadow duration-300 relative">
-                {product.image ? (
+                {product.image_url ? (
                   <Image
-                    src={product.image}
+                    src={product.image_url}
                     alt={product.name}
                     fill
                     className="object-cover"
@@ -39,20 +46,26 @@ export default function SignatureLine() {
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center text-gray-500 bg-gradient-to-br from-gray-200 to-gray-300">
-                    <span className="text-xs md:text-sm">Product {product.id}</span>
+                    <span className="text-xs md:text-sm">No Image</span>
                   </div>
                 )}
               </div>
 
               {/* Product Name & Category */}
               <div className="text-center">
-                <div className="text-[10px] md:text-xs text-gray-500 mb-1">{product.category} Size</div>
+                <div className="text-[10px] md:text-xs text-gray-500 mb-1">{product.size_category} Size</div>
                 <h3 className="font-medium text-[13px] md:text-[15px] lg:text-[16px] text-black group-hover:text-primary transition-colors">
                   {product.name}
                 </h3>
               </div>
             </Link>
           ))}
+
+          {products.length === 0 && (
+            <div className="col-span-full text-center py-12 text-gray-500">
+              등록된 시그니처 제품이 없습니다.
+            </div>
+          )}
         </div>
 
         {/* View All Button */}

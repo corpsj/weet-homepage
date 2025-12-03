@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS products (
   size TEXT,
   display_order INTEGER DEFAULT 0,
   is_active BOOLEAN DEFAULT true,
+  is_signature BOOLEAN DEFAULT false,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -55,4 +56,33 @@ CREATE POLICY "Authenticated users can update products" ON products
   FOR UPDATE TO authenticated USING (true);
 
 CREATE POLICY "Authenticated users can delete products" ON products
+  FOR DELETE TO authenticated USING (true);
+
+-- 문의(Inquiries) 테이블 생성
+CREATE TABLE IF NOT EXISTS inquiries (
+  id uuid default uuid_generate_v4() primary key,
+  name text not null,
+  email text not null,
+  phone text,
+  message text not null,
+  status text default 'new' check (status in ('new', 'read', 'replied')),
+  created_at timestamptz default now(),
+  updated_at timestamptz default now()
+);
+
+-- 문의 테이블 RLS
+ALTER TABLE inquiries ENABLE ROW LEVEL SECURITY;
+
+-- 누구나 문의 등록 가능 (Public Insert)
+CREATE POLICY "Anyone can insert inquiries" ON inquiries
+  FOR INSERT WITH CHECK (true);
+
+-- 관리자만 조회/수정/삭제 가능
+CREATE POLICY "Authenticated users can view inquiries" ON inquiries
+  FOR SELECT TO authenticated USING (true);
+
+CREATE POLICY "Authenticated users can update inquiries" ON inquiries
+  FOR UPDATE TO authenticated USING (true);
+
+CREATE POLICY "Authenticated users can delete inquiries" ON inquiries
   FOR DELETE TO authenticated USING (true);

@@ -28,6 +28,7 @@ export interface Database {
           floor_plan_url: string | null
           display_order: number
           is_active: boolean
+          is_signature: boolean
           created_at: string
           updated_at: string
         }
@@ -35,8 +36,8 @@ export interface Database {
           id?: string
           name: string
           category: string
-          sub_category: 'Private' | 'Public'
-          size_category: 'S' | 'M' | 'L' | 'XL' | 'SOLUTION' | 'DESIGN'
+          sub_category: string
+          size_category: string
           image_url: string
           tagline: string
           description: string
@@ -46,9 +47,10 @@ export interface Database {
           exterior_finish?: string | null
           interior_finish?: string | null
           size?: string | null
-          floor_plan_url?: string | null
+          hover_image_url?: string | null
           display_order?: number
           is_active?: boolean
+          is_signature?: boolean
           created_at?: string
           updated_at?: string
         }
@@ -56,8 +58,8 @@ export interface Database {
           id?: string
           name?: string
           category?: string
-          sub_category?: 'Private' | 'Public'
-          size_category?: 'S' | 'M' | 'L' | 'XL' | 'SOLUTION' | 'DESIGN'
+          sub_category?: string
+          size_category?: string
           image_url?: string
           tagline?: string
           description?: string
@@ -67,9 +69,10 @@ export interface Database {
           exterior_finish?: string | null
           interior_finish?: string | null
           size?: string | null
-          floor_plan_url?: string | null
+          hover_image_url?: string | null
           display_order?: number
           is_active?: boolean
+          is_signature?: boolean
           created_at?: string
           updated_at?: string
         }
