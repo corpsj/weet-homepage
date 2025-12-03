@@ -493,9 +493,8 @@ export default function ProductsPage() {
                       {sidebarStructure.S.Private.map((productId) => (
                         <p
                           key={productId}
-                          className={`cursor-pointer py-0.5 transition-colors hover:text-primary ${
-                            activeProduct === productId ? "text-primary font-bold bg-yellow-100 px-2 -mx-2" : ""
-                          }`}
+                          className={`cursor-pointer py-0.5 transition-colors hover:text-primary ${activeProduct === productId ? "text-primary font-bold bg-primary/20 px-2 -mx-2" : ""
+                            }`}
                           onClick={() => scrollToProduct(productId)}
                         >
                           {getProductName(productId)}
@@ -513,9 +512,8 @@ export default function ProductsPage() {
                       {sidebarStructure.S.Public.map((productId) => (
                         <p
                           key={productId}
-                          className={`cursor-pointer py-0.5 transition-colors hover:text-primary ${
-                            activeProduct === productId ? "text-primary font-bold bg-yellow-100 px-2 -mx-2" : ""
-                          }`}
+                          className={`cursor-pointer py-0.5 transition-colors hover:text-primary ${activeProduct === productId ? "text-primary font-bold bg-primary/20 px-2 -mx-2" : ""
+                            }`}
                           onClick={() => scrollToProduct(productId)}
                         >
                           {getProductName(productId)}

@@ -59,7 +59,7 @@ export default function SupportPage() {
           {/* 6 Steps Process - Desktop */}
           <div className="hidden lg:grid lg:grid-cols-6 gap-3 xl:gap-4 mb-6 xl:mb-8">
             {steps.map((step) => (
-              <div key={step.number} className="bg-yellow-400 rounded-t-lg px-3 xl:px-4 py-3 xl:py-4">
+              <div key={step.number} className="bg-primary rounded-t-lg px-3 xl:px-4 py-3 xl:py-4">
                 <h3 className="text-[12px] xl:text-[14px] font-bold mb-1">STEP .{step.number}</h3>
                 <p className="text-[11px] xl:text-[12px] font-bold leading-tight">{step.title}</p>
               </div>
@@ -75,7 +75,7 @@ export default function SupportPage() {
                 </div>
                 {index < steps.length - 1 && (
                   <div className="absolute -right-1.5 xl:-right-2 top-1/2 transform -translate-y-1/2 z-10">
-                    <div className="w-0 h-0 border-t-[10px] xl:border-t-[12px] border-t-transparent border-l-[20px] xl:border-l-[25px] border-l-yellow-400 border-b-[10px] xl:border-b-[12px] border-b-transparent"></div>
+                    <div className="w-0 h-0 border-t-[10px] xl:border-t-[12px] border-t-transparent border-l-[20px] xl:border-l-[25px] border-l-primary border-b-[10px] xl:border-b-[12px] border-b-transparent"></div>
                   </div>
                 )}
               </div>
@@ -95,7 +95,7 @@ export default function SupportPage() {
           <div className="lg:hidden space-y-6 mb-8">
             {steps.map((step) => (
               <div key={step.number} className="bg-white rounded-lg shadow-md overflow-hidden">
-                <div className="bg-yellow-400 px-4 py-3">
+                <div className="bg-primary px-4 py-3">
                   <h3 className="text-[12px] md:text-[13px] font-bold mb-1">STEP .{step.number}</h3>
                   <p className="text-[13px] md:text-[14px] font-bold">{step.title}</p>
                 </div>
@@ -136,7 +136,7 @@ export default function SupportPage() {
                   <div key={item} className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow cursor-pointer">
                     <div className="flex justify-between items-center mb-2">
                       <span className="font-bold text-lg">Q. 설치까지 얼마나 걸리나요?</span>
-                      <span className="text-yellow-500 text-xl">+</span>
+                      <span className="text-primary-dark text-xl">+</span>
                     </div>
                     <p className="text-gray-500 text-sm">
                       계약 후 공장에서 제작 완료까지 약 4~6주가 소요되며, 현장 설치는 1~2일이면 충분합니다.
@@ -156,15 +156,15 @@ export default function SupportPage() {
               <form className="space-y-4 bg-white p-6 md:p-8 rounded-lg shadow-sm">
                 <div>
                   <label className="block text-sm font-bold mb-2">이름</label>
-                  <input type="text" className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:border-yellow-400" placeholder="홍길동" />
+                  <input type="text" className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:border-primary" placeholder="홍길동" />
                 </div>
                 <div>
                   <label className="block text-sm font-bold mb-2">연락처</label>
-                  <input type="tel" className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:border-yellow-400" placeholder="010-0000-0000" />
+                  <input type="tel" className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:border-primary" placeholder="010-0000-0000" />
                 </div>
                 <div>
                   <label className="block text-sm font-bold mb-2">문의내용</label>
-                  <textarea className="w-full border border-gray-300 p-3 rounded h-32 focus:outline-none focus:border-yellow-400" placeholder="문의하실 내용을 입력해주세요."></textarea>
+                  <textarea className="w-full border border-gray-300 p-3 rounded h-32 focus:outline-none focus:border-primary" placeholder="문의하실 내용을 입력해주세요."></textarea>
                 </div>
                 <button className="w-full bg-black text-white py-4 rounded font-bold hover:bg-gray-800 transition-colors">
                   문의하기
