@@ -16,7 +16,7 @@ export default function ModularPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
             {/* Left: Illustration + Checklist */}
             <div>
-              <div className="relative w-full max-w-[563px] aspect-[563/449] mx-auto lg:mx-0 mb-8">
+              <div className="relative w-full max-w-[563px] aspect-[1024/817] mx-auto lg:mx-0 mb-8">
                 <Image
                   src="/images/modular/crane-illustration.png"
                   alt="모듈러 건축 크레인 일러스트"
@@ -119,7 +119,7 @@ export default function ModularPage() {
           {/* 하이브리드 모듈러 형태 */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start mb-16 lg:mb-24">
             {/* Left: Image */}
-            <div className="relative w-full aspect-[516/278] overflow-hidden rounded-lg">
+            <div className="relative w-full aspect-[2816/1536] overflow-hidden rounded-lg">
               <Image
                 src="/images/modular/hybrid-modular.png"
                 alt="하이브리드 모듈러 형태"
@@ -156,7 +156,7 @@ export default function ModularPage() {
           {/* 사전제작 */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
             {/* Left: Image */}
-            <div className="relative w-full aspect-[516/276] overflow-hidden rounded-lg">
+            <div className="relative w-full aspect-[2816/1536] overflow-hidden rounded-lg">
               <Image
                 src="/images/modular/prefabrication.png"
                 alt="사전제작"
@@ -201,7 +201,7 @@ export default function ModularPage() {
           {/* 탈현장 건설 OSC */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start mb-16 lg:mb-24">
             {/* Left: Image */}
-            <div className="relative w-full aspect-[516/278] overflow-hidden rounded-lg">
+            <div className="relative w-full aspect-[2816/1536] overflow-hidden rounded-lg">
               <Image
                 src="/images/modular/osc.png"
                 alt="탈현장 건설 OSC"
@@ -240,7 +240,7 @@ export default function ModularPage() {
           {/* 조립방식의 건축 */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
             {/* Left: Image */}
-            <div className="relative w-full aspect-[516/278] overflow-hidden rounded-lg">
+            <div className="relative w-full aspect-[2816/1536] overflow-hidden rounded-lg">
               <Image
                 src="/images/modular/prefabricated-building.png"
                 alt="조립방식의 건축"
