@@ -12,7 +12,8 @@ import {
     FileText,
     HelpCircle,
     ChevronDown,
-    Layers
+    Layers,
+    TrendingUp
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
@@ -29,6 +30,7 @@ const navigation: { title: string; items: NavItem[] }[] = [
         title: "Overview",
         items: [
             { name: '대시보드', href: '/admin', icon: LayoutDashboard },
+            { name: '분석 및 통계', href: '/admin/analytics', icon: TrendingUp },
         ]
     },
     {
