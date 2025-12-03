@@ -41,87 +41,62 @@ export default function SupportPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Section 1: 구매과정 (Purchase Process) */}
-      <section className="bg-[#EBEBEB] py-12 md:py-16 lg:py-20">
-        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[123px]">
-          {/* Title with diagonal corner */}
-          <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
-            <div className="w-[20px] h-[21px] md:w-[23px] md:h-[24px] lg:w-[26px] lg:h-[27px] flex-shrink-0">
-              <div className="w-0 h-0 border-l-[20px] md:border-l-[23px] lg:border-l-[26px] border-l-black border-t-[21px] md:border-t-[24px] lg:border-t-[27px] border-t-transparent"></div>
+      <section className="bg-[#EBEBEB] py-12 md:py-16 lg:py-24 relative overflow-hidden">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[123px] relative z-10">
+
+          {/* Header Section */}
+          <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 mb-16 lg:mb-24">
+            {/* Title Area */}
+            <div className="flex-shrink-0">
+              <h1 className="text-[32px] md:text-[40px] lg:text-[48px] font-bold leading-tight mb-4">
+                당신의 꿈을<br />짓는 여정
+              </h1>
+              <div className="w-[26px] h-[27px] relative">
+                <svg width="26" height="27" viewBox="0 0 26 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M0 0L26 0L13 27L0 0Z" fill="black" />
+                </svg>
+              </div>
             </div>
-            <h1 className="text-[24px] md:text-[28px] lg:text-[32px] font-bold">당신의 꿈을 짓는 여정</h1>
+
+            {/* Description Area */}
+            <div className="max-w-2xl pt-2">
+              <p className="text-[16px] md:text-[18px] lg:text-[20px] leading-relaxed font-medium">
+                "꿈이 현실이 되는 과정은 낯설거나 복잡해서는 안 됩니다.<br />
+                위트의 숙련된 '작업자들'이 이 여정의 처음부터 끝까지 당신과 함께 걷습니다.<br />
+                당신의 '로망'이 어떻게 '설계'가 되고, '니즈'가 어떻게 '기술'로 구현되는지, 모든 과정을 투명하게 공유하며 당신의 꿈을 가장 견고한 현실로 완성합니다."
+              </p>
+            </div>
           </div>
 
-          <p className="text-[13px] md:text-[14px] lg:text-[16px] leading-relaxed mb-8 md:mb-10 lg:mb-12 max-w-full lg:max-w-[1227px]">
-            "꿈이 현실이 되는 과정은 낯설거나 복잡해서는 안 됩니다. 위트의 숙련된 '작업자들'이 이 여정의 처음부터 끝까지 당신과 함께 걷습니다.
-            당신의 '로망'이 어떻게 '설계'가 되고, '니즈'가 어떻게 '기술'로 구현되는지, 모든 과정을 투명하게 공유하며 당신의 꿈을 가장 견고한 현실로 완성합니다."
-          </p>
-
-          {/* 6 Steps Process - Desktop */}
-          <div className="hidden lg:grid lg:grid-cols-6 gap-3 xl:gap-4 mb-6 xl:mb-8">
+          {/* Steps Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
             {steps.map((step) => (
-              <div key={step.number} className="bg-primary rounded-t-lg px-3 xl:px-4 py-3 xl:py-4">
-                <h3 className="text-[12px] xl:text-[14px] font-bold mb-1">STEP .{step.number}</h3>
-                <p className="text-[11px] xl:text-[12px] font-bold leading-tight">{step.title}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Step Images and Arrows - Desktop */}
-          <div className="hidden lg:grid lg:grid-cols-6 gap-3 xl:gap-4 mb-6 xl:mb-8">
-            {steps.map((step, index) => (
-              <div key={step.number} className="relative">
-                <div className="bg-gray-300 rounded-lg h-[140px] xl:h-[167px] flex items-center justify-center">
-                  <span className="text-[18px] xl:text-[24px] text-gray-500">Image {step.number}</span>
+              <div key={step.number} className="flex flex-col h-full">
+                {/* Step Header (Yellow Box) */}
+                <div className="bg-primary h-[70px] flex flex-col justify-center items-center text-center px-2 mb-4 rounded-sm">
+                  <span className="text-[14px] font-bold mb-1">STEP .{step.number}</span>
+                  <span className="text-[14px] font-bold leading-tight break-keep">{step.title}</span>
                 </div>
-                {index < steps.length - 1 && (
-                  <div className="absolute -right-1.5 xl:-right-2 top-1/2 transform -translate-y-1/2 z-10">
-                    <div className="w-0 h-0 border-t-[10px] xl:border-t-[12px] border-t-transparent border-l-[20px] xl:border-l-[25px] border-l-primary border-b-[10px] xl:border-b-[12px] border-b-transparent"></div>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
 
-          {/* Step Descriptions - Desktop */}
-          <div className="hidden lg:grid lg:grid-cols-6 gap-3 xl:gap-4 mb-8 xl:mb-12">
-            {steps.map((step) => (
-              <div key={step.number} className="text-[11px] xl:text-[12px] leading-relaxed">
-                {step.description}
-              </div>
-            ))}
-          </div>
-
-          {/* Mobile/Tablet Steps */}
-          <div className="lg:hidden space-y-6 mb-8">
-            {steps.map((step) => (
-              <div key={step.number} className="bg-white rounded-lg shadow-md overflow-hidden">
-                <div className="bg-primary px-4 py-3">
-                  <h3 className="text-[12px] md:text-[13px] font-bold mb-1">STEP .{step.number}</h3>
-                  <p className="text-[13px] md:text-[14px] font-bold">{step.title}</p>
+                {/* Step Image Placeholder */}
+                <div className="bg-white h-[167px] mb-6 rounded-sm border border-gray-200 flex items-center justify-center">
+                  {/* Placeholder for actual image from design if needed, currently keeping generic */}
+                  <span className="text-gray-400">Image {step.number}</span>
                 </div>
-                <div className="p-4">
-                  <div className="bg-gray-300 rounded-lg h-[160px] md:h-[180px] flex items-center justify-center mb-4">
-                    <span className="text-[20px] md:text-[22px] text-gray-500">Image {step.number}</span>
-                  </div>
-                  <p className="text-[12px] md:text-[13px] leading-relaxed text-gray-700">
-                    {step.description}
-                  </p>
-                </div>
+
+                {/* Step Description */}
+                <p className="text-[13px] leading-relaxed text-gray-800 break-keep">
+                  {step.description}
+                </p>
               </div>
             ))}
           </div>
 
-          {/* CTA Button */}
-          <div className="flex justify-center lg:justify-end">
-            <button className="w-full md:w-auto bg-black text-white px-8 md:px-16 lg:px-32 py-3 rounded hover:bg-gray-800 transition-colors text-[13px] md:text-[14px]">
-              지금 바로, 당신의 꿈을 짓는여정을 시작 (1:1 상담 신청하기)
-            </button>
-          </div>
         </div>
       </section>
 
       {/* Section 2: Q/A and F/Q */}
-      <section className="bg-[#EBEBEB] py-12 md:py-20 lg:py-32">
+      <section className="bg-[#EBEBEB] py-12 md:py-20 lg:py-32 border-t border-gray-300">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[123px]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 lg:gap-32">
             {/* Q/A Section */}
@@ -153,30 +128,32 @@ export default function SupportPage() {
                 1:1 문의하기
               </p>
 
-              <form className="space-y-4 bg-white p-6 md:p-8 rounded-lg shadow-sm">
-                <div>
-                  <label className="block text-sm font-bold mb-2">이름</label>
-                  <input type="text" className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:border-primary" placeholder="홍길동" />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold mb-2">연락처</label>
-                  <input type="tel" className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:border-primary" placeholder="010-0000-0000" />
-                </div>
-                <div>
-                  <label className="block text-sm font-bold mb-2">문의내용</label>
-                  <textarea className="w-full border border-gray-300 p-3 rounded h-32 focus:outline-none focus:border-primary" placeholder="문의하실 내용을 입력해주세요."></textarea>
-                </div>
-                <button className="w-full bg-black text-white py-4 rounded font-bold hover:bg-gray-800 transition-colors">
-                  문의하기
-                </button>
-              </form>
+              <div className="bg-white p-6 md:p-8 rounded-lg shadow-sm">
+                <form className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-bold mb-2">이름</label>
+                    <input type="text" className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:border-primary" placeholder="홍길동" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold mb-2">연락처</label>
+                    <input type="tel" className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:border-primary" placeholder="010-0000-0000" />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold mb-2">문의내용</label>
+                    <textarea className="w-full border border-gray-300 p-3 rounded h-32 focus:outline-none focus:border-primary" placeholder="문의하실 내용을 입력해주세요."></textarea>
+                  </div>
+                  <button className="w-full bg-black text-white py-4 rounded font-bold hover:bg-gray-800 transition-colors">
+                    문의하기
+                  </button>
+                </form>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       {/* Section 3: 방문예약 (Reservation) */}
-      <section className="bg-[#EBEBEB] py-12 md:py-20 lg:py-32">
+      <section className="bg-[#EBEBEB] py-12 md:py-20 lg:py-32 border-t border-gray-300">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[123px]">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-12">
             {/* 방문예약 */}
@@ -219,7 +196,7 @@ export default function SupportPage() {
       </section>
 
       {/* Section 4: A/S */}
-      <section className="bg-[#EBEBEB] py-12 md:py-20 lg:py-32">
+      <section className="bg-[#EBEBEB] py-12 md:py-20 lg:py-32 border-t border-gray-300">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[123px]">
           <h2 className="text-[48px] md:text-[64px] lg:text-[80px] font-bold mb-6 md:mb-8">A/S</h2>
           <p className="text-[14px] md:text-[15px] lg:text-[16px] text-gray-600">
