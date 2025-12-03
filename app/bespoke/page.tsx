@@ -19,55 +19,55 @@ export default function BespokePage() {
               BESPOKE
             </h1>
 
-            <div className="flex flex-col lg:flex-row gap-12 lg:gap-24">
-              <div className="lg:w-1/2">
-                <p className="text-[18px] md:text-[20px] leading-relaxed mb-8 text-gray-800 break-keep">
-                  weet의 모듈러 기술력은 '시그니처 라인'의 검증된 품질로 이미 증명되었습니다.
-                  <span className="block mt-4 font-semibold text-black text-xl md:text-2xl relative inline-block">
-                    <span className="relative z-10">'비스포크 서비스'는 세상에 단 하나뿐인<br />당신의 공간을 짓는 프리미엄 맞춤 솔루션입니다.</span>
-                    <span className="absolute bottom-1 left-0 w-full h-3 bg-primary/30 -z-0"></span>
-                  </span>
-                </p>
-              </div>
+            {/* Intro Text - Full Width */}
+            <div className="mb-16 md:mb-20">
+              <p className="text-[18px] md:text-[20px] leading-relaxed mb-8 text-gray-800 break-keep">
+                <span className="whitespace-nowrap">weet의 모듈러 기술력은 '시그니처 라인'의 검증된 품질로 이미 증명되었습니다.</span>
+                <span className="block mt-4 font-semibold text-black text-xl md:text-2xl relative inline-block">
+                  <span className="relative z-10">'비스포크 서비스'는 세상에 단 하나뿐인<br />당신의 공간을 짓는 프리미엄 맞춤 솔루션입니다.</span>
+                  <span className="absolute bottom-1 left-0 w-full h-3 bg-primary/30 -z-0"></span>
+                </span>
+              </p>
+            </div>
 
-              <div className="lg:w-1/2 space-y-6 text-[15px] md:text-[16px] text-gray-600">
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2, duration: 0.6 }}
-                  className="border-l-2 border-primary pl-6"
-                >
-                  <strong className="block text-black text-lg mb-1">검증된 기술, 특별한 비전</strong>
-                  시그니처 라인에서 검증된 모듈러 기술력과 당신의 특별한 비전의 만남.
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3, duration: 0.6 }}
-                  className="border-l-2 border-gray-300 pl-6 hover:border-primary transition-colors"
-                >
-                  <strong className="block text-black text-lg mb-1">1:1 맞춤 전문가</strong>
-                  아이디어 구상부터 완공까지, 전문가가 당신과 함께하며 모든 디테일을 구현합니다.
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4, duration: 0.6 }}
-                  className="border-l-2 border-gray-300 pl-6 hover:border-primary transition-colors"
-                >
-                  <strong className="block text-black text-lg mb-1">무한한 디자인</strong>
-                  부지의 형태, 용도, 스타일에 구애받지 않는 완전한 설계의 자유.
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5, duration: 0.6 }}
-                  className="border-l-2 border-gray-300 pl-6 hover:border-primary transition-colors"
-                >
-                  <strong className="block text-black text-lg mb-1">최상급 디테일</strong>
-                  기본을 넘어, 당신의 기준에 맞는 최상급 자재와 마감 공법을 선택할 수 있습니다.
-                </motion.div>
-              </div>
+            {/* Feature List - 2x2 Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 text-[15px] md:text-[16px] text-gray-600">
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="border-l-2 border-primary pl-6"
+              >
+                <strong className="block text-black text-lg mb-1">검증된 기술, 특별한 비전</strong>
+                시그니처 라인에서 검증된 모듈러 기술력과 당신의 특별한 비전의 만남.
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                className="border-l-2 border-gray-300 pl-6 hover:border-primary transition-colors"
+              >
+                <strong className="block text-black text-lg mb-1">1:1 맞춤 전문가</strong>
+                아이디어 구상부터 완공까지, 전문가가 당신과 함께하며 모든 디테일을 구현합니다.
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+                className="border-l-2 border-gray-300 pl-6 hover:border-primary transition-colors"
+              >
+                <strong className="block text-black text-lg mb-1">무한한 디자인</strong>
+                부지의 형태, 용도, 스타일에 구애받지 않는 완전한 설계의 자유.
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5, duration: 0.6 }}
+                className="border-l-2 border-gray-300 pl-6 hover:border-primary transition-colors"
+              >
+                <strong className="block text-black text-lg mb-1">최상급 디테일</strong>
+                기본을 넘어, 당신의 기준에 맞는 최상급 자재와 마감 공법을 선택할 수 있습니다.
+              </motion.div>
             </div>
 
             <div className="flex justify-end items-center gap-4 mt-16 group cursor-pointer">
