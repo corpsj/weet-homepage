@@ -35,7 +35,7 @@ const CREW_DATA = {
       "2019 인천도시공사 석산명소화 공모전 - 3등 인천광역시",
       "2020 (주) 망치개발 조형물 디자인 -입선 (주)망치개발"
     ],
-    images: ["/images/crew/park-1.jpg", "/images/crew/park-2.jpg"] // Placeholders
+    images: ["/images/crew/park-profile.png", "/images/crew/park-action.jpg"]
   }
 };
 

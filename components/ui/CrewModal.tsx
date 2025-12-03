@@ -1,8 +1,8 @@
 'use client';
 
-import { X } from 'lucide-react';
+import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface CrewModalProps {
     isOpen: boolean;
@@ -19,9 +19,12 @@ interface CrewModalProps {
 }
 
 export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
+            setCurrentImageIndex(0); // Reset to first image on open
         } else {
             document.body.style.overflow = 'unset';
         }
@@ -31,6 +34,14 @@ export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
     }, [isOpen]);
 
     if (!isOpen || !data) return null;
+
+    const nextImage = () => {
+        setCurrentImageIndex((prev) => (prev + 1) % data.images.length);
+    };
+
+    const prevImage = () => {
+        setCurrentImageIndex((prev) => (prev - 1 + data.images.length) % data.images.length);
+    };
 
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300" onClick={onClose}>
@@ -47,24 +58,53 @@ export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
                 </button>
 
                 {/* Left Side: Image & Key Info (Sticky on Desktop) */}
-                <div className="w-full md:w-[40%] bg-gray-100 relative flex-shrink-0 md:h-full">
+                <div className="w-full md:w-[40%] bg-gray-100 relative flex-shrink-0 md:h-full group">
                     <div className="h-[300px] md:h-full relative">
                         {/* Main Cover Image */}
                         <div className="absolute inset-0 bg-gray-300">
-                            {data.images[0] ? (
+                            {data.images[currentImageIndex] ? (
                                 <div className="relative w-full h-full">
-                                    {/* Placeholder for actual image */}
-                                    <div className="absolute inset-0 flex items-center justify-center text-gray-500 font-medium bg-gray-200">
-                                        Profile Image
-                                    </div>
-                                    {/* Uncomment when real images are available
-                   <Image src={data.images[0]} alt={data.name} fill className="object-cover" priority />
-                   */}
+                                    <Image
+                                        src={data.images[currentImageIndex]}
+                                        alt={data.name}
+                                        fill
+                                        className="object-cover transition-opacity duration-500"
+                                        priority
+                                    />
                                     {/* Gradient Overlay for Text Visibility */}
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent md:hidden" />
                                 </div>
                             ) : null}
                         </div>
+
+                        {/* Navigation Buttons (Only if > 1 image) */}
+                        {data.images.length > 1 && (
+                            <>
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+                                >
+                                    <ChevronLeft className="w-6 h-6" />
+                                </button>
+                                <button
+                                    onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 p-2 bg-black/20 hover:bg-black/40 text-white rounded-full backdrop-blur-sm transition-all opacity-0 group-hover:opacity-100"
+                                >
+                                    <ChevronRight className="w-6 h-6" />
+                                </button>
+
+                                {/* Dots Indicator */}
+                                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 md:bottom-8">
+                                    {data.images.map((_, idx) => (
+                                        <button
+                                            key={idx}
+                                            onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(idx); }}
+                                            className={`w-2 h-2 rounded-full transition-all ${idx === currentImageIndex ? 'bg-white w-4' : 'bg-white/50 hover:bg-white/80'}`}
+                                        />
+                                    ))}
+                                </div>
+                            </>
+                        )}
 
                         {/* Mobile Name Overlay */}
                         <div className="absolute bottom-0 left-0 w-full p-6 text-white md:hidden">
