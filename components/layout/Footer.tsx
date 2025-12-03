@@ -5,9 +5,9 @@ export default function Footer() {
   return (
     <footer className="bg-primary py-4 md:py-6">
       <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 md:gap-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 md:gap-8">
           {/* Left side - Logo */}
-          <div className="flex items-center gap-3 flex-shrink-0 -my-4 md:-my-6">
+          <div className="flex items-center gap-3 flex-shrink-0 -my-4 md:-my-6 pb-2">
             <div className="relative w-[100px] h-[100px] md:w-[120px] md:h-[120px]">
               <Image
                 src="/images/company/weet-logo.png"
@@ -19,8 +19,8 @@ export default function Footer() {
           </div>
 
           {/* Center - Company Info */}
-          <div className="flex-1 space-y-1 md:ml-4">
-            <h3 className="text-[16px] md:text-[18px] font-bold text-black font-serif">
+          <div className="flex-1 space-y-1 md:ml-4 pb-1">
+            <h3 className="text-[20px] md:text-[28px] font-bold text-black font-serif leading-none mb-2">
               'WE make dreams comE True'
             </h3>
             <div className="text-[11px] md:text-[12px] text-black leading-relaxed font-medium">
