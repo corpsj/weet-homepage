@@ -5,7 +5,7 @@ import { Product } from '@/types/supabase';
 
 async function getSignatureProducts(): Promise<Product[]> {
   const supabase = await createClient();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // eslint-disable-next-line
   const { data, error } = await (supabase as any)
     .from('products')
     .select('*')

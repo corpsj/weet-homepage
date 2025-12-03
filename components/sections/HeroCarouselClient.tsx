@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 
@@ -14,13 +14,13 @@ interface Slide {
 export default function HeroCarouselClient({ initialSlides }: { initialSlides: any[] }) {
     const [currentSlide, setCurrentSlide] = useState(0);
 
-    const nextSlide = () => {
+    const nextSlide = useCallback(() => {
         setCurrentSlide((prev) => (prev + 1) % initialSlides.length);
-    };
+    }, [initialSlides.length]);
 
-    const prevSlide = () => {
+    const prevSlide = useCallback(() => {
         setCurrentSlide((prev) => (prev - 1 + initialSlides.length) % initialSlides.length);
-    };
+    }, [initialSlides.length]);
 
     // Auto-advance slides every 10 seconds
     useEffect(() => {
@@ -28,7 +28,7 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: a
             nextSlide();
         }, 10000);
         return () => clearInterval(timer);
-    }, [currentSlide, initialSlides.length]);
+    }, [nextSlide]);
 
     if (initialSlides.length === 0) return null;
 

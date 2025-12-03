@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Plus, Trash2, ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+// eslint-disable-next-line
 type SupabaseAny = any;
 
 interface FAQ {
@@ -138,8 +138,8 @@ export default function SupportEditor({ initialFAQs, initialNotices }: { initial
                     <button
                         onClick={() => setActiveTab('faq')}
                         className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'faq'
-                                ? 'border-black text-black'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                            ? 'border-black text-black'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                             }`}
                     >
                         FAQ 관리
@@ -147,8 +147,8 @@ export default function SupportEditor({ initialFAQs, initialNotices }: { initial
                     <button
                         onClick={() => setActiveTab('notices')}
                         className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'notices'
-                                ? 'border-black text-black'
-                                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                            ? 'border-black text-black'
+                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
                             }`}
                     >
                         공지사항 관리

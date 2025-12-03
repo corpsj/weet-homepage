@@ -5,7 +5,7 @@ import { revalidatePath } from 'next/cache';
 
 export async function getInquiries() {
     const supabase = await createClient();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line
     const { data, error } = await (supabase as any)
         .from('inquiries')
         .select('*')
@@ -21,7 +21,7 @@ export async function getInquiries() {
 
 export async function updateInquiryStatus(id: string, status: 'new' | 'read' | 'replied') {
     const supabase = await createClient();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line
     const { error } = await (supabase as any)
         .from('inquiries')
         .update({ status })
@@ -29,7 +29,7 @@ export async function updateInquiryStatus(id: string, status: 'new' | 'read' | '
 
     if (error) {
         console.error('Error updating inquiry status:', error);
-        throw error;
+        throw new Error('Failed to update status');
     }
 
     revalidatePath('/admin/inquiries');
@@ -37,7 +37,7 @@ export async function updateInquiryStatus(id: string, status: 'new' | 'read' | '
 
 export async function deleteInquiry(id: string) {
     const supabase = await createClient();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line
     const { error } = await (supabase as any)
         .from('inquiries')
         .delete()
@@ -45,7 +45,7 @@ export async function deleteInquiry(id: string) {
 
     if (error) {
         console.error('Error deleting inquiry:', error);
-        throw error;
+        throw new Error('Failed to delete inquiry');
     }
 
     revalidatePath('/admin/inquiries');
@@ -63,7 +63,7 @@ export async function createInquiry(formData: FormData) {
         throw new Error('필수 항목을 입력해주세요.');
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // eslint-disable-next-line
     const { error } = await (supabase as any)
         .from('inquiries')
         .insert({
