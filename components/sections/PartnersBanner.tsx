@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 const partnerLogos = [
+  { name: 'LEóN Design Studio', logo: '/images/partners/leon-design-studio.png' },
   { name: '함평군', logo: '/images/partners/hampyeong-county.png' },
   { name: '함평군 농업기술센터', logo: '/images/partners/hampyeong-tech.png' },
   { name: 'LX Z:IN', logo: '/images/partners/lx-zin.png' },
