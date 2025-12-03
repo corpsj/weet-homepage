@@ -42,54 +42,55 @@ export default function SupportPage() {
     <div className="min-h-screen bg-white">
       {/* Section 1: 구매과정 (Purchase Process) */}
       <section className="bg-[#EBEBEB] py-12 md:py-16 lg:py-24 relative overflow-hidden">
-        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[123px] relative z-10">
+        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[123px] relative z-10">
 
-          {/* Header Section */}
-          <div className="flex flex-col lg:flex-row gap-8 lg:gap-16 mb-16 lg:mb-24">
-            {/* Title Area */}
-            <div className="flex-shrink-0">
-              <h1 className="text-[32px] md:text-[40px] lg:text-[48px] font-bold leading-tight mb-4">
-                당신의 꿈을<br />짓는 여정
-              </h1>
-              <div className="w-[26px] h-[27px] relative">
-                <svg width="26" height="27" viewBox="0 0 26 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M0 0L26 0L13 27L0 0Z" fill="black" />
-                </svg>
+          <div className="flex flex-col xl:flex-row gap-12 xl:gap-[150px]">
+            {/* Left Column: Title & Description */}
+            <div className="flex-shrink-0 xl:w-[500px]">
+              <div className="mb-12">
+                <h1 className="text-[32px] md:text-[40px] lg:text-[48px] font-bold leading-tight mb-4 text-black">
+                  당신의 꿈을<br />짓는 여정
+                </h1>
+                <div className="w-[26px] h-[27px] relative">
+                  <svg width="26" height="27" viewBox="0 0 26 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M0 0L26 0L13 27L0 0Z" fill="black" />
+                  </svg>
+                </div>
               </div>
-            </div>
 
-            {/* Description Area */}
-            <div className="max-w-2xl pt-2">
-              <p className="text-[16px] md:text-[18px] lg:text-[20px] leading-relaxed font-medium">
-                "꿈이 현실이 되는 과정은 낯설거나 복잡해서는 안 됩니다.<br />
-                위트의 숙련된 '작업자들'이 이 여정의 처음부터 끝까지 당신과 함께 걷습니다.<br />
-                당신의 '로망'이 어떻게 '설계'가 되고, '니즈'가 어떻게 '기술'로 구현되는지, 모든 과정을 투명하게 공유하며 당신의 꿈을 가장 견고한 현실로 완성합니다."
-              </p>
-            </div>
-          </div>
-
-          {/* Steps Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6">
-            {steps.map((step) => (
-              <div key={step.number} className="flex flex-col h-full">
-                {/* Step Header (Yellow Box) */}
-                <div className="bg-primary h-[70px] flex flex-col justify-center items-center text-center px-2 mb-4 rounded-sm">
-                  <span className="text-[14px] font-bold mb-1">STEP .{step.number}</span>
-                  <span className="text-[14px] font-bold leading-tight break-keep">{step.title}</span>
-                </div>
-
-                {/* Step Image Placeholder */}
-                <div className="bg-white h-[167px] mb-6 rounded-sm border border-gray-200 flex items-center justify-center">
-                  {/* Placeholder for actual image from design if needed, currently keeping generic */}
-                  <span className="text-gray-400">Image {step.number}</span>
-                </div>
-
-                {/* Step Description */}
-                <p className="text-[13px] leading-relaxed text-gray-800 break-keep">
-                  {step.description}
+              <div className="max-w-xl">
+                <p className="text-[18px] lg:text-[20px] leading-relaxed font-medium text-black break-keep">
+                  "꿈이 현실이 되는 과정은 낯설거나 복잡해서는 안 됩니다.<br /><br />
+                  위트의 숙련된 '작업자들'이 이 여정의 처음부터 끝까지 당신과 함께 걷습니다.<br /><br />
+                  당신의 '로망'이 어떻게 '설계'가 되고, '니즈'가 어떻게 '기술'로 구현되는지, 모든 과정을 투명하게 공유하며 당신의 꿈을 가장 견고한 현실로 완성합니다."
                 </p>
               </div>
-            ))}
+            </div>
+
+            {/* Right Column: Steps Grid (3x2) */}
+            <div className="flex-grow">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-12">
+                {steps.map((step) => (
+                  <div key={step.number} className="flex flex-col">
+                    {/* Step Header (Yellow Box) */}
+                    <div className="bg-primary h-[70px] w-full flex flex-col justify-center items-center text-center px-2 mb-4 rounded-sm">
+                      <span className="text-[14px] font-bold mb-1">STEP .{step.number}</span>
+                      <span className="text-[14px] font-bold leading-tight break-keep">{step.title}</span>
+                    </div>
+
+                    {/* Step Image Placeholder */}
+                    <div className="bg-white h-[167px] w-full mb-6 rounded-sm border border-gray-200 flex items-center justify-center">
+                      <span className="text-gray-400">Image {step.number}</span>
+                    </div>
+
+                    {/* Step Description */}
+                    <p className="text-[14px] leading-relaxed text-gray-800 break-keep">
+                      {step.description}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
         </div>
