@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 export default function SupportPage() {
   const steps = [
     {
@@ -80,9 +82,14 @@ export default function SupportPage() {
                       <span className="text-[14px] font-bold leading-tight break-keep">{step.title}</span>
                     </div>
 
-                    {/* Step Image Placeholder */}
-                    <div className="bg-white h-[167px] w-full mb-6 rounded-sm border border-gray-200 flex items-center justify-center">
-                      <span className="text-gray-400">Image {step.number}</span>
+                    {/* Step Image */}
+                    <div className="bg-white h-[167px] w-full mb-6 rounded-sm border border-gray-200 flex items-center justify-center relative overflow-hidden">
+                      <Image
+                        src={`/images/support/step${step.number}.png`}
+                        alt={step.title}
+                        fill
+                        className="object-cover"
+                      />
                     </div>
 
                     {/* Step Description */}
