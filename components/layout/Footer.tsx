@@ -19,25 +19,25 @@ export default function Footer() {
           </div>
 
           {/* Center - Company Info */}
-          <div className="flex-1 space-y-2">
-            <h3 className="text-[16px] md:text-[18px] font-bold text-black">
+          <div className="flex-1 space-y-1 md:ml-4">
+            <h3 className="text-[16px] md:text-[18px] font-bold text-black font-serif">
               'WE make dreams comE True'
             </h3>
-            <div className="text-[11px] md:text-[12px] text-black leading-relaxed">
-              <p>주식회사 위트 / 전남 함평군 대동면 금산길 205-27 / 사업자 등록번호 660-86-01862 / 010 1234 4567</p>
+            <div className="text-[11px] md:text-[12px] text-black leading-relaxed font-medium">
+              <p>(주)위트 &nbsp;|&nbsp; 함평군 대동면 금산길 205-27 &nbsp;|&nbsp; 사업자 등록번호 660-86-01862 &nbsp;|&nbsp; 010 1234 4567</p>
             </div>
           </div>
 
           {/* Right side - Copyright and Links */}
-          <div className="text-left md:text-right space-y-2 flex-shrink-0">
+          <div className="text-left md:text-right space-y-1 flex-shrink-0">
             <p className="text-[11px] md:text-[12px] font-bold text-black whitespace-nowrap">
               Copyright © weet All right reserved
             </p>
-            <div className="flex flex-wrap gap-2 text-[10px] md:text-[11px] text-black md:justify-end">
+            <div className="flex flex-wrap gap-2 text-[10px] md:text-[11px] text-black md:justify-end font-bold">
               <Link href="/privacy" className="hover:underline">개인정보 처리방침</Link>
-              <span>/</span>
+              <span>|</span>
               <Link href="/terms" className="hover:underline">이용약관</Link>
-              <span>/</span>
+              <span>|</span>
               <Link href="/company" className="hover:underline">회사소개</Link>
             </div>
           </div>
