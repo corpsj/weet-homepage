@@ -2,6 +2,9 @@ import { notFound } from 'next/navigation';
 import { supabaseAdmin } from '@/lib/supabase';
 import ProductForm from '@/components/admin/ProductForm';
 
+// 빌드 시 정적 생성 방지
+export const dynamic = 'force-dynamic';
+
 interface PageProps {
     params: Promise<{ id: string }>;
 }
