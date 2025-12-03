@@ -43,7 +43,7 @@ export default function SupportPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Section 1: 구매과정 (Purchase Process) */}
-      <section className="bg-[#EBEBEB] py-12 md:py-16 lg:py-24 relative overflow-hidden">
+      <section className="bg-[#D4D4D4] py-12 md:py-16 lg:py-24 relative overflow-hidden">
         <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[123px] relative z-10">
 
           <div className="flex flex-col xl:flex-row gap-12 xl:gap-[150px]">
