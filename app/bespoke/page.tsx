@@ -37,7 +37,7 @@ export default function BespokePage() {
                   transition={{ delay: 0.2, duration: 0.6 }}
                   className="border-l-2 border-primary pl-6"
                 >
-                  <strong className="block text-black text-lg mb-1">Unique Vision, Proven Tech</strong>
+                  <strong className="block text-black text-lg mb-1">검증된 기술, 특별한 비전</strong>
                   시그니처 라인에서 검증된 모듈러 기술력과 당신의 특별한 비전의 만남.
                 </motion.div>
                 <motion.div
@@ -46,7 +46,7 @@ export default function BespokePage() {
                   transition={{ delay: 0.3, duration: 0.6 }}
                   className="border-l-2 border-gray-300 pl-6 hover:border-primary transition-colors"
                 >
-                  <strong className="block text-black text-lg mb-1">1:1 Dedicated Architect</strong>
+                  <strong className="block text-black text-lg mb-1">1:1 맞춤 전문가</strong>
                   아이디어 구상부터 완공까지, 전문가가 당신과 함께하며 모든 디테일을 구현합니다.
                 </motion.div>
                 <motion.div
@@ -55,7 +55,7 @@ export default function BespokePage() {
                   transition={{ delay: 0.4, duration: 0.6 }}
                   className="border-l-2 border-gray-300 pl-6 hover:border-primary transition-colors"
                 >
-                  <strong className="block text-black text-lg mb-1">Limitless Design</strong>
+                  <strong className="block text-black text-lg mb-1">무한한 디자인</strong>
                   부지의 형태, 용도, 스타일에 구애받지 않는 완전한 설계의 자유.
                 </motion.div>
                 <motion.div
@@ -64,7 +64,7 @@ export default function BespokePage() {
                   transition={{ delay: 0.5, duration: 0.6 }}
                   className="border-l-2 border-gray-300 pl-6 hover:border-primary transition-colors"
                 >
-                  <strong className="block text-black text-lg mb-1">Premium Detailing</strong>
+                  <strong className="block text-black text-lg mb-1">최상급 디테일</strong>
                   기본을 넘어, 당신의 기준에 맞는 최상급 자재와 마감 공법을 선택할 수 있습니다.
                 </motion.div>
               </div>
