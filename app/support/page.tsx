@@ -48,22 +48,24 @@ export default function SupportPage() {
             {/* Left Column: Title & Description */}
             <div className="flex-shrink-0 xl:w-[500px]">
               <div className="mb-12">
-                <h1 className="text-[32px] md:text-[40px] lg:text-[48px] font-bold leading-tight mb-4 text-black">
-                  당신의 꿈을<br />짓는 여정
-                </h1>
-                <div className="w-[26px] h-[27px] relative">
-                  <svg width="26" height="27" viewBox="0 0 26 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 0H26V27L0 0Z" fill="black" />
-                  </svg>
+                <div className="flex items-start gap-4 mb-6">
+                  <div className="w-[26px] h-[27px] relative mt-2 flex-shrink-0">
+                    <svg width="26" height="27" viewBox="0 0 26 27" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M0 0H26V27L0 0Z" fill="black" />
+                    </svg>
+                  </div>
+                  <h1 className="text-[32px] md:text-[40px] lg:text-[48px] font-bold leading-tight text-black">
+                    당신의 꿈을<br />짓는 여정
+                  </h1>
                 </div>
-              </div>
 
-              <div className="max-w-xl">
-                <p className="text-[18px] lg:text-[20px] leading-relaxed font-medium text-black break-keep">
-                  "꿈이 현실이 되는 과정은 낯설거나 복잡해서는 안 됩니다.<br /><br />
-                  위트의 숙련된 '작업자들'이 이 여정의 처음부터 끝까지 당신과 함께 걷습니다.<br /><br />
-                  당신의 '로망'이 어떻게 '설계'가 되고, '니즈'가 어떻게 '기술'로 구현되는지, 모든 과정을 투명하게 공유하며 당신의 꿈을 가장 견고한 현실로 완성합니다."
-                </p>
+                <div className="max-w-xl">
+                  <p className="text-[18px] lg:text-[20px] leading-relaxed font-medium text-black break-keep">
+                    "꿈이 현실이 되는 과정은 낯설거나 복잡해서는 안 됩니다.<br /><br />
+                    위트의 숙련된 '작업자들'이 이 여정의 처음부터 끝까지 당신과 함께 걷습니다.<br /><br />
+                    당신의 '로망'이 어떻게 '설계'가 되고, '니즈'가 어떻게 '기술'로 구현되는지, 모든 과정을 투명하게 공유하며 당신의 꿈을 가장 견고한 현실로 완성합니다."
+                  </p>
+                </div>
               </div>
             </div>
 
