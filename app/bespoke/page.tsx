@@ -1,9 +1,19 @@
 'use client';
 
 import Image from 'next/image';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useState } from 'react';
+import { X } from 'lucide-react';
 
 export default function BespokePage() {
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  const images = [
+    { id: 'small-cafe', src: '/images/bespoke/small-cafe.jpg', alt: 'Small Cafe' },
+    { id: 'popup-store', src: '/images/bespoke/popup-store.jpg', alt: 'Pop-up Store' },
+    { id: 'smart-farm', src: '/images/bespoke/smart-farm.png', alt: 'Smart Farm' },
+  ];
+
   return (
     <div className="min-h-screen bg-white">
       {/* Section 1: Main Introduction */}
@@ -108,17 +118,19 @@ export default function BespokePage() {
               </button>
             </motion.div>
             <motion.div
-              className="lg:w-1/2 order-1 lg:order-2 relative h-[400px] md:h-[600px] w-full"
+              className="lg:w-1/2 order-1 lg:order-2 relative h-[400px] md:h-[600px] w-full cursor-pointer"
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
+              layoutId="small-cafe"
+              onClick={() => setSelectedId('small-cafe')}
             >
               <Image
                 src="/images/bespoke/small-cafe.jpg"
                 alt="Small Cafe"
                 fill
-                className="object-cover rounded-lg shadow-2xl"
+                className="object-cover rounded-lg shadow-2xl hover:scale-105 transition-transform duration-500"
               />
             </motion.div>
           </div>
@@ -130,17 +142,19 @@ export default function BespokePage() {
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
             <motion.div
-              className="lg:w-1/2 relative h-[400px] md:h-[600px] w-full"
+              className="lg:w-1/2 relative h-[400px] md:h-[600px] w-full cursor-pointer"
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
+              layoutId="popup-store"
+              onClick={() => setSelectedId('popup-store')}
             >
               <Image
                 src="/images/bespoke/popup-store.jpg"
                 alt="Pop-up Store"
                 fill
-                className="object-cover rounded-lg shadow-2xl"
+                className="object-cover rounded-lg shadow-2xl hover:scale-105 transition-transform duration-500"
               />
             </motion.div>
             <motion.div
@@ -196,22 +210,59 @@ export default function BespokePage() {
               </button>
             </motion.div>
             <motion.div
-              className="lg:w-1/2 order-1 lg:order-2 relative h-[400px] md:h-[600px] w-full"
+              className="lg:w-1/2 order-1 lg:order-2 relative h-[400px] md:h-[600px] w-full cursor-pointer"
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
+              layoutId="smart-farm"
+              onClick={() => setSelectedId('smart-farm')}
             >
               <Image
                 src="/images/bespoke/smart-farm.png"
                 alt="Smart Farm"
                 fill
-                className="object-cover rounded-lg shadow-2xl"
+                className="object-cover rounded-lg shadow-2xl hover:scale-105 transition-transform duration-500"
               />
             </motion.div>
           </div>
         </div>
       </section>
+
+      {/* Expanded Image Overlay */}
+      <AnimatePresence>
+        {selectedId && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 md:p-10"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setSelectedId(null)}
+          >
+            <motion.div
+              layoutId={selectedId}
+              className="relative w-full max-w-7xl h-auto aspect-video md:h-[85vh] md:w-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {images.find(img => img.id === selectedId) && (
+                <Image
+                  src={images.find(img => img.id === selectedId)!.src}
+                  alt={images.find(img => img.id === selectedId)!.alt}
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              )}
+              <button
+                className="absolute -top-12 right-0 text-white hover:text-primary transition-colors"
+                onClick={() => setSelectedId(null)}
+              >
+                <X className="w-8 h-8" />
+              </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
