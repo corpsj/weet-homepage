@@ -420,7 +420,7 @@ export default function ProductsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#F5F5F5] relative">
+    <div className="min-h-screen bg-[#EBEBEB] relative">
       {/* Sidebar Toggle Button */}
       <button
         className="fixed top-[120px] md:top-[160px] lg:top-[200px] left-4 z-50 bg-white border border-gray-300 p-3 rounded-lg shadow-lg transition-all hover:shadow-xl lg:hidden"

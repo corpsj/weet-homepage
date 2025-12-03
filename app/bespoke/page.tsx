@@ -4,7 +4,7 @@ export default function BespokePage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Section 1: Main Introduction */}
-      <section className="bg-gray-100 py-12 md:py-16 lg:py-20">
+      <section className="bg-[#EBEBEB] py-12 md:py-16 lg:py-20">
         <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[148px]">
           <h1 className="text-[48px] md:text-[64px] lg:text-[80px] font-bold mb-6 md:mb-8">BESPOKE</h1>
 
@@ -36,7 +36,7 @@ export default function BespokePage() {
           <div className="flex justify-end items-center gap-2 md:gap-4">
             <span className="text-[48px] md:text-[64px] lg:text-[80px] font-bold">More</span>
             <svg className="w-[48px] h-[48px] md:w-[64px] md:h-[64px] lg:w-[77px] lg:h-[77px]" viewBox="0 0 24 24" fill="none">
-              <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" fill="currentColor"/>
+              <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" fill="currentColor" />
             </svg>
           </div>
         </div>
@@ -72,7 +72,7 @@ export default function BespokePage() {
       </section>
 
       {/* Section 3: Pop-up Store */}
-      <section className="bg-gray-100 py-12 md:py-16 lg:py-20">
+      <section className="bg-[#EBEBEB] py-12 md:py-16 lg:py-20">
         <div className="max-w-[1920px] mx-auto px-0">
           <div className="relative lg:min-h-[865px]">
             <div className="static lg:absolute lg:left-[39px] lg:top-[54px] z-10 px-4 md:px-8 lg:px-0 mb-8 lg:mb-0">

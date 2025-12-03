@@ -57,7 +57,7 @@ export default function HeroCarousel() {
   }, [currentSlide]);
 
   return (
-    <section className="relative h-[60vh] md:h-[80vh] lg:h-screen bg-gray-200 overflow-hidden">
+    <section className="relative h-[60vh] md:h-[80vh] lg:h-screen bg-[#EBEBEB] overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0">
         <AnimatePresence mode="wait">
