@@ -1,5 +1,5 @@
 import { createClient } from '@/utils/supabase/server';
-import HeroCarouselClient from './HeroCarouselClient';
+import HeroCarouselClient, { Slide } from './HeroCarouselClientComponent';
 
 async function getHeroSlides() {
   const supabase = await createClient();
@@ -20,7 +20,7 @@ export default async function HeroCarousel() {
   const slides = await getHeroSlides();
 
   // Fallback slides if DB is empty
-  const initialSlides = slides.length > 0 ? slides : [
+  const initialSlides: Slide[] = slides.length > 0 ? slides : [
     {
       id: 1,
       image_url: '/images/products/small/private/02-3x6-house-render.jpg',

@@ -4,14 +4,14 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 
-interface Slide {
+export interface Slide {
     id: number;
     image_url: string;
     title?: string;
     subtitle?: string;
 }
 
-export default function HeroCarouselClient({ initialSlides }: { initialSlides: any[] }) {
+export default function HeroCarouselClient({ initialSlides }: { initialSlides: Slide[] }) {
     const [currentSlide, setCurrentSlide] = useState(0);
 
     const nextSlide = useCallback(() => {
