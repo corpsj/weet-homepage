@@ -29,10 +29,6 @@ export default function BespokePage() {
               BESPOKE
             </h1>
 
-            <h1 className="text-[50px] md:text-[70px] lg:text-[90px] font-bold mb-8 md:mb-12 leading-none tracking-tight">
-              BESPOKE
-            </h1>
-
             <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
               {/* Intro Text - Wider Column (65%) */}
               <div className="lg:w-[65%]">
