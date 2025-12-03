@@ -47,7 +47,7 @@ export interface Database {
           exterior_finish?: string | null
           interior_finish?: string | null
           size?: string | null
-          hover_image_url?: string | null
+          floor_plan_url?: string | null
           display_order?: number
           is_active?: boolean
           is_signature?: boolean
@@ -69,12 +69,157 @@ export interface Database {
           exterior_finish?: string | null
           interior_finish?: string | null
           size?: string | null
-          hover_image_url?: string | null
+          floor_plan_url?: string | null
           display_order?: number
           is_active?: boolean
           is_signature?: boolean
           created_at?: string
           updated_at?: string
+        }
+      }
+      inquiries: {
+        Row: {
+          id: string
+          name: string
+          email: string
+          phone: string | null
+          message: string
+          status: 'new' | 'read' | 'replied'
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          email: string
+          phone?: string | null
+          message: string
+          status?: 'new' | 'read' | 'replied'
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          email?: string
+          phone?: string | null
+          message?: string
+          status?: 'new' | 'read' | 'replied'
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      hero_slides: {
+        Row: {
+          id: number
+          image_url: string
+          title: string
+          subtitle: string | null
+          display_order: number
+          is_active: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: number
+          image_url: string
+          title: string
+          subtitle?: string | null
+          display_order?: number
+          is_active?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: number
+          image_url?: string
+          title?: string
+          subtitle?: string | null
+          display_order?: number
+          is_active?: boolean
+          created_at?: string
+        }
+      }
+      solutions: {
+        Row: {
+          id: string
+          title: string
+          description: string
+          image_url: string
+          sort_order: number
+          is_active: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          description: string
+          image_url: string
+          sort_order?: number
+          is_active?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          description?: string
+          image_url?: string
+          sort_order?: number
+          is_active?: boolean
+          created_at?: string
+        }
+      }
+      faqs: {
+        Row: {
+          id: string
+          question: string
+          answer: string
+          category: string
+          sort_order: number
+          is_active: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          question: string
+          answer: string
+          category?: string
+          sort_order?: number
+          is_active?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          question?: string
+          answer?: string
+          category?: string
+          sort_order?: number
+          is_active?: boolean
+          created_at?: string
+        }
+      }
+      notices: {
+        Row: {
+          id: string
+          title: string
+          content: string
+          is_pinned: boolean
+          is_active: boolean
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          content: string
+          is_pinned?: boolean
+          is_active?: boolean
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          content?: string
+          is_pinned?: boolean
+          is_active?: boolean
+          created_at?: string
         }
       }
     }

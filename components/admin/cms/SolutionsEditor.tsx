@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { Plus, Trash2, GripVertical, Save, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type SupabaseAny = any;
 import ImageUpload from '@/components/admin/media/ImageUpload';
 
 interface Solution {
@@ -19,7 +21,7 @@ export default function SolutionsEditor({ initialSolutions }: { initialSolutions
     const [solutions, setSolutions] = useState<Solution[]>(initialSolutions);
     const [loading, setLoading] = useState(false);
     const router = useRouter();
-    const supabase = createClient();
+    const supabase = createClient() as SupabaseAny;
 
     const handleAddSolution = async () => {
         setLoading(true);

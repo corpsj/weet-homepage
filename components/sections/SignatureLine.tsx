@@ -1,10 +1,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/utils/supabase/server';
+import { Product } from '@/types/supabase';
 
-async function getSignatureProducts() {
+async function getSignatureProducts(): Promise<Product[]> {
   const supabase = await createClient();
-  const { data, error } = await supabase
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data, error } = await (supabase as any)
     .from('products')
     .select('*')
     .eq('is_active', true)
@@ -16,7 +18,7 @@ async function getSignatureProducts() {
     return [];
   }
 
-  return data || [];
+  return (data || []) as Product[];
 }
 
 export default async function SignatureLine() {
