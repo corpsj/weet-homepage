@@ -58,9 +58,9 @@ export default function CompanyPage() {
               </div>
 
               <div className="mt-8 text-left">
-                <span className="relative inline-block font-bold text-black text-[24px] md:text-[28px]">
+                <span className="relative inline-block font-bold text-black text-[16px] md:text-[18px]">
                   <span className="relative z-10">주식회사 위트</span>
-                  <span className="absolute bottom-[2px] left-0 w-full h-[12px] bg-primary -z-0"></span>
+                  <span className="absolute bottom-[2px] left-0 w-full h-[8px] bg-primary -z-0"></span>
                 </span>
               </div>
             </div>
