@@ -51,3 +51,18 @@ export async function deleteProduct(id: string) {
     revalidatePath('/admin/products');
     revalidatePath('/products');
 }
+
+export async function toggleProductStatus(id: string, isActive: boolean) {
+    const { error } = await supabaseAdmin
+        .from('products')
+        .update({ is_active: isActive } as never)
+        .eq('id', id);
+
+    if (error) {
+        console.error('Error toggling product status:', error);
+        throw new Error('Failed to toggle product status');
+    }
+
+    revalidatePath('/admin/products');
+    revalidatePath('/products');
+}

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Plus, Edit, Trash2 } from 'lucide-react';
 import { supabaseAdmin } from '@/lib/supabase';
 import { deleteProduct } from '@/app/actions/product-actions';
+import ProductStatusToggle from '@/components/admin/products/ProductStatusToggle';
 
 import { Product } from '@/types/supabase';
 
@@ -53,15 +54,9 @@ export default async function AdminProductsPage() {
                                         {product.size_category}
                                     </span>
                                 </td>
+
                                 <td className="px-6 py-4">
-                                    <span
-                                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${product.is_active
-                                            ? 'bg-green-100 text-green-800'
-                                            : 'bg-gray-100 text-gray-800'
-                                            }`}
-                                    >
-                                        {product.is_active ? '활성' : '비활성'}
-                                    </span>
+                                    <ProductStatusToggle id={product.id} isActive={product.is_active} />
                                 </td>
                                 <td className="px-6 py-4 text-right flex justify-end gap-2">
                                     <Link

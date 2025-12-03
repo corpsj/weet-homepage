@@ -42,6 +42,11 @@ const navigation: { title: string; items: NavItem[] }[] = [
                 icon: Monitor
             },
             {
+                name: '제품 관리',
+                href: '/admin/products',
+                icon: Package
+            },
+            {
                 name: '솔루션',
                 href: '/admin/cms/solutions',
                 icon: Layers
@@ -56,7 +61,6 @@ const navigation: { title: string; items: NavItem[] }[] = [
     {
         title: "Commerce",
         items: [
-            { name: '제품 관리', href: '/admin/products', icon: Package },
             { name: '문의 관리', href: '/admin/inquiries', icon: MessageSquare },
         ]
     },
