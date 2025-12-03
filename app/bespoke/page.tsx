@@ -15,13 +15,13 @@ export default function BespokePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-[60px] md:text-[80px] lg:text-[100px] font-bold mb-8 md:mb-12 leading-none tracking-tight">
+            <h1 className="text-[50px] md:text-[70px] lg:text-[90px] font-bold mb-8 md:mb-12 leading-none tracking-tight">
               BESPOKE
             </h1>
 
             <div className="flex flex-col lg:flex-row gap-12 lg:gap-24">
               <div className="lg:w-1/2">
-                <p className="text-[18px] md:text-[20px] leading-relaxed mb-8 text-gray-800">
+                <p className="text-[18px] md:text-[20px] leading-relaxed mb-8 text-gray-800 break-keep">
                   weet의 모듈러 기술력은 '시그니처 라인'의 검증된 품질로 이미 증명되었습니다.
                   <span className="block mt-4 font-semibold text-black text-xl md:text-2xl relative inline-block">
                     <span className="relative z-10">'비스포크 서비스'는 세상에 단 하나뿐인<br />당신의 공간을 짓는 프리미엄 맞춤 솔루션입니다.</span>
