@@ -53,7 +53,7 @@ export default function SupportPage() {
                 </h1>
                 <div className="w-[26px] h-[27px] relative">
                   <svg width="26" height="27" viewBox="0 0 26 27" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 0L26 0L13 27L0 0Z" fill="black" />
+                    <path d="M0 0H26V27L0 0Z" fill="black" />
                   </svg>
                 </div>
               </div>
