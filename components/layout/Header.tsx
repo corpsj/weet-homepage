@@ -194,11 +194,11 @@ export default function Header() {
                 >
                   <Link
                     href={item.href}
-                    className="relative inline-block text-black font-bold text-[18px] hover:text-gray-700 transition-colors whitespace-nowrap"
+                    className="relative inline-block text-black font-bold text-[18px] hover:text-gray-700 transition-colors whitespace-nowrap group"
                   >
-                    {item.name}
+                    <span className="relative z-10">{item.name}</span>
                     <span className={cn(
-                      "absolute bottom-[-2px] left-0 right-0 h-[8px] bg-primary transition-all duration-200 -z-10",
+                      "absolute bottom-[2px] left-0 right-0 h-[8px] bg-primary transition-all duration-200 -z-0",
                       activeMenu === item.name ? "opacity-100 scale-x-100" : "opacity-0 scale-x-0"
                     )} />
                   </Link>
@@ -287,7 +287,7 @@ export default function Header() {
                             className="relative inline-block text-[14px] text-gray-600 hover:text-black transition-colors group"
                           >
                             <span className="relative z-10">{subitem}</span>
-                            <span className="absolute bottom-0 left-0 right-0 h-[4px] bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200 -z-0" />
+                            <span className="absolute bottom-[1px] left-0 right-0 h-[6px] bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200 -z-0" />
                           </Link>
                         ))}
                       </div>
