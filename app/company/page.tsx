@@ -99,7 +99,7 @@ export default function CompanyPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Section 1: Hero - '우리는 고객의 꿈을 짓습니다' */}
-      <section className="bg-[#EBEBEB] py-16 lg:py-24">
+      <section id="philosophy" className="bg-[#EBEBEB] py-16 lg:py-24 scroll-mt-[180px]">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             {/* Left: Slogan Image */}
@@ -162,7 +162,7 @@ export default function CompanyPage() {
       </section>
 
       {/* Section 2: 기업 CI */}
-      <section className="bg-white py-16 lg:py-24">
+      <section id="ci" className="bg-white py-16 lg:py-24 scroll-mt-[180px]">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             {/* Left: Logo */}
@@ -252,7 +252,7 @@ export default function CompanyPage() {
       </section>
 
       {/* Section 3: weet Crew */}
-      <section className="bg-[#EBEBEB] py-16 lg:py-24">
+      <section id="crew" className="bg-[#EBEBEB] py-16 lg:py-24 scroll-mt-[180px]">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
           <div className="flex flex-col lg:flex-row items-start gap-12 lg:gap-20">
             {/* Left: weet Crew Logo */}
@@ -332,7 +332,7 @@ export default function CompanyPage() {
       </section>
 
       {/* Section 4: weet Factory */}
-      <section className="bg-[#EBEBEB] py-16 lg:py-24 border-t border-gray-200">
+      <section id="factory" className="bg-[#EBEBEB] py-16 lg:py-24 border-t border-gray-200 scroll-mt-[180px]">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
           <div className="flex flex-col lg:flex-row items-start gap-12 lg:gap-20">
             {/* Left: weet Factory Logo */}

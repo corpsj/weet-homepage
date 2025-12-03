@@ -13,11 +13,11 @@ const navigation = [
     href: '/modular',
     width: 145,
     submenu: [
-      '모듈러건축이란?',
-      '모듈러 형태',
-      '사전제작 탈현장 건설',
-      'OSC',
-      '조립방식의 건축',
+      { name: '모듈러건축이란?', href: '/modular#what-is-modular' },
+      { name: '모듈러 형태', href: '/modular#modular-types' },
+      { name: '사전제작 탈현장 건설', href: '/modular#prefabrication' },
+      { name: 'OSC', href: '/modular#osc' },
+      { name: '조립방식의 건축', href: '/modular#assembly' },
     ],
   },
   {
@@ -25,12 +25,12 @@ const navigation = [
     href: '/products',
     width: 75,
     submenu: [
-      'S',
-      'M',
-      'L',
-      'XL',
-      'Solution',
-      'Design',
+      { name: 'S', href: '/products#s' },
+      { name: 'M', href: '/products#m' },
+      { name: 'L', href: '/products#l' },
+      { name: 'XL', href: '/products#xl' },
+      { name: 'Solution', href: '/products#solution' },
+      { name: 'Design', href: '/products#design' },
     ],
   },
   {
@@ -38,8 +38,8 @@ const navigation = [
     href: '/bespoke',
     width: 100,
     submenu: [
-      'BESPOKE 란?',
-      '제안 예시',
+      { name: 'BESPOKE 란?', href: '/bespoke#what-is-bespoke' },
+      { name: '제안 예시', href: '/bespoke#examples' },
     ],
   },
   {
@@ -47,10 +47,10 @@ const navigation = [
     href: '/solution',
     width: 155,
     submenu: [
-      'CCTV (보안 솔루션)',
-      '인터넷 솔루션',
-      '스마트 홈 솔루션',
-      '디자인 컨설팅 솔루션',
+      { name: 'CCTV (보안 솔루션)', href: '/solution/cctv' },
+      { name: '인터넷 솔루션', href: '/solution/network' },
+      { name: '스마트 홈 솔루션', href: '/solution/iot' },
+      { name: '디자인 컨설팅 솔루션', href: '/solution/design' },
     ],
   },
   {
@@ -58,10 +58,10 @@ const navigation = [
     href: '/company',
     width: 85,
     submenu: [
-      '우리의 철학',
-      '기업 CI',
-      '위트 크루',
-      '위트 펙토리',
+      { name: '우리의 철학', href: '/company#philosophy' },
+      { name: '기업 CI', href: '/company#ci' },
+      { name: '위트 크루', href: '/company#crew' },
+      { name: '위트 펙토리', href: '/company#factory' },
     ],
   },
   {
@@ -69,12 +69,12 @@ const navigation = [
     href: '/support',
     width: 75,
     submenu: [
-      '구매방법',
-      '방문예약',
-      '상담문의',
-      '견적문의',
-      'Q/A',
-      'A/S',
+      { name: '구매방법', href: '/support#purchase' },
+      { name: '방문예약', href: '/support#reservation' },
+      { name: '상담문의', href: '/support#consultation' },
+      { name: '견적문의', href: '/support#quote' },
+      { name: 'Q/A', href: '/support#qa' },
+      { name: 'A/S', href: '/support#as' },
     ],
   },
 ];
@@ -264,10 +264,10 @@ export default function Header() {
                           {item.submenu.map((subitem, idx) => (
                             <Link
                               key={idx}
-                              href={`${item.href}#${subitem.toLowerCase().replace(/\s+/g, '-')}`}
+                              href={subitem.href}
                               className="relative inline-block text-[14px] text-gray-600 hover:text-black transition-colors group"
                             >
-                              <span className="relative z-10">{subitem}</span>
+                              <span className="relative z-10">{subitem.name}</span>
                               <span className="absolute bottom-[1px] left-0 right-0 h-[6px] bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200 -z-0" />
                             </Link>
                           ))}
@@ -328,11 +328,11 @@ export default function Header() {
                   {item.submenu.map((subitem, idx) => (
                     <Link
                       key={idx}
-                      href={`${item.href}#${subitem.toLowerCase().replace(/\s+/g, '-')}`}
+                      href={subitem.href}
                       onClick={() => setMobileMenuOpen(false)}
                       className="block text-base md:text-lg text-gray-600 hover:text-black transition-colors py-1"
                     >
-                      {subitem}
+                      {subitem.name}
                     </Link>
                   ))}
                 </div>

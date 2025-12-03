@@ -17,7 +17,7 @@ export default function BespokePage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Section 1: Main Introduction */}
-      <section className="bg-[#EBEBEB] py-20 md:py-28 lg:py-32 overflow-hidden">
+      <section id="what-is-bespoke" className="bg-[#EBEBEB] py-20 md:py-28 lg:py-32 overflow-hidden scroll-mt-[180px]">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -95,7 +95,7 @@ export default function BespokePage() {
       </section>
 
       {/* Section 2: Small Cafe (Image Right) */}
-      <section className="bg-white py-20 md:py-32 overflow-hidden">
+      <section id="examples" className="bg-white py-20 md:py-32 overflow-hidden scroll-mt-[180px]">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
             <motion.div
