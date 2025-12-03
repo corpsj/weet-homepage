@@ -12,7 +12,7 @@ export default function ModularPage() {
     <div className="min-h-screen bg-white">
       {/* Section 1: 모듈러(Module)건축이란? */}
       <section className="bg-[#E8E8E8] py-16 lg:py-24">
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[140px]">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
             {/* Left: Illustration + Checklist */}
             <div>
@@ -115,7 +115,7 @@ export default function ModularPage() {
 
       {/* Section 2: 하이브리드 모듈러 형태 & 사전제작 */}
       <section className="bg-white py-16 lg:py-24">
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[140px]">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
           {/* 하이브리드 모듈러 형태 */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start mb-16 lg:mb-24">
             {/* Left: Image */}
@@ -197,7 +197,7 @@ export default function ModularPage() {
 
       {/* Section 3: 탈현장 건설 OSC & 조립방식의 건축 */}
       <section className="bg-[#E8E8E8] py-16 lg:py-24">
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[140px]">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
           {/* 탈현장 건설 OSC */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start mb-16 lg:mb-24">
             {/* Left: Image */}

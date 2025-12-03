@@ -130,7 +130,7 @@ export default function Header() {
         }
       }}
     >
-      <div className="max-w-[1920px] mx-auto">
+      <div className="max-w-[1600px] mx-auto">
         {/* Main Header */}
         <div className="relative flex items-center h-[100px] md:h-[140px] lg:h-[180px] px-4 md:px-8 lg:px-[64px]">
           {/* Logo */}

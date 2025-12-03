@@ -7,7 +7,7 @@ export default function CompanyPage() {
     <div className="min-h-screen bg-white">
       {/* Section 1: Hero - '우리는 고객의 꿈을 짓습니다' */}
       <section className="bg-[#EBEBEB] py-16 lg:py-24">
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[140px]">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             {/* Left: Slogan Image */}
             <div className="flex justify-center lg:justify-start">
@@ -70,7 +70,7 @@ export default function CompanyPage() {
 
       {/* Section 2: 기업 CI */}
       <section className="bg-white py-16 lg:py-24">
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[140px]">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             {/* Left: Logo */}
             <div className="flex justify-center lg:justify-start">
@@ -160,7 +160,7 @@ export default function CompanyPage() {
 
       {/* Section 3: weet Crew */}
       <section className="bg-[#EBEBEB] py-16 lg:py-24">
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[140px]">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
           <div className="flex flex-col lg:flex-row items-start gap-12 lg:gap-20">
             {/* Left: weet Crew Logo */}
             <div className="flex-shrink-0">
@@ -231,7 +231,7 @@ export default function CompanyPage() {
 
       {/* Section 4: weet Factory */}
       <section className="bg-[#EBEBEB] py-16 lg:py-24 border-t border-gray-200">
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[140px]">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
           <div className="flex flex-col lg:flex-row items-start gap-12 lg:gap-20">
             {/* Left: weet Factory Logo */}
             <div className="flex-shrink-0">

@@ -5,7 +5,7 @@ export default function BespokePage() {
     <div className="min-h-screen bg-white">
       {/* Section 1: Main Introduction */}
       <section className="bg-[#EBEBEB] py-12 md:py-16 lg:py-20">
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[148px]">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
           <h1 className="text-[48px] md:text-[64px] lg:text-[80px] font-bold mb-6 md:mb-8">BESPOKE</h1>
 
           <p className="text-[15px] md:text-[17px] lg:text-[18px] mb-6 md:mb-8 leading-relaxed max-w-full lg:max-w-[916px]">
@@ -44,7 +44,7 @@ export default function BespokePage() {
 
       {/* Section 2: Small Cafe */}
       <section className="bg-white py-12 md:py-16 lg:py-20">
-        <div className="max-w-[1920px] mx-auto px-0">
+        <div className="max-w-[1600px] mx-auto px-0">
           <div className="relative lg:min-h-[867px]">
             <div className="static lg:absolute lg:left-[29px] lg:top-[54px] z-10 px-4 md:px-8 lg:px-0 mb-8 lg:mb-0">
               <h2 className="text-[48px] md:text-[64px] lg:text-[80px] font-bold mb-6 md:mb-8 leading-tight">SMALL CAFE</h2>
@@ -73,7 +73,7 @@ export default function BespokePage() {
 
       {/* Section 3: Pop-up Store */}
       <section className="bg-[#EBEBEB] py-12 md:py-16 lg:py-20">
-        <div className="max-w-[1920px] mx-auto px-0">
+        <div className="max-w-[1600px] mx-auto px-0">
           <div className="relative lg:min-h-[865px]">
             <div className="static lg:absolute lg:left-[39px] lg:top-[54px] z-10 px-4 md:px-8 lg:px-0 mb-8 lg:mb-0">
               <h2 className="text-[48px] md:text-[64px] lg:text-[80px] font-bold mb-3 md:mb-4 leading-tight max-w-full lg:max-w-[723px]">
@@ -105,7 +105,7 @@ export default function BespokePage() {
 
       {/* Section 4: Smart Farm */}
       <section className="bg-white py-12 md:py-16 lg:py-20">
-        <div className="max-w-[1920px] mx-auto px-0">
+        <div className="max-w-[1600px] mx-auto px-0">
           <div className="relative lg:min-h-[867px]">
             <div className="static lg:absolute lg:left-[39px] lg:top-[57px] z-10 px-4 md:px-8 lg:px-0 mb-8 lg:mb-0">
               <h2 className="text-[48px] md:text-[64px] lg:text-[80px] font-bold mb-2 leading-tight max-w-full lg:max-w-[723px]">

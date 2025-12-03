@@ -17,7 +17,7 @@ export default function SignatureLine() {
 
   return (
     <section className="py-12 md:py-16 lg:py-20 bg-white">
-      <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[150px]">
+      <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[150px]">
         <h2 className="text-[32px] md:text-[40px] lg:text-[48px] font-semibold mb-8 md:mb-12 lg:mb-16 text-black">시그니처 라인</h2>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-8 md:gap-y-12 lg:gap-x-12 lg:gap-y-16">

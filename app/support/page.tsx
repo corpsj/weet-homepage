@@ -42,7 +42,7 @@ export default function SupportPage() {
     <div className="min-h-screen bg-white">
       {/* Section 1: 구매과정 (Purchase Process) */}
       <section className="bg-[#EBEBEB] py-12 md:py-16 lg:py-20">
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[123px]">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[123px]">
           {/* Title with diagonal corner */}
           <div className="flex items-center gap-3 md:gap-4 mb-6 md:mb-8">
             <div className="w-[20px] h-[21px] md:w-[23px] md:h-[24px] lg:w-[26px] lg:h-[27px] flex-shrink-0">
@@ -122,7 +122,7 @@ export default function SupportPage() {
 
       {/* Section 2: Q/A and F/Q */}
       <section className="bg-[#EBEBEB] py-12 md:py-20 lg:py-32">
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[123px]">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[123px]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 lg:gap-32">
             {/* Q/A Section */}
             <div>
@@ -177,7 +177,7 @@ export default function SupportPage() {
 
       {/* Section 3: 방문예약 (Reservation) */}
       <section className="bg-[#EBEBEB] py-12 md:py-20 lg:py-32">
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[123px]">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[123px]">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 lg:gap-12">
             {/* 방문예약 */}
             <div className="text-center bg-white p-6 md:p-8 rounded-lg shadow-md">
@@ -220,7 +220,7 @@ export default function SupportPage() {
 
       {/* Section 4: A/S */}
       <section className="bg-[#EBEBEB] py-12 md:py-20 lg:py-32">
-        <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[123px]">
+        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[123px]">
           <h2 className="text-[48px] md:text-[64px] lg:text-[80px] font-bold mb-6 md:mb-8">A/S</h2>
           <p className="text-[14px] md:text-[15px] lg:text-[16px] text-gray-600">
             제품 A/S 및 사후 관리 서비스

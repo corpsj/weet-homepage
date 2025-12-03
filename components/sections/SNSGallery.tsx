@@ -11,7 +11,7 @@ export default function SNSGallery() {
 
   return (
     <section className="py-12 md:py-16 lg:py-24 bg-white">
-      <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[150px]">
+      <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[150px]">
         <h2 className="text-[32px] md:text-[40px] lg:text-[48px] font-semibold mb-8 md:mb-12 lg:mb-16 text-black">SNS</h2>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 lg:gap-6 mb-8 md:mb-12 lg:mb-16">

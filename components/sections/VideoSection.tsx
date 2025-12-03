@@ -13,7 +13,7 @@ export default function VideoSection() {
 
   return (
     <section className="py-12 md:py-16 lg:py-24 bg-gray-100">
-      <div className="max-w-[1920px] mx-auto px-4 md:px-8 lg:px-[150px]">
+      <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[150px]">
         <h2 className="text-[32px] md:text-[40px] lg:text-[48px] font-semibold mb-8 md:mb-12 lg:mb-16 text-black">weet video</h2>
 
         <div className="relative w-full max-w-[1200px] mx-auto aspect-video bg-gray-800 rounded-lg md:rounded-xl overflow-hidden shadow-lg md:shadow-2xl group cursor-pointer">
