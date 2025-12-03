@@ -55,7 +55,7 @@ export default function SupportPage() {
                     </svg>
                   </div>
                   <h1 className="text-[32px] md:text-[40px] lg:text-[48px] font-bold leading-tight text-black">
-                    당신의 꿈을<br />짓는 여정
+                    당신의 꿈을 짓는 여정
                   </h1>
                 </div>
 
