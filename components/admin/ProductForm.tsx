@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Product, ProductInsert } from '@/types/supabase';
 import { createProduct, updateProduct } from '@/app/actions/product-actions';
 import { Loader2 } from 'lucide-react';
+import ImageUpload from '@/components/admin/media/ImageUpload';
 
 interface ProductFormProps {
     initialData?: Product;
@@ -39,6 +40,14 @@ export default function ProductForm({ initialData }: ProductFormProps) {
             ...prev,
             [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
         }));
+    };
+
+    const handleImageChange = (url: string) => {
+        setFormData(prev => ({ ...prev, image_url: url }));
+    };
+
+    const handleFloorPlanChange = (url: string) => {
+        setFormData(prev => ({ ...prev, floor_plan_url: url }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -160,28 +169,30 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                     <h3 className="text-lg font-bold border-b pb-2">이미지 및 설명</h3>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">메인 이미지 URL</label>
-                        <input
-                            type="text"
-                            name="image_url"
-                            required
-                            value={formData.image_url}
-                            onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded-lg outline-none"
-                            placeholder="/images/products/..."
+                        <label className="block text-sm font-medium text-gray-700 mb-1">메인 이미지</label>
+                        <ImageUpload
+                            value={formData.image_url || ''}
+                            onChange={handleImageChange}
                         />
                     </div>
 
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">도면 이미지 URL</label>
-                        <input
-                            type="text"
-                            name="floor_plan_url"
-                            value={formData.floor_plan_url || ''}
-                            onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded-lg outline-none"
-                            placeholder="/images/products/floor-plans/..."
-                        />
+                        <label className="block text-sm font-medium text-gray-700 mb-1">도면 이미지</label>
+                        <div className="space-y-2">
+                            <ImageUpload
+                                value={formData.floor_plan_url || ''}
+                                onChange={handleFloorPlanChange}
+                                className="h-[200px]"
+                            />
+                            <input
+                                type="text"
+                                name="floor_plan_url"
+                                value={formData.floor_plan_url || ''}
+                                onChange={handleChange}
+                                className="w-full px-3 py-2 border rounded-lg outline-none text-sm font-mono text-gray-600"
+                                placeholder="URL 직접 입력 또는 크롭 파라미터 추가"
+                            />
+                        </div>
                         <p className="text-xs text-gray-500 mt-1">
                             * 크롭 파라미터 포함 가능 (예: ?crop_w=300%&crop_h=440%&crop_t=-111%&crop_l=0%)
                         </p>
