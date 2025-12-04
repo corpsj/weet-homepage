@@ -1,5 +1,3 @@
-'use client';
-
 import AdminSidebar from '@/components/admin/AdminSidebar';
 import AdminHeader from '@/components/admin/AdminHeader';
 import { createClient } from '@/utils/supabase/server';

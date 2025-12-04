@@ -67,22 +67,17 @@ export default function SolutionsEditor({ initialSolutions }: { initialSolutions
 
     const updateSortOrder = async (items: Solution[]) => {
         try {
-            const updates = items.map((item, index) => ({
-                id: item.id,
-                sort_order: index
-            }));
-
-            const { error } = await supabase
-                .from('solutions')
-                .upsert(updates, { onConflict: 'id' });
-
-            if (error) throw error;
+            for (let i = 0; i < items.length; i++) {
+                const { error } = await supabase
+                    .from('solutions')
+                    .update({ sort_order: i } as never)
+                    .eq('id', items[i].id);
+                if (error) throw error;
+            }
             toast.success('순서가 저장되었습니다.');
         } catch (error) {
             console.error(error);
             toast.error('순서 저장 실패');
-            // Revert would be complex here without deep clone history, 
-            // but for sort order, usually a refresh is enough or user tries again
         }
     };
 
@@ -99,7 +94,7 @@ export default function SolutionsEditor({ initialSolutions }: { initialSolutions
 
             const { error } = await supabase
                 .from('solutions')
-                .insert(newSolution);
+                .insert(newSolution as never);
 
             if (error) throw error;
             router.refresh();
@@ -120,7 +115,7 @@ export default function SolutionsEditor({ initialSolutions }: { initialSolutions
         try {
             const { error } = await supabase
                 .from('solutions')
-                .update({ [field]: value })
+                .update({ [field]: value } as never)
                 .eq('id', id);
 
             if (error) throw error;
