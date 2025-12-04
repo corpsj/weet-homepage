@@ -24,7 +24,7 @@ const productsData = [
         tagline: ""
     },
     {
-        name: "3X6 집",
+        name: "3X6 집 (Zinc)",
         category: "Small unit",
         sub_category: "Private",
         size_category: "S",
