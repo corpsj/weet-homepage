@@ -18,7 +18,7 @@ export default async function InsightsPage() {
         fetchTopPages()
     ]);
 
-    const isConfigured = trafficStats !== null;
+    const isConfigured = trafficStats !== null && !(trafficStats as any)?.error;
 
     // Debug info
     const debugInfo = {
@@ -27,6 +27,8 @@ export default async function InsightsPage() {
         hasClientEmail: !!process.env.GOOGLE_CLIENT_EMAIL,
         hasPrivateKey: !!process.env.GOOGLE_PRIVATE_KEY,
         privateKeyLength: process.env.GOOGLE_PRIVATE_KEY?.length || 0,
+        // eslint-disable-next-line
+        apiError: (trafficStats as any)?.error || null,
     };
 
     return (
