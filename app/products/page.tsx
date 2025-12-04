@@ -83,6 +83,7 @@ export default function ProductsPage() {
   const [expandedCategories, setExpandedCategories] = useState<string[]>(["S"]);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [activeProduct, setActiveProduct] = useState<string>("");
+  const [selectedFloorPlan, setSelectedFloorPlan] = useState<string | null>(null);
   const productRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   useEffect(() => {
@@ -105,7 +106,15 @@ export default function ProductsPage() {
   }, []);
 
   // 사이드바 구조 생성 (Dynamic)
-  const sidebarStructure = useMemo(() => {
+  interface SidebarCategory {
+    label: string;
+    subtitle: string;
+    items?: string[];
+    Private?: string[];
+    Public?: string[];
+  }
+
+  const sidebarStructure = useMemo<Record<string, SidebarCategory>>(() => {
     return {
       S: {
         label: "S",
@@ -204,24 +213,35 @@ export default function ProductsPage() {
 
   return (
     <div className="min-h-screen bg-[#EBEBEB] relative">
-      {/* Sidebar Toggle Button */}
-      <button
-        className="fixed top-[120px] md:top-[160px] lg:top-[200px] left-4 z-50 bg-white border border-gray-300 p-3 rounded-lg shadow-lg transition-all hover:shadow-xl lg:hidden"
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-        aria-label="Toggle sidebar"
-      >
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" fill="currentColor" />
-        </svg>
-      </button>
-
-      {/* Overlay for mobile */}
-      {sidebarOpen && (
+      {/* Floor Plan Modal */}
+      {selectedFloorPlan && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          onClick={() => setSelectedFloorPlan(null)}
+        >
+          <div className="relative w-full max-w-5xl aspect-video bg-white rounded-xl overflow-hidden shadow-2xl">
+            <button
+              className="absolute top-4 right-4 p-2 bg-black/50 hover:bg-black/70 text-white rounded-full transition-colors z-10"
+              onClick={() => setSelectedFloorPlan(null)}
+            >
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+            <div className="w-full h-full relative">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={selectedFloorPlan}
+                alt="Floor Plan Full View"
+                className="w-full h-full object-contain"
+              />
+            </div>
+          </div>
+        </div>
       )}
+
+      {/* Sidebar Toggle Button */}
+      {/* ... existing button ... */}
 
       {/* Floating Sidebar */}
       <aside
@@ -237,246 +257,111 @@ export default function ProductsPage() {
         max-h-[calc(100vh-220px)]
       `}
       >
-        {/* Menu Header - Mobile only */}
-        <div className="lg:hidden sticky top-0 bg-white/95 backdrop-blur-md flex items-center justify-end p-4 border-b border-gray-200 rounded-t-xl">
-          <button onClick={() => setSidebarOpen(false)} className="hover:bg-gray-100 rounded-full p-1">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor" />
-            </svg>
-          </button>
-        </div>
-
+        {/* ... existing sidebar content ... */}
+        {/* Update Sidebar Items to match products-1 style more closely if needed */}
         {/* Categories */}
-        <div className="p-4 pt-6">
-          {/* S Category */}
-          <div className="mb-2">
-            <div
-              className="flex items-center justify-between cursor-pointer pb-2 border-b border-black"
-              onClick={() => toggleCategory("S")}
-            >
-              <h3 className="text-[20px] font-bold">S</h3>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                className={`transition-transform ${expandedCategories.includes("S") ? "rotate-180" : ""}`}
-              >
-                <path d="M7 10l5 5 5-5z" fill="currentColor" />
-              </svg>
-            </div>
+        <div className="p-4 pt-6 space-y-8">
+          {(Object.keys(sidebarStructure) as Array<keyof typeof sidebarStructure>).map((key) => {
+            const category = sidebarStructure[key];
+            const isExpanded = expandedCategories.includes(key);
+            const hasItems = (category.items && category.items.length > 0) ||
+              (category.Private && category.Private.length > 0) ||
+              (category.Public && category.Public.length > 0);
 
-            {expandedCategories.includes("S") && (
-              <div className="pt-3">
-                {/* Private */}
-                {sidebarStructure.S.Private.length > 0 && (
-                  <div className="mb-4">
-                    <p className="text-[11px] font-semibold mb-2 text-gray-500">Private</p>
-                    <div className="space-y-1 text-[12px]">
-                      {sidebarStructure.S.Private.map((productId) => (
-                        <p
-                          key={productId}
-                          className={`cursor-pointer py-0.5 transition-colors hover:text-[#FEBD16] ${activeProduct === productId ? "text-[#FEBD16] font-bold bg-[#FEBD16]/10 px-2 -mx-2 rounded" : ""
-                            }`}
-                          onClick={() => scrollToProduct(productId)}
-                        >
-                          {getProductName(productId)}
-                        </p>
-                      ))}
-                    </div>
+            if (!hasItems) return null;
+
+            return (
+              <div key={key} className="group">
+                <div
+                  className="flex items-start justify-between cursor-pointer mb-2"
+                  onClick={() => toggleCategory(key)}
+                >
+                  <div>
+                    <h3 className={`text-[20px] font-bold transition-colors ${isExpanded ? 'text-black' : 'text-gray-400 group-hover:text-gray-600'}`}>
+                      {category.label}
+                    </h3>
+                    {category.subtitle && (
+                      <p className="text-[11px] text-gray-400 mt-1 whitespace-pre-line leading-relaxed">
+                        {category.subtitle}
+                      </p>
+                    )}
+                  </div>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    className={`transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
+                  >
+                    <path d="M7 10l5 5 5-5z" fill={isExpanded ? "currentColor" : "#9CA3AF"} />
+                  </svg>
+                </div>
+
+                {isExpanded && (
+                  <div className="space-y-4 pl-1 mt-3">
+                    {/* S Category Special Handling */}
+                    {key === 'S' ? (
+                      <>
+                        {category.Private && category.Private.length > 0 && (
+                          <div className="mb-3">
+                            <p className="text-[11px] font-semibold mb-2 text-gray-400 uppercase tracking-wider">Private</p>
+                            <div className="space-y-1 text-[12px]">
+                              {category.Private.map((id: string) => (
+                                <p
+                                  key={id}
+                                  className={`cursor-pointer py-0.5 transition-colors hover:text-[#FEBD16] ${activeProduct === id ? "text-[#FEBD16] font-bold bg-[#FEBD16]/10 px-2 -mx-2 rounded" : "text-gray-500"
+                                    }`}
+                                  onClick={() => scrollToProduct(id)}
+                                >
+                                  {getProductName(id)}
+                                </p>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {category.Public && category.Public.length > 0 && (
+                          <div className="mb-3">
+                            <p className="text-[11px] font-semibold mb-2 text-gray-400 uppercase tracking-wider">Public</p>
+                            <div className="space-y-1 text-[12px]">
+                              {category.Public.map((id: string) => (
+                                <p
+                                  key={id}
+                                  className={`cursor-pointer py-0.5 transition-colors hover:text-[#FEBD16] ${activeProduct === id ? "text-[#FEBD16] font-bold bg-[#FEBD16]/10 px-2 -mx-2 rounded" : "text-gray-500"
+                                    }`}
+                                  onClick={() => scrollToProduct(id)}
+                                >
+                                  {getProductName(id)}
+                                </p>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      // Other Categories
+                      <div className="space-y-1 text-[12px]">
+                        {category.items?.map((id: string) => (
+                          <p
+                            key={id}
+                            className={`cursor-pointer py-0.5 transition-colors hover:text-[#FEBD16] ${activeProduct === id ? "text-[#FEBD16] font-bold bg-[#FEBD16]/10 px-2 -mx-2 rounded" : "text-gray-500"
+                              }`}
+                            onClick={() => scrollToProduct(id)}
+                          >
+                            {getProductName(id)}
+                          </p>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 )}
-
-                {/* Public */}
-                {sidebarStructure.S.Public.length > 0 && (
-                  <div className="mb-4">
-                    <p className="text-[11px] font-semibold mb-2 text-gray-500">Public</p>
-                    <div className="space-y-1 text-[12px]">
-                      {sidebarStructure.S.Public.map((productId) => (
-                        <p
-                          key={productId}
-                          className={`cursor-pointer py-0.5 transition-colors hover:text-[#FEBD16] ${activeProduct === productId ? "text-[#FEBD16] font-bold bg-[#FEBD16]/10 px-2 -mx-2 rounded" : ""
-                            }`}
-                          onClick={() => scrollToProduct(productId)}
-                        >
-                          {getProductName(productId)}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-                )}
               </div>
-            )}
-          </div>
-
-          {/* M Category */}
-          <div className="mb-2">
-            <div
-              className="flex items-center justify-between cursor-pointer pb-2 border-b border-black"
-              onClick={() => toggleCategory("M")}
-            >
-              <h3 className="text-[20px] font-bold">M</h3>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                className={`transition-transform ${expandedCategories.includes("M") ? "rotate-180" : ""}`}
-              >
-                <path d="M7 10l5 5 5-5z" fill="currentColor" />
-              </svg>
-            </div>
-            <p className="text-[11px] text-gray-500 mt-1">Small unit + Small unit</p>
-            {expandedCategories.includes("M") && sidebarStructure.M.items.length > 0 && (
-              <div className="pt-3 space-y-1 text-[12px]">
-                {sidebarStructure.M.items.map((productId) => (
-                  <p
-                    key={productId}
-                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FEBD16] ${activeProduct === productId ? "text-[#FEBD16] font-bold bg-[#FEBD16]/10 px-2 -mx-2 rounded" : ""}`}
-                    onClick={() => scrollToProduct(productId)}
-                  >
-                    {getProductName(productId)}
-                  </p>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* L Category */}
-          <div className="mb-2">
-            <div
-              className="flex items-center justify-between cursor-pointer pb-2 border-b border-black"
-              onClick={() => toggleCategory("L")}
-            >
-              <h3 className="text-[20px] font-bold">L</h3>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                className={`transition-transform ${expandedCategories.includes("L") ? "rotate-180" : ""}`}
-              >
-                <path d="M7 10l5 5 5-5z" fill="currentColor" />
-              </svg>
-            </div>
-            <p className="text-[11px] text-gray-500 mt-1 whitespace-pre-line">{sidebarStructure.L.subtitle}</p>
-            {expandedCategories.includes("L") && sidebarStructure.L.items.length > 0 && (
-              <div className="pt-3 space-y-1 text-[12px]">
-                {sidebarStructure.L.items.map((productId) => (
-                  <p
-                    key={productId}
-                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FEBD16] ${activeProduct === productId ? "text-[#FEBD16] font-bold bg-[#FEBD16]/10 px-2 -mx-2 rounded" : ""}`}
-                    onClick={() => scrollToProduct(productId)}
-                  >
-                    {getProductName(productId)}
-                  </p>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* XL Category */}
-          <div className="mb-2">
-            <div
-              className="flex items-center justify-between cursor-pointer pb-2 border-b border-black"
-              onClick={() => toggleCategory("XL")}
-            >
-              <h3 className="text-[20px] font-bold">XL</h3>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                className={`transition-transform ${expandedCategories.includes("XL") ? "rotate-180" : ""}`}
-              >
-                <path d="M7 10l5 5 5-5z" fill="currentColor" />
-              </svg>
-            </div>
-            <p className="text-[11px] text-gray-500 mt-1">{sidebarStructure.XL.subtitle}</p>
-            {expandedCategories.includes("XL") && sidebarStructure.XL.items.length > 0 && (
-              <div className="pt-3 space-y-1 text-[12px]">
-                {sidebarStructure.XL.items.map((productId) => (
-                  <p
-                    key={productId}
-                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FEBD16] ${activeProduct === productId ? "text-[#FEBD16] font-bold bg-[#FEBD16]/10 px-2 -mx-2 rounded" : ""}`}
-                    onClick={() => scrollToProduct(productId)}
-                  >
-                    {getProductName(productId)}
-                  </p>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* SOLUTION Category */}
-          <div className="mb-2">
-            <div
-              className="flex items-center justify-between cursor-pointer pb-2 border-b border-black"
-              onClick={() => toggleCategory("SOLUTION")}
-            >
-              <h3 className="text-[16px] font-bold">SOLUTION</h3>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                className={`transition-transform ${expandedCategories.includes("SOLUTION") ? "rotate-180" : ""}`}
-              >
-                <path d="M7 10l5 5 5-5z" fill="currentColor" />
-              </svg>
-            </div>
-            {expandedCategories.includes("SOLUTION") && sidebarStructure.SOLUTION.items.length > 0 && (
-              <div className="pt-3 space-y-1 text-[12px]">
-                {sidebarStructure.SOLUTION.items.map((productId) => (
-                  <p
-                    key={productId}
-                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FEBD16] ${activeProduct === productId ? "text-[#FEBD16] font-bold bg-[#FEBD16]/10 px-2 -mx-2 rounded" : ""}`}
-                    onClick={() => scrollToProduct(productId)}
-                  >
-                    {getProductName(productId)}
-                  </p>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* DESIGN Category */}
-          <div className="mb-2">
-            <div
-              className="flex items-center justify-between cursor-pointer pb-2 border-b border-black"
-              onClick={() => toggleCategory("DESIGN")}
-            >
-              <h3 className="text-[16px] font-bold">DESIGN</h3>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                className={`transition-transform ${expandedCategories.includes("DESIGN") ? "rotate-180" : ""}`}
-              >
-                <path d="M7 10l5 5 5-5z" fill="currentColor" />
-              </svg>
-            </div>
-            {expandedCategories.includes("DESIGN") && sidebarStructure.DESIGN.items.length > 0 && (
-              <div className="pt-3 space-y-1 text-[12px]">
-                {sidebarStructure.DESIGN.items.map((productId) => (
-                  <p
-                    key={productId}
-                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FEBD16] ${activeProduct === productId ? "text-[#FEBD16] font-bold bg-[#FEBD16]/10 px-2 -mx-2 rounded" : ""}`}
-                    onClick={() => scrollToProduct(productId)}
-                  >
-                    {getProductName(productId)}
-                  </p>
-                ))}
-              </div>
-            )}
-          </div>
+            );
+          })}
         </div>
       </aside>
 
       {/* Main Content Area */}
       <div className="min-h-screen pt-[100px] md:pt-[140px] lg:pt-[180px]">
-        {/* Products List */}
         <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
           {products.map((product) => (
             <div
@@ -487,7 +372,7 @@ export default function ProductsPage() {
               }}
               className="min-h-screen flex flex-col lg:flex-row mb-20 lg:mb-0"
             >
-              {/* Image Section - 좌측 */}
+              {/* Image Section */}
               <div className="w-full lg:w-[75%] h-[50vh] lg:h-screen relative">
                 {product.imageUrl ? (
                   <Image
@@ -505,7 +390,7 @@ export default function ProductsPage() {
                 )}
               </div>
 
-              {/* Info Section - 우측 */}
+              {/* Info Section */}
               <div className="w-full lg:w-[25%] bg-[#ebebeb] p-4 md:p-6 lg:p-8 flex flex-col">
                 {/* Category Tag with full-width line */}
                 <div className="mb-4">
@@ -527,15 +412,18 @@ export default function ProductsPage() {
                   </p>
                 </div>
 
-                {/* Floor Plan Diagram - CSS Cropped */}
+                {/* Floor Plan Diagram - Clickable for Modal */}
                 {product.floorPlan.src && (
                   <div className="mb-6 flex justify-center">
-                    <div className="relative w-full max-w-[250px] h-[120px] overflow-hidden border border-gray-200">
+                    <div
+                      className="relative w-full max-w-[250px] h-[120px] overflow-hidden border border-gray-200 cursor-zoom-in hover:border-[#FEBD16] transition-colors group"
+                      onClick={() => setSelectedFloorPlan(product.floorPlan.src)}
+                    >
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={product.floorPlan.src}
                         alt={`${product.name} 도면`}
-                        className="absolute max-w-none"
+                        className="absolute max-w-none group-hover:scale-105 transition-transform duration-300"
                         style={{
                           width: product.floorPlan.crop.width,
                           height: product.floorPlan.crop.height,
@@ -543,6 +431,9 @@ export default function ProductsPage() {
                           left: product.floorPlan.crop.left,
                         }}
                       />
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/10 transition-colors">
+                        <span className="opacity-0 group-hover:opacity-100 bg-black/70 text-white text-xs px-2 py-1 rounded">크게 보기</span>
+                      </div>
                     </div>
                   </div>
                 )}
