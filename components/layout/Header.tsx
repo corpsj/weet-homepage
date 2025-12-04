@@ -242,18 +242,14 @@ export default function Header() {
           {/* Mega Menu Dropdown */}
           {showMegaMenu && (
             <div
-              className="hidden lg:block absolute left-0 right-0 z-40"
+              className="hidden lg:block absolute left-0 right-0 z-40 pointer-events-none"
               style={{ top: '110px' }}
-              onMouseEnter={() => setShowMegaMenu(true)}
-              onMouseLeave={() => {
-                setShowMegaMenu(false);
-                setActiveMenu(null);
-              }}
             >
               <div className="flex justify-center w-full pr-[120px]">
                 <div
-                  className="flex py-6 gap-[60px] px-[60px] rounded-b-2xl shadow-sm"
+                  className="flex py-6 gap-[60px] px-[60px] rounded-b-2xl shadow-sm pointer-events-auto"
                   style={{ backgroundColor: '#EBEBEB' }}
+                  onMouseEnter={() => setShowMegaMenu(true)}
                 >
                   {navigation.map((item) => (
                     <div
