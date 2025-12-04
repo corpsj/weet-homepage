@@ -373,7 +373,7 @@ export default function ProductsPage() {
               className="min-h-screen flex flex-col lg:flex-row mb-20 lg:mb-32 border-b border-gray-300 pb-20 lg:pb-32 last:border-b-0"
             >
               {/* Image Section */}
-              <div className="w-full lg:w-[75%] h-[50vh] lg:h-screen relative">
+              <div className="w-full lg:w-[75%] aspect-[4/3] relative">
                 {product.imageUrl ? (
                   <Image
                     src={product.imageUrl}
@@ -432,6 +432,7 @@ export default function ProductsPage() {
                             height: product.floorPlan.crop.height,
                             top: product.floorPlan.crop.top,
                             left: product.floorPlan.crop.left,
+                            objectFit: 'contain'
                           }}
                         />
                         <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/10 transition-colors">
