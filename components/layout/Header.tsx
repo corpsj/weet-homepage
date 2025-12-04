@@ -95,7 +95,24 @@ export default function Header() {
     setMounted(true);
   }, []);
 
-  // ... (scroll effect)
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY < 10) {
+        setIsVisible(true);
+      } else if (currentScrollY > lastScrollY) {
+        setIsVisible(false); // Scrolling down
+      } else {
+        setIsVisible(true); // Scrolling up
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
   return (
     <>
@@ -113,12 +130,12 @@ export default function Header() {
       >
         <div className="max-w-[1600px] mx-auto">
           {/* Main Header */}
-          <div className="relative flex items-center h-[100px] md:h-[140px] lg:h-[180px] px-4 md:px-8 lg:px-[64px]">
+          <div className="relative flex items-center h-[70px] md:h-[90px] lg:h-[110px] px-4 md:px-8 lg:px-[64px]">
             {/* Logo */}
             <Link href="/" className="absolute left-4 md:left-8 lg:left-[64px] top-1/2 -translate-y-1/2 lg:static lg:transform-none">
-              <div className="w-[80px] h-[80px] md:w-[110px] md:h-[110px] lg:w-[140px] lg:h-[140px] relative">
+              <div className="w-[50px] h-[50px] md:w-[70px] md:h-[70px] lg:w-[90px] lg:h-[90px] relative">
                 <Image
-                  src="/images/logo/weet-logo.png"
+                  src="/images/logo_new.png"
                   alt="Weet Logo"
                   fill
                   className="object-contain"
