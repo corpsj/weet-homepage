@@ -36,7 +36,7 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
     if (initialSlides.length === 0) return null;
 
     return (
-        <section ref={containerRef} className="relative bg-[#EBEBEB] overflow-hidden w-full max-w-[1600px] mx-auto h-[calc(100vh-70px)] md:h-[calc(100vh-90px)] lg:h-[calc(100vh-110px)]">
+        <section ref={containerRef} className="relative bg-[#EBEBEB] overflow-hidden w-full max-w-[1400px] mx-auto h-[calc(100vh-70px)] md:h-[calc(100vh-90px)] lg:h-[calc(100vh-110px)] rounded-b-[30px] md:rounded-b-[40px] lg:rounded-b-[50px]">
             {/* Background Image with Parallax */}
             <motion.div style={{ y }} className="absolute inset-0 h-[120%] -top-[10%]">
                 <AnimatePresence mode="wait">

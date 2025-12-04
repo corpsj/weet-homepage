@@ -17,7 +17,10 @@ export default function PartnersBanner() {
           {partnerLogos.map((partner, idx) => (
             <div
               key={idx}
-              className="relative h-12 md:h-14 lg:h-16 w-32 md:w-40 lg:w-48"
+              className={`relative ${idx === 2
+                  ? 'h-12 md:h-14 lg:h-16 w-32 md:w-40 lg:w-48' // Original size for 3rd item
+                  : 'h-8 md:h-10 lg:h-12 w-24 md:w-28 lg:w-36'  // Smaller size for others
+                }`}
             >
               <Image
                 src={partner.logo}
