@@ -10,6 +10,8 @@ import {
     Monitor,
     HelpCircle,
     Layers,
+    Lightbulb,
+    BarChart3,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -35,14 +37,19 @@ const navigation: { title: string; items: NavItem[] }[] = [
                 icon: Package
             },
             {
-                name: '솔루션',
+                name: '솔루션 페이지',
                 href: '/admin/cms/solutions',
-                icon: Layers
+                icon: Lightbulb
             },
             {
-                name: '고객지원',
+                name: '고객지원 페이지',
                 href: '/admin/cms/support',
                 icon: HelpCircle
+            },
+            {
+                name: '고객 인사이트',
+                href: '/admin/insights',
+                icon: BarChart3
             },
         ]
     },
