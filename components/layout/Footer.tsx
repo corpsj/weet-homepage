@@ -21,7 +21,7 @@ export default function Footer() {
           {/* Center - Company Info */}
           <div className="flex-1 space-y-1 md:ml-4 pb-1">
             <h3 className="text-[20px] md:text-[28px] font-bold text-black font-serif leading-none mb-2">
-              'WE make dreams comE True'
+              'WE make dreams comE <Link href="/admin" className="cursor-default text-inherit hover:no-underline">True</Link>'
             </h3>
             <div className="text-[11px] md:text-[12px] text-black leading-relaxed font-medium">
               <p>(주)위트 &nbsp;|&nbsp; 함평군 대동면 금산길 205-27 &nbsp;|&nbsp; 사업자 등록번호 660-86-01862 &nbsp;|&nbsp; 010 1234 4567</p>
