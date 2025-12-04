@@ -1,12 +1,27 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { migrateProducts } from '@/app/actions/migration-actions';
 import { Loader2 } from 'lucide-react';
+import { createClient } from '@/utils/supabase/client';
 
 export default function AdminSettingsPage() {
     const [migrating, setMigrating] = useState(false);
     const [message, setMessage] = useState('');
+    const [userEmail, setUserEmail] = useState('');
+    const supabase = createClient();
+
+    useEffect(() => {
+        const getUser = async () => {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user?.email) {
+                setUserEmail(user.email);
+            }
+        };
+        getUser();
+    }, [supabase]);
+
+    const userId = userEmail.split('@')[0];
 
     const handleMigration = async () => {
         if (!confirm('기존 데이터를 데이터베이스로 이관하시겠습니까? (중복 데이터가 생성될 수 있습니다)')) {
@@ -37,11 +52,11 @@ export default function AdminSettingsPage() {
                     <h2 className="text-lg font-bold text-gray-900 mb-4">계정 설정</h2>
                     <div className="grid gap-6 max-w-xl">
                         <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">이메일</label>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">아이디</label>
                             <input
-                                type="email"
+                                type="text"
                                 disabled
-                                value="admin@weet.com"
+                                value={userId}
                                 className="w-full px-3 py-2 bg-gray-100 border border-gray-200 rounded-lg text-sm text-gray-500 cursor-not-allowed"
                             />
                         </div>

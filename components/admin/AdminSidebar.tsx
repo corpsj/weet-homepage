@@ -25,11 +25,21 @@ interface NavItem {
 
 const navigation: { title: string; items: NavItem[] }[] = [
     {
+        title: "Overview",
+        items: [
+            {
+                name: '대시보드',
+                href: '/admin',
+                icon: Layers
+            }
+        ]
+    },
+    {
         title: "Content Management",
         items: [
             {
                 name: '메인 페이지',
-                href: '/admin/cms/main',
+                href: '/admin/main',
                 icon: Monitor
             },
             {
@@ -39,17 +49,17 @@ const navigation: { title: string; items: NavItem[] }[] = [
             },
             {
                 name: '솔루션 페이지',
-                href: '/admin/cms/solutions',
+                href: '/admin/solutions',
                 icon: Lightbulb
             },
             {
                 name: '고객지원 페이지',
-                href: '/admin/cms/support',
+                href: '/admin/support',
                 icon: HelpCircle
             },
             {
                 name: '고객 인사이트',
-                href: '/admin/insights',
+                href: '/admin/insights', // Keeping insights as per user request/existing folder
                 icon: BarChart3
             },
         ]
@@ -79,6 +89,9 @@ export default function AdminSidebar({ user }: { user?: any }) {
         router.refresh();
     };
 
+    // Extract ID from email (remove @weet.com)
+    const userId = user?.email ? user.email.split('@')[0] : 'admin';
+
     return (
         <aside className="w-72 bg-[#0F172A] text-white flex flex-col fixed inset-y-0 z-50 shadow-xl">
             {/* Logo Area */}
@@ -95,7 +108,9 @@ export default function AdminSidebar({ user }: { user?: any }) {
                         </h3>
                         <div className="space-y-1">
                             {section.items.map((item) => {
-                                const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+                                const isActive = item.href === '/admin'
+                                    ? pathname === '/admin'
+                                    : pathname.startsWith(item.href);
                                 return (
                                     <Link
                                         key={item.name}
@@ -124,11 +139,11 @@ export default function AdminSidebar({ user }: { user?: any }) {
             <div className="p-4 border-t border-gray-800 bg-[#0B1120]">
                 <div className="flex items-center gap-3 px-4 py-3 mb-2">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center text-sm font-bold">
-                        {user?.email?.[0].toUpperCase() || 'A'}
+                        {userId[0].toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium text-white truncate">Admin User</p>
-                        <p className="text-xs text-gray-500 truncate">{user?.email || 'admin@weet.com'}</p>
+                        <p className="text-sm font-medium text-white truncate">{userId}</p>
+                        <p className="text-xs text-gray-500 truncate">Administrator</p>
                     </div>
                 </div>
                 <button
