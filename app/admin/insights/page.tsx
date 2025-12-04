@@ -1,70 +1,61 @@
-import { supabaseAdmin } from '@/lib/supabase';
-import InsightsDashboard from '@/components/admin/insights/InsightsDashboard';
-import { format, parseISO } from 'date-fns';
-import { Database } from '@/types/supabase';
-
-type Inquiry = Database['public']['Tables']['inquiries']['Row'];
+import {
+    fetchTrafficStats,
+    fetchUserDemographics,
+    fetchAcquisitionSources,
+    fetchTopPages
+} from '@/app/actions/analytics-actions';
+import AnalyticsDashboard from '@/components/admin/insights/AnalyticsDashboard';
+import { AlertTriangle } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
 export default async function InsightsPage() {
-    // Fetch all inquiries
-    const { data: inquiries, error } = await supabaseAdmin
-        .from('inquiries')
-        .select('*')
-        .order('created_at', { ascending: true })
-        .returns<Inquiry[]>();
+    // Parallel data fetching
+    const [trafficStats, demographics, acquisition, topPages] = await Promise.all([
+        fetchTrafficStats(),
+        fetchUserDemographics(),
+        fetchAcquisitionSources(),
+        fetchTopPages()
+    ]);
 
-    if (error) {
-        console.error('Error fetching inquiries:', error);
-        return <div>Error loading insights</div>;
-    }
-
-    const totalInquiries = inquiries?.length || 0;
-
-    // Calculate Monthly Trends
-    const monthlyData: Record<string, number> = {};
-    inquiries?.forEach(inquiry => {
-        const date = parseISO(inquiry.created_at);
-        const monthKey = format(date, 'yyyy-MM'); // Group by YYYY-MM
-        monthlyData[monthKey] = (monthlyData[monthKey] || 0) + 1;
-    });
-
-    // Convert to array and sort (last 6 months or all)
-    const monthlyTrends = Object.entries(monthlyData)
-        .sort((a, b) => a[0].localeCompare(b[0]))
-        .map(([key, value]) => {
-            const [year, month] = key.split('-');
-            return {
-                month: `${month}월`, // Display as "12월"
-                count: value
-            };
-        });
-
-    // Calculate Status Distribution
-    const statusData: Record<string, number> = {};
-    inquiries?.forEach(inquiry => {
-        const status = inquiry.status || 'new';
-        statusData[status] = (statusData[status] || 0) + 1;
-    });
-
-    const statusDistribution = Object.entries(statusData).map(([name, value]) => ({
-        name,
-        value
-    }));
+    const isConfigured = trafficStats !== null;
 
     return (
-        <div>
-            <div className="mb-8">
-                <h1 className="text-2xl font-bold text-gray-900">고객 인사이트</h1>
-                <p className="text-gray-500 mt-1">고객 문의 데이터를 분석하여 인사이트를 제공합니다.</p>
+        <div className="space-y-8">
+            <div>
+                <h1 className="text-2xl font-bold text-gray-900">웹 로그 분석</h1>
+                <p className="text-gray-500 mt-1">방문자 트래픽, 유입 경로, 사용자 행동을 분석합니다.</p>
             </div>
 
-            <InsightsDashboard
-                totalInquiries={totalInquiries}
-                monthlyTrends={monthlyTrends}
-                statusDistribution={statusDistribution}
-            />
+            {!isConfigured ? (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-8 text-center">
+                    <div className="flex justify-center mb-4">
+                        <div className="p-3 bg-yellow-100 rounded-full">
+                            <AlertTriangle className="w-8 h-8 text-yellow-600" />
+                        </div>
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">Google Analytics 연동 필요</h3>
+                    <p className="text-gray-600 mb-6 max-w-md mx-auto">
+                        데이터를 불러오기 위해서는 Google Analytics 4 (GA4) 연동 및 서비스 계정 설정이 필요합니다.
+                    </p>
+                    <div className="text-sm text-gray-500 bg-white p-4 rounded-lg border border-gray-200 inline-block text-left">
+                        <p className="font-medium mb-2">필요한 환경 변수 (.env.local):</p>
+                        <ul className="list-disc list-inside space-y-1">
+                            <li><code>NEXT_PUBLIC_GA_ID</code> (GA4 측정 ID)</li>
+                            <li><code>GA_PROPERTY_ID</code> (속성 ID)</li>
+                            <li><code>GOOGLE_CLIENT_EMAIL</code> (서비스 계정 이메일)</li>
+                            <li><code>GOOGLE_PRIVATE_KEY</code> (서비스 계정 키)</li>
+                        </ul>
+                    </div>
+                </div>
+            ) : (
+                <AnalyticsDashboard
+                    trafficStats={trafficStats}
+                    demographics={demographics}
+                    acquisition={acquisition}
+                    topPages={topPages}
+                />
+            )}
         </div>
     );
 }
