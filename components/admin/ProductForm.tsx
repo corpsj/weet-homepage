@@ -64,6 +64,8 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
             router.refresh();
             if (onSuccess) {
                 onSuccess();
+            } else {
+                router.push('/admin/products');
             }
         } catch (error) {
             console.error(error);

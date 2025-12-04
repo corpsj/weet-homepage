@@ -17,7 +17,6 @@ export async function createProduct(data: ProductInsert) {
 
     revalidatePath('/admin/products');
     revalidatePath('/products');
-    redirect('/admin/products');
 }
 
 export async function updateProduct(id: string, data: ProductUpdate) {
@@ -34,7 +33,6 @@ export async function updateProduct(id: string, data: ProductUpdate) {
     revalidatePath('/admin/products');
     revalidatePath(`/admin/products/${id}`);
     revalidatePath('/products');
-    redirect('/admin/products');
 }
 
 export async function deleteProduct(id: string) {
