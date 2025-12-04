@@ -6,7 +6,7 @@ async function getHeroSlides() {
   const { data, error } = await supabase
     .from('hero_slides')
     .select('*')
-    .order('display_order', { ascending: true });
+    .order('sort_order', { ascending: true });
 
   if (error) {
     console.error('Error fetching hero slides:', error);
