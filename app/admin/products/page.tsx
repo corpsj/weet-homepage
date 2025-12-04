@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import { Plus, Edit, Trash2 } from 'lucide-react';
+import { Plus, Edit } from 'lucide-react';
 import { supabaseAdmin } from '@/lib/supabase';
-import { deleteProduct } from '@/app/actions/product-actions';
 import ProductStatusToggle from '@/components/admin/products/ProductStatusToggle';
+import DeleteProductButton from '@/components/admin/products/DeleteProductButton';
 
 import { Product } from '@/types/supabase';
 
@@ -75,19 +75,7 @@ export default async function AdminProductsPage() {
                                     >
                                         <Edit className="w-4 h-4" />
                                     </Link>
-                                    <form action={deleteProduct.bind(null, product.id)}>
-                                        <button
-                                            type="submit"
-                                            className="p-2 text-gray-400 hover:text-red-600 transition-colors"
-                                            onClick={(e) => {
-                                                if (!confirm('정말 삭제하시겠습니까?')) {
-                                                    e.preventDefault();
-                                                }
-                                            }}
-                                        >
-                                            <Trash2 className="w-4 h-4" />
-                                        </button>
-                                    </form>
+                                    <DeleteProductButton productId={product.id} />
                                 </td>
                             </tr>
                         ))}
