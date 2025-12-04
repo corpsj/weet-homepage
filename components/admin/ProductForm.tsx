@@ -9,9 +9,10 @@ import ImageUpload from '@/components/admin/media/ImageUpload';
 
 interface ProductFormProps {
     initialData?: Product;
+    onSuccess?: () => void;
 }
 
-export default function ProductForm({ initialData }: ProductFormProps) {
+export default function ProductForm({ initialData, onSuccess }: ProductFormProps) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState<Partial<ProductInsert>>({
@@ -61,6 +62,9 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                 await createProduct(formData as ProductInsert);
             }
             router.refresh();
+            if (onSuccess) {
+                onSuccess();
+            }
         } catch (error) {
             console.error(error);
             alert('저장 중 오류가 발생했습니다.');
@@ -70,7 +74,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="space-y-8 bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+        <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Basic Info */}
                 <div className="space-y-4">
@@ -278,7 +282,7 @@ export default function ProductForm({ initialData }: ProductFormProps) {
                 </div>
             </div>
 
-            <div className="flex justify-end pt-4">
+            <div className="flex justify-end pt-4 sticky bottom-0 bg-white border-t mt-6">
                 <button
                     type="submit"
                     disabled={loading}
