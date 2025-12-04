@@ -85,6 +85,8 @@ export interface Database {
           phone: string | null
           message: string
           status: 'new' | 'read' | 'replied'
+          answer: string | null
+          replied_at: string | null
           created_at: string
           updated_at: string
         }
@@ -95,6 +97,8 @@ export interface Database {
           phone?: string | null
           message: string
           status?: 'new' | 'read' | 'replied'
+          answer?: string | null
+          replied_at?: string | null
           created_at?: string
           updated_at?: string
         }
@@ -105,6 +109,8 @@ export interface Database {
           phone?: string | null
           message?: string
           status?: 'new' | 'read' | 'replied'
+          answer?: string | null
+          replied_at?: string | null
           created_at?: string
           updated_at?: string
         }

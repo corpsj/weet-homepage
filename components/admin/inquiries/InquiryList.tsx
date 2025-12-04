@@ -8,7 +8,7 @@ import {
     CheckCircle2, Clock, MessageSquare, Trash2,
     MoreHorizontal, X
 } from 'lucide-react';
-import { updateInquiryStatus, deleteInquiry } from '@/app/actions/inquiry-actions';
+import { updateInquiryStatus, deleteInquiry, updateInquiryAnswer } from '@/app/actions/inquiry-actions';
 
 interface Inquiry {
     id: string;
@@ -17,6 +17,8 @@ interface Inquiry {
     phone: string | null;
     message: string;
     status: 'new' | 'read' | 'replied';
+    answer: string | null;
+    replied_at: string | null;
     created_at: string;
 }
 
@@ -25,6 +27,8 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
     const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
     const [filterStatus, setFilterStatus] = useState<string>('all');
     const [searchTerm, setSearchTerm] = useState('');
+    const [replyText, setReplyText] = useState('');
+    const [isSending, setIsSending] = useState(false);
 
     const filteredInquiries = inquiries.filter(inquiry => {
         const matchesStatus = filterStatus === 'all' || inquiry.status === filterStatus;
@@ -36,7 +40,6 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
     });
 
     const handleStatusChange = async (id: string, newStatus: 'new' | 'read' | 'replied') => {
-        // Optimistic update
         setInquiries(inquiries.map(i => i.id === id ? { ...i, status: newStatus } : i));
         if (selectedInquiry?.id === id) {
             setSelectedInquiry({ ...selectedInquiry, status: newStatus });
@@ -46,14 +49,12 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
             await updateInquiryStatus(id, newStatus);
         } catch (error) {
             console.error('Failed to update status:', error);
-            // Revert on error would be better
         }
     };
 
     const handleDelete = async (id: string) => {
         if (!confirm('정말 삭제하시겠습니까?')) return;
 
-        // Optimistic update
         setInquiries(inquiries.filter(i => i.id !== id));
         if (selectedInquiry?.id === id) {
             setSelectedInquiry(null);
@@ -65,6 +66,42 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
             console.error('Failed to delete inquiry:', error);
             alert('삭제 중 오류가 발생했습니다.');
         }
+    };
+
+    const handleSaveReply = async () => {
+        if (!selectedInquiry || !replyText.trim()) return;
+
+        setIsSending(true);
+        try {
+            await updateInquiryAnswer(selectedInquiry.id, replyText);
+
+            // Update local state
+            const updatedInquiry = {
+                ...selectedInquiry,
+                status: 'replied' as const,
+                answer: replyText,
+                replied_at: new Date().toISOString()
+            };
+
+            setInquiries(inquiries.map(i => i.id === selectedInquiry.id ? updatedInquiry : i));
+            setSelectedInquiry(updatedInquiry);
+            setReplyText('');
+            alert('답변이 저장되었습니다.');
+        } catch (error) {
+            console.error('Failed to save reply:', error);
+            alert('답변 저장에 실패했습니다.');
+        } finally {
+            setIsSending(false);
+        }
+    };
+
+    const handleSendEmail = () => {
+        if (!selectedInquiry) return;
+
+        const subject = `[Weet] ${selectedInquiry.name}님 문의에 대한 답변입니다.`;
+        const body = selectedInquiry.answer || replyText || '';
+
+        window.location.href = `mailto:${selectedInquiry.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     };
 
     const getStatusColor = (status: string) => {
@@ -107,8 +144,8 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
                                 key={status}
                                 onClick={() => setFilterStatus(status)}
                                 className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${filterStatus === status
-                                        ? 'bg-black text-white'
-                                        : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                    ? 'bg-black text-white'
+                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                                     }`}
                             >
                                 {status === 'all' ? '전체' : getStatusLabel(status)}
@@ -124,6 +161,7 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
                             key={inquiry.id}
                             onClick={() => {
                                 setSelectedInquiry(inquiry);
+                                setReplyText(inquiry.answer || '');
                                 if (inquiry.status === 'new') {
                                     handleStatusChange(inquiry.id, 'read');
                                 }
@@ -208,33 +246,47 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
 
                     {/* Content */}
                     <div className="flex-1 p-8 overflow-y-auto bg-gray-50/50">
-                        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm min-h-[200px]">
+                        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm min-h-[150px] mb-6">
+                            <h4 className="text-sm font-bold text-gray-900 mb-2">문의 내용</h4>
                             <p className="text-gray-800 whitespace-pre-wrap leading-relaxed">
                                 {selectedInquiry.message}
                             </p>
                         </div>
-                    </div>
 
-                    {/* Actions */}
-                    <div className="p-4 border-t border-gray-200 bg-white flex justify-end gap-3">
-                        {selectedInquiry.status !== 'replied' && (
-                            <button
-                                onClick={() => handleStatusChange(selectedInquiry.id, 'replied')}
-                                className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors text-sm font-medium"
-                            >
-                                <CheckCircle2 className="w-4 h-4" />
-                                답변 완료 처리
-                            </button>
-                        )}
-                        {selectedInquiry.status === 'replied' && (
-                            <button
-                                onClick={() => handleStatusChange(selectedInquiry.id, 'read')}
-                                className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
-                            >
-                                <Clock className="w-4 h-4" />
-                                읽음 상태로 변경
-                            </button>
-                        )}
+                        {/* Reply Section */}
+                        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                            <div className="flex justify-between items-center mb-4">
+                                <h4 className="text-sm font-bold text-gray-900">답변 작성</h4>
+                                {selectedInquiry.replied_at && (
+                                    <span className="text-xs text-gray-500">
+                                        최근 답변: {format(new Date(selectedInquiry.replied_at), 'yyyy.MM.dd HH:mm')}
+                                    </span>
+                                )}
+                            </div>
+                            <textarea
+                                value={replyText}
+                                onChange={(e) => setReplyText(e.target.value)}
+                                className="w-full h-40 p-4 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black/5 resize-none mb-4"
+                                placeholder="답변 내용을 입력하세요..."
+                            />
+                            <div className="flex justify-end gap-3">
+                                <button
+                                    onClick={handleSendEmail}
+                                    className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                                >
+                                    <Mail className="w-4 h-4" />
+                                    메일 앱 열기
+                                </button>
+                                <button
+                                    onClick={handleSaveReply}
+                                    disabled={isSending || !replyText.trim()}
+                                    className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors text-sm font-medium disabled:bg-gray-400"
+                                >
+                                    <CheckCircle2 className="w-4 h-4" />
+                                    {isSending ? '저장 중...' : '답변 저장 및 완료 처리'}
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             ) : (

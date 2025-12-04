@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import InquiryForm from '@/components/support/InquiryForm';
 
 export default function SupportPage() {
   const steps = [
@@ -139,23 +140,7 @@ export default function SupportPage() {
               </p>
 
               <div className="bg-white p-6 md:p-8 rounded-lg shadow-sm">
-                <form className="space-y-4">
-                  <div>
-                    <label className="block text-sm font-bold mb-2">이름</label>
-                    <input type="text" className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:border-primary" placeholder="홍길동" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-bold mb-2">연락처</label>
-                    <input type="tel" className="w-full border border-gray-300 p-3 rounded focus:outline-none focus:border-primary" placeholder="010-0000-0000" />
-                  </div>
-                  <div>
-                    <label className="block text-sm font-bold mb-2">문의내용</label>
-                    <textarea className="w-full border border-gray-300 p-3 rounded h-32 focus:outline-none focus:border-primary" placeholder="문의하실 내용을 입력해주세요."></textarea>
-                  </div>
-                  <button className="w-full bg-black text-white py-4 rounded font-bold hover:bg-gray-800 transition-colors">
-                    문의하기
-                  </button>
-                </form>
+                <InquiryForm />
               </div>
             </div>
           </div>

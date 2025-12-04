@@ -51,6 +51,26 @@ export async function deleteInquiry(id: string) {
     revalidatePath('/admin/inquiries');
 }
 
+export async function updateInquiryAnswer(id: string, answer: string) {
+    const supabase = await createClient();
+    // eslint-disable-next-line
+    const { error } = await (supabase as any)
+        .from('inquiries')
+        .update({
+            answer,
+            status: 'replied',
+            replied_at: new Date().toISOString()
+        })
+        .eq('id', id);
+
+    if (error) {
+        console.error('Error updating inquiry answer:', error);
+        throw new Error('Failed to save answer');
+    }
+
+    revalidatePath('/admin/inquiries');
+}
+
 export async function createInquiry(formData: FormData) {
     const supabase = await createClient();
 
