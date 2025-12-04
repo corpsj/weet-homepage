@@ -26,6 +26,7 @@ export default function PartnersBanner() {
                 src={partner.logo}
                 alt={partner.name}
                 fill
+                sizes="(max-width: 768px) 96px, (max-width: 1024px) 112px, 144px"
                 className="object-contain"
               />
             </div>

@@ -13,6 +13,7 @@ export default function Footer() {
                 src="/images/company/weet-logo.png"
                 alt="weet:) 로고"
                 fill
+                sizes="(max-width: 768px) 100px, 120px"
                 className="object-contain"
               />
             </div>

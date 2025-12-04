@@ -33,7 +33,6 @@ export default function ImageUpload({ value, onChange, className = '', bucket = 
 
             // Compress if it's an image
             if (file.type.startsWith('image/')) {
-                console.log(`Original size: ${file.size / 1024 / 1024} MB`);
                 const options = {
                     maxSizeMB: 1,
                     maxWidthOrHeight: 1920,
@@ -41,10 +40,8 @@ export default function ImageUpload({ value, onChange, className = '', bucket = 
                 };
                 try {
                     const compressedFile = await imageCompression(file, options);
-                    console.log(`Compressed size: ${compressedFile.size / 1024 / 1024} MB`);
                     fileToUpload = compressedFile;
-                } catch (error) {
-                    console.error('Compression failed:', error);
+                } catch {
                     // Fallback to original file if compression fails
                 }
             }
@@ -66,8 +63,7 @@ export default function ImageUpload({ value, onChange, className = '', bucket = 
                 .getPublicUrl(filePath);
 
             onChange(data.publicUrl);
-        } catch (error) {
-            console.error('Upload failed:', error);
+        } catch {
             alert('이미지 업로드에 실패했습니다. 스토리지 버킷 설정을 확인해주세요.');
         } finally {
             setLoading(false);
@@ -98,6 +94,7 @@ export default function ImageUpload({ value, onChange, className = '', bucket = 
                         src={value}
                         alt="Uploaded image"
                         fill
+                        sizes="(max-width: 768px) 100vw, 400px"
                         className="object-cover"
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />

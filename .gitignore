@@ -43,6 +43,19 @@ next-env.d.ts
 # turbopack
 .turbo
 
-# YoYo AI version control directory
-.yoyo/
+# backup files
+*.bak
+*.backup
+*.old
+
+# temp/debug files
+*.sql
+figma_tree.json
+
+# python
 .venv/
+*.py
+__pycache__/
+
+# other tools
+.yoyo/

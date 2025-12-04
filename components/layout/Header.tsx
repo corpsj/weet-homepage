@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Menu, X, Instagram, Youtube } from 'lucide-react';
@@ -86,10 +86,36 @@ export default function Header() {
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [currentLang, setCurrentLang] = useState('KR');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [expandedMobileMenu, setExpandedMobileMenu] = useState<string | null>(null);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [mounted, setMounted] = useState(false);
+
+  const handleMobileMenuToggle = useCallback(() => {
+    setMobileMenuOpen(prev => !prev);
+  }, []);
+
+  const handleMobileMenuClose = useCallback(() => {
+    setMobileMenuOpen(false);
+  }, []);
+
+  const handleMegaMenuEnter = useCallback(() => {
+    setShowMegaMenu(true);
+  }, []);
+
+  const handleMegaMenuLeave = useCallback(() => {
+    if (window.innerWidth >= 1024) {
+      setShowMegaMenu(false);
+      setActiveMenu(null);
+    }
+  }, []);
+
+  const handleMenuHover = useCallback((menuName: string) => {
+    setActiveMenu(menuName);
+  }, []);
+
+  const handleLangChange = useCallback((lang: string) => {
+    setCurrentLang(lang);
+  }, []);
 
   useEffect(() => {
     setMounted(true);
@@ -121,12 +147,7 @@ export default function Header() {
           "bg-white fixed top-0 left-0 right-0 z-50 border-b border-gray-200 transition-transform duration-300",
           isVisible ? "translate-y-0" : "-translate-y-full"
         )}
-        onMouseLeave={() => {
-          if (window.innerWidth >= 1024) {
-            setShowMegaMenu(false);
-            setActiveMenu(null);
-          }
-        }}
+        onMouseLeave={handleMegaMenuLeave}
       >
         <div className="max-w-[1600px] mx-auto">
           {/* Main Header */}
@@ -138,6 +159,7 @@ export default function Header() {
                   src="/images/logo_new.png"
                   alt="Weet Logo"
                   fill
+                  sizes="(max-width: 768px) 50px, (max-width: 1024px) 70px, 90px"
                   className="object-contain"
                   priority
                 />
@@ -146,10 +168,7 @@ export default function Header() {
 
             {/* Mobile Menu Button - Right Side */}
             <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setMobileMenuOpen(!mobileMenuOpen);
-              }}
+              onClick={handleMobileMenuToggle}
               className="lg:hidden absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-[60] p-2 hover:bg-gray-100 rounded-md transition-colors active:bg-gray-200"
               aria-label="Toggle mobile menu"
               type="button"
@@ -160,13 +179,13 @@ export default function Header() {
             {/* Desktop Navigation */}
             <nav
               className="hidden lg:flex absolute left-0 right-0 top-0 bottom-0 items-center justify-center pointer-events-none pr-[120px]"
-              onMouseEnter={() => setShowMegaMenu(true)}
+              onMouseEnter={handleMegaMenuEnter}
             >
               <div className="flex pointer-events-auto gap-[60px] pb-[70px] -mb-[70px]">
                 {navigation.map((item) => (
                   <div
                     key={item.name}
-                    onMouseEnter={() => setActiveMenu(item.name)}
+                    onMouseEnter={() => handleMenuHover(item.name)}
                   >
                     <Link
                       href={item.href}
@@ -217,7 +236,7 @@ export default function Header() {
                 {languages.map((lang, idx) => (
                   <span key={lang} className="flex items-center">
                     <button
-                      onClick={() => setCurrentLang(lang)}
+                      onClick={() => handleLangChange(lang)}
                       className={cn(
                         'hover:text-gray-700 transition-colors',
                         currentLang === lang ? 'text-black font-bold' : 'text-gray-400'
@@ -239,7 +258,7 @@ export default function Header() {
                 {languages.map((lang, idx) => (
                   <span key={lang} className="flex items-center">
                     <button
-                      onClick={() => setCurrentLang(lang)}
+                      onClick={() => handleLangChange(lang)}
                       className={cn(
                         'hover:text-gray-700 transition-colors',
                         currentLang === lang ? 'text-black font-bold' : 'text-gray-600'
@@ -305,18 +324,19 @@ export default function Header() {
         <div className="lg:hidden fixed inset-0 bg-white z-[100] overflow-y-auto animate-fade-in">
           {/* Header with Close Button */}
           <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-            <Link href="/" onClick={() => setMobileMenuOpen(false)}>
+            <Link href="/" onClick={handleMobileMenuClose}>
               <div className="w-[60px] h-[60px] relative">
                 <Image
                   src="/images/logo/weet-logo.png"
                   alt="Weet Logo"
                   fill
+                  sizes="60px"
                   className="object-contain"
                 />
               </div>
             </Link>
             <button
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={handleMobileMenuClose}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
               type="button"
             >
@@ -335,7 +355,7 @@ export default function Header() {
                 {/* Main Menu Item */}
                 <Link
                   href={item.href}
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={handleMobileMenuClose}
                   className="block text-2xl md:text-3xl font-bold text-black mb-3 hover:text-gray-600 transition-colors"
                 >
                   {item.name}
@@ -347,7 +367,7 @@ export default function Header() {
                     <Link
                       key={idx}
                       href={subitem.href}
-                      onClick={() => setMobileMenuOpen(false)}
+                      onClick={handleMobileMenuClose}
                       className="block text-base md:text-lg text-gray-600 hover:text-black transition-colors py-1"
                     >
                       {subitem.name}
@@ -366,7 +386,7 @@ export default function Header() {
               {languages.map((lang) => (
                 <button
                   key={lang}
-                  onClick={() => setCurrentLang(lang)}
+                  onClick={() => handleLangChange(lang)}
                   className={cn(
                     'px-4 py-2 rounded-lg font-medium transition-all',
                     currentLang === lang
@@ -385,7 +405,7 @@ export default function Header() {
                 href="https://blog.naver.com"
                 target="_blank"
                 className="flex items-center gap-2 text-gray-700 hover:text-black transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={handleMobileMenuClose}
               >
                 <span className="text-xl font-bold">N</span>
                 <span className="text-sm">blog</span>
@@ -394,7 +414,7 @@ export default function Header() {
                 href="https://instagram.com"
                 target="_blank"
                 className="flex items-center gap-2 text-gray-700 hover:text-black transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={handleMobileMenuClose}
               >
                 <Instagram className="w-5 h-5" />
                 <span className="text-sm">Instagram</span>
@@ -403,7 +423,7 @@ export default function Header() {
                 href="https://youtube.com"
                 target="_blank"
                 className="flex items-center gap-2 text-gray-700 hover:text-black transition-colors"
-                onClick={() => setMobileMenuOpen(false)}
+                onClick={handleMobileMenuClose}
               >
                 <Youtube className="w-5 h-5" />
                 <span className="text-sm">YouTube</span>
