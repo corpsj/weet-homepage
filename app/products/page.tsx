@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import Image from "next/image";
 import { getProducts } from "@/lib/products";
 import { Product } from "@/types/supabase";
@@ -80,6 +80,9 @@ const mapProductToData = (p: Product): ProductData => {
 export default function ProductsPage() {
   const [products, setProducts] = useState<ProductData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [expandedCategories, setExpandedCategories] = useState<string[]>(["S"]);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [activeProduct, setActiveProduct] = useState<string>("");
   const productRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   useEffect(() => {
@@ -88,6 +91,9 @@ export default function ProductsPage() {
         const data = await getProducts();
         const mappedData = data.map(mapProductToData);
         setProducts(mappedData);
+        if (mappedData.length > 0) {
+          setActiveProduct(mappedData[0].id);
+        }
       } catch (error) {
         console.error("Failed to fetch products:", error);
       } finally {
@@ -98,6 +104,96 @@ export default function ProductsPage() {
     fetchProducts();
   }, []);
 
+  // 사이드바 구조 생성 (Dynamic)
+  const sidebarStructure = useMemo(() => {
+    return {
+      S: {
+        label: "S",
+        subtitle: "",
+        Private: products.filter(p => p.sizeCategory === "S" && p.subCategory === "Private").map(p => p.id),
+        Public: products.filter(p => p.sizeCategory === "S" && p.subCategory === "Public").map(p => p.id),
+      },
+      M: {
+        label: "M",
+        subtitle: "Small unit + Small unit",
+        items: products.filter(p => p.sizeCategory === "M").map(p => p.id)
+      },
+      L: {
+        label: "L",
+        subtitle: "Small unit + Small unit\n+ 현장 공사",
+        items: products.filter(p => p.sizeCategory === "L").map(p => p.id)
+      },
+      XL: {
+        label: "XL",
+        subtitle: "단지개념",
+        items: products.filter(p => p.sizeCategory === "XL").map(p => p.id)
+      },
+      SOLUTION: {
+        label: "SOLUTION",
+        subtitle: "",
+        items: products.filter(p => p.sizeCategory === "SOLUTION").map(p => p.id)
+      },
+      DESIGN: {
+        label: "DESIGN",
+        subtitle: "",
+        items: products.filter(p => p.sizeCategory === "DESIGN").map(p => p.id)
+      },
+    };
+  }, [products]);
+
+  const toggleCategory = (category: string) => {
+    if (expandedCategories.includes(category)) {
+      setExpandedCategories(expandedCategories.filter((c) => c !== category));
+    } else {
+      setExpandedCategories([...expandedCategories, category]);
+    }
+  };
+
+  const scrollToProduct = (productId: string) => {
+    const element = productRefs.current[productId];
+    if (element) {
+      const headerOffset = 100; // Adjusted for header height
+      const elementPosition = element.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth",
+      });
+      setActiveProduct(productId);
+
+      // Mobile: Close sidebar after selection
+      if (window.innerWidth < 1024) {
+        setSidebarOpen(false);
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 300;
+
+      for (const product of products) {
+        const element = productRefs.current[product.id];
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveProduct(product.id);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [products]);
+
+  const getProductName = (id: string) => {
+    const product = products.find((p) => p.id === id);
+    return product?.name || id;
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#EBEBEB]">
@@ -107,7 +203,277 @@ export default function ProductsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#EBEBEB]">
+    <div className="min-h-screen bg-[#EBEBEB] relative">
+      {/* Sidebar Toggle Button */}
+      <button
+        className="fixed top-[120px] md:top-[160px] lg:top-[200px] left-4 z-50 bg-white border border-gray-300 p-3 rounded-lg shadow-lg transition-all hover:shadow-xl lg:hidden"
+        onClick={() => setSidebarOpen(!sidebarOpen)}
+        aria-label="Toggle sidebar"
+      >
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" fill="currentColor" />
+        </svg>
+      </button>
+
+      {/* Overlay for mobile */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Floating Sidebar */}
+      <aside
+        className={`
+        fixed top-[116px] md:top-[156px] lg:top-[196px]
+        w-[200px] md:w-[220px]
+        left-4 lg:left-6
+        bg-white/95 backdrop-blur-md
+        overflow-y-auto
+        transition-all duration-300 ease-in-out z-40
+        ${sidebarOpen ? "translate-x-0 opacity-100" : "-translate-x-[250px] opacity-0 lg:translate-x-0 lg:opacity-100"}
+        rounded-xl shadow-2xl
+        max-h-[calc(100vh-220px)]
+      `}
+      >
+        {/* Menu Header - Mobile only */}
+        <div className="lg:hidden sticky top-0 bg-white/95 backdrop-blur-md flex items-center justify-end p-4 border-b border-gray-200 rounded-t-xl">
+          <button onClick={() => setSidebarOpen(false)} className="hover:bg-gray-100 rounded-full p-1">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" fill="currentColor" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Categories */}
+        <div className="p-4 pt-6">
+          {/* S Category */}
+          <div className="mb-2">
+            <div
+              className="flex items-center justify-between cursor-pointer pb-2 border-b border-black"
+              onClick={() => toggleCategory("S")}
+            >
+              <h3 className="text-[20px] font-bold">S</h3>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                className={`transition-transform ${expandedCategories.includes("S") ? "rotate-180" : ""}`}
+              >
+                <path d="M7 10l5 5 5-5z" fill="currentColor" />
+              </svg>
+            </div>
+
+            {expandedCategories.includes("S") && (
+              <div className="pt-3">
+                {/* Private */}
+                {sidebarStructure.S.Private.length > 0 && (
+                  <div className="mb-4">
+                    <p className="text-[11px] font-semibold mb-2 text-gray-500">Private</p>
+                    <div className="space-y-1 text-[12px]">
+                      {sidebarStructure.S.Private.map((productId) => (
+                        <p
+                          key={productId}
+                          className={`cursor-pointer py-0.5 transition-colors hover:text-[#FF5A00] ${activeProduct === productId ? "text-[#FF5A00] font-bold bg-[#FF5A00]/10 px-2 -mx-2 rounded" : ""
+                            }`}
+                          onClick={() => scrollToProduct(productId)}
+                        >
+                          {getProductName(productId)}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Public */}
+                {sidebarStructure.S.Public.length > 0 && (
+                  <div className="mb-4">
+                    <p className="text-[11px] font-semibold mb-2 text-gray-500">Public</p>
+                    <div className="space-y-1 text-[12px]">
+                      {sidebarStructure.S.Public.map((productId) => (
+                        <p
+                          key={productId}
+                          className={`cursor-pointer py-0.5 transition-colors hover:text-[#FF5A00] ${activeProduct === productId ? "text-[#FF5A00] font-bold bg-[#FF5A00]/10 px-2 -mx-2 rounded" : ""
+                            }`}
+                          onClick={() => scrollToProduct(productId)}
+                        >
+                          {getProductName(productId)}
+                        </p>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* M Category */}
+          <div className="mb-2">
+            <div
+              className="flex items-center justify-between cursor-pointer pb-2 border-b border-black"
+              onClick={() => toggleCategory("M")}
+            >
+              <h3 className="text-[20px] font-bold">M</h3>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                className={`transition-transform ${expandedCategories.includes("M") ? "rotate-180" : ""}`}
+              >
+                <path d="M7 10l5 5 5-5z" fill="currentColor" />
+              </svg>
+            </div>
+            <p className="text-[11px] text-gray-500 mt-1">Small unit + Small unit</p>
+            {expandedCategories.includes("M") && sidebarStructure.M.items.length > 0 && (
+              <div className="pt-3 space-y-1 text-[12px]">
+                {sidebarStructure.M.items.map((productId) => (
+                  <p
+                    key={productId}
+                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FF5A00] ${activeProduct === productId ? "text-[#FF5A00] font-bold bg-[#FF5A00]/10 px-2 -mx-2 rounded" : ""}`}
+                    onClick={() => scrollToProduct(productId)}
+                  >
+                    {getProductName(productId)}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* L Category */}
+          <div className="mb-2">
+            <div
+              className="flex items-center justify-between cursor-pointer pb-2 border-b border-black"
+              onClick={() => toggleCategory("L")}
+            >
+              <h3 className="text-[20px] font-bold">L</h3>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                className={`transition-transform ${expandedCategories.includes("L") ? "rotate-180" : ""}`}
+              >
+                <path d="M7 10l5 5 5-5z" fill="currentColor" />
+              </svg>
+            </div>
+            <p className="text-[11px] text-gray-500 mt-1 whitespace-pre-line">{sidebarStructure.L.subtitle}</p>
+            {expandedCategories.includes("L") && sidebarStructure.L.items.length > 0 && (
+              <div className="pt-3 space-y-1 text-[12px]">
+                {sidebarStructure.L.items.map((productId) => (
+                  <p
+                    key={productId}
+                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FF5A00] ${activeProduct === productId ? "text-[#FF5A00] font-bold bg-[#FF5A00]/10 px-2 -mx-2 rounded" : ""}`}
+                    onClick={() => scrollToProduct(productId)}
+                  >
+                    {getProductName(productId)}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* XL Category */}
+          <div className="mb-2">
+            <div
+              className="flex items-center justify-between cursor-pointer pb-2 border-b border-black"
+              onClick={() => toggleCategory("XL")}
+            >
+              <h3 className="text-[20px] font-bold">XL</h3>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                className={`transition-transform ${expandedCategories.includes("XL") ? "rotate-180" : ""}`}
+              >
+                <path d="M7 10l5 5 5-5z" fill="currentColor" />
+              </svg>
+            </div>
+            <p className="text-[11px] text-gray-500 mt-1">{sidebarStructure.XL.subtitle}</p>
+            {expandedCategories.includes("XL") && sidebarStructure.XL.items.length > 0 && (
+              <div className="pt-3 space-y-1 text-[12px]">
+                {sidebarStructure.XL.items.map((productId) => (
+                  <p
+                    key={productId}
+                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FF5A00] ${activeProduct === productId ? "text-[#FF5A00] font-bold bg-[#FF5A00]/10 px-2 -mx-2 rounded" : ""}`}
+                    onClick={() => scrollToProduct(productId)}
+                  >
+                    {getProductName(productId)}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* SOLUTION Category */}
+          <div className="mb-2">
+            <div
+              className="flex items-center justify-between cursor-pointer pb-2 border-b border-black"
+              onClick={() => toggleCategory("SOLUTION")}
+            >
+              <h3 className="text-[16px] font-bold">SOLUTION</h3>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                className={`transition-transform ${expandedCategories.includes("SOLUTION") ? "rotate-180" : ""}`}
+              >
+                <path d="M7 10l5 5 5-5z" fill="currentColor" />
+              </svg>
+            </div>
+            {expandedCategories.includes("SOLUTION") && sidebarStructure.SOLUTION.items.length > 0 && (
+              <div className="pt-3 space-y-1 text-[12px]">
+                {sidebarStructure.SOLUTION.items.map((productId) => (
+                  <p
+                    key={productId}
+                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FF5A00] ${activeProduct === productId ? "text-[#FF5A00] font-bold bg-[#FF5A00]/10 px-2 -mx-2 rounded" : ""}`}
+                    onClick={() => scrollToProduct(productId)}
+                  >
+                    {getProductName(productId)}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* DESIGN Category */}
+          <div className="mb-2">
+            <div
+              className="flex items-center justify-between cursor-pointer pb-2 border-b border-black"
+              onClick={() => toggleCategory("DESIGN")}
+            >
+              <h3 className="text-[16px] font-bold">DESIGN</h3>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                className={`transition-transform ${expandedCategories.includes("DESIGN") ? "rotate-180" : ""}`}
+              >
+                <path d="M7 10l5 5 5-5z" fill="currentColor" />
+              </svg>
+            </div>
+            {expandedCategories.includes("DESIGN") && sidebarStructure.DESIGN.items.length > 0 && (
+              <div className="pt-3 space-y-1 text-[12px]">
+                {sidebarStructure.DESIGN.items.map((productId) => (
+                  <p
+                    key={productId}
+                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FF5A00] ${activeProduct === productId ? "text-[#FF5A00] font-bold bg-[#FF5A00]/10 px-2 -mx-2 rounded" : ""}`}
+                    onClick={() => scrollToProduct(productId)}
+                  >
+                    {getProductName(productId)}
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </aside>
+
       {/* Main Content Area */}
       <div className="min-h-screen pt-[100px] md:pt-[140px] lg:pt-[180px]">
         {/* Products List */}
