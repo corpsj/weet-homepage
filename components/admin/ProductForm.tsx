@@ -67,7 +67,11 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
             }
         } catch (error) {
             console.error(error);
-            alert('저장 중 오류가 발생했습니다.');
+            if (error instanceof Error) {
+                alert(`저장 중 오류가 발생했습니다: ${error.message}`);
+            } else {
+                alert('저장 중 알 수 없는 오류가 발생했습니다.');
+            }
         } finally {
             setLoading(false);
         }

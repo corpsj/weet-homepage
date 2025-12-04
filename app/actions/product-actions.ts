@@ -28,7 +28,7 @@ export async function updateProduct(id: string, data: ProductUpdate) {
 
     if (error) {
         console.error('Error updating product:', error);
-        throw new Error('Failed to update product');
+        throw new Error(error.message || 'Failed to update product');
     }
 
     revalidatePath('/admin/products');
