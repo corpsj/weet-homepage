@@ -7,8 +7,11 @@ import { createClient } from '@/utils/supabase/server'
 export async function login(formData: FormData) {
     const supabase = await createClient()
 
-    const email = formData.get('email') as string
+    const id = formData.get('id') as string
     const password = formData.get('password') as string
+
+    // ID만 입력받아 이메일 형식으로 변환
+    const email = `${id}@weet.com`
 
     const { error } = await supabase.auth.signInWithPassword({
         email,

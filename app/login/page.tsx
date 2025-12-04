@@ -12,17 +12,17 @@ export default function LoginPage() {
                 <form className="mt-8 space-y-6">
                     <div className="rounded-md shadow-sm -space-y-px">
                         <div>
-                            <label htmlFor="email-address" className="sr-only">
-                                이메일 주소
+                            <label htmlFor="id" className="sr-only">
+                                아이디
                             </label>
                             <input
-                                id="email-address"
-                                name="email"
-                                type="email"
-                                autoComplete="email"
+                                id="id"
+                                name="id"
+                                type="text"
+                                autoComplete="username"
                                 required
                                 className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-black focus:border-black focus:z-10 sm:text-sm"
-                                placeholder="이메일 주소"
+                                placeholder="아이디"
                             />
                         </div>
                         <div>
