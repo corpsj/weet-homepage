@@ -157,28 +157,6 @@ export default function Header() {
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
             </button>
 
-            {/* Language Selector - Top Right (Desktop) */}
-            <div className="hidden lg:block absolute right-[64px] top-[30px]">
-              <div className="flex items-center space-x-1 text-sm font-medium">
-                {languages.map((lang, idx) => (
-                  <span key={lang} className="flex items-center">
-                    <button
-                      onClick={() => setCurrentLang(lang)}
-                      className={cn(
-                        'hover:text-gray-700 transition-colors',
-                        currentLang === lang ? 'text-black font-bold' : 'text-gray-600'
-                      )}
-                    >
-                      {lang}
-                    </button>
-                    {idx < languages.length - 1 && (
-                      <span className="mx-1 text-gray-600">/</span>
-                    )}
-                  </span>
-                ))}
-              </div>
-            </div>
-
             {/* Desktop Navigation */}
             <nav
               className="hidden lg:flex absolute left-0 right-0 top-0 bottom-0 items-center justify-center pointer-events-none pr-[120px]"
@@ -206,7 +184,7 @@ export default function Header() {
             </nav>
 
             {/* Social Icons - Desktop only */}
-            <div className="hidden lg:flex absolute right-[64px] top-1/2 -translate-y-1/2 items-center space-x-4">
+            <div className="hidden lg:flex absolute right-[64px] top-[40%] -translate-y-1/2 items-center space-x-4">
               <Link
                 href="https://blog.naver.com"
                 target="_blank"
@@ -231,6 +209,28 @@ export default function Header() {
                 <Youtube className="w-[18px] h-[18px]" />
                 <span className="text-[14px]">youtube</span>
               </Link>
+            </div>
+
+            {/* Language Selector - Top Right (Desktop) - Moved below SNS */}
+            <div className="hidden lg:block absolute right-[64px] top-[65%]">
+              <div className="flex items-center space-x-1 text-[10px] font-medium">
+                {languages.map((lang, idx) => (
+                  <span key={lang} className="flex items-center">
+                    <button
+                      onClick={() => setCurrentLang(lang)}
+                      className={cn(
+                        'hover:text-gray-700 transition-colors',
+                        currentLang === lang ? 'text-black font-bold' : 'text-gray-400'
+                      )}
+                    >
+                      {lang}
+                    </button>
+                    {idx < languages.length - 1 && (
+                      <span className="mx-1 text-gray-300">|</span>
+                    )}
+                  </span>
+                ))}
+              </div>
             </div>
 
             {/* Language Selector - Mobile/Tablet - Moved below hamburger */}

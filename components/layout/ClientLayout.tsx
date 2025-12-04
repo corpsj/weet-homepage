@@ -19,7 +19,7 @@ export default function ClientLayout({
     return (
         <>
             <Header />
-            <main className="flex-1 pt-[100px] md:pt-[140px] lg:pt-[180px]">{children}</main>
+            <main className="flex-1 pt-[70px] md:pt-[90px] lg:pt-[110px]">{children}</main>
             <Footer />
         </>
     );
