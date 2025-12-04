@@ -269,6 +269,20 @@ const productsData = [
 export async function migrateProducts() {
     console.log('Starting migration...');
 
+    // 1. Clear existing data
+    const { error: deleteError } = await supabaseAdmin
+        .from('products')
+        .delete()
+        .neq('id', '00000000-0000-0000-0000-000000000000'); // Delete all rows
+
+    if (deleteError) {
+        console.error('Failed to clear products table:', deleteError);
+        throw new Error('Failed to clear existing data');
+    }
+
+    console.log('Cleared existing products.');
+
+    // 2. Insert new data
     for (const product of productsData) {
         const { error } = await supabaseAdmin
             .from('products')

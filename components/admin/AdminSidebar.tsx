@@ -30,7 +30,6 @@ const navigation: { title: string; items: NavItem[] }[] = [
         title: "Overview",
         items: [
             { name: '대시보드', href: '/admin', icon: LayoutDashboard },
-            { name: '분석 및 통계', href: '/admin/analytics', icon: TrendingUp },
         ]
     },
     {

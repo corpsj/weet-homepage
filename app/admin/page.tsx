@@ -1,136 +1,72 @@
 'use client';
 
-import { Users, Package, MessageSquare, TrendingUp, ArrowUpRight, Clock, CheckCircle } from 'lucide-react';
+import Link from 'next/link';
+import { Package, MessageSquare, Monitor, Layers, HelpCircle, ArrowRight } from 'lucide-react';
 
 export default function AdminDashboard() {
     return (
         <div className="space-y-8">
             {/* Welcome Section */}
-            <div className="flex justify-between items-end">
-                <div>
-                    <h2 className="text-3xl font-bold text-gray-900 tracking-tight">Dashboard</h2>
-                    <p className="text-gray-500 mt-2">Weet 관리자 페이지에 오신 것을 환영합니다.</p>
-                </div>
-                <div className="text-sm text-gray-500 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-100">
-                    Last updated: {new Date().toLocaleDateString()}
-                </div>
+            <div>
+                <h2 className="text-3xl font-bold text-gray-900 tracking-tight">안녕하세요, 관리자님</h2>
+                <p className="text-gray-500 mt-2">Weet 홈페이지 관리자 대시보드입니다.</p>
             </div>
 
-            {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <StatsCard
-                    title="Total Products"
-                    value="12"
-                    trend="+2.5%"
+            {/* Quick Actions Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <DashboardCard
+                    title="제품 관리"
+                    description="제품 목록을 조회하고 새로운 제품을 등록합니다."
                     icon={Package}
+                    href="/admin/products"
                     color="bg-blue-500"
                 />
-                <StatsCard
-                    title="Active Inquiries"
-                    value="5"
-                    trend="+12%"
+                <DashboardCard
+                    title="문의 관리"
+                    description="고객 문의 내역을 확인하고 상태를 변경합니다."
                     icon={MessageSquare}
+                    href="/admin/inquiries"
                     color="bg-green-500"
                 />
-                <StatsCard
-                    title="Total Visitors"
-                    value="1,234"
-                    trend="+8.1%"
-                    icon={Users}
+                <DashboardCard
+                    title="메인 페이지 관리"
+                    description="메인 배너 및 시그니처 라인을 설정합니다."
+                    icon={Monitor}
+                    href="/admin/cms/main"
                     color="bg-purple-500"
                 />
-                <StatsCard
-                    title="Conversion Rate"
-                    value="3.2%"
-                    trend="+1.2%"
-                    icon={TrendingUp}
+                <DashboardCard
+                    title="솔루션 페이지 관리"
+                    description="솔루션 섹션의 콘텐츠를 수정합니다."
+                    icon={Layers}
+                    href="/admin/cms/solutions"
                     color="bg-orange-500"
                 />
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Recent Activity */}
-                <div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                    <div className="flex items-center justify-between mb-6">
-                        <h3 className="text-lg font-bold text-gray-900">Recent Activity</h3>
-                        <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">View All</button>
-                    </div>
-                    <div className="space-y-6">
-                        {[1, 2, 3, 4].map((i) => (
-                            <div key={i} className="flex items-start gap-4 group">
-                                <div className="w-10 h-10 rounded-full bg-gray-50 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-50 transition-colors">
-                                    <Clock className="w-5 h-5 text-gray-400 group-hover:text-blue-500" />
-                                </div>
-                                <div className="flex-1 pt-1">
-                                    <p className="text-sm font-medium text-gray-900">새로운 문의가 등록되었습니다.</p>
-                                    <p className="text-xs text-gray-500 mt-1">2시간 전 • 홍길동님</p>
-                                </div>
-                                <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    New
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Quick Actions / System Status */}
-                <div className="space-y-6">
-                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-                        <h3 className="text-lg font-bold text-gray-900 mb-4">System Status</h3>
-                        <div className="space-y-4">
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                                    <span className="text-sm text-gray-600">Database</span>
-                                </div>
-                                <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">Operational</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                                    <span className="text-sm text-gray-600">API Server</span>
-                                </div>
-                                <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">Operational</span>
-                            </div>
-                            <div className="flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                                    <span className="text-sm text-gray-600">Storage</span>
-                                </div>
-                                <span className="text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">Operational</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-gradient-to-br from-[#0F172A] to-[#1E293B] rounded-2xl p-6 shadow-lg text-white">
-                        <h3 className="text-lg font-bold mb-2">Need Help?</h3>
-                        <p className="text-sm text-gray-300 mb-4">관리자 페이지 사용 중 문제가 발생하면 기술지원팀에 문의하세요.</p>
-                        <button className="w-full bg-white text-black font-medium py-2 rounded-lg text-sm hover:bg-gray-100 transition-colors">
-                            Contact Support
-                        </button>
-                    </div>
-                </div>
+                <DashboardCard
+                    title="고객지원 페이지 관리"
+                    description="FAQ 및 공지사항을 관리합니다."
+                    icon={HelpCircle}
+                    href="/admin/cms/support"
+                    color="bg-indigo-500"
+                />
             </div>
         </div>
     );
 }
 
-function StatsCard({ title, value, trend, icon: Icon, color }: any) {
+function DashboardCard({ title, description, icon: Icon, href, color }: any) {
     return (
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+        <Link href={href} className="group block bg-white rounded-2xl p-6 shadow-sm border border-gray-200 hover:shadow-md hover:border-gray-300 transition-all">
             <div className="flex items-start justify-between mb-4">
-                <div className={`p-3 rounded-xl ${color} bg-opacity-10`}>
+                <div className={`p-3 rounded-xl ${color} bg-opacity-10 group-hover:bg-opacity-20 transition-colors`}>
                     <Icon className={`w-6 h-6 ${color.replace('bg-', 'text-')}`} />
                 </div>
-                <span className="flex items-center text-xs font-medium text-green-600 bg-green-50 px-2 py-1 rounded-full">
-                    <ArrowUpRight className="w-3 h-3 mr-1" />
-                    {trend}
-                </span>
+                <ArrowRight className="w-5 h-5 text-gray-300 group-hover:text-gray-500 transition-colors" />
             </div>
             <div>
-                <p className="text-sm font-medium text-gray-500">{title}</p>
-                <h3 className="text-2xl font-bold text-gray-900 mt-1">{value}</h3>
+                <h3 className="text-lg font-bold text-gray-900 group-hover:text-black transition-colors">{title}</h3>
+                <p className="text-sm text-gray-500 mt-1 line-clamp-2">{description}</p>
             </div>
-        </div>
+        </Link>
     );
 }

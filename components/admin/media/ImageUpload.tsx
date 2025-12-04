@@ -4,6 +4,7 @@ import { useState, useRef } from 'react';
 import { Upload, X, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { createClient } from '@/utils/supabase/client';
+import imageCompression from 'browser-image-compression';
 
 interface ImageUploadProps {
     value: string;
@@ -21,19 +22,40 @@ export default function ImageUpload({ value, onChange, className = '', bucket = 
         inputRef.current?.click();
     };
 
+
     const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
         setLoading(true);
         try {
-            const fileExt = file.name.split('.').pop();
+            let fileToUpload = file;
+
+            // Compress if it's an image
+            if (file.type.startsWith('image/')) {
+                console.log(`Original size: ${file.size / 1024 / 1024} MB`);
+                const options = {
+                    maxSizeMB: 1,
+                    maxWidthOrHeight: 1920,
+                    useWebWorker: true,
+                };
+                try {
+                    const compressedFile = await imageCompression(file, options);
+                    console.log(`Compressed size: ${compressedFile.size / 1024 / 1024} MB`);
+                    fileToUpload = compressedFile;
+                } catch (error) {
+                    console.error('Compression failed:', error);
+                    // Fallback to original file if compression fails
+                }
+            }
+
+            const fileExt = fileToUpload.name.split('.').pop();
             const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
             const filePath = `${fileName}`;
 
             const { error: uploadError } = await supabase.storage
                 .from(bucket)
-                .upload(filePath, file);
+                .upload(filePath, fileToUpload);
 
             if (uploadError) {
                 throw uploadError;
