@@ -20,6 +20,15 @@ export default async function InsightsPage() {
 
     const isConfigured = trafficStats !== null;
 
+    // Debug info
+    const debugInfo = {
+        hasGaId: !!process.env.NEXT_PUBLIC_GA_ID,
+        hasPropertyId: !!process.env.GA_PROPERTY_ID,
+        hasClientEmail: !!process.env.GOOGLE_CLIENT_EMAIL,
+        hasPrivateKey: !!process.env.GOOGLE_PRIVATE_KEY,
+        privateKeyLength: process.env.GOOGLE_PRIVATE_KEY?.length || 0,
+    };
+
     return (
         <div className="space-y-8">
             <div>
@@ -36,8 +45,18 @@ export default async function InsightsPage() {
                     </div>
                     <h3 className="text-lg font-bold text-gray-900 mb-2">Google Analytics 연동 필요</h3>
                     <p className="text-gray-600 mb-6 max-w-md mx-auto">
-                        데이터를 불러오기 위해서는 Google Analytics 4 (GA4) 연동 및 서비스 계정 설정이 필요합니다.
+                        데이터를 불러오지 못했습니다. 아래 디버그 정보를 확인해주세요.
                     </p>
+
+                    <div className="text-left bg-white p-4 rounded-lg border border-red-200 text-sm font-mono mb-6 max-w-lg mx-auto overflow-auto">
+                        <p className="font-bold text-red-600 mb-2">Debug Info:</p>
+                        <pre>{JSON.stringify(debugInfo, null, 2)}</pre>
+                        <p className="mt-2 text-gray-500">
+                            * Private Key Length가 0이면 키가 제대로 로드되지 않은 것입니다.<br />
+                            * 모든 값이 true여야 합니다.
+                        </p>
+                    </div>
+
                     <div className="text-sm text-gray-500 bg-white p-4 rounded-lg border border-gray-200 inline-block text-left">
                         <p className="font-medium mb-2">필요한 환경 변수 (.env.local):</p>
                         <ul className="list-disc list-inside space-y-1">
