@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { getProducts } from "@/lib/products";
 import { Product } from "@/types/supabase";
-import { ChevronDown, ChevronUp } from "lucide-react";
 
 // 제품 타입 정의 (Frontend View Model)
 interface ProductData {
@@ -81,8 +80,6 @@ const mapProductToData = (p: Product): ProductData => {
 export default function ProductsPage() {
   const [products, setProducts] = useState<ProductData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [expandedCategories, setExpandedCategories] = useState<string[]>(["S", "M", "L", "XL", "SOLUTION", "DESIGN"]);
-  const [activeProduct, setActiveProduct] = useState<string>("");
   const productRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
 
   useEffect(() => {
@@ -91,9 +88,6 @@ export default function ProductsPage() {
         const data = await getProducts();
         const mappedData = data.map(mapProductToData);
         setProducts(mappedData);
-        if (mappedData.length > 0) {
-          setActiveProduct(mappedData[0].id);
-        }
       } catch (error) {
         console.error("Failed to fetch products:", error);
       } finally {
@@ -103,97 +97,6 @@ export default function ProductsPage() {
 
     fetchProducts();
   }, []);
-
-  // 사이드바 구조 생성 (Dynamic)
-  interface SidebarCategory {
-    label: string;
-    subtitle: string;
-    items?: string[];
-    Private?: string[];
-    Public?: string[];
-  }
-
-  const sidebarStructure: Record<string, SidebarCategory> = {
-    S: {
-      label: "S",
-      subtitle: "",
-      Private: products.filter(p => p.sizeCategory === "S" && p.subCategory === "Private").map(p => p.id),
-      Public: products.filter(p => p.sizeCategory === "S" && p.subCategory === "Public").map(p => p.id),
-    },
-    M: {
-      label: "M",
-      subtitle: "Small unit + Small unit",
-      items: products.filter(p => p.sizeCategory === "M").map(p => p.id)
-    },
-    L: {
-      label: "L",
-      subtitle: "Small unit + Small unit\n+ 현장 공사",
-      items: products.filter(p => p.sizeCategory === "L").map(p => p.id)
-    },
-    XL: {
-      label: "XL",
-      subtitle: "단지개념",
-      items: products.filter(p => p.sizeCategory === "XL").map(p => p.id)
-    },
-    SOLUTION: {
-      label: "SOLUTION",
-      subtitle: "",
-      items: products.filter(p => p.sizeCategory === "SOLUTION").map(p => p.id)
-    },
-    DESIGN: {
-      label: "DESIGN",
-      subtitle: "",
-      items: products.filter(p => p.sizeCategory === "DESIGN").map(p => p.id)
-    },
-  };
-
-  const toggleCategory = (category: string) => {
-    if (expandedCategories.includes(category)) {
-      setExpandedCategories(expandedCategories.filter((c) => c !== category));
-    } else {
-      setExpandedCategories([...expandedCategories, category]);
-    }
-  };
-
-  const scrollToProduct = (productId: string) => {
-    const element = productRefs.current[productId];
-    if (element) {
-      const headerOffset = 100;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: "smooth",
-      });
-      setActiveProduct(productId);
-    }
-  };
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + 300;
-
-      for (const product of products) {
-        const element = productRefs.current[product.id];
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveProduct(product.id);
-            break;
-          }
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [products]);
-
-  const getProductName = (id: string) => {
-    const product = products.find((p) => p.id === id);
-    return product?.name || id;
-  };
 
   if (loading) {
     return (
@@ -205,214 +108,107 @@ export default function ProductsPage() {
 
   return (
     <div className="min-h-screen bg-[#EBEBEB]">
-      <div className="flex max-w-[1920px] mx-auto relative">
-        {/* Sidebar */}
-        <aside className="w-[300px] h-screen sticky top-0 overflow-y-auto hidden lg:block pt-[120px] pb-20 pl-[60px]">
-          <div className="space-y-12">
-            {(Object.keys(sidebarStructure) as Array<keyof typeof sidebarStructure>).map((key) => {
-              const category = sidebarStructure[key];
-              const isExpanded = expandedCategories.includes(key);
-              const hasItems = (category.items && category.items.length > 0) ||
-                (category.Private && category.Private.length > 0) ||
-                (category.Public && category.Public.length > 0);
-
-              if (!hasItems) return null;
-
-              return (
-                <div key={key} className="group">
-                  <div
-                    className="flex items-start justify-between cursor-pointer mb-4"
-                    onClick={() => toggleCategory(key)}
-                  >
-                    <div>
-                      <h2 className={`text-2xl font-bold transition-colors ${isExpanded ? 'text-black' : 'text-gray-400 group-hover:text-gray-600'}`}>
-                        {category.label}
-                      </h2>
-                      {category.subtitle && (
-                        <p className="text-xs text-gray-400 mt-1 whitespace-pre-line leading-relaxed">
-                          {category.subtitle}
-                        </p>
-                      )}
-                    </div>
-                    {isExpanded ? (
-                      <ChevronUp className="w-5 h-5 text-gray-400" />
-                    ) : (
-                      <ChevronDown className="w-5 h-5 text-gray-400" />
-                    )}
+      {/* Main Content Area */}
+      <div className="min-h-screen pt-[100px] md:pt-[140px] lg:pt-[180px]">
+        {/* Products List */}
+        <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
+          {products.map((product) => (
+            <div
+              key={product.id}
+              id={product.id}
+              ref={(el) => {
+                productRefs.current[product.id] = el;
+              }}
+              className="min-h-screen flex flex-col lg:flex-row mb-20 lg:mb-0"
+            >
+              {/* Image Section - 좌측 */}
+              <div className="w-full lg:w-[75%] h-[50vh] lg:h-screen relative">
+                {product.imageUrl ? (
+                  <Image
+                    src={product.imageUrl}
+                    alt={product.name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 75vw"
+                    priority={products.indexOf(product) < 2}
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-400">
+                    No Image
                   </div>
+                )}
+              </div>
 
-                  {isExpanded && (
-                    <div className="space-y-6 pl-2 border-l border-gray-200 ml-1">
-                      {/* S Category Special Handling */}
-                      {key === 'S' ? (
-                        <>
-                          {category.Private && category.Private.length > 0 && (
-                            <div className="mb-4">
-                              <h3 className="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Private</h3>
-                              <ul className="space-y-2">
-                                {category.Private.map((id: string) => (
-                                  <li
-                                    key={id}
-                                    className={`text-sm cursor-pointer transition-colors ${activeProduct === id ? 'text-[#FF5A00] font-medium' : 'text-gray-500 hover:text-gray-900'}`}
-                                    onClick={() => scrollToProduct(id)}
-                                  >
-                                    {getProductName(id)}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-                          {category.Public && category.Public.length > 0 && (
-                            <div>
-                              <h3 className="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Public</h3>
-                              <ul className="space-y-2">
-                                {category.Public.map((id: string) => (
-                                  <li
-                                    key={id}
-                                    className={`text-sm cursor-pointer transition-colors ${activeProduct === id ? 'text-[#FF5A00] font-medium' : 'text-gray-500 hover:text-gray-900'}`}
-                                    onClick={() => scrollToProduct(id)}
-                                  >
-                                    {getProductName(id)}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-                        </>
-                      ) : (
-                        // Other Categories
-                        <ul className="space-y-2">
-                          {category.items?.map((id: string) => (
-                            <li
-                              key={id}
-                              className={`text-sm cursor-pointer transition-colors ${activeProduct === id ? 'text-[#FF5A00] font-medium' : 'text-gray-500 hover:text-gray-900'}`}
-                              onClick={() => scrollToProduct(id)}
-                            >
-                              {getProductName(id)}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </aside>
-
-        {/* Main Content */}
-        <main className="flex-1 min-h-screen pt-[120px] px-4 lg:px-20 pb-40">
-          <div className="max-w-5xl mx-auto space-y-40">
-            {products.map((product) => (
-              <div
-                key={product.id}
-                ref={(el) => { productRefs.current[product.id] = el; }}
-                className="scroll-mt-32"
-              >
-                {/* Product Header */}
-                <div className="mb-8">
-                  <div className="flex items-baseline gap-4 mb-2">
-                    <h2 className="text-4xl font-bold text-gray-900">{product.name}</h2>
-                    <span className="text-xl text-[#FF5A00] font-medium">{product.sizeCategory}</span>
+              {/* Info Section - 우측 */}
+              <div className="w-full lg:w-[25%] bg-[#ebebeb] p-4 md:p-6 lg:p-8 flex flex-col">
+                {/* Category Tag with full-width line */}
+                <div className="mb-4">
+                  <div className="flex justify-end mb-2">
+                    <span className="text-[15px] font-medium">{product.category}</span>
                   </div>
-                  {product.tagline && (
-                    <p className="text-lg text-gray-600">{product.tagline}</p>
-                  )}
+                  <div className="h-[1px] w-full bg-black"></div>
                 </div>
 
-                {/* Main Image */}
-                <div className="relative w-full aspect-[16/9] bg-gray-200 rounded-2xl overflow-hidden mb-12 shadow-sm">
-                  {product.imageUrl ? (
-                    <Image
-                      src={product.imageUrl}
-                      alt={product.name}
-                      fill
-                      className="object-cover"
-                      sizes="(max-width: 768px) 100vw, 80vw"
-                      priority={products.indexOf(product) < 2}
-                    />
-                  ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                      No Image
-                    </div>
-                  )}
+                {/* Product Name */}
+                <h2 className="text-[28px] md:text-[32px] font-bold mb-3 leading-tight">
+                  {product.name}
+                </h2>
+
+                {/* Description */}
+                <div className="mb-6">
+                  <p className="text-[12px] leading-[1.8] whitespace-pre-line text-gray-700">
+                    {product.description}
+                  </p>
                 </div>
 
-                {/* Details Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
-                  {/* Left: Description & Specs */}
-                  <div className="space-y-8">
-                    <div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">Description</h3>
-                      <p className="text-gray-600 leading-relaxed whitespace-pre-line">
-                        {product.description}
-                      </p>
-                    </div>
-
-                    <div>
-                      <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">Specifications</h3>
-                      <dl className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
-                        <div className="sm:col-span-1">
-                          <dt className="text-sm font-medium text-gray-500">가격</dt>
-                          <dd className="mt-1 text-sm text-gray-900">{product.details.price}</dd>
-                        </div>
-                        <div className="sm:col-span-1">
-                          <dt className="text-sm font-medium text-gray-500">사이즈</dt>
-                          <dd className="mt-1 text-sm text-gray-900">{product.details.size}</dd>
-                        </div>
-                        <div className="sm:col-span-1">
-                          <dt className="text-sm font-medium text-gray-500">구조</dt>
-                          <dd className="mt-1 text-sm text-gray-900">{product.details.structure}</dd>
-                        </div>
-                        <div className="sm:col-span-1">
-                          <dt className="text-sm font-medium text-gray-500">지붕재</dt>
-                          <dd className="mt-1 text-sm text-gray-900">{product.details.roofType}</dd>
-                        </div>
-                        <div className="sm:col-span-1">
-                          <dt className="text-sm font-medium text-gray-500">외부마감</dt>
-                          <dd className="mt-1 text-sm text-gray-900">{product.details.exterior}</dd>
-                        </div>
-                        <div className="sm:col-span-1">
-                          <dt className="text-sm font-medium text-gray-500">내부마감</dt>
-                          <dd className="mt-1 text-sm text-gray-900">{product.details.interior}</dd>
-                        </div>
-                      </dl>
+                {/* Floor Plan Diagram - CSS Cropped */}
+                {product.floorPlan.src && (
+                  <div className="mb-6 flex justify-center">
+                    <div className="relative w-full max-w-[250px] h-[120px] overflow-hidden border border-gray-200 bg-white">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={product.floorPlan.src}
+                        alt={`${product.name} 도면`}
+                        className="absolute max-w-none"
+                        style={{
+                          width: product.floorPlan.crop.width,
+                          height: product.floorPlan.crop.height,
+                          top: product.floorPlan.crop.top,
+                          left: product.floorPlan.crop.left,
+                        }}
+                      />
                     </div>
                   </div>
+                )}
 
-                  {/* Right: Floor Plan */}
+                {/* Detail Section */}
+                <div className="mt-auto">
+                  <h3 className="text-[20px] font-bold mb-2">Detail</h3>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">Floor Plan</h3>
-                    <div className="bg-white p-8 rounded-xl border border-gray-100 shadow-sm aspect-square flex items-center justify-center relative overflow-hidden">
-                      {product.floorPlan.src ? (
-                        <div
-                          className="relative w-full h-full"
-                          style={{
-                            width: product.floorPlan.crop.width !== "100%" ? product.floorPlan.crop.width : "100%",
-                            height: product.floorPlan.crop.height !== "100%" ? product.floorPlan.crop.height : "100%",
-                            top: product.floorPlan.crop.top,
-                            left: product.floorPlan.crop.left,
-                            position: 'relative'
-                          }}
-                        >
-                          <Image
-                            src={product.floorPlan.src}
-                            alt={`${product.name} Floor Plan`}
-                            fill
-                            className="object-contain"
-                          />
-                        </div>
-                      ) : (
-                        <div className="text-gray-400 text-sm">도면 준비중</div>
-                      )}
+                    <div className="border-t border-gray-400 py-1.5">
+                      <span className="text-[12px]">가격 : {product.details.price}</span>
+                    </div>
+                    <div className="border-t border-gray-400 py-1.5">
+                      <span className="text-[12px]">구조 : {product.details.structure}</span>
+                    </div>
+                    <div className="border-t border-gray-400 py-1.5">
+                      <span className="text-[12px]">지붕형태 : {product.details.roofType}</span>
+                    </div>
+                    <div className="border-t border-gray-400 py-1.5">
+                      <span className="text-[12px]">외부마감 : {product.details.exterior}</span>
+                    </div>
+                    <div className="border-t border-gray-400 py-1.5">
+                      <span className="text-[12px]">내부마감 : {product.details.interior}</span>
+                    </div>
+                    <div className="border-t border-gray-400 py-1.5">
+                      <span className="text-[12px]">크기 : {product.details.size}</span>
                     </div>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </main>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
