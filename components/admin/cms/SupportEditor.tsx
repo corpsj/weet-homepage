@@ -4,8 +4,6 @@ import { useState } from 'react';
 import { Plus, Trash2, ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
-// eslint-disable-next-line
-type SupabaseAny = any;
 
 interface FAQ {
     id: string;
@@ -32,7 +30,8 @@ export default function SupportEditor({ initialFAQs, initialNotices }: { initial
     const [loading, setLoading] = useState(false);
     const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
     const router = useRouter();
-    const supabase = createClient() as SupabaseAny;
+    // eslint-disable-next-line
+    const supabase = createClient() as any;
 
     // --- FAQ Handlers ---
     const handleAddFAQ = async () => {
