@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 
 export interface Slide {
@@ -14,8 +14,6 @@ export interface Slide {
 export default function HeroCarouselClient({ initialSlides }: { initialSlides: Slide[] }) {
     const [currentSlide, setCurrentSlide] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
-    const { scrollY } = useScroll();
-    const y = useTransform(scrollY, [0, 1000], [0, 400]); // Parallax effect
 
     const nextSlide = useCallback(() => {
         setCurrentSlide((prev) => (prev + 1) % initialSlides.length);
@@ -60,8 +58,8 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
 
             {/* Main Content Container */}
             <div className="relative z-10 w-full max-w-[1400px] mx-auto h-full shadow-2xl">
-                {/* Main Image with Parallax */}
-                <motion.div style={{ y }} className="absolute inset-0 h-[120%] -top-[10%]">
+                {/* Main Image - Static */}
+                <div className="absolute inset-0 w-full h-full">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={currentSlide}
@@ -79,47 +77,50 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                                 className="object-cover"
                                 sizes="(max-width: 1400px) 100vw, 1400px"
                             />
-                            {/* Gradient Overlay for Text Readability - Kept for aesthetics even without text */}
+                            {/* Gradient Overlay for Text Readability */}
                             <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
                         </motion.div>
                     </AnimatePresence>
-                </motion.div>
+                </div>
             </div>
 
-            {/* Navigation Arrows */}
-            <div className="relative z-20 w-full max-w-[1400px] mx-auto h-full pointer-events-none">
-                <button
-                    onClick={prevSlide}
-                    className="absolute left-4 md:left-8 lg:left-[60px] top-1/2 -translate-y-1/2 w-[50px] h-[50px] md:w-[60px] md:h-[60px] lg:w-[80px] lg:h-[80px] flex items-center justify-center hover:bg-white/10 hover:backdrop-blur-md transition-all rounded-full group pointer-events-auto"
-                    aria-label="Previous slide"
-                >
-                    <svg className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 transition-transform group-hover:-translate-x-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 18L9 12L15 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                </button>
+            {/* Navigation Arrows - Moved outside constrained container to be at screen edges if desired, or just ensure visibility */}
+            {/* Actually, keeping them inside the max-w container is better for the "contained" look, but let's ensure they are visible. 
+               I will add a background to them and ensure z-index is correct. 
+               Also removing the pointer-events-none wrapper approach if it was causing issues, 
+               but actually I'll just make them absolute to the section again to be safe and simple. */}
 
-                <button
-                    onClick={nextSlide}
-                    className="absolute right-4 md:right-8 lg:right-[60px] top-1/2 -translate-y-1/2 w-[50px] h-[50px] md:w-[60px] md:h-[60px] lg:w-[80px] lg:h-[80px] flex items-center justify-center hover:bg-white/10 hover:backdrop-blur-md transition-all rounded-full group pointer-events-auto"
-                    aria-label="Next slide"
-                >
-                    <svg className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 18L15 12L9 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                </button>
+            <button
+                onClick={prevSlide}
+                className="absolute left-4 md:left-8 lg:left-[60px] top-1/2 -translate-y-1/2 w-[50px] h-[50px] md:w-[60px] md:h-[60px] lg:w-[80px] lg:h-[80px] flex items-center justify-center bg-black/20 hover:bg-black/40 backdrop-blur-md transition-all z-30 rounded-full group"
+                aria-label="Previous slide"
+            >
+                <svg className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 transition-transform group-hover:-translate-x-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15 18L9 12L15 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+            </button>
 
-                {/* Slide Indicators */}
-                <div className="absolute bottom-12 md:bottom-16 lg:bottom-[60px] left-1/2 -translate-x-1/2 flex space-x-3 pointer-events-auto">
-                    {initialSlides.map((_, idx) => (
-                        <button
-                            key={idx}
-                            onClick={() => setCurrentSlide(idx)}
-                            className={`h-[3px] md:h-[4px] rounded-full transition-all duration-500 ${idx === currentSlide ? 'bg-white w-[40px] md:w-[50px]' : 'bg-white/40 hover:bg-white/70 w-[20px] md:w-[30px]'
-                                }`}
-                            aria-label={`Go to slide ${idx + 1}`}
-                        />
-                    ))}
-                </div>
+            <button
+                onClick={nextSlide}
+                className="absolute right-4 md:right-8 lg:right-[60px] top-1/2 -translate-y-1/2 w-[50px] h-[50px] md:w-[60px] md:h-[60px] lg:w-[80px] lg:h-[80px] flex items-center justify-center bg-black/20 hover:bg-black/40 backdrop-blur-md transition-all z-30 rounded-full group"
+                aria-label="Next slide"
+            >
+                <svg className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 18L15 12L9 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+            </button>
+
+            {/* Slide Indicators */}
+            <div className="absolute bottom-12 md:bottom-16 lg:bottom-[60px] left-1/2 -translate-x-1/2 flex space-x-3 z-30">
+                {initialSlides.map((_, idx) => (
+                    <button
+                        key={idx}
+                        onClick={() => setCurrentSlide(idx)}
+                        className={`h-[3px] md:h-[4px] rounded-full transition-all duration-500 ${idx === currentSlide ? 'bg-white w-[40px] md:w-[50px]' : 'bg-white/40 hover:bg-white/70 w-[20px] md:w-[30px]'
+                            }`}
+                        aria-label={`Go to slide ${idx + 1}`}
+                    />
+                ))}
             </div>
 
             {/* Scroll Down Indicator */}
