@@ -70,7 +70,7 @@ export default function SolutionPage() {
                 {/* Icon Circle */}
                 <div className="w-[80px] h-[80px] rounded-full bg-[#FAFAFA] border border-[#F0F0F0] flex items-center justify-center mb-6 group-hover:bg-[#FFF9E6] group-hover:border-[#FEBD16] transition-all duration-300">
                   <div className="text-[#888] group-hover:text-[#E5A410] transition-colors duration-300">
-                    {React.cloneElement(item.icon as React.ReactElement, { size: 36 })}
+                    {React.cloneElement(item.icon as React.ReactElement<{ size?: number }>, { size: 36 })}
                   </div>
                 </div>
 
