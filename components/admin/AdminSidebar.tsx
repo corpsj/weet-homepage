@@ -3,20 +3,15 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-    LayoutDashboard,
     Package,
     MessageSquare,
     Settings,
     LogOut,
     Monitor,
-    FileText,
     HelpCircle,
-    ChevronDown,
     Layers,
-    TrendingUp
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
 
 interface NavItem {
     name: string;
@@ -26,12 +21,6 @@ interface NavItem {
 }
 
 const navigation: { title: string; items: NavItem[] }[] = [
-    {
-        title: "Overview",
-        items: [
-            { name: '대시보드', href: '/admin', icon: LayoutDashboard },
-        ]
-    },
     {
         title: "Content Management",
         items: [
