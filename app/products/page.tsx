@@ -370,7 +370,7 @@ export default function ProductsPage() {
               ref={(el) => {
                 productRefs.current[product.id] = el;
               }}
-              className="min-h-screen flex flex-col lg:flex-row mb-20 lg:mb-0"
+              className="min-h-screen flex flex-col lg:flex-row mb-20 lg:mb-32 border-b border-gray-300 pb-20 lg:pb-32 last:border-b-0"
             >
               {/* Image Section */}
               <div className="w-full lg:w-[75%] h-[50vh] lg:h-screen relative">
@@ -391,74 +391,78 @@ export default function ProductsPage() {
               </div>
 
               {/* Info Section */}
-              <div className="w-full lg:w-[25%] bg-[#ebebeb] p-4 md:p-6 lg:p-8 flex flex-col">
-                {/* Category Tag with full-width line */}
-                <div className="mb-4">
-                  <div className="flex justify-end mb-2">
-                    <span className="text-[15px] font-medium">{product.category}</span>
+              <div className="w-full lg:w-[25%] bg-[#ebebeb] p-4 md:p-6 lg:p-8 flex flex-col justify-between">
+                <div>
+                  {/* Category Tag with full-width line */}
+                  <div className="mb-4">
+                    <div className="flex justify-end mb-2">
+                      <span className="text-[15px] font-medium">{product.category}</span>
+                    </div>
+                    <div className="h-[1px] w-full bg-black"></div>
                   </div>
-                  <div className="h-[1px] w-full bg-black"></div>
+
+                  {/* Product Name */}
+                  <h2 className="text-[28px] md:text-[32px] font-bold mb-3 leading-tight">
+                    {product.name}
+                  </h2>
+
+                  {/* Description */}
+                  <div className="mb-6">
+                    <p className="text-[12px] leading-[1.8] whitespace-pre-line text-gray-700">
+                      {product.description}
+                    </p>
+                  </div>
                 </div>
 
-                {/* Product Name */}
-                <h2 className="text-[28px] md:text-[32px] font-bold mb-3 leading-tight">
-                  {product.name}
-                </h2>
-
-                {/* Description */}
-                <div className="mb-6">
-                  <p className="text-[12px] leading-[1.8] whitespace-pre-line text-gray-700">
-                    {product.description}
-                  </p>
-                </div>
-
-                {/* Floor Plan Diagram - Clickable for Modal */}
-                {product.floorPlan.src && (
-                  <div className="mb-6 flex justify-center">
-                    <div
-                      className="relative w-full max-w-[250px] h-[120px] overflow-hidden border border-gray-200 cursor-zoom-in hover:border-[#FEBD16] transition-colors group"
-                      onClick={() => setSelectedFloorPlan(product.floorPlan.src)}
-                    >
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={product.floorPlan.src}
-                        alt={`${product.name} 도면`}
-                        className="absolute max-w-none group-hover:scale-105 transition-transform duration-300"
-                        style={{
-                          width: product.floorPlan.crop.width,
-                          height: product.floorPlan.crop.height,
-                          top: product.floorPlan.crop.top,
-                          left: product.floorPlan.crop.left,
-                        }}
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/10 transition-colors">
-                        <span className="opacity-0 group-hover:opacity-100 bg-black/70 text-white text-xs px-2 py-1 rounded">크게 보기</span>
+                <div>
+                  {/* Floor Plan Diagram - Clickable for Modal */}
+                  {product.floorPlan.src && (
+                    <div className="mb-10 mt-10 flex justify-center">
+                      <div
+                        className="relative w-full max-w-[300px] h-[160px] overflow-hidden border border-gray-200 cursor-zoom-in hover:border-[#FEBD16] transition-colors group"
+                        onClick={() => setSelectedFloorPlan(product.floorPlan.src)}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={product.floorPlan.src}
+                          alt={`${product.name} 도면`}
+                          className="absolute max-w-none group-hover:scale-105 transition-transform duration-300"
+                          style={{
+                            width: product.floorPlan.crop.width,
+                            height: product.floorPlan.crop.height,
+                            top: product.floorPlan.crop.top,
+                            left: product.floorPlan.crop.left,
+                          }}
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/10 transition-colors">
+                          <span className="opacity-0 group-hover:opacity-100 bg-black/70 text-white text-xs px-2 py-1 rounded">크게 보기</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {/* Detail Section */}
-                <div className="mt-auto">
-                  <h3 className="text-[20px] font-bold mb-2">Detail</h3>
-                  <div>
-                    <div className="border-t border-gray-400 py-1.5">
-                      <span className="text-[12px]">가격 : {product.details.price}</span>
-                    </div>
-                    <div className="border-t border-gray-400 py-1.5">
-                      <span className="text-[12px]">구조 : {product.details.structure}</span>
-                    </div>
-                    <div className="border-t border-gray-400 py-1.5">
-                      <span className="text-[12px]">지붕형태 : {product.details.roofType}</span>
-                    </div>
-                    <div className="border-t border-gray-400 py-1.5">
-                      <span className="text-[12px]">외부마감 : {product.details.exterior}</span>
-                    </div>
-                    <div className="border-t border-gray-400 py-1.5">
-                      <span className="text-[12px]">내부마감 : {product.details.interior}</span>
-                    </div>
-                    <div className="border-t border-gray-400 py-1.5">
-                      <span className="text-[12px]">크기 : {product.details.size}</span>
+                  {/* Detail Section */}
+                  <div className="mt-auto">
+                    <h3 className="text-[20px] font-bold mb-2">Detail</h3>
+                    <div>
+                      <div className="border-t border-gray-400 py-1.5">
+                        <span className="text-[12px]">가격 : {product.details.price}</span>
+                      </div>
+                      <div className="border-t border-gray-400 py-1.5">
+                        <span className="text-[12px]">구조 : {product.details.structure}</span>
+                      </div>
+                      <div className="border-t border-gray-400 py-1.5">
+                        <span className="text-[12px]">지붕형태 : {product.details.roofType}</span>
+                      </div>
+                      <div className="border-t border-gray-400 py-1.5">
+                        <span className="text-[12px]">외부마감 : {product.details.exterior}</span>
+                      </div>
+                      <div className="border-t border-gray-400 py-1.5">
+                        <span className="text-[12px]">내부마감 : {product.details.interior}</span>
+                      </div>
+                      <div className="border-t border-gray-400 py-1.5">
+                        <span className="text-[12px]">크기 : {product.details.size}</span>
+                      </div>
                     </div>
                   </div>
                 </div>

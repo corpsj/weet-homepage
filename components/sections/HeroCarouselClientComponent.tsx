@@ -36,7 +36,8 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
     if (initialSlides.length === 0) return null;
 
     return (
-        <section ref={containerRef} className="relative h-[85vh] bg-[#EBEBEB] overflow-hidden">
+    return (
+        <section ref={containerRef} className="relative bg-[#EBEBEB] overflow-hidden w-full max-w-[1600px] mx-auto h-[calc(100vh-70px)] md:h-[calc(100vh-90px)] lg:h-[calc(100vh-110px)]">
             {/* Background Image with Parallax */}
             <motion.div style={{ y }} className="absolute inset-0 h-[120%] -top-[10%]">
                 <AnimatePresence mode="wait">
@@ -54,37 +55,13 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                             fill
                             priority
                             className="object-cover"
-                            sizes="100vw"
+                            sizes="(max-width: 1600px) 100vw, 1600px"
                         />
-                        {/* Gradient Overlay for Text Readability */}
-                        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/60" />
+                        {/* Gradient Overlay for Text Readability - Kept for aesthetics even without text */}
+                        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
                     </motion.div>
                 </AnimatePresence>
             </motion.div>
-
-            {/* Text Content */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-10 px-4 text-center">
-                <AnimatePresence mode="wait">
-                    {initialSlides[currentSlide].title && (
-                        <motion.div
-                            key={`text-${currentSlide}`}
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
-                        >
-                            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 tracking-tight drop-shadow-lg">
-                                {initialSlides[currentSlide].title}
-                            </h1>
-                            {initialSlides[currentSlide].subtitle && (
-                                <p className="text-lg md:text-2xl font-light tracking-wide drop-shadow-md opacity-90">
-                                    {initialSlides[currentSlide].subtitle}
-                                </p>
-                            )}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </div>
 
             {/* Navigation Arrows */}
             <button
@@ -108,7 +85,7 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
             </button>
 
             {/* Slide Indicators */}
-            <div className="absolute bottom-20 md:bottom-24 lg:bottom-[100px] left-1/2 -translate-x-1/2 flex space-x-3 z-20">
+            <div className="absolute bottom-12 md:bottom-16 lg:bottom-[60px] left-1/2 -translate-x-1/2 flex space-x-3 z-20">
                 {initialSlides.map((_, idx) => (
                     <button
                         key={idx}
@@ -122,11 +99,11 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
 
             {/* Scroll Down Indicator */}
             <motion.div
-                className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center cursor-pointer"
+                className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center cursor-pointer"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1, duration: 1 }}
-                onClick={() => window.scrollTo({ top: window.innerHeight * 0.85, behavior: 'smooth' })}
+                onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
             >
                 <span className="text-white/80 text-xs tracking-widest uppercase mb-2">Scroll</span>
                 <motion.div
