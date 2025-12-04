@@ -167,7 +167,7 @@ export default function Header() {
               className="hidden lg:flex absolute left-0 right-0 top-0 bottom-0 items-center justify-center pointer-events-none pr-[120px]"
               onMouseEnter={() => setShowMegaMenu(true)}
             >
-              <div className="flex pointer-events-auto gap-[60px]">
+              <div className="flex pointer-events-auto gap-[60px] pb-[70px] -mb-[70px]">
                 {navigation.map((item) => (
                   <div
                     key={item.name}
@@ -189,7 +189,7 @@ export default function Header() {
             </nav>
 
             {/* Social Icons - Desktop only */}
-            <div className="hidden lg:flex absolute right-[64px] bottom-[30px] items-center space-x-4">
+            <div className="hidden lg:flex absolute right-[64px] top-1/2 -translate-y-1/2 items-center space-x-4">
               <Link
                 href="https://blog.naver.com"
                 target="_blank"
@@ -244,6 +244,11 @@ export default function Header() {
             <div
               className="hidden lg:block absolute left-0 right-0 z-40"
               style={{ top: '110px' }}
+              onMouseEnter={() => setShowMegaMenu(true)}
+              onMouseLeave={() => {
+                setShowMegaMenu(false);
+                setActiveMenu(null);
+              }}
             >
               <div className="flex justify-center w-full pr-[120px]">
                 <div
