@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Product, ProductInsert } from '@/types/supabase';
 import { createProduct, updateProduct } from '@/app/actions/product-actions';
 import { Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 import ImageUpload from '@/components/admin/media/ImageUpload';
 
 interface ProductFormProps {
@@ -70,9 +71,9 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
         } catch (error) {
             console.error(error);
             if (error instanceof Error) {
-                alert(`저장 중 오류가 발생했습니다: ${error.message}`);
+                toast.error(`저장 중 오류가 발생했습니다: ${error.message}`);
             } else {
-                alert('저장 중 알 수 없는 오류가 발생했습니다.');
+                toast.error('저장 중 알 수 없는 오류가 발생했습니다.');
             }
         } finally {
             setLoading(false);

@@ -2,6 +2,7 @@
 
 import { useState, useRef } from 'react';
 import { Upload, X, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 import Image from 'next/image';
 import { createClient } from '@/utils/supabase/client';
 import imageCompression from 'browser-image-compression';
@@ -64,7 +65,7 @@ export default function ImageUpload({ value, onChange, className = '', bucket = 
 
             onChange(data.publicUrl);
         } catch {
-            alert('이미지 업로드에 실패했습니다. 스토리지 버킷 설정을 확인해주세요.');
+            toast.error('이미지 업로드에 실패했습니다. 스토리지 버킷 설정을 확인해주세요.');
         } finally {
             setLoading(false);
             // Reset input so same file can be selected again if needed

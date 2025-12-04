@@ -8,6 +8,7 @@ import {
     CheckCircle2, Clock, MessageSquare, Trash2,
     MoreHorizontal, X
 } from 'lucide-react';
+import { toast } from 'sonner';
 import { updateInquiryStatus, deleteInquiry, updateInquiryAnswer } from '@/app/actions/inquiry-actions';
 
 interface Inquiry {
@@ -64,7 +65,7 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
             await deleteInquiry(id);
         } catch (error) {
             console.error('Failed to delete inquiry:', error);
-            alert('삭제 중 오류가 발생했습니다.');
+            toast.error('삭제 중 오류가 발생했습니다.');
         }
     };
 
@@ -86,10 +87,10 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
             setInquiries(inquiries.map(i => i.id === selectedInquiry.id ? updatedInquiry : i));
             setSelectedInquiry(updatedInquiry);
             setReplyText('');
-            alert('답변이 저장되었습니다.');
+            toast.success('답변이 저장되었습니다.');
         } catch (error) {
             console.error('Failed to save reply:', error);
-            alert('답변 저장에 실패했습니다.');
+            toast.error('답변 저장에 실패했습니다.');
         } finally {
             setIsSending(false);
         }

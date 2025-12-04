@@ -7,6 +7,25 @@ import { Database } from '@/types/supabase';
 import ImageUpload from '@/components/admin/media/ImageUpload';
 import { createHeroSlide, updateHeroSlide, deleteHeroSlide, updateSignatureStatus } from '@/app/actions/cms-actions';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { createClient } from '@/utils/supabase/client';
+import {
+    DndContext,
+    closestCenter,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors,
+    DragEndEvent
+} from '@dnd-kit/core';
+import {
+    arrayMove,
+    SortableContext,
+    sortableKeyboardCoordinates,
+    verticalListSortingStrategy,
+    useSortable
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 
 type HeroSlide = Database['public']['Tables']['hero_slides']['Row'];
 type Product = Database['public']['Tables']['products']['Row'];
@@ -68,6 +87,51 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
     const [isAdding, setIsAdding] = useState(false);
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
+    const [heroSlides, setHeroSlides] = useState(slides);
+    const supabase = createClient();
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
+
+    const handleDragEnd = async (event: DragEndEvent) => {
+        const { active, over } = event;
+
+        if (over && active.id !== over.id) {
+            setHeroSlides((items) => {
+                const oldIndex = items.findIndex((item) => item.id === active.id);
+                const newIndex = items.findIndex((item) => item.id === over.id);
+                const newItems = arrayMove(items, oldIndex, newIndex);
+
+                // Update sort order in DB
+                updateSortOrder(newItems);
+
+                return newItems;
+            });
+        }
+    };
+
+    const updateSortOrder = async (items: HeroSlide[]) => {
+        try {
+            const updates = items.map((item, index) => ({
+                id: item.id,
+                sort_order: index
+            }));
+
+            const { error } = await supabase
+                .from('hero_slides')
+                .upsert(updates as any, { onConflict: 'id' });
+
+            if (error) throw error;
+            toast.success('순서가 저장되었습니다.');
+        } catch (error) {
+            console.error(error);
+            toast.error('순서 저장 실패');
+        }
+    };
 
     const handleCreate = async (formData: FormData) => {
         startTransition(async () => {
@@ -75,8 +139,9 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
                 await createHeroSlide(formData);
                 setIsAdding(false);
                 router.refresh();
+                toast.success('슬라이드가 추가되었습니다.');
             } catch (error) {
-                alert('슬라이드 추가 실패');
+                toast.error('슬라이드 추가 실패');
             }
         });
     };
@@ -87,8 +152,9 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
             try {
                 await deleteHeroSlide(id);
                 router.refresh();
+                toast.success('삭제되었습니다.');
             } catch (error) {
-                alert('삭제 실패');
+                toast.error('삭제 실패');
             }
         });
     };
@@ -105,27 +171,51 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
                 </button>
             </div>
 
-            <div className="space-y-4">
-                {slides.map((slide) => (
-                    <HeroSlideItem key={slide.id} slide={slide} onDelete={handleDelete} />
-                ))}
-
-                {isAdding && (
-                    <div className="border border-blue-200 rounded-lg p-4 bg-blue-50">
-                        <h4 className="font-bold mb-4">새 슬라이드</h4>
-                        <HeroSlideForm
-                            onSubmit={handleCreate}
-                            onCancel={() => setIsAdding(false)}
-                            isPending={isPending}
-                        />
+            <DndContext
+                sensors={sensors}
+                collisionDetection={closestCenter}
+                onDragEnd={handleDragEnd}
+            >
+                <SortableContext
+                    items={heroSlides.map(s => s.id)}
+                    strategy={verticalListSortingStrategy}
+                >
+                    <div className="space-y-4">
+                        {heroSlides.map((slide) => (
+                            <SortableHeroSlideItem key={slide.id} slide={slide} onDelete={handleDelete} />
+                        ))}
                     </div>
-                )}
-            </div>
+                </SortableContext>
+            </DndContext>
+
+            {isAdding && (
+                <div className="border border-blue-200 rounded-lg p-4 bg-blue-50">
+                    <h4 className="font-bold mb-4">새 슬라이드</h4>
+                    <HeroSlideForm
+                        onSubmit={handleCreate}
+                        onCancel={() => setIsAdding(false)}
+                        isPending={isPending}
+                    />
+                </div>
+            )}
         </div>
     );
 }
 
-function HeroSlideItem({ slide, onDelete }: { slide: HeroSlide, onDelete: (id: number) => void }) {
+function SortableHeroSlideItem({ slide, onDelete }: { slide: HeroSlide, onDelete: (id: number) => void }) {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+    } = useSortable({ id: slide.id });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+    };
+
     const [isEditing, setIsEditing] = useState(false);
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
@@ -136,15 +226,16 @@ function HeroSlideItem({ slide, onDelete }: { slide: HeroSlide, onDelete: (id: n
                 await updateHeroSlide(slide.id, formData);
                 setIsEditing(false);
                 router.refresh();
+                toast.success('수정되었습니다.');
             } catch (error) {
-                alert('수정 실패');
+                toast.error('수정 실패');
             }
         });
     };
 
     if (isEditing) {
         return (
-            <div className="border border-blue-200 rounded-lg p-4 bg-blue-50">
+            <div className="border border-blue-200 rounded-lg p-4 bg-blue-50" style={style} ref={setNodeRef}>
                 <HeroSlideForm
                     initialData={slide}
                     onSubmit={handleUpdate}
@@ -156,8 +247,16 @@ function HeroSlideItem({ slide, onDelete }: { slide: HeroSlide, onDelete: (id: n
     }
 
     return (
-        <div className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border border-gray-100 group">
-            <div className="cursor-move text-gray-400 hover:text-gray-600">
+        <div
+            ref={setNodeRef}
+            style={style}
+            className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border border-gray-100 group"
+        >
+            <div
+                {...attributes}
+                {...listeners}
+                className="cursor-move text-gray-400 hover:text-gray-600 p-1"
+            >
                 <GripVertical className="w-5 h-5" />
             </div>
             <div className="relative w-24 h-16 bg-gray-200 rounded-md overflow-hidden flex-shrink-0">
@@ -280,7 +379,7 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
                 await updateSignatureStatus(productId, !currentStatus);
                 router.refresh();
             } catch (error: any) {
-                alert(error.message || '업데이트 실패');
+                toast.error(error.message || '업데이트 실패');
             }
         });
     };
@@ -295,8 +394,8 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
                             key={product.id}
                             onClick={() => !isPending && handleToggle(product.id, product.is_signature)}
                             className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${product.is_signature
-                                    ? 'border-black bg-gray-50 ring-1 ring-black'
-                                    : 'border-gray-200 hover:border-gray-300'
+                                ? 'border-black bg-gray-50 ring-1 ring-black'
+                                : 'border-gray-200 hover:border-gray-300'
                                 } ${isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${product.is_signature ? 'bg-black border-black' : 'border-gray-300 bg-white'

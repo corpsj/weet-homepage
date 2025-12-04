@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Plus, Trash2, ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 
@@ -50,7 +51,7 @@ export default function SupportEditor({ initialFAQs, initialNotices }: { initial
             router.refresh();
         } catch (e) {
             console.error(e);
-            alert('Failed to add FAQ');
+            toast.error('Failed to add FAQ');
         } finally {
             setLoading(false);
         }
@@ -94,7 +95,7 @@ export default function SupportEditor({ initialFAQs, initialNotices }: { initial
             router.refresh();
         } catch (e) {
             console.error(e);
-            alert('Failed to add Notice');
+            toast.error('Failed to add Notice');
         } finally {
             setLoading(false);
         }

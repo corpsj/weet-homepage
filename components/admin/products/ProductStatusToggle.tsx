@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { toggleProductStatus } from '@/app/actions/product-actions';
 import { Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface ProductStatusToggleProps {
     id: string;
@@ -18,7 +19,7 @@ export default function ProductStatusToggle({ id, isActive }: ProductStatusToggl
             await toggleProductStatus(id, !isActive);
         } catch (error) {
             console.error(error);
-            alert('상태 변경에 실패했습니다.');
+            toast.error('상태 변경에 실패했습니다.');
         } finally {
             setLoading(false);
         }

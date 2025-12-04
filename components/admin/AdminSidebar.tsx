@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { createClient } from '@/utils/supabase/client';
 import {
     Package,
     MessageSquare,
@@ -67,8 +68,16 @@ const navigation: { title: string; items: NavItem[] }[] = [
     }
 ];
 
-export default function AdminSidebar() {
+export default function AdminSidebar({ user }: { user?: any }) {
     const pathname = usePathname();
+    const router = useRouter();
+    const supabase = createClient();
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut();
+        router.push('/login');
+        router.refresh();
+    };
 
     return (
         <aside className="w-72 bg-[#0F172A] text-white flex flex-col fixed inset-y-0 z-50 shadow-xl">
@@ -115,14 +124,17 @@ export default function AdminSidebar() {
             <div className="p-4 border-t border-gray-800 bg-[#0B1120]">
                 <div className="flex items-center gap-3 px-4 py-3 mb-2">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center text-sm font-bold">
-                        AD
+                        {user?.email?.[0].toUpperCase() || 'A'}
                     </div>
                     <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-white truncate">Admin User</p>
-                        <p className="text-xs text-gray-500 truncate">admin@weet.com</p>
+                        <p className="text-xs text-gray-500 truncate">{user?.email || 'admin@weet.com'}</p>
                     </div>
                 </div>
-                <button className="flex items-center gap-3 px-4 py-2 text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg w-full transition-colors">
+                <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-3 px-4 py-2 text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg w-full transition-colors"
+                >
                     <LogOut className="w-4 h-4" />
                     로그아웃
                 </button>

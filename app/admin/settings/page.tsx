@@ -31,8 +31,45 @@ export default function AdminSettingsPage() {
         <div>
             <h1 className="text-2xl font-bold text-gray-900 mb-8">설정</h1>
 
-            <div className="bg-white p-8 rounded-xl border border-gray-200 shadow-sm space-y-8">
-                <div>
+            <div className="space-y-6">
+                {/* Account Settings (Placeholder) */}
+                <div className="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                    <h2 className="text-lg font-bold text-gray-900 mb-4">계정 설정</h2>
+                    <div className="grid gap-6 max-w-xl">
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">이메일</label>
+                            <input
+                                type="email"
+                                disabled
+                                value="admin@weet.com"
+                                className="w-full px-3 py-2 bg-gray-100 border border-gray-200 rounded-lg text-sm text-gray-500 cursor-not-allowed"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700 mb-1">비밀번호</label>
+                            <button className="text-sm text-blue-600 hover:underline font-medium">
+                                비밀번호 변경
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Notification Settings (Placeholder) */}
+                <div className="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                    <h2 className="text-lg font-bold text-gray-900 mb-4">알림 설정</h2>
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between max-w-xl">
+                            <div>
+                                <p className="text-sm font-medium text-gray-900">이메일 알림</p>
+                                <p className="text-xs text-gray-500">새로운 문의가 들어오면 이메일로 알림을 받습니다.</p>
+                            </div>
+                            <input type="checkbox" defaultChecked className="w-4 h-4 text-black border-gray-300 rounded focus:ring-black" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Data Management */}
+                <div className="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
                     <h2 className="text-lg font-bold text-gray-900 mb-4">데이터 관리</h2>
                     <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
                         <h3 className="font-medium text-gray-900 mb-2">초기 데이터 이관 (Migration)</h3>
