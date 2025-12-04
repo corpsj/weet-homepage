@@ -276,7 +276,7 @@ export default function ProductsPage() {
                       {sidebarStructure.S.Private.map((productId) => (
                         <p
                           key={productId}
-                          className={`cursor-pointer py-0.5 transition-colors hover:text-[#FF5A00] ${activeProduct === productId ? "text-[#FF5A00] font-bold bg-[#FF5A00]/10 px-2 -mx-2 rounded" : ""
+                          className={`cursor-pointer py-0.5 transition-colors hover:text-[#FEBD16] ${activeProduct === productId ? "text-[#FEBD16] font-bold bg-[#FEBD16]/10 px-2 -mx-2 rounded" : ""
                             }`}
                           onClick={() => scrollToProduct(productId)}
                         >
@@ -295,7 +295,7 @@ export default function ProductsPage() {
                       {sidebarStructure.S.Public.map((productId) => (
                         <p
                           key={productId}
-                          className={`cursor-pointer py-0.5 transition-colors hover:text-[#FF5A00] ${activeProduct === productId ? "text-[#FF5A00] font-bold bg-[#FF5A00]/10 px-2 -mx-2 rounded" : ""
+                          className={`cursor-pointer py-0.5 transition-colors hover:text-[#FEBD16] ${activeProduct === productId ? "text-[#FEBD16] font-bold bg-[#FEBD16]/10 px-2 -mx-2 rounded" : ""
                             }`}
                           onClick={() => scrollToProduct(productId)}
                         >
@@ -332,7 +332,7 @@ export default function ProductsPage() {
                 {sidebarStructure.M.items.map((productId) => (
                   <p
                     key={productId}
-                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FF5A00] ${activeProduct === productId ? "text-[#FF5A00] font-bold bg-[#FF5A00]/10 px-2 -mx-2 rounded" : ""}`}
+                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FEBD16] ${activeProduct === productId ? "text-[#FEBD16] font-bold bg-[#FEBD16]/10 px-2 -mx-2 rounded" : ""}`}
                     onClick={() => scrollToProduct(productId)}
                   >
                     {getProductName(productId)}
@@ -365,7 +365,7 @@ export default function ProductsPage() {
                 {sidebarStructure.L.items.map((productId) => (
                   <p
                     key={productId}
-                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FF5A00] ${activeProduct === productId ? "text-[#FF5A00] font-bold bg-[#FF5A00]/10 px-2 -mx-2 rounded" : ""}`}
+                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FEBD16] ${activeProduct === productId ? "text-[#FEBD16] font-bold bg-[#FEBD16]/10 px-2 -mx-2 rounded" : ""}`}
                     onClick={() => scrollToProduct(productId)}
                   >
                     {getProductName(productId)}
@@ -398,7 +398,7 @@ export default function ProductsPage() {
                 {sidebarStructure.XL.items.map((productId) => (
                   <p
                     key={productId}
-                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FF5A00] ${activeProduct === productId ? "text-[#FF5A00] font-bold bg-[#FF5A00]/10 px-2 -mx-2 rounded" : ""}`}
+                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FEBD16] ${activeProduct === productId ? "text-[#FEBD16] font-bold bg-[#FEBD16]/10 px-2 -mx-2 rounded" : ""}`}
                     onClick={() => scrollToProduct(productId)}
                   >
                     {getProductName(productId)}
@@ -430,7 +430,7 @@ export default function ProductsPage() {
                 {sidebarStructure.SOLUTION.items.map((productId) => (
                   <p
                     key={productId}
-                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FF5A00] ${activeProduct === productId ? "text-[#FF5A00] font-bold bg-[#FF5A00]/10 px-2 -mx-2 rounded" : ""}`}
+                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FEBD16] ${activeProduct === productId ? "text-[#FEBD16] font-bold bg-[#FEBD16]/10 px-2 -mx-2 rounded" : ""}`}
                     onClick={() => scrollToProduct(productId)}
                   >
                     {getProductName(productId)}
@@ -462,7 +462,7 @@ export default function ProductsPage() {
                 {sidebarStructure.DESIGN.items.map((productId) => (
                   <p
                     key={productId}
-                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FF5A00] ${activeProduct === productId ? "text-[#FF5A00] font-bold bg-[#FF5A00]/10 px-2 -mx-2 rounded" : ""}`}
+                    className={`cursor-pointer py-0.5 transition-colors hover:text-[#FEBD16] ${activeProduct === productId ? "text-[#FEBD16] font-bold bg-[#FEBD16]/10 px-2 -mx-2 rounded" : ""}`}
                     onClick={() => scrollToProduct(productId)}
                   >
                     {getProductName(productId)}
@@ -530,7 +530,7 @@ export default function ProductsPage() {
                 {/* Floor Plan Diagram - CSS Cropped */}
                 {product.floorPlan.src && (
                   <div className="mb-6 flex justify-center">
-                    <div className="relative w-full max-w-[250px] h-[120px] overflow-hidden border border-gray-200 bg-white">
+                    <div className="relative w-full max-w-[250px] h-[120px] overflow-hidden border border-gray-200">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={product.floorPlan.src}

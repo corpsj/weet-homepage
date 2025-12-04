@@ -253,7 +253,7 @@ export default function ProductsPage() {
                                                                 {category.Private.map((id: string) => (
                                                                     <li
                                                                         key={id}
-                                                                        className={`text-sm cursor-pointer transition-colors ${activeProduct === id ? 'text-[#FF5A00] font-medium' : 'text-gray-500 hover:text-gray-900'}`}
+                                                                        className={`text-sm cursor-pointer transition-colors ${activeProduct === id ? 'text-[#FEBD16] font-medium' : 'text-gray-500 hover:text-gray-900'}`}
                                                                         onClick={() => scrollToProduct(id)}
                                                                     >
                                                                         {getProductName(id)}
@@ -269,7 +269,7 @@ export default function ProductsPage() {
                                                                 {category.Public.map((id: string) => (
                                                                     <li
                                                                         key={id}
-                                                                        className={`text-sm cursor-pointer transition-colors ${activeProduct === id ? 'text-[#FF5A00] font-medium' : 'text-gray-500 hover:text-gray-900'}`}
+                                                                        className={`text-sm cursor-pointer transition-colors ${activeProduct === id ? 'text-[#FEBD16] font-medium' : 'text-gray-500 hover:text-gray-900'}`}
                                                                         onClick={() => scrollToProduct(id)}
                                                                     >
                                                                         {getProductName(id)}
@@ -285,7 +285,7 @@ export default function ProductsPage() {
                                                     {category.items?.map((id: string) => (
                                                         <li
                                                             key={id}
-                                                            className={`text-sm cursor-pointer transition-colors ${activeProduct === id ? 'text-[#FF5A00] font-medium' : 'text-gray-500 hover:text-gray-900'}`}
+                                                            className={`text-sm cursor-pointer transition-colors ${activeProduct === id ? 'text-[#FEBD16] font-medium' : 'text-gray-500 hover:text-gray-900'}`}
                                                             onClick={() => scrollToProduct(id)}
                                                         >
                                                             {getProductName(id)}
@@ -314,7 +314,7 @@ export default function ProductsPage() {
                                 <div className="mb-8">
                                     <div className="flex items-baseline gap-4 mb-2">
                                         <h2 className="text-4xl font-bold text-gray-900">{product.name}</h2>
-                                        <span className="text-xl text-[#FF5A00] font-medium">{product.sizeCategory}</span>
+                                        <span className="text-xl text-[#FEBD16] font-medium">{product.sizeCategory}</span>
                                     </div>
                                     {product.tagline && (
                                         <p className="text-lg text-gray-600">{product.tagline}</p>
@@ -384,7 +384,7 @@ export default function ProductsPage() {
                                     {/* Right: Floor Plan */}
                                     <div>
                                         <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">Floor Plan</h3>
-                                        <div className="bg-white p-8 rounded-xl border border-gray-100 shadow-sm aspect-square flex items-center justify-center relative overflow-hidden">
+                                        <div className="p-8 rounded-xl border border-gray-100 shadow-sm aspect-square flex items-center justify-center relative overflow-hidden">
                                             {product.floorPlan.src ? (
                                                 <div
                                                     className="relative w-full h-full"
