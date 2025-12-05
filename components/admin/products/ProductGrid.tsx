@@ -179,7 +179,6 @@ export default function ProductGrid({ products: initialProducts }: ProductGridPr
 
     // Filter State
     const [filterCategory, setFilterCategory] = useState('All');
-    const [filterSubCategory, setFilterSubCategory] = useState('All');
     const [filterStatus, setFilterStatus] = useState('All');
 
     // DnD Sensors
@@ -233,7 +232,6 @@ export default function ProductGrid({ products: initialProducts }: ProductGridPr
     // Filter Logic
     const filteredProducts = products.filter(product => {
         if (filterCategory !== 'All' && product.size_category !== filterCategory) return false;
-        if (filterSubCategory !== 'All' && product.sub_category !== filterSubCategory) return false;
         if (filterStatus !== 'All') {
             const isActive = filterStatus === 'Active';
             if (product.is_active !== isActive) return false;
@@ -277,16 +275,6 @@ export default function ProductGrid({ products: initialProducts }: ProductGridPr
                                 {c === 'All' ? '전체 카테고리' : c}
                             </option>
                         ))}
-                    </select>
-
-                    <select
-                        value={filterSubCategory}
-                        onChange={(e) => setFilterSubCategory(e.target.value)}
-                        className="px-3 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-black bg-white"
-                    >
-                        <option value="All">전체 용도</option>
-                        <option value="Private">Private</option>
-                        <option value="Public">Public</option>
                     </select>
 
                     <select
@@ -442,7 +430,6 @@ export default function ProductGrid({ products: initialProducts }: ProductGridPr
                     <button
                         onClick={() => {
                             setFilterCategory('All');
-                            setFilterSubCategory('All');
                             setFilterStatus('All');
                         }}
                         className="mt-2 text-blue-600 hover:text-blue-700 font-medium text-sm"

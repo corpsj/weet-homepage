@@ -13,7 +13,7 @@ export interface Database {
         Row: {
           id: string
           name: string
-          sub_category: 'Private' | 'Public'
+          sub_category: 'Private' | 'Public' | null
           size_category: 'S' | 'M' | 'L' | 'XL' | 'SOLUTION' | 'DESIGN'
           image_url: string
           tagline: string
@@ -34,7 +34,7 @@ export interface Database {
         Insert: {
           id?: string
           name: string
-          sub_category: string
+          sub_category?: string | null
           size_category: string
           image_url: string
           tagline: string
@@ -55,7 +55,7 @@ export interface Database {
         Update: {
           id?: string
           name?: string
-          sub_category?: string
+          sub_category?: string | null
           size_category?: string
           image_url?: string
           tagline?: string

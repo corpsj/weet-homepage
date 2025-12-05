@@ -18,7 +18,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState<Partial<ProductInsert>>({
         name: initialData?.name || '',
-        sub_category: initialData?.sub_category || 'Private',
+        sub_category: (!initialData || initialData.size_category === 'S') ? (initialData?.sub_category || 'Private') : null,
         size_category: initialData?.size_category || 'S',
         image_url: initialData?.image_url || '',
         tagline: initialData?.tagline || '',
@@ -36,6 +36,27 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
+
+        // S 카테고리가 아니면 세부 카테고리를 null로 설정
+        if (name === 'size_category' && value !== 'S') {
+            setFormData(prev => ({
+                ...prev,
+                size_category: value,
+                sub_category: null
+            }));
+            return;
+        }
+
+        // S 카테고리로 변경 시 기본값 설정
+        if (name === 'size_category' && value === 'S') {
+            setFormData(prev => ({
+                ...prev,
+                size_category: value,
+                sub_category: prev.sub_category || 'Private'
+            }));
+            return;
+        }
+
         setFormData(prev => ({
             ...prev,
             [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : value
@@ -97,7 +118,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                         />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className={formData.size_category === 'S' ? "grid grid-cols-2 gap-4" : ""}>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">카테고리</label>
                             <select
@@ -114,18 +135,20 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                                 <option value="DESIGN">DESIGN</option>
                             </select>
                         </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-1">서브 카테고리</label>
-                            <select
-                                name="sub_category"
-                                value={formData.sub_category}
-                                onChange={handleChange}
-                                className="w-full px-3 py-2 border rounded-lg outline-none"
-                            >
-                                <option value="Private">Private</option>
-                                <option value="Public">Public</option>
-                            </select>
-                        </div>
+                        {formData.size_category === 'S' && (
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">세부 카테고리</label>
+                                <select
+                                    name="sub_category"
+                                    value={formData.sub_category || 'Private'}
+                                    onChange={handleChange}
+                                    className="w-full px-3 py-2 border rounded-lg outline-none"
+                                >
+                                    <option value="Private">Private</option>
+                                    <option value="Public">Public</option>
+                                </select>
+                            </div>
+                        )}
                     </div>
 
                     <div className="flex items-center gap-2">
