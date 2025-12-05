@@ -23,13 +23,13 @@ export default async function HeroCarousel() {
   const initialSlides: Slide[] = slides.length > 0 ? slides : [
     {
       id: 1,
-      image_url: '/images/products/small/private/02-3x6-house-render.jpg',
+      image_url: '/images/products/small/private/3x6-house.jpg',
       title: '3x6 House',
       subtitle: '',
     },
     {
       id: 2,
-      image_url: '/images/products/small/private/01-3x9-house.jpg',
+      image_url: '/images/products/small/private/3x9.jpg',
       title: '3x9 House',
       subtitle: '',
     },
