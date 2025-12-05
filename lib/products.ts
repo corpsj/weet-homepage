@@ -60,9 +60,9 @@ export function buildSidebarStructure(products: Product[]) {
     items?: string[]
   }> = {
     S: { label: 'S', subtitle: '', Private: [], Public: [] },
-    M: { label: 'M', subtitle: 'Small unit + Small unit', items: [] },
-    L: { label: 'L', subtitle: 'Small unit + Small unit\n+ 현장 공사', items: [] },
-    XL: { label: 'XL', subtitle: '단지개념', items: [] },
+    M: { label: 'M', subtitle: '', items: [] },
+    L: { label: 'L', subtitle: '', items: [] },
+    XL: { label: 'XL', subtitle: '', items: [] },
     SOLUTION: { label: 'SOLUTION', subtitle: '', items: [] },
     DESIGN: { label: 'DESIGN', subtitle: '', items: [] },
   }

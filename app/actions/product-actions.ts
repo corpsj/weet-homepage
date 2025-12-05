@@ -64,3 +64,26 @@ export async function toggleProductStatus(id: string, isActive: boolean) {
     revalidatePath('/admin/products');
     revalidatePath('/products');
 }
+
+export async function reorderProducts(orderedIds: string[]) {
+    try {
+        // 각 제품의 display_order를 배열 인덱스로 업데이트
+        for (let i = 0; i < orderedIds.length; i++) {
+            const { error } = await supabaseAdmin
+                .from('products')
+                .update({ display_order: i } as never)
+                .eq('id', orderedIds[i]);
+
+            if (error) {
+                console.error(`Error updating order for product ${orderedIds[i]}:`, error);
+                throw new Error('Failed to reorder products');
+            }
+        }
+
+        revalidatePath('/admin/products');
+        revalidatePath('/products');
+    } catch (error) {
+        console.error('Error reordering products:', error);
+        throw new Error('Failed to reorder products');
+    }
+}

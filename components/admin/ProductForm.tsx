@@ -18,7 +18,6 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
     const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState<Partial<ProductInsert>>({
         name: initialData?.name || '',
-        category: initialData?.category || 'Small unit',
         sub_category: initialData?.sub_category || 'Private',
         size_category: initialData?.size_category || 'S',
         image_url: initialData?.image_url || '',
@@ -31,7 +30,6 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
         interior_finish: initialData?.interior_finish || '',
         size: initialData?.size || '',
         floor_plan_url: initialData?.floor_plan_url || '',
-        display_order: initialData?.display_order || 0,
         is_active: initialData?.is_active ?? true,
         is_signature: initialData?.is_signature ?? false,
     });
@@ -102,13 +100,19 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">카테고리</label>
-                            <input
-                                type="text"
-                                name="category"
-                                value={formData.category}
+                            <select
+                                name="size_category"
+                                value={formData.size_category}
                                 onChange={handleChange}
                                 className="w-full px-3 py-2 border rounded-lg outline-none"
-                            />
+                            >
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="SOLUTION">SOLUTION</option>
+                                <option value="DESIGN">DESIGN</option>
+                            </select>
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">서브 카테고리</label>
@@ -122,34 +126,6 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                                 <option value="Public">Public</option>
                             </select>
                         </div>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">사이즈 카테고리</label>
-                        <select
-                            name="size_category"
-                            value={formData.size_category}
-                            onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded-lg outline-none"
-                        >
-                            <option value="S">S</option>
-                            <option value="M">M</option>
-                            <option value="L">L</option>
-                            <option value="XL">XL</option>
-                            <option value="SOLUTION">SOLUTION</option>
-                            <option value="DESIGN">DESIGN</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">순서 (Display Order)</label>
-                        <input
-                            type="number"
-                            name="display_order"
-                            value={formData.display_order}
-                            onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded-lg outline-none"
-                        />
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -173,11 +149,90 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                         />
                         <label className="text-sm font-medium text-gray-700">시그니처 라인 노출</label>
                     </div>
+
+                    {/* Details - moved here */}
+                    <div className="pt-4 mt-4 border-t">
+                        <h3 className="text-lg font-bold border-b pb-2 mb-4">상세 스펙</h3>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">가격</label>
+                                <input
+                                    type="text"
+                                    name="price"
+                                    value={formData.price || ''}
+                                    onChange={handleChange}
+                                    className="w-full px-3 py-2 border rounded-lg outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">크기</label>
+                                <input
+                                    type="text"
+                                    name="size"
+                                    value={formData.size || ''}
+                                    onChange={handleChange}
+                                    className="w-full px-3 py-2 border rounded-lg outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">구조</label>
+                                <input
+                                    type="text"
+                                    name="structure"
+                                    value={formData.structure || ''}
+                                    onChange={handleChange}
+                                    className="w-full px-3 py-2 border rounded-lg outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">지붕형태</label>
+                                <input
+                                    type="text"
+                                    name="roof_type"
+                                    value={formData.roof_type || ''}
+                                    onChange={handleChange}
+                                    className="w-full px-3 py-2 border rounded-lg outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">외부마감</label>
+                                <input
+                                    type="text"
+                                    name="exterior_finish"
+                                    value={formData.exterior_finish || ''}
+                                    onChange={handleChange}
+                                    className="w-full px-3 py-2 border rounded-lg outline-none"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">내부마감</label>
+                                <input
+                                    type="text"
+                                    name="interior_finish"
+                                    value={formData.interior_finish || ''}
+                                    onChange={handleChange}
+                                    className="w-full px-3 py-2 border rounded-lg outline-none"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Description - moved here */}
+                    <div className="pt-4 mt-4 border-t">
+                        <label className="block text-sm font-medium text-gray-700 mb-1">설명 (Description)</label>
+                        <textarea
+                            name="description"
+                            rows={5}
+                            value={formData.description}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2 border rounded-lg outline-none resize-none"
+                        />
+                    </div>
                 </div>
 
-                {/* Images & Description */}
+                {/* Images */}
                 <div className="space-y-4">
-                    <h3 className="text-lg font-bold border-b pb-2">이미지 및 설명</h3>
+                    <h3 className="text-lg font-bold border-b pb-2">이미지</h3>
 
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">메인 이미지</label>
@@ -207,84 +262,6 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                         <p className="text-xs text-gray-500 mt-1">
                             * 크롭 파라미터 포함 가능 (예: ?crop_w=300%&crop_h=440%&crop_t=-111%&crop_l=0%)
                         </p>
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">설명 (Description)</label>
-                        <textarea
-                            name="description"
-                            rows={5}
-                            value={formData.description}
-                            onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded-lg outline-none resize-none"
-                        />
-                    </div>
-                </div>
-            </div>
-
-            {/* Details */}
-            <div className="space-y-4">
-                <h3 className="text-lg font-bold border-b pb-2">상세 스펙</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">가격</label>
-                        <input
-                            type="text"
-                            name="price"
-                            value={formData.price || ''}
-                            onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded-lg outline-none"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">구조</label>
-                        <input
-                            type="text"
-                            name="structure"
-                            value={formData.structure || ''}
-                            onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded-lg outline-none"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">지붕형태</label>
-                        <input
-                            type="text"
-                            name="roof_type"
-                            value={formData.roof_type || ''}
-                            onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded-lg outline-none"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">외부마감</label>
-                        <input
-                            type="text"
-                            name="exterior_finish"
-                            value={formData.exterior_finish || ''}
-                            onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded-lg outline-none"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">내부마감</label>
-                        <input
-                            type="text"
-                            name="interior_finish"
-                            value={formData.interior_finish || ''}
-                            onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded-lg outline-none"
-                        />
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">크기</label>
-                        <input
-                            type="text"
-                            name="size"
-                            value={formData.size || ''}
-                            onChange={handleChange}
-                            className="w-full px-3 py-2 border rounded-lg outline-none"
-                        />
                     </div>
                 </div>
             </div>
