@@ -121,17 +121,20 @@ export default function ProductsPage() {
         M: {
             label: "M",
             subtitle: "",
-            items: products.filter(p => p.sizeCategory === "M").map(p => p.id)
+            Private: products.filter(p => p.sizeCategory === "M" && p.subCategory === "Private").map(p => p.id),
+            Public: products.filter(p => p.sizeCategory === "M" && p.subCategory === "Public").map(p => p.id),
         },
         L: {
             label: "L",
             subtitle: "",
-            items: products.filter(p => p.sizeCategory === "L").map(p => p.id)
+            Private: products.filter(p => p.sizeCategory === "L" && p.subCategory === "Private").map(p => p.id),
+            Public: products.filter(p => p.sizeCategory === "L" && p.subCategory === "Public").map(p => p.id),
         },
         XL: {
             label: "XL",
             subtitle: "",
-            items: products.filter(p => p.sizeCategory === "XL").map(p => p.id)
+            Private: products.filter(p => p.sizeCategory === "XL" && p.subCategory === "Private").map(p => p.id),
+            Public: products.filter(p => p.sizeCategory === "XL" && p.subCategory === "Public").map(p => p.id),
         },
         SOLUTION: {
             label: "SOLUTION",
@@ -241,8 +244,8 @@ export default function ProductsPage() {
 
                                     {isExpanded && (
                                         <div className="space-y-6 pl-2 border-l border-gray-200 ml-1">
-                                            {/* S Category Special Handling */}
-                                            {key === 'S' ? (
+                                            {/* S, M, L, XL - 세부 카테고리(Private/Public) 지원 */}
+                                            {(key === 'S' || key === 'M' || key === 'L' || key === 'XL') ? (
                                                 <>
                                                     {category.Private && category.Private.length > 0 && (
                                                         <div className="mb-4">
@@ -278,7 +281,7 @@ export default function ProductsPage() {
                                                     )}
                                                 </>
                                             ) : (
-                                                // Other Categories
+                                                // SOLUTION, DESIGN - 세부 카테고리 없음
                                                 <ul className="space-y-2">
                                                     {category.items?.map((id: string) => (
                                                         <li

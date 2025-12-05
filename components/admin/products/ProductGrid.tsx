@@ -331,26 +331,79 @@ export default function ProductGrid({ products: initialProducts }: ProductGridPr
                             const categoryProducts = filteredProducts.filter(p => p.size_category === category);
                             if (categoryProducts.length === 0) return null;
 
+                            // S, M, L, XL은 세부 카테고리(Private/Public) 구분
+                            const hasSubCategories = ['S', 'M', 'L', 'XL'].includes(category);
+                            const privateProducts = hasSubCategories
+                                ? categoryProducts.filter(p => p.sub_category === 'Private')
+                                : [];
+                            const publicProducts = hasSubCategories
+                                ? categoryProducts.filter(p => p.sub_category === 'Public')
+                                : [];
+
                             return (
                                 <div key={category}>
                                     <div className="flex items-center gap-3 mb-3">
                                         <h2 className="text-lg font-bold text-gray-900">{category}</h2>
                                         <span className="text-sm text-gray-500">({categoryProducts.length})</span>
                                     </div>
-                                    <SortableContext
-                                        items={categoryProducts.map(p => p.id)}
-                                        strategy={verticalListSortingStrategy}
-                                    >
-                                        <div className="space-y-3">
-                                            {categoryProducts.map((product) => (
-                                                <SortableListRow
-                                                    key={product.id}
-                                                    product={product}
-                                                    onEdit={handleEdit}
-                                                />
-                                            ))}
+
+                                    {hasSubCategories ? (
+                                        <div className="space-y-6">
+                                            {privateProducts.length > 0 && (
+                                                <div>
+                                                    <h3 className="text-sm font-medium text-gray-500 mb-2 pl-2">Private ({privateProducts.length})</h3>
+                                                    <SortableContext
+                                                        items={privateProducts.map(p => p.id)}
+                                                        strategy={verticalListSortingStrategy}
+                                                    >
+                                                        <div className="space-y-3">
+                                                            {privateProducts.map((product) => (
+                                                                <SortableListRow
+                                                                    key={product.id}
+                                                                    product={product}
+                                                                    onEdit={handleEdit}
+                                                                />
+                                                            ))}
+                                                        </div>
+                                                    </SortableContext>
+                                                </div>
+                                            )}
+                                            {publicProducts.length > 0 && (
+                                                <div>
+                                                    <h3 className="text-sm font-medium text-gray-500 mb-2 pl-2">Public ({publicProducts.length})</h3>
+                                                    <SortableContext
+                                                        items={publicProducts.map(p => p.id)}
+                                                        strategy={verticalListSortingStrategy}
+                                                    >
+                                                        <div className="space-y-3">
+                                                            {publicProducts.map((product) => (
+                                                                <SortableListRow
+                                                                    key={product.id}
+                                                                    product={product}
+                                                                    onEdit={handleEdit}
+                                                                />
+                                                            ))}
+                                                        </div>
+                                                    </SortableContext>
+                                                </div>
+                                            )}
                                         </div>
-                                    </SortableContext>
+                                    ) : (
+                                        <SortableContext
+                                            items={categoryProducts.map(p => p.id)}
+                                            strategy={verticalListSortingStrategy}
+                                        >
+                                            <div className="space-y-3">
+                                                {categoryProducts.map((product) => (
+                                                    <SortableListRow
+                                                        key={product.id}
+                                                        product={product}
+                                                        onEdit={handleEdit}
+                                                    />
+                                                ))}
+                                            </div>
+                                        </SortableContext>
+                                    )}
                                 </div>
                             );
                         })}
