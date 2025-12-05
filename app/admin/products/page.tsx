@@ -8,7 +8,7 @@ export default async function AdminProductsPage() {
     const { data: products, error } = await supabaseAdmin
         .from('products')
         .select('*')
-        .order('created_at', { ascending: false })
+        .order('display_order', { ascending: true })
         .returns<Product[]>();
 
     if (error) {
