@@ -60,9 +60,9 @@ export function buildSidebarStructure(products: Product[]) {
     items?: string[]
   }> = {
     S: { label: 'S', subtitle: '', Private: [], Public: [] },
-    M: { label: 'M', subtitle: '', Private: [], Public: [] },
-    L: { label: 'L', subtitle: '', Private: [], Public: [] },
-    XL: { label: 'XL', subtitle: '', Private: [], Public: [] },
+    M: { label: 'M', subtitle: '', items: [] },
+    L: { label: 'L', subtitle: '', items: [] },
+    XL: { label: 'XL', subtitle: '', items: [] },
     SOLUTION: { label: 'SOLUTION', subtitle: '', items: [] },
     DESIGN: { label: 'DESIGN', subtitle: '', items: [] },
   }
@@ -70,15 +70,15 @@ export function buildSidebarStructure(products: Product[]) {
   products.forEach((product) => {
     const category = product.size_category
 
-    // S, M, L, XL은 Private/Public 세부 카테고리 지원
-    if (category === 'S' || category === 'M' || category === 'L' || category === 'XL') {
+    // S만 Private/Public 세부 카테고리 지원
+    if (category === 'S') {
       if (product.sub_category === 'Private') {
         structure[category].Private?.push(product.id)
       } else {
         structure[category].Public?.push(product.id)
       }
     } else if (structure[category]) {
-      // SOLUTION, DESIGN은 세부 카테고리 없음
+      // M, L, XL, SOLUTION, DESIGN은 세부 카테고리 없음
       structure[category].items?.push(product.id)
     }
   })

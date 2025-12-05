@@ -311,28 +311,52 @@ export default function ProductGrid({ products: initialProducts }: ProductGridPr
             </div>
 
             {viewMode === 'grid' ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                    {filteredProducts.map((product) => (
-                        <GridCard
-                            key={product.id}
-                            product={product}
-                            onEdit={handleEdit}
-                        />
-                    ))}
-                </div>
+                <>
+                    {/* Category Filter Buttons */}
+                    <div className="flex flex-wrap gap-2 mb-6">
+                        {categories.map((category) => (
+                            <button
+                                key={category}
+                                onClick={() => setFilterCategory(category)}
+                                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                                    filterCategory === category
+                                        ? 'bg-black text-white'
+                                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                                }`}
+                            >
+                                {category === 'All' ? '전체' : category}
+                                <span className="ml-1.5 text-xs opacity-70">
+                                    ({category === 'All'
+                                        ? products.length
+                                        : products.filter(p => p.size_category === category).length})
+                                </span>
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {filteredProducts.map((product) => (
+                            <GridCard
+                                key={product.id}
+                                product={product}
+                                onEdit={handleEdit}
+                            />
+                        ))}
+                    </div>
+                </>
             ) : (
                 <DndContext
                     sensors={sensors}
                     collisionDetection={closestCenter}
                     onDragEnd={handleDragEnd}
                 >
-                    <div className="space-y-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                         {categories.filter(c => c !== 'All').map((category) => {
                             const categoryProducts = filteredProducts.filter(p => p.size_category === category);
                             if (categoryProducts.length === 0) return null;
 
-                            // S, M, L, XL은 세부 카테고리(Private/Public) 구분
-                            const hasSubCategories = ['S', 'M', 'L', 'XL'].includes(category);
+                            // S만 세부 카테고리(Private/Public) 구분
+                            const hasSubCategories = category === 'S';
                             const privateProducts = hasSubCategories
                                 ? categoryProducts.filter(p => p.sub_category === 'Private')
                                 : [];
@@ -341,22 +365,22 @@ export default function ProductGrid({ products: initialProducts }: ProductGridPr
                                 : [];
 
                             return (
-                                <div key={category}>
-                                    <div className="flex items-center gap-3 mb-3">
+                                <div key={category} className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                                    <div className="flex items-center gap-3 mb-3 pb-2 border-b border-gray-200">
                                         <h2 className="text-lg font-bold text-gray-900">{category}</h2>
                                         <span className="text-sm text-gray-500">({categoryProducts.length})</span>
                                     </div>
 
                                     {hasSubCategories ? (
-                                        <div className="space-y-6">
+                                        <div className="space-y-4">
                                             {privateProducts.length > 0 && (
                                                 <div>
-                                                    <h3 className="text-sm font-medium text-gray-500 mb-2 pl-2">Private ({privateProducts.length})</h3>
+                                                    <h3 className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wider">Private ({privateProducts.length})</h3>
                                                     <SortableContext
                                                         items={privateProducts.map(p => p.id)}
                                                         strategy={verticalListSortingStrategy}
                                                     >
-                                                        <div className="space-y-3">
+                                                        <div className="space-y-2">
                                                             {privateProducts.map((product) => (
                                                                 <SortableListRow
                                                                     key={product.id}
@@ -370,12 +394,12 @@ export default function ProductGrid({ products: initialProducts }: ProductGridPr
                                             )}
                                             {publicProducts.length > 0 && (
                                                 <div>
-                                                    <h3 className="text-sm font-medium text-gray-500 mb-2 pl-2">Public ({publicProducts.length})</h3>
+                                                    <h3 className="text-xs font-medium text-gray-500 mb-2 uppercase tracking-wider">Public ({publicProducts.length})</h3>
                                                     <SortableContext
                                                         items={publicProducts.map(p => p.id)}
                                                         strategy={verticalListSortingStrategy}
                                                     >
-                                                        <div className="space-y-3">
+                                                        <div className="space-y-2">
                                                             {publicProducts.map((product) => (
                                                                 <SortableListRow
                                                                     key={product.id}
@@ -393,7 +417,7 @@ export default function ProductGrid({ products: initialProducts }: ProductGridPr
                                             items={categoryProducts.map(p => p.id)}
                                             strategy={verticalListSortingStrategy}
                                         >
-                                            <div className="space-y-3">
+                                            <div className="space-y-2">
                                                 {categoryProducts.map((product) => (
                                                     <SortableListRow
                                                         key={product.id}
