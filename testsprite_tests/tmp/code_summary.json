@@ -1,0 +1,141 @@
+{
+    "tech_stack": [
+        "TypeScript",
+        "Next.js",
+        "React",
+        "Tailwind CSS",
+        "Supabase",
+        "Framer Motion"
+    ],
+    "features": [
+        {
+            "name": "Admin Dashboard",
+            "description": "Main dashboard view for the admin panel.",
+            "files": [
+                "app/admin/page.tsx",
+                "app/admin/layout.tsx",
+                "components/admin/AdminSidebar.tsx",
+                "components/admin/AdminHeader.tsx"
+            ]
+        },
+        {
+            "name": "Admin Main Page CMS",
+            "description": "CMS for managing the main homepage content.",
+            "files": [
+                "app/admin/main/page.tsx",
+                "components/admin/cms/MainCmsClient.tsx"
+            ]
+        },
+        {
+            "name": "Admin Product Management",
+            "description": "Manage products: list, add, and edit.",
+            "files": [
+                "app/admin/products/page.tsx",
+                "app/admin/products/new/page.tsx",
+                "app/admin/products/[id]/page.tsx",
+                "components/admin/ProductForm.tsx",
+                "components/admin/products"
+            ]
+        },
+        {
+            "name": "Admin Solution Page CMS",
+            "description": "CMS for managing solution pages.",
+            "files": [
+                "app/admin/solutions/page.tsx",
+                "components/admin/cms/SolutionsEditor.tsx"
+            ]
+        },
+        {
+            "name": "Admin Support Page CMS",
+            "description": "CMS for managing support and FAQ content.",
+            "files": [
+                "app/admin/support/page.tsx",
+                "components/admin/cms/SupportEditor.tsx"
+            ]
+        },
+        {
+            "name": "Admin Customer Insights",
+            "description": "View and analyze customer insights.",
+            "files": [
+                "app/admin/insights/page.tsx",
+                "components/admin/insights"
+            ]
+        },
+        {
+            "name": "Admin Inquiry Management",
+            "description": "Manage customer inquiries.",
+            "files": [
+                "app/admin/inquiries/page.tsx",
+                "components/admin/inquiries"
+            ]
+        },
+        {
+            "name": "Admin Settings",
+            "description": "Admin panel settings.",
+            "files": [
+                "app/admin/settings/page.tsx"
+            ]
+        },
+        {
+            "name": "Authentication",
+            "description": "User authentication and session management using Supabase.",
+            "files": [
+                "app/login/page.tsx",
+                "middleware.ts",
+                "utils/supabase/client.ts",
+                "utils/supabase/middleware.ts",
+                "utils/supabase/server.ts"
+            ]
+        },
+        {
+            "name": "Company Page",
+            "description": "Company introduction and information page.",
+            "files": [
+                "app/company/page.tsx"
+            ]
+        },
+        {
+            "name": "Products (Public)",
+            "description": "Public product listings and details for Bespoke and Modular items.",
+            "files": [
+                "app/products/page.tsx",
+                "app/bespoke/page.tsx",
+                "app/modular/page.tsx"
+            ]
+        },
+        {
+            "name": "Solutions (Public)",
+            "description": "Public solutions showcase and details.",
+            "files": [
+                "app/solution/page.tsx",
+                "components/solution/SolutionTemplate.tsx"
+            ]
+        },
+        {
+            "name": "Support (Public)",
+            "description": "Public customer support and FAQ section.",
+            "files": [
+                "app/support/page.tsx",
+                "components/support/FAQ.tsx"
+            ]
+        },
+        {
+            "name": "Homepage",
+            "description": "Main landing page with hero section and feature highlights.",
+            "files": [
+                "app/page.tsx",
+                "components/sections/Hero.tsx",
+                "components/sections/PartnersBanner.tsx"
+            ]
+        },
+        {
+            "name": "Core Layout",
+            "description": "Global layout components including Header and Footer.",
+            "files": [
+                "app/layout.tsx",
+                "components/layout/Header.tsx",
+                "components/layout/Footer.tsx"
+            ]
+        }
+    ]
+}

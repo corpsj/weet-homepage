@@ -1,0 +1,21 @@
+{
+  "status": "commited",
+  "type": "frontend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3001",
+  "loginUser": "weet",
+  "loginPassword": "weet003!",
+  "executionArgs": {
+    "projectName": "weet-homepage",
+    "projectPath": "/Users/zoopark/Library/CloudStorage/SynologyDrive-dev/weet-homepage",
+    "testIds": [
+      "TC006",
+      "TC007"
+    ],
+    "additionalInstruction": "",
+    "envs": {
+      "API_KEY": "sk-user-NAnRJxTpUxDSLyx-Za4bil6wD-owdmjTmLblH_tY_8mjRRfZYoedQq0PQbtQUQxmS1qS0jLfs-oGWXarFgnrzmE0h8qNXOgZOCyI1_NskwT-_Ytllv9FmlLdET4682BSjZs"
+    }
+  },
+  "proxy": "http://d8c96797-1814-4237-bfeb-9a63aa7ff2b0:W4PhcAC8sQQQHDjB16bIRnwtCSkDUKXz@tun.testsprite.com:8080"
+}

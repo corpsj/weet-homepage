@@ -1,0 +1,499 @@
+[
+  {
+    "id": "TC001",
+    "title": "Homepage Hero Carousel Functionality",
+    "description": "Verify the homepage hero carousel loads images correctly, autoplays, loops, and no broken text appears.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the homepage"
+      },
+      {
+        "type": "assertion",
+        "description": "Check that hero images load fully without broken links"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the carousel autoplays and transitions smoothly between slides"
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure that hero text is displayed correctly on all slides without truncation or layout issues"
+      },
+      {
+        "type": "action",
+        "description": "Manually navigate carousel slides using controls"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm slides switch correctly on manual input and loop back to first after last slide"
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Responsive Navigation Menu Behavior",
+    "description": "Verify desktop and mobile navigation menus including hamburger toggle, dropdowns, and accessible states.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Open the site on desktop viewport"
+      },
+      {
+        "type": "assertion",
+        "description": "Validate main navigation links are visible, correct, and clickable"
+      },
+      {
+        "type": "assertion",
+        "description": "Test dropdown menus appear on hover and contain correct links"
+      },
+      {
+        "type": "action",
+        "description": "Resize viewport to mobile width"
+      },
+      {
+        "type": "assertion",
+        "description": "Check hamburger menu icon is visible and main navigation links are hidden initially"
+      },
+      {
+        "type": "action",
+        "description": "Click hamburger menu to open navigation drawer"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify navigation links appear and dropdown menus expand/collapse on tap"
+      },
+      {
+        "type": "action",
+        "description": "Use keyboard to navigate menu for accessibility testing"
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure keyboard focus states and tab order are logical"
+      },
+      {
+        "type": "action",
+        "description": "Close navigation drawer"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the menu is hidden and return to page content"
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Public Product Listings and Details Navigation",
+    "description": "Validate product listings segmented by Bespoke and Modular categories and navigation to detailed product pages.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to public products main page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify listing shows categorized sections for Bespoke and Modular"
+      },
+      {
+        "type": "action",
+        "description": "Click on Bespoke category link to view Bespoke products"
+      },
+      {
+        "type": "assertion",
+        "description": "Check Bespoke product list loads with product names and thumbnails"
+      },
+      {
+        "type": "action",
+        "description": "Click on a Bespoke product to open its details page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify product details load correctly based on route parameter"
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure images lazy load as user scrolls without layout jumps"
+      },
+      {
+        "type": "action",
+        "description": "Navigate back to Bespoke product list"
+      },
+      {
+        "type": "action",
+        "description": "Repeat steps for Modular category products"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm smooth navigation between listings and detail pages without errors"
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Solutions and Solution Subpages Content Display",
+    "description": "Check Solutions page loads with minimal layout shifts and displays detailed subpages with optimized images.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the Solutions main page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the solution listing displays all solution items accurately"
+      },
+      {
+        "type": "action",
+        "description": "Click a solution to navigate to its detailed solution subpage"
+      },
+      {
+        "type": "assertion",
+        "description": "Check that the detailed solution subpage content loads fully without layout jumping"
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure images on the solution page are optimized and lazy loaded"
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Support Section FAQ and Form Validation",
+    "description": "Validate FAQ displays properly and support form enforces robust validation with error handling and success toasts.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the Support page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the FAQ section displays all questions and answers correctly"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to submit the support inquiry form with empty mandatory fields"
+      },
+      {
+        "type": "assertion",
+        "description": "Check that form validation errors are displayed for required fields"
+      },
+      {
+        "type": "action",
+        "description": "Submit the form with invalid inputs (e.g., wrong email format)"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm validation error messages for incorrect input formats appear"
+      },
+      {
+        "type": "action",
+        "description": "Submit form with valid data"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a success toast is displayed confirming submission"
+      },
+      {
+        "type": "action",
+        "description": "Simulate backend API failure during form submission"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm user sees an appropriate error message and can retry submitting"
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Admin Authentication: Login and Session Management",
+    "description": "Test admin login page handles valid and invalid credentials correctly and protects admin routes with session management.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to the admin login page"
+      },
+      {
+        "type": "action",
+        "description": "Enter invalid username/email and password"
+      },
+      {
+        "type": "action",
+        "description": "Click login button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify that an error message is shown and login is rejected"
+      },
+      {
+        "type": "action",
+        "description": "Enter valid credentials and submit"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm successful login and redirect to admin dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Try to access protected admin routes without logging in"
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure access is denied and redirected to login page"
+      },
+      {
+        "type": "action",
+        "description": "Logout from admin dashboard"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify session is cleared and admin routes become inaccessible"
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Admin Product Management: Add, Edit, List Products",
+    "description": "Verify admin can list existing products, add new products with validation, and edit product details with updates reflecting on public site.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login to admin dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to product management page"
+      },
+      {
+        "type": "assertion",
+        "description": "Check that list of products is displayed with correct details"
+      },
+      {
+        "type": "action",
+        "description": "Click add new product button"
+      },
+      {
+        "type": "action",
+        "description": "Attempt to submit product form with missing required fields"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm form validation errors are shown"
+      },
+      {
+        "type": "action",
+        "description": "Fill all required fields correctly and submit new product"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify product is added and visible in admin list"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to edit existing product page"
+      },
+      {
+        "type": "action",
+        "description": "Modify product details and save"
+      },
+      {
+        "type": "assertion",
+        "description": "Check changes persist in admin list and are reflected on public product details page"
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Content Management System (CMS) Updates Reflect on Public Site",
+    "description": "Validate that changes made in admin CMS for homepage, solutions, and support content update the public facing pages immediately.",
+    "category": "integration",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login to admin dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Update homepage main content and save"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify updated content is visible on public homepage without errors"
+      },
+      {
+        "type": "action",
+        "description": "Edit solution pages content via CMS and publish changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Check solution pages on public site reflect new content"
+      },
+      {
+        "type": "action",
+        "description": "Modify support FAQ content in admin CMS and save"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm updated FAQ content appears on public support page"
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Inquiry Management and Real-time Updates in Admin Dashboard",
+    "description": "Test admin inquiry management section shows incoming customer inquiries in real-time and supports inquiry status updates.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login to admin dashboard"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to inquiry management page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify list of customer inquiries is displayed with relevant data"
+      },
+      {
+        "type": "action",
+        "description": "Submit a new inquiry via public inquiry form"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm new inquiry appears in admin inquiry management page without manual refresh"
+      },
+      {
+        "type": "action",
+        "description": "Update inquiry status and save changes"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify inquiry status is updated and reflected correctly in the list"
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Performance Optimization: Image Lazy Loading and Layout Stability",
+    "description": "Ensure all images on public pages use lazy loading correctly and page layout does not shift unexpectedly during content load.",
+    "category": "performance",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to product listing pages or solutions pages with many images"
+      },
+      {
+        "type": "assertion",
+        "description": "Monitor that images outside viewport load only when about to scroll into view (lazy loading)"
+      },
+      {
+        "type": "assertion",
+        "description": "Observe that no significant content layout shifts occur while images load"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to different pages multiple times and verify consistent image loading performance"
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Error Handling: API Failures in CMS and Forms",
+    "description": "Verify the platform handles backend API errors gracefully for admin CMS actions and public inquiry/support forms with appropriate user feedback.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Simulate backend API failure when saving CMS changes in admin"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm error messages are shown to admin with no UI crashes and retry options"
+      },
+      {
+        "type": "action",
+        "description": "Simulate API failure when submitting public inquiry form"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify user sees error feedback and form remains editable for retry"
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Console Error Monitoring During Interactions",
+    "description": "Ensure there are no console errors or warnings during navigation, data mutations or server interactions on both public and admin sides.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate through all main public site pages: homepage, products, solutions, company, support"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify browser console shows no JavaScript errors or warnings"
+      },
+      {
+        "type": "action",
+        "description": "Login to admin dashboard and perform CMS content changes, product edits, inquiry management"
+      },
+      {
+        "type": "assertion",
+        "description": "Check console logs for absence of errors or warnings"
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Recent Bug Fix Verification",
+    "description": "Confirm fixes for hero carousel import, image saving errors, and product material naming consistency are verified and no regressions exist.",
+    "category": "regression",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Load homepage hero carousel and verify images and text display correctly"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify no import errors occur related to hero carousel"
+      },
+      {
+        "type": "action",
+        "description": "Add or edit a product including image uploads"
+      },
+      {
+        "type": "assertion",
+        "description": "Ensure image saving completes without errors and product appears correctly"
+      },
+      {
+        "type": "action",
+        "description": "Check product details page for correct and consistent material naming"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm that previous naming inconsistencies are resolved"
+      }
+    ]
+  }
+]

@@ -25,6 +25,10 @@ npm start
 npm run lint
 ```
 
+## 🚀 배포 (Deployment)
+
+이 프로젝트는 **Vercel**에 배포되어 있습니다. 모든 변경사항은 리포지토리에 **푸시(Push)**해야 배포가 트리거됩니다.
+
 ## 중요: 디자인 구현 요구사항
 
 **모든 UI 구현은 반드시 Figma 디자인을 철저히 따라야 합니다.** `/design/figma_design.md`에 참조된 디자인을 최대한 똑같이 구현하는 것이 목표입니다. 각 페이지별 Figma 디자인:
@@ -51,6 +55,8 @@ Next.js App Router를 사용하며 다음 주요 라우트로 구성됩니다:
 - `/solution` - 솔루션 제공
 - `/company` - 회사소개 (app/ 폴더에 아직 미생성 - 생성 필요)
 - `/support` - 고객지원
+- `/admin` - 관리자 패널 (로그인 필요)
+- `/login` - 관리자 로그인
 
 ### 컴포넌트 구성
 
@@ -109,6 +115,17 @@ Header 컴포넌트(`components/layout/Header.tsx`)는 메가 메뉴 드롭다�
 
 이 패턴은 지속적인 필터링/네비게이션이 필요한 모든 페이지에 재사용해야 합니다.
 
+### 관리자 패널 및 백엔드 (`/admin`)
+
+- **인증 (Authentication)**: Supabase Auth 사용. `middleware.ts`와 `layout.tsx`에서 이중으로 세션을 검증하여 비로그인 사용자의 접근을 차단합니다.
+- **데이터베이스 (Database)**: Supabase PostgreSQL 사용. `products`, `solutions`, `hero_slides`, `inquiries` 등의 테이블로 구성됩니다.
+- **스토리지 (Storage)**: Supabase Storage를 사용하여 제품 및 슬라이드 이미지를 관리합니다.
+- **UI 패턴**:
+  - **사이드바**: `/components/admin/AdminSidebar.tsx`에서 네비게이션 관리.
+  - **토스트 알림**: `sonner` 라이브러리를 사용하여 사용자 피드백 제공 (`alert` 사용 지양).
+  - **드래그 앤 드롭**: `@dnd-kit`을 사용하여 순서 변경 기능 구현.
+  - **낙관적 업데이트**: 데이터 수정 시 UI를 먼저 업데이트하고 실패 시 롤백하는 패턴 적용.
+
 ## 주요 의존성
 
 - **next**: 15.1.3+ (Turbopack이 있는 App Router)
@@ -117,6 +134,12 @@ Header 컴포넌트(`components/layout/Header.tsx`)는 메가 메뉴 드롭다�
 - **zustand**: 5.0.2+ 상태 관리용
 - **lucide-react**: 0.468.0+ 아이콘용
 - **clsx + tailwind-merge**: className 유틸리티용
+- **@supabase/ssr**: Supabase 서버 사이드 렌더링 지원
+- **sonner**: 토스트 알림
+- **@dnd-kit**: 드래그 앤 드롭 인터랙션
+
+### 관리자 계정 관리
+관리자 회원가입 페이지는 보안상 존재하지 않습니다. Supabase 대시보드의 Authentication > Users 메뉴에서 직접 계정을 생성해야 합니다. (이메일 형식: `id@weet.com`)
 
 ## 이미지 처리
 

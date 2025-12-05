@@ -411,7 +411,7 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
 
                             <div className="min-w-0">
                                 <p className="text-sm font-medium text-gray-900 truncate">{product.name}</p>
-                                <p className="text-xs text-gray-500">{product.category}</p>
+                                <p className="text-xs text-gray-500">{product.size_category}</p>
                             </div>
                         </div>
                     ))}

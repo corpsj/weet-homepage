@@ -1,0 +1,67 @@
+[
+  {
+    "id": "d97096cf-fb4c-4b92-9a1f-454fcad00f5a",
+    "name": "3X9 집",
+    "image_url": "https://nyrsdwjpowbmmytqkwwv.supabase.co/storage/v1/object/public/products/products/d97096cf-fb4c-4b92-9a1f-454fcad00f5a_1764835724275.png"
+  },
+  {
+    "id": "8537ea88-c9c5-4fa4-86a3-74fdee5c787a",
+    "name": "3X6 집 (적삼목)",
+    "image_url": "https://nyrsdwjpowbmmytqkwwv.supabase.co/storage/v1/object/public/products/products/3x6_red_cedar.jpg_1764897705227"
+  },
+  {
+    "id": "ff2e42c4-a2ba-4358-a124-c029107dd707",
+    "name": "3X3 내서재",
+    "image_url": "https://nyrsdwjpowbmmytqkwwv.supabase.co/storage/v1/object/public/products/products/ff2e42c4-a2ba-4358-a124-c029107dd707_1764835729153.jpg"
+  },
+  {
+    "id": "9a682f35-e916-48d4-8660-6d83c348ab81",
+    "name": "3X6 맨스케이브",
+    "image_url": "https://nyrsdwjpowbmmytqkwwv.supabase.co/storage/v1/object/public/products/products/9a682f35-e916-48d4-8660-6d83c348ab81_1764835731139.jpg"
+  },
+  {
+    "id": "9720112a-6bc4-46ec-8dfe-55b4ab5f18b0",
+    "name": "3X6 집 (스타코)",
+    "image_url": "https://nyrsdwjpowbmmytqkwwv.supabase.co/storage/v1/object/public/products/products/3x6_stucco.jpg_1764897706349"
+  },
+  {
+    "id": "61a84abc-d0e8-415e-8545-f8ea7499f89b",
+    "name": "3X6 CAMPER",
+    "image_url": "https://nyrsdwjpowbmmytqkwwv.supabase.co/storage/v1/object/public/products/products/61a84abc-d0e8-415e-8545-f8ea7499f89b_1764835726700.jpg"
+  },
+  {
+    "id": "10a04f47-1438-4b8c-b1f1-63c8706a1902",
+    "name": "3X3 SAUNA",
+    "image_url": "https://nyrsdwjpowbmmytqkwwv.supabase.co/storage/v1/object/public/products/products/10a04f47-1438-4b8c-b1f1-63c8706a1902_1764835728023.jpg"
+  },
+  {
+    "id": "45758936-0ed9-430f-9d63-eba8710d6154",
+    "name": "3X6 버스정류장",
+    "image_url": "https://nyrsdwjpowbmmytqkwwv.supabase.co/storage/v1/object/public/products/products/45758936-0ed9-430f-9d63-eba8710d6154_1764835733716.jpg"
+  },
+  {
+    "id": "5f4f1839-c154-4b6c-9a90-9393834d22a8",
+    "name": "3X3 리트릿",
+    "image_url": "https://nyrsdwjpowbmmytqkwwv.supabase.co/storage/v1/object/public/products/products/5f4f1839-c154-4b6c-9a90-9393834d22a8_1764835730343.jpg"
+  },
+  {
+    "id": "dd9fc287-2f97-41a9-89b7-9fb80ffb3361",
+    "name": "4X8 공중화장실",
+    "image_url": "https://nyrsdwjpowbmmytqkwwv.supabase.co/storage/v1/object/public/products/products/dd9fc287-2f97-41a9-89b7-9fb80ffb3361_1764835734514.jpg"
+  },
+  {
+    "id": "55f6f984-1f6d-41cd-9518-391cfff9f2e9",
+    "name": "3X9 파고라",
+    "image_url": "https://nyrsdwjpowbmmytqkwwv.supabase.co/storage/v1/object/public/products/products/55f6f984-1f6d-41cd-9518-391cfff9f2e9_1764835735407.jpg"
+  },
+  {
+    "id": "1ae98914-4ba0-4f78-bd7a-0e044355be98",
+    "name": "3X6 집(골강판)",
+    "image_url": "https://nyrsdwjpowbmmytqkwwv.supabase.co/storage/v1/object/public/products/products/1ae98914-4ba0-4f78-bd7a-0e044355be98_1764835736202.png"
+  },
+  {
+    "id": "7f0a4d8f-f91c-4039-89c1-e4fac0f69492",
+    "name": "3X6 피터팬의 모험",
+    "image_url": "https://nyrsdwjpowbmmytqkwwv.supabase.co/storage/v1/object/public/products/products/7f0a4d8f-f91c-4039-89c1-e4fac0f69492_1764835732000.jpg"
+  }
+]

@@ -11,8 +11,8 @@ const partnerLogos = [
 
 export default function PartnersBanner() {
   return (
-    <div className="bg-primary min-h-[80px] md:min-h-[100px] lg:h-[120px] flex items-center justify-center py-4 md:py-6 lg:py-0">
-      <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[150px] w-full">
+    <div className="bg-primary h-[60px] md:h-[70px] lg:h-[80px] flex items-center justify-center">
+      <div className="max-w-[1200px] mx-auto px-4 md:px-8 lg:px-[60px] w-full">
         <div className="flex flex-nowrap items-center justify-between gap-6 md:gap-8 lg:gap-12 overflow-x-auto scrollbar-hide">
           {partnerLogos.map((partner, idx) => (
             <div

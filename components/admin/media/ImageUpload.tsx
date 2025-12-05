@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import Image from 'next/image';
 import { createClient } from '@/utils/supabase/client';
 import imageCompression from 'browser-image-compression';
+import { uploadImageAction } from '@/app/actions/storage-actions';
 
 interface ImageUploadProps {
     value: string;
@@ -51,21 +52,22 @@ export default function ImageUpload({ value, onChange, className = '', bucket = 
             const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
             const filePath = `${fileName}`;
 
-            const { error: uploadError } = await supabase.storage
-                .from(bucket)
-                .upload(filePath, fileToUpload);
+            const formData = new FormData();
+            formData.append('file', fileToUpload);
+            formData.append('bucket', bucket);
+            formData.append('path', filePath);
 
-            if (uploadError) {
-                throw uploadError;
+            const result = await uploadImageAction(formData);
+
+            if (!result.success) {
+                throw new Error(result.error);
             }
 
-            const { data } = supabase.storage
-                .from(bucket)
-                .getPublicUrl(filePath);
-
-            onChange(data.publicUrl);
-        } catch {
-            toast.error('이미지 업로드에 실패했습니다. 스토리지 버킷 설정을 확인해주세요.');
+            onChange(result.url || '');
+        } catch (error) {
+            console.error('Image upload failed:', error);
+            const errorMessage = error instanceof Error ? error.message : '스토리지 버킷 설정을 확인해주세요.';
+            toast.error(`이미지 업로드 실패: ${errorMessage}`);
         } finally {
             setLoading(false);
             // Reset input so same file can be selected again if needed

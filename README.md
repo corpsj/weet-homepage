@@ -11,6 +11,8 @@
 - **캐러셀**: Swiper
 - **상태관리**: Zustand
 - **아이콘**: Lucide React
+- **백엔드/DB**: Supabase (Auth, Database, Storage)
+- **UI 라이브러리**: Sonner (Toast), @dnd-kit (Drag & Drop)
 
 ## 📁 프로젝트 구조
 
@@ -23,7 +25,9 @@ weet-homepage/
 │   ├── bespoke/           # BESPOKE
 │   ├── solution/          # SOLUTION
 │   ├── company/           # 회사소개
-│   └── support/           # 고객지원
+│   ├── support/           # 고객지원
+│   ├── admin/             # 관리자 페이지 (CMS)
+│   └── login/             # 관리자 로그인
 ├── components/
 │   ├── layout/            # Header, Footer
 │   ├── sections/          # 섹션 컴포넌트
@@ -72,6 +76,13 @@ weet-homepage/
 - 6단계 프로세스 안내
 - 1:1 상담 예약 CTA
 
+### 8. 관리자 패널 (`/admin`)
+- **대시보드**: 트래픽 및 방문자 통계 확인
+- **CMS**: 메인 페이지(히어로 슬라이드), 솔루션, FAQ 등 콘텐츠 관리
+- **제품 관리**: 제품 등록, 수정, 상태 변경(공개/비공개), 순서 변경
+- **문의 관리**: 고객 문의 확인 및 이메일 답변
+- **설정**: 관리자 계정 및 시스템 설정
+
 ## 🎯 주요 기능
 
 ### 메가 메뉴
@@ -97,6 +108,16 @@ weet-homepage/
 npm install
 ```
 
+### 환경 변수 설정 (.env.local)
+
+프로젝트 루트에 `.env.local` 파일을 생성하고 다음 변수들을 설정해야 합니다:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key # 관리자 기능용
+```
+
 ### 개발 서버 실행
 
 ```bash
@@ -116,6 +137,11 @@ npm run build
 ```bash
 npm start
 ```
+
+## 🚀 배포 (Deployment)
+
+이 프로젝트는 **Vercel**에 배포되어 있습니다.
+모든 변경사항은 Git 리포지토리에 **푸시(Push)**해야만 Vercel에서 자동으로 감지하여 배포가 트리거됩니다.
 
 ## 🎨 디자인 시스템
 
@@ -149,8 +175,9 @@ npm start
 ### 우선순위 낮음
 - [ ] 다국어 실제 번역
 - [ ] 상담 문의 폼 구현
-- [ ] 관리자 페이지
-- [ ] CMS 연동
+- [x] 관리자 페이지 (구현 완료)
+  - *참고: 관리자 계정은 Supabase 대시보드에서 직접 생성해야 합니다.*
+- [x] CMS 연동 (Supabase 연동 완료)
 
 ## 📄 라이선스
 

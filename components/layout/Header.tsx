@@ -154,7 +154,7 @@ export default function Header() {
           <div className="relative flex items-center h-[70px] md:h-[90px] lg:h-[110px] px-4 md:px-8 lg:px-[64px]">
             {/* Logo */}
             <Link href="/" className="absolute left-4 md:left-8 lg:left-[64px] top-1/2 -translate-y-1/2 lg:static lg:transform-none">
-              <div className="w-[50px] h-[50px] md:w-[70px] md:h-[70px] lg:w-[90px] lg:h-[90px] relative">
+              <div className="w-[50px] h-[50px] md:w-[70px] md:h-[70px] lg:w-[90px] lg:h-[90px] relative select-none">
                 <Image
                   src="/images/logo_new.png"
                   alt="Weet Logo"
@@ -162,6 +162,7 @@ export default function Header() {
                   sizes="(max-width: 768px) 50px, (max-width: 1024px) 70px, 90px"
                   className="object-contain"
                   priority
+                  draggable={false}
                 />
               </div>
             </Link>
@@ -325,13 +326,14 @@ export default function Header() {
           {/* Header with Close Button */}
           <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
             <Link href="/" onClick={handleMobileMenuClose}>
-              <div className="w-[60px] h-[60px] relative">
+              <div className="w-[60px] h-[60px] relative select-none">
                 <Image
-                  src="/images/logo/weet-logo.png"
+                  src="/images/logo_new.png"
                   alt="Weet Logo"
                   fill
                   sizes="60px"
                   className="object-contain"
+                  draggable={false}
                 />
               </div>
             </Link>

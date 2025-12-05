@@ -233,7 +233,7 @@ export default function CompanyPage() {
                   <div className="flex items-start gap-4">
                     <div className="w-10 h-10 flex items-center justify-center flex-shrink-0">
                       <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M0 0H36V36L0 0Z" fill="#2D2D2D" />
+                        <path d="M0 0H36L0 36Z" fill="#2D2D2D" />
                       </svg>
                     </div>
                     <div className="flex-1">
@@ -260,7 +260,7 @@ export default function CompanyPage() {
               <div className="flex items-center gap-2">
                 <div className="flex-shrink-0">
                   <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 0H40V40L0 0Z" fill="#2D2D2D" />
+                    <path d="M0 0H40L0 40Z" fill="#2D2D2D" />
                   </svg>
                 </div>
                 <span className="text-[28px] md:text-[32px] lg:text-[36px] font-bold text-black">weet</span>
@@ -340,7 +340,7 @@ export default function CompanyPage() {
               <div className="flex items-center gap-2">
                 <div className="flex-shrink-0">
                   <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M0 0H40V40L0 0Z" fill="#2D2D2D" />
+                    <path d="M0 0H40L0 40Z" fill="#2D2D2D" />
                   </svg>
                 </div>
                 <span className="text-[28px] md:text-[32px] lg:text-[36px] font-bold text-black">weet</span>

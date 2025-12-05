@@ -1,18 +1,17 @@
 "use client";
 
+import SolutionTemplate from "@/components/solution/SolutionTemplate";
+
+const features: any[] = [];
+
 export default function DesignSolutionPage() {
   return (
-    <div className="min-h-screen bg-[#E8E8E8]">
-      <section className="py-12 md:py-16 lg:py-20">
-        <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20">
-          {/* Header */}
-          <div className="mb-12 md:mb-16">
-            <h1 className="text-[32px] md:text-[40px] lg:text-[48px] font-bold">
-              디자인솔루션
-            </h1>
-          </div>
-        </div>
-      </section>
-    </div>
+    <SolutionTemplate
+      title="디자인 솔루션"
+      subtitle="Interior Design"
+      heroImage="/images/solution/design_hero.png"
+      description="당신의 '로망'이 '공간'이 되는 순간. 전문 디자이너와 함께 당신만의 특별한 공간을 만들어보세요."
+      features={features}
+    />
   );
 }
