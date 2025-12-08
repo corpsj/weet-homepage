@@ -280,7 +280,7 @@ export default function Header() {
           {showMegaMenu && (
             <div
               className="hidden lg:block absolute left-0 right-0 z-40 pointer-events-none"
-              style={{ top: '110px' }}
+              style={{ top: '80px' }}
             >
               <div className="flex justify-center w-full pr-[120px]">
                 <div
