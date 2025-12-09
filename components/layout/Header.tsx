@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, Instagram, Youtube } from 'lucide-react';
+import { Menu, X, Instagram, Youtube, ChevronUp, ChevronDown } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
 
@@ -98,6 +98,14 @@ export default function Header() {
     setMobileMenuOpen(false);
   }, []);
 
+  const [mobileExpanded, setMobileExpanded] = useState<string[]>([]);
+
+  const toggleMobileSubmenu = useCallback((name: string) => {
+    setMobileExpanded(prev =>
+      prev.includes(name) ? prev.filter(item => item !== name) : [...prev, name]
+    );
+  }, []);
+
   const handleMegaMenuEnter = useCallback(() => {
     setShowMegaMenu(true);
   }, []);
@@ -151,7 +159,7 @@ export default function Header() {
       >
         <div className="max-w-[1600px] mx-auto">
           {/* Main Header */}
-          <div className="relative flex items-center h-[70px] md:h-[90px] lg:h-[110px] px-4 md:px-8 lg:px-[64px]">
+          <div className="relative flex items-center h-[105px] md:h-[135px] lg:h-[110px] px-4 md:px-8 lg:px-[64px]">
             {/* Logo */}
             <Link href="/" className="absolute left-4 md:left-8 lg:left-[64px] top-1/2 -translate-y-1/2 lg:static lg:transform-none">
               <div className="w-[50px] h-[50px] md:w-[70px] md:h-[70px] lg:w-[90px] lg:h-[90px] relative select-none">
@@ -354,17 +362,34 @@ export default function Header() {
                 className="mb-8 last:mb-0"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
-                {/* Main Menu Item */}
-                <Link
-                  href={item.href}
-                  onClick={handleMobileMenuClose}
-                  className="block text-2xl md:text-3xl font-bold text-black mb-3 hover:text-gray-600 transition-colors"
-                >
-                  {item.name}
-                </Link>
+                <div className="flex items-center justify-between mb-3">
+                  <Link
+                    href={item.href}
+                    onClick={handleMobileMenuClose}
+                    className="block text-2xl md:text-3xl font-bold text-black hover:text-gray-600 transition-colors"
+                  >
+                    {item.name}
+                  </Link>
+                  {item.submenu && item.submenu.length > 0 && (
+                    <button
+                      onClick={() => toggleMobileSubmenu(item.name)}
+                      className="p-2 -mr-2 text-gray-400 hover:text-black transition-colors"
+                    >
+                      {mobileExpanded.includes(item.name) ? (
+                        <ChevronUp className="w-6 h-6" />
+                      ) : (
+                        <ChevronDown className="w-6 h-6" />
+                      )}
+                    </button>
+                  )}
+                </div>
 
-                {/* Submenu - Always Visible */}
-                <div className="ml-4 space-y-2">
+                <div
+                  className={cn(
+                    "ml-4 space-y-2 overflow-hidden transition-all duration-300 ease-in-out",
+                    mobileExpanded.includes(item.name) ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
+                  )}
+                >
                   {item.submenu.map((subitem, idx) => (
                     <Link
                       key={idx}

@@ -34,7 +34,7 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
     if (initialSlides.length === 0) return null;
 
     return (
-        <section ref={containerRef} className="relative bg-[#EBEBEB] overflow-hidden w-full h-[calc(100vh-70px)] md:h-[calc(100vh-90px)] lg:h-[calc(100vh-110px)]">
+        <section ref={containerRef} className="relative bg-[#EBEBEB] overflow-hidden w-full h-[calc(100vh-105px)] md:h-[calc(100vh-135px)] lg:h-[calc(100vh-110px)]">
             {/* Blurred Background Layer */}
             <AnimatePresence mode="wait">
                 <motion.div

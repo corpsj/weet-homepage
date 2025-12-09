@@ -299,8 +299,43 @@ export default function ProductsPage() {
                     </div>
                 </aside>
 
+                {/* Mobile Top Navigation */}
+                <div className="lg:hidden fixed top-[105px] md:top-[135px] left-0 right-0 z-40 bg-[#EBEBEB]/95 backdrop-blur-sm border-b border-gray-200 shadow-sm">
+                    <div className="flex overflow-x-auto px-4 py-3 gap-6 no-scrollbar">
+                        {(Object.keys(sidebarStructure) as Array<keyof typeof sidebarStructure>).map((key) => {
+                            const category = sidebarStructure[key];
+                            // Check if any product in this category is active or if we are just looking for a category jump
+                            // Simplified logic: Check if the current active product belongs to this category
+                            let isActiveCategory = false;
+                            if (key === 'S') {
+                                isActiveCategory = !!(category?.Private?.includes(activeProduct) || category?.Public?.includes(activeProduct));
+                            } else {
+                                isActiveCategory = !!category?.items?.includes(activeProduct);
+                            }
+
+                            // Helper to find the first product ID in a category to scroll to
+                            const firstProductId = key === 'S'
+                                ? (category.Private?.[0] || category.Public?.[0])
+                                : category.items?.[0];
+
+                            if (!firstProductId) return null;
+
+                            return (
+                                <button
+                                    key={key}
+                                    onClick={() => scrollToProduct(firstProductId)}
+                                    className={`whitespace-nowrap text-sm font-bold transition-colors ${isActiveCategory ? 'text-[#FEBD16]' : 'text-gray-500'
+                                        }`}
+                                >
+                                    {category.label}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+
                 {/* Main Content */}
-                <main className="flex-1 min-h-screen pt-[120px] px-4 lg:px-20 pb-40">
+                <main className="flex-1 min-h-screen pt-[160px] md:pt-[190px] lg:pt-[120px] px-4 lg:px-20 pb-40">
                     <div className="max-w-5xl mx-auto space-y-40">
                         {products.map((product) => (
                             <div
