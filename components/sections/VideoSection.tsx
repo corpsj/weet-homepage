@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import { Play } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export default function VideoSection() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const t = useTranslation();
 
   const handlePlay = () => {
     setIsPlaying(true);
@@ -14,7 +16,9 @@ export default function VideoSection() {
   return (
     <section className="py-12 md:py-16 lg:py-24 bg-gray-100">
       <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[150px]">
-        <h2 className="text-[32px] md:text-[40px] lg:text-[48px] font-semibold mb-8 md:mb-12 lg:mb-16 text-black">weet video</h2>
+        <h2 className="text-[32px] md:text-[40px] lg:text-[48px] font-semibold mb-8 md:mb-12 lg:mb-16 text-black uppercase">
+          {t.main.video.title}
+        </h2>
 
         <div className="relative w-full max-w-[1200px] mx-auto aspect-video bg-gray-800 rounded-lg md:rounded-xl overflow-hidden shadow-lg md:shadow-2xl group cursor-pointer">
           {/* Video Thumbnail/Background */}
@@ -51,8 +55,8 @@ export default function VideoSection() {
           {/* Video Overlay Title */}
           {!isPlaying && (
             <div className="absolute bottom-4 left-4 md:bottom-6 md:left-6 lg:bottom-8 lg:left-8 z-10">
-              <h3 className="text-white text-lg md:text-xl lg:text-2xl font-semibold mb-1 md:mb-2">weet을 소개합니다</h3>
-              <p className="text-gray-300 text-xs md:text-sm">모듈러 건축의 새로운 기준</p>
+              <h3 className="text-white text-lg md:text-xl lg:text-2xl font-semibold mb-1 md:mb-2">{t.main.video.overlayTitle}</h3>
+              <p className="text-gray-300 text-xs md:text-sm">{t.main.video.overlayDesc}</p>
             </div>
           )}
         </div>

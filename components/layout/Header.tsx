@@ -3,11 +3,12 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, Instagram, Youtube, ChevronUp, ChevronDown } from 'lucide-react';
+import { Menu, X, Instagram, Youtube } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
+import { useLanguage } from '@/contexts/LanguageContext';
 
-const navigation = [
+const navigationKo = [
   {
     name: '모듈러건축 소개',
     href: '/modular',
@@ -61,7 +62,7 @@ const navigation = [
       { name: '우리의 철학', href: '/company#philosophy' },
       { name: '기업 CI', href: '/company#ci' },
       { name: '위트 크루', href: '/company#crew' },
-      { name: '위트 펙토리', href: '/company#factory' },
+      { name: '위트 팩토리', href: '/company#factory' },
     ],
   },
   {
@@ -79,16 +80,88 @@ const navigation = [
   },
 ];
 
-const languages = ['KR', 'EN', 'ES'];
+const navigationEn = [
+  {
+    name: 'About Modular',
+    href: '/modular',
+    width: 145,
+    submenu: [
+      { name: 'What is Modular?', href: '/modular#what-is-modular' },
+      { name: 'Modular Types', href: '/modular#modular-types' },
+      { name: 'Prefabrication', href: '/modular#prefabrication' },
+      { name: 'OSC', href: '/modular#osc' },
+      { name: 'Assembly', href: '/modular#assembly' },
+    ],
+  },
+  {
+    name: 'Products',
+    href: '/products',
+    width: 75,
+    submenu: [
+      { name: 'S', href: '/products#s' },
+      { name: 'M', href: '/products#m' },
+      { name: 'L', href: '/products#l' },
+      { name: 'XL', href: '/products#xl' },
+      { name: 'Solution', href: '/products#solution' },
+      { name: 'Design', href: '/products#design' },
+    ],
+  },
+  {
+    name: 'BESPOKE',
+    href: '/bespoke',
+    width: 100,
+    submenu: [
+      { name: 'What is BESPOKE?', href: '/bespoke#what-is-bespoke' },
+      { name: 'Examples', href: '/bespoke#examples' },
+    ],
+  },
+  {
+    name: 'SOLUTION',
+    href: '/solution',
+    width: 155,
+    submenu: [
+      { name: 'CCTV (Security)', href: '/solution/cctv' },
+      { name: 'Network Solution', href: '/solution/network' },
+      { name: 'Smart Home (IoT)', href: '/solution/iot' },
+      { name: 'Design Consulting', href: '/solution/design' },
+    ],
+  },
+  {
+    name: 'Company',
+    href: '/company',
+    width: 85,
+    submenu: [
+      { name: 'Our Philosophy', href: '/company#philosophy' },
+      { name: 'Corporate CI', href: '/company#ci' },
+      { name: 'Weet Crew', href: '/company#crew' },
+      { name: 'Weet Factory', href: '/company#factory' },
+    ],
+  },
+  {
+    name: 'Support',
+    href: '/support',
+    width: 75,
+    submenu: [
+      { name: 'How to Buy', href: '/support#purchase' },
+      { name: 'Reservation', href: '/support#reservation' },
+      { name: 'Consultation', href: '/support#consultation' },
+      { name: 'Get a Quote', href: '/support#quote' },
+      { name: 'Q/A', href: '/support#qa' },
+      { name: 'A/S', href: '/support#as' },
+    ],
+  },
+];
 
 export default function Header() {
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
-  const [currentLang, setCurrentLang] = useState('KR');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [mounted, setMounted] = useState(false);
+  const { language, setLanguage } = useLanguage();
+
+  const navigation = language === 'KO' ? navigationKo : navigationEn;
 
   const handleMobileMenuToggle = useCallback(() => {
     setMobileMenuOpen(prev => !prev);
@@ -96,14 +169,6 @@ export default function Header() {
 
   const handleMobileMenuClose = useCallback(() => {
     setMobileMenuOpen(false);
-  }, []);
-
-  const [mobileExpanded, setMobileExpanded] = useState<string[]>([]);
-
-  const toggleMobileSubmenu = useCallback((name: string) => {
-    setMobileExpanded(prev =>
-      prev.includes(name) ? prev.filter(item => item !== name) : [...prev, name]
-    );
   }, []);
 
   const handleMegaMenuEnter = useCallback(() => {
@@ -121,9 +186,7 @@ export default function Header() {
     setActiveMenu(menuName);
   }, []);
 
-  const handleLangChange = useCallback((lang: string) => {
-    setCurrentLang(lang);
-  }, []);
+
 
   useEffect(() => {
     setMounted(true);
@@ -162,12 +225,12 @@ export default function Header() {
           <div className="relative flex items-center h-[105px] md:h-[135px] lg:h-[110px] px-4 md:px-8 lg:px-[64px]">
             {/* Logo */}
             <Link href="/" className="absolute left-4 md:left-8 lg:left-[64px] top-1/2 -translate-y-1/2 lg:static lg:transform-none">
-              <div className="w-[50px] h-[50px] md:w-[70px] md:h-[70px] lg:w-[90px] lg:h-[90px] relative select-none">
+              <div className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] lg:w-[90px] lg:h-[90px] relative select-none">
                 <Image
                   src="/images/logo_new.png"
                   alt="Weet Logo"
                   fill
-                  sizes="(max-width: 768px) 50px, (max-width: 1024px) 70px, 90px"
+                  sizes="(max-width: 768px) 80px, (max-width: 1024px) 100px, 90px"
                   className="object-contain"
                   priority
                   draggable={false}
@@ -211,77 +274,58 @@ export default function Header() {
               </div>
             </nav>
 
-            {/* Social Icons - Desktop only */}
-            <div className="hidden lg:flex absolute right-[64px] top-[40%] -translate-y-1/2 items-center space-x-4">
-              <Link
-                href="https://blog.naver.com"
-                target="_blank"
-                className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
-              >
-                <span className="text-[20px] font-bold">N</span>
-                <span className="text-[14px]">blog</span>
-              </Link>
-              <Link
-                href="https://instagram.com"
-                target="_blank"
-                className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
-              >
-                <Instagram className="w-[18px] h-[18px]" />
-                <span className="text-[14px]">instagram</span>
-              </Link>
-              <Link
-                href="https://youtube.com"
-                target="_blank"
-                className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
-              >
-                <Youtube className="w-[18px] h-[18px]" />
-                <span className="text-[14px]">youtube</span>
-              </Link>
+            {/* Social Icons & Language - Desktop only */}
+            <div className="hidden lg:flex absolute right-[64px] top-[40%] -translate-y-1/2 items-center gap-8">
+              <div className="flex items-center space-x-4">
+                <Link
+                  href="https://blog.naver.com"
+                  target="_blank"
+                  className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
+                >
+                  <span className="text-[20px] font-bold">N</span>
+                  <span className="text-[14px]">blog</span>
+                </Link>
+                <Link
+                  href="https://instagram.com"
+                  target="_blank"
+                  className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
+                >
+                  <Instagram className="w-[18px] h-[18px]" />
+                  <span className="text-[14px]">instagram</span>
+                </Link>
+                <Link
+                  href="https://youtube.com"
+                  target="_blank"
+                  className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
+                >
+                  <Youtube className="w-[18px] h-[18px]" />
+                  <span className="text-[14px]">youtube</span>
+                </Link>
+              </div>
+
+              {/* Desktop Language Switcher */}
+              <div className="flex items-center gap-2 text-sm font-medium">
+                <button
+                  onClick={() => setLanguage('KO')}
+                  className={cn("font-bold transition-colors", language === 'KO' ? "text-black" : "text-gray-400 hover:text-black")}
+                >
+                  KO
+                </button>
+                <span className="text-gray-300">|</span>
+                <button
+                  onClick={() => setLanguage('EN')}
+                  className={cn("font-bold transition-colors", language === 'EN' ? "text-black" : "text-gray-400 hover:text-black")}
+                >
+                  EN
+                </button>
+              </div>
             </div>
 
             {/* Language Selector - Top Right (Desktop) - Moved below SNS */}
-            <div className="hidden lg:block absolute right-[64px] top-[65%]">
-              <div className="flex items-center space-x-1 text-[10px] font-medium">
-                {languages.map((lang, idx) => (
-                  <span key={lang} className="flex items-center">
-                    <button
-                      onClick={() => handleLangChange(lang)}
-                      className={cn(
-                        'hover:text-gray-700 transition-colors',
-                        currentLang === lang ? 'text-black font-bold' : 'text-gray-400'
-                      )}
-                    >
-                      {lang}
-                    </button>
-                    {idx < languages.length - 1 && (
-                      <span className="mx-1 text-gray-300">|</span>
-                    )}
-                  </span>
-                ))}
-              </div>
-            </div>
+
 
             {/* Language Selector - Mobile/Tablet - Moved below hamburger */}
-            <div className="lg:hidden absolute right-4 md:right-8 bottom-4">
-              <div className="flex items-center space-x-1 text-xs md:text-sm font-medium">
-                {languages.map((lang, idx) => (
-                  <span key={lang} className="flex items-center">
-                    <button
-                      onClick={() => handleLangChange(lang)}
-                      className={cn(
-                        'hover:text-gray-700 transition-colors',
-                        currentLang === lang ? 'text-black font-bold' : 'text-gray-600'
-                      )}
-                    >
-                      {lang}
-                    </button>
-                    {idx < languages.length - 1 && (
-                      <span className="mx-1 text-gray-600">/</span>
-                    )}
-                  </span>
-                ))}
-              </div>
-            </div>
+
           </div>
 
           {/* Mega Menu Dropdown */}
@@ -370,26 +414,9 @@ export default function Header() {
                   >
                     {item.name}
                   </Link>
-                  {item.submenu && item.submenu.length > 0 && (
-                    <button
-                      onClick={() => toggleMobileSubmenu(item.name)}
-                      className="p-2 -mr-2 text-gray-400 hover:text-black transition-colors"
-                    >
-                      {mobileExpanded.includes(item.name) ? (
-                        <ChevronUp className="w-6 h-6" />
-                      ) : (
-                        <ChevronDown className="w-6 h-6" />
-                      )}
-                    </button>
-                  )}
                 </div>
 
-                <div
-                  className={cn(
-                    "ml-4 space-y-2 overflow-hidden transition-all duration-300 ease-in-out",
-                    mobileExpanded.includes(item.name) ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
-                  )}
-                >
+                <div className="ml-4 space-y-2">
                   {item.submenu.map((subitem, idx) => (
                     <Link
                       key={idx}
@@ -408,25 +435,22 @@ export default function Header() {
           {/* Bottom Section */}
           <div className="px-6 pb-8 space-y-6">
             {/* Language Selector */}
-            <div className="flex items-center gap-2">
-              <span className="text-sm text-gray-500 mr-2">Language:</span>
-              {languages.map((lang) => (
-                <button
-                  key={lang}
-                  onClick={() => handleLangChange(lang)}
-                  className={cn(
-                    'px-4 py-2 rounded-lg font-medium transition-all',
-                    currentLang === lang
-                      ? 'bg-primary text-black'
-                      : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-                  )}
-                >
-                  {lang}
-                </button>
-              ))}
-            </div>
-
-            {/* Social Links */}
+            {/* Language Selector */}
+            <div className="flex items-center gap-3 text-sm font-medium">
+              <button
+                onClick={() => setLanguage('KO')}
+                className={cn("font-bold transition-colors", language === 'KO' ? "text-black" : "text-gray-400 hover:text-black")}
+              >
+                KO
+              </button>
+              <span className="text-gray-300">|</span>
+              <button
+                onClick={() => setLanguage('EN')}
+                className={cn("font-bold transition-colors", language === 'EN' ? "text-black" : "text-gray-400 hover:text-black")}
+              >
+                EN
+              </button>
+            </div>            {/* Social Links */}
             <div className="flex items-center gap-4 pt-4 border-t border-gray-200">
               <Link
                 href="https://blog.naver.com"

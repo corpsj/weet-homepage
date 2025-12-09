@@ -5,6 +5,7 @@ import Image from "next/image";
 import { getProducts } from "@/lib/products";
 import { Product } from "@/types/supabase";
 import { ChevronDown, ChevronUp } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 // 제품 타입 정의 (Frontend View Model)
 interface ProductData {
@@ -82,6 +83,21 @@ export default function ProductsPage() {
     const [expandedCategories, setExpandedCategories] = useState<string[]>(["S", "M", "L", "XL", "SOLUTION", "DESIGN"]);
     const [activeProduct, setActiveProduct] = useState<string>("");
     const productRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+    const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+    const lastScrollY = useRef(0);
+    const [direction, setDirection] = useState(0);
+    const prevActiveProduct = useRef<string>("");
+
+    useEffect(() => {
+        if (prevActiveProduct.current && activeProduct !== prevActiveProduct.current) {
+            const prevIndex = products.findIndex(p => p.id === prevActiveProduct.current);
+            const currIndex = products.findIndex(p => p.id === activeProduct);
+            if (prevIndex !== -1 && currIndex !== -1) {
+                setDirection(currIndex > prevIndex ? 1 : -1);
+            }
+        }
+        prevActiveProduct.current = activeProduct;
+    }, [activeProduct, products]);
 
     useEffect(() => {
         const fetchProducts = async () => {
@@ -170,13 +186,26 @@ export default function ProductsPage() {
 
     useEffect(() => {
         const handleScroll = () => {
-            const scrollPosition = window.scrollY + 300;
+            const currentScrollY = window.scrollY;
+
+            // Header Visibility Logic
+            if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
+                setIsHeaderVisible(false);
+            } else {
+                setIsHeaderVisible(true);
+            }
+            lastScrollY.current = currentScrollY;
+
+            // Active Product Logic
+            // Use a center-screen offset for better UX
+            const checkPoint = currentScrollY + (window.innerHeight / 3);
 
             for (const product of products) {
                 const element = productRefs.current[product.id];
                 if (element) {
                     const { offsetTop, offsetHeight } = element;
-                    if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+                    // Check if the product section contains the checkpoint
+                    if (checkPoint >= offsetTop && checkPoint < offsetTop + offsetHeight) {
                         setActiveProduct(product.id);
                         break;
                     }
@@ -184,7 +213,7 @@ export default function ProductsPage() {
             }
         };
 
-        window.addEventListener("scroll", handleScroll);
+        window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
     }, [products]);
 
@@ -203,7 +232,7 @@ export default function ProductsPage() {
 
     return (
         <div className="min-h-screen bg-[#EBEBEB]">
-            <div className="flex max-w-[1920px] mx-auto relative">
+            <div className="flex flex-col lg:flex-row max-w-[1920px] mx-auto relative">
                 {/* Sidebar */}
                 <aside className="w-[300px] h-screen sticky top-0 overflow-y-auto hidden lg:block pt-[120px] pb-20 pl-[60px]">
                     <div className="space-y-12">
@@ -300,12 +329,11 @@ export default function ProductsPage() {
                 </aside>
 
                 {/* Mobile Top Navigation */}
-                <div className="lg:hidden fixed top-[105px] md:top-[135px] left-0 right-0 z-40 bg-[#EBEBEB]/95 backdrop-blur-sm border-b border-gray-200 shadow-sm">
+                {/* Mobile Top Navigation */}
+                <div className={`lg:hidden sticky z-40 bg-[#EBEBEB]/95 backdrop-blur-sm border-b border-gray-200 shadow-sm transition-[top] duration-300 ${isHeaderVisible ? 'top-[105px] md:top-[135px] lg:top-[110px]' : 'top-0'}`}>
                     <div className="flex overflow-x-auto px-4 py-3 gap-6 no-scrollbar">
                         {(Object.keys(sidebarStructure) as Array<keyof typeof sidebarStructure>).map((key) => {
                             const category = sidebarStructure[key];
-                            // Check if any product in this category is active or if we are just looking for a category jump
-                            // Simplified logic: Check if the current active product belongs to this category
                             let isActiveCategory = false;
                             if (key === 'S') {
                                 isActiveCategory = !!(category?.Private?.includes(activeProduct) || category?.Public?.includes(activeProduct));
@@ -313,7 +341,6 @@ export default function ProductsPage() {
                                 isActiveCategory = !!category?.items?.includes(activeProduct);
                             }
 
-                            // Helper to find the first product ID in a category to scroll to
                             const firstProductId = key === 'S'
                                 ? (category.Private?.[0] || category.Public?.[0])
                                 : category.items?.[0];
@@ -332,6 +359,88 @@ export default function ProductsPage() {
                             );
                         })}
                     </div>
+                    {/* Active Product Info Bar */}
+                    {activeProduct && (() => {
+                        const activeIndex = products.findIndex(p => p.id === activeProduct);
+                        const prevProduct = products[activeIndex - 1];
+                        const nextProduct = products[activeIndex + 1];
+
+                        const slideVariants = {
+                            enter: (direction: number) => ({
+                                x: direction > 0 ? 20 : -20,
+                                opacity: 0
+                            }),
+                            center: {
+                                x: 0,
+                                opacity: 1
+                            },
+                            exit: (direction: number) => ({
+                                x: direction > 0 ? -20 : 20,
+                                opacity: 0
+                            })
+                        };
+
+                        return (
+                            <div className="px-4 py-2 bg-white/80 backdrop-blur-md border-t border-gray-100 grid grid-cols-[1fr_auto_1fr] items-center text-sm gap-4 overflow-hidden h-[42px]">
+                                <div className="text-left min-w-0">
+                                    <AnimatePresence mode="popLayout" initial={false} custom={direction}>
+                                        {prevProduct && (
+                                            <motion.div
+                                                key={prevProduct.id}
+                                                custom={direction}
+                                                variants={slideVariants}
+                                                initial="enter"
+                                                animate="center"
+                                                exit="exit"
+                                                transition={{ duration: 0.2, ease: "easeInOut" }}
+                                                className="truncate text-xs text-gray-400 cursor-pointer hover:text-gray-600 block"
+                                                onClick={() => scrollToProduct(prevProduct.id)}
+                                            >
+                                                {prevProduct.name}
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+
+                                <div className="text-center flex justify-center min-w-[120px]">
+                                    <AnimatePresence mode="popLayout" initial={false} custom={direction}>
+                                        <motion.div
+                                            key={activeProduct}
+                                            custom={direction}
+                                            variants={slideVariants}
+                                            initial="enter"
+                                            animate="center"
+                                            exit="exit"
+                                            transition={{ duration: 0.2, ease: "easeInOut" }}
+                                            className="font-bold text-black text-base truncate"
+                                        >
+                                            {getProductName(activeProduct)}
+                                        </motion.div>
+                                    </AnimatePresence>
+                                </div>
+
+                                <div className="text-right min-w-0">
+                                    <AnimatePresence mode="popLayout" initial={false} custom={direction}>
+                                        {nextProduct && (
+                                            <motion.div
+                                                key={nextProduct.id}
+                                                custom={direction}
+                                                variants={slideVariants}
+                                                initial="enter"
+                                                animate="center"
+                                                exit="exit"
+                                                transition={{ duration: 0.2, ease: "easeInOut" }}
+                                                className="truncate text-xs text-gray-400 cursor-pointer hover:text-gray-600 block ml-auto"
+                                                onClick={() => nextProduct && scrollToProduct(nextProduct.id)}
+                                            >
+                                                {nextProduct.name}
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                            </div>
+                        );
+                    })()}
                 </div>
 
                 {/* Main Content */}
@@ -417,17 +526,15 @@ export default function ProductsPage() {
                                     {/* Right: Floor Plan */}
                                     <div>
                                         <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">Floor Plan</h3>
-                                        <div className="h-[400px] w-full rounded-xl flex items-start justify-center relative overflow-hidden">
+                                        <div className="w-full aspect-[4/3] rounded-xl flex items-center justify-center relative overflow-hidden border border-gray-100">
                                             {product.floorPlan.src ? (
-                                                <div className="relative w-full h-full flex items-start justify-center">
-                                                    <div className="relative" style={{ width: '280px', height: '280px' }}>
-                                                        <Image
-                                                            src={product.floorPlan.src}
-                                                            alt={`${product.name} Floor Plan`}
-                                                            fill
-                                                            className="object-contain"
-                                                        />
-                                                    </div>
+                                                <div className="relative w-full h-full">
+                                                    <Image
+                                                        src={product.floorPlan.src}
+                                                        alt="Floor Plan"
+                                                        fill
+                                                        className="object-contain"
+                                                    />
                                                 </div>
                                             ) : (
                                                 <div className="text-gray-400 text-sm">도면 준비중</div>

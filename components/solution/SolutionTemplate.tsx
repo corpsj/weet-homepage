@@ -1,17 +1,19 @@
 'use client';
 
-import React, { useRef } from 'react';
+import { useState, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import FeatureModal from './FeatureModal';
 
 interface Feature {
     id: string;
     title: string;
     image: string;
     description: string;
+    detailContent?: string;
 }
 
 interface SolutionTemplateProps {
@@ -41,6 +43,14 @@ export default function SolutionTemplate({
         target: containerRef,
         offset: ["start start", "end start"]
     });
+
+    const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const openModal = (feature: Feature) => {
+        setSelectedFeature(feature);
+        setIsModalOpen(true);
+    };
 
     const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
     const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
@@ -126,7 +136,7 @@ export default function SolutionTemplate({
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
                                 className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500 border border-gray-100 flex flex-col"
                             >
-                                <div className="relative h-64 overflow-hidden">
+                                <div className="relative h-64 overflow-hidden cursor-pointer" onClick={() => openModal(feature)}>
                                     {feature.image ? (
                                         <Image
                                             src={feature.image}
@@ -148,12 +158,15 @@ export default function SolutionTemplate({
                                 </div>
 
                                 <div className="p-8 flex-1 flex flex-col justify-between">
-                                    <p className="text-gray-600 leading-relaxed mb-6">
+                                    <p className="text-gray-600 leading-relaxed mb-6 line-clamp-3">
                                         {feature.description}
                                     </p>
-                                    <div className="flex items-center text-primary font-semibold text-sm group-hover:translate-x-1 transition-transform cursor-pointer">
+                                    <button
+                                        onClick={() => openModal(feature)}
+                                        className="flex items-center text-primary font-semibold text-sm group-hover:translate-x-1 transition-transform cursor-pointer w-fit"
+                                    >
                                         자세히 보기 <ChevronRight className="w-4 h-4 ml-1" />
-                                    </div>
+                                    </button>
                                 </div>
                             </motion.div>
                         ))}
@@ -161,6 +174,11 @@ export default function SolutionTemplate({
                 </div>
             </section>
 
+            <FeatureModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                feature={selectedFeature}
+            />
         </div>
     );
 }

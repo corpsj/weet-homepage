@@ -16,6 +16,8 @@ export const metadata: Metadata = {
 import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from 'next/script';
 
+import { LanguageProvider } from '@/contexts/LanguageContext';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -24,7 +26,9 @@ export default function RootLayout({
   return (
     <html lang="ko" className={geist.variable}>
       <body className="min-h-screen flex flex-col">
-        <ClientLayout>{children}</ClientLayout>
+        <LanguageProvider>
+          <ClientLayout>{children}</ClientLayout>
+        </LanguageProvider>
         {process.env.NEXT_PUBLIC_GA_ID && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
         )}

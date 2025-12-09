@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import { useTranslation } from '@/hooks/useTranslation';
 
 export interface Slide {
     id: number;
@@ -14,6 +15,7 @@ export interface Slide {
 export default function HeroCarouselClient({ initialSlides }: { initialSlides: Slide[] }) {
     const [currentSlide, setCurrentSlide] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
+    const t = useTranslation();
 
     const nextSlide = useCallback(() => {
         setCurrentSlide((prev) => (prev + 1) % initialSlides.length);
@@ -34,7 +36,7 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
     if (initialSlides.length === 0) return null;
 
     return (
-        <section ref={containerRef} className="relative bg-[#EBEBEB] overflow-hidden w-full h-[calc(100vh-105px)] md:h-[calc(100vh-135px)] lg:h-[calc(100vh-110px)]">
+        <section ref={containerRef} className="relative bg-[#EBEBEB] overflow-hidden w-full aspect-[2/3] md:aspect-[16/9]">
             {/* Blurred Background Layer */}
             <AnimatePresence mode="wait">
                 <motion.div
@@ -131,7 +133,7 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                 transition={{ delay: 1, duration: 1 }}
                 onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
             >
-                <span className="text-white/80 text-xs tracking-widest uppercase mb-2">Scroll</span>
+                <span className="text-white/80 text-xs tracking-widest uppercase mb-2">{t.common.more || 'SCROLL'}</span>
                 <motion.div
                     animate={{ y: [0, 8, 0] }}
                     transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}

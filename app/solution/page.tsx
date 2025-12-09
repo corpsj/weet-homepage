@@ -56,18 +56,18 @@ export default function SolutionPage() {
             </h1>
             {/* 심플한 구분선 */}
             <div className="w-[1px] h-8 bg-gray-300 mx-auto mb-6"></div>
-            <p className="text-[#666666] text-lg leading-relaxed max-w-2xl mx-auto break-keep">
+            <p className="text-[#666666] text-base md:text-lg leading-relaxed max-w-2xl mx-auto break-keep px-4">
               위트는 단순한 공간을 넘어, 당신의 삶을 더욱 안전하고 편리하게 만드는<br className="hidden md:block" />
               통합 라이프스타일 솔루션을 제안합니다.
             </p>
           </div>
 
           {/* Solution Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 md:px-0">
             {solutions.map((item) => (
               <div
                 key={item.id}
-                className="group bg-white rounded-xl p-8 shadow-sm border border-transparent hover:border-[#FEBD16] hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all duration-300 flex flex-col items-center text-center cursor-default h-full relative overflow-hidden"
+                className="group bg-white rounded-xl p-6 md:p-8 shadow-sm border border-transparent hover:border-[#FEBD16] hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all duration-300 flex flex-col items-center text-center cursor-default h-full relative overflow-hidden"
               >
                 {/* Hover Top Line Accent */}
                 <div className="absolute top-0 left-0 w-full h-[4px] bg-[#FEBD16] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
@@ -92,8 +92,11 @@ export default function SolutionPage() {
                 {/* Detail Badge */}
                 <div className="w-full pt-6 border-t border-gray-100 mt-auto">
                   <p className="text-xs text-[#888] font-medium mb-4">{item.detail}</p>
-                  <Link href={item.href} className="flex items-center justify-center gap-1 mx-auto text-sm font-bold text-[#1A1A1A] hover:text-[#FEBD16] transition-colors">
-                    More <ArrowRight size={14} />
+                  <Link
+                    href={item.href}
+                    className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-gray-100 text-sm font-bold text-[#1A1A1A] hover:bg-[#FEBD16] hover:text-white transition-all duration-300"
+                  >
+                    자세히 보기 <ArrowRight size={14} />
                   </Link>
                 </div>
               </div>

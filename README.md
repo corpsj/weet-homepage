@@ -116,7 +116,12 @@ npm install
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key # 관리자 기능용
+INSTAGRAM_ACCESS_TOKEN=your_instagram_long_lived_token
+INSTAGRAM_USER_ID=your_instagram_user_id # access token 계정과 동일하면 생략 가능
+NEXT_PUBLIC_INSTAGRAM_PROFILE_URL=https://instagram.com/your_handle
 ```
+
+> Instagram 연동: Facebook for Developers에서 Instagram Basic Display 앱을 만들고 단기 토큰을 발급한 뒤 [Long-Lived Token](https://developers.facebook.com/docs/instagram-basic-display-api/guides/long-lived-access-tokens)을 생성하세요. `INSTAGRAM_USER_ID`는 대상 인스타그램 계정의 ID이며, 토큰이 동일 계정에서 발급됐다면 생략해도 됩니다. 프로필 버튼 링크는 `NEXT_PUBLIC_INSTAGRAM_PROFILE_URL`로 제어합니다.
 
 ### 개발 서버 실행
 
