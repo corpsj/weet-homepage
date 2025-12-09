@@ -274,51 +274,49 @@ export default function Header() {
               </div>
             </nav>
 
-            {/* Social Icons & Language - Desktop only */}
-            <div className="hidden lg:flex absolute right-[64px] top-1/2 -translate-y-1/2 flex-col items-end gap-1">
-              <div className="flex items-center space-x-4">
-                <Link
-                  href="https://blog.naver.com"
-                  target="_blank"
-                  className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
-                >
-                  <span className="text-[20px] font-bold">N</span>
-                  <span className="text-[14px]">blog</span>
-                </Link>
-                <Link
-                  href="https://instagram.com"
-                  target="_blank"
-                  className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
-                >
-                  <Instagram className="w-[18px] h-[18px]" />
-                  <span className="text-[14px]">instagram</span>
-                </Link>
-                <Link
-                  href="https://youtube.com"
-                  target="_blank"
-                  className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
-                >
-                  <Youtube className="w-[18px] h-[18px]" />
-                  <span className="text-[14px]">youtube</span>
-                </Link>
-              </div>
+            {/* Social Icons - Desktop only */}
+            <div className="hidden lg:flex absolute right-[64px] top-1/2 -translate-y-1/2 items-center space-x-4">
+              <Link
+                href="https://blog.naver.com"
+                target="_blank"
+                className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
+              >
+                <span className="text-[20px] font-bold">N</span>
+                <span className="text-[14px]">blog</span>
+              </Link>
+              <Link
+                href="https://instagram.com"
+                target="_blank"
+                className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
+              >
+                <Instagram className="w-[18px] h-[18px]" />
+                <span className="text-[14px]">instagram</span>
+              </Link>
+              <Link
+                href="https://youtube.com"
+                target="_blank"
+                className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
+              >
+                <Youtube className="w-[18px] h-[18px]" />
+                <span className="text-[14px]">youtube</span>
+              </Link>
+            </div>
 
-              {/* Desktop Language Switcher */}
-              <div className="flex items-center gap-2 text-[11px] font-medium">
-                <button
-                  onClick={() => setLanguage('KO')}
-                  className={cn("transition-colors", language === 'KO' ? "text-gray-600 font-bold" : "text-gray-300 hover:text-gray-500")}
-                >
-                  KO
-                </button>
-                <span className="text-gray-200">|</span>
-                <button
-                  onClick={() => setLanguage('EN')}
-                  className={cn("transition-colors", language === 'EN' ? "text-gray-600 font-bold" : "text-gray-300 hover:text-gray-500")}
-                >
-                  EN
-                </button>
-              </div>
+            {/* Desktop Language Switcher - Bottom aligned */}
+            <div className="hidden lg:flex absolute right-[64px] bottom-3 flex items-center gap-2 text-[11px] font-medium">
+              <button
+                onClick={() => setLanguage('KO')}
+                className={cn("transition-colors", language === 'KO' ? "text-gray-600 font-bold" : "text-gray-300 hover:text-gray-500")}
+              >
+                KO
+              </button>
+              <span className="text-gray-200">|</span>
+              <button
+                onClick={() => setLanguage('EN')}
+                className={cn("transition-colors", language === 'EN' ? "text-gray-600 font-bold" : "text-gray-300 hover:text-gray-500")}
+              >
+                EN
+              </button>
             </div>
 
             {/* Language Selector - Top Right (Desktop) - Moved below SNS */}
