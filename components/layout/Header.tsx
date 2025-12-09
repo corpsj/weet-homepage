@@ -275,7 +275,7 @@ export default function Header() {
             </nav>
 
             {/* Social Icons & Language - Desktop only */}
-            <div className="hidden lg:flex absolute right-[64px] top-[40%] -translate-y-1/2 items-center gap-8">
+            <div className="hidden lg:flex absolute right-[64px] top-1/2 -translate-y-1/2 flex-col items-end gap-1">
               <div className="flex items-center space-x-4">
                 <Link
                   href="https://blog.naver.com"
@@ -304,17 +304,17 @@ export default function Header() {
               </div>
 
               {/* Desktop Language Switcher */}
-              <div className="flex items-center gap-2 text-sm font-medium">
+              <div className="flex items-center gap-2 text-[11px] font-medium">
                 <button
                   onClick={() => setLanguage('KO')}
-                  className={cn("font-bold transition-colors", language === 'KO' ? "text-black" : "text-gray-400 hover:text-black")}
+                  className={cn("transition-colors", language === 'KO' ? "text-gray-600 font-bold" : "text-gray-300 hover:text-gray-500")}
                 >
                   KO
                 </button>
-                <span className="text-gray-300">|</span>
+                <span className="text-gray-200">|</span>
                 <button
                   onClick={() => setLanguage('EN')}
-                  className={cn("font-bold transition-colors", language === 'EN' ? "text-black" : "text-gray-400 hover:text-black")}
+                  className={cn("transition-colors", language === 'EN' ? "text-gray-600 font-bold" : "text-gray-300 hover:text-gray-500")}
                 >
                   EN
                 </button>
