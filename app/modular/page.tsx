@@ -121,7 +121,7 @@ export default function ModularPage() {
             {/* Left: Image */}
             <div className="relative w-full aspect-[2816/1536] overflow-hidden rounded-lg">
               <Image
-                src="/images/modular/hybrid-modular.png"
+                src="/images/modular/hybrid-modular.jpg"
                 alt="하이브리드 모듈러 형태"
                 fill
                 className="object-cover"
@@ -158,7 +158,7 @@ export default function ModularPage() {
             {/* Left: Image */}
             <div className="relative w-full aspect-[2816/1536] overflow-hidden rounded-lg">
               <Image
-                src="/images/modular/prefabrication.png"
+                src="/images/modular/prefabrication.jpg"
                 alt="사전제작"
                 fill
                 className="object-cover"
@@ -203,7 +203,7 @@ export default function ModularPage() {
             {/* Left: Image */}
             <div className="relative w-full aspect-[2816/1536] overflow-hidden rounded-lg">
               <Image
-                src="/images/modular/osc.png"
+                src="/images/modular/osc.jpg"
                 alt="탈현장 건설 OSC"
                 fill
                 className="object-cover"
@@ -242,7 +242,7 @@ export default function ModularPage() {
             {/* Left: Image */}
             <div className="relative w-full aspect-[2816/1536] overflow-hidden rounded-lg">
               <Image
-                src="/images/modular/prefabricated-building.png"
+                src="/images/modular/prefabricated-building.jpg"
                 alt="조립방식의 건축"
                 fill
                 className="object-cover"
