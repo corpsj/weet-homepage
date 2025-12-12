@@ -31,7 +31,6 @@ const navigationKo = [
       { name: 'L', href: '/products#l' },
       { name: 'XL', href: '/products#xl' },
       { name: 'Solution', href: '/products#solution' },
-      { name: 'Design', href: '/products#design' },
     ],
   },
   {
@@ -48,10 +47,10 @@ const navigationKo = [
     href: '/solution',
     width: 155,
     submenu: [
-      { name: 'CCTV (보안 솔루션)', href: '/solution/cctv' },
-      { name: '인터넷 솔루션', href: '/solution/network' },
-      { name: '스마트 홈 솔루션', href: '/solution/iot' },
-      { name: '디자인 컨설팅 솔루션', href: '/solution/design' },
+      { name: '시큐리티', href: '/solution/cctv' },
+      { name: '네트워크', href: '/solution/network' },
+      { name: 'IoT', href: '/solution/iot' },
+      { name: '디자인', href: '/solution/design' },
     ],
   },
   {
@@ -103,7 +102,6 @@ const navigationEn = [
       { name: 'L', href: '/products#l' },
       { name: 'XL', href: '/products#xl' },
       { name: 'Solution', href: '/products#solution' },
-      { name: 'Design', href: '/products#design' },
     ],
   },
   {
@@ -120,7 +118,7 @@ const navigationEn = [
     href: '/solution',
     width: 155,
     submenu: [
-      { name: 'CCTV (Security)', href: '/solution/cctv' },
+      { name: 'Security', href: '/solution/cctv' },
       { name: 'Network Solution', href: '/solution/network' },
       { name: 'Smart Home (IoT)', href: '/solution/iot' },
       { name: 'Design Consulting', href: '/solution/design' },

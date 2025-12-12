@@ -7,6 +7,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import { ChevronRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import FeatureModal from './FeatureModal';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface Feature {
     id: string;
@@ -24,12 +25,20 @@ interface SolutionTemplateProps {
     features: Feature[];
 }
 
-const solutionLinks = [
-    { name: '보안 솔루션', href: '/solution/cctv' },
-    { name: '네트워크 솔루션', href: '/solution/network' },
-    { name: 'IOT 솔루션', href: '/solution/iot' },
-    { name: '디자인 솔루션', href: '/solution/design' },
-];
+const NAV = {
+    KO: [
+        { name: '시큐리티', href: '/solution/cctv' },
+        { name: '네트워크', href: '/solution/network' },
+        { name: 'IoT', href: '/solution/iot' },
+        { name: '디자인', href: '/solution/design' },
+    ],
+    EN: [
+        { name: 'Security', href: '/solution/cctv' },
+        { name: 'Network', href: '/solution/network' },
+        { name: 'IoT', href: '/solution/iot' },
+        { name: 'Design', href: '/solution/design' },
+    ],
+};
 
 export default function SolutionTemplate({
     title,
@@ -38,6 +47,9 @@ export default function SolutionTemplate({
     description,
     features,
 }: SolutionTemplateProps) {
+    const { language } = useLanguage();
+    const navLinks = language === 'KO' ? NAV.KO : NAV.EN;
+    const viewMoreLabel = language === 'KO' ? '자세히 보기' : 'View more';
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -98,7 +110,7 @@ export default function SolutionTemplate({
             <div className="sticky top-[70px] md:top-[90px] lg:top-[110px] z-40 flex justify-center py-4 pointer-events-none">
                 <div className="bg-gray-100/80 backdrop-blur-md p-1.5 rounded-full pointer-events-auto shadow-sm border border-gray-200/50 inline-flex overflow-x-auto max-w-[90vw] no-scrollbar">
                     <div className="flex items-center relative">
-                        {solutionLinks.map((link) => {
+                        {navLinks.map((link) => {
                             const isActive = title === link.name;
                             return (
                                 <Link
@@ -165,7 +177,7 @@ export default function SolutionTemplate({
                                         onClick={() => openModal(feature)}
                                         className="flex items-center text-primary font-semibold text-sm group-hover:translate-x-1 transition-transform cursor-pointer w-fit"
                                     >
-                                        자세히 보기 <ChevronRight className="w-4 h-4 ml-1" />
+                                        {viewMoreLabel} <ChevronRight className="w-4 h-4 ml-1" />
                                     </button>
                                 </div>
                             </motion.div>

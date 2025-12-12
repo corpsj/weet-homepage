@@ -12,7 +12,7 @@ export async function createProduct(data: ProductInsert) {
 
     if (error) {
         console.error('Error creating product:', error);
-        throw new Error('Failed to create product');
+        throw new Error(`Failed to create product: ${error.message} (${error.details || ''})`);
     }
 
     revalidatePath('/admin/products');
@@ -27,7 +27,7 @@ export async function updateProduct(id: string, data: ProductUpdate) {
 
     if (error) {
         console.error('Error updating product:', error);
-        throw new Error(error.message || 'Failed to update product');
+        throw new Error(`Failed to update product: ${error.message} (${error.details || ''})`);
     }
 
     revalidatePath('/admin/products');

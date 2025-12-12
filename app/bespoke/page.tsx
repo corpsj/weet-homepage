@@ -1,269 +1,280 @@
-'use client';
+ 'use client';
 
-import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
-import { X } from 'lucide-react';
+ import Image from 'next/image';
+ import { motion, AnimatePresence } from 'framer-motion';
+ import { useState } from 'react';
+ import { X } from 'lucide-react';
+ import { useLanguage } from '@/contexts/LanguageContext';
 
-export default function BespokePage() {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+ type Lang = 'KO' | 'EN';
 
-  const images = [
-    { id: 'small-cafe', src: '/images/bespoke/small-cafe.jpg', alt: 'Small Cafe' },
-    { id: 'popup-store', src: '/images/bespoke/popup-store.jpg', alt: 'Pop-up Store' },
-    { id: 'smart-farm', src: '/images/bespoke/smart-farm.png', alt: 'Smart Farm' },
-  ];
+ const COPY: Record<Lang, {
+   headline: string;
+   lead: string;
+   highlight: string;
+   features: Array<{ title: string; body: string }>;
+   sections: Array<{
+     id: string;
+     badge: string;
+     title: string;
+     quote: string;
+     body: string;
+     cta: string;
+     image: { src: string; alt: string };
+     imageOnRight: boolean;
+   }>;
+   overlayClose: string;
+ }> = {
+   KO: {
+     headline: 'BESPOKE',
+     lead: 'WEET의 모듈 기술력은 “어떤 공간이든 현실로 만든다”는 검증된 자신감에서 시작합니다.',
+     highlight: '브랜드 쇼룸, 팝업스토어, 스마트팜 등 당신의 아이디어를 실현하는 맞춤형 솔루션을 제공합니다.',
+     features: [
+       { title: '검증된 기술, 맞춤 설계', body: '모듈러 기술과 공간 경험을 기반으로 목적에 맞는 설계와 공정을 제안합니다.' },
+       { title: '1:1 맞춤 코디네이션', body: '예산과 일정, 운영 시나리오를 함께 설계하며 모든 디테일을 함께 결정합니다.' },
+       { title: '무한한 확장성', body: '규모와 용도에 맞춰 확장·이동이 가능해 사업 변화에도 유연하게 대응합니다.' },
+       { title: '최상의 퀄리티', body: '표준화된 공정과 프리미엄 마감으로 완성도 높은 결과물을 약속합니다.' },
+     ],
+     sections: [
+       {
+         id: 'small-cafe',
+         badge: 'COMMERCIAL',
+         title: 'SMALL CAFE',
+         quote: '감각적 분위기와 효율적인 동선을 갖춘 미니 카페를 하루 만에 구현합니다.',
+         body: '브랜드의 톤앤매너를 살린 내·외부 마감과 고객 동선 설계를 동시에 진행해 작은 공간에서도 경험이 풍부하도록 디자인합니다.',
+         cta: '포트폴리오 보기',
+         image: { src: '/images/bespoke/small-cafe.jpg', alt: 'Small Cafe' },
+         imageOnRight: true,
+       },
+       {
+         id: 'popup-store',
+         badge: 'RETAIL & EVENT',
+         title: 'POP-UP STORE / BRAND SHOWROOM',
+         quote: '짧은 기간에도 브랜드 경험을 극대화하는 임팩트 있는 공간.',
+         body: '빠른 설치와 해체, 이동을 고려한 설계로 이벤트 일정에 맞춰 즉시 운영 가능합니다. 디지털 콘텐츠와 연동한 체험 동선까지 함께 설계합니다.',
+         cta: '포트폴리오 보기',
+         image: { src: '/images/bespoke/popup-store.jpg', alt: 'Pop-up Store' },
+         imageOnRight: false,
+       },
+       {
+         id: 'smart-farm',
+         badge: 'AGRITECH',
+         title: 'SMART FARM',
+         quote: '지능형 제어와 모듈 구조로 농업 시설을 빠르게 구축합니다.',
+         body: '모듈 설계로 단열과 설비 배치를 최적화하고, 센서·제어 시스템을 연동해 안정적인 재배 환경을 제공합니다.',
+         cta: '포트폴리오 보기',
+         image: { src: '/images/bespoke/smart-farm.png', alt: 'Smart Farm' },
+         imageOnRight: true,
+       },
+     ],
+     overlayClose: '닫기',
+   },
+   EN: {
+     headline: 'BESPOKE',
+     lead: 'Our modular know-how starts from a simple confidence: we can make any space real.',
+     highlight: 'From brand showrooms and pop-up stores to smart farms, we deliver custom solutions for your ideas.',
+     features: [
+       { title: 'Proven tech, tailored design', body: 'We combine modular engineering with spatial expertise to match your purpose.' },
+       { title: '1:1 coordination', body: 'Budget, schedule, and operation scenarios are planned together—every detail is co-created.' },
+       { title: 'Unlimited scalability', body: 'Modules can expand or relocate to adapt as your business evolves.' },
+       { title: 'Premium quality', body: 'Standardized processes and premium finishes ensure a refined final result.' },
+     ],
+     sections: [
+       {
+         id: 'small-cafe',
+         badge: 'COMMERCIAL',
+         title: 'SMALL CAFE',
+         quote: 'A cozy café with efficient flow, built and ready in a day.',
+         body: 'We design interiors and customer circulation that reflect your brand, creating a rich experience even in compact spaces.',
+         cta: 'View portfolio',
+         image: { src: '/images/bespoke/small-cafe.jpg', alt: 'Small Cafe' },
+         imageOnRight: true,
+       },
+       {
+         id: 'popup-store',
+         badge: 'RETAIL & EVENT',
+         title: 'POP-UP STORE / BRAND SHOWROOM',
+         quote: 'Impactful brand experiences, even on short timelines.',
+         body: 'Designed for fast install, teardown, and relocation. We plan experiential flows with digital content so events launch on time.',
+         cta: 'View portfolio',
+         image: { src: '/images/bespoke/popup-store.jpg', alt: 'Pop-up Store' },
+         imageOnRight: false,
+       },
+       {
+         id: 'smart-farm',
+         badge: 'AGRITECH',
+         title: 'SMART FARM',
+         quote: 'Build agricultural facilities quickly with intelligent control and modular structure.',
+         body: 'Optimized insulation and MEP layout within modular envelopes, paired with sensors and control systems for stable growing environments.',
+         cta: 'View portfolio',
+         image: { src: '/images/bespoke/smart-farm.png', alt: 'Smart Farm' },
+         imageOnRight: true,
+       },
+     ],
+     overlayClose: 'Close',
+   },
+ };
 
-  return (
-    <div className="min-h-screen bg-white">
-      {/* Section 1: Main Introduction */}
-      <section id="what-is-bespoke" className="bg-[#EBEBEB] py-20 md:py-28 lg:py-32 overflow-hidden scroll-mt-[180px]">
-        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            <h1 className="text-[50px] md:text-[70px] lg:text-[90px] font-bold mb-8 md:mb-12 leading-none tracking-tight">
-              BESPOKE
-            </h1>
+ const IMAGES = [
+   { id: 'small-cafe', src: '/images/bespoke/small-cafe.jpg', alt: 'Small Cafe' },
+   { id: 'popup-store', src: '/images/bespoke/popup-store.jpg', alt: 'Pop-up Store' },
+   { id: 'smart-farm', src: '/images/bespoke/smart-farm.png', alt: 'Smart Farm' },
+ ];
 
-            <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
-              {/* Intro Text - Wider Column (65%) */}
-              <div className="lg:w-[65%]">
-                <p className="text-[18px] md:text-[20px] leading-relaxed mb-8 text-gray-800 break-keep">
-                  <span className="whitespace-nowrap tracking-tight">weet의 모듈러 기술력은 '시그니처 라인'의 검증된 품질로 이미 증명되었습니다.</span>
-                  <span className="block mt-4 font-semibold text-black text-xl md:text-2xl relative inline-block">
-                    <span className="relative z-10">'비스포크 서비스'는 세상에 단 하나뿐인<br />당신의 공간을 짓는 프리미엄 맞춤 솔루션입니다.</span>
-                    <span className="absolute bottom-1 left-0 w-full h-3 bg-primary/30 -z-0"></span>
-                  </span>
-                </p>
-              </div>
+ export default function BespokePage() {
+   const [selectedId, setSelectedId] = useState<string | null>(null);
+   const { language } = useLanguage();
+   const copy = COPY[language];
 
-              {/* Feature List - Narrower Column (35%) */}
-              <div className="lg:w-[35%] space-y-6 text-[15px] md:text-[16px] text-gray-600">
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.2, duration: 0.6 }}
-                  className="border-l-2 border-primary pl-6"
-                >
-                  <strong className="block text-black text-lg mb-1">검증된 기술, 특별한 비전</strong>
-                  시그니처 라인에서 검증된 모듈러 기술력과 당신의 특별한 비전의 만남.
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.3, duration: 0.6 }}
-                  className="border-l-2 border-gray-300 pl-6 hover:border-primary transition-colors"
-                >
-                  <strong className="block text-black text-lg mb-1">1:1 맞춤 전문가</strong>
-                  아이디어 구상부터 완공까지, 전문가가 당신과 함께하며 모든 디테일을 구현합니다.
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4, duration: 0.6 }}
-                  className="border-l-2 border-gray-300 pl-6 hover:border-primary transition-colors"
-                >
-                  <strong className="block text-black text-lg mb-1">무한한 디자인</strong>
-                  부지의 형태, 용도, 스타일에 구애받지 않는 완전한 설계의 자유.
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5, duration: 0.6 }}
-                  className="border-l-2 border-gray-300 pl-6 hover:border-primary transition-colors"
-                >
-                  <strong className="block text-black text-lg mb-1">최상급 디테일</strong>
-                  기본을 넘어, 당신의 기준에 맞는 최상급 자재와 마감 공법을 선택할 수 있습니다.
-                </motion.div>
-              </div>
-            </div>
+   return (
+     <div className="min-h-screen bg-white">
+       <section id="what-is-bespoke" className="bg-[#EBEBEB] py-20 md:py-28 lg:py-32 overflow-hidden scroll-mt-[180px]">
+         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
+           <motion.div
+             initial={{ opacity: 0, y: 30 }}
+             animate={{ opacity: 1, y: 0 }}
+             transition={{ duration: 0.8 }}
+           >
+             <h1 className="text-[50px] md:text-[70px] lg:text-[90px] font-bold mb-8 md:mb-12 leading-none tracking-tight">
+               {copy.headline}
+             </h1>
 
-            <div className="flex justify-end items-center gap-4 mt-16 group cursor-pointer">
-              <span className="text-[40px] md:text-[60px] font-bold group-hover:text-primary transition-colors">More</span>
-              <div className="w-[50px] h-[50px] md:w-[70px] md:h-[70px] bg-black rounded-full flex items-center justify-center group-hover:bg-primary transition-colors">
-                <svg className="w-8 h-8 md:w-10 md:h-10 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
+             <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
+               <div className="lg:w-[65%]">
+                 <p className="text-[18px] md:text-[20px] leading-relaxed mb-6 text-gray-800 break-keep">
+                   {copy.lead}
+                 </p>
+                 <p className="text-[20px] md:text-[24px] font-semibold text-black break-keep">
+                   {copy.highlight}
+                 </p>
+               </div>
 
-      {/* Section 2: Small Cafe (Image Right) */}
-      <section id="examples" className="bg-white py-20 md:py-32 overflow-hidden scroll-mt-[180px]">
-        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-            <motion.div
-              className="lg:w-1/2 order-2 lg:order-1"
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <span className="text-primary font-bold tracking-widest text-sm mb-4 block">COMMERCIAL</span>
-              <h2 className="text-[40px] md:text-[60px] font-bold mb-8 leading-tight">SMALL CAFE</h2>
-              <p className="text-[20px] md:text-[24px] font-medium mb-6 text-gray-900">
-                "카페는 커피 맛 이전에,<br />'공간의 경험'으로 먼저 기억됩니다."
-              </p>
-              <p className="text-gray-600 leading-relaxed mb-8 text-lg">
-                문을 여는 순간 느껴지는 독특한 분위기, 공간을 채우는 빛과 소재의 질감.
-                위트의 '작업자들'은 당신의 브랜드 스토리를 고객이 오감으로 경험하는 감각적인 공간 언어로 풀어냅니다.
-                운영 효율과 심미성이 완벽히 공존하는 1:1 맞춤형 상업 공간을 제안합니다.
-              </p>
-              <button className="border-b-2 border-black pb-1 text-lg font-medium hover:text-primary hover:border-primary transition-colors">
-                View Portfolio
-              </button>
-            </motion.div>
-            <motion.div
-              className="lg:w-1/2 order-1 lg:order-2 relative h-[400px] md:h-[600px] w-full cursor-pointer"
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              layoutId="small-cafe"
-              onClick={() => setSelectedId('small-cafe')}
-            >
-              <Image
-                src="/images/bespoke/small-cafe.jpg"
-                alt="Small Cafe"
-                fill
-                className="object-cover rounded-lg shadow-2xl hover:scale-105 transition-transform duration-500"
-              />
-            </motion.div>
-          </div>
-        </div>
-      </section>
+               <div className="lg:w-[35%] space-y-6 text-[15px] md:text-[16px] text-gray-600">
+                 {copy.features.map((feature, idx) => (
+                   <motion.div
+                     key={feature.title}
+                     initial={{ opacity: 0, x: 20 }}
+                     whileInView={{ opacity: 1, x: 0 }}
+                     transition={{ delay: 0.15 * idx, duration: 0.6 }}
+                     className="border-l-2 border-gray-300 pl-6 hover:border-primary transition-colors"
+                   >
+                     <strong className="block text-black text-lg mb-1">{feature.title}</strong>
+                     {feature.body}
+                   </motion.div>
+                 ))}
+               </div>
+             </div>
+           </motion.div>
+         </div>
+       </section>
 
-      {/* Section 3: Pop-up Store (Image Left) */}
-      <section className="bg-[#F5F5F5] py-20 md:py-32 overflow-hidden">
-        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-            <motion.div
-              className="lg:w-1/2 relative h-[400px] md:h-[600px] w-full cursor-pointer"
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              layoutId="popup-store"
-              onClick={() => setSelectedId('popup-store')}
-            >
-              <Image
-                src="/images/bespoke/popup-store.jpg"
-                alt="Pop-up Store"
-                fill
-                className="object-cover rounded-lg shadow-2xl hover:scale-105 transition-transform duration-500"
-              />
-            </motion.div>
-            <motion.div
-              className="lg:w-1/2"
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <span className="text-primary font-bold tracking-widest text-sm mb-4 block">RETAIL & EVENT</span>
-              <h2 className="text-[40px] md:text-[60px] font-bold mb-8 leading-tight">
-                POP-UP STORE<br />BRAND SHOWROOM
-              </h2>
-              <p className="text-[20px] md:text-[24px] font-medium mb-6 text-gray-900">
-                '브랜드 경험'을 원하는 곳,<br />어디로든 옮기다
-              </p>
-              <p className="text-gray-600 leading-relaxed mb-8 text-lg">
-                단 며칠 만에 고객을 사로잡는 강력한 브랜드 경험.
-                정해진 장소와 시간에 얽매이지 않고, 원하는 곳 어디든 당신의 브랜드를 펼쳐보세요.
-                빠른 설치와 철거, 완벽한 브랜딩 구현, 이동성을 충족하는 스마트한 비즈니스 솔루션입니다.
-              </p>
-              <button className="border-b-2 border-black pb-1 text-lg font-medium hover:text-primary hover:border-primary transition-colors">
-                View Portfolio
-              </button>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+       {copy.sections.map((section) => {
+         const imageBlock = (
+           <motion.div
+             key={`${section.id}-image`}
+             className="relative h-[400px] md:h-[600px] w-full cursor-pointer"
+             initial={{ opacity: 0, scale: 0.95 }}
+             whileInView={{ opacity: 1, scale: 1 }}
+             viewport={{ once: true }}
+             transition={{ duration: 0.8 }}
+             layoutId={section.id}
+             onClick={() => setSelectedId(section.id)}
+           >
+             <Image
+               src={section.image.src}
+               alt={section.image.alt}
+               fill
+               className="object-cover rounded-lg shadow-2xl hover:scale-105 transition-transform duration-500"
+             />
+           </motion.div>
+         );
 
-      {/* Section 4: Smart Farm (Image Right) */}
-      <section className="bg-white py-20 md:py-32 overflow-hidden">
-        <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-            <motion.div
-              className="lg:w-1/2 order-2 lg:order-1"
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-            >
-              <span className="text-primary font-bold tracking-widest text-sm mb-4 block">AGRITECH</span>
-              <h2 className="text-[40px] md:text-[60px] font-bold mb-8 leading-tight">SMART FARM</h2>
-              <p className="text-[20px] md:text-[24px] font-medium mb-6 text-gray-900">
-                '데이터'가 '수확'이 되는,<br />농업의 미래를 짓다
-              </p>
-              <p className="text-gray-600 leading-relaxed mb-8 text-lg">
-                스마트팜은 단순한 온실이 아닌, 데이터로 농사를 짓는 정밀한 연구소입니다.
-                완벽한 단열과 기밀성을 갖춘 모듈 구조를 기반으로, 최적화된 환경 제어 시스템과 데이터 인프라를 통합합니다.
-                기술이 농업의 한계를 넘어서는 혁신적인 공간을 경험하세요.
-              </p>
-              <button className="border-b-2 border-black pb-1 text-lg font-medium hover:text-primary hover:border-primary transition-colors">
-                View Portfolio
-              </button>
-            </motion.div>
-            <motion.div
-              className="lg:w-1/2 order-1 lg:order-2 relative h-[400px] md:h-[600px] w-full cursor-pointer"
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              layoutId="smart-farm"
-              onClick={() => setSelectedId('smart-farm')}
-            >
-              <Image
-                src="/images/bespoke/smart-farm.png"
-                alt="Smart Farm"
-                fill
-                className="object-cover rounded-lg shadow-2xl hover:scale-105 transition-transform duration-500"
-              />
-            </motion.div>
-          </div>
-        </div>
-      </section>
+         const textBlock = (
+           <motion.div
+             key={`${section.id}-text`}
+             className="lg:w-1/2"
+             initial={{ opacity: 0, x: section.imageOnRight ? -50 : 50 }}
+             whileInView={{ opacity: 1, x: 0 }}
+             viewport={{ once: true }}
+             transition={{ duration: 0.8 }}
+           >
+             <span className="text-primary font-bold tracking-widest text-sm mb-4 block">{section.badge}</span>
+             <h2 className="text-[40px] md:text-[60px] font-bold mb-6 leading-tight">{section.title}</h2>
+             <p className="text-[20px] md:text-[24px] font-medium mb-6 text-gray-900 break-keep">
+               {section.quote}
+             </p>
+             <p className="text-gray-600 leading-relaxed mb-8 text-lg break-keep">
+               {section.body}
+             </p>
+             <button className="border-b-2 border-black pb-1 text-lg font-medium hover:text-primary hover:border-primary transition-colors">
+               {section.cta}
+             </button>
+           </motion.div>
+         );
 
-      {/* Expanded Image Overlay */}
-      <AnimatePresence>
-        {selectedId && (
-          <motion.div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 md:p-10"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={() => setSelectedId(null)}
-          >
-            <motion.div
-              layoutId={selectedId}
-              className="relative w-full max-w-7xl h-auto aspect-video md:h-[85vh] md:w-auto"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {images.find(img => img.id === selectedId) && (
-                <Image
-                  src={images.find(img => img.id === selectedId)!.src}
-                  alt={images.find(img => img.id === selectedId)!.alt}
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              )}
-              <button
-                className="absolute -top-12 right-0 text-white hover:text-primary transition-colors"
-                onClick={() => setSelectedId(null)}
-              >
-                <X className="w-8 h-8" />
-              </button>
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
+         return (
+           <section
+             key={section.id}
+             id={section.id === 'popup-store' ? 'examples' : undefined}
+             className={`${section.imageOnRight ? 'bg-white' : 'bg-[#F5F5F5]'} py-20 md:py-32 overflow-hidden scroll-mt-[180px]`}
+           >
+             <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
+               <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+                 {section.imageOnRight ? (
+                   <>
+                     {textBlock}
+                     <div className="lg:w-1/2">
+                       {imageBlock}
+                     </div>
+                   </>
+                 ) : (
+                   <>
+                     <div className="lg:w-1/2">
+                       {imageBlock}
+                     </div>
+                     {textBlock}
+                   </>
+                 )}
+               </div>
+             </div>
+           </section>
+         );
+       })}
+
+       <AnimatePresence>
+         {selectedId && (
+           <motion.div
+             className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 md:p-10"
+             initial={{ opacity: 0 }}
+             animate={{ opacity: 1 }}
+             exit={{ opacity: 0 }}
+             onClick={() => setSelectedId(null)}
+           >
+             <motion.div
+               layoutId={selectedId}
+               className="relative w-full max-w-7xl h-auto aspect-video md:h-[85vh] md:w-auto"
+               onClick={(e) => e.stopPropagation()}
+             >
+               {IMAGES.find(img => img.id === selectedId) && (
+                 <Image
+                   src={IMAGES.find(img => img.id === selectedId)!.src}
+                   alt={IMAGES.find(img => img.id === selectedId)!.alt}
+                   fill
+                   className="object-contain"
+                   priority
+                 />
+               )}
+               <button
+                 className="absolute -top-12 right-0 text-white hover:text-primary transition-colors"
+                 onClick={() => setSelectedId(null)}
+               >
+                 <X className="w-8 h-8" />
+                 <span className="sr-only">{copy.overlayClose}</span>
+               </button>
+             </motion.div>
+           </motion.div>
+         )}
+       </AnimatePresence>
+     </div>
+   );
+ }

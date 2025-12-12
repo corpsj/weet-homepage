@@ -4,9 +4,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Product, ProductInsert } from '@/types/supabase';
 import { createProduct, updateProduct } from '@/app/actions/product-actions';
-import { Loader2 } from 'lucide-react';
+import { Loader2, X } from 'lucide-react';
 import { toast } from 'sonner';
 import ImageUpload from '@/components/admin/media/ImageUpload';
+import MultiImageUpload from '@/components/admin/media/MultiImageUpload';
 
 interface ProductFormProps {
     initialData?: Product;
@@ -32,6 +33,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
         floor_plan_url: initialData?.floor_plan_url || '',
         is_active: initialData?.is_active ?? true,
         is_signature: initialData?.is_signature ?? false,
+        sub_images: initialData?.sub_images || [],
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -69,6 +71,21 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
 
     const handleFloorPlanChange = (url: string) => {
         setFormData(prev => ({ ...prev, floor_plan_url: url }));
+    };
+
+    const handleSubImageAdd = (urls: string[]) => {
+        if (!urls || urls.length === 0) return;
+        setFormData(prev => ({
+            ...prev,
+            sub_images: [...(prev.sub_images || []), ...urls]
+        }));
+    };
+
+    const handleSubImageRemove = (indexToRemove: number) => {
+        setFormData(prev => ({
+            ...prev,
+            sub_images: (prev.sub_images || []).filter((_, index) => index !== indexToRemove)
+        }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -273,17 +290,35 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                                 onChange={handleFloorPlanChange}
                                 className="h-[200px]"
                             />
-                            <input
-                                type="text"
-                                name="floor_plan_url"
-                                value={formData.floor_plan_url || ''}
-                                onChange={handleChange}
-                                className="w-full px-3 py-2 border rounded-lg outline-none text-sm font-mono text-gray-600"
-                                placeholder="URL 직접 입력 또는 크롭 파라미터 추가"
-                            />
                         </div>
-                        <p className="text-xs text-gray-500 mt-1">
-                            * 크롭 파라미터 포함 가능 (예: ?crop_w=300%&crop_h=440%&crop_t=-111%&crop_l=0%)
+                    </div>
+
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">서브 이미지 (추가)</label>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                            {formData.sub_images?.map((url, index) => (
+                                <div key={index} className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden border">
+                                    <img src={url} alt={`Sub ${index}`} className="w-full h-full object-cover" />
+                                    <button
+                                        type="button"
+                                        onClick={() => handleSubImageRemove(index)}
+                                        className="absolute top-1 right-1 bg-black/50 text-white p-1 rounded-full hover:bg-red-500 transition-colors"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 18 18" /></svg>
+                                    </button>
+                                </div>
+                            ))}
+                            <div className="aspect-video">
+                                <div className="aspect-video">
+                                    <MultiImageUpload
+                                        onUpload={handleSubImageAdd}
+                                        className="h-full"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <p className="text-xs text-gray-500">
+                            * + 버튼을 눌러 이미지를 계속 추가할 수 있습니다.
                         </p>
                     </div>
                 </div>

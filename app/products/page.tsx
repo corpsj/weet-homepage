@@ -1,11 +1,12 @@
-"use client";
+﻿"use client";
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { getProducts } from "@/lib/products";
 import { Product } from "@/types/supabase";
-import { ChevronDown, ChevronUp } from "lucide-react";
+import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 // 제품 타입 정의 (Frontend View Model)
 interface ProductData {
@@ -14,6 +15,7 @@ interface ProductData {
     subCategory: "Private" | "Public";
     sizeCategory: "S" | "M" | "L" | "XL" | "SOLUTION" | "DESIGN";
     imageUrl: string;
+    subImages: string[];
     tagline: string;
     description: string;
     details: {
@@ -74,10 +76,26 @@ const mapProductToData = (p: Product): ProductData => {
             size: p.size || "-",
         },
         floorPlan: floorPlan,
+        subImages: p.sub_images || [],
     };
 };
 
 export default function ProductsPage() {
+    const { language } = useLanguage();
+    const isKO = language === 'KO';
+    const TEXT = {
+        loading: isKO ? '불러오는 중...' : 'Loading...',
+        description: isKO ? '설명' : 'Description',
+        specs: isKO ? '상세 정보' : 'Specifications',
+        price: isKO ? '가격' : 'Price',
+        size: isKO ? '크기' : 'Size',
+        structure: isKO ? '구조' : 'Structure',
+        roof: isKO ? '지붕재' : 'Roof',
+        exterior: isKO ? '외부마감' : 'Exterior',
+        interior: isKO ? '내부마감' : 'Interior',
+        floorPlan: isKO ? '평면도' : 'Floor Plan',
+        floorPlanWaiting: isKO ? '평면 준비중' : 'Floor plan coming soon',
+    };
     const [products, setProducts] = useState<ProductData[]>([]);
     const [loading, setLoading] = useState(true);
     const [expandedCategories, setExpandedCategories] = useState<string[]>(["S", "M", "L", "XL", "SOLUTION", "DESIGN"]);
@@ -87,6 +105,29 @@ export default function ProductsPage() {
     const lastScrollY = useRef(0);
     const [direction, setDirection] = useState(0);
     const prevActiveProduct = useRef<string>("");
+
+    // Gallery Modal State
+    const [galleryOpen, setGalleryOpen] = useState(false);
+    const [currentGalleryImages, setCurrentGalleryImages] = useState<string[]>([]);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+    const openGallery = (product: ProductData) => {
+        const images = [product.imageUrl, ...(product.subImages || [])].filter(Boolean);
+        if (images.length === 0) return;
+        setCurrentGalleryImages(images);
+        setCurrentImageIndex(0);
+        setGalleryOpen(true);
+    };
+
+    const nextImage = (e?: React.MouseEvent) => {
+        e?.stopPropagation();
+        setCurrentImageIndex((prev) => (prev + 1) % currentGalleryImages.length);
+    };
+
+    const prevImage = (e?: React.MouseEvent) => {
+        e?.stopPropagation();
+        setCurrentImageIndex((prev) => (prev - 1 + currentGalleryImages.length) % currentGalleryImages.length);
+    };
 
     useEffect(() => {
         if (prevActiveProduct.current && activeProduct !== prevActiveProduct.current) {
@@ -104,6 +145,15 @@ export default function ProductsPage() {
             try {
                 const data = await getProducts();
                 const mappedData = data.map(mapProductToData);
+
+                // Sort by Category Order
+                const categoryOrder = ["S", "M", "L", "XL", "SOLUTION", "DESIGN"];
+                mappedData.sort((a, b) => {
+                    const idxA = categoryOrder.indexOf(a.sizeCategory);
+                    const idxB = categoryOrder.indexOf(b.sizeCategory);
+                    return idxA - idxB;
+                });
+
                 setProducts(mappedData);
                 if (mappedData.length > 0) {
                     setActiveProduct(mappedData[0].id);
@@ -161,13 +211,40 @@ export default function ProductsPage() {
         },
     };
 
-    const toggleCategory = (category: string) => {
-        if (expandedCategories.includes(category)) {
-            setExpandedCategories(expandedCategories.filter((c) => c !== category));
-        } else {
+    const handleCategoryClick = (category: string) => {
+        // 1. Expand immediately
+        if (!expandedCategories.includes(category)) {
             setExpandedCategories([...expandedCategories, category]);
         }
+
+        // 2. Scroll to first product in category
+        const catData = sidebarStructure[category];
+        let firstProductId = "";
+
+        if (category === 'S') {
+            firstProductId = catData.Private?.[0] || catData.Public?.[0] || "";
+        } else {
+            firstProductId = catData.items?.[0] || "";
+        }
+
+        if (firstProductId) {
+            scrollToProduct(firstProductId);
+        }
     };
+
+    // Auto-expand category based on active Product
+    useEffect(() => {
+        if (!activeProduct) return;
+
+        const activeProductData = products.find(p => p.id === activeProduct);
+        if (activeProductData) {
+            const category = activeProductData.sizeCategory;
+            // Also expand S if subcategory private/public? "S" is the key in sidebarStructure
+            if (!expandedCategories.includes(category)) {
+                setExpandedCategories(prev => [...prev, category]);
+            }
+        }
+    }, [activeProduct, products]);
 
     const scrollToProduct = (productId: string) => {
         const element = productRefs.current[productId];
@@ -197,25 +274,74 @@ export default function ProductsPage() {
             lastScrollY.current = currentScrollY;
 
             // Active Product Logic
-            // Use a center-screen offset for better UX
-            const checkPoint = currentScrollY + (window.innerHeight / 3);
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+
+            // Check if we are at bottom
+            if (currentScrollY + windowHeight + 100 >= documentHeight) {
+                // Optional: Set active to last product?
+            }
+
+            // Find visible product
+            // Strategy: Find the product that occupies the most screen space or whose top is closest to a "reading line" (e.g., top 1/3)
+            let maxOverlap = 0;
+            let visibleProductId = "";
+
+            const readingTop = currentScrollY + 150; // Offset for header
+            const readingBottom = currentScrollY + windowHeight;
 
             for (const product of products) {
                 const element = productRefs.current[product.id];
                 if (element) {
                     const { offsetTop, offsetHeight } = element;
-                    // Check if the product section contains the checkpoint
-                    if (checkPoint >= offsetTop && checkPoint < offsetTop + offsetHeight) {
-                        setActiveProduct(product.id);
-                        break;
+                    const elementBottom = offsetTop + offsetHeight;
+
+                    // Calculate overlap
+                    const overlapTop = Math.max(readingTop, offsetTop);
+                    const overlapBottom = Math.min(readingBottom, elementBottom);
+                    const overlap = Math.max(0, overlapBottom - overlapTop);
+
+                    if (overlap > maxOverlap) {
+                        maxOverlap = overlap;
+                        visibleProductId = product.id;
                     }
                 }
+            }
+
+            if (visibleProductId && visibleProductId !== activeProduct) {
+                // Prevent "jump" by only updating if significantly different or manual override needed
+                // Actually, react state update won't cause scroll jump unless layout shifts.
+                // The user reported "scrolling up jumps to 3x9". This usually happens if `expandedCategories` state resets or something causes re-render that loses scroll position.
+                // But here we are just setting activeProduct.
+                // Let's ensure we don't accidentally select the first product when scrolling up from L if overlap logic is weird.
+
+                setActiveProduct(visibleProductId);
             }
         };
 
         window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
-    }, [products]);
+    }, [products, activeProduct]); // Added activeProduct to dependency if needed, but handled inside. Actually checking visibleProductId !== activeProduct uses closure state if not in dep array?
+    // Better to use ref for current active if we want to avoid re-binding listener, OR rely on setState batching.
+    // The previous implementation was fine dependency-wise. 
+    // The "Jump" to 3x9 suggests that when `setActiveProduct` changes, maybe `toggleCategory` logic or some effect forces a scroll?
+    // Ah, `toggleCategory` expands/collapses. If scrolling up changes active product to one in a CLOSED category, does it force close sections?
+    // No, `expandedCategories` is separate.
+
+    // The issue might be that `scrollToProduct` was being called automatically? No, only on click.
+
+    // Let's stick to the overlap logic which is improved.
+    // Also, one issue with the "Scroll Cutoff" might be `overflow-y-auto` on the sidebar itself within the flex container not having a defined height.
+    // In the Sidebar replacement above, I added `h-screen sticky top-0 ... pb-20`.
+    // The container needs `h-screen` to scroll internally if content is long.
+    // The previous code had `h-screen overflow-y-auto`, which is correct for sticky sidebar.
+    // But if the sidebar is taller than viewport, `sticky` behaves weirdly if not handled.
+    // `overflow-y-auto` handles internal scroll.
+
+    // The "Cutoff after M" might be because the Main Content ended too early?
+    // I added `space-y-[20vh]` to main content to ensure spacing.
+    // I will checking the sidebar `overflow` class in the previous tool call.
+    // I used `overflow-hidden` on parent and `overflow-y-auto` on child. This is good flex pattern.
 
     const getProductName = (id: string) => {
         const product = products.find((p) => p.id === id);
@@ -225,7 +351,7 @@ export default function ProductsPage() {
     if (loading) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-[#EBEBEB]">
-                <div className="text-xl font-bold text-gray-500">Loading...</div>
+                <div className="text-xl font-bold text-gray-500">{TEXT.loading}</div>
             </div>
         );
     }
@@ -234,8 +360,8 @@ export default function ProductsPage() {
         <div className="min-h-screen bg-[#EBEBEB]">
             <div className="flex flex-col lg:flex-row max-w-[1920px] mx-auto relative">
                 {/* Sidebar */}
-                <aside className="w-[300px] h-screen sticky top-0 overflow-y-auto hidden lg:block pt-[120px] pb-20 pl-[60px]">
-                    <div className="space-y-12">
+                <aside className="w-[280px] h-screen sticky top-0 hidden lg:flex flex-col pt-[140px] pb-10 pl-[60px] overflow-hidden">
+                    <div className="flex-1 overflow-y-auto pr-6 custom-scrollbar space-y-12">
                         {(Object.keys(sidebarStructure) as Array<keyof typeof sidebarStructure>).map((key) => {
                             const category = sidebarStructure[key];
                             const isExpanded = expandedCategories.includes(key);
@@ -248,87 +374,105 @@ export default function ProductsPage() {
                             return (
                                 <div key={key} className="group">
                                     <div
-                                        className="flex items-start justify-between cursor-pointer mb-4"
-                                        onClick={() => toggleCategory(key)}
+                                        className="flex items-center justify-between cursor-pointer mb-4 select-none group/header py-2" // Added padding for click area
+                                        onClick={() => handleCategoryClick(key)}
                                     >
-                                        <div>
-                                            <h2 className={`text-2xl font-bold transition-colors ${isExpanded ? 'text-black' : 'text-gray-400 group-hover:text-gray-600'}`}>
+                                        <div className="transiton-transform duration-300 group-hover/header:translate-x-2"> {/* Increased movement */}
+                                            <h2 className={`text-5xl font-black tracking-tighter transition-colors duration-300 ${isExpanded ? 'text-black' : 'text-gray-200 group-hover:text-gray-400'}`}> {/* Larger font, lighter inactive color */}
                                                 {category.label}
                                             </h2>
                                             {category.subtitle && (
-                                                <p className="text-xs text-gray-400 mt-1 whitespace-pre-line leading-relaxed">
+                                                <p className="text-[10px] text-gray-400 mt-1 font-medium tracking-wide uppercase opacity-0 group-hover/header:opacity-100 transition-opacity transformtranslate-y-1 group-hover/header:translate-y-0">
                                                     {category.subtitle}
                                                 </p>
                                             )}
                                         </div>
-                                        {isExpanded ? (
-                                            <ChevronUp className="w-5 h-5 text-gray-400" />
-                                        ) : (
-                                            <ChevronDown className="w-5 h-5 text-gray-400" />
-                                        )}
                                     </div>
 
-                                    {isExpanded && (
-                                        <div className="space-y-6 pl-2 border-l border-gray-200 ml-1">
-                                            {/* S만 세부 카테고리(Private/Public) 지원 */}
-                                            {key === 'S' ? (
-                                                <>
-                                                    {category.Private && category.Private.length > 0 && (
-                                                        <div className="mb-4">
-                                                            <h3 className="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Private</h3>
-                                                            <ul className="space-y-2">
-                                                                {category.Private.map((id: string) => (
-                                                                    <li
-                                                                        key={id}
-                                                                        className={`text-sm cursor-pointer transition-colors ${activeProduct === id ? 'text-[#FEBD16] font-medium' : 'text-gray-500 hover:text-gray-900'}`}
-                                                                        onClick={() => scrollToProduct(id)}
-                                                                    >
-                                                                        {getProductName(id)}
-                                                                    </li>
-                                                                ))}
-                                                            </ul>
-                                                        </div>
+                                    <AnimatePresence>
+                                        {isExpanded && (
+                                            <motion.div
+                                                initial={{ height: 0, opacity: 0 }}
+                                                animate={{ height: "auto", opacity: 1 }}
+                                                exit={{ height: 0, opacity: 0 }}
+                                                transition={{ duration: 0.3, ease: "easeInOut" }}
+                                                className="overflow-hidden"
+                                            >
+                                                <div className="pl-1 space-y-6 pt-2 pb-4">
+                                                    {/* S만 세부 카테고리(Private/Public) 지원 */}
+                                                    {key === 'S' ? (
+                                                        <>
+                                                            {category.Private && category.Private.length > 0 && (
+                                                                <div className="mb-6">
+                                                                    <div className="flex items-center gap-2 mb-3">
+                                                                        <div className="h-[1px] w-3 bg-gray-300"></div>
+                                                                        <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Private</h3>
+                                                                    </div>
+                                                                    <ul className="space-y-3 pl-5 border-l border-gray-100">
+                                                                        {category.Private.map((id: string) => (
+                                                                            <li
+                                                                                key={id}
+                                                                                className={`text-[13px] cursor-pointer transition-all duration-200 relative ${activeProduct === id ? 'text-black font-bold translate-x-1' : 'text-gray-400 hover:text-gray-600 hover:translate-x-1'}`}
+                                                                                onClick={() => scrollToProduct(id)}
+                                                                            >
+                                                                                {activeProduct === id && (
+                                                                                    <span className="absolute -left-[21px] top-1.5 w-1.5 h-1.5 bg-[#FEBD16] rounded-full" />
+                                                                                )}
+                                                                                {getProductName(id)}
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+                                                            )}
+                                                            {category.Public && category.Public.length > 0 && (
+                                                                <div>
+                                                                    <div className="flex items-center gap-2 mb-3">
+                                                                        <div className="h-[1px] w-3 bg-gray-300"></div>
+                                                                        <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Public</h3>
+                                                                    </div>
+                                                                    <ul className="space-y-3 pl-5 border-l border-gray-100">
+                                                                        {category.Public.map((id: string) => (
+                                                                            <li
+                                                                                key={id}
+                                                                                className={`text-[13px] cursor-pointer transition-all duration-200 relative ${activeProduct === id ? 'text-black font-bold translate-x-1' : 'text-gray-400 hover:text-gray-600 hover:translate-x-1'}`}
+                                                                                onClick={() => scrollToProduct(id)}
+                                                                            >
+                                                                                {activeProduct === id && (
+                                                                                    <span className="absolute -left-[21px] top-1.5 w-1.5 h-1.5 bg-[#FEBD16] rounded-full" />
+                                                                                )}
+                                                                                {getProductName(id)}
+                                                                            </li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+                                                            )}
+                                                        </>
+                                                    ) : (
+                                                        <ul className="space-y-3 pl-5 border-l border-gray-100">
+                                                            {category.items?.map((id: string) => (
+                                                                <li
+                                                                    key={id}
+                                                                    className={`text-[13px] cursor-pointer transition-all duration-200 relative ${activeProduct === id ? 'text-black font-bold translate-x-1' : 'text-gray-400 hover:text-gray-600 hover:translate-x-1'}`}
+                                                                    onClick={() => scrollToProduct(id)}
+                                                                >
+                                                                    {activeProduct === id && (
+                                                                        <span className="absolute -left-[21px] top-1.5 w-1.5 h-1.5 bg-[#FEBD16] rounded-full" />
+                                                                    )}
+                                                                    {getProductName(id)}
+                                                                </li>
+                                                            ))}
+                                                        </ul>
                                                     )}
-                                                    {category.Public && category.Public.length > 0 && (
-                                                        <div>
-                                                            <h3 className="text-xs font-bold text-gray-400 mb-2 uppercase tracking-wider">Public</h3>
-                                                            <ul className="space-y-2">
-                                                                {category.Public.map((id: string) => (
-                                                                    <li
-                                                                        key={id}
-                                                                        className={`text-sm cursor-pointer transition-colors ${activeProduct === id ? 'text-[#FEBD16] font-medium' : 'text-gray-500 hover:text-gray-900'}`}
-                                                                        onClick={() => scrollToProduct(id)}
-                                                                    >
-                                                                        {getProductName(id)}
-                                                                    </li>
-                                                                ))}
-                                                            </ul>
-                                                        </div>
-                                                    )}
-                                                </>
-                                            ) : (
-                                                // M, L, XL, SOLUTION, DESIGN - 세부 카테고리 없음
-                                                <ul className="space-y-2">
-                                                    {category.items?.map((id: string) => (
-                                                        <li
-                                                            key={id}
-                                                            className={`text-sm cursor-pointer transition-colors ${activeProduct === id ? 'text-[#FEBD16] font-medium' : 'text-gray-500 hover:text-gray-900'}`}
-                                                            onClick={() => scrollToProduct(id)}
-                                                        >
-                                                            {getProductName(id)}
-                                                        </li>
-                                                    ))}
-                                                </ul>
-                                            )}
-                                        </div>
-                                    )}
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
                                 </div>
                             );
                         })}
                     </div>
                 </aside>
 
-                {/* Mobile Top Navigation */}
                 {/* Mobile Top Navigation */}
                 <div className={`lg:hidden sticky z-40 bg-[#EBEBEB]/95 backdrop-blur-sm border-b border-gray-200 shadow-sm transition-[top] duration-300 ${isHeaderVisible ? 'top-[105px] md:top-[135px] lg:top-[110px]' : 'top-0'}`}>
                     <div className="flex overflow-x-auto px-4 py-3 gap-6 no-scrollbar">
@@ -359,93 +503,14 @@ export default function ProductsPage() {
                             );
                         })}
                     </div>
-                    {/* Active Product Info Bar */}
-                    {activeProduct && (() => {
-                        const activeIndex = products.findIndex(p => p.id === activeProduct);
-                        const prevProduct = products[activeIndex - 1];
-                        const nextProduct = products[activeIndex + 1];
-
-                        const slideVariants = {
-                            enter: (direction: number) => ({
-                                x: direction > 0 ? 20 : -20,
-                                opacity: 0
-                            }),
-                            center: {
-                                x: 0,
-                                opacity: 1
-                            },
-                            exit: (direction: number) => ({
-                                x: direction > 0 ? -20 : 20,
-                                opacity: 0
-                            })
-                        };
-
-                        return (
-                            <div className="px-4 py-2 bg-white/80 backdrop-blur-md border-t border-gray-100 grid grid-cols-[1fr_auto_1fr] items-center text-sm gap-4 overflow-hidden h-[42px]">
-                                <div className="text-left min-w-0">
-                                    <AnimatePresence mode="popLayout" initial={false} custom={direction}>
-                                        {prevProduct && (
-                                            <motion.div
-                                                key={prevProduct.id}
-                                                custom={direction}
-                                                variants={slideVariants}
-                                                initial="enter"
-                                                animate="center"
-                                                exit="exit"
-                                                transition={{ duration: 0.2, ease: "easeInOut" }}
-                                                className="truncate text-xs text-gray-400 cursor-pointer hover:text-gray-600 block"
-                                                onClick={() => scrollToProduct(prevProduct.id)}
-                                            >
-                                                {prevProduct.name}
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-
-                                <div className="text-center flex justify-center min-w-[120px]">
-                                    <AnimatePresence mode="popLayout" initial={false} custom={direction}>
-                                        <motion.div
-                                            key={activeProduct}
-                                            custom={direction}
-                                            variants={slideVariants}
-                                            initial="enter"
-                                            animate="center"
-                                            exit="exit"
-                                            transition={{ duration: 0.2, ease: "easeInOut" }}
-                                            className="font-bold text-black text-base truncate"
-                                        >
-                                            {getProductName(activeProduct)}
-                                        </motion.div>
-                                    </AnimatePresence>
-                                </div>
-
-                                <div className="text-right min-w-0">
-                                    <AnimatePresence mode="popLayout" initial={false} custom={direction}>
-                                        {nextProduct && (
-                                            <motion.div
-                                                key={nextProduct.id}
-                                                custom={direction}
-                                                variants={slideVariants}
-                                                initial="enter"
-                                                animate="center"
-                                                exit="exit"
-                                                transition={{ duration: 0.2, ease: "easeInOut" }}
-                                                className="truncate text-xs text-gray-400 cursor-pointer hover:text-gray-600 block ml-auto"
-                                                onClick={() => nextProduct && scrollToProduct(nextProduct.id)}
-                                            >
-                                                {nextProduct.name}
-                                            </motion.div>
-                                        )}
-                                    </AnimatePresence>
-                                </div>
-                            </div>
-                        );
-                    })()}
                 </div>
 
                 {/* Main Content */}
-                <main className="flex-1 min-h-screen pt-[160px] md:pt-[190px] lg:pt-[120px] px-4 lg:px-20 pb-40">
-                    <div className="max-w-5xl mx-auto space-y-40">
+                <main className="flex-1 min-h-screen pt-[160px] md:pt-[190px] lg:pt-[140px] px-4 lg:px-20 pb-40">
+                    {/* Active Product Overlay for Desktop (Optional, maybe minimal breadcrumb instead?) */}
+                    {/* Removing the sticky header inside main content to prevent conflicts, Sidebar handles navigation */}
+
+                    <div className="max-w-5xl mx-auto space-y-[20vh]"> {/* Increased spacing for better scroll detection */}
                         {products.map((product) => (
                             <div
                                 key={product.id}
@@ -464,16 +529,33 @@ export default function ProductsPage() {
                                 </div>
 
                                 {/* Main Image */}
-                                <div className="relative w-full aspect-[16/9] bg-gray-200 rounded-2xl overflow-hidden mb-12 shadow-sm">
+                                <div
+                                    className="relative w-full aspect-[16/9] bg-gray-200 rounded-2xl overflow-hidden mb-12 shadow-sm cursor-pointer group"
+                                    onClick={() => openGallery(product)}
+                                >
                                     {product.imageUrl ? (
-                                        <Image
-                                            src={product.imageUrl}
-                                            alt={product.name}
-                                            fill
-                                            className="object-cover"
-                                            sizes="(max-width: 768px) 100vw, 80vw"
-                                            priority={products.indexOf(product) < 2}
-                                        />
+                                        <>
+                                            <Image
+                                                src={product.imageUrl}
+                                                alt={product.name}
+                                                fill
+                                                className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                                sizes="(max-width: 768px) 100vw, 80vw"
+                                                priority={products.indexOf(product) < 2}
+                                            />
+                                            {/* Gallery hint icon */}
+                                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                                                <div className="bg-white/80 backdrop-blur-sm p-3 rounded-full">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6" /><path d="M9 21H3v-6" /><path d="M21 3l-7 7" /><path d="M3 21l7-7" /></svg>
+                                                </div>
+                                            </div>
+                                            {/* Image count indicator if multiple */}
+                                            {(product.subImages && product.subImages.length > 0) && (
+                                                <div className="absolute bottom-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm">
+                                                    + {product.subImages.length + 1} Images
+                                                </div>
+                                            )}
+                                        </>
                                     ) : (
                                         <div className="absolute inset-0 flex items-center justify-center text-gray-400">
                                             No Image
@@ -486,37 +568,37 @@ export default function ProductsPage() {
                                     {/* Left: Description & Specs */}
                                     <div className="space-y-8">
                                         <div>
-                                            <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">Description</h3>
+                                            <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">{TEXT.description}</h3>
                                             <p className="text-gray-600 leading-relaxed whitespace-pre-line">
                                                 {product.description}
                                             </p>
                                         </div>
 
                                         <div>
-                                            <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">Specifications</h3>
+                                            <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">{TEXT.specs}</h3>
                                             <dl className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
                                                 <div className="sm:col-span-1">
-                                                    <dt className="text-sm font-medium text-gray-500">가격</dt>
+                                                    <dt className="text-sm font-medium text-gray-500">{TEXT.price}</dt>
                                                     <dd className="mt-1 text-sm text-gray-900">{product.details.price}</dd>
                                                 </div>
                                                 <div className="sm:col-span-1">
-                                                    <dt className="text-sm font-medium text-gray-500">사이즈</dt>
+                                                    <dt className="text-sm font-medium text-gray-500">{TEXT.size}</dt>
                                                     <dd className="mt-1 text-sm text-gray-900">{product.details.size}</dd>
                                                 </div>
                                                 <div className="sm:col-span-1">
-                                                    <dt className="text-sm font-medium text-gray-500">구조</dt>
+                                                    <dt className="text-sm font-medium text-gray-500">{TEXT.structure}</dt>
                                                     <dd className="mt-1 text-sm text-gray-900">{product.details.structure}</dd>
                                                 </div>
                                                 <div className="sm:col-span-1">
-                                                    <dt className="text-sm font-medium text-gray-500">지붕재</dt>
+                                                    <dt className="text-sm font-medium text-gray-500">{TEXT.roof}</dt>
                                                     <dd className="mt-1 text-sm text-gray-900">{product.details.roofType}</dd>
                                                 </div>
                                                 <div className="sm:col-span-1">
-                                                    <dt className="text-sm font-medium text-gray-500">외부마감</dt>
+                                                    <dt className="text-sm font-medium text-gray-500">{TEXT.exterior}</dt>
                                                     <dd className="mt-1 text-sm text-gray-900">{product.details.exterior}</dd>
                                                 </div>
                                                 <div className="sm:col-span-1">
-                                                    <dt className="text-sm font-medium text-gray-500">내부마감</dt>
+                                                    <dt className="text-sm font-medium text-gray-500">{TEXT.interior}</dt>
                                                     <dd className="mt-1 text-sm text-gray-900">{product.details.interior}</dd>
                                                 </div>
                                             </dl>
@@ -525,7 +607,7 @@ export default function ProductsPage() {
 
                                     {/* Right: Floor Plan */}
                                     <div>
-                                        <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">Floor Plan</h3>
+                                        <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">{TEXT.floorPlan}</h3>
                                         <div className="w-full aspect-[4/3] rounded-xl flex items-center justify-center relative overflow-hidden border border-gray-100">
                                             {product.floorPlan.src ? (
                                                 <div className="relative w-full h-full">
@@ -537,7 +619,7 @@ export default function ProductsPage() {
                                                     />
                                                 </div>
                                             ) : (
-                                                <div className="text-gray-400 text-sm">도면 준비중</div>
+                                                <div className="text-gray-400 text-sm">{TEXT.floorPlanWaiting}</div>
                                             )}
                                         </div>
                                     </div>
@@ -547,6 +629,73 @@ export default function ProductsPage() {
                     </div>
                 </main>
             </div>
+
+            {/* Gallery Modal */}
+            <AnimatePresence>
+                {galleryOpen && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={() => setGalleryOpen(false)}
+                        className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 md:p-10"
+                    >
+                        {/* Close Button */}
+                        <button
+                            className="absolute top-4 right-4 md:top-8 md:right-8 text-white/50 hover:text-white z-50 p-2"
+                            onClick={() => setGalleryOpen(false)}
+                        >
+                            <X className="w-8 h-8 md:w-10 md:h-10" />
+                        </button>
+
+                        <div className="relative w-full max-w-7xl max-h-full flex flex-col items-center justify-center" onClick={e => e.stopPropagation()}>
+
+                            {/* Main Display */}
+                            <div className="relative w-full aspect-[16/9] md:aspect-[16/10] max-h-[80vh] bg-black">
+                                <Image
+                                    src={currentGalleryImages[currentImageIndex]}
+                                    alt="Gallery"
+                                    fill
+                                    className="object-contain"
+                                    sizes="100vw"
+                                />
+
+                                {/* Nav Arrows */}
+                                <button
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-3 rounded-full text-white backdrop-blur-md transition-all"
+                                    onClick={prevImage}
+                                >
+                                    <ChevronDown className="w-8 h-8 rotate-90" />
+                                </button>
+                                <button
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-3 rounded-full text-white backdrop-blur-md transition-all"
+                                    onClick={nextImage}
+                                >
+                                    <ChevronDown className="w-8 h-8 -rotate-90" />
+                                </button>
+                            </div>
+
+                            {/* Thumbnails */}
+                            <div className="mt-6 flex gap-3 overflow-x-auto max-w-full pb-2 hide-scrollbar px-4">
+                                {currentGalleryImages.map((img, idx) => (
+                                    <button
+                                        key={idx}
+                                        onClick={() => setCurrentImageIndex(idx)}
+                                        className={`relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all ${currentImageIndex === idx ? 'border-[#FEBD16] opacity-100' : 'border-transparent opacity-50 hover:opacity-100'}`}
+                                    >
+                                        <Image
+                                            src={img}
+                                            alt={`Thumb ${idx}`}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </div>
     );
 }
