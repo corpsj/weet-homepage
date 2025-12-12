@@ -38,7 +38,7 @@ const navigation: { title: string; items: NavItem[] }[] = [
         title: "Content Management",
         items: [
             {
-                name: '메인 페이지',
+                name: '랜딩 페이지',
                 href: '/admin/main',
                 icon: Monitor
             },

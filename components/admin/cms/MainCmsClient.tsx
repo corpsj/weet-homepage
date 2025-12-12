@@ -42,7 +42,7 @@ export default function MainCmsClient({ initialHeroSlides, initialProducts }: Ma
         <div className="space-y-6">
             <div className="flex justify-between items-center">
                 <div>
-                    <h2 className="text-2xl font-bold text-gray-900">메인 페이지 관리</h2>
+                    <h2 className="text-2xl font-bold text-gray-900">랜딩 페이지 관리</h2>
                     <p className="text-gray-500 text-sm mt-1">홈페이지의 주요 섹션을 관리합니다.</p>
                 </div>
             </div>

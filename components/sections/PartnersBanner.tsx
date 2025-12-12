@@ -13,13 +13,13 @@ export default function PartnersBanner() {
   return (
     <div className="bg-primary h-[60px] md:h-[70px] lg:h-[80px] flex items-center justify-center">
       <div className="max-w-[1200px] mx-auto px-4 md:px-8 lg:px-[60px] w-full">
-        <div className="flex flex-nowrap items-center justify-between gap-6 md:gap-8 lg:gap-12 overflow-x-auto scrollbar-hide">
+        <div className="flex flex-nowrap items-center justify-between gap-12 md:gap-16 lg:gap-24 overflow-x-auto scrollbar-hide">
           {partnerLogos.map((partner, idx) => (
             <div
               key={idx}
               className={`relative ${idx === 2
-                  ? 'h-12 md:h-14 lg:h-16 w-32 md:w-40 lg:w-48' // Original size for 3rd item
-                  : 'h-8 md:h-10 lg:h-12 w-24 md:w-28 lg:w-36'  // Smaller size for others
+                ? 'h-12 md:h-14 lg:h-16 w-32 md:w-40 lg:w-48' // Original size for 3rd item
+                : 'h-8 md:h-10 lg:h-12 w-24 md:w-28 lg:w-36'  // Smaller size for others
                 }`}
             >
               <Image

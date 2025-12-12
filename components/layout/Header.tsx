@@ -222,7 +222,7 @@ export default function Header() {
           {/* Main Header */}
           <div className="relative flex items-center h-[105px] md:h-[135px] lg:h-[110px] px-4 md:px-8 lg:px-[64px]">
             {/* Logo */}
-            <Link href="/" className="absolute left-4 md:left-8 lg:left-[64px] top-1/2 -translate-y-1/2 lg:static lg:transform-none">
+            <Link href="/" className="absolute left-4 md:left-8 lg:left-[64px] top-1/2 -translate-y-1/2 xl:static xl:transform-none">
               <div className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] lg:w-[90px] lg:h-[90px] relative select-none">
                 <Image
                   src="/images/logo_new.png"
@@ -239,7 +239,7 @@ export default function Header() {
             {/* Mobile Menu Button - Right Side */}
             <button
               onClick={handleMobileMenuToggle}
-              className="lg:hidden absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-[60] p-2 hover:bg-gray-100 rounded-md transition-colors active:bg-gray-200"
+              className="xl:hidden absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-[60] p-2 hover:bg-gray-100 rounded-md transition-colors active:bg-gray-200"
               aria-label="Toggle mobile menu"
               type="button"
             >
@@ -248,7 +248,7 @@ export default function Header() {
 
             {/* Desktop Navigation */}
             <nav
-              className="hidden lg:flex absolute left-0 right-0 top-0 bottom-0 items-center justify-center pointer-events-none pr-[120px]"
+              className="hidden xl:flex absolute left-0 right-0 top-0 bottom-0 items-center justify-center pointer-events-none pr-[120px]"
               onMouseEnter={handleMegaMenuEnter}
             >
               <div className="flex pointer-events-auto gap-[60px] pb-[70px] -mb-[70px]">
@@ -273,7 +273,7 @@ export default function Header() {
             </nav>
 
             {/* Social Icons - Desktop only */}
-            <div className="hidden lg:flex absolute right-[64px] top-1/2 -translate-y-1/2 items-center space-x-4">
+            <div className="hidden xl:flex absolute right-[64px] top-1/2 -translate-y-1/2 items-center space-x-4">
               <Link
                 href="https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/"
                 target="_blank"
@@ -309,7 +309,7 @@ export default function Header() {
             </div>
 
             {/* Desktop Language Switcher - Bottom aligned */}
-            <div className="hidden lg:flex absolute right-[64px] bottom-3 flex items-center gap-2 text-[11px] font-medium">
+            <div className="hidden xl:flex absolute right-[64px] bottom-3 flex items-center gap-2 text-[11px] font-medium">
               <button
                 onClick={() => setLanguage('KO')}
                 className={cn("transition-colors", language === 'KO' ? "text-gray-600 font-bold" : "text-gray-300 hover:text-gray-500")}
@@ -335,7 +335,7 @@ export default function Header() {
           {/* Mega Menu Dropdown */}
           {showMegaMenu && (
             <div
-              className="hidden lg:block absolute left-0 right-0 z-40 pointer-events-none"
+              className="hidden xl:block absolute left-0 right-0 z-40 pointer-events-none"
               style={{ top: '80px' }}
             >
               <div className="flex justify-center w-full pr-[120px]">

@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/utils/supabase/server';
+import { createServiceRoleClient } from '@/utils/supabase/service';
 import { revalidatePath } from 'next/cache';
 import { Database } from '@/types/supabase';
 
@@ -26,7 +27,8 @@ export async function getHeroSlides() {
 }
 
 export async function createHeroSlide(formData: FormData) {
-    const supabase = await createClient();
+    // Use Service Role Client to bypass RLS
+    const supabase = createServiceRoleClient();
     const title = formData.get('title') as string;
     const subtitle = formData.get('subtitle') as string;
     const image_url = formData.get('image_url') as string;
@@ -55,7 +57,7 @@ export async function createHeroSlide(formData: FormData) {
 
     if (error) {
         console.error('Error creating hero slide:', error);
-        throw new Error('슬라이드 생성 실패');
+        throw new Error('슬라이드 생성 실패: ' + error.message);
     }
 
     revalidatePath('/admin/cms/main');
@@ -63,7 +65,8 @@ export async function createHeroSlide(formData: FormData) {
 }
 
 export async function updateHeroSlide(id: number, formData: FormData) {
-    const supabase = await createClient();
+    // Use Service Role Client to bypass RLS
+    const supabase = createServiceRoleClient();
     const title = formData.get('title') as string;
     const subtitle = formData.get('subtitle') as string;
     const image_url = formData.get('image_url') as string;
@@ -80,7 +83,7 @@ export async function updateHeroSlide(id: number, formData: FormData) {
 
     if (error) {
         console.error('Error updating hero slide:', error);
-        throw new Error('슬라이드 수정 실패');
+        throw new Error('슬라이드 수정 실패: ' + error.message);
     }
 
     revalidatePath('/admin/cms/main');
@@ -88,7 +91,8 @@ export async function updateHeroSlide(id: number, formData: FormData) {
 }
 
 export async function deleteHeroSlide(id: number) {
-    const supabase = await createClient();
+    // Use Service Role Client to bypass RLS
+    const supabase = createServiceRoleClient();
     // eslint-disable-next-line
     const { error } = await (supabase as any)
         .from('hero_slides')
@@ -97,7 +101,7 @@ export async function deleteHeroSlide(id: number) {
 
     if (error) {
         console.error('Error deleting hero slide:', error);
-        throw new Error('슬라이드 삭제 실패');
+        throw new Error('슬라이드 삭제 실패: ' + error.message);
     }
 
     revalidatePath('/admin/cms/main');

@@ -44,7 +44,7 @@ export default function VideoSection() {
               {/* TODO: Replace with actual video embed (YouTube, Vimeo, etc.) */}
               <iframe
                 className="w-full h-full"
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+                src=""
                 title="weet video"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen

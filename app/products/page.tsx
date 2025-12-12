@@ -539,7 +539,7 @@ export default function ProductsPage() {
                 </div>
 
                 {/* Main Content */}
-                <main className="flex-1 min-h-screen pt-[160px] md:pt-[190px] lg:pt-[140px] px-4 lg:px-20 pb-40">
+                <main className="flex-1 min-h-screen pt-[100px] md:pt-[190px] lg:pt-[140px] px-4 lg:px-20 pb-40">
                     {/* Active Product Overlay for Desktop (Optional, maybe minimal breadcrumb instead?) */}
                     {/* Removing the sticky header inside main content to prevent conflicts, Sidebar handles navigation */}
 

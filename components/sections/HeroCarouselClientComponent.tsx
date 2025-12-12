@@ -36,7 +36,7 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
     if (initialSlides.length === 0) return null;
 
     return (
-        <section ref={containerRef} className="relative bg-[#EBEBEB] overflow-hidden w-full aspect-[2/3] md:aspect-[16/9]">
+        <section ref={containerRef} className="relative bg-[#EBEBEB] overflow-hidden w-full aspect-[2/3] md:aspect-[16/9] lg:aspect-auto lg:h-[calc(100vh-110px)]">
             {/* Blurred Background Layer */}
             <AnimatePresence mode="wait">
                 <motion.div
@@ -79,19 +79,38 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                                 className="object-cover"
                                 sizes="(max-width: 1400px) 100vw, 1400px"
                             />
-                            {/* Gradient Overlay for Text Readability */}
-                            <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/30" />
+                            {/* Gradient Overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/60" />
+
+                            {/* Text Content */}
+                            <div className="absolute inset-0 flex flex-col justify-center items-start text-left text-white px-8 md:px-16 lg:px-24">
+                                {initialSlides[currentSlide].title && (
+                                    <motion.h1
+                                        initial={{ y: 20, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        transition={{ delay: 0.3, duration: 0.8 }}
+                                        className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 drop-shadow-lg"
+                                    >
+                                        {initialSlides[currentSlide].title}
+                                    </motion.h1>
+                                )}
+                                {initialSlides[currentSlide].subtitle && (
+                                    <motion.p
+                                        initial={{ y: 20, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        transition={{ delay: 0.5, duration: 0.8 }}
+                                        className="text-xl md:text-2xl lg:text-3xl font-light tracking-wide drop-shadow-md"
+                                    >
+                                        {initialSlides[currentSlide].subtitle}
+                                    </motion.p>
+                                )}
+                            </div>
                         </motion.div>
                     </AnimatePresence>
                 </div>
             </div>
 
-            {/* Navigation Arrows - Moved outside constrained container to be at screen edges if desired, or just ensure visibility */}
-            {/* Actually, keeping them inside the max-w container is better for the "contained" look, but let's ensure they are visible. 
-               I will add a background to them and ensure z-index is correct. 
-               Also removing the pointer-events-none wrapper approach if it was causing issues, 
-               but actually I'll just make them absolute to the section again to be safe and simple. */}
-
+            {/* Navigation Arrows */}
             <button
                 onClick={prevSlide}
                 className="absolute left-4 md:left-8 lg:left-[60px] top-1/2 -translate-y-1/2 w-[50px] h-[50px] md:w-[60px] md:h-[60px] lg:w-[80px] lg:h-[80px] flex items-center justify-center bg-black/20 hover:bg-black/40 backdrop-blur-md transition-all z-30 rounded-full group"
@@ -112,8 +131,8 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                 </svg>
             </button>
 
-            {/* Slide Indicators */}
-            <div className="absolute bottom-12 md:bottom-16 lg:bottom-[60px] left-1/2 -translate-x-1/2 flex space-x-3 z-30">
+            {/* Slide Indicators - Moved up to avoid overlap with scroll indicator */}
+            <div className="absolute bottom-20 md:bottom-24 lg:bottom-28 left-1/2 -translate-x-1/2 flex space-x-3 z-30">
                 {initialSlides.map((_, idx) => (
                     <button
                         key={idx}
