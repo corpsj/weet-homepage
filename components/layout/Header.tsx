@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, Instagram, Youtube } from 'lucide-react';
+import { Menu, X, Instagram, Youtube, Carrot } from 'lucide-react';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -275,7 +275,15 @@ export default function Header() {
             {/* Social Icons - Desktop only */}
             <div className="hidden lg:flex absolute right-[64px] top-1/2 -translate-y-1/2 items-center space-x-4">
               <Link
-                href="https://blog.naver.com"
+                href="https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/"
+                target="_blank"
+                className="text-sm font-bold hover:text-gray-700 transition-colors flex items-center gap-1"
+              >
+                <Carrot className="w-[18px] h-[18px]" />
+                <span className="text-[14px]">당근</span>
+              </Link>
+              <Link
+                href="https://blog.naver.com/we-et"
                 target="_blank"
                 className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
               >
@@ -283,7 +291,7 @@ export default function Header() {
                 <span className="text-[14px]">blog</span>
               </Link>
               <Link
-                href="https://instagram.com"
+                href="https://www.instagram.com/weet_kr/"
                 target="_blank"
                 className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
               >
@@ -449,7 +457,16 @@ export default function Header() {
             </div>            {/* Social Links */}
             <div className="flex items-center gap-4 pt-4 border-t border-gray-200">
               <Link
-                href="https://blog.naver.com"
+                href="https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/"
+                target="_blank"
+                className="flex items-center gap-2 text-gray-700 hover:text-black transition-colors"
+                onClick={handleMobileMenuClose}
+              >
+                <Carrot className="w-5 h-5" />
+                <span className="text-sm font-bold">당근</span>
+              </Link>
+              <Link
+                href="https://blog.naver.com/we-et"
                 target="_blank"
                 className="flex items-center gap-2 text-gray-700 hover:text-black transition-colors"
                 onClick={handleMobileMenuClose}
@@ -458,7 +475,7 @@ export default function Header() {
                 <span className="text-sm">blog</span>
               </Link>
               <Link
-                href="https://instagram.com"
+                href="https://www.instagram.com/weet_kr/"
                 target="_blank"
                 className="flex items-center gap-2 text-gray-700 hover:text-black transition-colors"
                 onClick={handleMobileMenuClose}

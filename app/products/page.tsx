@@ -101,7 +101,37 @@ export default function ProductsPage() {
     const [expandedCategories, setExpandedCategories] = useState<string[]>(["S", "M", "L", "XL", "SOLUTION", "DESIGN"]);
     const [activeProduct, setActiveProduct] = useState<string>("");
     const productRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+    const sidebarRef = useRef<HTMLDivElement>(null);
+    const sidebarItemRefs = useRef<{ [key: string]: HTMLLIElement | null }>({});
     const [isHeaderVisible, setIsHeaderVisible] = useState(true);
+
+    // Sidebar Auto-Scroll Logic
+    useEffect(() => {
+        if (activeProduct && sidebarItemRefs.current[activeProduct] && sidebarRef.current) {
+            const item = sidebarItemRefs.current[activeProduct];
+            const container = sidebarRef.current;
+
+            if (item && container) {
+                // Calculate relative position to center the item
+                const itemRect = item.getBoundingClientRect();
+                const containerRect = container.getBoundingClientRect();
+                const currentScroll = container.scrollTop;
+
+                // Position within the viewport relative to container
+                const relativeTop = itemRect.top - containerRect.top;
+
+                // Desired position: Center of container
+                const targetRelativeTop = (containerRect.height / 2) - (itemRect.height / 2);
+
+                const scrollAmount = relativeTop - targetRelativeTop;
+
+                container.scrollTo({
+                    top: currentScroll + scrollAmount,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    }, [activeProduct]);
     const lastScrollY = useRef(0);
     const [direction, setDirection] = useState(0);
     const prevActiveProduct = useRef<string>("");
@@ -361,7 +391,7 @@ export default function ProductsPage() {
             <div className="flex flex-col lg:flex-row max-w-[1920px] mx-auto relative">
                 {/* Sidebar */}
                 <aside className="w-[280px] h-screen sticky top-0 hidden lg:flex flex-col pt-[140px] pb-10 pl-[60px] overflow-hidden">
-                    <div className="flex-1 overflow-y-auto pr-6 custom-scrollbar space-y-12">
+                    <div ref={sidebarRef} className="flex-1 overflow-y-auto pr-6 custom-scrollbar space-y-12">
                         {(Object.keys(sidebarStructure) as Array<keyof typeof sidebarStructure>).map((key) => {
                             const category = sidebarStructure[key];
                             const isExpanded = expandedCategories.includes(key);
@@ -412,6 +442,7 @@ export default function ProductsPage() {
                                                                         {category.Private.map((id: string) => (
                                                                             <li
                                                                                 key={id}
+                                                                                ref={el => { sidebarItemRefs.current[id] = el; }} // Attach Ref
                                                                                 className={`text-[13px] cursor-pointer transition-all duration-200 relative ${activeProduct === id ? 'text-black font-bold translate-x-1' : 'text-gray-400 hover:text-gray-600 hover:translate-x-1'}`}
                                                                                 onClick={() => scrollToProduct(id)}
                                                                             >
@@ -434,6 +465,7 @@ export default function ProductsPage() {
                                                                         {category.Public.map((id: string) => (
                                                                             <li
                                                                                 key={id}
+                                                                                ref={el => { sidebarItemRefs.current[id] = el; }} // Attach Ref
                                                                                 className={`text-[13px] cursor-pointer transition-all duration-200 relative ${activeProduct === id ? 'text-black font-bold translate-x-1' : 'text-gray-400 hover:text-gray-600 hover:translate-x-1'}`}
                                                                                 onClick={() => scrollToProduct(id)}
                                                                             >
@@ -452,6 +484,7 @@ export default function ProductsPage() {
                                                             {category.items?.map((id: string) => (
                                                                 <li
                                                                     key={id}
+                                                                    ref={el => { sidebarItemRefs.current[id] = el; }} // Attach Ref
                                                                     className={`text-[13px] cursor-pointer transition-all duration-200 relative ${activeProduct === id ? 'text-black font-bold translate-x-1' : 'text-gray-400 hover:text-gray-600 hover:translate-x-1'}`}
                                                                     onClick={() => scrollToProduct(id)}
                                                                 >
