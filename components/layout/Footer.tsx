@@ -1,4 +1,4 @@
-﻿import Link from 'next/link';
+import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -13,7 +13,7 @@ export default function Footer() {
             <div className="relative w-[100px] h-[100px] md:w-[120px] md:h-[120px]">
               <Image
                 src="/images/company/weet-logo.png"
-                alt="weet:) 濡쒓퀬"
+                alt="weet:) 로고"
                 fill
                 sizes="(max-width: 768px) 100px, 120px"
                 className="object-contain"
@@ -28,9 +28,9 @@ export default function Footer() {
             </h3>
             <div className="text-[11px] md:text-[12px] text-black leading-relaxed font-medium">
               {language === 'KO' ? (
-                <p>(二??꾪듃 &nbsp;|&nbsp; ?⑦룊援???숇㈃ 湲덉궛湲?205-27 &nbsp;|&nbsp; ?ъ뾽???깅줉踰덊샇 660-86-01862 &nbsp;|&nbsp; 010 1234 4567</p>
+                <p>주식회사 위트 &nbsp;|&nbsp; 전남 함평군 대동면 금산길 205-27 &nbsp;|&nbsp; 사업자등록번호 660-86-01862 &nbsp;|&nbsp; 010-9645-2348</p>
               ) : (
-                <p>Weet Co., Ltd. &nbsp;|&nbsp; 205-27, Geumsan-gil, Daedong-myeon, Hampyeong-gun, Jeollanam-do, Republic of Korea <br className="hidden md:block" /> Business Reg. 660-86-01862 &nbsp;|&nbsp; +82-10-1234-4567</p>
+                <p>Weet Co., Ltd. &nbsp;|&nbsp; 205-27, Geumsan-gil, Daedong-myeon, Hampyeong-gun, Jeollanam-do, Republic of Korea <br className="hidden md:block" /> Business Reg. 660-86-01862 &nbsp;|&nbsp; +82-10-9645-2348</p>
               )}
             </div>
           </div>
@@ -38,14 +38,14 @@ export default function Footer() {
           {/* Right side - Copyright and Links */}
           <div className="text-left md:text-right space-y-1 flex-shrink-0">
             <p className="text-[11px] md:text-[12px] font-bold text-black whitespace-nowrap">
-              Copyright 짤 weet All right reserved
+              Copyright © weet All right reserved
             </p>
             <div className="flex flex-wrap gap-2 text-[10px] md:text-[11px] text-black md:justify-end font-bold">
-              <Link href="/privacy" className="hover:underline">{language === 'KO' ? '媛쒖씤?뺣낫 泥섎━諛⑹묠' : 'Privacy Policy'}</Link>
+              <Link href="/privacy" className="hover:underline">{language === 'KO' ? '개인정보 처리방침' : 'Privacy Policy'}</Link>
               <span>|</span>
-              <Link href="/terms" className="hover:underline">{language === 'KO' ? '?댁슜?쎄?' : 'Terms of Use'}</Link>
+              <Link href="/terms" className="hover:underline">{language === 'KO' ? '이용약관' : 'Terms of Use'}</Link>
               <span>|</span>
-              <Link href="/company" className="hover:underline">{language === 'KO' ? '?뚯궗?뚭컻' : 'About Us'}</Link>
+              <Link href="/company" className="hover:underline">{language === 'KO' ? '회사소개' : 'About Us'}</Link>
             </div>
           </div>
         </div>
