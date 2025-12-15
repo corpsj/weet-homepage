@@ -122,7 +122,7 @@ export default function CompanyPage() {
               <div className="w-[300px] h-[300px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] relative overflow-hidden rounded-lg">
                 <Image
                   src="/images/company/ci-logo.png"
-                  alt="weet:) Logo"
+                  alt="위트(WEET) 로고"
                   fill
                   className="object-contain"
                 />

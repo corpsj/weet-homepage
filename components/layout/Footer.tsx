@@ -13,7 +13,7 @@ export default function Footer() {
             <div className="relative w-[100px] h-[100px] md:w-[120px] md:h-[120px]">
               <Image
                 src="/images/company/weet-logo.png"
-                alt="weet:) 로고"
+                alt="위트(WEET) 로고"
                 fill
                 sizes="(max-width: 768px) 100px, 120px"
                 className="object-contain"
@@ -28,9 +28,9 @@ export default function Footer() {
             </h3>
             <div className="text-[11px] md:text-[12px] text-black leading-relaxed font-medium">
               {language === 'KO' ? (
-                <p>주식회사 위트 &nbsp;|&nbsp; 함평군 대동면 금산길 205-27 &nbsp;|&nbsp; 사업자 등록번호 660-86-01862 &nbsp;|&nbsp; 010 9645 2348</p>
+                <p>주식회사 위트(WEET) &nbsp;|&nbsp; 함평군 대동면 금산길 205-27 &nbsp;|&nbsp; 사업자 등록번호 660-86-01862 &nbsp;|&nbsp; 010 9645 2348</p>
               ) : (
-                <p>Weet Co., Ltd. &nbsp;|&nbsp; 205-27, Geumsan-gil, Daedong-myeon, Hampyeong-gun, Jeollanam-do, Republic of Korea <br className="hidden md:block" /> Business Reg. 660-86-01862 &nbsp;|&nbsp; +82-10-9645-2348</p>
+                <p>Weet Co., Ltd. (WEET) &nbsp;|&nbsp; 205-27, Geumsan-gil, Daedong-myeon, Hampyeong-gun, Jeollanam-do, Republic of Korea <br className="hidden md:block" /> Business Reg. 660-86-01862 &nbsp;|&nbsp; +82-10-9645-2348</p>
               )}
             </div>
           </div>
