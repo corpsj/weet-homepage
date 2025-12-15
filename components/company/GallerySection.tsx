@@ -6,6 +6,7 @@ import { createClient } from '@/utils/supabase/client';
 import { Database } from '@/types/supabase';
 import { Loader2 } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import ImageModal from '@/components/ui/ImageModal';
 
 type GalleryItem = Database['public']['Tables']['gallery']['Row'];
 
@@ -36,6 +37,28 @@ export default function GallerySection() {
 
         fetchItems();
     }, []);
+
+    const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+
+    const handleImageClick = (index: number) => {
+        setSelectedImageIndex(index);
+    };
+
+    const handleCloseModal = () => {
+        setSelectedImageIndex(null);
+    };
+
+    const handleNextImage = () => {
+        setSelectedImageIndex((prev) =>
+            prev !== null && prev < items.length - 1 ? prev + 1 : prev
+        );
+    };
+
+    const handlePrevImage = () => {
+        setSelectedImageIndex((prev) =>
+            prev !== null && prev > 0 ? prev - 1 : prev
+        );
+    };
 
     if (loading) {
         return (
@@ -77,10 +100,11 @@ export default function GallerySection() {
                         {/* Grid */}
                         {items.length > 0 ? (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                                {items.map((item) => (
+                                {items.map((item, index) => (
                                     <div
                                         key={item.id}
-                                        className="group cursor-default"
+                                        className="group cursor-pointer"
+                                        onClick={() => handleImageClick(index)}
                                     >
                                         <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 mb-4 shadow-sm hover:shadow-md transition-shadow">
                                             <Image
@@ -90,9 +114,16 @@ export default function GallerySection() {
                                                 className="object-cover group-hover:scale-105 transition-transform duration-500"
                                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                             />
-                                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+                                            {/* Hover overlay hint */}
+                                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                                                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover:translate-y-0">
+                                                    <span className="text-white font-medium px-4 py-2 border border-white/50 rounded-full bg-black/20 backdrop-blur-sm">
+                                                        View
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <h3 className="text-xl font-bold text-black mb-2">
+                                        <h3 className="text-xl font-bold text-black mb-2 group-hover:text-primary transition-colors">
                                             {item.title}
                                         </h3>
                                         {item.description && (
@@ -113,6 +144,20 @@ export default function GallerySection() {
                     </div>
                 </div>
             </div>
+
+            {/* Lightbox Modal */}
+            {selectedImageIndex !== null && items[selectedImageIndex] && (
+                <ImageModal
+                    isOpen={selectedImageIndex !== null}
+                    onClose={handleCloseModal}
+                    imageUrl={items[selectedImageIndex].image_url}
+                    imageAlt={items[selectedImageIndex].title}
+                    onNext={handleNextImage}
+                    onPrev={handlePrevImage}
+                    hasNext={selectedImageIndex < items.length - 1}
+                    hasPrev={selectedImageIndex > 0}
+                />
+            )}
         </section>
     );
 }
