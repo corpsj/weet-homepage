@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft, Loader2, Save } from 'lucide-react';
 import Link from 'next/link';
 import { createClient } from '@/utils/supabase/client';
+import { Database } from '@/types/supabase';
 import { toast } from 'sonner';
 import MultiImageUpload from '@/components/admin/media/MultiImageUpload';
 
@@ -48,13 +49,14 @@ export default function NewGalleryItemPage() {
         try {
             // Create a gallery item for EACH image
             const promises = uploadedImages.map((url, index) => {
-                return supabase.from('gallery').insert({
+                const item: Database['public']['Tables']['gallery']['Insert'] = {
                     title: uploadedImages.length > 1 ? `${title} (${index + 1})` : title,
                     description: description || null,
                     image_url: url,
                     is_active: true,
                     display_order: 0
-                });
+                };
+                return (supabase.from('gallery') as any).insert(item);
             });
 
             const results = await Promise.all(promises);
