@@ -1,21 +1,27 @@
-import type { Metadata } from "next";
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
+import AdminSidebar from '@/components/admin/AdminSidebar';
 
-export const metadata: Metadata = {
-  robots: {
-    index: false,
-    follow: false,
-    googleBot: {
-      index: false,
-      follow: false,
-    },
-  },
-};
-
-export default function AdminLayout({
+export default async function AdminLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
-  return children;
-}
+}) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
+  if (!user) {
+    redirect('/login');
+  }
+
+  return (
+    <div className="flex h-screen overflow-hidden bg-gray-50">
+      <AdminSidebar user={user} />
+      <main className="flex-1 overflow-y-auto p-8">
+        {children}
+      </main>
+    </div>
+  );
+}
