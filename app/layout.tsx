@@ -47,10 +47,8 @@ export const metadata: Metadata = {
     description: defaultDescription,
     images: [
       {
-        url: "/images/company/weet-logo.png",
-        width: 512,
-        height: 512,
-        alt: "위트(WEET) 로고",
+        url: "/OG_LOGO.jpg",
+        alt: "위트(WEET)",
       },
     ],
   },
@@ -58,7 +56,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: defaultTitle,
     description: defaultDescription,
-    images: ["/images/company/weet-logo.png"],
+    images: ["/OG_LOGO.jpg"],
   },
   robots: {
     index: true,
