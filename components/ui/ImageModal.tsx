@@ -134,7 +134,7 @@ export default function ImageModal({
                                 {/* Extra details or branding could go here */}
                                 <div className="mt-8 pt-8 border-t border-gray-100">
                                     <p className="text-xs text-gray-400">
-                                        Designed by Weet Architecture
+                                        Designed by weet:)
                                     </p>
                                 </div>
                             </div>
