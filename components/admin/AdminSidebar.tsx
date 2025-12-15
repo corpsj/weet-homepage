@@ -99,7 +99,7 @@ export default function AdminSidebar({ user }: { user?: any }) {
     const userId = user?.email ? user.email.split('@')[0] : 'admin';
 
     return (
-        <aside className="w-72 bg-[#0F172A] text-white flex flex-col fixed inset-y-0 z-[100] shadow-xl">
+        <aside className="w-72 bg-[#0F172A] text-white flex flex-col fixed inset-y-0 left-0 z-[100] shadow-xl">
             {/* Logo Area */}
             <div className="h-20 flex items-center px-8 border-b border-gray-800">
                 <span className="text-2xl font-bold tracking-tight text-white">Weet <span className="text-gray-500 font-light">Admin</span></span>
