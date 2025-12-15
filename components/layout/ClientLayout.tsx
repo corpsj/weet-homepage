@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { Toaster } from 'sonner';
 
 export default function ClientLayout({
     children,
@@ -16,6 +17,7 @@ export default function ClientLayout({
     if (isAdmin) {
         return (
             <div className="min-h-screen bg-gray-50 text-black">
+                <Toaster position="top-right" richColors />
                 {children}
             </div>
         );
@@ -26,6 +28,7 @@ export default function ClientLayout({
             <Header />
             <main className="flex-1 pt-[70px] md:pt-[90px] lg:pt-[110px]">{children}</main>
             <Footer />
+            <Toaster position="top-right" richColors />
         </>
     );
 }

@@ -13,6 +13,7 @@ import {
     Layers,
     Lightbulb,
     BarChart3,
+    Link2,
     Image as ImageIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -32,6 +33,11 @@ const navigation: { title: string; items: NavItem[] }[] = [
                 name: '대시보드',
                 href: '/admin',
                 icon: Layers
+            },
+            {
+                name: 'UTM Builder',
+                href: '/admin/utm',
+                icon: Link2
             }
         ]
     },
