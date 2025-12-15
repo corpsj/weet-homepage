@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useState } from 'react';
 import CrewModal from '@/components/ui/CrewModal';
 import { useTranslation } from '@/hooks/useTranslation';
+import GallerySection from '@/components/company/GallerySection';
 
 interface CrewData {
   name: string;
@@ -329,6 +330,8 @@ export default function CompanyPage() {
           </div>
         </div>
       </section>
+
+      <GallerySection />
 
       <CrewModal
         isOpen={isModalOpen}
