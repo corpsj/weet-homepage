@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Plus, Trash2, Loader2, ArrowUp, ArrowDown } from 'lucide-react';
+import { Plus, Trash2, Loader2, Pencil } from 'lucide-react';
 import { createClient } from '@/utils/supabase/client';
 import { toast } from 'sonner';
 import { Database } from '@/types/supabase';
@@ -94,7 +94,13 @@ export default function AdminGalleryPage() {
                                 fill
                                 className="object-cover"
                             />
-                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100">
+                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
+                                <Link
+                                    href={`/admin/gallery/${item.id}`}
+                                    className="p-2 bg-white rounded-full text-black hover:bg-gray-100 transition-colors shadow-lg"
+                                >
+                                    <Pencil className="w-5 h-5" />
+                                </Link>
                                 <button
                                     onClick={() => handleDelete(item.id)}
                                     disabled={deleting === item.id}

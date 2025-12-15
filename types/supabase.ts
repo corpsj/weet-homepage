@@ -234,6 +234,7 @@ export interface Database {
           title: string
           description: string | null
           image_url: string
+          sub_images: string[] | null
           display_order: number
           is_active: boolean
           created_at: string
@@ -244,6 +245,7 @@ export interface Database {
           title: string
           description?: string | null
           image_url: string
+          sub_images?: string[] | null
           display_order?: number
           is_active?: boolean
           created_at?: string
@@ -254,6 +256,7 @@ export interface Database {
           title?: string
           description?: string | null
           image_url?: string
+          sub_images?: string[] | null
           display_order?: number
           is_active?: boolean
           created_at?: string

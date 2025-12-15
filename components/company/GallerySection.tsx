@@ -150,7 +150,10 @@ export default function GallerySection() {
                 <ImageModal
                     isOpen={selectedImageIndex !== null}
                     onClose={handleCloseModal}
-                    imageUrl={items[selectedImageIndex].image_url}
+                    images={[
+                        items[selectedImageIndex].image_url,
+                        ...(items[selectedImageIndex].sub_images || [])
+                    ]}
                     imageAlt={items[selectedImageIndex].title}
                     title={items[selectedImageIndex].title}
                     description={items[selectedImageIndex].description}

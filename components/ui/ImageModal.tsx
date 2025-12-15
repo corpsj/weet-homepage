@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useCallback } from 'react';
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -9,7 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 interface ImageModalProps {
     isOpen: boolean;
     onClose: () => void;
-    imageUrl: string;
+    images: string[];
     imageAlt?: string;
     title?: string;
     description?: string | null;
@@ -22,7 +22,7 @@ interface ImageModalProps {
 export default function ImageModal({
     isOpen,
     onClose,
-    imageUrl,
+    images,
     imageAlt = 'Gallery Image',
     title,
     description,
@@ -31,24 +31,65 @@ export default function ImageModal({
     hasNext = false,
     hasPrev = false,
 }: ImageModalProps) {
+    const [currentIndex, setCurrentIndex] = useState(0);
+
+    // Reset index when modal opens with new images
+    useEffect(() => {
+        if (isOpen) {
+            setCurrentIndex(0);
+        }
+    }, [isOpen, images]);
+
     // Handle keyboard navigation
     useEffect(() => {
         if (!isOpen) return;
 
         const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'Escape') onClose();
-            if (e.key === 'ArrowRight' && onNext && hasNext) onNext();
-            if (e.key === 'ArrowLeft' && onPrev && hasPrev) onPrev();
+
+            // Internal carousel navigation
+            if (e.key === 'ArrowRight') {
+                if (currentIndex < images.length - 1) {
+                    setCurrentIndex(prev => prev + 1);
+                } else if (onNext && hasNext) {
+                    onNext();
+                }
+            }
+            if (e.key === 'ArrowLeft') {
+                if (currentIndex > 0) {
+                    setCurrentIndex(prev => prev - 1);
+                } else if (onPrev && hasPrev) {
+                    onPrev();
+                }
+            }
         };
 
         window.addEventListener('keydown', handleKeyDown);
-        document.body.style.overflow = 'hidden'; // Prevent background scrolling
+        document.body.style.overflow = 'hidden';
 
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
             document.body.style.overflow = 'unset';
         };
-    }, [isOpen, onClose, onNext, onPrev, hasNext, hasPrev]);
+    }, [isOpen, onClose, onNext, onPrev, hasNext, hasPrev, currentIndex, images.length]);
+
+    const handleNext = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (currentIndex < images.length - 1) {
+            setCurrentIndex(prev => prev + 1);
+        } else if (onNext && hasNext) {
+            onNext();
+        }
+    };
+
+    const handlePrev = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (currentIndex > 0) {
+            setCurrentIndex(prev => prev - 1);
+        } else if (onPrev && hasPrev) {
+            onPrev();
+        }
+    };
 
     if (!isOpen) return null;
 
@@ -72,38 +113,50 @@ export default function ImageModal({
                         onClick={(e) => e.stopPropagation()}
                     >
                         {/* 1. Image Section (Left / Top) */}
-                        <div className="relative flex-1 bg-black min-h-[300px] md:min-h-0 flex items-center justify-center">
-                            <Image
-                                src={imageUrl}
-                                alt={imageAlt}
-                                fill
-                                className="object-contain"
-                                sizes="(max-width: 768px) 100vw, 70vw"
-                                priority
-                            />
+                        <div className="relative flex-1 bg-black min-h-[300px] md:min-h-0 flex items-center justify-center overflow-hidden">
+                            <AnimatePresence mode="wait">
+                                <motion.div
+                                    key={images[currentIndex]}
+                                    initial={{ opacity: 0, x: 20 }}
+                                    animate={{ opacity: 1, x: 0 }}
+                                    exit={{ opacity: 0, x: -20 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="relative w-full h-full"
+                                >
+                                    <Image
+                                        src={images[currentIndex]}
+                                        alt={`${imageAlt} - ${currentIndex + 1}`}
+                                        fill
+                                        className="object-contain"
+                                        sizes="(max-width: 768px) 100vw, 70vw"
+                                        priority
+                                    />
+                                </motion.div>
+                            </AnimatePresence>
 
                             {/* Navigation Buttons (Over Image) */}
-                            {hasPrev && (
+                            {(hasPrev || currentIndex > 0) && (
                                 <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        onPrev?.();
-                                    }}
+                                    onClick={handlePrev}
                                     className="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 rounded-full transition-colors z-20"
                                 >
                                     <ChevronLeft className="w-8 h-8" />
                                 </button>
                             )}
-                            {hasNext && (
+                            {(hasNext || currentIndex < images.length - 1) && (
                                 <button
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        onNext?.();
-                                    }}
+                                    onClick={handleNext}
                                     className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 rounded-full transition-colors z-20"
                                 >
                                     <ChevronRight className="w-8 h-8" />
                                 </button>
+                            )}
+
+                            {/* Image Counter */}
+                            {images.length > 1 && (
+                                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 px-3 py-1 bg-black/50 rounded-full text-white text-xs z-20 backdrop-blur-sm">
+                                    {currentIndex + 1} / {images.length}
+                                </div>
                             )}
                         </div>
 
@@ -120,18 +173,20 @@ export default function ImageModal({
                             </div>
 
                             {/* Scrollable Content */}
-                            <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
-                                {title && (
-                                    <h2 className="text-2xl font-bold mb-4 text-black">{title}</h2>
-                                )}
+                            <div className="flex-1 overflow-y-auto p-6 custom-scrollbar flex flex-col">
+                                <div className="flex-1">
+                                    {title && (
+                                        <h2 className="text-2xl font-bold mb-8 text-black">{title}</h2>
+                                    )}
 
-                                {description && (
-                                    <div className="space-y-4 text-gray-600 leading-relaxed text-sm md:text-base whitespace-pre-line">
-                                        {description}
-                                    </div>
-                                )}
+                                    {description && (
+                                        <div className="space-y-4 text-gray-600 leading-relaxed text-sm md:text-base whitespace-pre-line">
+                                            {description}
+                                        </div>
+                                    )}
+                                </div>
 
-                                {/* Extra details or branding could go here */}
+                                {/* Extra details or branding */}
                                 <div className="mt-8 pt-8 border-t border-gray-100">
                                     <p className="text-xs text-gray-400">
                                         Designed by weet:)
