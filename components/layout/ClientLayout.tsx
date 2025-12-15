@@ -10,10 +10,15 @@ export default function ClientLayout({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
-    const isAdmin = pathname?.startsWith('/admin');
+    // Check if current path is admin
+    const isAdmin = pathname?.startsWith('/admin') || pathname?.includes('/admin/');
 
     if (isAdmin) {
-        return <>{children}</>;
+        return (
+            <div className="min-h-screen bg-gray-50 text-black">
+                {children}
+            </div>
+        );
     }
 
     return (
