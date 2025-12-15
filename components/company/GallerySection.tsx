@@ -152,6 +152,8 @@ export default function GallerySection() {
                     onClose={handleCloseModal}
                     imageUrl={items[selectedImageIndex].image_url}
                     imageAlt={items[selectedImageIndex].title}
+                    title={items[selectedImageIndex].title}
+                    description={items[selectedImageIndex].description}
                     onNext={handleNextImage}
                     onPrev={handlePrevImage}
                     hasNext={selectedImageIndex < items.length - 1}
