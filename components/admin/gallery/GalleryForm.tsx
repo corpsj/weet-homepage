@@ -21,7 +21,7 @@ const formSchema = z.object({
     is_active: z.boolean().default(true),
 });
 
-type FormData = z.infer<typeof formSchema>;
+type FormData = z.input<typeof formSchema>;
 
 interface GalleryFormProps {
     initialData?: GalleryItem | null;
@@ -107,6 +107,8 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
             return;
         }
 
+        const parsed = formSchema.parse(data);
+
         setLoading(true);
         try {
             const mainImage = images[0];
@@ -117,7 +119,7 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
                 const { error } = await supabase
                     .from('gallery')
                     .update({
-                        ...data,
+                        ...parsed,
                         image_url: mainImage,
                         sub_images: subImages,
                         updated_at: new Date().toISOString(),
@@ -131,7 +133,7 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
                 const { error } = await supabase
                     .from('gallery')
                     .insert({
-                        ...data,
+                        ...parsed,
                         image_url: mainImage,
                         sub_images: subImages,
                     });

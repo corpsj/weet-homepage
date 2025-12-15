@@ -76,6 +76,7 @@ export interface Database {
           created_at?: string
           updated_at?: string
         }
+        Relationships: []
       }
       inquiries: {
         Row: {
@@ -114,6 +115,7 @@ export interface Database {
           created_at?: string
           updated_at?: string
         }
+        Relationships: []
       }
       hero_slides: {
         Row: {
@@ -143,6 +145,7 @@ export interface Database {
           is_active?: boolean
           created_at?: string
         }
+        Relationships: []
       }
       solutions: {
         Row: {
@@ -172,6 +175,7 @@ export interface Database {
           is_active?: boolean
           created_at?: string
         }
+        Relationships: []
       }
       faqs: {
         Row: {
@@ -201,6 +205,7 @@ export interface Database {
           is_active?: boolean
           created_at?: string
         }
+        Relationships: []
       }
       notices: {
         Row: {
@@ -227,6 +232,7 @@ export interface Database {
           is_active?: boolean
           created_at?: string
         }
+        Relationships: []
       }
       gallery: {
         Row: {
@@ -262,6 +268,7 @@ export interface Database {
           created_at?: string
           updated_at?: string
         }
+        Relationships: []
       }
     }
     Views: {

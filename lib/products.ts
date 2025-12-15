@@ -18,7 +18,7 @@ export async function getProducts(): Promise<Product[]> {
 }
 
 // 카테고리별 제품 가져오기
-export async function getProductsByCategory(sizeCategory: string): Promise<Product[]> {
+export async function getProductsByCategory(sizeCategory: Product['size_category']): Promise<Product[]> {
   const { data, error } = await supabase
     .from('products')
     .select('*')
