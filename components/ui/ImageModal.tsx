@@ -110,13 +110,7 @@ export default function ImageModal({
                         {/* 2. Content Section (Right / Bottom) */}
                         <div className="w-full md:w-[400px] flex-shrink-0 bg-white flex flex-col border-l border-gray-100">
                             {/* Header */}
-                            <div className="p-6 border-b border-gray-100 flex items-center justify-between">
-                                <div className="flex items-center gap-3">
-                                    <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center text-white font-bold text-xs">
-                                        W
-                                    </div>
-                                    <span className="font-bold text-sm">Weet Gallery</span>
-                                </div>
+                            <div className="p-6 border-b border-gray-100 flex items-center justify-end">
                                 <button
                                     onClick={onClose}
                                     className="p-1 hover:bg-gray-100 rounded-full transition-colors"
