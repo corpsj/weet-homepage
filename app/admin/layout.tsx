@@ -1,40 +1,21 @@
-import AdminSidebar from '@/components/admin/AdminSidebar';
-import AdminHeader from '@/components/admin/AdminHeader';
-import { createClient } from '@/utils/supabase/server';
-import { redirect } from 'next/navigation';
-import { Toaster } from 'sonner';
+import type { Metadata } from "next";
 
-export default async function AdminLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
-    // Server-side auth check
-    const supabase = await createClient();
-    const { data: { user } } = await supabase.auth.getUser();
+export const metadata: Metadata = {
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: {
+      index: false,
+      follow: false,
+    },
+  },
+};
 
-    if (!user) {
-        redirect('/login');
-    }
-
-    return (
-        <div className="min-h-screen bg-[#F8FAFC] flex font-sans">
-            {/* Sidebar */}
-            <AdminSidebar user={user} />
-
-            {/* Main Content Wrapper */}
-            <div className="flex-1 ml-72 flex flex-col min-h-screen">
-                {/* Header */}
-                <AdminHeader />
-
-                {/* Page Content */}
-                <main className="flex-1 p-8 overflow-y-auto">
-                    <div className="max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        {children}
-                    </div>
-                </main>
-            </div>
-            <Toaster position="top-right" />
-        </div>
-    );
+export default function AdminLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return children;
 }
+

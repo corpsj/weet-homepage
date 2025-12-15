@@ -1,4 +1,18 @@
 import React from 'react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '개인정보처리방침',
+  description: '위트(WEET) 개인정보처리방침 안내 페이지입니다.',
+  alternates: {
+    canonical: '/privacy',
+  },
+  openGraph: {
+    url: '/privacy',
+    title: '개인정보처리방침',
+    description: '위트(WEET) 개인정보처리방침 안내 페이지입니다.',
+  },
+};
 
 export default function PrivacyPage() {
     return (

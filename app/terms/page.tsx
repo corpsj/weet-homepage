@@ -1,4 +1,18 @@
 import React from 'react';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '이용약관',
+  description: '위트(WEET) 이용약관 안내 페이지입니다.',
+  alternates: {
+    canonical: '/terms',
+  },
+  openGraph: {
+    url: '/terms',
+    title: '이용약관',
+    description: '위트(WEET) 이용약관 안내 페이지입니다.',
+  },
+};
 
 export default function TermsPage() {
     return (

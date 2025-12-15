@@ -1,4 +1,21 @@
 import { login } from './actions'
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '관리자 로그인',
+  description: '위트(WEET) 관리자 로그인 페이지입니다.',
+  alternates: {
+    canonical: '/login',
+  },
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: {
+      index: false,
+      follow: false,
+    },
+  },
+};
 
 export default function LoginPage() {
     return (
