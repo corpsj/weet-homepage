@@ -554,7 +554,6 @@ export default function ProductsPage() {
                                 <div className="mb-8">
                                     <div className="flex items-baseline gap-4 mb-2">
                                         <h2 className="text-4xl font-bold text-gray-900">{product.name}</h2>
-                                        <span className="text-xl text-[#FEBD16] font-medium">{product.sizeCategory}</span>
                                     </div>
                                     {product.tagline && (
                                         <p className="text-lg text-gray-600">{product.tagline}</p>
