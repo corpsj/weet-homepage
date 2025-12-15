@@ -15,13 +15,20 @@ export default function EditGalleryPage() {
     const [loading, setLoading] = useState(true);
     const supabase = createClient();
 
+    const itemId = (() => {
+        const raw = params?.id;
+        if (typeof raw === 'string') return raw;
+        if (Array.isArray(raw)) return raw[0];
+        return undefined;
+    })();
+
     useEffect(() => {
         const fetchItem = async () => {
             try {
                 const { data, error } = await supabase
                     .from('gallery')
                     .select('*')
-                    .eq('id', params.id)
+                    .eq('id', itemId)
                     .single();
 
                 if (error) throw error;
@@ -33,10 +40,12 @@ export default function EditGalleryPage() {
             }
         };
 
-        if (params.id) {
+        if (itemId) {
             fetchItem();
+        } else {
+            setLoading(false);
         }
-    }, [params.id]);
+    }, [itemId, supabase]);
 
     if (loading) {
         return (

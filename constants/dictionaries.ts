@@ -12,7 +12,7 @@ export const DICTIONARY = {
         header: {
             menu: {
                 company: '기업소개',
-                products: '제품',
+                products: '시그니처 라인',
                 solutions: '솔루션',
                 support: '고객지원',
                 factory: '위트 팩토리',
@@ -42,7 +42,7 @@ export const DICTIONARY = {
             },
             partners: 'PARTNERS',
             video: {
-                title: 'WEET OFFICIAL VIDEO',
+                title: 'weet Video',
                 description: '위트가 만들어가는 새로운 공간의 이야기를 만나보세요.',
                 overlayTitle: 'weet을 소개합니다',
                 overlayDesc: '모듈러 건축의 새로운 기준',
@@ -212,7 +212,7 @@ export const DICTIONARY = {
             },
             partners: 'PARTNERS',
             video: {
-                title: 'WEET OFFICIAL VIDEO',
+                title: 'weet Video',
                 description: 'Discover the story of new spaces created by Weet.',
                 overlayTitle: 'Introducing Weet',
                 overlayDesc: 'The New Standard in Modular Architecture',
