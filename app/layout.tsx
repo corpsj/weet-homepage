@@ -18,6 +18,7 @@ const metadataBase = (() => {
 
 const defaultTitle = "위트(WEET) - 모듈러 건축 전문 기업";
 const defaultDescription = "모듈러 건축 전문 기업 위트(WEET)";
+const siteOrigin = metadataBase.origin;
 
 export const metadata: Metadata = {
   metadataBase,
@@ -93,8 +94,53 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const organizationId = `${siteOrigin}/#organization`;
+  const websiteId = `${siteOrigin}/#website`;
+
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "@id": organizationId,
+      name: "위트",
+      legalName: "주식회사 위트",
+      alternateName: ["WEET", "weet", "위트(WEET)"],
+      url: siteOrigin,
+      logo: `${siteOrigin}/images/company/weet-logo.png`,
+      sameAs: [
+        "https://www.instagram.com/weet_kr/",
+        "https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/",
+      ],
+      contactPoint: [
+        {
+          "@type": "ContactPoint",
+          telephone: "+82-10-9645-2348",
+          contactType: "customer service",
+          areaServed: "KR",
+          availableLanguage: ["ko", "en"],
+        },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": websiteId,
+      url: siteOrigin,
+      name: "위트(WEET)",
+      publisher: {
+        "@id": organizationId,
+      },
+    },
+  ];
+
   return (
     <html lang="ko" className={geist.variable}>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </head>
       <body className="min-h-screen flex flex-col">
         <LanguageProvider>
           <ClientLayout>{children}</ClientLayout>
