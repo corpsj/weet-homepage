@@ -62,6 +62,7 @@ const navigationKo = [
       { name: '기업 CI', href: '/company#ci' },
       { name: '위트 크루', href: '/company#crew' },
       { name: '위트 팩토리', href: '/company#factory' },
+      { name: '위트 갤러리', href: '/company/gallery' },
     ],
   },
   {
@@ -133,6 +134,7 @@ const navigationEn = [
       { name: 'Corporate CI', href: '/company#ci' },
       { name: 'Weet Crew', href: '/company#crew' },
       { name: 'Weet Factory', href: '/company#factory' },
+      { name: 'Weet Gallery', href: '/company/gallery' },
     ],
   },
   {

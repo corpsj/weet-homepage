@@ -28,9 +28,9 @@ export default function Footer() {
             </h3>
             <div className="text-[11px] md:text-[12px] text-black leading-relaxed font-medium">
               {language === 'KO' ? (
-                <p>(주)위트 &nbsp;|&nbsp; 함평군 대동면 금산길 205-27 &nbsp;|&nbsp; 사업자 등록번호 660-86-01862 &nbsp;|&nbsp; 010 1234 4567</p>
+                <p>주식회사 위트 &nbsp;|&nbsp; 함평군 대동면 금산길 205-27 &nbsp;|&nbsp; 사업자 등록번호 660-86-01862 &nbsp;|&nbsp; 010 9645 2348</p>
               ) : (
-                <p>Weet Co., Ltd. &nbsp;|&nbsp; 205-27, Geumsan-gil, Daedong-myeon, Hampyeong-gun, Jeollanam-do, Republic of Korea <br className="hidden md:block" /> Business Reg. 660-86-01862 &nbsp;|&nbsp; +82-10-1234-4567</p>
+                <p>Weet Co., Ltd. &nbsp;|&nbsp; 205-27, Geumsan-gil, Daedong-myeon, Hampyeong-gun, Jeollanam-do, Republic of Korea <br className="hidden md:block" /> Business Reg. 660-86-01862 &nbsp;|&nbsp; +82-10-9645-2348</p>
               )}
             </div>
           </div>

@@ -13,6 +13,7 @@ import {
     Layers,
     Lightbulb,
     BarChart3,
+    Image as ImageIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -61,6 +62,11 @@ const navigation: { title: string; items: NavItem[] }[] = [
                 name: '고객 인사이트',
                 href: '/admin/insights', // Keeping insights as per user request/existing folder
                 icon: BarChart3
+            },
+            {
+                name: '갤러리 관리',
+                href: '/admin/gallery',
+                icon: ImageIcon
             },
         ]
     },
