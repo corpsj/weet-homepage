@@ -60,7 +60,7 @@ export default function GallerySection() {
                                 </svg>
                             </div>
                             <span className="text-[28px] md:text-[32px] lg:text-[36px] font-bold text-black">
-                                {language === 'KO' ? '위트 갤러리' : 'Weet Gallery'}
+                                {language === 'KO' ? 'weet Gallery' : 'weet Gallery'}
                             </span>
                         </div>
                     </div>
