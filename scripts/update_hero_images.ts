@@ -28,9 +28,10 @@ async function main() {
 
     // 2. Fetch High Quality Product Images
     // We'll look for specific "pretty" products
-    const targetProductNames = ['3X6 집 (적삼목)', 'CAMPER (Basic)', '3X3 SAUNA'];
+    // User requested 3X9 House specifically
+    const targetProductNames = ['3X9 집', '3X6 집 (적삼목)', 'CAMPER (Basic)'];
     // Fallback search terms if exact names don't match
-    const searchTerms = ['3X6', 'CAMPER', 'SAUNA'];
+    const searchTerms = ['3X9', '3X6', 'CAMPER'];
 
     const { data: products, error: productError } = await supabase
         .from('products')
@@ -44,29 +45,26 @@ async function main() {
 
     // Keyword matching helper
     const findProductImage = (keyword: string) => {
-        const p = products.find(p => p.name.includes(keyword) && p.image_url?.includes('replacement')); // Prefer replacement images
-        return p ? p.image_url : products.find(p => p.name.includes(keyword))?.image_url;
+        // Try to find a "replacement" (newly uploaded) image first
+        const p = products.find(p => p.name.includes(keyword) && p.image_url?.includes('replacement'));
+        if (p) return p.image_url;
+        // Fallback to any image with keyword
+        return products.find(p => p.name.includes(keyword))?.image_url;
     };
 
     // Prepare new images
-    // Slide 1 -> 3x6 or similar
-    // Slide 2 -> Camper or similar
-    // Slide 3 -> Sauna or similar (if exists)
-    // If not enough unique images, we'll cycle through top products
-
-    // Hardcoded mapping logic based on typical slide count (usually 3)
     const newImages: string[] = [];
 
-    // Priority 1: 3x6 House (Signature)
-    const img1 = findProductImage('3X6');
+    // Priority 1: 3X9 House (User Request)
+    const img1 = findProductImage('3X9');
     if (img1) newImages.push(img1);
 
-    // Priority 2: Camper
-    const img2 = findProductImage('CAMPER') || findProductImage('캠퍼');
+    // Priority 2: 3X6 House
+    const img2 = findProductImage('3X6');
     if (img2) newImages.push(img2);
 
-    // Priority 3: Sauna or Design
-    const img3 = findProductImage('SAUNA') || findProductImage('사우나') || findProductImage('DESIGN');
+    // Priority 3: Camper
+    const img3 = findProductImage('CAMPER') || findProductImage('캠퍼');
     if (img3) newImages.push(img3);
 
     // 3. Update Slides
