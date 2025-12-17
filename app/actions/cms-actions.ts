@@ -16,7 +16,7 @@ export async function getHeroSlides() {
     const { data, error } = await (supabase as any)
         .from('hero_slides')
         .select('*')
-        .order('display_order', { ascending: true });
+        .order('sort_order', { ascending: true });
 
     if (error) {
         console.error('Error fetching hero slides:', error);
@@ -33,16 +33,16 @@ export async function createHeroSlide(formData: FormData) {
     const subtitle = formData.get('subtitle') as string;
     const image_url = formData.get('image_url') as string;
 
-    // Get max display_order
+    // Get max sort_order
     // eslint-disable-next-line
     const { data: maxOrderData } = await (supabase as any)
         .from('hero_slides')
-        .select('display_order')
-        .order('display_order', { ascending: false })
+        .select('sort_order')
+        .order('sort_order', { ascending: false })
         .limit(1)
         .single();
 
-    const nextOrder = (maxOrderData?.display_order || 0) + 1;
+    const nextOrder = (maxOrderData?.sort_order || 0) + 1;
 
     // eslint-disable-next-line
     const { error } = await (supabase as any)
@@ -51,7 +51,7 @@ export async function createHeroSlide(formData: FormData) {
             title,
             subtitle,
             image_url,
-            display_order: nextOrder,
+            sort_order: nextOrder,
             is_active: true
         });
 

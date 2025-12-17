@@ -18,7 +18,7 @@ async function main() {
     const { data: slides, error: slideError } = await supabase
         .from('hero_slides')
         .select('*')
-        .order('display_order');
+        .order('sort_order');
 
     if (slideError) {
         console.error('Error fetching slides:', slideError);

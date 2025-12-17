@@ -125,7 +125,7 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
         try {
             const updates = items.map((item, index) => ({
                 id: item.id,
-                display_order: index
+                sort_order: index
             }));
 
             const { error } = await supabase
