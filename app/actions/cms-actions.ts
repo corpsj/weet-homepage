@@ -60,7 +60,7 @@ export async function createHeroSlide(formData: FormData) {
         throw new Error('슬라이드 생성 실패: ' + error.message);
     }
 
-    revalidatePath('/admin/cms/main');
+    revalidatePath('/admin/main');
     revalidatePath('/'); // Revalidate homepage
 }
 
@@ -86,7 +86,7 @@ export async function updateHeroSlide(id: number, formData: FormData) {
         throw new Error('슬라이드 수정 실패: ' + error.message);
     }
 
-    revalidatePath('/admin/cms/main');
+    revalidatePath('/admin/main');
     revalidatePath('/');
 }
 
@@ -104,7 +104,7 @@ export async function deleteHeroSlide(id: number) {
         throw new Error('슬라이드 삭제 실패: ' + error.message);
     }
 
-    revalidatePath('/admin/cms/main');
+    revalidatePath('/admin/main');
     revalidatePath('/');
 }
 
@@ -155,6 +155,6 @@ export async function updateSignatureStatus(productId: string, isSignature: bool
         throw new Error('상태 업데이트 실패');
     }
 
-    revalidatePath('/admin/cms/main');
+    revalidatePath('/admin/main');
     revalidatePath('/');
 }

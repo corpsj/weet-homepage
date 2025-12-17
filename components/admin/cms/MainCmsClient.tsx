@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useState, useTransition, useEffect } from 'react';
 import { Save, Plus, Trash2, GripVertical, Image as ImageIcon, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { Database } from '@/types/supabase';
@@ -89,6 +89,13 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
     const router = useRouter();
     const [heroSlides, setHeroSlides] = useState(slides);
     const supabase = createClient();
+
+    // Sync state with props when server data changes
+    useEffect(() => {
+        setHeroSlides(slides);
+    }, [slides]);
+
+    // ... rest of component
 
     const sensors = useSensors(
         useSensor(PointerSensor),
