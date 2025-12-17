@@ -125,7 +125,7 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
         try {
             const updates = items.map((item, index) => ({
                 id: item.id,
-                sort_order: index
+                display_order: index
             }));
 
             const { error } = await supabase
@@ -379,14 +379,42 @@ function HeroSlideForm({
 function SignatureLineEditor({ products }: { products: Product[] }) {
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
+    // Local optimistic state
+    const [optimisticIds, setOptimisticIds] = useState<Set<string>>(
+        new Set(products.filter(p => p.is_signature).map(p => p.id))
+    );
 
-    const handleToggle = (productId: string, currentStatus: boolean) => {
+    // Sync from server when products prop updates
+    useEffect(() => {
+        setOptimisticIds(new Set(products.filter(p => p.is_signature).map(p => p.id)));
+    }, [products]);
+
+    const handleToggle = (productId: string) => {
+        const currentStatus = optimisticIds.has(productId);
+        const newStatus = !currentStatus;
+
+        // 1. Optimistic Update
+        setOptimisticIds(prev => {
+            const next = new Set(prev);
+            if (newStatus) next.add(productId);
+            else next.delete(productId);
+            return next;
+        });
+
+        // 2. Server Action
         startTransition(async () => {
             try {
-                await updateSignatureStatus(productId, !currentStatus);
+                await updateSignatureStatus(productId, newStatus);
                 router.refresh();
             } catch (error: any) {
+                // Revert on error
                 toast.error(error.message || '업데이트 실패');
+                setOptimisticIds(prev => {
+                    const next = new Set(prev);
+                    if (currentStatus) next.add(productId); // Restore old status
+                    else next.delete(productId);
+                    return next;
+                });
             }
         });
     };
@@ -396,32 +424,35 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
             <div>
                 <h3 className="text-lg font-bold text-gray-900 mb-4">노출 제품 선택 (최대 10개)</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {products.map((product) => (
-                        <div
-                            key={product.id}
-                            onClick={() => !isPending && handleToggle(product.id, product.is_signature)}
-                            className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${product.is_signature
-                                ? 'border-black bg-gray-50 ring-1 ring-black'
-                                : 'border-gray-200 hover:border-gray-300'
-                                } ${isPending ? 'opacity-50 cursor-not-allowed' : ''}`}
-                        >
-                            <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${product.is_signature ? 'bg-black border-black' : 'border-gray-300 bg-white'
-                                }`}>
-                                {product.is_signature && <div className="w-2 h-2 bg-white rounded-full" />}
-                            </div>
+                    {products.map((product) => {
+                        const isSelected = optimisticIds.has(product.id);
+                        return (
+                            <div
+                                key={product.id}
+                                onClick={() => !isPending && handleToggle(product.id)}
+                                className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${isSelected
+                                    ? 'border-black bg-gray-50 ring-1 ring-black'
+                                    : 'border-gray-200 hover:border-gray-300'
+                                    } ${isPending ? 'opacity-70' : ''}`}
+                            >
+                                <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${isSelected ? 'bg-black border-black' : 'border-gray-300 bg-white'
+                                    }`}>
+                                    {isSelected && <div className="w-2 h-2 bg-white rounded-full" />}
+                                </div>
 
-                            <div className="w-10 h-10 bg-gray-100 rounded-md flex-shrink-0 relative overflow-hidden">
-                                {product.image_url && (
-                                    <Image src={product.image_url} alt={product.name} fill className="object-cover" />
-                                )}
-                            </div>
+                                <div className="w-10 h-10 bg-gray-100 rounded-md flex-shrink-0 relative overflow-hidden">
+                                    {product.image_url && (
+                                        <Image src={product.image_url} alt={product.name} fill className="object-cover" />
+                                    )}
+                                </div>
 
-                            <div className="min-w-0">
-                                <p className="text-sm font-medium text-gray-900 truncate">{product.name}</p>
-                                <p className="text-xs text-gray-500">{product.size_category}</p>
+                                <div className="min-w-0">
+                                    <p className="text-sm font-medium text-gray-900 truncate">{product.name}</p>
+                                    <p className="text-xs text-gray-500">{product.size_category}</p>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        )
+                    })}
                 </div>
             </div>
         </div>
