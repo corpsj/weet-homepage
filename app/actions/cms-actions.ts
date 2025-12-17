@@ -128,7 +128,7 @@ export async function getSignatureProducts() {
 }
 
 export async function updateSignatureStatus(productId: string, isSignature: boolean) {
-    const supabase = await createClient();
+    const supabase = createServiceRoleClient();
 
     // Check current count if enabling
     if (isSignature) {
