@@ -93,8 +93,8 @@ export default function ProductsPage() {
         roof: isKO ? '지붕재' : 'Roof',
         exterior: isKO ? '외부마감' : 'Exterior',
         interior: isKO ? '내부마감' : 'Interior',
-        floorPlan: isKO ? '평면도' : 'Floor Plan',
-        floorPlanWaiting: isKO ? '평면 준비중' : 'Floor plan coming soon',
+        floorPlan: isKO ? '도면' : 'Floor Plan',
+        floorPlanWaiting: isKO ? '도면 준비중' : 'Floor plan coming soon',
     };
     const [products, setProducts] = useState<ProductData[]>([]);
     const [loading, setLoading] = useState(true);

@@ -1,9 +1,19 @@
 'use client';
 
 import { useEffect } from 'react';
-import { X } from 'lucide-react';
-import ProductForm from '@/components/admin/ProductForm';
+import dynamic from 'next/dynamic';
+import { X, Loader2 } from 'lucide-react';
 import { Product } from '@/types/supabase';
+
+const ProductForm = dynamic(() => import('@/components/admin/ProductForm'), {
+    loading: () => (
+        <div className="h-96 flex flex-col items-center justify-center text-gray-400">
+            <Loader2 className="w-8 h-8 animate-spin mb-4" />
+            <p>Loading form...</p>
+        </div>
+    ),
+    ssr: false // No need for SSR for a client-side modal
+});
 
 interface ProductModalProps {
     isOpen: boolean;
