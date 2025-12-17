@@ -12,12 +12,14 @@ const supabase = createClient(
 async function checkSignature() {
     const { data: products, error } = await supabase
         .from('products')
-        .select('*')
-        .eq('is_signature', true);
+        .select('id, name, is_active, is_signature, image_url, display_order')
+        .eq('is_signature', true)
+        .order('display_order');
 
     if (error) console.error(error);
     else {
-        console.log('Signature Products:', products.map(p => ({ name: p.name, image: p.image_url })));
+        console.log('Signature Products count:', products.length);
+        products.forEach(p => console.log(`[${p.is_active ? 'Active' : 'Inactive'}] ${p.name} (Order:${p.display_order})`));
     }
 }
 checkSignature();
