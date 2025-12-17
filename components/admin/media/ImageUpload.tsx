@@ -33,18 +33,24 @@ export default function ImageUpload({ value, onChange, className = '', bucket = 
         try {
             let fileToUpload = file;
 
-            // Compress if it's an image
+            // Compress/Convert to WebP if it's an image
             if (file.type.startsWith('image/')) {
                 const options = {
-                    maxSizeMB: 1,
-                    maxWidthOrHeight: 1920,
+                    maxSizeMB: 5, // Increased from 1MB to 5MB for better quality
+                    maxWidthOrHeight: 2560, // Increased to support QHD/Retina
                     useWebWorker: true,
+                    fileType: 'image/webp',
+                    initialQuality: 0.9, // High quality
                 };
                 try {
                     const compressedFile = await imageCompression(file, options);
-                    fileToUpload = compressedFile;
-                } catch {
-                    // Fallback to original file if compression fails
+                    // Create a new file with .webp extension
+                    const newFileName = file.name.replace(/\.[^/.]+$/, "") + ".webp";
+                    fileToUpload = new File([compressedFile], newFileName, { type: 'image/webp' });
+                } catch (e) {
+                    console.warn('Compression failed, using original file', e);
+                    // Fallback to original file but attempting to rename extension might be misleading if content isn't webp. 
+                    // Ideally we should still try to upload, maybe as original.
                 }
             }
 

@@ -7,11 +7,29 @@ import {
 import { ArrowUpRight, Users, MousePointer, Clock, TrendingUp, Monitor, Smartphone, Globe } from 'lucide-react';
 import Link from 'next/link';
 
+interface AnalyticsMetric {
+    value: string;
+}
+
+interface AnalyticsDimension {
+    value: string;
+}
+
+interface AnalyticsRow {
+    dimensionValues: AnalyticsDimension[];
+    metricValues: AnalyticsMetric[];
+}
+
+interface AnalyticsResponse {
+    rows?: AnalyticsRow[];
+}
+
 interface AnalyticsDashboardProps {
     trafficStats: any;
     demographics: any;
     acquisition: any;
     topPages: any;
+    cityStats: any;
 }
 
 const COLORS = ['#111827', '#4B5563', '#9CA3AF', '#D1D5DB', '#E5E7EB'];
@@ -20,7 +38,8 @@ export default function AnalyticsDashboard({
     trafficStats,
     demographics,
     acquisition,
-    topPages
+    topPages,
+    cityStats
 }: AnalyticsDashboardProps) {
 
     // Data Transformation
@@ -47,6 +66,12 @@ export default function AnalyticsDashboard({
         views: parseInt(row.metricValues[0].value),
         users: parseInt(row.metricValues[1].value),
     })) || [];
+
+    const cityData = cityStats?.rows?.map((row: any) => ({
+        name: row.dimensionValues[0].value, // City
+        region: row.dimensionValues[1].value, // Region
+        value: parseInt(row.metricValues[0].value)
+    })).slice(0, 5) || []; // Top 5
 
     // Summary Metrics (Last 7 Days)
     const totalUsers = trafficData.reduce((acc: number, curr: any) => acc + curr.users, 0);
@@ -220,8 +245,8 @@ export default function AnalyticsDashboard({
             </div>
 
             {/* Secondary Row */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Acquisition Channels */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Acquisition Channels (Top 5) */}
                 <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300">
                     <h3 className="text-lg font-bold text-gray-900 mb-2">유입 경로</h3>
                     <p className="text-sm text-gray-500 mb-8">사용자가 사이트를 찾은 방법 (Top 5)</p>
@@ -251,30 +276,57 @@ export default function AnalyticsDashboard({
                     </div>
                 </div>
 
+                {/* City/Region Stats (Top 5) */}
+                <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300">
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">지역별 분포</h3>
+                    <p className="text-sm text-gray-500 mb-8">사용자 접속 지역 (Top 5)</p>
+                    <div className="h-[300px]">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={cityData} layout="vertical" margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
+                                <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#f3f4f6" />
+                                <XAxis type="number" hide />
+                                <YAxis
+                                    dataKey="name"
+                                    type="category"
+                                    tick={{ fontSize: 12, fill: '#4B5563', fontWeight: 500 }}
+                                    width={80}
+                                    axisLine={false}
+                                    tickLine={false}
+                                />
+                                <Tooltip content={<CustomTooltip />} />
+                                <Bar
+                                    dataKey="value"
+                                    name="방문자"
+                                    fill="#4B5563"
+                                    radius={[0, 4, 4, 0]}
+                                    barSize={20}
+                                />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </div>
+
                 {/* Top Pages Table */}
-                <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
+                <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden lg:col-span-1">
                     <h3 className="text-lg font-bold text-gray-900 mb-2">인기 페이지</h3>
-                    <p className="text-sm text-gray-500 mb-6">가장 많이 조회된 페이지 (Top 10)</p>
+                    <p className="text-sm text-gray-500 mb-6">가장 많이 조회된 페이지</p>
                     <div className="overflow-x-auto">
                         <table className="w-full text-sm text-left">
                             <thead className="text-xs text-gray-400 uppercase border-b border-gray-100">
                                 <tr>
                                     <th className="px-4 py-3 font-medium">페이지</th>
                                     <th className="px-4 py-3 text-right font-medium">뷰</th>
-                                    <th className="px-4 py-3 text-right font-medium">방문자</th>
                                 </tr>
                             </thead>
                             <tbody className="divide-y divide-gray-50">
-                                {topPagesData.map((page: any, index: number) => (
+                                {topPagesData.slice(0, 5).map((page: any, index: number) => (
                                     <tr key={index} className="group hover:bg-gray-50/50 transition-colors">
-                                        <td className="px-4 py-4 font-medium text-gray-900 truncate max-w-[200px]">
+                                        <td className="px-4 py-4 font-medium text-gray-900 truncate max-w-[150px]">
                                             <div className="flex flex-col">
                                                 <span className="text-sm group-hover:text-black transition-colors">{page.title === '(not set)' ? '메인 페이지' : page.title}</span>
-                                                <span className="text-xs text-gray-400 font-normal">{page.path}</span>
                                             </div>
                                         </td>
                                         <td className="px-4 py-4 text-right text-gray-600 group-hover:text-gray-900">{page.views.toLocaleString()}</td>
-                                        <td className="px-4 py-4 text-right text-gray-600 group-hover:text-gray-900">{page.users.toLocaleString()}</td>
                                     </tr>
                                 ))}
                             </tbody>

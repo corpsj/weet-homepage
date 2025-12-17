@@ -114,7 +114,7 @@ const COPY: Record<Lang, {
         'Off-Site Construction (OSC)',
         'Prefabricated Building',
       ],
-      signature: '- WEET -'
+      signature: '- weet -'
     },
     sections: [
       {

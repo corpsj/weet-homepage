@@ -16,15 +16,15 @@ const metadataBase = (() => {
   }
 })();
 
-const defaultTitle = "위트(WEET) - 모듈러 건축 전문 기업";
-const defaultDescription = "모듈러 건축 전문 기업 위트(WEET)";
+const defaultTitle = "위트(weet) - 모듈러 건축 전문 기업";
+const defaultDescription = "모듈러 건축 전문 기업 위트(weet)";
 const siteOrigin = metadataBase.origin;
 
 export const metadata: Metadata = {
   metadataBase,
   title: {
     default: defaultTitle,
-    template: "%s | 위트(WEET)",
+    template: "%s | 위트(weet)",
   },
   description: defaultDescription,
   alternates: {
@@ -32,7 +32,6 @@ export const metadata: Metadata = {
   },
   keywords: [
     "위트",
-    "WEET",
     "weet",
     "모듈러 건축",
     "모듈러주택",
@@ -42,13 +41,13 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     url: "/",
-    siteName: "위트(WEET)",
+    siteName: "위트(weet)",
     title: defaultTitle,
     description: defaultDescription,
     images: [
       {
         url: "/OG_LOGO.jpg",
-        alt: "위트(WEET)",
+        alt: "위트(weet)",
       },
     ],
   },
@@ -74,9 +73,9 @@ export const metadata: Metadata = {
     other: {
       ...(process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION
         ? {
-            "naver-site-verification":
-              process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION,
-          }
+          "naver-site-verification":
+            process.env.NEXT_PUBLIC_NAVER_SITE_VERIFICATION,
+        }
         : {}),
     },
   },
@@ -102,7 +101,7 @@ export default function RootLayout({
       "@id": organizationId,
       name: "위트",
       legalName: "주식회사 위트",
-      alternateName: ["WEET", "weet", "위트(WEET)"],
+      alternateName: ["weet", "위트(weet)"],
       url: siteOrigin,
       logo: `${siteOrigin}/images/company/weet-logo.png`,
       sameAs: [
@@ -124,7 +123,7 @@ export default function RootLayout({
       "@type": "WebSite",
       "@id": websiteId,
       url: siteOrigin,
-      name: "위트(WEET)",
+      name: "위트(weet)",
       publisher: {
         "@id": organizationId,
       },

@@ -3,6 +3,7 @@
 import {
     getTrafficStats,
     getUserDemographics,
+    getCityDemographics,
     getAcquisitionSources,
     getTopPages
 } from '@/lib/analytics';
@@ -13,6 +14,10 @@ export async function fetchTrafficStats(startDate?: string, endDate?: string) {
 
 export async function fetchUserDemographics(startDate?: string, endDate?: string) {
     return await getUserDemographics(startDate, endDate);
+}
+
+export async function fetchCityDemographics(startDate?: string, endDate?: string) {
+    return await getCityDemographics(startDate, endDate);
 }
 
 export async function fetchAcquisitionSources(startDate?: string, endDate?: string) {

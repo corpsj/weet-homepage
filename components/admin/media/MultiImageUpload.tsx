@@ -34,16 +34,19 @@ export default function MultiImageUpload({ onUpload, className = '', bucket = 'p
                 try {
                     let fileToUpload = file;
 
-                    // Compress if it's an image
+                    // Compress/Convert to WebP if it's an image
                     if (file.type.startsWith('image/')) {
                         const options = {
-                            maxSizeMB: 1,
-                            maxWidthOrHeight: 1920,
+                            maxSizeMB: 5,
+                            maxWidthOrHeight: 2560,
                             useWebWorker: true,
+                            fileType: 'image/webp',
+                            initialQuality: 0.9,
                         };
                         try {
                             const compressedFile = await imageCompression(file, options);
-                            fileToUpload = compressedFile;
+                            const newFileName = file.name.replace(/\.[^/.]+$/, "") + ".webp";
+                            fileToUpload = new File([compressedFile], newFileName, { type: 'image/webp' });
                         } catch (e) {
                             console.warn('Compression failed, using original file', e);
                             // Fallback to original file

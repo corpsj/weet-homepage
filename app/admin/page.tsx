@@ -4,17 +4,19 @@ import {
     fetchTrafficStats,
     fetchUserDemographics,
     fetchAcquisitionSources,
-    fetchTopPages
+    fetchTopPages,
+    fetchCityDemographics
 } from '@/app/actions/analytics-actions';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminPage() {
-    const [trafficStats, demographics, acquisition, topPages] = await Promise.all([
+    const [trafficStats, demographics, acquisition, topPages, cityStats] = await Promise.all([
         fetchTrafficStats(),
         fetchUserDemographics(),
         fetchAcquisitionSources(),
-        fetchTopPages()
+        fetchTopPages(),
+        fetchCityDemographics()
     ]);
 
     return (
@@ -30,6 +32,7 @@ export default async function AdminPage() {
                     demographics={demographics}
                     acquisition={acquisition}
                     topPages={topPages}
+                    cityStats={cityStats}
                 />
             </Suspense>
         </div>

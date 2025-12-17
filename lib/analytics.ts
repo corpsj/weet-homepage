@@ -65,6 +65,26 @@ export async function getUserDemographics(startDate = '30daysAgo', endDate = 'to
     }
 }
 
+export async function getCityDemographics(startDate = '30daysAgo', endDate = 'today') {
+    if (!analyticsDataClient || !propertyId) return null;
+
+    try {
+        const [response] = await analyticsDataClient.runReport({
+            property: `properties/${propertyId}`,
+            dateRanges: [{ startDate, endDate }],
+            dimensions: [{ name: 'city' }, { name: 'region' }],
+            metrics: [{ name: 'activeUsers' }],
+            limit: 10,
+            orderBys: [{ metric: { metricName: 'activeUsers' }, desc: true }],
+        });
+
+        return response;
+    } catch (error) {
+        console.error('GA4 City Stats Error:', error);
+        return null;
+    }
+}
+
 export async function getAcquisitionSources(startDate = '30daysAgo', endDate = 'today') {
     if (!analyticsDataClient || !propertyId) return null;
 

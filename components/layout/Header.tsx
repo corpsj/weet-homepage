@@ -132,9 +132,9 @@ const navigationEn = [
     submenu: [
       { name: 'Our Philosophy', href: '/company#philosophy' },
       { name: 'Corporate CI', href: '/company#ci' },
-      { name: 'Weet Crew', href: '/company#crew' },
-      { name: 'Weet Factory', href: '/company#factory' },
-      { name: 'Weet Gallery', href: '/company#gallery' },
+      { name: 'weet Crew', href: '/company#crew' },
+      { name: 'weet Factory', href: '/company#factory' },
+      { name: 'weet Gallery', href: '/company#gallery' },
     ],
   },
   {
@@ -228,7 +228,7 @@ export default function Header() {
               <div className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] lg:w-[90px] lg:h-[90px] relative select-none">
                 <Image
                   src="/images/logo_new.png"
-                  alt="위트(WEET) 로고"
+                  alt="위트(weet) 로고"
                   fill
                   sizes="(max-width: 768px) 80px, (max-width: 1024px) 100px, 90px"
                   className="object-contain"
@@ -387,7 +387,7 @@ export default function Header() {
               <div className="w-[60px] h-[60px] relative select-none">
                 <Image
                   src="/images/logo_new.png"
-                  alt="위트(WEET) 로고"
+                  alt="위트(weet) 로고"
                   fill
                   sizes="60px"
                   className="object-contain"

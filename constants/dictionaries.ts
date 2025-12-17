@@ -15,7 +15,7 @@ export const DICTIONARY = {
                 products: '시그니처 라인',
                 solutions: '솔루션',
                 support: '고객지원',
-                factory: '위트 팩토리',
+                factory: 'weet 팩토리',
             },
             factory: {
                 lab: 'LAB',
@@ -24,7 +24,7 @@ export const DICTIONARY = {
         },
         footer: {
             address: '주소 : 경기도 이천시 신둔면 원적로 159번길 86',
-            company: '주식회사 위트',
+            company: '주식회사 weet',
             ceo: '대표자 : 박현태, 장혁훈, 박성주',
             bizNum: '사업자등록번호 : 468-81-03099',
             tel: 'TEL : 1566-6734',
