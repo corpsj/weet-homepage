@@ -36,7 +36,7 @@ export default function SignatureLineClient({ products }: SignatureLineClientPro
                                         alt={product.name}
                                         fill
                                         className="object-cover"
-                                        sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                     />
                                 ) : (
                                     <div className="w-full h-full flex items-center justify-center text-gray-500 bg-gradient-to-br from-gray-200 to-gray-300">
