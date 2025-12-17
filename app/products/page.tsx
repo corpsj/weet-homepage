@@ -345,21 +345,10 @@ export default function ProductsPage() {
             lastScrollY.current = currentScrollY;
 
             // Active Product Logic
-            const windowHeight = window.innerHeight;
-            const documentHeight = document.documentElement.scrollHeight;
+            const triggerLine = currentScrollY + (window.innerHeight * 0.3); // trigger at 30% viewport height
 
-            // Check if we are at bottom
-            if (currentScrollY + windowHeight + 100 >= documentHeight) {
-                // Optional: Set active to last product?
-            }
-
-            // Find visible product
-            // Strategy: Find the product that occupies the most screen space or whose top is closest to a "reading line" (e.g., top 1/3)
-            let maxOverlap = 0;
-            let visibleProductId = "";
-
-            const readingTop = currentScrollY + 150; // Offset for header
-            const readingBottom = currentScrollY + windowHeight;
+            let closestProductId = "";
+            let minDistance = Infinity;
 
             for (const product of products) {
                 const element = productRefs.current[product.id];
@@ -367,26 +356,31 @@ export default function ProductsPage() {
                     const { offsetTop, offsetHeight } = element;
                     const elementBottom = offsetTop + offsetHeight;
 
-                    // Calculate overlap
-                    const overlapTop = Math.max(readingTop, offsetTop);
-                    const overlapBottom = Math.min(readingBottom, elementBottom);
-                    const overlap = Math.max(0, overlapBottom - overlapTop);
+                    // Check if product is currently covering the trigger line
+                    if (triggerLine >= offsetTop && triggerLine <= elementBottom) {
+                        closestProductId = product.id;
+                        break; // Found the one under the 30% line
+                    }
 
-                    if (overlap > maxOverlap) {
-                        maxOverlap = overlap;
-                        visibleProductId = product.id;
+                    // Fallback: Find closest start to trigger line (if gap exists)
+                    const distance = Math.abs(offsetTop - triggerLine);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        closestProductId = product.id;
                     }
                 }
             }
 
-            if (visibleProductId && visibleProductId !== activeProduct) {
-                // Prevent "jump" by only updating if significantly different or manual override needed
-                // Actually, react state update won't cause scroll jump unless layout shifts.
-                // The user reported "scrolling up jumps to 3x9". This usually happens if `expandedCategories` state resets or something causes re-render that loses scroll position.
-                // But here we are just setting activeProduct.
-                // Let's ensure we don't accidentally select the first product when scrolling up from L if overlap logic is weird.
+            // Bottom detection to force select last item
+            const documentHeight = document.documentElement.scrollHeight;
+            if (window.innerHeight + currentScrollY >= documentHeight - 100) {
+                if (products.length > 0) {
+                    closestProductId = products[products.length - 1].id;
+                }
+            }
 
-                setActiveProduct(visibleProductId);
+            if (closestProductId && closestProductId !== activeProduct) {
+                setActiveProduct(closestProductId);
             }
         };
 
