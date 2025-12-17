@@ -198,6 +198,36 @@ export default function ProductsPage() {
         fetchProducts();
     }, []);
 
+    // Scroll to Hash on Load
+    useEffect(() => {
+        if (!loading && products.length > 0 && window.location.hash) {
+            const hash = window.location.hash.substring(1); // remove #
+            // use timeout to ensure rendering
+            setTimeout(() => {
+                const element = document.getElementById(hash);
+                if (element) {
+                    const headerOffset = 100;
+                    const elementPosition = element.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: "smooth"
+                    });
+
+                    // Also expand the category if needed
+                    const productCategory = products.find(p => p.sizeCategory.toLowerCase() === hash)?.sizeCategory;
+                    if (productCategory) {
+                        setExpandedCategories(prev => {
+                            if (!prev.includes(productCategory)) return [...prev, productCategory];
+                            return prev;
+                        });
+                    }
+                }
+            }, 100);
+        }
+    }, [loading, products]);
+
     // 사이드바 구조 생성 (Dynamic)
     interface SidebarCategory {
         label: string;
@@ -544,120 +574,132 @@ export default function ProductsPage() {
                     {/* Removing the sticky header inside main content to prevent conflicts, Sidebar handles navigation */}
 
                     <div className="max-w-5xl mx-auto space-y-[20vh]"> {/* Increased spacing for better scroll detection */}
-                        {products.map((product) => (
-                            <div
-                                key={product.id}
-                                ref={(el) => { productRefs.current[product.id] = el; }}
-                                className="scroll-mt-32"
-                            >
-                                {/* Product Header */}
-                                <div className="mb-8">
-                                    <div className="flex items-baseline gap-4 mb-2">
-                                        <h2 className="text-4xl font-bold text-gray-900">{product.name}</h2>
-                                    </div>
-                                    {product.tagline && (
-                                        <p className="text-lg text-gray-600">{product.tagline}</p>
-                                    )}
-                                </div>
+                        {products.map((product, index) => {
+                            // Check if this is the first product of its category to render the anchor
+                            const isFirstOfCategory = index === 0 || products[index - 1].sizeCategory !== product.sizeCategory;
+                            const categoryId = product.sizeCategory.toLowerCase(); // s, m, l, xl, solution, design
 
-                                {/* Main Image */}
-                                <div
-                                    className="relative w-full aspect-[16/9] bg-gray-200 rounded-2xl overflow-hidden mb-12 shadow-sm cursor-pointer group"
-                                    onClick={() => openGallery(product)}
-                                >
-                                    {product.imageUrl ? (
-                                        <>
-                                            <Image
-                                                src={product.imageUrl}
-                                                alt={product.name}
-                                                fill
-                                                className="object-cover group-hover:scale-105 transition-transform duration-500"
-                                                sizes="(max-width: 768px) 100vw, 80vw"
-                                                priority={products.indexOf(product) < 2}
-                                            />
-                                            {/* Gallery hint icon */}
-                                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
-                                                <div className="bg-white/80 backdrop-blur-sm p-3 rounded-full">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6" /><path d="M9 21H3v-6" /><path d="M21 3l-7 7" /><path d="M3 21l7-7" /></svg>
+                            return (
+                                <div key={product.id} className="relative">
+                                    {/* Anchor for Scroll */}
+                                    {isFirstOfCategory && (
+                                        <div id={categoryId} className="absolute -top-[140px] invisible" />
+                                    )}
+
+                                    <div
+                                        ref={(el) => { productRefs.current[product.id] = el; }}
+                                        className="scroll-mt-32"
+                                    >
+                                        {/* Product Header */}
+                                        <div className="mb-8">
+                                            <div className="flex items-baseline gap-4 mb-2">
+                                                <h2 className="text-4xl font-bold text-gray-900">{product.name}</h2>
+                                            </div>
+                                            {product.tagline && (
+                                                <p className="text-lg text-gray-600">{product.tagline}</p>
+                                            )}
+                                        </div>
+
+                                        {/* Main Image */}
+                                        <div
+                                            className="relative w-full aspect-[16/9] bg-gray-200 rounded-2xl overflow-hidden mb-12 shadow-sm cursor-pointer group"
+                                            onClick={() => openGallery(product)}
+                                        >
+                                            {product.imageUrl ? (
+                                                <>
+                                                    <Image
+                                                        src={product.imageUrl}
+                                                        alt={product.name}
+                                                        fill
+                                                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                                        sizes="(max-width: 768px) 100vw, 80vw"
+                                                        priority={products.indexOf(product) < 2}
+                                                    />
+                                                    {/* Gallery hint icon */}
+                                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                                                        <div className="bg-white/80 backdrop-blur-sm p-3 rounded-full">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6" /><path d="M9 21H3v-6" /><path d="M21 3l-7 7" /><path d="M3 21l7-7" /></svg>
+                                                        </div>
+                                                    </div>
+                                                    {/* Image count indicator if multiple */}
+                                                    {(product.subImages && product.subImages.length > 0) && (
+                                                        <div className="absolute bottom-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm">
+                                                            + {product.subImages.length + 1} Images
+                                                        </div>
+                                                    )}
+                                                </>
+                                            ) : (
+                                                <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                                                    No Image
+                                                </div>
+                                            )}
+                                        </div>
+
+                                        {/* Details Grid */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+                                            {/* Left: Description & Specs */}
+                                            <div className="space-y-8">
+                                                <div>
+                                                    <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">{TEXT.description}</h3>
+                                                    <p className="text-gray-600 leading-relaxed whitespace-pre-line">
+                                                        {product.description}
+                                                    </p>
+                                                </div>
+
+                                                <div>
+                                                    <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">{TEXT.specs}</h3>
+                                                    <dl className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
+                                                        <div className="sm:col-span-1">
+                                                            <dt className="text-sm font-medium text-gray-500">{TEXT.price}</dt>
+                                                            <dd className="mt-1 text-sm text-gray-900">{product.details.price}</dd>
+                                                        </div>
+                                                        <div className="sm:col-span-1">
+                                                            <dt className="text-sm font-medium text-gray-500">{TEXT.size}</dt>
+                                                            <dd className="mt-1 text-sm text-gray-900">{product.details.size}</dd>
+                                                        </div>
+                                                        <div className="sm:col-span-1">
+                                                            <dt className="text-sm font-medium text-gray-500">{TEXT.structure}</dt>
+                                                            <dd className="mt-1 text-sm text-gray-900">{product.details.structure}</dd>
+                                                        </div>
+                                                        <div className="sm:col-span-1">
+                                                            <dt className="text-sm font-medium text-gray-500">{TEXT.roof}</dt>
+                                                            <dd className="mt-1 text-sm text-gray-900">{product.details.roofType}</dd>
+                                                        </div>
+                                                        <div className="sm:col-span-1">
+                                                            <dt className="text-sm font-medium text-gray-500">{TEXT.exterior}</dt>
+                                                            <dd className="mt-1 text-sm text-gray-900">{product.details.exterior}</dd>
+                                                        </div>
+                                                        <div className="sm:col-span-1">
+                                                            <dt className="text-sm font-medium text-gray-500">{TEXT.interior}</dt>
+                                                            <dd className="mt-1 text-sm text-gray-900">{product.details.interior}</dd>
+                                                        </div>
+                                                    </dl>
                                                 </div>
                                             </div>
-                                            {/* Image count indicator if multiple */}
-                                            {(product.subImages && product.subImages.length > 0) && (
-                                                <div className="absolute bottom-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm">
-                                                    + {product.subImages.length + 1} Images
-                                                </div>
-                                            )}
-                                        </>
-                                    ) : (
-                                        <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                                            No Image
-                                        </div>
-                                    )}
-                                </div>
 
-                                {/* Details Grid */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
-                                    {/* Left: Description & Specs */}
-                                    <div className="space-y-8">
-                                        <div>
-                                            <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">{TEXT.description}</h3>
-                                            <p className="text-gray-600 leading-relaxed whitespace-pre-line">
-                                                {product.description}
-                                            </p>
-                                        </div>
-
-                                        <div>
-                                            <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">{TEXT.specs}</h3>
-                                            <dl className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
-                                                <div className="sm:col-span-1">
-                                                    <dt className="text-sm font-medium text-gray-500">{TEXT.price}</dt>
-                                                    <dd className="mt-1 text-sm text-gray-900">{product.details.price}</dd>
+                                            {/* Right: Floor Plan */}
+                                            <div>
+                                                <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">{TEXT.floorPlan}</h3>
+                                                <div className="w-full aspect-[4/3] rounded-xl flex items-center justify-center relative overflow-hidden border border-gray-100">
+                                                    {product.floorPlan.src ? (
+                                                        <div className="relative w-full h-full">
+                                                            <Image
+                                                                src={product.floorPlan.src}
+                                                                alt="Floor Plan"
+                                                                fill
+                                                                className="object-contain"
+                                                            />
+                                                        </div>
+                                                    ) : (
+                                                        <div className="text-gray-400 text-sm">{TEXT.floorPlanWaiting}</div>
+                                                    )}
                                                 </div>
-                                                <div className="sm:col-span-1">
-                                                    <dt className="text-sm font-medium text-gray-500">{TEXT.size}</dt>
-                                                    <dd className="mt-1 text-sm text-gray-900">{product.details.size}</dd>
-                                                </div>
-                                                <div className="sm:col-span-1">
-                                                    <dt className="text-sm font-medium text-gray-500">{TEXT.structure}</dt>
-                                                    <dd className="mt-1 text-sm text-gray-900">{product.details.structure}</dd>
-                                                </div>
-                                                <div className="sm:col-span-1">
-                                                    <dt className="text-sm font-medium text-gray-500">{TEXT.roof}</dt>
-                                                    <dd className="mt-1 text-sm text-gray-900">{product.details.roofType}</dd>
-                                                </div>
-                                                <div className="sm:col-span-1">
-                                                    <dt className="text-sm font-medium text-gray-500">{TEXT.exterior}</dt>
-                                                    <dd className="mt-1 text-sm text-gray-900">{product.details.exterior}</dd>
-                                                </div>
-                                                <div className="sm:col-span-1">
-                                                    <dt className="text-sm font-medium text-gray-500">{TEXT.interior}</dt>
-                                                    <dd className="mt-1 text-sm text-gray-900">{product.details.interior}</dd>
-                                                </div>
-                                            </dl>
-                                        </div>
-                                    </div>
-
-                                    {/* Right: Floor Plan */}
-                                    <div>
-                                        <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">{TEXT.floorPlan}</h3>
-                                        <div className="w-full aspect-[4/3] rounded-xl flex items-center justify-center relative overflow-hidden border border-gray-100">
-                                            {product.floorPlan.src ? (
-                                                <div className="relative w-full h-full">
-                                                    <Image
-                                                        src={product.floorPlan.src}
-                                                        alt="Floor Plan"
-                                                        fill
-                                                        className="object-contain"
-                                                    />
-                                                </div>
-                                            ) : (
-                                                <div className="text-gray-400 text-sm">{TEXT.floorPlanWaiting}</div>
-                                            )}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 </main>
             </div>

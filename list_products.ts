@@ -1,6 +1,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
+import fs from 'fs';
 
 dotenv.config({ path: '.env.local' });
 
@@ -13,20 +14,16 @@ async function listProducts() {
     const { data: products, error } = await supabase
         .from('products')
         .select('*')
-        .ilike('name', '%3x6%');
+        .order('display_order', { ascending: true });
 
     if (error) {
         console.error('Error fetching products:', error);
         return;
     }
 
-    console.log('Found products:', products.length);
-    products.forEach(p => {
-        console.log(`ID: ${p.id}`);
-        console.log(`Name: ${p.name}`);
-        console.log(`Exterior Finish: ${p.exterior_finish}`);
-        console.log('---');
-    });
+    const lines = products.map(p => `[Order:${p.display_order}] ${p.name} (Finish: ||${p.exterior_finish}||) (ID: ${p.id})`);
+    fs.writeFileSync('product_list.txt', lines.join('\n'));
+    console.log('Written to product_list.txt');
 }
 
 listProducts();
