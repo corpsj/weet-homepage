@@ -181,7 +181,18 @@ export default function ProductsPage() {
                 mappedData.sort((a, b) => {
                     const idxA = categoryOrder.indexOf(a.sizeCategory);
                     const idxB = categoryOrder.indexOf(b.sizeCategory);
-                    return idxA - idxB;
+
+                    if (idxA !== idxB) {
+                        return idxA - idxB;
+                    }
+
+                    // If both are 'S', sort by SubCategory (Private first)
+                    if (a.sizeCategory === 'S') {
+                        if (a.subCategory === 'Private' && b.subCategory !== 'Private') return -1;
+                        if (a.subCategory !== 'Private' && b.subCategory === 'Private') return 1;
+                    }
+
+                    return 0; // Keep original order (display_order from DB)
                 });
 
                 setProducts(mappedData);
