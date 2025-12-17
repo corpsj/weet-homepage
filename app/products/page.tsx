@@ -344,38 +344,39 @@ export default function ProductsPage() {
             }
             lastScrollY.current = currentScrollY;
 
-            // Active Product Logic
-            const triggerLine = currentScrollY + (window.innerHeight * 0.3); // trigger at 30% viewport height
+            // Active Product Logic using getBoundingClientRect (Viewport Relative)
+            // Trigger point: 30% down from top of viewport
+            const triggerPoint = window.innerHeight * 0.3;
 
             let closestProductId = "";
-            let minDistance = Infinity;
+            let minDistanceToTrigger = Infinity;
+
+            // Check bottom of page first
+            const documentHeight = document.documentElement.scrollHeight;
+            if (window.innerHeight + currentScrollY >= documentHeight - 50) {
+                if (products.length > 0) {
+                    setActiveProduct(products[products.length - 1].id);
+                    return;
+                }
+            }
 
             for (const product of products) {
                 const element = productRefs.current[product.id];
                 if (element) {
-                    const { offsetTop, offsetHeight } = element;
-                    const elementBottom = offsetTop + offsetHeight;
+                    const rect = element.getBoundingClientRect();
 
-                    // Check if product is currently covering the trigger line
-                    if (triggerLine >= offsetTop && triggerLine <= elementBottom) {
+                    // Check overlap with trigger point
+                    if (rect.top <= triggerPoint && rect.bottom >= triggerPoint) {
                         closestProductId = product.id;
-                        break; // Found the one under the 30% line
+                        break;
                     }
 
-                    // Fallback: Find closest start to trigger line (if gap exists)
-                    const distance = Math.abs(offsetTop - triggerLine);
-                    if (distance < minDistance) {
-                        minDistance = distance;
+                    // Fallback: track closest element top to trigger
+                    const distance = Math.abs(rect.top - triggerPoint);
+                    if (distance < minDistanceToTrigger) {
+                        minDistanceToTrigger = distance;
                         closestProductId = product.id;
                     }
-                }
-            }
-
-            // Bottom detection to force select last item
-            const documentHeight = document.documentElement.scrollHeight;
-            if (window.innerHeight + currentScrollY >= documentHeight - 100) {
-                if (products.length > 0) {
-                    closestProductId = products[products.length - 1].id;
                 }
             }
 
@@ -386,27 +387,8 @@ export default function ProductsPage() {
 
         window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
-    }, [products, activeProduct]); // Added activeProduct to dependency if needed, but handled inside. Actually checking visibleProductId !== activeProduct uses closure state if not in dep array?
-    // Better to use ref for current active if we want to avoid re-binding listener, OR rely on setState batching.
-    // The previous implementation was fine dependency-wise. 
-    // The "Jump" to 3x9 suggests that when `setActiveProduct` changes, maybe `toggleCategory` logic or some effect forces a scroll?
-    // Ah, `toggleCategory` expands/collapses. If scrolling up changes active product to one in a CLOSED category, does it force close sections?
-    // No, `expandedCategories` is separate.
+    }, [products, activeProduct]);
 
-    // The issue might be that `scrollToProduct` was being called automatically? No, only on click.
-
-    // Let's stick to the overlap logic which is improved.
-    // Also, one issue with the "Scroll Cutoff" might be `overflow-y-auto` on the sidebar itself within the flex container not having a defined height.
-    // In the Sidebar replacement above, I added `h-screen sticky top-0 ... pb-20`.
-    // The container needs `h-screen` to scroll internally if content is long.
-    // The previous code had `h-screen overflow-y-auto`, which is correct for sticky sidebar.
-    // But if the sidebar is taller than viewport, `sticky` behaves weirdly if not handled.
-    // `overflow-y-auto` handles internal scroll.
-
-    // The "Cutoff after M" might be because the Main Content ended too early?
-    // I added `space-y-[20vh]` to main content to ensure spacing.
-    // I will checking the sidebar `overflow` class in the previous tool call.
-    // I used `overflow-hidden` on parent and `overflow-y-auto` on child. This is good flex pattern.
 
     const getProductName = (id: string) => {
         const product = products.find((p) => p.id === id);
