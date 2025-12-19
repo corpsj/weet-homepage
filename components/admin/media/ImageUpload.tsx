@@ -36,7 +36,7 @@ export default function ImageUpload({ value, onChange, className = '', bucket = 
             // Compress/Convert to WebP if it's an image
             if (file.type.startsWith('image/')) {
                 const options = {
-                    maxSizeMB: 5, // Increased from 1MB to 5MB for better quality
+                    maxSizeMB: 20, // Increased from 5MB to 20MB
                     maxWidthOrHeight: 2560, // Increased to support QHD/Retina
                     useWebWorker: true,
                     fileType: 'image/webp',
@@ -131,7 +131,7 @@ export default function ImageUpload({ value, onChange, className = '', bucket = 
                             </div>
                             <div className="text-center">
                                 <p className="text-sm font-medium">클릭하여 이미지 업로드</p>
-                                <p className="text-xs text-gray-400 mt-1">PNG, JPG, GIF up to 10MB</p>
+                                <p className="text-xs text-gray-400 mt-1">PNG, JPG, GIF up to 20MB</p>
                             </div>
                         </>
                     )}
