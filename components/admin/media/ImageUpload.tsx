@@ -71,7 +71,12 @@ export default function ImageUpload({ value, onChange, className = '', bucket = 
 
             onChange(result.url || '');
         } catch (error) {
-            console.error('Image upload failed:', error);
+            console.error('Image upload failed calling action:', {
+                error,
+                fileName: file?.name,
+                fileSize: file?.size,
+                fileType: file?.type,
+            });
             const errorMessage = error instanceof Error ? error.message : '스토리지 버킷 설정을 확인해주세요.';
             toast.error(`이미지 업로드 실패: ${errorMessage}`);
         } finally {

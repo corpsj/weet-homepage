@@ -70,7 +70,12 @@ export default function MultiImageUpload({ onUpload, className = '', bucket = 'p
 
                     return result.url;
                 } catch (error) {
-                    console.error('File upload error:', error);
+                    console.error('File upload error:', {
+                        error,
+                        fileName: file.name,
+                        fileSize: file.size,
+                        fileType: file.type
+                    });
                     return null;
                 }
             });

@@ -34,7 +34,14 @@ export async function uploadImageAction(formData: FormData) {
 
         return { success: true, url: publicUrlData.publicUrl };
     } catch (error) {
-        console.error('Upload error:', error);
+        console.error('Upload error details:', {
+            error,
+            bucket: formData.get('bucket'),
+            path: formData.get('path'),
+            fileName: (formData.get('file') as File)?.name,
+            fileSize: (formData.get('file') as File)?.size,
+            fileType: (formData.get('file') as File)?.type,
+        });
         return {
             success: false,
             error: error instanceof Error ? error.message : 'Upload failed'
