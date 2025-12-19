@@ -14,12 +14,11 @@ interface Props {
 
 const ITEMS_PER_PAGE = 12;
 
-export default async function AdminProductsPage({ searchParams }: Props) { // Remove 'await' here, searchParams is not a promise in this Next.js version (likely 14/15 changes, but standard is object)
-    // Actually in Next 15 searchParams is a promise, but let's assume standard 14 behavior based on codebase.
-    // If it errors, I'll fix it. The codebase seems to be Next 14.
-    const currentPage = Number(searchParams?.page) || 1;
-    const category = searchParams?.category || 'All';
-    const status = searchParams?.status || 'All';
+export default async function AdminProductsPage({ searchParams }: Props) {
+    const resolvedParams = await searchParams;
+    const currentPage = Number(resolvedParams?.page) || 1;
+    const category = resolvedParams?.category || 'All';
+    const status = resolvedParams?.status || 'All';
 
     // Build Query
     let query = supabaseAdmin
