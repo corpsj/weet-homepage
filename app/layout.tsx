@@ -81,6 +81,7 @@ export const metadata: Metadata = {
   },
 };
 
+import { Analytics } from "@vercel/analytics/next";
 import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from 'next/script';
 
@@ -142,6 +143,7 @@ export default function RootLayout({
         <LanguageProvider>
           <ClientLayout>{children}</ClientLayout>
         </LanguageProvider>
+        <Analytics />
         {process.env.NEXT_PUBLIC_GA_ID && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
         )}
