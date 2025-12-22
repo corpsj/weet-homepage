@@ -5,7 +5,7 @@ import { Save, Plus, Trash2, GripVertical, Image as ImageIcon, Loader2 } from 'l
 import Image from 'next/image';
 import { Database } from '@/types/supabase';
 import ImageUpload from '@/components/admin/media/ImageUpload';
-import { createHeroSlide, updateHeroSlide, deleteHeroSlide, updateSignatureStatus } from '@/app/actions/cms-actions';
+import { createHeroSlide, updateHeroSlide, deleteHeroSlide, updateSignatureStatus, reorderHeroSlides } from '@/app/actions/cms-actions';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { createClient } from '@/utils/supabase/client';
@@ -122,28 +122,25 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
     };
 
     const updateSortOrder = async (items: HeroSlide[]) => {
-        try {
-            const updates = items.map((item, index) => ({
-                id: item.id,
-                sort_order: index
-            }));
-
-            const { error } = await supabase
-                .from('hero_slides')
-                .upsert(updates as any, { onConflict: 'id' });
-
-            if (error) throw error;
-            toast.success('순서가 저장되었습니다.');
-        } catch (error) {
-            console.error(error);
-            toast.error('순서 저장 실패');
-        }
-    };
-
-    const handleCreate = async (formData: FormData) => {
         startTransition(async () => {
             try {
-                await createHeroSlide(formData);
+                const ids = items.map(item => item.id);
+                await reorderHeroSlides(ids);
+                toast.success('순서가 저장되었습니다.');
+                router.refresh();
+            } catch (error) {
+                console.error('Failed to reorder:', error);
+                toast.error('순서 저장 실패');
+                // Refresh to sync back with server state on failure
+                router.refresh();
+            }
+        });
+    };
+
+    const handleCreate = async (data: { title: string; subtitle: string; image_url: string }) => {
+        startTransition(async () => {
+            try {
+                await createHeroSlide(data);
                 setIsAdding(false);
                 router.refresh();
                 toast.success('슬라이드가 추가되었습니다.');
@@ -227,10 +224,10 @@ function SortableHeroSlideItem({ slide, onDelete }: { slide: HeroSlide, onDelete
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
 
-    const handleUpdate = async (formData: FormData) => {
+    const handleUpdate = async (data: { title: string; subtitle: string; image_url: string }) => {
         startTransition(async () => {
             try {
-                await updateHeroSlide(slide.id, formData);
+                await updateHeroSlide(slide.id, data);
                 setIsEditing(false);
                 router.refresh();
                 toast.success('수정되었습니다.');
@@ -310,7 +307,7 @@ function HeroSlideForm({
     isPending
 }: {
     initialData?: HeroSlide,
-    onSubmit: (formData: FormData) => void,
+    onSubmit: (data: { title: string; subtitle: string; image_url: string }) => void,
     onCancel: () => void,
     isPending: boolean
 }) {
@@ -319,8 +316,11 @@ function HeroSlideForm({
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         const formData = new FormData(e.currentTarget);
-        formData.append('image_url', imageUrl);
-        onSubmit(formData);
+        onSubmit({
+            title: formData.get('title') as string,
+            subtitle: formData.get('subtitle') as string,
+            image_url: imageUrl
+        });
     };
 
     return (

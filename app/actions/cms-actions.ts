@@ -26,12 +26,11 @@ export async function getHeroSlides() {
     return data as HeroSlide[];
 }
 
-export async function createHeroSlide(formData: FormData) {
+export async function createHeroSlide(data: { title: string; subtitle: string; image_url: string }) {
+    console.log('Creating hero slide:', data);
     // Use Service Role Client to bypass RLS
     const supabase = createServiceRoleClient();
-    const title = formData.get('title') as string;
-    const subtitle = formData.get('subtitle') as string;
-    const image_url = formData.get('image_url') as string;
+    const { title, subtitle, image_url } = data;
 
     // Get max sort_order
     // eslint-disable-next-line
@@ -64,12 +63,11 @@ export async function createHeroSlide(formData: FormData) {
     revalidatePath('/'); // Revalidate homepage
 }
 
-export async function updateHeroSlide(id: number, formData: FormData) {
+export async function updateHeroSlide(id: number, data: { title: string; subtitle: string; image_url: string }) {
+    console.log('Updating hero slide:', id, data);
     // Use Service Role Client to bypass RLS
     const supabase = createServiceRoleClient();
-    const title = formData.get('title') as string;
-    const subtitle = formData.get('subtitle') as string;
-    const image_url = formData.get('image_url') as string;
+    const { title, subtitle, image_url } = data;
 
     // eslint-disable-next-line
     const { error } = await (supabase as any)
@@ -102,6 +100,30 @@ export async function deleteHeroSlide(id: number) {
     if (error) {
         console.error('Error deleting hero slide:', error);
         throw new Error('슬라이드 삭제 실패: ' + error.message);
+    }
+
+    revalidatePath('/admin/main');
+    revalidatePath('/');
+}
+
+export async function reorderHeroSlides(ids: number[]) {
+    const supabase = createServiceRoleClient();
+
+    // Use a single RPC or multiple updates
+    // For simplicity with Supabase JS client without a custom RPC:
+    const updates = ids.map((id, index) => ({
+        id,
+        sort_order: index
+    }));
+
+    // eslint-disable-next-line
+    const { error } = await (supabase as any)
+        .from('hero_slides')
+        .upsert(updates, { onConflict: 'id' });
+
+    if (error) {
+        console.error('Error reordering hero slides:', error);
+        throw new Error('순서 변경 실패: ' + error.message);
     }
 
     revalidatePath('/admin/main');
