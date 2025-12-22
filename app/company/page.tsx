@@ -5,6 +5,7 @@ import { useState } from 'react';
 import CrewModal from '@/components/ui/CrewModal';
 import { useTranslation } from '@/hooks/useTranslation';
 import GallerySection from '@/components/company/GallerySection';
+import ImageSlider from '@/components/ui/ImageSlider';
 
 interface CrewData {
   name: string;
@@ -301,28 +302,23 @@ export default function CompanyPage() {
             <div className="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
               {/* LAB */}
               <div className="flex flex-col items-center text-center w-full">
-                <div className="w-full md:max-w-[541px] aspect-[541/422] rounded-lg overflow-hidden mb-4 relative">
-                  <Image
-                    src="/images/company/lab.jpg"
-                    alt="LAB"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
+                <ImageSlider
+                  images={t.company.factory.lab.images}
+                  alt="LAB"
+                  className="mb-4"
+                />
                 <h3 className="text-[18px] md:text-[20px] font-bold text-black">{t.company.factory.lab.title}</h3>
                 <p className="text-[14px] text-gray-600">{t.company.factory.lab.desc}</p>
               </div>
 
               {/* WORKSHOP */}
               <div className="flex flex-col items-center text-center w-full">
-                <div className="w-full md:max-w-[359px] aspect-[359/422] rounded-lg overflow-hidden mb-4 relative">
-                  <Image
-                    src="/images/company/workshop.jpg"
-                    alt="WORKSHOP"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
+                <ImageSlider
+                  images={t.company.factory.workshop.images}
+                  alt="WORKSHOP"
+                  className="mb-4"
+                  aspectRatio="md:max-w-[359px] aspect-[359/422]"
+                />
                 <h3 className="text-[18px] md:text-[20px] font-bold text-black">{t.company.factory.workshop.title}</h3>
                 <p className="text-[14px] text-gray-600">{t.company.factory.workshop.desc}</p>
               </div>
