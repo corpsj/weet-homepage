@@ -160,7 +160,7 @@ export const DICTIONARY = {
                 lab: {
                     title: 'LAB',
                     desc: '당신의 꿈을 연구하는곳',
-                    images: ['/images/company/lab.jpg', '/images/company/factory.png']
+                    images: ['/images/company/lab_new.jpg']
                 },
                 workshop: {
                     title: 'WORKSHOP',
@@ -354,7 +354,7 @@ He is an engineer who strives to uphold the principle of 'warm and solid housing
                 lab: {
                     title: 'LAB',
                     desc: 'Where your dreams are researched',
-                    images: ['/images/company/lab.jpg', '/images/company/factory.png']
+                    images: ['/images/company/lab_new.jpg']
                 },
                 workshop: {
                     title: 'WORKSHOP',
