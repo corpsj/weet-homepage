@@ -1,11 +1,12 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Noto_Sans_KR } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/components/layout/ClientLayout";
 
-const geist = Geist({
+const noto = Noto_Sans_KR({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
+  weight: ["400", "500", "700"],
+  variable: "--font-noto-sans",
 });
 
 const metadataBase = (() => {
@@ -132,7 +133,7 @@ export default function RootLayout({
   ];
 
   return (
-    <html lang="ko" className={geist.variable}>
+    <html lang="ko" className={noto.variable}>
       <head>
         <script
           type="application/ld+json"

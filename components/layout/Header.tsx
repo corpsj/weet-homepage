@@ -361,7 +361,7 @@ export default function Header() {
                             <Link
                               key={idx}
                               href={subitem.href}
-                              className="relative inline-block text-[13px] font-bold text-gray-600 hover:text-black transition-colors group"
+                              className="relative inline-block text-[13px] text-gray-600 hover:text-black transition-colors group"
                             >
                               <span className="relative z-10">{subitem.name}</span>
                               <span className="absolute bottom-[1px] left-0 right-0 h-[6px] bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200 -z-0" />
@@ -428,7 +428,7 @@ export default function Header() {
                       key={idx}
                       href={subitem.href}
                       onClick={handleMobileMenuClose}
-                      className="block text-sm md:text-base font-bold text-gray-600 hover:text-black transition-colors py-1"
+                      className="block text-sm md:text-base text-gray-600 hover:text-black transition-colors py-1"
                     >
                       {subitem.name}
                     </Link>

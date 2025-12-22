@@ -5,6 +5,7 @@
 @layer base {
   body {
     @apply bg-[#EBEBEB] text-black antialiased;
+    font-family: var(--font-noto-sans), sans-serif;
   }
 
   html {
