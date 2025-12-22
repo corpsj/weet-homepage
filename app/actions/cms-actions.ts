@@ -12,7 +12,7 @@ type Product = Database['public']['Tables']['products']['Row'];
 
 export async function getHeroSlides() {
     const supabase = await createClient();
-    console.log('Fetching hero slides...');
+    console.log('--- SERVER: getHeroSlides START ---');
     // eslint-disable-next-line
     const { data, error } = await (supabase as any)
         .from('hero_slides')
@@ -20,10 +20,15 @@ export async function getHeroSlides() {
         .order('display_order', { ascending: true });
 
     if (error) {
-        console.error('Error fetching hero slides:', error);
+        console.error('--- SERVER: getHeroSlides ERROR ---', error);
         return [];
     }
 
+    console.log('--- SERVER: getHeroSlides SUCCESS ---', {
+        count: data?.length,
+        firstTitle: data?.[0]?.title,
+        columns: data && data.length > 0 ? Object.keys(data[0]) : 'no data'
+    });
     return data as HeroSlide[];
 }
 
