@@ -287,7 +287,7 @@ export default function Header() {
               <Link
                 href="https://blog.naver.com/we-et"
                 target="_blank"
-                className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
+                className="text-sm font-bold hover:text-gray-700 transition-colors flex items-center gap-1"
               >
                 <span className="text-[16px] font-bold">N</span>
                 <span className="text-[12px]">blog</span>
@@ -295,7 +295,7 @@ export default function Header() {
               <Link
                 href="https://www.instagram.com/weet_kr/"
                 target="_blank"
-                className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
+                className="text-sm font-bold hover:text-gray-700 transition-colors flex items-center gap-1"
               >
                 <Instagram className="w-[16px] h-[16px]" />
                 <span className="text-[12px]">instagram</span>
@@ -303,7 +303,7 @@ export default function Header() {
               <Link
                 href="https://youtube.com"
                 target="_blank"
-                className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
+                className="text-sm font-bold hover:text-gray-700 transition-colors flex items-center gap-1"
               >
                 <Youtube className="w-[16px] h-[16px]" />
                 <span className="text-[12px]">youtube</span>
@@ -361,7 +361,7 @@ export default function Header() {
                             <Link
                               key={idx}
                               href={subitem.href}
-                              className="relative inline-block text-[13px] text-gray-600 hover:text-black transition-colors group"
+                              className="relative inline-block text-[13px] font-bold text-gray-600 hover:text-black transition-colors group"
                             >
                               <span className="relative z-10">{subitem.name}</span>
                               <span className="absolute bottom-[1px] left-0 right-0 h-[6px] bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200 -z-0" />
@@ -428,7 +428,7 @@ export default function Header() {
                       key={idx}
                       href={subitem.href}
                       onClick={handleMobileMenuClose}
-                      className="block text-sm md:text-base text-gray-600 hover:text-black transition-colors py-1"
+                      className="block text-sm md:text-base font-bold text-gray-600 hover:text-black transition-colors py-1"
                     >
                       {subitem.name}
                     </Link>
@@ -474,7 +474,7 @@ export default function Header() {
                 onClick={handleMobileMenuClose}
               >
                 <span className="text-xl font-bold">N</span>
-                <span className="text-[12px]">blog</span>
+                <span className="text-[12px] font-bold">blog</span>
               </Link>
               <Link
                 href="https://www.instagram.com/weet_kr/"
@@ -483,7 +483,7 @@ export default function Header() {
                 onClick={handleMobileMenuClose}
               >
                 <Instagram className="w-5 h-5" />
-                <span className="text-[12px]">Instagram</span>
+                <span className="text-[12px] font-bold">Instagram</span>
               </Link>
               <Link
                 href="https://youtube.com"
@@ -492,7 +492,7 @@ export default function Header() {
                 onClick={handleMobileMenuClose}
               >
                 <Youtube className="w-5 h-5" />
-                <span className="text-[12px]">YouTube</span>
+                <span className="text-[12px] font-bold">YouTube</span>
               </Link>
             </div>
 
