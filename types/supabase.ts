@@ -123,7 +123,7 @@ export interface Database {
           image_url: string
           title: string
           subtitle: string | null
-          display_order: number
+          sort_order: number
           is_active: boolean
           created_at: string
         }
@@ -132,7 +132,7 @@ export interface Database {
           image_url: string
           title: string
           subtitle?: string | null
-          display_order?: number
+          sort_order?: number
           is_active?: boolean
           created_at?: string
         }
@@ -141,7 +141,7 @@ export interface Database {
           image_url?: string
           title?: string
           subtitle?: string | null
-          display_order?: number
+          sort_order?: number
           is_active?: boolean
           created_at?: string
         }

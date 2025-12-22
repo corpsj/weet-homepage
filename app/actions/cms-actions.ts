@@ -17,7 +17,7 @@ export async function getHeroSlides() {
     const { data, error } = await (supabase as any)
         .from('hero_slides')
         .select('*')
-        .order('display_order', { ascending: true });
+        .order('sort_order', { ascending: true });
 
     if (error) {
         console.error('--- SERVER: getHeroSlides ERROR ---', error);
@@ -38,20 +38,20 @@ export async function createHeroSlide(data: { title: string; subtitle: string; i
         const supabase = createServiceRoleClient();
         const { title, subtitle, image_url } = data;
 
-        // Get max display_order
+        // Get max sort_order
         // eslint-disable-next-line
         const { data: maxOrderData, error: maxOrderError } = await (supabase as any)
             .from('hero_slides')
-            .select('display_order')
-            .order('display_order', { ascending: false })
+            .select('sort_order')
+            .order('sort_order', { ascending: false })
             .limit(1)
             .single();
 
         if (maxOrderError && maxOrderError.code !== 'PGRST116') {
-            console.error('Error fetching max display_order:', maxOrderError);
+            console.error('Error fetching max sort_order:', maxOrderError);
         }
 
-        const nextOrder = (maxOrderData?.display_order || 0) + 1;
+        const nextOrder = (maxOrderData?.sort_order || 0) + 1;
 
         // eslint-disable-next-line
         const { error } = await (supabase as any)
@@ -60,7 +60,7 @@ export async function createHeroSlide(data: { title: string; subtitle: string; i
                 title,
                 subtitle,
                 image_url,
-                display_order: nextOrder,
+                sort_order: nextOrder,
                 is_active: true
             });
 
@@ -139,7 +139,7 @@ export async function reorderHeroSlides(ids: number[]) {
             // eslint-disable-next-line
             const { error } = await (supabase as any)
                 .from('hero_slides')
-                .update({ display_order: i })
+                .update({ sort_order: i })
                 .eq('id', id);
 
             if (error) {
