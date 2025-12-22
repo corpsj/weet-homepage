@@ -261,7 +261,7 @@ export default function Header() {
                   >
                     <Link
                       href={item.href}
-                      className="relative inline-block text-black font-bold text-[18px] hover:text-gray-700 transition-colors whitespace-nowrap group"
+                      className="relative inline-block text-black font-bold text-[15px] hover:text-gray-700 transition-colors whitespace-nowrap group"
                     >
                       <span className="relative z-10">{item.name}</span>
                       <span className={cn(
@@ -281,37 +281,37 @@ export default function Header() {
                 target="_blank"
                 className="text-sm font-bold hover:text-gray-700 transition-colors flex items-center gap-1"
               >
-                <Carrot className="w-[18px] h-[18px]" />
-                <span className="text-[14px]">당근</span>
+                <Carrot className="w-[16px] h-[16px]" />
+                <span className="text-[12px]">당근</span>
               </Link>
               <Link
                 href="https://blog.naver.com/we-et"
                 target="_blank"
                 className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
               >
-                <span className="text-[20px] font-bold">N</span>
-                <span className="text-[14px]">blog</span>
+                <span className="text-[16px] font-bold">N</span>
+                <span className="text-[12px]">blog</span>
               </Link>
               <Link
                 href="https://www.instagram.com/weet_kr/"
                 target="_blank"
                 className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
               >
-                <Instagram className="w-[18px] h-[18px]" />
-                <span className="text-[14px]">instagram</span>
+                <Instagram className="w-[16px] h-[16px]" />
+                <span className="text-[12px]">instagram</span>
               </Link>
               <Link
                 href="https://youtube.com"
                 target="_blank"
                 className="text-sm font-normal hover:text-gray-700 transition-colors flex items-center gap-1"
               >
-                <Youtube className="w-[18px] h-[18px]" />
-                <span className="text-[14px]">youtube</span>
+                <Youtube className="w-[16px] h-[16px]" />
+                <span className="text-[12px]">youtube</span>
               </Link>
             </div>
 
             {/* Desktop Language Switcher - Bottom aligned */}
-            <div className="hidden xl:flex absolute right-[64px] bottom-3 flex items-center gap-2 text-[11px] font-medium">
+            <div className="hidden xl:flex absolute right-[64px] bottom-3 flex items-center gap-2 text-[10px] font-medium">
               <button
                 onClick={() => setLanguage('KO')}
                 className={cn("transition-colors", language === 'KO' ? "text-gray-600 font-bold" : "text-gray-300 hover:text-gray-500")}
@@ -352,7 +352,7 @@ export default function Header() {
                       className="flex flex-col items-start"
                     >
                       {/* Invisible Placeholder for Alignment */}
-                      <div className="text-[18px] font-bold invisible h-0 mb-5 overflow-hidden">{item.name}</div>
+                      <div className="text-[15px] font-bold invisible h-0 mb-5 overflow-hidden">{item.name}</div>
 
                       {/* Submenu Items */}
                       <div className="relative w-0">
@@ -361,7 +361,7 @@ export default function Header() {
                             <Link
                               key={idx}
                               href={subitem.href}
-                              className="relative inline-block text-[14px] text-gray-600 hover:text-black transition-colors group"
+                              className="relative inline-block text-[13px] text-gray-600 hover:text-black transition-colors group"
                             >
                               <span className="relative z-10">{subitem.name}</span>
                               <span className="absolute bottom-[1px] left-0 right-0 h-[6px] bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200 -z-0" />
@@ -416,7 +416,7 @@ export default function Header() {
                   <Link
                     href={item.href}
                     onClick={handleMobileMenuClose}
-                    className="block text-2xl md:text-3xl font-bold text-black hover:text-gray-600 transition-colors"
+                    className="block text-lg md:text-xl font-bold text-black hover:text-gray-600 transition-colors"
                   >
                     {item.name}
                   </Link>
@@ -428,7 +428,7 @@ export default function Header() {
                       key={idx}
                       href={subitem.href}
                       onClick={handleMobileMenuClose}
-                      className="block text-base md:text-lg text-gray-600 hover:text-black transition-colors py-1"
+                      className="block text-sm md:text-base text-gray-600 hover:text-black transition-colors py-1"
                     >
                       {subitem.name}
                     </Link>
@@ -442,7 +442,7 @@ export default function Header() {
           <div className="px-6 pb-8 space-y-6">
             {/* Language Selector */}
             {/* Language Selector */}
-            <div className="flex items-center gap-3 text-sm font-medium">
+            <div className="flex items-center gap-3 text-xs font-medium">
               <button
                 onClick={() => setLanguage('KO')}
                 className={cn("font-bold transition-colors", language === 'KO' ? "text-black" : "text-gray-400 hover:text-black")}
@@ -465,7 +465,7 @@ export default function Header() {
                 onClick={handleMobileMenuClose}
               >
                 <Carrot className="w-5 h-5" />
-                <span className="text-sm font-bold">당근</span>
+                <span className="text-[12px] font-bold">당근</span>
               </Link>
               <Link
                 href="https://blog.naver.com/we-et"
@@ -474,7 +474,7 @@ export default function Header() {
                 onClick={handleMobileMenuClose}
               >
                 <span className="text-xl font-bold">N</span>
-                <span className="text-sm">blog</span>
+                <span className="text-[12px]">blog</span>
               </Link>
               <Link
                 href="https://www.instagram.com/weet_kr/"
@@ -483,7 +483,7 @@ export default function Header() {
                 onClick={handleMobileMenuClose}
               >
                 <Instagram className="w-5 h-5" />
-                <span className="text-sm">Instagram</span>
+                <span className="text-[12px]">Instagram</span>
               </Link>
               <Link
                 href="https://youtube.com"
@@ -492,7 +492,7 @@ export default function Header() {
                 onClick={handleMobileMenuClose}
               >
                 <Youtube className="w-5 h-5" />
-                <span className="text-sm">YouTube</span>
+                <span className="text-[12px]">YouTube</span>
               </Link>
             </div>
 
