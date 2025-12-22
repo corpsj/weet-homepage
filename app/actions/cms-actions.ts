@@ -12,11 +12,12 @@ type Product = Database['public']['Tables']['products']['Row'];
 
 export async function getHeroSlides() {
     const supabase = await createClient();
+    console.log('Fetching hero slides...');
     // eslint-disable-next-line
     const { data, error } = await (supabase as any)
         .from('hero_slides')
         .select('*')
-        .order('sort_order', { ascending: true });
+        .order('display_order', { ascending: true });
 
     if (error) {
         console.error('Error fetching hero slides:', error);
@@ -27,65 +28,81 @@ export async function getHeroSlides() {
 }
 
 export async function createHeroSlide(data: { title: string; subtitle: string; image_url: string }) {
-    console.log('Creating hero slide:', data);
-    // Use Service Role Client to bypass RLS
-    const supabase = createServiceRoleClient();
-    const { title, subtitle, image_url } = data;
+    try {
+        console.log('--- SERVER: createHeroSlide START ---', data);
+        const supabase = createServiceRoleClient();
+        const { title, subtitle, image_url } = data;
 
-    // Get max sort_order
-    // eslint-disable-next-line
-    const { data: maxOrderData } = await (supabase as any)
-        .from('hero_slides')
-        .select('sort_order')
-        .order('sort_order', { ascending: false })
-        .limit(1)
-        .single();
+        // Get max display_order
+        // eslint-disable-next-line
+        const { data: maxOrderData, error: maxOrderError } = await (supabase as any)
+            .from('hero_slides')
+            .select('display_order')
+            .order('display_order', { ascending: false })
+            .limit(1)
+            .single();
 
-    const nextOrder = (maxOrderData?.sort_order || 0) + 1;
+        if (maxOrderError && maxOrderError.code !== 'PGRST116') {
+            console.error('Error fetching max display_order:', maxOrderError);
+        }
 
-    // eslint-disable-next-line
-    const { error } = await (supabase as any)
-        .from('hero_slides')
-        .insert({
-            title,
-            subtitle,
-            image_url,
-            sort_order: nextOrder,
-            is_active: true
-        });
+        const nextOrder = (maxOrderData?.display_order || 0) + 1;
 
-    if (error) {
-        console.error('Error creating hero slide:', error);
-        throw new Error('슬라이드 생성 실패: ' + error.message);
+        // eslint-disable-next-line
+        const { error } = await (supabase as any)
+            .from('hero_slides')
+            .insert({
+                title,
+                subtitle,
+                image_url,
+                display_order: nextOrder,
+                is_active: true
+            });
+
+        if (error) {
+            console.error('SERVER: Insert failed:', error);
+            return { success: false, error: error.message };
+        }
+
+        revalidatePath('/admin/main');
+        revalidatePath('/');
+        console.log('--- SERVER: createHeroSlide SUCCESS ---');
+        return { success: true };
+    } catch (error: any) {
+        console.error('--- SERVER: createHeroSlide FAILED ---', error);
+        return { success: false, error: error.message || 'Internal server error' };
     }
-
-    revalidatePath('/admin/main');
-    revalidatePath('/'); // Revalidate homepage
 }
 
 export async function updateHeroSlide(id: number, data: { title: string; subtitle: string; image_url: string }) {
-    console.log('Updating hero slide:', id, data);
-    // Use Service Role Client to bypass RLS
-    const supabase = createServiceRoleClient();
-    const { title, subtitle, image_url } = data;
+    try {
+        console.log('--- SERVER: updateHeroSlide START ---', id, data);
+        const supabase = createServiceRoleClient();
+        const { title, subtitle, image_url } = data;
 
-    // eslint-disable-next-line
-    const { error } = await (supabase as any)
-        .from('hero_slides')
-        .update({
-            title,
-            subtitle,
-            image_url
-        })
-        .eq('id', id);
+        // eslint-disable-next-line
+        const { error } = await (supabase as any)
+            .from('hero_slides')
+            .update({
+                title,
+                subtitle,
+                image_url
+            })
+            .eq('id', id);
 
-    if (error) {
-        console.error('Error updating hero slide:', error);
-        throw new Error('슬라이드 수정 실패: ' + error.message);
+        if (error) {
+            console.error('SERVER: Update failed:', error);
+            return { success: false, error: error.message };
+        }
+
+        revalidatePath('/admin/main');
+        revalidatePath('/');
+        console.log('--- SERVER: updateHeroSlide SUCCESS ---');
+        return { success: true };
+    } catch (error: any) {
+        console.error('--- SERVER: updateHeroSlide FAILED ---', error);
+        return { success: false, error: error.message || 'Internal server error' };
     }
-
-    revalidatePath('/admin/main');
-    revalidatePath('/');
 }
 
 export async function deleteHeroSlide(id: number) {
@@ -107,27 +124,33 @@ export async function deleteHeroSlide(id: number) {
 }
 
 export async function reorderHeroSlides(ids: number[]) {
-    const supabase = createServiceRoleClient();
+    try {
+        console.log('--- SERVER: reorderHeroSlides START ---', ids);
+        const supabase = createServiceRoleClient();
 
-    // Use a single RPC or multiple updates
-    // For simplicity with Supabase JS client without a custom RPC:
-    const updates = ids.map((id, index) => ({
-        id,
-        sort_order: index
-    }));
+        // Sequential updates to avoid partial upsert validation issues
+        for (let i = 0; i < ids.length; i++) {
+            const id = ids[i];
+            // eslint-disable-next-line
+            const { error } = await (supabase as any)
+                .from('hero_slides')
+                .update({ display_order: i })
+                .eq('id', id);
 
-    // eslint-disable-next-line
-    const { error } = await (supabase as any)
-        .from('hero_slides')
-        .upsert(updates, { onConflict: 'id' });
+            if (error) {
+                console.error(`SERVER: Reorder failed at index ${i} (ID: ${id}):`, error);
+                return { success: false, error: `ID ${id} 정렬 실패: ` + error.message };
+            }
+        }
 
-    if (error) {
-        console.error('Error reordering hero slides:', error);
-        throw new Error('순서 변경 실패: ' + error.message);
+        revalidatePath('/admin/main');
+        revalidatePath('/');
+        console.log('--- SERVER: reorderHeroSlides SUCCESS ---');
+        return { success: true };
+    } catch (error: any) {
+        console.error('--- SERVER: reorderHeroSlides FAILED ---', error);
+        return { success: false, error: error.message || 'Internal server error' };
     }
-
-    revalidatePath('/admin/main');
-    revalidatePath('/');
 }
 
 // --- Signature Line ---

@@ -11,11 +11,12 @@ import { uploadImageAction } from '@/app/actions/storage-actions';
 interface ImageUploadProps {
     value: string;
     onChange: (url: string) => void;
+    onUploadStart?: () => void;
     className?: string;
     bucket?: string;
 }
 
-export default function ImageUpload({ value, onChange, className = '', bucket = 'products' }: ImageUploadProps) {
+export default function ImageUpload({ value, onChange, onUploadStart, className = '', bucket = 'products' }: ImageUploadProps) {
     const [loading, setLoading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const supabase = createClient();
@@ -30,6 +31,7 @@ export default function ImageUpload({ value, onChange, className = '', bucket = 
         if (!file) return;
 
         setLoading(true);
+        onUploadStart?.();
         try {
             let fileToUpload = file;
 

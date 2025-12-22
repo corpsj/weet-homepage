@@ -125,13 +125,19 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
         startTransition(async () => {
             try {
                 const ids = items.map(item => item.id);
-                await reorderHeroSlides(ids);
-                toast.success('순서가 저장되었습니다.');
+                console.log('Sending reorder request for IDs:', ids);
+                const result = await reorderHeroSlides(ids);
+
+                if (result.success) {
+                    toast.success('순서가 저장되었습니다.');
+                } else {
+                    console.error('Server-side reorder failure:', result.error);
+                    toast.error(`순서 저장 실패: ${result.error}`);
+                }
                 router.refresh();
-            } catch (error) {
-                console.error('Failed to reorder:', error);
-                toast.error('순서 저장 실패');
-                // Refresh to sync back with server state on failure
+            } catch (error: any) {
+                console.error('Client-side reorder exception:', error);
+                toast.error(`순서 저장 중 오류 발생: ${error.message || '알 수 없는 오류'}`);
                 router.refresh();
             }
         });
@@ -140,12 +146,16 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
     const handleCreate = async (data: { title: string; subtitle: string; image_url: string }) => {
         startTransition(async () => {
             try {
-                await createHeroSlide(data);
-                setIsAdding(false);
-                router.refresh();
-                toast.success('슬라이드가 추가되었습니다.');
+                const result = await createHeroSlide(data);
+                if (result.success) {
+                    setIsAdding(false);
+                    router.refresh();
+                    toast.success('슬라이드가 추가되었습니다.');
+                } else {
+                    toast.error('슬라이드 추가 실패: ' + result.error);
+                }
             } catch (error) {
-                toast.error('슬라이드 추가 실패');
+                toast.error('슬라이드 추가 중 오류 발생');
             }
         });
     };
@@ -227,12 +237,16 @@ function SortableHeroSlideItem({ slide, onDelete }: { slide: HeroSlide, onDelete
     const handleUpdate = async (data: { title: string; subtitle: string; image_url: string }) => {
         startTransition(async () => {
             try {
-                await updateHeroSlide(slide.id, data);
-                setIsEditing(false);
-                router.refresh();
-                toast.success('수정되었습니다.');
+                const result = await updateHeroSlide(slide.id, data);
+                if (result.success) {
+                    setIsEditing(false);
+                    router.refresh();
+                    toast.success('수정되었습니다.');
+                } else {
+                    toast.error('수정 실패: ' + result.error);
+                }
             } catch (error) {
-                toast.error('수정 실패');
+                toast.error('수정 중 오류 발생');
             }
         });
     };
@@ -312,9 +326,14 @@ function HeroSlideForm({
     isPending: boolean
 }) {
     const [imageUrl, setImageUrl] = useState(initialData?.image_url || '');
+    const [isUploading, setIsUploading] = useState(false);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (isUploading) {
+            toast.error('이미지 업로드 중입니다.');
+            return;
+        }
         const formData = new FormData(e.currentTarget);
         onSubmit({
             title: formData.get('title') as string,
@@ -330,7 +349,11 @@ function HeroSlideForm({
                     <label className="block text-sm font-bold mb-2">이미지</label>
                     <ImageUpload
                         value={imageUrl}
-                        onChange={setImageUrl}
+                        onChange={(url) => {
+                            setImageUrl(url);
+                            setIsUploading(false);
+                        }}
+                        onUploadStart={() => setIsUploading(true)}
                         className="h-32"
                     />
                 </div>
@@ -366,9 +389,9 @@ function HeroSlideForm({
                 <button
                     type="submit"
                     className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 disabled:bg-gray-400 flex items-center gap-2"
-                    disabled={isPending || !imageUrl}
+                    disabled={isPending || isUploading || !imageUrl}
                 >
-                    {isPending && <Loader2 className="w-4 h-4 animate-spin" />}
+                    {(isPending || isUploading) && <Loader2 className="w-4 h-4 animate-spin" />}
                     저장
                 </button>
             </div>
