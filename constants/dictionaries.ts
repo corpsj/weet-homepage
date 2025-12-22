@@ -148,11 +148,12 @@ export const DICTIONARY = {
                 solution: {
                     title: 'HOME SOLUTION 부문',
                     name: '박성주',
-                    role: 'HOME SOLUTION 부문 대표',
-                    description: '준비중',
-                    education: { title: '항목 1', items: ['준비중'] },
-                    career: { title: '항목 2', items: ['준비중'] },
-                    awards: { title: '', items: [] }
+                    role: 'weet의 대표 솔루션 디렉터',
+                    description: `집이라는 하드웨어에 생명력을 불어넣는 'Home OS' 개발을 통해, 집과 거주자가 유기적으로 연결되는 스마트 홈 솔루션을 구축하고 있다.
+단순한 기기 제어를 넘어 집이 거주자의 필요를 먼저 읽고 반응하는 '지능형 공간'을 지향하며, 복잡한 환경에서도 누구에게나 직관적인 사용성을 제공하는 것을 원칙으로 한다.
+오지에서도 끊김 없는 연결성을 확보하고 어디서든 고유의 공간에 접근할 수 있게 하는 인프라 구축을 총괄하며, 기술이 기술 그 자체로 남지 않고 삶의 가장 안락한 조력자가 되도록 만드는 일을 책임지고 있다.`,
+                    education: { title: '학력 및 자격', items: ['준비중'] },
+                    career: { title: '경력', items: ['준비중'] }
                 }
             },
             factory: {
@@ -340,11 +341,12 @@ He is an engineer who strives to uphold the principle of 'warm and solid housing
                 solution: {
                     title: 'HOME SOLUTION Division',
                     name: 'Park Sung-ju',
-                    role: 'Head of HOME SOLUTION',
-                    description: 'Coming Soon',
-                    education: { title: 'Item 1', items: ['Coming Soon'] },
-                    career: { title: 'Item 2', items: ['Coming Soon'] },
-                    awards: { title: '', items: [] }
+                    role: 'Chief Solution Director',
+                    description: `By developing the 'Home OS' that breathes life into building hardware, he is building smart home solutions where homes and residents are organically connected.
+Beyond simple device control, he aims for 'intelligent spaces' where the home proactively senses and responds to the residents' needs, with a core principle of providing intuitive usability for everyone.
+He oversees the infrastructure that ensures seamless connectivity in off-grid locations and enables access to one's personal space from anywhere, ensuring that technology remains not as a mere tool but as life's most comfortable supporter.`,
+                    education: { title: 'Education and Qualifications', items: ['Coming Soon'] },
+                    career: { title: 'Career', items: ['Coming Soon'] }
                 }
             },
             factory: {
