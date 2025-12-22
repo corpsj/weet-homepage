@@ -148,7 +148,7 @@ export const DICTIONARY = {
                 solution: {
                     title: 'HOME SOLUTION 부문',
                     name: '박성주',
-                    role: 'weet의 대표 솔루션 디렉터',
+                    role: 'weet의 대표 솔루션 개발자',
                     description: `"우리 할머니도 사용할 수 있는 기술."\n\n건축물이 완성된 이후, 그 안팎에서 펼쳐질 고객의 일상을 더욱 편리하게 만드는 '홈 솔루션' 전반을 책임지고 있습니다. 집이 먼저 사용자에게 필요한 말을 건네고, 보이지 않는 곳에서 조용히 삶을 서포트할 수 있도록 'Home OS'를 개발합니다. 최첨단 기술을 가장 단순하고 따뜻한 인터페이스로 풀어내는 것, 그것이 저의 철학입니다.`,
                     education: { title: '학력 및 자격', items: ['준비중'] },
                     career: { title: '경력', items: ['준비중'] },
