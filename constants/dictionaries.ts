@@ -165,7 +165,7 @@ export const DICTIONARY = {
                 workshop: {
                     title: 'WORKSHOP',
                     desc: '당신의 꿈을 짓는곳',
-                    images: ['/images/company/workshop.jpg', '/images/company/factory.png']
+                    images: ['/images/company/workshop.jpg']
                 }
             }
         },
@@ -359,7 +359,7 @@ He is an engineer who strives to uphold the principle of 'warm and solid housing
                 workshop: {
                     title: 'WORKSHOP',
                     desc: 'Where your dreams are built',
-                    images: ['/images/company/workshop.jpg', '/images/company/factory.png']
+                    images: ['/images/company/workshop.jpg']
                 }
             }
         },
