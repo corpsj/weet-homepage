@@ -142,18 +142,17 @@ export const DICTIONARY = {
                             '2018년 제주시 한림읍 금능리 A펜션 외 세 현장 설계, 시공',
                             '2019년 제주시 오라동 B단독주택 외 한 현장 설계, 시공'
                         ]
-                    }
-
+                    },
+                    awards: { title: '', items: [] }
                 },
                 solution: {
                     title: 'HOME SOLUTION 부문',
                     name: '박성주',
                     role: 'weet의 대표 솔루션 디렉터',
-                    description: `집이라는 하드웨어에 생명력을 불어넣는 'Home OS' 개발을 통해, 집과 거주자가 유기적으로 연결되는 스마트 홈 솔루션을 구축하고 있다.
-단순한 기기 제어를 넘어 집이 거주자의 필요를 먼저 읽고 반응하는 '지능형 공간'을 지향하며, 복잡한 환경에서도 누구에게나 직관적인 사용성을 제공하는 것을 원칙으로 한다.
-오지에서도 끊김 없는 연결성을 확보하고 어디서든 고유의 공간에 접근할 수 있게 하는 인프라 구축을 총괄하며, 기술이 기술 그 자체로 남지 않고 삶의 가장 안락한 조력자가 되도록 만드는 일을 책임지고 있다.`,
+                    description: `**"우리 할머니도 사용할 수 있는 기술."**\n\n건축물이 완성된 이후, 그 안팎에서 펼쳐질 고객의 일상을 더욱 편리하게 만드는 '홈 솔루션' 전반을 책임지고 있습니다. 집이 먼저 사용자에게 필요한 말을 건네고, 보이지 않는 곳에서 조용히 삶을 서포트할 수 있도록 'Home OS'를 개발합니다. 최첨단 기술을 가장 단순하고 따뜻한 인터페이스로 풀어내는 것, 그것이 저의 철학입니다.`,
                     education: { title: '학력 및 자격', items: ['준비중'] },
-                    career: { title: '경력', items: ['준비중'] }
+                    career: { title: '경력', items: ['준비중'] },
+                    awards: { title: '', items: [] }
                 }
             },
             factory: {
@@ -342,11 +341,10 @@ He is an engineer who strives to uphold the principle of 'warm and solid housing
                     title: 'HOME SOLUTION Division',
                     name: 'Park Sung-ju',
                     role: 'Chief Solution Director',
-                    description: `By developing the 'Home OS' that breathes life into building hardware, he is building smart home solutions where homes and residents are organically connected.
-Beyond simple device control, he aims for 'intelligent spaces' where the home proactively senses and responds to the residents' needs, with a core principle of providing intuitive usability for everyone.
-He oversees the infrastructure that ensures seamless connectivity in off-grid locations and enables access to one's personal space from anywhere, ensuring that technology remains not as a mere tool but as life's most comfortable supporter.`,
+                    description: `**"Technology that even grandmothers can use."**\n\nI am responsible for the overall 'home solutions' that make the daily lives of customers, both inside and outside the space, more convenient after the building is completed. I develop 'Home OS' so that the house can first speak to the user and quietly support their life from unseen places. Solving cutting-edge technology with the simplest and warmest interface—that is my philosophy.`,
                     education: { title: 'Education and Qualifications', items: ['Coming Soon'] },
-                    career: { title: 'Career', items: ['Coming Soon'] }
+                    career: { title: 'Career', items: ['Coming Soon'] },
+                    awards: { title: '', items: [] }
                 }
             },
             factory: {
