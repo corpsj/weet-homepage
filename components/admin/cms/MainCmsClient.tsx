@@ -336,8 +336,8 @@ function HeroSlideForm({
         }
         const formData = new FormData(e.currentTarget);
         onSubmit({
-            title: formData.get('title') as string,
-            subtitle: formData.get('subtitle') as string,
+            title: (formData.get('title') as string) || '',
+            subtitle: (formData.get('subtitle') as string) || '',
             image_url: imageUrl
         });
     };
@@ -363,7 +363,6 @@ function HeroSlideForm({
                         <input
                             name="title"
                             defaultValue={initialData?.title}
-                            required
                             className="w-full border border-gray-300 p-2 rounded"
                         />
                     </div>
