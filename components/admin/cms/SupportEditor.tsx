@@ -180,10 +180,14 @@ BEGIN
         ALTER TABLE faqs ADD COLUMN order_index INTEGER DEFAULT 0;
     END IF;
 
-    -- 레거시 컬럼(question, answer)이 있다면 NOT NULL 제약 조건 제거
+    -- 레거시 컬럼(question, answer) 제약 조건 제거 (400 에러 해결 핵심)
     IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'faqs' AND column_name = 'question') THEN
         ALTER TABLE faqs ALTER COLUMN question DROP NOT NULL;
         ALTER TABLE faqs ALTER COLUMN answer DROP NOT NULL;
+        
+        -- 데이터가 없다면 아예 삭제해도 무방합니다 (선택사항)
+        -- ALTER TABLE faqs DROP COLUMN question;
+        -- ALTER TABLE faqs DROP COLUMN answer;
     END IF;
 END $$;
 
