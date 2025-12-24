@@ -168,15 +168,22 @@ CREATE TABLE IF NOT EXISTS faqs (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 2. 만약 기존 테이블이 있다면 누락된 컬럼 추가
+-- 2. 만약 기존 테이블이 있다면 누락된 컬럼 추가 및 레거시 제약 조건 제거
 DO $$
 BEGIN
+    -- 신규 컬럼 추가
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'faqs' AND column_name = 'question_ko') THEN
         ALTER TABLE faqs ADD COLUMN question_ko TEXT;
         ALTER TABLE faqs ADD COLUMN answer_ko TEXT;
         ALTER TABLE faqs ADD COLUMN question_en TEXT;
         ALTER TABLE faqs ADD COLUMN answer_en TEXT;
         ALTER TABLE faqs ADD COLUMN order_index INTEGER DEFAULT 0;
+    END IF;
+
+    -- 레거시 컬럼(question, answer)이 있다면 NOT NULL 제약 조건 제거
+    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'faqs' AND column_name = 'question') THEN
+        ALTER TABLE faqs ALTER COLUMN question DROP NOT NULL;
+        ALTER TABLE faqs ALTER COLUMN answer DROP NOT NULL;
     END IF;
 END $$;
 
