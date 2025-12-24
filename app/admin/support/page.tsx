@@ -8,7 +8,7 @@ async function getFAQs() {
     const { data, error } = await supabase
         .from('faqs')
         .select('*')
-        .order('sort_order', { ascending: true });
+        .order('order_index', { ascending: true });
 
     if (error) throw error;
     return data;

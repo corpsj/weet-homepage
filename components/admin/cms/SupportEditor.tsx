@@ -7,12 +7,13 @@ import { useRouter } from 'next/navigation';
 import { createClient } from '@/utils/supabase/client';
 
 interface FAQ {
-    id: string;
-    question: string;
-    answer: string;
-    category: string;
-    sort_order: number;
-    is_active: boolean;
+    id: number;
+    question_ko: string;
+    answer_ko: string;
+    question_en: string | null;
+    answer_en: string | null;
+    order_index: number;
+    created_at: string;
 }
 
 interface Notice {
@@ -29,7 +30,7 @@ export default function SupportEditor({ initialFAQs, initialNotices }: { initial
     const [faqs, setFAQs] = useState<FAQ[]>(initialFAQs);
     const [notices, setNotices] = useState<Notice[]>(initialNotices);
     const [loading, setLoading] = useState(false);
-    const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
+    const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
     const router = useRouter();
     // eslint-disable-next-line
     const supabase = createClient() as any;
@@ -39,11 +40,11 @@ export default function SupportEditor({ initialFAQs, initialNotices }: { initial
         setLoading(true);
         try {
             const newFAQ = {
-                question: 'New Question',
-                answer: 'Answer goes here',
-                category: 'general',
-                sort_order: faqs.length,
-                is_active: true
+                question_ko: '새 질문',
+                answer_ko: '내용을 입력하세요.',
+                question_en: 'New Question',
+                answer_en: 'Enter content here.',
+                order_index: faqs.length,
             };
 
             const { error } = await supabase.from('faqs').insert(newFAQ);
@@ -57,7 +58,7 @@ export default function SupportEditor({ initialFAQs, initialNotices }: { initial
         }
     };
 
-    const handleUpdateFAQ = async (id: string, field: keyof FAQ, value: any) => {
+    const handleUpdateFAQ = async (id: number, field: keyof FAQ, value: any) => {
         setFAQs(faqs.map(f => f.id === id ? { ...f, [field]: value } : f));
         try {
             await supabase.from('faqs').update({ [field]: value }).eq('id', id);
@@ -66,7 +67,7 @@ export default function SupportEditor({ initialFAQs, initialNotices }: { initial
         }
     };
 
-    const handleDeleteFAQ = async (id: string) => {
+    const handleDeleteFAQ = async (id: number) => {
         if (!confirm('Delete this FAQ?')) return;
         setLoading(true);
         try {
@@ -179,13 +180,12 @@ export default function SupportEditor({ initialFAQs, initialNotices }: { initial
                                         onClick={() => setExpandedFaq(expandedFaq === faq.id ? null : faq.id)}
                                     >
                                         <div className="flex-1 mr-4">
-                                            <input
-                                                type="text"
-                                                value={faq.question}
-                                                onClick={(e) => e.stopPropagation()}
-                                                onChange={(e) => handleUpdateFAQ(faq.id, 'question', e.target.value)}
-                                                className="w-full bg-transparent border-none focus:ring-0 font-medium text-gray-900 p-0"
-                                            />
+                                            <div className="font-medium text-gray-900">
+                                                {faq.question_ko}
+                                            </div>
+                                            <div className="text-xs text-gray-500 mt-1">
+                                                {faq.question_en || '(No English Question)'}
+                                            </div>
                                         </div>
                                         <div className="flex items-center gap-3">
                                             <button
@@ -202,34 +202,47 @@ export default function SupportEditor({ initialFAQs, initialNotices }: { initial
                                     </div>
 
                                     {expandedFaq === faq.id && (
-                                        <div className="p-4 border-t border-gray-200 bg-white">
-                                            <textarea
-                                                rows={4}
-                                                value={faq.answer}
-                                                onChange={(e) => handleUpdateFAQ(faq.id, 'answer', e.target.value)}
-                                                className="w-full p-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black/5 resize-none"
-                                            />
-                                            <div className="flex items-center gap-4 mt-3">
-                                                <div className="flex items-center gap-2">
-                                                    <label className="text-xs font-medium text-gray-500">카테고리:</label>
-                                                    <select
-                                                        value={faq.category}
-                                                        onChange={(e) => handleUpdateFAQ(faq.id, 'category', e.target.value)}
-                                                        className="text-sm border-gray-200 rounded-md focus:ring-black focus:border-black"
-                                                    >
-                                                        <option value="general">일반</option>
-                                                        <option value="product">제품</option>
-                                                        <option value="service">서비스</option>
-                                                    </select>
-                                                </div>
-                                                <div className="flex items-center gap-2">
+                                        <div className="p-4 border-t border-gray-200 bg-white grid grid-cols-1 md:grid-cols-2 gap-4">
+                                            <div className="space-y-3">
+                                                <h4 className="text-xs font-bold text-gray-500 uppercase">국문 (Korean)</h4>
+                                                <div>
+                                                    <label className="text-xs text-gray-500 mb-1 block">질문</label>
                                                     <input
-                                                        type="checkbox"
-                                                        checked={faq.is_active}
-                                                        onChange={(e) => handleUpdateFAQ(faq.id, 'is_active', e.target.checked)}
-                                                        className="w-4 h-4 text-black border-gray-300 rounded focus:ring-black"
+                                                        type="text"
+                                                        value={faq.question_ko}
+                                                        onChange={(e) => handleUpdateFAQ(faq.id, 'question_ko', e.target.value)}
+                                                        className="w-full p-2 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-black"
                                                     />
-                                                    <label className="text-xs font-medium text-gray-600">활성화</label>
+                                                </div>
+                                                <div>
+                                                    <label className="text-xs text-gray-500 mb-1 block">답변</label>
+                                                    <textarea
+                                                        rows={4}
+                                                        value={faq.answer_ko}
+                                                        onChange={(e) => handleUpdateFAQ(faq.id, 'answer_ko', e.target.value)}
+                                                        className="w-full p-2 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-black resize-none"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div className="space-y-3">
+                                                <h4 className="text-xs font-bold text-gray-500 uppercase">영문 (English)</h4>
+                                                <div>
+                                                    <label className="text-xs text-gray-500 mb-1 block">Question</label>
+                                                    <input
+                                                        type="text"
+                                                        value={faq.question_en || ''}
+                                                        onChange={(e) => handleUpdateFAQ(faq.id, 'question_en', e.target.value)}
+                                                        className="w-full p-2 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-black"
+                                                    />
+                                                </div>
+                                                <div>
+                                                    <label className="text-xs text-gray-500 mb-1 block">Answer</label>
+                                                    <textarea
+                                                        rows={4}
+                                                        value={faq.answer_en || ''}
+                                                        onChange={(e) => handleUpdateFAQ(faq.id, 'answer_en', e.target.value)}
+                                                        className="w-full p-2 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-black resize-none"
+                                                    />
                                                 </div>
                                             </div>
                                         </div>

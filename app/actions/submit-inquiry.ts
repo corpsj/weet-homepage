@@ -8,13 +8,9 @@ export async function submitInquiry(prevState: any, formData: FormData) {
 
     const name = formData.get('name') as string;
     const phone = formData.get('phone') as string;
-    const message = formData.get('message') as string;
-    // Email is optional in the UI mock, but schema might require it. 
-    // Based on previous files, email seems required. I'll check the UI again.
-    // The UI in support/page.tsx didn't have an email field in the mock form, 
-    // but the schema and InquiryList interface show 'email'.
-    // I will add email to the form and here.
     const email = formData.get('email') as string;
+    const message = formData.get('message') as string;
+    const category = formData.get('category') as string;
 
     if (!name || !phone || !message) {
         return { success: false, message: '필수 항목을 입력해주세요.' };
@@ -25,9 +21,10 @@ export async function submitInquiry(prevState: any, formData: FormData) {
         .from('inquiries')
         .insert({
             name,
-            email: email || '', // Handle optional email if allowed, or enforce it
+            email: email || '',
             phone,
             message,
+            category: category || 'General',
             status: 'new'
         });
 

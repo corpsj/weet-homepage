@@ -4,7 +4,7 @@ import InquiryList from '@/components/admin/inquiries/InquiryList';
 export const dynamic = 'force-dynamic';
 
 export default async function AdminInquiriesPage() {
-    const inquiries = await getInquiries();
+    const { data } = await getInquiries();
 
     return (
         <div className="h-full flex flex-col">
@@ -13,7 +13,7 @@ export default async function AdminInquiriesPage() {
                 <p className="text-gray-500 mt-1">접수된 고객 문의를 확인하고 관리합니다.</p>
             </div>
 
-            <InquiryList initialInquiries={inquiries || []} />
+            <InquiryList initialInquiries={data || []} />
         </div>
     );
 }

@@ -60,7 +60,7 @@ const navigation: { title: string; items: NavItem[] }[] = [
                 icon: Lightbulb
             },
             {
-                name: '고객지원 페이지',
+                name: 'FAQ 관리',
                 href: '/admin/support',
                 icon: HelpCircle
             },

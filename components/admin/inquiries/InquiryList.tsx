@@ -9,16 +9,17 @@ import {
     MoreHorizontal, X
 } from 'lucide-react';
 import { toast } from 'sonner';
-import { updateInquiryStatus, deleteInquiry, updateInquiryAnswer } from '@/app/actions/inquiry-actions';
+import { updateInquiryStatus, deleteInquiry, replyToInquiry } from '@/app/actions/inquiry-actions';
 
 interface Inquiry {
     id: string;
+    category: string | null;
     name: string;
     email: string;
     phone: string | null;
     message: string;
     status: 'new' | 'read' | 'replied';
-    answer: string | null;
+    reply_content: string | null;
     replied_at: string | null;
     created_at: string;
 }
@@ -74,13 +75,13 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
 
         setIsSending(true);
         try {
-            await updateInquiryAnswer(selectedInquiry.id, replyText);
+            await replyToInquiry(selectedInquiry.id, replyText);
 
             // Update local state
-            const updatedInquiry = {
+            const updatedInquiry: Inquiry = {
                 ...selectedInquiry,
-                status: 'replied' as const,
-                answer: replyText,
+                status: 'replied',
+                reply_content: replyText,
                 replied_at: new Date().toISOString()
             };
 
@@ -100,7 +101,7 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
         if (!selectedInquiry) return;
 
         const subject = `[Weet] ${selectedInquiry.name}님 문의에 대한 답변입니다.`;
-        const body = selectedInquiry.answer || replyText || '';
+        const body = selectedInquiry.reply_content || replyText || '';
 
         window.location.href = `mailto:${selectedInquiry.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     };
@@ -162,7 +163,7 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
                             key={inquiry.id}
                             onClick={() => {
                                 setSelectedInquiry(inquiry);
-                                setReplyText(inquiry.answer || '');
+                                setReplyText(inquiry.reply_content || '');
                                 if (inquiry.status === 'new') {
                                     handleStatusChange(inquiry.id, 'read');
                                 }

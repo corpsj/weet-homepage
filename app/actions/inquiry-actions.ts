@@ -1,103 +1,103 @@
 'use server';
 
-import { createClient } from '@/utils/supabase/server';
+import { getSupabaseAdmin, supabase } from '@/lib/supabase';
+import { Inquiry, InquiryUpdate } from '@/types/supabase';
 import { revalidatePath } from 'next/cache';
 
-export async function getInquiries() {
-    const supabase = await createClient();
-    // eslint-disable-next-line
-    const { data, error } = await (supabase as any)
+export async function getInquiries(page = 1, limit = 20, status?: string) {
+    const admin = getSupabaseAdmin();
+    let query = admin
         .from('inquiries')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .select('*', { count: 'exact' });
+
+    if (status && status !== 'all') {
+        query = query.eq('status', status);
+    }
+
+    const from = (page - 1) * limit;
+    const to = from + limit - 1;
+
+    query = query
+        .order('created_at', { ascending: false })
+        .range(from, to);
+
+    const { data, error, count } = await query;
 
     if (error) {
         console.error('Error fetching inquiries:', error);
-        return [];
+        return { data: [], count: 0 };
     }
 
-    return data;
+    return { data: data as Inquiry[], count: count || 0 };
+}
+
+export async function getInquiry(id: string) {
+    const admin = getSupabaseAdmin();
+    const { data, error } = await admin
+        .from('inquiries')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error) {
+        console.error('Error fetching inquiry:', error);
+        return null;
+    }
+
+    return data as Inquiry;
 }
 
 export async function updateInquiryStatus(id: string, status: 'new' | 'read' | 'replied') {
-    const supabase = await createClient();
-    // eslint-disable-next-line
-    const { error } = await (supabase as any)
+    const admin = getSupabaseAdmin();
+    const { error } = await admin
         .from('inquiries')
         .update({ status })
         .eq('id', id);
 
     if (error) {
         console.error('Error updating inquiry status:', error);
-        throw new Error('Failed to update status');
+        return { success: false, message: '상태 업데이트 실패' };
     }
 
     revalidatePath('/admin/inquiries');
+    return { success: true };
+}
+
+export async function replyToInquiry(id: string, replyContent: string) {
+    const admin = getSupabaseAdmin();
+    const { error } = await admin
+        .from('inquiries')
+        .update({
+            reply_content: replyContent,
+            replied_at: new Date().toISOString(),
+            status: 'replied'
+        })
+        .eq('id', id);
+
+    if (error) {
+        console.error('Error replying to inquiry:', error);
+        return { success: false, message: '답변 등록 실패' };
+    }
+
+    // TODO: Send email notification here using a mail provider (e.g. Resend, SendGrid)
+
+    revalidatePath('/admin/inquiries');
+    revalidatePath(`/admin/inquiries/${id}`);
+    return { success: true, message: '답변이 등록되었습니다.' };
 }
 
 export async function deleteInquiry(id: string) {
-    const supabase = await createClient();
-    // eslint-disable-next-line
-    const { error } = await (supabase as any)
+    const admin = getSupabaseAdmin();
+    const { error } = await admin
         .from('inquiries')
         .delete()
         .eq('id', id);
 
     if (error) {
         console.error('Error deleting inquiry:', error);
-        throw new Error('Failed to delete inquiry');
+        return { success: false, message: '문의 삭제 실패' };
     }
 
     revalidatePath('/admin/inquiries');
-}
-
-export async function updateInquiryAnswer(id: string, answer: string) {
-    const supabase = await createClient();
-    // eslint-disable-next-line
-    const { error } = await (supabase as any)
-        .from('inquiries')
-        .update({
-            answer,
-            status: 'replied',
-            replied_at: new Date().toISOString()
-        })
-        .eq('id', id);
-
-    if (error) {
-        console.error('Error updating inquiry answer:', error);
-        throw new Error('Failed to save answer');
-    }
-
-    revalidatePath('/admin/inquiries');
-}
-
-export async function createInquiry(formData: FormData) {
-    const supabase = await createClient();
-
-    const name = formData.get('name') as string;
-    const email = formData.get('email') as string;
-    const phone = formData.get('phone') as string;
-    const message = formData.get('message') as string;
-
-    if (!name || !email || !message) {
-        throw new Error('필수 항목을 입력해주세요.');
-    }
-
-    // eslint-disable-next-line
-    const { error } = await (supabase as any)
-        .from('inquiries')
-        .insert({
-            name,
-            email,
-            phone,
-            message,
-            status: 'new'
-        });
-
-    if (error) {
-        console.error('Error creating inquiry:', error);
-        throw new Error('문의 등록 중 오류가 발생했습니다.');
-    }
-
     return { success: true };
 }

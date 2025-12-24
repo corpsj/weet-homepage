@@ -81,36 +81,39 @@ export interface Database {
       inquiries: {
         Row: {
           id: string
+          category: string | null
           name: string
           email: string
           phone: string | null
           message: string
           status: 'new' | 'read' | 'replied'
-          answer: string | null
+          reply_content: string | null
           replied_at: string | null
           created_at: string
           updated_at: string
         }
         Insert: {
           id?: string
+          category?: string | null
           name: string
           email: string
           phone?: string | null
           message: string
           status?: 'new' | 'read' | 'replied'
-          answer?: string | null
+          reply_content?: string | null
           replied_at?: string | null
           created_at?: string
           updated_at?: string
         }
         Update: {
           id?: string
+          category?: string | null
           name?: string
           email?: string
           phone?: string | null
           message?: string
           status?: 'new' | 'read' | 'replied'
-          answer?: string | null
+          reply_content?: string | null
           replied_at?: string | null
           created_at?: string
           updated_at?: string
@@ -179,31 +182,34 @@ export interface Database {
       }
       faqs: {
         Row: {
-          id: string
-          question: string
-          answer: string
-          category: string
-          sort_order: number
-          is_active: boolean
+          id: number
+          question_ko: string
+          answer_ko: string
+          question_en: string | null
+          answer_en: string | null
+          order_index: number
           created_at: string
+          updated_at: string
         }
         Insert: {
-          id?: string
-          question: string
-          answer: string
-          category?: string
-          sort_order?: number
-          is_active?: boolean
+          id?: number
+          question_ko: string
+          answer_ko: string
+          question_en?: string | null
+          answer_en?: string | null
+          order_index?: number
           created_at?: string
+          updated_at?: string
         }
         Update: {
-          id?: string
-          question?: string
-          answer?: string
-          category?: string
-          sort_order?: number
-          is_active?: boolean
+          id?: number
+          question_ko?: string
+          answer_ko?: string
+          question_en?: string | null
+          answer_en?: string | null
+          order_index?: number
           created_at?: string
+          updated_at?: string
         }
         Relationships: []
       }
@@ -287,3 +293,11 @@ export interface Database {
 export type Product = Database['public']['Tables']['products']['Row']
 export type ProductInsert = Database['public']['Tables']['products']['Insert']
 export type ProductUpdate = Database['public']['Tables']['products']['Update']
+
+export type Faq = Database['public']['Tables']['faqs']['Row']
+export type FaqInsert = Database['public']['Tables']['faqs']['Insert']
+export type FaqUpdate = Database['public']['Tables']['faqs']['Update']
+
+export type Inquiry = Database['public']['Tables']['inquiries']['Row']
+export type InquiryInsert = Database['public']['Tables']['inquiries']['Insert']
+export type InquiryUpdate = Database['public']['Tables']['inquiries']['Update']
