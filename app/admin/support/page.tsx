@@ -26,7 +26,18 @@ async function getNotices() {
 }
 
 export default async function CMSSupportPage() {
-    const [faqs, notices] = await Promise.all([getFAQs(), getNotices()]);
+    let faqs: any[] = [];
+    let notices: any[] = [];
+    let error: string | null = null;
 
-    return <SupportEditor initialFAQs={faqs || []} initialNotices={notices || []} />;
+    try {
+        const [faqsData, noticesData] = await Promise.all([getFAQs(), getNotices()]);
+        faqs = faqsData || [];
+        notices = noticesData || [];
+    } catch (e: any) {
+        console.error('CMS Support Page Error:', e);
+        error = e.message || '데이터베이스 조회 중 오류가 발생했습니다.';
+    }
+
+    return <SupportEditor initialFAQs={faqs} initialNotices={notices} dbError={error} />;
 }
