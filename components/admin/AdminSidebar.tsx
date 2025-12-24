@@ -54,11 +54,7 @@ const navigation: { title: string; items: NavItem[] }[] = [
                 href: '/admin/products',
                 icon: Package
             },
-            {
-                name: '솔루션 페이지',
-                href: '/admin/solutions',
-                icon: Lightbulb
-            },
+
             {
                 name: 'FAQ 관리',
                 href: '/admin/support',
