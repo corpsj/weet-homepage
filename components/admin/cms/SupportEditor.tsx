@@ -310,47 +310,67 @@ END $$;`}
                                     </div>
 
                                     {expandedFaq === faq.id && (
-                                        <div className="p-4 border-t border-gray-200 bg-white grid grid-cols-1 md:grid-cols-2 gap-4">
-                                            <div className="space-y-3">
-                                                <h4 className="text-xs font-bold text-gray-500 uppercase">국문 (Korean)</h4>
-                                                <div>
-                                                    <label className="text-xs text-gray-500 mb-1 block">질문</label>
-                                                    <input
-                                                        type="text"
-                                                        value={faq.question_ko}
-                                                        onChange={(e) => handleUpdateFAQ(faq.id, 'question_ko', e.target.value)}
-                                                        className="w-full p-2 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-black"
-                                                    />
+                                        <div className="p-4 border-t border-gray-200 bg-white space-y-6">
+                                            {/* Primary Korean Section */}
+                                            <div className="space-y-4">
+                                                <div className="flex items-center gap-2 border-l-4 border-blue-500 pl-3">
+                                                    <h4 className="text-sm font-bold text-gray-900">국문 정보 (필수)</h4>
                                                 </div>
-                                                <div>
-                                                    <label className="text-xs text-gray-500 mb-1 block">답변</label>
-                                                    <textarea
-                                                        rows={4}
-                                                        value={faq.answer_ko}
-                                                        onChange={(e) => handleUpdateFAQ(faq.id, 'answer_ko', e.target.value)}
-                                                        className="w-full p-2 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-black resize-none"
-                                                    />
+                                                <div className="grid grid-cols-1 gap-4">
+                                                    <div>
+                                                        <label className="text-xs font-medium text-gray-500 mb-1 block">질문 (Korean)</label>
+                                                        <input
+                                                            type="text"
+                                                            value={faq.question_ko}
+                                                            onChange={(e) => handleUpdateFAQ(faq.id, 'question_ko', e.target.value)}
+                                                            placeholder="질문을 입력하세요"
+                                                            className="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all"
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="text-xs font-medium text-gray-500 mb-1 block">답변 (Korean)</label>
+                                                        <textarea
+                                                            rows={4}
+                                                            value={faq.answer_ko}
+                                                            onChange={(e) => handleUpdateFAQ(faq.id, 'answer_ko', e.target.value)}
+                                                            placeholder="답변 내용을 입력하세요"
+                                                            className="w-full p-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all resize-none"
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div className="space-y-3">
-                                                <h4 className="text-xs font-bold text-gray-500 uppercase">영문 (English)</h4>
-                                                <div>
-                                                    <label className="text-xs text-gray-500 mb-1 block">Question</label>
-                                                    <input
-                                                        type="text"
-                                                        value={faq.question_en || ''}
-                                                        onChange={(e) => handleUpdateFAQ(faq.id, 'question_en', e.target.value)}
-                                                        className="w-full p-2 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-black"
-                                                    />
+
+                                            {/* Secondary English Section */}
+                                            <div className="space-y-4 pt-2 border-t border-gray-100">
+                                                <div className="flex items-center justify-between">
+                                                    <div className="flex items-center gap-2 border-l-4 border-gray-300 pl-3">
+                                                        <h4 className="text-sm font-bold text-gray-700">영문 정보 (선택)</h4>
+                                                    </div>
+                                                    <span className="text-[10px] text-gray-400 bg-gray-50 px-2 py-0.5 rounded border border-gray-100">
+                                                        * 영문 버전이 필요한 경우에만 입력하세요
+                                                    </span>
                                                 </div>
-                                                <div>
-                                                    <label className="text-xs text-gray-500 mb-1 block">Answer</label>
-                                                    <textarea
-                                                        rows={4}
-                                                        value={faq.answer_en || ''}
-                                                        onChange={(e) => handleUpdateFAQ(faq.id, 'answer_en', e.target.value)}
-                                                        className="w-full p-2 border border-gray-200 rounded text-sm focus:outline-none focus:ring-1 focus:ring-black resize-none"
-                                                    />
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 opacity-80 hover:opacity-100 transition-opacity">
+                                                    <div>
+                                                        <label className="text-xs font-medium text-gray-500 mb-1 block">Question (English)</label>
+                                                        <input
+                                                            type="text"
+                                                            value={faq.question_en || ''}
+                                                            onChange={(e) => handleUpdateFAQ(faq.id, 'question_en', e.target.value)}
+                                                            placeholder="English Question"
+                                                            className="w-full p-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-gray-400"
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="text-xs font-medium text-gray-500 mb-1 block">Answer (English)</label>
+                                                        <textarea
+                                                            rows={4}
+                                                            value={faq.answer_en || ''}
+                                                            onChange={(e) => handleUpdateFAQ(faq.id, 'answer_en', e.target.value)}
+                                                            placeholder="English Answer"
+                                                            className="w-full p-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 resize-none"
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
