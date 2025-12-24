@@ -4,7 +4,8 @@ import { useState } from 'react';
 import { Plus, Trash2, ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
-import { createClient } from '@/utils/supabase/client';
+import { createFaq, updateFaq, deleteFaq } from '@/app/actions/faq-actions';
+import { createNotice, updateNotice, deleteNotice } from '@/app/actions/notice-actions';
 
 interface FAQ {
     id: number;
@@ -40,14 +41,12 @@ export default function SupportEditor({
     const [loading, setLoading] = useState(false);
     const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
     const router = useRouter();
-    // eslint-disable-next-line
-    const supabase = createClient() as any;
 
     // --- FAQ Handlers ---
     const handleAddFAQ = async () => {
         setLoading(true);
         try {
-            const newFAQ = {
+            const newFAQData = {
                 question_ko: '새 질문',
                 answer_ko: '내용을 입력하세요.',
                 question_en: 'New Question',
@@ -55,34 +54,50 @@ export default function SupportEditor({
                 order_index: faqs.length,
             };
 
-            const { error } = await supabase.from('faqs').insert(newFAQ);
-            if (error) throw error;
-            router.refresh();
+            const result = await createFaq(newFAQData);
+            if (result.success && result.data) {
+                setFAQs(prev => [...prev, result.data as FAQ]);
+                setExpandedFaq(result.data.id);
+                toast.success('FAQ가 추가되었습니다.');
+            } else {
+                toast.error(result.message || 'FAQ 추가 실패');
+            }
         } catch (e) {
             console.error(e);
-            toast.error('Failed to add FAQ');
+            toast.error('오류가 발생했습니다.');
         } finally {
             setLoading(false);
         }
     };
 
     const handleUpdateFAQ = async (id: number, field: keyof FAQ, value: any) => {
-        setFAQs(faqs.map(f => f.id === id ? { ...f, [field]: value } : f));
+        // Optimistic update
+        setFAQs(prev => prev.map(f => f.id === id ? { ...f, [field]: value } : f));
         try {
-            await supabase.from('faqs').update({ [field]: value }).eq('id', id);
+            const result = await updateFaq(id, { [field]: value });
+            if (!result.success) {
+                toast.error(result.message);
+                // Rollback if needed, but for text fields usually okay to just wait for next change
+            }
         } catch (e) {
             console.error(e);
         }
     };
 
     const handleDeleteFAQ = async (id: number) => {
-        if (!confirm('Delete this FAQ?')) return;
+        if (!confirm('이 FAQ를 삭제하시겠습니까?')) return;
         setLoading(true);
         try {
-            await supabase.from('faqs').delete().eq('id', id);
-            router.refresh();
+            const result = await deleteFaq(id);
+            if (result.success) {
+                setFAQs(prev => prev.filter(f => f.id !== id));
+                toast.success('FAQ가 삭제되었습니다.');
+            } else {
+                toast.error(result.message);
+            }
         } catch (e) {
             console.error(e);
+            toast.error('오류가 발생했습니다.');
         } finally {
             setLoading(false);
         }
@@ -92,41 +107,54 @@ export default function SupportEditor({
     const handleAddNotice = async () => {
         setLoading(true);
         try {
-            const newNotice = {
-                title: 'New Notice',
-                content: 'Content goes here',
+            const newNoticeData = {
+                title: '새 공지사항',
+                content: '내용을 입력하세요.',
                 is_pinned: false,
                 is_active: true
             };
 
-            const { error } = await supabase.from('notices').insert(newNotice);
-            if (error) throw error;
-            router.refresh();
+            const result = await createNotice(newNoticeData);
+            if (result.success && result.data) {
+                setNotices(prev => [result.data as Notice, ...prev]);
+                toast.success('공지사항이 추가되었습니다.');
+            } else {
+                toast.error(result.message);
+            }
         } catch (e) {
             console.error(e);
-            toast.error('Failed to add Notice');
+            toast.error('오류가 발생했습니다.');
         } finally {
             setLoading(false);
         }
     };
 
     const handleUpdateNotice = async (id: string, field: keyof Notice, value: any) => {
-        setNotices(notices.map(n => n.id === id ? { ...n, [field]: value } : n));
+        setNotices(prev => prev.map(n => n.id === id ? { ...n, [field]: value } : n));
         try {
-            await supabase.from('notices').update({ [field]: value }).eq('id', id);
+            const result = await updateNotice(id, { [field]: value });
+            if (!result.success) {
+                toast.error(result.message);
+            }
         } catch (e) {
             console.error(e);
         }
     };
 
     const handleDeleteNotice = async (id: string) => {
-        if (!confirm('Delete this Notice?')) return;
+        if (!confirm('이 공지사항을 삭제하시겠습니까?')) return;
         setLoading(true);
         try {
-            await supabase.from('notices').delete().eq('id', id);
-            router.refresh();
+            const result = await deleteNotice(id);
+            if (result.success) {
+                setNotices(prev => prev.filter(n => n.id !== id));
+                toast.success('공지사항이 삭제되었습니다.');
+            } else {
+                toast.error(result.message);
+            }
         } catch (e) {
             console.error(e);
+            toast.error('오류가 발생했습니다.');
         } finally {
             setLoading(false);
         }

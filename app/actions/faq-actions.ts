@@ -48,7 +48,7 @@ export async function createFaq(faq: FaqInsert) {
     }
 
     revalidatePath('/support');
-    revalidatePath('/admin/faqs');
+    revalidatePath('/admin/support');
     return { success: true, message: 'FAQ가 생성되었습니다.', data };
 }
 
@@ -67,7 +67,7 @@ export async function updateFaq(id: number, faq: FaqUpdate) {
     }
 
     revalidatePath('/support');
-    revalidatePath('/admin/faqs');
+    revalidatePath('/admin/support');
     return { success: true, message: 'FAQ가 수정되었습니다.', data };
 }
 
@@ -84,7 +84,7 @@ export async function deleteFaq(id: number) {
     }
 
     revalidatePath('/support');
-    revalidatePath('/admin/faqs');
+    revalidatePath('/admin/support');
     return { success: true, message: 'FAQ가 삭제되었습니다.' };
 }
 
@@ -101,6 +101,6 @@ export async function updateFaqOrder(items: { id: number; order_index: number }[
     }
 
     revalidatePath('/support');
-    revalidatePath('/admin/faqs');
+    revalidatePath('/admin/support');
     return { success: true };
 }
