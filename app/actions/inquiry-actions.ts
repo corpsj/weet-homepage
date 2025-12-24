@@ -11,7 +11,7 @@ export async function getInquiries(page = 1, limit = 20, status?: string) {
         .select('*', { count: 'exact' });
 
     if (status && status !== 'all') {
-        query = query.eq('status', status);
+        query = query.eq('status', status as any);
     }
 
     const from = (page - 1) * limit;
