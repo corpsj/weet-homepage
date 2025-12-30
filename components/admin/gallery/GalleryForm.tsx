@@ -10,6 +10,7 @@ import { createClient } from '@/utils/supabase/client';
 import { toast } from 'sonner';
 import { Loader2, Plus, X, Upload, GripVertical } from 'lucide-react';
 import { Database } from '@/types/supabase';
+import imageCompression from 'browser-image-compression';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
 type GalleryItem = Database['public']['Tables']['gallery']['Row'];
@@ -59,13 +60,33 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
 
         try {
             for (const file of files) {
-                const fileExt = file.name.split('.').pop();
+                let fileToUpload = file;
+
+                // Compress/Convert to WebP if it's an image
+                if (file.type.startsWith('image/')) {
+                    const options = {
+                        maxSizeMB: 10,
+                        maxWidthOrHeight: 1600,
+                        useWebWorker: true,
+                        fileType: 'image/webp',
+                        initialQuality: 0.8,
+                    };
+                    try {
+                        const compressedFile = await imageCompression(file, options);
+                        const newFileName = file.name.replace(/\.[^/.]+$/, "") + ".webp";
+                        fileToUpload = new File([compressedFile], newFileName, { type: 'image/webp' });
+                    } catch (e) {
+                        console.warn('Compression failed, using original file', e);
+                    }
+                }
+
+                const fileExt = fileToUpload.name.split('.').pop();
                 const fileName = `${Math.random()}.${fileExt}`;
                 const filePath = `gallery/${fileName}`;
 
                 const { error: uploadError } = await supabase.storage
                     .from('images')
-                    .upload(filePath, file);
+                    .upload(filePath, fileToUpload);
 
                 if (uploadError) throw uploadError;
 
@@ -173,8 +194,8 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
                         <label
                             htmlFor="image-upload"
                             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-colors ${uploading
-                                    ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                    : 'bg-black text-white hover:bg-gray-800'
+                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                : 'bg-black text-white hover:bg-gray-800'
                                 }`}
                         >
                             {uploading ? (

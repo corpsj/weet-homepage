@@ -10,9 +10,10 @@ interface MultiImageUploadProps {
     onUpload: (urls: string[]) => void;
     className?: string;
     bucket?: string;
+    quality?: 'high' | 'standard';
 }
 
-export default function MultiImageUpload({ onUpload, className = '', bucket = 'products' }: MultiImageUploadProps) {
+export default function MultiImageUpload({ onUpload, className = '', bucket = 'products', quality = 'high' }: MultiImageUploadProps) {
     const [loading, setLoading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -36,12 +37,18 @@ export default function MultiImageUpload({ onUpload, className = '', bucket = 'p
 
                     // Compress/Convert to WebP if it's an image
                     if (file.type.startsWith('image/')) {
-                        const options = {
+                        const options = quality === 'high' ? {
                             maxSizeMB: 20,
                             maxWidthOrHeight: 2560,
                             useWebWorker: true,
                             fileType: 'image/webp',
                             initialQuality: 0.9,
+                        } : {
+                            maxSizeMB: 10,
+                            maxWidthOrHeight: 1600,
+                            useWebWorker: true,
+                            fileType: 'image/webp',
+                            initialQuality: 0.8,
                         };
                         try {
                             const compressedFile = await imageCompression(file, options);

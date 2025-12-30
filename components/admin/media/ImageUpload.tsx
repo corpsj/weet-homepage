@@ -14,9 +14,17 @@ interface ImageUploadProps {
     onUploadStart?: () => void;
     className?: string;
     bucket?: string;
+    quality?: 'high' | 'standard';
 }
 
-export default function ImageUpload({ value, onChange, onUploadStart, className = '', bucket = 'products' }: ImageUploadProps) {
+export default function ImageUpload({
+    value,
+    onChange,
+    onUploadStart,
+    className = '',
+    bucket = 'products',
+    quality = 'high'
+}: ImageUploadProps) {
     const [loading, setLoading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
     const supabase = createClient();
@@ -37,13 +45,20 @@ export default function ImageUpload({ value, onChange, onUploadStart, className 
 
             // Compress/Convert to WebP if it's an image
             if (file.type.startsWith('image/')) {
-                const options = {
-                    maxSizeMB: 20, // Increased from 5MB to 20MB
-                    maxWidthOrHeight: 2560, // Increased to support QHD/Retina
+                const options = quality === 'high' ? {
+                    maxSizeMB: 20,
+                    maxWidthOrHeight: 2560,
                     useWebWorker: true,
                     fileType: 'image/webp',
-                    initialQuality: 0.9, // High quality
+                    initialQuality: 0.9,
+                } : {
+                    maxSizeMB: 10,
+                    maxWidthOrHeight: 1600,
+                    useWebWorker: true,
+                    fileType: 'image/webp',
+                    initialQuality: 0.8,
                 };
+
                 try {
                     const compressedFile = await imageCompression(file, options);
                     // Create a new file with .webp extension
@@ -51,8 +66,6 @@ export default function ImageUpload({ value, onChange, onUploadStart, className 
                     fileToUpload = new File([compressedFile], newFileName, { type: 'image/webp' });
                 } catch (e) {
                     console.warn('Compression failed, using original file', e);
-                    // Fallback to original file but attempting to rename extension might be misleading if content isn't webp. 
-                    // Ideally we should still try to upload, maybe as original.
                 }
             }
 
@@ -138,7 +151,7 @@ export default function ImageUpload({ value, onChange, onUploadStart, className 
                             </div>
                             <div className="text-center">
                                 <p className="text-sm font-medium">클릭하여 이미지 업로드</p>
-                                <p className="text-xs text-gray-400 mt-1">PNG, JPG, GIF up to 20MB</p>
+                                <p className="text-xs text-gray-400 mt-1">PNG, JPG, GIF up to {quality === 'high' ? '20MB' : '10MB'}</p>
                             </div>
                         </>
                     )}
