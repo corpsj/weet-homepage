@@ -187,7 +187,7 @@ export default function BespokePage() {
         const textBlock = (
           <motion.div
             key={`${section.id}-text`}
-            className="lg:w-1/2"
+            className="w-full lg:w-1/2"
             initial={{ opacity: 0, x: section.imageOnRight ? -50 : 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -218,13 +218,13 @@ export default function BespokePage() {
                 {section.imageOnRight ? (
                   <>
                     {textBlock}
-                    <div className="lg:w-1/2">
+                    <div className="w-full lg:w-1/2">
                       {imageBlock}
                     </div>
                   </>
                 ) : (
                   <>
-                    <div className="lg:w-1/2">
+                    <div className="w-full lg:w-1/2">
                       {imageBlock}
                     </div>
                     {textBlock}
