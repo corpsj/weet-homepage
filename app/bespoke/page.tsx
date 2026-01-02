@@ -173,7 +173,6 @@ export default function BespokePage() {
           <motion.div
             key={`${section.id}-image`}
             className="relative h-[400px] md:h-[600px] w-full cursor-pointer"
-            layoutId={section.id}
             onClick={() => setSelectedId(section.id)}
           >
             <Image
