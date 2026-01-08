@@ -13,7 +13,7 @@ interface ProductData {
     id: string;
     name: string;
     subCategory: "Private" | "Public";
-    sizeCategory: "S" | "M" | "L" | "XL" | "SOLUTION" | "DESIGN";
+    sizeCategory: "S" | "M" | "L" | "XL" | "DESIGN";
     imageUrl: string;
     subImages: string[];
     tagline: string;
@@ -63,7 +63,7 @@ const mapProductToData = (p: Product): ProductData => {
         id: p.id,
         name: p.name,
         subCategory: p.sub_category as "Private" | "Public",
-        sizeCategory: p.size_category as "S" | "M" | "L" | "XL" | "SOLUTION" | "DESIGN",
+        sizeCategory: p.size_category as "S" | "M" | "L" | "XL" | "DESIGN",
         imageUrl: p.image_url,
         tagline: p.tagline || "",
         description: p.description,
@@ -98,7 +98,7 @@ export default function ProductsPage() {
     };
     const [products, setProducts] = useState<ProductData[]>([]);
     const [loading, setLoading] = useState(true);
-    const [expandedCategories, setExpandedCategories] = useState<string[]>(["S", "M", "L", "XL", "SOLUTION", "DESIGN"]);
+    const [expandedCategories, setExpandedCategories] = useState<string[]>(["S", "M", "L", "XL", "DESIGN"]);
     const [activeProduct, setActiveProduct] = useState<string>("");
     const productRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
     const sidebarRef = useRef<HTMLDivElement>(null);
@@ -177,7 +177,7 @@ export default function ProductsPage() {
                 const mappedData = data.map(mapProductToData);
 
                 // Sort by Category Order
-                const categoryOrder = ["S", "M", "L", "XL", "SOLUTION", "DESIGN"];
+                const categoryOrder = ["S", "M", "L", "XL", "DESIGN"];
                 mappedData.sort((a, b) => {
                     const idxA = categoryOrder.indexOf(a.sizeCategory);
                     const idxB = categoryOrder.indexOf(b.sizeCategory);
@@ -269,11 +269,6 @@ export default function ProductsPage() {
             label: "XL",
             subtitle: "",
             items: products.filter(p => p.sizeCategory === "XL").map(p => p.id),
-        },
-        SOLUTION: {
-            label: "SOLUTION",
-            subtitle: "",
-            items: products.filter(p => p.sizeCategory === "SOLUTION").map(p => p.id)
         },
         DESIGN: {
             label: "DESIGN",

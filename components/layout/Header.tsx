@@ -30,7 +30,6 @@ const navigationKo = [
       { name: 'M', href: '/products#m' },
       { name: 'L', href: '/products#l' },
       { name: 'XL', href: '/products#xl' },
-      { name: 'Solution', href: '/products#solution' },
     ],
   },
   {
@@ -100,7 +99,6 @@ const navigationEn = [
       { name: 'M', href: '/products#m' },
       { name: 'L', href: '/products#l' },
       { name: 'XL', href: '/products#xl' },
-      { name: 'Solution', href: '/products#solution' },
     ],
   },
   {
@@ -336,9 +334,9 @@ export default function Header() {
               className="hidden xl:block absolute left-0 right-0 z-40 pointer-events-none"
               style={{ top: '80px' }}
             >
-              <div className="flex justify-center w-full pr-[120px]">
+              <div className="flex justify-center w-full">
                 <div
-                  className="flex py-6 gap-[60px] px-[60px] rounded-b-2xl shadow-sm pointer-events-auto"
+                  className="flex py-6 gap-[60px] pl-[60px] pr-[180px] rounded-b-2xl shadow-sm pointer-events-auto"
                   style={{ backgroundColor: '#EBEBEB' }}
                   onMouseEnter={() => setShowMegaMenu(true)}
                 >

@@ -40,8 +40,37 @@ export default function GallerySection() {
 
     const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
+    // Pagination
+    const [currentPage, setCurrentPage] = useState(1);
+    const ITEMS_PER_PAGE = 8;
+    const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+
+    const paginatedItems = items.slice(
+        (currentPage - 1) * ITEMS_PER_PAGE,
+        currentPage * ITEMS_PER_PAGE
+    );
+
+    const handlePageChange = (page: number) => {
+        if (page >= 1 && page <= totalPages) {
+            setCurrentPage(page);
+            // Optional: Scroll to top of gallery section
+            const gallerySection = document.getElementById('gallery');
+            if (gallerySection) {
+                const headerOffset = 100;
+                const elementPosition = gallerySection.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        }
+    };
+
     const handleImageClick = (index: number) => {
-        setSelectedImageIndex(index);
+        // Adjust index for global list based on pagination
+        const globalIndex = (currentPage - 1) * ITEMS_PER_PAGE + index;
+        setSelectedImageIndex(globalIndex);
     };
 
     const handleCloseModal = () => {
@@ -73,67 +102,95 @@ export default function GallerySection() {
     return (
         <section id="gallery" className="bg-white py-16 lg:py-24 scroll-mt-[180px]">
             <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
-                <div className="flex flex-col lg:flex-row items-start gap-12 lg:gap-20">
-                    {/* Left: Section Title */}
-                    <div className="flex-shrink-0 mb-4 lg:mb-0">
-                        <div className="flex items-center gap-2">
-                            <div className="flex-shrink-0">
-                                <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M0 0H40L0 40Z" fill="#2D2D2D" />
-                                </svg>
-                            </div>
-                            <span className="text-[28px] md:text-[32px] lg:text-[36px] font-bold text-black">
-                                {language === 'KO' ? 'weet Gallery' : 'weet Gallery'}
-                            </span>
-                        </div>
+                <div className="flex flex-col gap-12 lg:gap-20">
+                    {/* Section Title */}
+                    <div>
+                        <h2 className="text-[32px] md:text-[40px] lg:text-[48px] font-semibold mb-4 text-black uppercase">
+                            {language === 'KO' ? 'weet Gallery' : 'weet Gallery'}
+                        </h2>
                     </div>
 
-                    {/* Right: Content */}
-                    <div className="flex-1 w-full">
-                        {/* Intro Text */}
-                        <p className="text-lg text-gray-600 mb-12">
-                            {language === 'KO'
-                                ? '위트가 만들어가는 새로운 공간의 이야기를 만나보세요.'
-                                : 'Discover the stories of new spaces created by Weet.'}
-                        </p>
-
+                    {/* Content */}
+                    <div className="w-full">
                         {/* Grid */}
                         {items.length > 0 ? (
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-                                {items.map((item, index) => (
-                                    <div
-                                        key={item.id}
-                                        className="group cursor-pointer"
-                                        onClick={() => handleImageClick(index)}
-                                    >
-                                        <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 mb-4 shadow-sm hover:shadow-md transition-shadow">
-                                            <Image
-                                                src={item.image_url}
-                                                alt={item.title}
-                                                fill
-                                                className="object-cover group-hover:scale-105 transition-transform duration-500"
-                                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                            />
-                                            {/* Hover overlay hint */}
-                                            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                                                <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover:translate-y-0">
-                                                    <span className="text-white font-medium px-4 py-2 border border-white/50 rounded-full bg-black/20 backdrop-blur-sm">
-                                                        View
-                                                    </span>
+                            <>
+                                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 lg:gap-6 mb-12">
+                                    {paginatedItems.map((item, index) => (
+                                        <div
+                                            key={item.id}
+                                            className="group cursor-pointer"
+                                            onClick={() => handleImageClick(index)} // Using paginated index is fine if we updated handler, but better pass actual item ID or correct index
+                                        >
+                                            <div className="relative aspect-[4/3] rounded-2xl overflow-hidden bg-gray-100 mb-3 shadow-sm hover:shadow-md transition-shadow">
+                                                <Image
+                                                    src={item.image_url}
+                                                    alt={item.title}
+                                                    fill
+                                                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                                    sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                                                />
+                                                {/* Hover overlay hint */}
+                                                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
+                                                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-y-2 group-hover:translate-y-0">
+                                                        <span className="text-white font-medium px-4 py-2 border border-white/50 rounded-full bg-black/20 backdrop-blur-sm text-sm">
+                                                            View
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <h3 className="text-lg font-bold text-black mb-1 group-hover:text-primary transition-colors line-clamp-1">
+                                                {item.title}
+                                            </h3>
+                                            {item.description && (
+                                                <p className="text-gray-600 line-clamp-1 text-xs">
+                                                    {item.description}
+                                                </p>
+                                            )}
                                         </div>
-                                        <h3 className="text-xl font-bold text-black mb-2 group-hover:text-primary transition-colors">
-                                            {item.title}
-                                        </h3>
-                                        {item.description && (
-                                            <p className="text-gray-600 line-clamp-2 text-sm">
-                                                {item.description}
-                                            </p>
-                                        )}
+                                    ))}
+                                </div>
+
+                                {/* Pagination Controls */}
+                                {totalPages > 1 && (
+                                    <div className="flex justify-center items-center gap-2">
+                                        <button
+                                            onClick={() => handlePageChange(currentPage - 1)}
+                                            disabled={currentPage === 1}
+                                            className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                        >
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M15 18l-6-6 6-6" />
+                                            </svg>
+                                        </button>
+
+                                        <div className="flex gap-1">
+                                            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                                                <button
+                                                    key={page}
+                                                    onClick={() => handlePageChange(page)}
+                                                    className={`w-10 h-10 flex items-center justify-center rounded-full text-sm font-medium transition-colors ${currentPage === page
+                                                        ? 'bg-black text-white'
+                                                        : 'text-gray-600 hover:bg-gray-100'
+                                                        }`}
+                                                >
+                                                    {page}
+                                                </button>
+                                            ))}
+                                        </div>
+
+                                        <button
+                                            onClick={() => handlePageChange(currentPage + 1)}
+                                            disabled={currentPage === totalPages}
+                                            className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                        >
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                                <path d="M9 18l6-6-6-6" />
+                                            </svg>
+                                        </button>
                                     </div>
-                                ))}
-                            </div>
+                                )}
+                            </>
                         ) : (
                             <div className="text-center py-20 text-gray-500 bg-gray-50 rounded-xl">
                                 {language === 'KO'
