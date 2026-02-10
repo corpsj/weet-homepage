@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
+import type { ProjectInsert } from "@/types/supabase";
 
 export default function NewProjectPage() {
   const router = useRouter();
@@ -19,18 +20,21 @@ export default function NewProjectPage() {
     status: "completed",
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     const imagesArray = formData.images.split(",").map((s) => s.trim()).filter(Boolean);
     const tagsArray = formData.tags.split(",").map((s) => s.trim()).filter(Boolean);
 
-    const { error } = await supabase.from("projects").insert({
+    const payload = {
       ...formData,
+      completed_at: formData.completed_at || null,
       images: imagesArray,
       tags: tagsArray,
-    });
+    } satisfies ProjectInsert;
+
+    const { error } = await supabase.from("projects").insert(payload);
 
     if (error) {
       alert("Error: " + error.message);

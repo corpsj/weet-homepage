@@ -26,7 +26,7 @@ export default function LoginPage() {
                         관리자 로그인
                     </h2>
                     <p className="mt-2 text-center text-sm text-gray-600">
-                        시스템 관리를 위해 로그인해주세요
+                        모듈러 관리를 위해 로그인해주세요
                     </p>
                 </div>
                 <form className="mt-8 space-y-6">

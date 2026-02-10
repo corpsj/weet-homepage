@@ -276,6 +276,45 @@ export interface Database {
         }
         Relationships: []
       }
+      projects: {
+        Row: {
+          id: string
+          title: string
+          client: string | null
+          location: string | null
+          completed_at: string | null
+          description: string | null
+          images: string[] | null
+          tags: string[] | null
+          status: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          client?: string | null
+          location?: string | null
+          completed_at?: string | null
+          description?: string | null
+          images?: string[] | null
+          tags?: string[] | null
+          status?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          client?: string | null
+          location?: string | null
+          completed_at?: string | null
+          description?: string | null
+          images?: string[] | null
+          tags?: string[] | null
+          status?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -301,3 +340,7 @@ export type FaqUpdate = Database['public']['Tables']['faqs']['Update']
 export type Inquiry = Database['public']['Tables']['inquiries']['Row']
 export type InquiryInsert = Database['public']['Tables']['inquiries']['Insert']
 export type InquiryUpdate = Database['public']['Tables']['inquiries']['Update']
+
+export type Project = Database['public']['Tables']['projects']['Row']
+export type ProjectInsert = Database['public']['Tables']['projects']['Insert']
+export type ProjectUpdate = Database['public']['Tables']['projects']['Update']

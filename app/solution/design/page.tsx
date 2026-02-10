@@ -33,7 +33,7 @@ const COPY: Record<Lang, {
         id: "exterior",
         title: "외관 디자인 솔루션",
         image: "/images/solution/design_exterior.webp",
-        description: '"시스템의 한계를 넘어서는 조형적 완성" 규격화된 모듈 안에서도 독창적인 조형미를 구현합니다.',
+        description: '"모듈러의 한계를 넘어서는 조형적 완성" 규격화된 모듈 안에서도 독창적인 조형미를 구현합니다.',
         detailContent: "· 주변 환경과 조화를 이루는 파사드\n· 건물의 정체성을 드러내는 디자인\n· 독창적인 조형미 구현",
       },
       {

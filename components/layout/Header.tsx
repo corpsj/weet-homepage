@@ -10,12 +10,12 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 const navigationKo = [
   {
-    name: '시스템건축 소개',
+    name: '모듈러건축 소개',
     href: '/modular',
     width: 145,
     submenu: [
-      { name: '시스템건축이란?', href: '/modular#what-is-modular' },
-      { name: '시스템 형태', href: '/modular#modular-types' },
+      { name: '모듈러건축이란?', href: '/modular#what-is-modular' },
+      { name: '모듈러 형태', href: '/modular#modular-types' },
       { name: '사전제작 탈현장 건설', href: '/modular#prefabrication' },
       { name: 'OSC', href: '/modular#osc' },
       { name: '조립방식의 건축', href: '/modular#assembly' },
@@ -31,6 +31,12 @@ const navigationKo = [
       { name: 'L', href: '/products#l' },
       { name: 'XL', href: '/products#xl' },
     ],
+  },
+  {
+    name: '프로젝트',
+    href: '/projects',
+    width: 75,
+    submenu: [],
   },
   {
     name: 'BESPOKE',
@@ -100,6 +106,12 @@ const navigationEn = [
       { name: 'L', href: '/products#l' },
       { name: 'XL', href: '/products#xl' },
     ],
+  },
+  {
+    name: 'Projects',
+    href: '/projects',
+    width: 75,
+    submenu: [],
   },
   {
     name: 'BESPOKE',

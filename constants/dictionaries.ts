@@ -160,12 +160,12 @@ export const DICTIONARY = {
                 lab: {
                     title: 'LAB',
                     desc: '당신의 꿈을 연구하는곳',
-                    images: ['/images/company/lab_new.jpg']
+                    images: ['/images/company/lab_new.webp']
                 },
                 workshop: {
                     title: 'WORKSHOP',
                     desc: '당신의 꿈을 짓는곳',
-                    images: ['/images/company/workshop.jpg']
+                    images: ['/images/company/workshop.webp']
                 }
             }
         },
@@ -354,12 +354,12 @@ He is an engineer who strives to uphold the principle of 'warm and solid housing
                 lab: {
                     title: 'LAB',
                     desc: 'Where your dreams are researched',
-                    images: ['/images/company/lab_new.jpg']
+                    images: ['/images/company/lab_new.webp']
                 },
                 workshop: {
                     title: 'WORKSHOP',
                     desc: 'Where your dreams are built',
-                    images: ['/images/company/workshop.jpg']
+                    images: ['/images/company/workshop.webp']
                 }
             }
         },
