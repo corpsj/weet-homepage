@@ -17,8 +17,8 @@ const metadataBase = (() => {
   }
 })();
 
-const defaultTitle = "위트(weet) - 모듈러 건축 전문 기업";
-const defaultDescription = "모듈러 건축 전문 기업 위트(weet)";
+const defaultTitle = "위트(weet) - 시스템 건축 전문 기업";
+const defaultDescription = "시스템 건축 전문 기업 위트(weet)";
 const siteOrigin = metadataBase.origin;
 
 export const metadata: Metadata = {
@@ -34,8 +34,8 @@ export const metadata: Metadata = {
   keywords: [
     "위트",
     "weet",
-    "모듈러 건축",
-    "모듈러주택",
+    "시스템 건축",
+    "시스템주택",
     "프리패브",
     "유닛하우스",
   ],
@@ -47,7 +47,7 @@ export const metadata: Metadata = {
     description: defaultDescription,
     images: [
       {
-        url: "/OG_LOGO.jpg",
+        url: "/OG_LOGO.webp",
         alt: "위트(weet)",
       },
     ],
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: defaultTitle,
     description: defaultDescription,
-    images: ["/OG_LOGO.jpg"],
+    images: ["/OG_LOGO.webp"],
   },
   robots: {
     index: true,
@@ -105,7 +105,7 @@ export default function RootLayout({
       legalName: "주식회사 위트",
       alternateName: ["weet", "위트(weet)"],
       url: siteOrigin,
-      logo: `${siteOrigin}/images/company/weet-logo.png`,
+      logo: `${siteOrigin}/images/company/weet-logo.webp`,
       sameAs: [
         "https://www.instagram.com/weet_kr/",
         "https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/",

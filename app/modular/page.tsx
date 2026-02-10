@@ -19,8 +19,8 @@ const COPY: Record<Lang, {
 }> = {
   KO: {
     hero: {
-      title: '모듈러(Module)건축이란?',
-      lead: "'모듈러 건축'은 빠른 속도, 정확한 품질, 유연한 공간을 모두 제공하는 가장 진보된 건축 솔루션입니다.",
+      title: '시스템(Module)건축이란?',
+      lead: "'시스템 건축'은 빠른 속도, 정확한 품질, 유연한 공간을 모두 제공하는 가장 진보된 건축 솔루션입니다.",
       paragraphs: [
         '우리의 건축 철학: 더 나은 삶을 위한 합리적 기술',
         '우리는 집이 더 합리적이고 효율적인 방식으로 지어져야 한다고 믿습니다.',
@@ -30,15 +30,15 @@ const COPY: Record<Lang, {
         '또한, 현장의 소음, 분진, 폐기물을 최소화하여 환경과 이웃에 미치는 영향을 줄이는 것이 우리가 지향하는 방식입니다.',
         "공장에서 완성된 모듈은 고객의 대지에서 약속된 일정에 맞춰 '조립'됩니다. 수개월이 소요되던 현장 공정을 획기적으로 단축함으로써, 고객은 정확한 예산과 예측 가능한 일정 안에서 완벽한 공간을 만나게 됩니다.",
         "우리는 이것을 '시간과 자원의 효율적 사용'이라 부릅니다.",
-        "마지막으로, 우리가 제공하는 집의 '형태'는 고정되어 있지 않습니다. 모듈러 건축의 본질은 '유연성'입니다.",
+        "마지막으로, 우리가 제공하는 집의 '형태'는 고정되어 있지 않습니다. 시스템 건축의 본질은 '유연성'입니다.",
         "표준화된 모듈의 조합을 통해 고객의 개성을 반영한 다양한 설계가 가능하며, 삶의 주기에 따라 공간을 '확장'하거나 '축소'할 수 있습니다.",
         "심지어 필요시 집을 '이동'시켜 자산으로서의 가치를 이어갈 수도 있습니다.",
         '우리의 철학은 명확합니다.',
         '기술을 통해 건축의 불확실성을 제거하고, 고객에게는 더 빠르고, 더 견고하며, 더 유연한 삶의 기반을 제공하는 것.',
-        '이것이 우리가 모듈러 건축을 통해 구현하려는 가치입니다.',
+        '이것이 우리가 시스템 건축을 통해 구현하려는 가치입니다.',
       ],
       checklist: [
-        '하이브리드 모듈러 형태 ( Hybrid Modular Unit )',
+        '하이브리드 시스템 형태 ( Hybrid Modular Unit )',
         '사전제작 ( Prefabrication )',
         '탈현장 건설 OSC ( Off-Site Construction )',
         '조립방식의 건축 ( Prefabricated Building )',
@@ -48,14 +48,14 @@ const COPY: Record<Lang, {
     sections: [
       {
         id: 'modular-types',
-        title: '하이브리드 모듈러 형태 ( Hybrid Modular Unit )',
+        title: '하이브리드 시스템 형태 ( Hybrid Modular Unit )',
         subtitle: '구조적 안전과 쾌적함의 결합 (하이브리드 구조)',
         paragraphs: [
           "우리는 단일 소재의 한계를 넘어선 '하이브리드 구조(Hybrid Structure)'를 채택했습니다.",
           '건물의 뼈대는 변형 없는 고강도 구조용 강철을 사용하여 내진 성능과 내구성을 극대화하고, 사람이 머무는 내부는 목재로 구성하여 철이 줄 수 없는 뛰어난 단열과 습도 조절 능력을 담았습니다.',
         ],
         coreValue: '어떤 재해에도 흔들리지 않는 강철의 안전성과 사계절 쾌적한 목재의 거주성을 동시에 제공합니다.',
-        image: '/images/modular/hybrid-modular.jpg',
+        image: '/images/modular/hybrid-modular.webp',
         bg: 'light',
       },
       {
@@ -68,7 +68,7 @@ const COPY: Record<Lang, {
           '정밀한 용접이 필요한 철골과 습도 관리가 필수인 목재 모두 최적의 환경에서 가공되며, 숙련된 엔지니어의 엄격한 QC(품질관리)를 거쳐 출하됩니다.',
         ],
         coreValue: '현장 숙련도에 의존하지 않는, 설계 도면의 수치를 mm 단위까지 정확하게 구현하는 엔지니어링 기반의 제조 품질입니다.',
-        image: '/images/modular/prefabrication.jpg',
+        image: '/images/modular/prefabrication.webp',
         bg: 'light',
       },
       {
@@ -81,7 +81,7 @@ const COPY: Record<Lang, {
           '순차적으로 기다릴 필요 없이 두 과정이 동시에 진행되어, 전체 공사 기간을 획기적으로 단축합니다.',
         ],
         coreValue: '날씨와 민원 등 현장 변수로 인한 지연이 없습니다. 약속된 일정에 정확히 입주하고, 비즈니스 기회를 앞당기는 합리적인 솔루션입니다.',
-        image: '/images/modular/osc.jpg',
+        image: '/images/modular/osc.webp',
         bg: 'dark',
       },
       {
@@ -94,7 +94,7 @@ const COPY: Record<Lang, {
           '현장에서는 단순 조립과 마감 작업만 이루어지기에 소음, 분진, 건축 폐기물 발생을 최소화하여 주변 환경과 이웃을 배려합니다.',
         ],
         coreValue: '시공 과정의 스트레스를 없앤 깨끗한 현장, 그리고 훗날 건물의 확장이나 이동(Relocation)까지 가능한 지속 가능한 건축 방식입니다.',
-        image: '/images/modular/prefabricated-building.jpg',
+        image: '/images/modular/prefabricated-building.webp',
         bg: 'dark',
       },
     ],
@@ -126,7 +126,7 @@ const COPY: Record<Lang, {
           'Structural reviews and QC loops are done before shipping so modules arrive ready to install.',
         ],
         coreValue: 'Hybrid engineering that delivers both robustness and comfort.',
-        image: '/images/modular/hybrid-modular.jpg',
+        image: '/images/modular/hybrid-modular.webp',
         bg: 'light',
       },
       {
@@ -138,7 +138,7 @@ const COPY: Record<Lang, {
           'Multi-stage QC checks dimensions, finishes, and functions to minimize on-site rework and surprises.',
         ],
         coreValue: 'Tightly controlled standard processes keep quality consistent.',
-        image: '/images/modular/prefabrication.jpg',
+        image: '/images/modular/prefabrication.webp',
         bg: 'light',
       },
       {
@@ -150,7 +150,7 @@ const COPY: Record<Lang, {
           'We reduce weather, noise, and safety risks and deliver predictable schedules with structured quality control.',
         ],
         coreValue: 'Parallel workflows minimize schedule risk and keep delivery dates reliable.',
-        image: '/images/modular/osc.jpg',
+        image: '/images/modular/osc.webp',
         bg: 'dark',
       },
       {
@@ -162,7 +162,7 @@ const COPY: Record<Lang, {
           'Need to expand or relocate later? Modules can be separated, moved, and reassembled for higher asset flexibility.',
         ],
         coreValue: 'Fast delivery now with flexibility for future moves or expansions.',
-        image: '/images/modular/prefabricated-building.jpg',
+        image: '/images/modular/prefabricated-building.webp',
         bg: 'dark',
       },
     ],
@@ -182,7 +182,7 @@ export default function ModularPage() {
             <div>
               <div className="relative w-full max-w-[563px] aspect-[1024/817] mx-auto lg:mx-0 mb-8">
                 <Image
-                  src="/images/modular/main-image.png"
+                  src="/images/modular/main-image.webp"
                   alt={copy.hero.title}
                   fill
                   className="object-contain"

@@ -7,7 +7,7 @@ import GallerySection from '@/components/company/GallerySection';
 export default function Home() {
   return (
     <main>
-      <h1 className="sr-only">위트(weet) 모듈러 건축 전문 기업</h1>
+      <h1 className="sr-only">위트(weet) 시스템 건축 전문 기업</h1>
       <HeroCarousel />
       <PartnersBanner />
       <SignatureLine />

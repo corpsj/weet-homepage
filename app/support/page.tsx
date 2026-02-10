@@ -222,7 +222,7 @@ export default function SupportPage() {
                     </div>
                     <div className="aspect-[4/3] relative rounded-2xl overflow-hidden bg-gray-100">
                       <Image
-                        src={`/images/support/step${idx + 1}.png`}
+                        src={`/images/support/step${idx + 1}.webp`}
                         alt={step.title}
                         fill
                         className="object-cover"

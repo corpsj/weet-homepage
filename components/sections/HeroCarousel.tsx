@@ -24,7 +24,7 @@ export default async function HeroCarousel() {
   const initialSlides: Slide[] = slides.length > 0 ? slides : [
     {
       id: 1,
-      image_url: '/images/hero_main.jpg',
+      image_url: '/images/hero_main.webp',
       title: 'Welcome to weet:)',
       subtitle: 'We make dreams come true.',
     }

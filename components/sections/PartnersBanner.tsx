@@ -1,12 +1,12 @@
 import Image from 'next/image';
 
 const partnerLogos = [
-  { name: 'LEóN Design Studio', logo: '/images/partners/leon-design-studio.png' },
-  { name: '함평군', logo: '/images/partners/hampyeong-county.png' },
-  { name: '함평군 농업기술센터', logo: '/images/partners/hampyeong-tech.png' },
-  { name: 'LX Z:IN', logo: '/images/partners/lx-zin.png' },
-  { name: 'Carrier', logo: '/images/partners/carrier.png' },
-  { name: 'LG HelloVision', logo: '/images/partners/lg-hellovision.png' },
+  { name: 'LEóN Design Studio', logo: '/images/partners/leon-design-studio.webp' },
+  { name: '함평군', logo: '/images/partners/hampyeong-county.webp' },
+  { name: '함평군 농업기술센터', logo: '/images/partners/hampyeong-tech.webp' },
+  { name: 'LX Z:IN', logo: '/images/partners/lx-zin.webp' },
+  { name: 'Carrier', logo: '/images/partners/carrier.webp' },
+  { name: 'LG HelloVision', logo: '/images/partners/lg-hellovision.webp' },
 ];
 
 export default function PartnersBanner() {

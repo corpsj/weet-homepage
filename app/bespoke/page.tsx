@@ -27,10 +27,10 @@ const COPY: Record<Lang, {
 }> = {
   KO: {
     headline: 'BESPOKE',
-    lead: "weet의 모듈러 기술력은 '시그니처 라인'의 검증된 품질로 이미 증명되었습니다.",
+    lead: "weet의 시스템 기술력은 '시그니처 라인'의 검증된 품질로 이미 증명되었습니다.",
     highlight: "'비스포크 서비스'는 세상에 단 하나뿐인 당신의 공간을 짓는 프리미엄 맞춤 솔루션입니다.",
     features: [
-      { title: '검증된 기술, 특별한 비전', body: '시그니처 라인에서 검증된 모듈러 기술력과 당신의 특별한 비전의 만남.' },
+      { title: '검증된 기술, 특별한 비전', body: '시그니처 라인에서 검증된 시스템 기술력과 당신의 특별한 비전의 만남.' },
       { title: '1:1 맞춤 전문가', body: '아이디어 구상부터 완공까지, 전문가가 당신과 함께하며 모든 디테일을 구현합니다.' },
       { title: '무한한 디자인', body: '부지의 형태, 용도, 스타일에 구애받지 않는 완전한 설계의 자유.' },
       { title: '최상급 디테일', body: '기본을 넘어, 당신의 기준에 맞는 최상급 자재와 마감 공법을 선택할 수 있습니다.' },
@@ -43,7 +43,7 @@ const COPY: Record<Lang, {
         quote: '"카페는 커피 맛 이전에,\n\'공간의 경험\'으로 먼저 기억됩니다."',
         body: "문을 여는 순간 느껴지는 독특한 분위기, 공간을 채우는 빛과 소재의 질감. 위트의 '작업자들'은 당신의 브랜드 스토리를 고객이 오감으로 경험하는 감각적인 공간 언어로 풀어냅니다. 운영 효율과 심미성이 완벽히 공존하는 1:1 맞춤형 상업 공간을 제안합니다.",
         cta: 'View Portfolio',
-        image: { src: '/images/bespoke/small-cafe-v2.jpg', alt: 'Small Cafe' },
+        image: { src: '/images/bespoke/small-cafe-v2.webp', alt: 'Small Cafe' },
         imageOnRight: true,
       },
       {
@@ -53,7 +53,7 @@ const COPY: Record<Lang, {
         quote: "'브랜드 경험'을 원하는 곳,\n어디로든 옮기다",
         body: '단 며칠 만에 고객을 사로잡는 강력한 브랜드 경험. 정해진 장소와 시간에 얽매이지 않고, 원하는 곳 어디든 당신의 브랜드를 펼쳐보세요. 빠른 설치와 철거, 완벽한 브랜딩 구현, 이동성을 충족하는 스마트한 비즈니스 솔루션입니다.',
         cta: 'View Portfolio',
-        image: { src: '/images/bespoke/popup-store-v2.jpg', alt: 'Pop-up Store' },
+        image: { src: '/images/bespoke/popup-store-v2.webp', alt: 'Pop-up Store' },
         imageOnRight: false,
       },
       {
@@ -63,7 +63,7 @@ const COPY: Record<Lang, {
         quote: "'데이터'가 '수확'이 되는,\n농업의 미래를 짓다",
         body: '스마트팜은 단순한 온실이 아닌, 데이터로 농사를 짓는 정밀한 연구소입니다. 완벽한 단열과 기밀성을 갖춘 모듈 구조를 기반으로, 최적화된 환경 제어 시스템과 데이터 인프라를 통합합니다. 기술이 농업의 한계를 넘어서는 혁신적인 공간을 경험하세요.',
         cta: 'View Portfolio',
-        image: { src: '/images/bespoke/smart-farm-v2.png', alt: 'Smart Farm' },
+        image: { src: '/images/bespoke/smart-farm-v2.webp', alt: 'Smart Farm' },
         imageOnRight: true,
       },
     ],
@@ -87,7 +87,7 @@ const COPY: Record<Lang, {
         quote: 'A cozy café with efficient flow, built and ready in a day.',
         body: 'We design interiors and customer circulation that reflect your brand, creating a rich experience even in compact spaces.',
         cta: 'View portfolio',
-        image: { src: '/images/bespoke/small-cafe-v2.jpg', alt: 'Small Cafe' },
+        image: { src: '/images/bespoke/small-cafe-v2.webp', alt: 'Small Cafe' },
         imageOnRight: true,
       },
       {
@@ -97,7 +97,7 @@ const COPY: Record<Lang, {
         quote: 'Impactful brand experiences, even on short timelines.',
         body: 'Designed for fast install, teardown, and relocation. We plan experiential flows with digital content so events launch on time.',
         cta: 'View portfolio',
-        image: { src: '/images/bespoke/popup-store-v2.jpg', alt: 'Pop-up Store' },
+        image: { src: '/images/bespoke/popup-store-v2.webp', alt: 'Pop-up Store' },
         imageOnRight: false,
       },
       {
@@ -107,7 +107,7 @@ const COPY: Record<Lang, {
         quote: 'Build agricultural facilities quickly with intelligent control and modular structure.',
         body: 'Optimized insulation and MEP layout within modular envelopes, paired with sensors and control systems for stable growing environments.',
         cta: 'View portfolio',
-        image: { src: '/images/bespoke/smart-farm-v2.png', alt: 'Smart Farm' },
+        image: { src: '/images/bespoke/smart-farm-v2.webp', alt: 'Smart Farm' },
         imageOnRight: true,
       },
     ],
@@ -116,9 +116,9 @@ const COPY: Record<Lang, {
 };
 
 const IMAGES = [
-  { id: 'small-cafe', src: '/images/bespoke/small-cafe-v2.jpg', alt: 'Small Cafe' },
-  { id: 'popup-store', src: '/images/bespoke/popup-store-v2.jpg', alt: 'Pop-up Store' },
-  { id: 'smart-farm', src: '/images/bespoke/smart-farm-v2.png', alt: 'Smart Farm' },
+  { id: 'small-cafe', src: '/images/bespoke/small-cafe-v2.webp', alt: 'Small Cafe' },
+  { id: 'popup-store', src: '/images/bespoke/popup-store-v2.webp', alt: 'Pop-up Store' },
+  { id: 'smart-farm', src: '/images/bespoke/smart-farm-v2.webp', alt: 'Smart Farm' },
 ];
 
 export default function BespokePage() {

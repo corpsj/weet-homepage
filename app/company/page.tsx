@@ -30,7 +30,7 @@ export default function CompanyPage() {
         t.company.crew.design.career,
         t.company.crew.design.awards,
       ],
-      images: ["/images/crew/park-profile.png", "/images/crew/park-action.jpg"]
+      images: ["/images/crew/park-profile.webp", "/images/crew/park-action.webp"]
     },
     construction: {
       name: t.company.crew.construction.name,
@@ -73,7 +73,7 @@ export default function CompanyPage() {
             <div className="flex justify-center lg:justify-start">
               <div className="relative w-full max-w-[400px] aspect-[200/240]">
                 <Image
-                  src="/images/company/slogan.png"
+                  src="/images/company/slogan.webp"
                   alt="We make dreams come true"
                   fill
                   className="object-contain"
@@ -123,7 +123,7 @@ export default function CompanyPage() {
             <div className="flex justify-center lg:justify-start">
               <div className="w-[300px] h-[300px] md:w-[350px] md:h-[350px] lg:w-[400px] lg:h-[400px] relative overflow-hidden rounded-lg">
                 <Image
-                  src="/images/company/ci-logo.png"
+                  src="/images/company/ci-logo.webp"
                   alt="위트(WEET) 로고"
                   fill
                   className="object-contain"
@@ -225,7 +225,7 @@ export default function CompanyPage() {
               <div className="flex flex-col items-center text-center h-full">
                 <div className="w-[60px] h-[60px] md:w-[120px] md:h-[120px] mb-2 md:mb-6 relative">
                   <Image
-                    src="/images/company/crew-design-new.png"
+                    src="/images/company/crew-design-new.webp"
                     alt="Design Crew"
                     fill
                     className="object-contain"
@@ -244,7 +244,7 @@ export default function CompanyPage() {
               <div className="flex flex-col items-center text-center h-full">
                 <div className="w-[60px] h-[60px] md:w-[120px] md:h-[120px] mb-2 md:mb-6 relative">
                   <Image
-                    src="/images/company/crew-construction-new.png"
+                    src="/images/company/crew-construction-new.webp"
                     alt="Construction Crew"
                     fill
                     className="object-contain"
@@ -263,7 +263,7 @@ export default function CompanyPage() {
               <div className="flex flex-col items-center text-center h-full">
                 <div className="w-[60px] h-[60px] md:w-[120px] md:h-[120px] mb-2 md:mb-6 relative">
                   <Image
-                    src="/images/company/crew-solution-new.png"
+                    src="/images/company/crew-solution-new.webp"
                     alt="Solution Crew"
                     fill
                     className="object-contain"

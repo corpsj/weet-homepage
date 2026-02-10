@@ -12,7 +12,7 @@ export default function Footer() {
           <div className="flex items-center gap-3 flex-shrink-0 pb-2 transform-none">
             <div className="relative w-[100px] h-[100px] md:w-[120px] md:h-[120px]">
               <Image
-                src="/images/company/weet-logo.png"
+                src="/images/company/weet-logo.webp"
                 alt="위트(weet) 로고"
                 fill
                 sizes="(max-width: 768px) 100px, 120px"

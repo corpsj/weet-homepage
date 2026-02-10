@@ -10,12 +10,12 @@ import { useLanguage } from '@/contexts/LanguageContext';
 
 const navigationKo = [
   {
-    name: '모듈러건축 소개',
+    name: '시스템건축 소개',
     href: '/modular',
     width: 145,
     submenu: [
-      { name: '모듈러건축이란?', href: '/modular#what-is-modular' },
-      { name: '모듈러 형태', href: '/modular#modular-types' },
+      { name: '시스템건축이란?', href: '/modular#what-is-modular' },
+      { name: '시스템 형태', href: '/modular#modular-types' },
       { name: '사전제작 탈현장 건설', href: '/modular#prefabrication' },
       { name: 'OSC', href: '/modular#osc' },
       { name: '조립방식의 건축', href: '/modular#assembly' },
@@ -221,7 +221,7 @@ export default function Header() {
             <Link href="/" className="absolute left-4 md:left-8 lg:left-[64px] top-1/2 -translate-y-1/2 xl:static xl:transform-none">
               <div className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] lg:w-[90px] lg:h-[90px] relative select-none">
                 <Image
-                  src="/images/logo_new.png"
+                  src="/images/logo_new.webp"
                   alt="위트(weet) 로고"
                   fill
                   sizes="(max-width: 768px) 80px, (max-width: 1024px) 100px, 90px"
@@ -380,7 +380,7 @@ export default function Header() {
             <Link href="/" onClick={handleMobileMenuClose}>
               <div className="w-[60px] h-[60px] relative select-none">
                 <Image
-                  src="/images/logo_new.png"
+                  src="/images/logo_new.webp"
                   alt="위트(weet) 로고"
                   fill
                   sizes="60px"
