@@ -30,13 +30,8 @@ const navigationKo = [
       { name: 'M', href: '/products#m' },
       { name: 'L', href: '/products#l' },
       { name: 'XL', href: '/products#xl' },
+      { name: '프로젝트', href: '/projects' },
     ],
-  },
-  {
-    name: '프로젝트',
-    href: '/projects',
-    width: 75,
-    submenu: [],
   },
   {
     name: 'BESPOKE',
@@ -105,13 +100,8 @@ const navigationEn = [
       { name: 'M', href: '/products#m' },
       { name: 'L', href: '/products#l' },
       { name: 'XL', href: '/products#xl' },
+      { name: 'Projects', href: '/projects' },
     ],
-  },
-  {
-    name: 'Projects',
-    href: '/projects',
-    width: 75,
-    submenu: [],
   },
   {
     name: 'BESPOKE',
