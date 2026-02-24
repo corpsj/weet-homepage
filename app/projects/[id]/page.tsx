@@ -1,14 +1,16 @@
-import { createClient } from "@/utils/supabase/server";
+import { supabaseAdmin } from "@/lib/supabase";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
-export default async function ProjectDetailPage({ params }: { params: { id: string } }) {
-  const supabase = await createClient();
-  const { data: project } = await supabase
+export const dynamic = 'force-dynamic';
+
+export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const { data: project } = await supabaseAdmin
     .from("projects")
     .select("*")
-    .eq("id", params.id)
+    .eq("id", id)
     .single();
 
   if (!project) {
@@ -52,7 +54,6 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
         </header>
 
         <div className="space-y-12">
-          {/* Main Image */}
           {project.images?.[0] && (
             <div className="relative aspect-video rounded-2xl overflow-hidden shadow-sm">
               <Image
@@ -65,12 +66,10 @@ export default async function ProjectDetailPage({ params }: { params: { id: stri
             </div>
           )}
 
-          {/* Description */}
           <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed whitespace-pre-wrap">
             {project.description}
           </div>
 
-          {/* Gallery Grid */}
           {project.images && project.images.length > 1 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {project.images.slice(1).map((img: string, i: number) => (

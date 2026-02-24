@@ -1,6 +1,8 @@
-import { createClient } from "@/utils/supabase/server";
+import { supabaseAdmin } from "@/lib/supabase";
 import Link from "next/link";
 import Image from "next/image";
+
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
   title: "Projects | WEET",
@@ -8,8 +10,7 @@ export const metadata = {
 };
 
 export default async function ProjectsPage() {
-  const supabase = await createClient();
-  const { data: projects } = await supabase
+  const { data: projects } = await supabaseAdmin
     .from("projects")
     .select("*")
     .order("completed_at", { ascending: false });
