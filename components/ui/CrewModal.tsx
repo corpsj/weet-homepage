@@ -149,17 +149,19 @@ export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
                         {/* Dynamic Details Grid */}
                         <div className="space-y-10">
                             {data.sections.map((section, idx) => (
-                                <section key={idx}>
-                                    <h3 className="text-[18px] font-bold text-black mb-4 flex items-center gap-3">
-                                        <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
-                                        {section.title}
-                                    </h3>
-                                    <ul className="space-y-2 pl-5 border-l-2 border-gray-100 ml-0.5">
-                                        {section.items.map((item, itemIdx) => (
-                                            <li key={itemIdx} className="text-[15px] text-gray-700 hover:text-black transition-colors">{item}</li>
-                                        ))}
-                                    </ul>
-                                </section>
+                                section.items && section.items.length > 0 && (
+                                    <section key={idx}>
+                                        <h3 className="text-[18px] font-bold text-black mb-4 flex items-center gap-3">
+                                            <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                                            {section.title}
+                                        </h3>
+                                        <ul className="space-y-2 pl-5 border-l-2 border-gray-100 ml-0.5">
+                                            {section.items.map((item, itemIdx) => (
+                                                <li key={itemIdx} className="text-[15px] text-gray-700 hover:text-black transition-colors">{item}</li>
+                                            ))}
+                                        </ul>
+                                    </section>
+                                )
                             ))}
                         </div>
                     </div>

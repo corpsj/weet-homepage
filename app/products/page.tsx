@@ -94,7 +94,7 @@ export default function ProductsPage() {
         exterior: isKO ? '외부마감' : 'Exterior',
         interior: isKO ? '내부마감' : 'Interior',
         floorPlan: isKO ? '도면' : 'Floor Plan',
-        floorPlanWaiting: isKO ? '도면 준비중' : 'Floor plan coming soon',
+        floorPlanWaiting: isKO ? '도면 요청 시 제공' : 'Floor plan available on request',
     };
     const [products, setProducts] = useState<ProductData[]>([]);
     const [loading, setLoading] = useState(true);

@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, Instagram, Youtube, Carrot } from 'lucide-react';
+import { Menu, X, Instagram, Carrot, ChevronDown } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -157,6 +158,7 @@ export default function Header() {
   const [mounted, setMounted] = useState(false);
   const { language, setLanguage } = useLanguage();
 
+  const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
   const navigation = language === 'KO' ? navigationKo : navigationEn;
 
   const handleMobileMenuToggle = useCallback(() => {
@@ -180,6 +182,7 @@ export default function Header() {
 
   const handleMenuHover = useCallback((menuName: string) => {
     setActiveMenu(menuName);
+    setShowMegaMenu(true);
   }, []);
 
 
@@ -296,14 +299,7 @@ export default function Header() {
                 <Instagram className="w-[16px] h-[16px]" />
                 <span className="text-[12px]">instagram</span>
               </Link>
-              <Link
-                href="https://youtube.com"
-                target="_blank"
-                className="text-sm font-bold hover:text-gray-700 transition-colors flex items-center gap-1"
-              >
-                <Youtube className="w-[16px] h-[16px]" />
-                <span className="text-[12px]">youtube</span>
-              </Link>
+
             </div>
 
             {/* Desktop Language Switcher - Bottom aligned */}
@@ -402,36 +398,61 @@ export default function Header() {
 
           {/* Menu Content */}
           <nav className="px-6 py-8">
-            {navigation.map((item, index) => (
-              <div
-                key={item.name}
-                className="mb-8 last:mb-0"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <Link
-                    href={item.href}
-                    onClick={handleMobileMenuClose}
-                    className="block text-lg md:text-xl font-bold text-black hover:text-gray-600 transition-colors"
-                  >
-                    {item.name}
-                  </Link>
-                </div>
+            {navigation.map((item, index) => {
+              const hasSubmenu = item.submenu && item.submenu.length > 0;
+              const isExpanded = expandedMenu === item.name;
 
-                <div className="ml-4 space-y-2">
-                  {item.submenu.map((subitem, idx) => (
-                    <Link
-                      key={idx}
-                      href={subitem.href}
-                      onClick={handleMobileMenuClose}
-                      className="block text-sm md:text-base text-gray-600 hover:text-black transition-colors py-1"
-                    >
-                      {subitem.name}
-                    </Link>
-                  ))}
+              return (
+                <div
+                  key={item.name}
+                  className="mb-8 last:mb-0"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <button
+                    onClick={() => setExpandedMenu(isExpanded ? null : item.name)}
+                    className="flex items-center justify-between w-full text-left mb-3"
+                    type="button"
+                  >
+                    <span className="block text-lg md:text-xl font-bold text-black hover:text-gray-600 transition-colors">
+                      {item.name}
+                    </span>
+                    {hasSubmenu && (
+                      <ChevronDown
+                        className={cn(
+                          "w-6 h-6 text-black transition-transform duration-300",
+                          isExpanded && "rotate-180"
+                        )}
+                      />
+                    )}
+                  </button>
+
+                  <AnimatePresence>
+                    {isExpanded && hasSubmenu && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <div className="ml-4 space-y-2 pb-2">
+                          {item.submenu.map((subitem, idx) => (
+                            <Link
+                              key={idx}
+                              href={subitem.href}
+                              onClick={handleMobileMenuClose}
+                              className="block text-sm md:text-base text-gray-600 hover:text-black transition-colors py-1"
+                            >
+                              {subitem.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </nav>
 
           {/* Bottom Section */}
@@ -481,15 +502,7 @@ export default function Header() {
                 <Instagram className="w-5 h-5" />
                 <span className="text-[12px] font-bold">Instagram</span>
               </Link>
-              <Link
-                href="https://youtube.com"
-                target="_blank"
-                className="flex items-center gap-2 text-gray-700 hover:text-black transition-colors"
-                onClick={handleMobileMenuClose}
-              >
-                <Youtube className="w-5 h-5" />
-                <span className="text-[12px] font-bold">YouTube</span>
-              </Link>
+
             </div>
 
             {/* Footer Text */}
