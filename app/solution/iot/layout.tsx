@@ -13,6 +13,9 @@ export const metadata: Metadata = {
     description:
       "위트(WEET) IoT 솔루션으로 더 똑똑한 공간을 만드세요. 센서·제어·자동화를 통해 편의성과 효율을 높입니다.",
   },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function SolutionIotLayout({
@@ -22,4 +25,3 @@ export default function SolutionIotLayout({
 }>) {
   return children;
 }
-

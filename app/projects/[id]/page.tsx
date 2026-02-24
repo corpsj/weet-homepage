@@ -1,9 +1,33 @@
+import type { Metadata } from "next";
 import { supabaseAdmin } from "@/lib/supabase";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 
 export const dynamic = 'force-dynamic';
+
+export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
+  const { id } = await params;
+  const { data: project } = await supabaseAdmin
+    .from("projects")
+    .select("title, description")
+    .eq("id", id)
+    .single();
+
+  if (!project) {
+    return { title: "프로젝트" };
+  }
+
+  return {
+    title: project.title,
+    description: project.description ?? `위트(WEET) 시공 사례: ${project.title}`,
+    openGraph: {
+      url: `/projects/${id}`,
+      title: project.title,
+      description: project.description ?? `위트(WEET) 시공 사례: ${project.title}`,
+    },
+  };
+}
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

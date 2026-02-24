@@ -13,6 +13,9 @@ export const metadata: Metadata = {
     description:
       "위트(WEET) 디자인 솔루션으로 공간의 완성도를 높이세요. 목적과 브랜드에 맞춘 컨셉·마감·동선을 제안합니다.",
   },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function SolutionDesignLayout({
@@ -22,4 +25,3 @@ export default function SolutionDesignLayout({
 }>) {
   return children;
 }
-

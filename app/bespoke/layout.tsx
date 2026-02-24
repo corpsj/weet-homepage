@@ -13,6 +13,9 @@ export const metadata: Metadata = {
     description:
       "위트(WEET)의 BESPOKE는 아이디어를 현실로 만드는 맞춤형 모듈러 솔루션입니다. 용도·예산·일정에 맞춰 1:1로 제안합니다.",
   },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function BespokeLayout({
@@ -22,4 +25,3 @@ export default function BespokeLayout({
 }>) {
   return children;
 }
-

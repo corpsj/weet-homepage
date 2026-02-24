@@ -13,6 +13,9 @@ export const metadata: Metadata = {
     description:
       "위트(WEET) 고객지원: 구매 방법, 방문 예약, 상담·견적 문의, Q/A, A/S까지 한 번에 안내합니다.",
   },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function SupportLayout({
@@ -22,4 +25,3 @@ export default function SupportLayout({
 }>) {
   return children;
 }
-

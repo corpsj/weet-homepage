@@ -1,12 +1,21 @@
+import type { Metadata } from "next";
 import { supabaseAdmin } from "@/lib/supabase";
 import Link from "next/link";
 import Image from "next/image";
 
 export const dynamic = 'force-dynamic';
 
-export const metadata = {
-  title: "Projects | WEET",
-  description: "WEET의 실제 프로젝트 시공 사례를 소개합니다.",
+export const metadata: Metadata = {
+  title: "시공 사례",
+  description: "위트(WEET)의 실제 프로젝트 시공 사례를 소개합니다. 다양한 용도와 규모의 모듈러 건축 프로젝트를 확인하세요.",
+  alternates: {
+    canonical: "/projects",
+  },
+  openGraph: {
+    url: "/projects",
+    title: "시공 사례",
+    description: "위트(WEET)의 실제 프로젝트 시공 사례를 소개합니다. 다양한 용도와 규모의 모듈러 건축 프로젝트를 확인하세요.",
+  },
 };
 
 export default async function ProjectsPage() {

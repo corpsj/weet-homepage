@@ -1,0 +1,31 @@
+TASK 5: Remove "준비중" Placeholder Text - COMPLETED
+
+CHANGES MADE:
+=============
+
+1. constants/dictionaries.ts (Lines 153-154, 187)
+   - Changed education items from ['준비중'] to []
+   - Changed career items from ['준비중'] to []
+   - Changed noFloorPlan from '도면 준비중' to '도면 요청 시 제공'
+
+2. app/products/page.tsx (Line 97)
+   - Updated floorPlanWaiting text from '도면 준비중' to '도면 요청 시 제공'
+   - Updated English version to 'Floor plan available on request'
+
+3. components/ui/CrewModal.tsx (Lines 151-152)
+   - Added conditional rendering to skip sections with empty items
+   - Prevents empty education/career sections from displaying in crew modal
+
+VERIFICATION:
+==============
+✓ Zero instances of '준비중' in public-facing code (verified with grep)
+✓ Education and career sections now hidden (empty arrays + conditional render)
+✓ Floor plan text updated to polished message
+✓ npm run build passes successfully
+✓ Evidence file created: task-5-placeholder-check.txt
+
+IMPACT:
+=======
+- Company page crew modal no longer shows empty "준비중" placeholders
+- Products page shows "도면 요청 시 제공" instead of "도면 준비중"
+- All visible placeholder text removed from production site
