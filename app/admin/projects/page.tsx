@@ -1,57 +1,42 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Plus, Trash2, Loader2, Pencil, MapPin, Calendar, User } from 'lucide-react';
-import { createClient } from '@/utils/supabase/client';
 import { toast } from 'sonner';
 import { Project } from '@/types/supabase';
+import { getProjects, deleteProject } from '@/app/actions/project-actions';
 
 export default function AdminProjectsPage() {
     const [projects, setProjects] = useState<Project[]>([]);
     const [loading, setLoading] = useState(true);
     const [deleting, setDeleting] = useState<string | null>(null);
     const [filterStatus, setFilterStatus] = useState('All');
-    const supabase = createClient();
 
-    const fetchProjects = async (status: string) => {
+    const fetchProjects = useCallback(async (status: string) => {
         try {
-            let query = supabase
-                .from('projects')
-                .select('*')
-                .order('created_at', { ascending: false });
-            if (status !== 'All') {
-                query = query.eq('status', status);
-            }
-
-            const { data, error } = await query;
-            if (error) throw error;
-            setProjects(data || []);
+            const data = await getProjects(status);
+            setProjects(data);
         } catch (error) {
             console.error('Error fetching projects:', error);
             toast.error('프로젝트 목록을 불러오지 못했습니다.');
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
+
     useEffect(() => {
         setLoading(true);
         fetchProjects(filterStatus);
-    }, [filterStatus]);
+    }, [filterStatus, fetchProjects]);
 
     const handleDelete = async (id: string) => {
         if (!confirm('정말 삭제하시겠습니까?')) return;
 
         setDeleting(id);
         try {
-            const { error } = await supabase
-                .from('projects')
-                .delete()
-                .eq('id', id);
-
-            if (error) throw error;
-
+            await deleteProject(id);
             setProjects(prev => prev.filter(item => item.id !== id));
             toast.success('삭제되었습니다.');
         } catch (error) {

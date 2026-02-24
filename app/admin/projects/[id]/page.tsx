@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
-import { createClient } from '@/utils/supabase/client';
 import { Project } from '@/types/supabase';
+import { getProject } from '@/app/actions/project-actions';
 import ProjectForm from '@/components/admin/projects/ProjectForm';
 import { Loader2 } from 'lucide-react';
 
@@ -11,7 +11,6 @@ export default function EditProjectPage() {
     const params = useParams();
     const [project, setProject] = useState<Project | null>(null);
     const [loading, setLoading] = useState(true);
-    const supabase = createClient();
 
     const projectId = (() => {
         const raw = params?.id;
@@ -28,13 +27,7 @@ export default function EditProjectPage() {
 
         const fetchProject = async (id: string) => {
             try {
-                const { data, error } = await supabase
-                    .from('projects')
-                    .select('*')
-                    .eq('id', id)
-                    .single();
-
-                if (error) throw error;
+                const data = await getProject(id);
                 setProject(data);
             } catch (error) {
                 console.error('Error fetching project:', error);
@@ -44,7 +37,7 @@ export default function EditProjectPage() {
         };
 
         fetchProject(projectId);
-    }, [projectId, supabase]);
+    }, [projectId]);
 
     if (loading) {
         return (

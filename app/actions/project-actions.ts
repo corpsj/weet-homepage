@@ -2,7 +2,42 @@
 
 import { revalidatePath } from 'next/cache';
 import { supabaseAdmin } from '@/lib/supabase';
-import { ProjectInsert, ProjectUpdate } from '@/types/supabase';
+import { Project, ProjectInsert, ProjectUpdate } from '@/types/supabase';
+
+export async function getProjects(status?: string): Promise<Project[]> {
+    let query = supabaseAdmin
+        .from('projects')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+    if (status && status !== 'All') {
+        query = query.eq('status', status);
+    }
+
+    const { data, error } = await query;
+
+    if (error) {
+        console.error('Error fetching projects:', error);
+        throw new Error('Failed to fetch projects');
+    }
+
+    return (data as Project[]) || [];
+}
+
+export async function getProject(id: string): Promise<Project | null> {
+    const { data, error } = await supabaseAdmin
+        .from('projects')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+    if (error) {
+        console.error('Error fetching project:', error);
+        return null;
+    }
+
+    return data as Project;
+}
 
 export async function createProject(data: ProjectInsert) {
     const { error } = await supabaseAdmin
