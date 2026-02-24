@@ -6,11 +6,11 @@ import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { createClient } from '@/utils/supabase/client';
 import { toast } from 'sonner';
 import { Loader2, Upload, X, GripVertical } from 'lucide-react';
 import { Project } from '@/types/supabase';
 import { createProject, updateProject } from '@/app/actions/project-actions';
+import { uploadImageAction } from '@/app/actions/storage-actions';
 import imageCompression from 'browser-image-compression';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 
@@ -32,10 +32,10 @@ interface ProjectFormProps {
 
 export default function ProjectForm({ initialData }: ProjectFormProps) {
     const router = useRouter();
-    const supabase = createClient();
     const [loading, setLoading] = useState(false);
     const [images, setImages] = useState<string[]>(initialData?.images || []);
     const [uploading, setUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState('');
 
     const {
         register,
@@ -62,7 +62,9 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
         const newImages: string[] = [];
 
         try {
-            for (const file of files) {
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                setUploadProgress(`${i + 1}/${files.length}`);
                 let fileToUpload = file;
 
                 if (file.type.startsWith('image/')) {
@@ -77,8 +79,8 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                         const compressedFile = await imageCompression(file, options);
                         const newFileName = file.name.replace(/\.[^/.]+$/, '') + '.webp';
                         fileToUpload = new File([compressedFile], newFileName, { type: 'image/webp' });
-                    } catch (e) {
-                        console.warn('Compression failed, using original file', e);
+                    } catch (err) {
+                        console.warn('Compression failed, using original file', err);
                     }
                 }
 
@@ -86,25 +88,29 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                 const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
                 const filePath = `projects/${fileName}`;
 
-                const { error: uploadError } = await supabase.storage
-                    .from('images')
-                    .upload(filePath, fileToUpload);
+                const formData = new FormData();
+                formData.append('file', fileToUpload);
+                formData.append('bucket', 'images');
+                formData.append('path', filePath);
 
-                if (uploadError) throw uploadError;
+                const result = await uploadImageAction(formData);
 
-                const { data: { publicUrl } } = supabase.storage
-                    .from('images')
-                    .getPublicUrl(filePath);
+                if (!result.success) {
+                    throw new Error(result.error);
+                }
 
-                newImages.push(publicUrl);
+                newImages.push(result.url || '');
             }
 
             setImages((prev) => [...prev, ...newImages]);
+            toast.success(`${newImages.length}장 업로드 완료`);
         } catch (error) {
             console.error('Error uploading images:', error);
-            toast.error('이미지 업로드에 실패했습니다.');
+            const msg = error instanceof Error ? error.message : '이미지 업로드에 실패했습니다.';
+            toast.error(msg);
         } finally {
             setUploading(false);
+            setUploadProgress('');
             e.target.value = '';
         }
     };
@@ -186,11 +192,16 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                             }`}
                         >
                             {uploading ? (
-                                <Loader2 className="w-4 h-4 animate-spin" />
+                                <>
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    {uploadProgress && <span>{uploadProgress} 업로드 중...</span>}
+                                </>
                             ) : (
-                                <Upload className="w-4 h-4" />
+                                <>
+                                    <Upload className="w-4 h-4" />
+                                    이미지 업로드
+                                </>
                             )}
-                            이미지 업로드
                         </label>
                     </div>
                 </div>
