@@ -113,7 +113,7 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
             {/* Navigation Arrows */}
             <button
                 onClick={prevSlide}
-                className="absolute left-4 md:left-8 lg:left-[60px] top-1/2 -translate-y-1/2 w-[50px] h-[50px] md:w-[60px] md:h-[60px] lg:w-[80px] lg:h-[80px] flex items-center justify-center bg-black/20 hover:bg-black/40 backdrop-blur-md transition-all z-30 rounded-full group"
+                className="absolute left-4 md:left-8 lg:left-[60px] top-1/2 -translate-y-1/2 w-[50px] h-[50px] md:w-[60px] md:h-[60px] lg:w-[80px] lg:h-[80px] flex items-center justify-center bg-black/20 hover:bg-black/40 transition-colors duration-200 backdrop-blur-md z-30 rounded-full group"
                 aria-label="Previous slide"
             >
                 <svg className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 transition-transform group-hover:-translate-x-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -123,7 +123,7 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
 
             <button
                 onClick={nextSlide}
-                className="absolute right-4 md:right-8 lg:right-[60px] top-1/2 -translate-y-1/2 w-[50px] h-[50px] md:w-[60px] md:h-[60px] lg:w-[80px] lg:h-[80px] flex items-center justify-center bg-black/20 hover:bg-black/40 backdrop-blur-md transition-all z-30 rounded-full group"
+                className="absolute right-4 md:right-8 lg:right-[60px] top-1/2 -translate-y-1/2 w-[50px] h-[50px] md:w-[60px] md:h-[60px] lg:w-[80px] lg:h-[80px] flex items-center justify-center bg-black/20 hover:bg-black/40 transition-colors duration-200 backdrop-blur-md z-30 rounded-full group"
                 aria-label="Next slide"
             >
                 <svg className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -137,7 +137,7 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                     <button
                         key={idx}
                         onClick={() => setCurrentSlide(idx)}
-                        className={`h-[3px] md:h-[4px] rounded-full transition-all duration-500 ${idx === currentSlide ? 'bg-white w-[40px] md:w-[50px]' : 'bg-white/40 hover:bg-white/70 w-[20px] md:w-[30px]'
+                        className={`h-[3px] md:h-[4px] rounded-full transition-all duration-200 ${idx === currentSlide ? 'bg-white w-[40px] md:w-[50px]' : 'bg-white/40 hover:bg-white w-[20px] md:w-[30px]'
                             }`}
                         aria-label={`Go to slide ${idx + 1}`}
                     />

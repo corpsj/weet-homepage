@@ -70,7 +70,7 @@ export default function SNSGalleryClient({ items, profileUrl }: SNSGalleryClient
                         href={profileUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-2 md:gap-3 bg-[#2D2D2D] hover:bg-black text-white font-semibold px-8 py-3 md:px-10 md:py-3.5 rounded-full transition-all duration-300 shadow-md hover:shadow-lg text-sm md:text-base"
+                        className="inline-flex items-center gap-2 md:gap-3 bg-[#2D2D2D] hover:bg-primary-dark text-white font-semibold px-8 py-3 md:px-10 md:py-3.5 rounded-full transition-colors duration-200 shadow-md hover:shadow-lg text-sm md:text-base"
                     >
                         <Instagram className="w-5 h-5 md:w-6 md:h-6" />
                         <span>{t.main.sns.description || 'Instagram'}</span>

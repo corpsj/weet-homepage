@@ -13,7 +13,7 @@ export default function NotFound() {
                 <div className="pt-8">
                     <Link
                         href="/"
-                        className="inline-flex items-center gap-2 px-8 py-4 bg-black text-white text-sm font-bold rounded-full hover:bg-gray-800 transition-all duration-300 hover:scale-105"
+                        className="inline-flex items-center gap-2 px-8 py-4 bg-black text-white text-sm font-bold rounded-full hover:bg-primary-dark transition-all duration-200 hover:scale-[1.02]"
                     >
                         <ArrowLeft size={18} />
                         홈으로 돌아가기

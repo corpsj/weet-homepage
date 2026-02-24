@@ -157,7 +157,7 @@ export default function GallerySection() {
                                         <button
                                             onClick={() => handlePageChange(currentPage - 1)}
                                             disabled={currentPage === 1}
-                                            className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                            className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200"
                                         >
                                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                 <path d="M15 18l-6-6 6-6" />
@@ -182,7 +182,7 @@ export default function GallerySection() {
                                         <button
                                             onClick={() => handlePageChange(currentPage + 1)}
                                             disabled={currentPage === totalPages}
-                                            className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                            className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity duration-200"
                                         >
                                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                                                 <path d="M9 18l6-6-6-6" />

@@ -540,7 +540,7 @@ export default function ProductsPage() {
                                 <button
                                     key={key}
                                     onClick={() => scrollToProduct(firstProductId)}
-                                    className={`whitespace-nowrap text-sm font-bold transition-colors ${isActiveCategory ? 'text-[#FEBD16]' : 'text-gray-500'
+                                    className={`whitespace-nowrap text-sm font-bold transition-colors duration-200 hover:text-primary ${isActiveCategory ? 'text-primary' : 'text-gray-500'
                                         }`}
                                 >
                                     {category.label}

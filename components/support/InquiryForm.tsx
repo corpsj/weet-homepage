@@ -135,7 +135,7 @@ export default function InquiryForm({ category = 'General Inquiry' }: { category
                 <button
                     type="submit"
                     disabled={isPending}
-                    className="w-full bg-black text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-gray-800 active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed mt-4"
+                    className="w-full bg-black text-white py-4 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-primary-dark active:scale-[0.99] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed mt-4"
                 >
                     {isPending ? (
                         <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

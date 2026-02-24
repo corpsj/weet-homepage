@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { Instagram, Carrot } from 'lucide-react';
 
 export default function Footer() {
   const { language } = useLanguage();
@@ -36,16 +37,47 @@ export default function Footer() {
           </div>
 
           {/* Right side - Copyright and Links */}
-          <div className="text-left md:text-right space-y-1 flex-shrink-0">
-            <p className="text-[11px] md:text-[12px] font-bold text-black whitespace-nowrap">
-              Copyright © weet All right reserved
-            </p>
-            <div className="flex flex-wrap gap-2 text-[10px] md:text-[11px] text-black md:justify-end font-bold">
-              <Link href="/privacy" className="hover:underline">{language === 'KO' ? '개인정보 처리방침' : 'Privacy Policy'}</Link>
-              <span>|</span>
-              <Link href="/terms" className="hover:underline">{language === 'KO' ? '이용약관' : 'Terms of Use'}</Link>
-              <span>|</span>
-              <Link href="/company" className="hover:underline">{language === 'KO' ? '회사소개' : 'About Us'}</Link>
+          <div className="text-left md:text-right space-y-3 flex-shrink-0">
+            <div className="flex items-center gap-5 md:justify-end text-black">
+              <Link
+                href="https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/"
+                target="_blank"
+                className="flex items-center gap-1.5 font-bold hover:text-white hover:scale-110 transition-all duration-200"
+                aria-label="당근마켓"
+              >
+                <Carrot className="w-5 h-5" />
+                <span className="text-[13px] pt-0.5">당근</span>
+              </Link>
+              <Link
+                href="https://blog.naver.com/we-et"
+                target="_blank"
+                className="flex items-center gap-1.5 font-bold hover:text-white hover:scale-110 transition-all duration-200"
+                aria-label="네이버 블로그"
+              >
+                <span className="text-[20px] font-bold leading-none mt-[-2px]">N</span>
+                <span className="text-[13px] pt-0.5">blog</span>
+              </Link>
+              <Link
+                href="https://www.instagram.com/weet_kr/"
+                target="_blank"
+                className="flex items-center gap-1.5 font-bold hover:text-white hover:scale-110 transition-all duration-200"
+                aria-label="인스타그램"
+              >
+                <Instagram className="w-5 h-5" />
+                <span className="text-[13px] pt-0.5">instagram</span>
+              </Link>
+            </div>
+            <div className="space-y-1">
+              <p className="text-[11px] md:text-[12px] font-bold text-black whitespace-nowrap">
+                Copyright © weet All right reserved
+              </p>
+              <div className="flex flex-wrap gap-2 text-[10px] md:text-[11px] text-black md:justify-end font-bold">
+                <Link href="/privacy" className="hover:text-black/70 transition-colors duration-200">{language === 'KO' ? '개인정보 처리방침' : 'Privacy Policy'}</Link>
+                <span>|</span>
+                <Link href="/terms" className="hover:text-black/70 transition-colors duration-200">{language === 'KO' ? '이용약관' : 'Terms of Use'}</Link>
+                <span>|</span>
+                <Link href="/company" className="hover:text-black/70 transition-colors duration-200">{language === 'KO' ? '회사소개' : 'About Us'}</Link>
+              </div>
             </div>
           </div>
         </div>

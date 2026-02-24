@@ -27,7 +27,7 @@ export default async function ProjectsPage() {
           <Link 
             key={project.id} 
             href={`/projects/${project.id}`}
-            className="group block bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100"
+            className="group block bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg hover:scale-[1.02] transition-all duration-200 border border-gray-100"
           >
             <div className="relative aspect-[4/3] bg-gray-100 overflow-hidden">
               {project.images?.[0] ? (

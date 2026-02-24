@@ -29,7 +29,7 @@ export default function SignatureLineClient({ products }: SignatureLineClientPro
                             className="group cursor-pointer"
                         >
                             {/* Product Image */}
-                            <div className="aspect-[3/4] bg-gray-200 rounded-lg mb-3 md:mb-4 overflow-hidden group-hover:shadow-lg transition-shadow duration-300 relative">
+                            <div className="aspect-[3/4] bg-gray-200 rounded-lg mb-3 md:mb-4 overflow-hidden group-hover:shadow-lg group-hover:scale-[1.02] transition-all duration-200 relative">
                                 {product.image_url ? (
                                     <Image
                                         src={product.image_url}
@@ -67,7 +67,7 @@ export default function SignatureLineClient({ products }: SignatureLineClientPro
                 <div className="flex justify-center mt-12 md:mt-14 lg:mt-16">
                     <Link
                         href="/products"
-                        className="inline-flex items-center gap-2 bg-black hover:bg-gray-800 text-white font-medium px-8 md:px-10 py-2.5 md:py-3 rounded-lg transition-colors text-sm md:text-base"
+                        className="inline-flex items-center gap-2 bg-black hover:bg-primary-dark text-white font-medium px-8 md:px-10 py-2.5 md:py-3 rounded-lg transition-colors duration-200 text-sm md:text-base"
                     >
                         <span>{t.products.filter?.all} {t.common.viewDetails || 'Products'}</span> {/* Using existing keys approximately */}
                         <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
