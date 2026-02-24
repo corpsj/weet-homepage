@@ -15,6 +15,7 @@ import {
     BarChart3,
     Link2,
     Image as ImageIcon,
+    FolderKanban,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -55,6 +56,11 @@ const navigation: { title: string; items: NavItem[] }[] = [
                 icon: Package
             },
 
+            {
+                name: '프로젝트 관리',
+                href: '/admin/projects',
+                icon: FolderKanban
+            },
             {
                 name: 'FAQ 관리',
                 href: '/admin/support',
