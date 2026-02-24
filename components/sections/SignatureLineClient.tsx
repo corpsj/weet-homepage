@@ -15,10 +15,8 @@ export default function SignatureLineClient({ products }: SignatureLineClientPro
     return (
         <section className="py-12 md:py-16 lg:py-20 bg-white">
             <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[150px]">
-                {/* TODO: Translate "Signature Line" if needed. Dictionary doesn't have it yet. Using hardcoded for now or 'weet Crew' equivalent? No, it's products. */}
                 <h2 className="text-[32px] md:text-[40px] lg:text-[48px] font-semibold mb-8 md:mb-12 lg:mb-16 text-black">
                     {t.header?.menu?.products || 'Products'}
-                    {/* Actually Signature Line is specific. I should add it to dictionary. */}
                 </h2>
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-4 gap-y-8 md:gap-x-8 md:gap-y-12 lg:gap-x-12 lg:gap-y-16">
@@ -67,9 +65,9 @@ export default function SignatureLineClient({ products }: SignatureLineClientPro
                 <div className="flex justify-center mt-12 md:mt-14 lg:mt-16">
                     <Link
                         href="/products"
-                        className="inline-flex items-center gap-2 bg-black hover:bg-primary-dark text-white font-medium px-8 md:px-10 py-2.5 md:py-3 rounded-lg transition-colors duration-200 text-sm md:text-base"
+                        className="inline-flex items-center gap-2 bg-black hover:bg-primary-dark text-white font-medium px-8 md:px-10 py-3 md:py-3.5 min-h-[44px] rounded-lg transition-colors duration-200 text-sm md:text-base"
                     >
-                        <span>{t.products.filter?.all} {t.common.viewDetails || 'Products'}</span> {/* Using existing keys approximately */}
+                        <span>{t.products.filter?.all} {t.common.viewDetails || 'Products'}</span>
                         <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M7 4L13 10L7 16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
