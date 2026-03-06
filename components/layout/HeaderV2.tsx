@@ -11,8 +11,8 @@ import { zIndex } from '@/lib/design-tokens';
 const navItems = [
   { href: '/modular-v2', label: '모듈러건축 소개' },
   { href: '/products-v2', label: '제품 소개' },
-  { href: '/bespoke', label: 'BESPOKE' },
-  { href: '/solution', label: 'SOLUTION' },
+  { href: '/bespoke-v2', label: 'BESPOKE' },
+  { href: '/solution-v2', label: 'SOLUTION' },
   { href: '/company-v2', label: '회사소개' },
   { href: '/support-v2', label: '고객지원' },
 ];

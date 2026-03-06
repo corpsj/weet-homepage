@@ -1,6 +1,7 @@
 import { HeaderV2 } from '@/components/layout/HeaderV2';
 import { FooterV2 } from '@/components/layout/FooterV2';
 import { FloatingKakaoCTA } from '@/components/ui/FloatingKakaoCTA';
+import { AIChatbot } from '@/components/ui/AIChatbot';
 
 export default function RedesignLayout({
   children,
@@ -15,6 +16,7 @@ export default function RedesignLayout({
       </main>
       <FooterV2 />
       <FloatingKakaoCTA />
+      <AIChatbot />
     </>
   );
 }
