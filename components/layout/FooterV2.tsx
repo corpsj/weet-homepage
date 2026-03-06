@@ -59,7 +59,7 @@ export function FooterV2() {
             <h3 className="text-lg font-semibold">서비스</h3>
             <ul className="flex flex-col gap-3 text-gray-400 text-sm">
               <li>
-                <Link href="/modular" className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center">
+                <Link href="/modular-v2" className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center">
                   모듈러건축 소개
                 </Link>
               </li>
@@ -74,7 +74,7 @@ export function FooterV2() {
                 </Link>
               </li>
               <li>
-                <Link href="/support" className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center">
+                <Link href="/support-v2" className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center">
                   고객지원
                 </Link>
               </li>

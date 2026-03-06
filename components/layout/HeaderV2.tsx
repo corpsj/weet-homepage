@@ -9,12 +9,12 @@ import { cn } from '@/lib/utils';
 import { zIndex } from '@/lib/design-tokens';
 
 const navItems = [
-  { href: '/modular', label: '모듈러건축 소개' },
-  { href: '/products', label: '제품 소개' },
+  { href: '/modular-v2', label: '모듈러건축 소개' },
+  { href: '/products-v2', label: '제품 소개' },
   { href: '/bespoke', label: 'BESPOKE' },
   { href: '/solution', label: 'SOLUTION' },
-  { href: '/company', label: '회사소개' },
-  { href: '/support', label: '고객지원' },
+  { href: '/company-v2', label: '회사소개' },
+  { href: '/support-v2', label: '고객지원' },
 ];
 
 export function HeaderV2() {
@@ -111,7 +111,7 @@ export function HeaderV2() {
 
           <div className="hidden lg:block">
             <Link
-              href="/support"
+              href="/support-v2"
               className="bg-primary text-black rounded-full px-6 py-2.5 font-medium min-h-[44px] flex items-center justify-center hover:bg-[#E5A410] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
             >
               상담 신청
@@ -183,7 +183,7 @@ export function HeaderV2() {
 
               <div className="mt-auto pt-6">
                 <Link
-                  href="/support"
+                  href="/support-v2"
                   className="bg-primary text-black rounded-full w-full py-4 text-lg font-medium min-h-[44px] flex items-center justify-center hover:bg-[#E5A410] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
                 >
                   상담 신청
