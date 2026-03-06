@@ -1,5 +1,6 @@
 import { HeaderV2 } from '@/components/layout/HeaderV2';
 import { FooterV2 } from '@/components/layout/FooterV2';
+import { FloatingKakaoCTA } from '@/components/ui/FloatingKakaoCTA';
 
 export default function RedesignLayout({
   children,
@@ -13,6 +14,7 @@ export default function RedesignLayout({
         {children}
       </main>
       <FooterV2 />
+      <FloatingKakaoCTA />
     </>
   );
 }
