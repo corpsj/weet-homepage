@@ -1,7 +1,14 @@
+import dynamic from 'next/dynamic';
 import { HeaderV2 } from '@/components/layout/HeaderV2';
 import { FooterV2 } from '@/components/layout/FooterV2';
-import { FloatingKakaoCTA } from '@/components/ui/FloatingKakaoCTA';
-import { AIChatbot } from '@/components/ui/AIChatbot';
+
+const FloatingKakaoCTA = dynamic(() =>
+  import('@/components/ui/FloatingKakaoCTA').then((m) => m.FloatingKakaoCTA),
+);
+
+const AIChatbot = dynamic(() =>
+  import('@/components/ui/AIChatbot').then((m) => m.AIChatbot),
+);
 
 export default function RedesignLayout({
   children,

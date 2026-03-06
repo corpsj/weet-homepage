@@ -122,7 +122,7 @@ export default function SolutionRedesignPage() {
             </p>
           </ScrollReveal>
           <ScrollReveal delay={0.15}>
-            <div className="mt-8 grid grid-cols-3 gap-6">
+            <div className="mt-8 grid grid-cols-3 gap-4 sm:gap-6">
               <div>
                 <p className="text-3xl font-bold text-gray-900">원스톱</p>
                 <p className="mt-1 text-sm text-gray-500">통합 시공</p>

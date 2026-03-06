@@ -1,11 +1,27 @@
 import type { Metadata } from 'next';
+import dynamic from 'next/dynamic';
 import FullscreenHero from '@/components/sections/FullscreenHero';
-import { TrustBadges } from '@/components/sections/TrustBadges';
-import { ModelComparison } from '@/components/sections/ModelComparison';
-import { HomeCTA } from './HomeCTA';
+
+const TrustBadges = dynamic(
+  () => import('@/components/sections/TrustBadges').then((m) => m.TrustBadges),
+  { loading: () => <section className="py-16 bg-white" /> },
+);
+
+const ModelComparison = dynamic(
+  () =>
+    import('@/components/sections/ModelComparison').then(
+      (m) => m.ModelComparison,
+    ),
+  { loading: () => <section className="py-16 bg-gray-50" /> },
+);
+
+const HomeCTA = dynamic(
+  () => import('./HomeCTA').then((m) => m.HomeCTA),
+  { loading: () => <section className="py-24 bg-gray-900" /> },
+);
 
 export const metadata: Metadata = {
-  title: '위트(weet) | 위트있는 모듈러 하우스',
+  title: '위트있는 모듈러 하우스',
   description:
     '시스템 모듈러 건축 전문 기업 위트(weet). S/M/L/XL 규격 모듈부터 BESPOKE 맞춤 설계까지, 빠르고 합리적인 건축 솔루션을 제안합니다.',
   alternates: { canonical: '/home' },

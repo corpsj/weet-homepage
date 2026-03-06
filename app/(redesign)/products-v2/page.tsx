@@ -94,8 +94,8 @@ export default function ProductsV2Page() {
       try {
         const data = await getProducts();
         const mappedData = data
-          .map(mapProductToData)
-          .filter((p) => p.sizeCategory !== "SOLUTION" as any);
+          .filter((p) => p.size_category !== "SOLUTION")
+          .map(mapProductToData);
 
         const categoryOrder = ["S", "M", "L", "XL", "DESIGN"];
         mappedData.sort((a, b) => {
@@ -403,7 +403,7 @@ function ExpandedDetail({
                       : "border-transparent opacity-60 hover:opacity-100 bg-gray-100"
                   )}
                 >
-                  <img src={img} alt="" className="w-full h-full object-cover" />
+                  <img src={img} alt="" loading="lazy" className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>

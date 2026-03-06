@@ -191,7 +191,7 @@ export default function FullscreenHero() {
               transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
               className="text-lg md:text-xl text-white/70 mb-8 lg:mb-12 font-medium"
             >
-              from ₩{model.price}
+              ₩{model.price}부터
             </motion.div>
 
             <motion.div

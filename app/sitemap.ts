@@ -29,6 +29,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/support", changeFrequency: "monthly", priority: 0.7 },
     { path: "/privacy", changeFrequency: "yearly", priority: 0.2 },
     { path: "/terms", changeFrequency: "yearly", priority: 0.2 },
+    // Redesign pages
+    { path: "/home", changeFrequency: "weekly", priority: 1 },
+    { path: "/products-v2", changeFrequency: "weekly", priority: 0.9 },
+    { path: "/modular-v2", changeFrequency: "monthly", priority: 0.8 },
+    { path: "/bespoke-v2", changeFrequency: "monthly", priority: 0.7 },
+    { path: "/solution-v2", changeFrequency: "monthly", priority: 0.8 },
+    { path: "/company-v2", changeFrequency: "monthly", priority: 0.7 },
+    { path: "/support-v2", changeFrequency: "monthly", priority: 0.7 },
+    { path: "/shelter", changeFrequency: "monthly", priority: 0.8 },
+    { path: "/quote", changeFrequency: "monthly", priority: 0.8 },
+    { path: "/ar", changeFrequency: "monthly", priority: 0.5 },
   ];
 
   return routes.map((route) => ({
