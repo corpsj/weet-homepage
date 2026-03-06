@@ -2,6 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --weet-primary: #FEBD16;
+  --weet-primary-dark: #E5A410;
+  --weet-bg: #FFFFFF;
+  --weet-bg-section: #F9FAFB;
+  --weet-bg-dark: #111827;
+  --weet-text: #111827;
+  --weet-text-secondary: #4B5563;
+  --weet-text-muted: #9CA3AF;
+}
+
 @layer base {
   body {
     @apply bg-[#EBEBEB] text-black antialiased;

@@ -87,6 +87,7 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from 'next/script';
 
 import { LanguageProvider } from '@/contexts/LanguageContext';
+import { KakaoProvider } from '@/components/providers/KakaoProvider';
 
 export default function RootLayout({
   children,
@@ -141,9 +142,17 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen flex flex-col">
-        <LanguageProvider>
-          <ClientLayout>{children}</ClientLayout>
-        </LanguageProvider>
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:bg-[#FEBD16] focus:text-black focus:px-4 focus:py-2 focus:rounded-md focus:text-sm focus:font-medium focus:shadow-lg"
+        >
+          본문 바로가기
+        </a>
+        <KakaoProvider>
+          <LanguageProvider>
+            <ClientLayout>{children}</ClientLayout>
+          </LanguageProvider>
+        </KakaoProvider>
         <Analytics />
         {process.env.NEXT_PUBLIC_GA_ID && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
@@ -159,6 +168,7 @@ export default function RootLayout({
             `}
           </Script>
         )}
+        <div id="a11y-announcer" aria-live="polite" aria-atomic="true" className="sr-only" />
       </body>
     </html>
   );
