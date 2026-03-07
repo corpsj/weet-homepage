@@ -216,24 +216,6 @@ export default function ProductsV2ClientPage() {
         </Tabs>
       </section>
 
-      <section className="mx-auto w-full max-w-6xl px-5 pb-6 sm:px-8 lg:px-12">
-        <div className="rounded-2xl bg-[#2D2D2A] px-6 py-9 text-[#FAFAFA] sm:px-8 sm:py-10">
-          <div className="max-w-3xl">
-            <p className="mb-3 text-xs tracking-[0.16em] text-[#FFCA0D]">전용 안내</p>
-            <h2 className="text-3xl font-semibold">체류형 쉼터</h2>
-            <p className="mt-4 text-sm leading-7 text-[#FAFAFA]/85 sm:text-base">
-              33㎡ 이하, 건축 허가 불필요, 농지·임야 설치 가능 조건에 맞춘 체류형 쉼터 전용 구성을 안내합니다.
-            </p>
-            <Link
-              href="/shelter"
-              className="mt-6 inline-flex rounded-full border border-[#FFCA0D] px-5 py-2.5 text-sm font-semibold text-[#FFCA0D] transition-colors hover:bg-[#FFCA0D] hover:text-[#2D2D2A]"
-            >
-              체류형 쉼터 상담
-            </Link>
-          </div>
-        </div>
-      </section>
-
       <section className="mx-auto w-full max-w-6xl px-5 pb-14 pt-6 sm:px-8 lg:px-12 lg:pb-20">
         <div className="rounded-2xl border border-[#2D2D2A]/15 bg-[#FAFAFA] p-7 sm:p-10">
           <h2 className="text-2xl font-semibold text-[#2D2D2A] sm:text-3xl">맞춤 견적 받기</h2>
