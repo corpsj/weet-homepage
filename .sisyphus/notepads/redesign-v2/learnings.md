@@ -198,3 +198,21 @@
 - Implemented size cards for S/M/L/XL with fixed dimensions, 면적, 추천 용도, and 총 가격 only (no 월납입/할부/리스 text).
 - Added dark `체류형 쉼터` section (`#2D2D2A`) with 상담 CTA to `/support-v2`, plus final CTA section `견적 받기` to `/bespoke-v2`.
 - Verification: LSP diagnostics clean on both new files and `npm run build` passed with `/products-v2` generated successfully.
+
+## [2026-03-07] Wave5-SEO: Server/client split for metadata
+- **Problem**: All 9 V2 redesign pages had `"use client"` at top, preventing `export const metadata` from working in Next.js App Router
+- **Solution**: Split each page into server wrapper (page.tsx) + client component (*-client.tsx) pattern
+- **Pattern applied to all 9 pages**:
+  1. `home/page.tsx` → server wrapper + `home-client.tsx` (title: "홈 | weet:) 시스템건축")
+  2. `system/page.tsx` → server wrapper + `system-client.tsx` (title: "시스템건축 소개 | weet:)")
+  3. `products-v2/page.tsx` → added description to existing metadata
+  4. `projects-v2/page.tsx` → server wrapper + `projects-v2-client.tsx` (title: "시공사례 | weet:)")
+  5. `bespoke-v2/page.tsx` → server wrapper + `bespoke-v2-client.tsx` (title: "비스포크 맞춤 설계 | weet:)")
+  6. `solutions/page.tsx` → server wrapper + `solutions-client.tsx` (title: "솔루션 | weet:)")
+  7. `company-v2/page.tsx` → server wrapper + `company-v2-client.tsx` (title: "회사소개 | weet:)")
+  8. `support-v2/page.tsx` → server wrapper + `support-v2-client.tsx` (title: "고객지원 | weet:)")
+  9. `my/tracking/page.tsx` → server wrapper + `tracking-client.tsx` (title: "시공 추적 | weet:)")
+- **Metadata structure**: Each page exports unique Korean title + description for SEO
+- **Build verification**: `npm run build` PASS (3.5s, Turbopack, 33/33 pages generated, zero errors)
+- **Files created**: 9 new client component files (*-client.tsx), 9 page.tsx files updated with server-side metadata
+- **No UI changes**: All client-side logic preserved, only architectural split for metadata support
