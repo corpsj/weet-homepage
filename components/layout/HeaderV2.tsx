@@ -1,9 +1,8 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { V2_NAV_ITEMS } from '@/lib/navigation';
@@ -21,6 +20,7 @@ export function HeaderV2() {
   const [isHidden, setIsHidden] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const pathname = usePathname();
+  const logoRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -65,7 +65,11 @@ export function HeaderV2() {
           className="flex items-center gap-2 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md"
           aria-label="위트 홈으로 가기"
         >
-          <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center font-bold text-[#2D2D2A] text-xs leading-none">
+          <div
+            ref={logoRef}
+            data-easter-egg="logo"
+            className="w-9 h-9 rounded-full bg-primary flex items-center justify-center font-bold text-[#2D2D2A] text-xs leading-none cursor-pointer"
+          >
             weet:)
           </div>
           <span className="hidden sm:block font-semibold text-foreground text-sm tracking-tight">

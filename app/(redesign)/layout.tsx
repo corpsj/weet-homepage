@@ -6,6 +6,7 @@ import { KakaoProvider } from '@/components/providers/KakaoProvider'
 import { Toaster } from '@/components/ui/sonner'
 import { FloatingKakaoCTA } from '@/components/ui/FloatingKakaoCTA'
 import { AIChatbot } from '@/components/ui/AIChatbot'
+import { EasterEggs } from '@/components/ui/EasterEggs'
 
 export const metadata: Metadata = {
   title: {
@@ -31,6 +32,7 @@ export default function RedesignLayout({
       <FooterV2 />
       <FloatingKakaoCTA />
       <AIChatbot />
+      <EasterEggs />
       <Toaster />
     </KakaoProvider>
   )

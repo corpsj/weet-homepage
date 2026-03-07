@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, RefObject } from 'react';
 
-export function useKonamiCode() {
-  const [triggered, setTriggered] = useState(false);
-
+/**
+ * Hook to detect Konami code sequence: ↑↑↓↓←→←→BA
+ * Returns a callback setter to handle the triggered event
+ */
+export function useKonamiCode(callback?: () => void) {
   useEffect(() => {
     const konamiCode = [
       'ArrowUp', 'ArrowUp',
@@ -16,10 +18,13 @@ export function useKonamiCode() {
     let position = 0;
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === konamiCode[position]) {
+      const key = e.key.toLowerCase();
+      const expectedKey = konamiCode[position].toLowerCase();
+
+      if (key === expectedKey) {
         position++;
         if (position === konamiCode.length) {
-          setTriggered(true);
+          callback?.();
           position = 0;
         }
       } else {
@@ -29,18 +34,19 @@ export function useKonamiCode() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
-  return triggered;
+  }, [callback]);
 }
 
-export function useTripleClick(timeout = 500) {
-  const [triggered, setTriggered] = useState(false);
+/**
+ * Hook to detect triple-click on a ref element
+ * Returns callback to attach to element
+ */
+export function useTripleClick(ref: RefObject<HTMLElement | null>, callback?: () => void, timeout = 500) {
   const [clicks, setClicks] = useState(0);
 
   useEffect(() => {
     if (clicks === 3) {
-      setTriggered(true);
+      callback?.();
       setClicks(0);
     }
 
@@ -48,11 +54,17 @@ export function useTripleClick(timeout = 500) {
       const timer = setTimeout(() => setClicks(0), timeout);
       return () => clearTimeout(timer);
     }
-  }, [clicks, timeout]);
+  }, [clicks, callback, timeout]);
 
-  const handleTripleClick = useCallback(() => {
-    setClicks((prev) => prev + 1);
-  }, []);
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
 
-  return { triggered, handleTripleClick };
+    const handleClick = () => {
+      setClicks((prev) => prev + 1);
+    };
+
+    element.addEventListener('click', handleClick);
+    return () => element.removeEventListener('click', handleClick);
+  }, [ref]);
 }

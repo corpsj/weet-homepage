@@ -53,7 +53,7 @@ export function FooterV2() {
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-sm text-white/70 hover:text-primary transition-colors min-h-[36px] inline-flex items-center"
+                    className="text-sm text-white/70 hover:text-primary transition-colors min-h-[44px] inline-flex items-center"
                   >
                     {item.label}
                   </Link>
@@ -73,7 +73,7 @@ export function FooterV2() {
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-white/70 hover:text-primary transition-colors min-h-[36px] inline-flex items-center"
+                      className="text-sm text-white/70 hover:text-primary transition-colors min-h-[44px] inline-flex items-center"
                     >
                       {item.label}
                     </a>
@@ -82,7 +82,7 @@ export function FooterV2() {
                   <li key={item.label}>
                     <a
                       href={item.href}
-                      className="text-sm text-white/70 hover:text-primary transition-colors min-h-[36px] inline-flex items-center"
+                      className="text-sm text-white/70 hover:text-primary transition-colors min-h-[44px] inline-flex items-center"
                     >
                       {item.label}
                     </a>
@@ -102,7 +102,7 @@ export function FooterV2() {
                     href={item.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-white/70 hover:text-primary transition-colors min-h-[36px] inline-flex items-center"
+                    className="text-sm text-white/70 hover:text-primary transition-colors min-h-[44px] inline-flex items-center"
                   >
                     {item.label}
                   </a>
