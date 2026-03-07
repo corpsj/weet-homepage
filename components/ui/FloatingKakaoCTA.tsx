@@ -3,12 +3,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { isKakaoReady, openKakaoChannel } from '@/lib/kakao';
-import { ConsultationModal } from '@/components/ui/ConsultationModal';
 
 export function FloatingKakaoCTA() {
   const [isVisible, setIsVisible] = useState(true);
   const [showTooltip, setShowTooltip] = useState(false);
-  const [showModal, setShowModal] = useState(false);
   const [hasPulsed, setHasPulsed] = useState(false);
   const lastScrollY = useRef(0);
 
@@ -35,11 +33,7 @@ export function FloatingKakaoCTA() {
   }, []);
 
   const handleClick = useCallback(() => {
-    if (isKakaoReady()) {
-      openKakaoChannel();
-    } else {
-      setShowModal(true);
-    }
+    openKakaoChannel();
   }, []);
 
   return (
@@ -93,8 +87,6 @@ export function FloatingKakaoCTA() {
           )}
         </button>
       </div>
-
-      <ConsultationModal isOpen={showModal} onClose={() => setShowModal(false)} />
     </>
   );
 }

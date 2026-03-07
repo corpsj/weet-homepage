@@ -6,7 +6,6 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { zIndex } from '@/lib/design-tokens';
 
 const navItems = [
   { href: '/modular-v2', label: '모듈러건축 소개' },
@@ -81,7 +80,7 @@ export function HeaderV2() {
     <>
       <header 
         className={headerClass}
-        style={{ zIndex: zIndex.header }}
+        style={{ zIndex: 100 }}
       >
         <div className="mx-auto max-w-[1440px] px-4 md:px-6 lg:px-8 h-[64px] lg:h-[72px] flex items-center justify-between">
           <Link 
@@ -140,7 +139,7 @@ export function HeaderV2() {
             exit={{ opacity: 0, x: '100%' }}
             transition={{ type: 'tween', duration: 0.3 }}
             className="fixed inset-0 bg-white"
-            style={{ zIndex: zIndex.mobileMenu }}
+            style={{ zIndex: 200 }}
             role="dialog"
             aria-modal="true"
             aria-label="모바일 메인 메뉴"

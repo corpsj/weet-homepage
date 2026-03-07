@@ -1,30 +1,51 @@
-'use client';
+'use client'
 
-import { motion, useInView } from 'framer-motion';
-import { useRef, type ReactNode } from 'react';
-import { scrollReveal } from '@/lib/animations';
+import { useRef } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
+import { fadeUp, fadeIn, slideInLeft, slideInRight } from '@/lib/animations'
+import type { Variants } from 'framer-motion'
 
 interface ScrollRevealProps {
-  children: ReactNode;
-  className?: string;
-  delay?: number;
-  once?: boolean;
+  children: React.ReactNode
+  direction?: 'up' | 'down' | 'left' | 'right' | 'none'
+  delay?: number
+  duration?: number
+  className?: string
+  once?: boolean
 }
 
-export function ScrollReveal({ children, className, delay = 0, once = true }: ScrollRevealProps) {
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once, margin: '-50px' });
+const variantMap: Record<NonNullable<ScrollRevealProps['direction']>, Variants> = {
+  up: fadeUp,
+  down: {
+    hidden: { opacity: 0, y: -30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+  },
+  left: slideInLeft,
+  right: slideInRight,
+  none: fadeIn,
+}
+
+export function ScrollReveal({
+  children,
+  direction = 'up',
+  delay = 0,
+  className,
+  once = true,
+}: ScrollRevealProps) {
+  const prefersReducedMotion = useReducedMotion()
+  const variants = prefersReducedMotion ? fadeIn : variantMap[direction]
 
   return (
     <motion.div
-      ref={ref}
       initial="hidden"
-      animate={isInView ? 'visible' : 'hidden'}
-      variants={scrollReveal}
-      transition={{ delay }}
+      whileInView="visible"
+      viewport={{ once, amount: 0.2 }}
+      variants={variants}
+      custom={delay}
       className={className}
+      style={delay ? { transitionDelay: `${delay}s` } : undefined}
     >
       {children}
     </motion.div>
-  );
+  )
 }

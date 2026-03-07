@@ -1,83 +1,78 @@
-/**
- * Framer Motion Animation Variants
- * Shared animation presets for consistent motion across the site
- */
+import type { Variants } from 'framer-motion'
 
-import { motion as motionConfig } from './design-tokens';
-
-// Fade animations
-export const fadeInUp = {
+export const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: motionConfig.duration.normal },
+    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
   },
-};
+}
 
-export const fadeInDown = {
-  hidden: { opacity: 0, y: -30 },
+export const fadeIn: Variants = {
+  hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    y: 0,
-    transition: { duration: motionConfig.duration.normal },
+    transition: { duration: 0.5, ease: 'easeOut' },
   },
-};
+}
 
-export const fadeInLeft = {
-  hidden: { opacity: 0, x: -30 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: motionConfig.duration.normal },
-  },
-};
-
-export const fadeInRight = {
-  hidden: { opacity: 0, x: 30 },
+export const slideInLeft: Variants = {
+  hidden: { opacity: 0, x: -40 },
   visible: {
     opacity: 1,
     x: 0,
-    transition: { duration: motionConfig.duration.normal },
+    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
   },
-};
+}
 
-// Scale animation
-export const scaleIn = {
-  hidden: { opacity: 0, scale: 0.9 },
+export const slideInRight: Variants = {
+  hidden: { opacity: 0, x: 40 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
+  },
+}
+
+export const scaleIn: Variants = {
+  hidden: { opacity: 0, scale: 0.92 },
   visible: {
     opacity: 1,
     scale: 1,
-    transition: { duration: motionConfig.duration.normal },
+    transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
   },
-};
+}
 
-// Stagger animations for lists
-export const staggerContainer = {
+export const staggerContainer: Variants = {
   hidden: {},
   visible: {
-    transition: { staggerChildren: 0.1 },
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
   },
-};
+}
 
-export const staggerItem = {
+export const staggerItem: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: motionConfig.duration.fast },
+    transition: { duration: 0.5, ease: 'easeOut' },
   },
-};
+}
 
-// Scroll reveal animation
-export const scrollReveal = {
-  hidden: { opacity: 0, y: 40 },
+export const pageTransition: Variants = {
+  hidden: { opacity: 0, y: 10 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: motionConfig.duration.reveal,
-      ease: motionConfig.ease.smooth,
-    },
+    transition: { duration: 0.35, ease: 'easeOut' },
   },
-};
+  exit: {
+    opacity: 0,
+    y: -10,
+    transition: { duration: 0.25, ease: 'easeIn' },
+  },
+}

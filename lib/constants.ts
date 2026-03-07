@@ -13,3 +13,13 @@ export const COMPANY = {
   daangn: 'https://www.daangn.com/kr/local-profile/위트weet-kihpx4ctggn6/',
   url: 'https://www.we-et.com',
 } as const;
+
+export const BRAND_V2 = {
+  concept: '시스템건축',
+  divisions: {
+    mobileHousing: '이동식주택',
+    onsiteConstruction: '현장건축',
+  },
+  tagline: '시스템건축의 새로운 기준',
+  ctaLabels: ['상담 신청', '카카오톡 상담', '견적 받기'] as const,
+} as const

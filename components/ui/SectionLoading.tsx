@@ -2,7 +2,14 @@
 
 import { cn } from '@/lib/utils';
 import { useMemo } from 'react';
-import { loadingStates } from '@/lib/witty-copy';
+
+const loadingStates = [
+  '집 짓는 중...',
+  '모듈 조립하는 중...',
+  '인테리어 마무리 중...',
+  '거의 다 왔어요...',
+  '기초 공사 중...',
+] as const;
 
 interface SectionLoadingProps {
   className?: string;

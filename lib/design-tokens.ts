@@ -1,121 +1,28 @@
-/**
- * Design System Tokens for weet:) Homepage
- * Centralized design values for colors, typography, spacing, and animations
- */
+export const COLORS = {
+  accent: { hex: '#FFCA0D', hsl: '46 100% 52.5%' },
+  primary: { hex: '#2D2D2A', hsl: '60 5.3% 17.1%' },
+  background: { hex: '#FAFAFA', hsl: '0 0% 98%' },
+} as const
 
-// Colors
-export const colors = {
-  primary: '#FEBD16',      // weet yellow
-  primaryDark: '#E5A410',
-  black: '#000000',
-  white: '#FFFFFF',
-  bg: {
-    main: '#FFFFFF',
-    section: '#F9FAFB',
-    dark: '#111827',
-  },
-  text: {
-    primary: '#111827',
-    secondary: '#4B5563',
-    muted: '#9CA3AF',
-    inverse: '#FFFFFF',
-  },
-  border: {
-    light: '#E5E7EB',
-    medium: '#D1D5DB',
-  },
-  status: {
-    success: '#22C55E',
-    warning: '#F59E0B',
-    error: '#EF4444',
-  },
-} as const;
+export const TYPOGRAPHY = {
+  display: 'text-7xl md:text-8xl font-bold tracking-tight',
+  h1: 'text-4xl md:text-5xl lg:text-6xl font-bold',
+  h2: 'text-2xl md:text-3xl lg:text-4xl font-semibold',
+  h3: 'text-xl md:text-2xl lg:text-3xl font-semibold',
+  bodyLg: 'text-base md:text-lg leading-relaxed',
+  caption: 'text-sm text-muted-foreground',
+} as const
 
-// Typography
-export const typography = {
-  hero: {
-    size: 'clamp(2.5rem, 5vw, 4.5rem)',
-    weight: 700,
-    lineHeight: 1.1,
-  },
-  h1: {
-    size: 'clamp(2rem, 4vw, 3.5rem)',
-    weight: 700,
-    lineHeight: 1.2,
-  },
-  h2: {
-    size: 'clamp(1.5rem, 3vw, 2.5rem)',
-    weight: 700,
-    lineHeight: 1.3,
-  },
-  h3: {
-    size: 'clamp(1.25rem, 2vw, 1.75rem)',
-    weight: 600,
-    lineHeight: 1.4,
-  },
-  body: {
-    size: '1rem',
-    weight: 400,
-    lineHeight: 1.6,
-  },
-  caption: {
-    size: '0.875rem',
-    weight: 400,
-    lineHeight: 1.5,
-  },
-  small: {
-    size: '0.75rem',
-    weight: 400,
-    lineHeight: 1.5,
-  },
-} as const;
+export const SPACING = {
+  sectionPaddingY: 'py-16 md:py-24 lg:py-32',
+  containerMaxWidth: 'max-w-7xl mx-auto px-4 md:px-6',
+  cardGap: 'gap-6 md:gap-8',
+} as const
 
-// Spacing (section padding)
-export const spacing = {
-  section: {
-    mobile: '3rem',
-    tablet: '5rem',
-    desktop: '7rem',
-  },
-  container: {
-    maxWidth: '1440px',
-    padding: {
-      mobile: '1rem',
-      tablet: '2rem',
-      desktop: '4rem',
-    },
-  },
-} as const;
-
-// Breakpoints
-export const breakpoints = {
-  mobile: 375,
-  tablet: 768,
-  desktop: 1024,
-  wide: 1440,
-} as const;
-
-// Animation config (durations in seconds, for framer-motion)
-export const motion = {
-  duration: {
-    fast: 0.2,
-    normal: 0.4,
-    slow: 0.6,
-    reveal: 0.8,
-  },
-  ease: {
-    default: [0.25, 0.1, 0.25, 1],
-    smooth: [0.45, 0, 0.55, 1],
-    bounce: [0.68, -0.55, 0.265, 1.55],
-  },
-} as const;
-
-// Z-indices
-export const zIndex = {
-  header: 100,
-  mobileMenu: 200,
-  modal: 300,
-  floatingCTA: 400,
-  chatbot: 500,
-  skipNav: 9999,
-} as const;
+export const Z_INDEX = {
+  header: 50,
+  overlay: 150,
+  modal: 100,
+  toast: 200,
+  floatingBtn: 40,
+} as const

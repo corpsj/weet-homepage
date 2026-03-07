@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { zIndex } from '@/lib/design-tokens';
 import { announceToScreenReader, trapFocus } from '@/lib/a11y';
 import { COMPANY } from '@/lib/constants';
 
@@ -91,7 +90,7 @@ export function AIChatbot() {
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.2 }}
             className="fixed bottom-24 right-4 w-[360px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-2xl"
-            style={{ zIndex: zIndex.chatbot }}
+            style={{ zIndex: 500 }}
           >
             <div className="flex items-center justify-between bg-gray-900 px-4 py-3">
               <div className="flex items-center gap-2">
@@ -198,7 +197,7 @@ export function AIChatbot() {
           'fixed bottom-4 right-20 flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all',
           isOpen ? 'bg-gray-900 text-white' : 'bg-[#FEBD16] text-black hover:bg-[#E5A410]'
         )}
-        style={{ zIndex: zIndex.chatbot }}
+        style={{ zIndex: 500 }}
         aria-label={isOpen ? '채팅 닫기' : 'AI 상담 시작'}
       >
         {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
