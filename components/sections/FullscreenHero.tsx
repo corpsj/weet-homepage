@@ -1,188 +1,162 @@
 'use client';
 
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { cn } from '@/lib/utils';
-import { productTaglines, productSubcopy } from '@/lib/witty-copy';
-import type { SizeCategory } from '@/lib/types';
 
-interface ModelSlide {
-  size: SizeCategory;
-  dims: string;
-  area: string;
-  price: string;
-  gradient: string;
-}
-
-const models: ModelSlide[] = [
-  {
-    size: 'S',
-    dims: '3×6m',
-    area: '18㎡',
-    price: '2,500만',
-    gradient: 'from-[#1a1a1a] via-[#252525] to-[#1a1a1a]',
-  },
-  {
-    size: 'M',
-    dims: '3×9m',
-    area: '27㎡',
-    price: '3,800만',
-    gradient: 'from-[#1c1f26] via-[#272b33] to-[#1c1f26]',
-  },
-  {
-    size: 'L',
-    dims: '6×9m',
-    area: '54㎡',
-    price: '6,500만',
-    gradient: 'from-[#1f1c1a] via-[#2a2623] to-[#1f1c1a]',
-  },
-  {
-    size: 'XL',
-    dims: '6×12m',
-    area: '72㎡',
-    price: '8,900만',
-    gradient: 'from-[#0f0f0f] via-[#1a1a1a] to-[#0f0f0f]',
-  },
+const floatingShapes = [
+  { id: 'rect-a', width: 120, height: 80, top: '15%', left: '10%', duration: 18, delay: 0, rotate: 12 },
+  { id: 'sq-b', width: 60, height: 60, top: '60%', right: '8%', duration: 22, delay: 2, rotate: -8 },
+  { id: 'rect-c', width: 90, height: 140, bottom: '20%', left: '70%', duration: 20, delay: 4, rotate: 6 },
+  { id: 'rect-d', width: 50, height: 100, top: '35%', right: '25%', duration: 24, delay: 1, rotate: -15 },
 ];
 
+const contentVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.8,
+      ease: [0.25, 0.46, 0.45, 0.94],
+      staggerChildren: 0.12,
+    },
+  },
+};
+
+const childVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.6, ease: [0.25, 0.46, 0.45, 0.94] },
+  },
+};
+
 export function FullscreenHero() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const sectionRefs = useRef<(HTMLElement | null)[]>([]);
-
-  const setSectionRef = useCallback((el: HTMLElement | null, index: number) => {
-    sectionRefs.current[index] = el;
-  }, []);
-
-  useEffect(() => {
-    const sections = sectionRefs.current.filter(Boolean) as HTMLElement[];
-    if (sections.length === 0) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          if (entry.isIntersecting) {
-            const idx = sections.indexOf(entry.target as HTMLElement);
-            if (idx !== -1) setActiveIndex(idx);
-          }
-        }
-      },
-      { root: containerRef.current, threshold: 0.6 }
-    );
-
-    sections.forEach((s) => observer.observe(s));
-    return () => observer.disconnect();
-  }, []);
-
-  const scrollTo = (index: number) => {
-    sectionRefs.current[index]?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const [videoFailed, setVideoFailed] = useState(false);
 
   return (
-    <div
-      ref={containerRef}
-      className="h-screen overflow-y-auto snap-y snap-mandatory relative"
-    >
-      {models.map((model, i) => (
-        <section
-          key={model.size}
-          ref={(el) => setSectionRef(el, i)}
-          className={cn(
-            'h-screen w-full snap-start relative flex items-center justify-center overflow-hidden',
-            `bg-gradient-to-br ${model.gradient}`
-          )}
+    <section className="h-screen w-full relative overflow-hidden" style={{ backgroundColor: '#2D2D2A' }}>
+      {!videoFailed && (
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          onError={() => setVideoFailed(true)}
         >
-          <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-primary/5 blur-3xl" />
-            <div className="absolute bottom-1/3 right-1/4 w-72 h-72 rounded-full bg-primary/3 blur-2xl" />
-          </div>
+          <source src="/videos/hero.mp4" type="video/mp4" />
+        </video>
+      )}
 
-          <div className="relative z-10 max-w-5xl mx-auto px-4 md:px-6 text-center">
-            <motion.div
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-            >
-              <Badge className="mb-6 bg-primary/20 text-primary border-primary/30 text-sm px-4 py-1.5">
-                {model.dims} · {model.area}
-              </Badge>
+      <div
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(135deg, #1a1a18 0%, #2D2D2A 40%, #1f1f1c 70%, #2D2D2A 100%)',
+        }}
+      />
 
-              <h2 className="text-[6rem] sm:text-[8rem] md:text-[10rem] lg:text-[12rem] font-bold text-white/10 leading-none select-none">
-                {model.size}
-              </h2>
-
-              <div className="-mt-12 sm:-mt-16 md:-mt-20">
-                <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3">
-                  {productTaglines[model.size]}
-                </p>
-                <p className="text-base sm:text-lg text-white/60 mb-2 max-w-lg mx-auto">
-                  {productSubcopy[model.size]}
-                </p>
-                <p className="text-lg sm:text-xl font-semibold text-primary mb-8">
-                  ₩{model.price}~
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button
-                  asChild
-                  size="lg"
-                  className="bg-primary text-[#2D2D2A] hover:bg-primary/90 font-semibold rounded-full px-8 h-13 text-base"
-                >
-                  <Link href="/products-v2">자세히 보기</Link>
-                </Button>
-                <Button
-                  asChild
-                  size="lg"
-                  variant="outline"
-                  className="border-white/30 text-white hover:bg-white/10 rounded-full px-8 h-13 text-base bg-transparent"
-                >
-                  <Link href="/support-v2">상담 신청</Link>
-                </Button>
-              </div>
-            </motion.div>
-          </div>
-
-          {i === 0 && (
-            <motion.button
-              type="button"
-              className="absolute bottom-8 left-1/2 -translate-x-1/2 text-white/40 z-10"
-              animate={{ y: [0, 8, 0] }}
-              transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
-              onClick={() => scrollTo(1)}
-              aria-label="다음 모델 보기"
-            >
-              <ChevronDown className="h-8 w-8" />
-            </motion.button>
-          )}
-        </section>
+      {floatingShapes.map((shape) => (
+        <motion.div
+          key={shape.id}
+          className="absolute border border-white/[0.04] bg-white/[0.02] rounded-sm pointer-events-none"
+          style={{
+            width: shape.width,
+            height: shape.height,
+            top: shape.top,
+            left: shape.left,
+            right: shape.right,
+            bottom: shape.bottom,
+          }}
+          animate={{
+            y: [0, -20, 0, 15, 0],
+            rotate: [0, shape.rotate, 0, -shape.rotate / 2, 0],
+          }}
+          transition={{
+            duration: shape.duration,
+            delay: shape.delay,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        />
       ))}
 
-      <nav
-        className="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col gap-3"
-        aria-label="모델 탐색"
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/60" />
+
+      <motion.div
+        className="relative z-10 h-full flex flex-col items-center justify-center px-4 md:px-6 text-center"
+        variants={contentVariants}
+        initial="hidden"
+        animate="visible"
       >
-        {models.map((model, i) => (
-          <button
-            key={model.size}
-            type="button"
-            onClick={() => scrollTo(i)}
-            className={cn(
-              'w-3 h-3 rounded-full transition-all duration-300',
-              activeIndex === i
-                ? 'bg-primary scale-125'
-                : 'bg-white/30 hover:bg-white/60'
-            )}
-            aria-label={`${model.size} 모델`}
-            aria-current={activeIndex === i ? 'true' : undefined}
-          />
-        ))}
-      </nav>
-    </div>
+        <motion.div variants={childVariants}>
+          <Badge className="mb-6 bg-white/10 text-white/80 border-white/20 text-sm px-4 py-1.5 backdrop-blur-sm">
+            시스템건축의 새로운 기준
+          </Badge>
+        </motion.div>
+
+        <motion.h1
+          variants={childVariants}
+          className="text-4xl md:text-5xl lg:text-7xl font-bold text-white leading-tight mb-5 whitespace-pre-line"
+        >
+          {'당신의 공간을,\n위트있게'}
+        </motion.h1>
+
+        <motion.p
+          variants={childVariants}
+          className="text-base md:text-lg text-white/60 max-w-xl mx-auto mb-10"
+        >
+          모듈러 건축과 현장건축 — 위트가 만드는 새로운 라이프스타일
+        </motion.p>
+
+        <motion.div
+          variants={childVariants}
+          className="flex flex-col sm:flex-row gap-3 justify-center"
+        >
+          <Button
+            asChild
+            size="lg"
+            className="bg-primary text-[#2D2D2A] hover:bg-primary/90 font-semibold rounded-full px-8 h-13 text-base"
+          >
+            <Link href="/products-v2">제품 보기</Link>
+          </Button>
+          <Button
+            asChild
+            size="lg"
+            variant="outline"
+            className="border-white/30 text-white hover:bg-white/10 rounded-full px-8 h-13 text-base bg-transparent"
+          >
+            <Link href="/support-v2">상담 신청</Link>
+          </Button>
+        </motion.div>
+      </motion.div>
+
+      <motion.div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2, duration: 0.6 }}
+      >
+        <span className="text-white/40 text-xs tracking-widest">스크롤</span>
+        <motion.div
+          animate={{ y: [0, 8, 0] }}
+          transition={{ repeat: Infinity, duration: 2, ease: 'easeInOut' }}
+        >
+          <ChevronDown className="h-6 w-6 text-white/40" />
+        </motion.div>
+      </motion.div>
+
+      <span
+        className="absolute bottom-4 right-6 text-white/5 text-sm font-light select-none pointer-events-none z-10"
+        aria-hidden="true"
+      >
+        weet :)
+      </span>
+    </section>
   );
 }

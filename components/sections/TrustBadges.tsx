@@ -1,8 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Award, Building2, Newspaper, Users } from 'lucide-react';
-import { CountUp } from '@/components/ui/CountUp';
+import { Award, Newspaper } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { sectionHeadlines } from '@/lib/witty-copy';
 import { cn } from '@/lib/utils';
@@ -19,13 +18,6 @@ const certifications = [
   { name: 'ISO 9001', id: 'iso' },
   { name: '모듈러 특별법 대응', id: 'modular' },
   { name: '건설업 등록', id: 'construction' },
-];
-
-const stats = [
-  { end: 150, suffix: '+', label: '시공 완료', icon: Building2 },
-  { end: 12, label: '년 업력', icon: Users },
-  { end: 98, suffix: '%', label: '고객 만족', icon: Users },
-  { end: 3, label: '개월 평균 시공', icon: Building2 },
 ];
 
 export function TrustBadges() {
@@ -94,42 +86,6 @@ export function TrustBadges() {
                   <Award className="w-5 h-5 text-amber-400/80 flex-shrink-0" />
                   <span className="text-sm md:text-base font-medium text-white/80 whitespace-nowrap">
                     {cert.name}
-                  </span>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </ScrollReveal>
-
-        <ScrollReveal>
-          <div>
-            <p className="text-sm font-medium text-white/40 uppercase tracking-widest text-center mb-8">
-              주요 실적
-            </p>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-              {stats.map((stat, i) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className={cn(
-                    'flex flex-col items-center justify-center text-center',
-                    'py-8 px-4 md:py-10 md:px-6 rounded-2xl',
-                    'border border-white/10 bg-white/5',
-                    'hover:border-white/20 hover:bg-white/[0.08] transition-all duration-300'
-                  )}
-                >
-                  <div className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-2">
-                    <CountUp
-                      end={stat.end}
-                      suffix={stat.suffix}
-                      triggerOnView
-                    />
-                  </div>
-                  <span className="text-sm md:text-base text-white/50 font-medium">
-                    {stat.label}
                   </span>
                 </motion.div>
               ))}
