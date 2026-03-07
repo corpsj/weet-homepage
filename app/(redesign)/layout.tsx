@@ -23,8 +23,14 @@ export default function RedesignLayout({
 }) {
   return (
     <KakaoProvider>
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[9999] focus:bg-primary focus:text-[#2D2D2A] focus:px-4 focus:py-2 focus:rounded-lg focus:font-semibold focus:text-sm"
+      >
+        본문으로 건너뛰기
+      </a>
       <HeaderV2 />
-      <main className="min-h-screen pt-20">
+      <main id="main-content" className="min-h-screen pt-20">
         <PageTransition>
           {children}
         </PageTransition>

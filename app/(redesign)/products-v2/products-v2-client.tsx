@@ -225,7 +225,7 @@ export default function ProductsV2ClientPage() {
               33㎡ 이하, 건축 허가 불필요, 농지·임야 설치 가능 조건에 맞춘 체류형 쉼터 전용 구성을 안내합니다.
             </p>
             <Link
-              href="/support-v2"
+              href="/shelter"
               className="mt-6 inline-flex rounded-full border border-[#FFCA0D] px-5 py-2.5 text-sm font-semibold text-[#FFCA0D] transition-colors hover:bg-[#FFCA0D] hover:text-[#2D2D2A]"
             >
               체류형 쉼터 상담
@@ -241,7 +241,7 @@ export default function ProductsV2ClientPage() {
             설치 환경과 예산, 원하는 평면에 맞춘 맞춤형 제안을 받아보세요. 전담 컨설턴트가 빠르게 안내해 드립니다.
           </p>
           <Link
-            href="/bespoke-v2"
+            href="/quote"
             className="mt-6 inline-flex rounded-full bg-[#FFCA0D] px-6 py-3 text-sm font-semibold text-[#2D2D2A] transition-colors hover:bg-[#e9b807]"
           >
             견적 받기
