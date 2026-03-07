@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FileCheck, Ruler, Zap, ChevronDown, Phone } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { CountUp } from '@/components/ui/CountUp';
+import { WittyTooltip } from '@/components/ui/WittyTooltip';
+import { COMPANY } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
 const benefits = [
@@ -13,6 +15,12 @@ const benefits = [
   { icon: Ruler, title: '33㎡ 이하', desc: '법적 기준 내 컴팩트한 공간' },
   { icon: Zap, title: '빠른 설치', desc: '최소 3주 만에 설치 완료' },
 ];
+
+const benefitTooltips: Record<string, string> = {
+  '건축 허가 불필요': '33㎡ 이하 농지 체류형 쉼터 기준',
+  '33㎡ 이하': '약 10평, 넉넉한 원룸 크기',
+  '빠른 설치': '공장 제작 후 현장 설치까지',
+};
 
 const whyWeet = [
   { stat: 3, suffix: '주', label: '만에 설치 완료', desc: '공장 제작 후 현장 설치까지' },
@@ -85,7 +93,9 @@ export default function ShelterPage() {
                     <div className="w-14 h-14 bg-[#FEBD16]/10 rounded-full flex items-center justify-center mx-auto mb-4">
                       <Icon className="w-7 h-7 text-[#FEBD16]" aria-hidden="true" />
                     </div>
-                    <h3 className="font-bold text-lg text-gray-900 mb-2">{b.title}</h3>
+                    <WittyTooltip text={benefitTooltips[b.title]}>
+                      <h3 className="font-bold text-lg text-gray-900 mb-2">{b.title}</h3>
+                    </WittyTooltip>
                     <p className="text-gray-500 text-sm">{b.desc}</p>
                   </div>
                 </ScrollReveal>
@@ -193,7 +203,7 @@ export default function ShelterPage() {
           </Link>
           <div className="flex items-center justify-center gap-2 text-white/40">
             <Phone className="w-4 h-4" aria-hidden="true" />
-            <a href="tel:010-9645-2348" className="hover:text-white/70 transition-colors min-h-[44px] inline-flex items-center">010-9645-2348</a>
+            <a href={COMPANY.phoneHref} className="hover:text-white/70 transition-colors min-h-[44px] inline-flex items-center">{COMPANY.phone}</a>
           </div>
         </div>
       </section>

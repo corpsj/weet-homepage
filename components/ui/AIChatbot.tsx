@@ -1,10 +1,12 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { zIndex } from '@/lib/design-tokens';
+import { announceToScreenReader, trapFocus } from '@/lib/a11y';
+import { COMPANY } from '@/lib/constants';
 
 type Message = {
   role: 'user' | 'assistant';
@@ -34,7 +36,7 @@ function getReply(input: string): string {
       return reply;
     }
   }
-  return '좋은 질문이에요! 더 정확한 답변을 위해 전문 상담사와 연결해드릴까요? 010-9645-2348로 전화하시거나, 카카오톡으로 문의해주세요 :)';
+  return `좋은 질문이에요! 더 정확한 답변을 위해 전문 상담사와 연결해드릴까요? ${COMPANY.phone}로 전화하시거나, 카카오톡으로 문의해주세요 :)`;
 }
 
 export function AIChatbot() {
@@ -45,6 +47,12 @@ export function AIChatbot() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen || !modalRef.current) return;
+    return trapFocus(modalRef.current);
+  }, [isOpen]);
 
   const scrollToBottom = () => {
     setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 50);
@@ -61,6 +69,7 @@ export function AIChatbot() {
 
     setTimeout(() => {
       setMessages((prev) => [...prev, { role: 'assistant', content: getReply(message) }]);
+      announceToScreenReader('새로운 답변이 도착했습니다');
       setIsTyping(false);
       scrollToBottom();
     }, 800);
@@ -76,6 +85,7 @@ export function AIChatbot() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
+            ref={modalRef}
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}

@@ -7,6 +7,7 @@ import { Product } from "@/types/supabase";
 import { ArrowRight, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { emptyStates } from "@/lib/witty-copy";
 
 interface ProductData {
   id: string;
@@ -74,6 +75,7 @@ const CATEGORIES = ["ALL", "S", "M", "L", "XL", "DESIGN"] as const;
 export default function ProductsV2Page() {
   const [products, setProducts] = useState<ProductData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<typeof CATEGORIES[number]>("ALL");
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [cols, setCols] = useState(3);
@@ -90,9 +92,15 @@ export default function ProductsV2Page() {
   }, []);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchProducts = async () => {
+      setFetchError(false);
+
       try {
         const data = await getProducts();
+        if (controller.signal.aborted) return;
+
         const mappedData = data
           .filter((p) => p.size_category !== "SOLUTION")
           .map(mapProductToData);
@@ -105,14 +113,22 @@ export default function ProductsV2Page() {
           return a.name.localeCompare(b.name);
         });
 
+        if (controller.signal.aborted) return;
         setProducts(mappedData);
       } catch (err) {
+        if (controller.signal.aborted) return;
         console.error("Error fetching products:", err);
+        setFetchError(true);
       } finally {
-        setIsLoading(false);
+        if (!controller.signal.aborted) {
+          setIsLoading(false);
+        }
       }
     };
+
     fetchProducts();
+
+    return () => controller.abort();
   }, []);
 
   const filteredProducts = products.filter(
@@ -135,6 +151,22 @@ export default function ProductsV2Page() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FEBD16]"></div>
+      </div>
+    );
+  }
+
+  if (fetchError) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
+        <p className="text-xl font-bold text-gray-900 mb-2">데이터를 불러오지 못했어요</p>
+        <p className="text-gray-500 mb-6">잠시 후 다시 시도해주세요</p>
+        <button
+          type="button"
+          onClick={() => window.location.reload()}
+          className="px-6 py-3 bg-[#FEBD16] text-black font-semibold rounded-full hover:bg-[#E5A410] transition-colors min-h-[44px]"
+        >
+          다시 시도
+        </button>
       </div>
     );
   }
@@ -283,7 +315,7 @@ export default function ProductsV2Page() {
 
           {filteredProducts.length === 0 && (
             <div className="py-24 text-center">
-              <p className="text-gray-500 text-lg">해당 카테고리의 제품이 없습니다.</p>
+              <p className="text-gray-500 text-lg">{emptyStates.noProducts}</p>
             </div>
           )}
         </div>

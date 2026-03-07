@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Palette, Users, Expand, Gem, ArrowRight } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { MicroInteraction } from '@/components/ui/MicroInteraction';
 import { cn } from '@/lib/utils';
 
 const features = [
@@ -97,15 +98,17 @@ export default function BespokeRedesignPage() {
               const Icon = f.icon;
               return (
                 <ScrollReveal key={f.title} delay={i * 0.1}>
-                  <div className="flex items-start gap-4 rounded-2xl border border-gray-200 p-6 transition-shadow hover:shadow-md">
-                    <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[#FEBD16]/10">
-                      <Icon className="h-6 w-6 text-[#FEBD16]" aria-hidden="true" />
+                  <MicroInteraction hover="lift">
+                    <div className="flex items-start gap-4 rounded-2xl border border-gray-200 p-6 transition-shadow hover:shadow-md">
+                      <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-[#FEBD16]/10">
+                        <Icon className="h-6 w-6 text-[#FEBD16]" aria-hidden="true" />
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-gray-900">{f.title}</h3>
+                        <p className="mt-1 text-sm text-gray-500 leading-relaxed">{f.desc}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h3 className="font-bold text-gray-900">{f.title}</h3>
-                      <p className="mt-1 text-sm text-gray-500 leading-relaxed">{f.desc}</p>
-                    </div>
-                  </div>
+                  </MicroInteraction>
                 </ScrollReveal>
               );
             })}

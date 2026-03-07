@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import { Search, CheckCircle2, Circle, Clock, Phone } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { cn } from '@/lib/utils';
+import { useTrackingRealtime } from '@/lib/tracking-realtime';
+import { COMPANY } from '@/lib/constants';
 
 type TrackingStep = {
   label: string;
@@ -25,15 +27,23 @@ const demoSteps: TrackingStep[] = [
 export default function TrackingPage() {
   const [code, setCode] = useState('');
   const [isTracking, setIsTracking] = useState(false);
-  const [steps] = useState<TrackingStep[]>(demoSteps);
+  const [searchedCode, setSearchedCode] = useState<string | null>(null);
+  const {
+    tracking: realtimeTracking,
+    loading: realtimeLoading,
+    error: realtimeError,
+  } = useTrackingRealtime(searchedCode);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (code.trim()) {
+    const trimmedCode = code.trim();
+    if (trimmedCode) {
+      setSearchedCode(trimmedCode);
       setIsTracking(true);
     }
   };
 
+  const steps: TrackingStep[] = realtimeTracking?.steps ?? demoSteps;
   const currentIdx = steps.findIndex((s) => s.status === 'current');
   const progressPercent = currentIdx >= 0 ? ((currentIdx + 0.5) / steps.length) * 100 : 0;
 
@@ -91,7 +101,7 @@ export default function TrackingPage() {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-xs font-medium uppercase tracking-wider text-gray-400">주문번호</p>
-                    <p className="mt-1 text-lg font-bold text-gray-900">{code}</p>
+                    <p className="mt-1 text-lg font-bold text-gray-900">{searchedCode ?? code}</p>
                   </div>
                   <div className="text-right">
                     <p className="text-xs font-medium uppercase tracking-wider text-gray-400">현재 단계</p>
@@ -108,6 +118,12 @@ export default function TrackingPage() {
                     className="h-full rounded-full bg-[#FEBD16]"
                   />
                 </div>
+                {realtimeLoading && (
+                  <p className="mt-3 text-xs text-gray-400">실시간 현황을 불러오는 중입니다...</p>
+                )}
+                {realtimeError && (
+                  <p className="mt-2 text-xs text-gray-500">{realtimeError} 데모 진행 현황으로 안내해드릴게요.</p>
+                )}
               </div>
             </ScrollReveal>
 
@@ -167,10 +183,10 @@ export default function TrackingPage() {
                   궁금한 점이 있으시면 담당자에게 직접 문의하세요
                 </p>
                 <a
-                  href="tel:010-9645-2348"
+                  href={COMPANY.phoneHref}
                   className="mt-3 inline-flex min-h-[44px] items-center gap-2 text-sm font-semibold text-gray-900 hover:text-[#FEBD16] transition-colors"
                 >
-                  <Phone className="h-4 w-4" /> 010-9645-2348
+                  <Phone className="h-4 w-4" /> {COMPANY.phone}
                 </a>
               </div>
             </ScrollReveal>

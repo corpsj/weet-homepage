@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { COMPANY } from '@/lib/constants';
 
 export function FooterV2() {
   return (
@@ -17,10 +18,10 @@ export function FooterV2() {
               </div>
             </Link>
             <p className="text-xl font-medium">위트있는 집, 위트있는 삶</p>
-            <div className="text-gray-400 text-sm leading-relaxed space-y-1">
-              <p>주식회사 위트</p>
-              <p>함평군 대동면 금산길 205-27</p>
-              <p>사업자등록번호 660-86-01862</p>
+              <div className="text-gray-400 text-sm leading-relaxed space-y-1">
+              <p>{COMPANY.nameShort}</p>
+              <p>{COMPANY.addressShort}</p>
+              <p>사업자등록번호 {COMPANY.businessNumber}</p>
             </div>
           </div>
 
@@ -86,7 +87,7 @@ export function FooterV2() {
             <ul className="flex flex-col gap-3 text-gray-400 text-sm">
               <li>
                 <a 
-                  href="https://www.instagram.com/weet_kr/" 
+                  href={COMPANY.instagram}
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center"
@@ -96,7 +97,7 @@ export function FooterV2() {
               </li>
               <li>
                 <a 
-                  href="https://www.daangn.com/kr/local-profile/위트weet-kihpx4ctggn6/" 
+                  href={COMPANY.daangn}
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center"
@@ -106,7 +107,7 @@ export function FooterV2() {
               </li>
               <li>
                 <a 
-                  href="https://blog.naver.com/we-et" 
+                  href={COMPANY.blog}
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center"
@@ -128,7 +129,7 @@ export function FooterV2() {
             <Link href="/terms" className="hover:text-white transition-colors">
               이용약관
             </Link>
-            <p>전화: 010-9645-2348</p>
+            <p>전화: {COMPANY.phone}</p>
           </div>
         </div>
       </div>

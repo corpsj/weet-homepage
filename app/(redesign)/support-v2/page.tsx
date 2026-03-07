@@ -7,6 +7,7 @@ import { ChevronDown, Phone, MessageCircle, Mail, Send, MapPin, Clock } from 'lu
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabase';
+import { COMPANY } from '@/lib/constants';
 
 type FormState = { status: 'idle' | 'success' | 'error'; message: string };
 
@@ -43,8 +44,8 @@ const contactCards = [
   {
     icon: Phone,
     title: '전화 상담',
-    desc: '010-9645-2348',
-    href: 'tel:010-9645-2348',
+    desc: COMPANY.phone,
+    href: COMPANY.phoneHref,
     cta: '전화하기',
   },
   {
@@ -57,8 +58,8 @@ const contactCards = [
   {
     icon: Mail,
     title: '이메일 문의',
-    desc: 'contact@we-et.com',
-    href: 'mailto:contact@we-et.com',
+    desc: COMPANY.email,
+    href: COMPANY.emailHref,
     cta: '이메일 보내기',
   },
 ];
@@ -311,16 +312,16 @@ export default function SupportRedesignPage() {
             <div>
               <MapPin className="mx-auto mb-3 h-6 w-6 text-[#FEBD16]" aria-hidden="true" />
               <p className="text-sm text-white/40">주소</p>
-              <p className="mt-1 text-sm text-white">전남 함평군 대동면 금산길 205-27</p>
+              <p className="mt-1 text-sm text-white">{COMPANY.address}</p>
             </div>
             <div>
               <Phone className="mx-auto mb-3 h-6 w-6 text-[#FEBD16]" aria-hidden="true" />
               <p className="text-sm text-white/40">전화</p>
               <a
-                href="tel:010-9645-2348"
+                href={COMPANY.phoneHref}
                 className="mt-1 inline-flex min-h-[44px] items-center text-sm text-white hover:text-[#FEBD16] transition-colors"
               >
-                010-9645-2348
+                {COMPANY.phone}
               </a>
             </div>
             <div>

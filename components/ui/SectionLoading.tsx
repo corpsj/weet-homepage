@@ -1,5 +1,8 @@
+"use client";
+
 import { cn } from '@/lib/utils';
 import { useMemo } from 'react';
+import { loadingStates } from '@/lib/witty-copy';
 
 interface SectionLoadingProps {
   className?: string;
@@ -8,6 +11,10 @@ interface SectionLoadingProps {
 
 export function SectionLoading({ className, lines = 3 }: SectionLoadingProps) {
   const lineKeys = useMemo(() => Array.from({ length: lines }).map(() => crypto.randomUUID()), [lines]);
+  const loadingMessage = useMemo(
+    () => loadingStates[Math.floor(Math.random() * loadingStates.length)],
+    []
+  );
 
   return (
     <div className={cn('animate-pulse space-y-4 p-8', className)}>
@@ -16,7 +23,7 @@ export function SectionLoading({ className, lines = 3 }: SectionLoadingProps) {
           <title>Loading</title>
           <path d="M12 2v4m0 12v4m-8-10H0m24 0h-4m-2.343-5.657L15.314 8.686m-6.628 6.628L6.343 17.657m0-11.314L8.686 8.686m6.628 6.628l2.343 2.343" />
         </svg>
-        <span className="text-sm font-medium">짓는 중...</span>
+        <span className="text-sm font-medium">{loadingMessage}</span>
       </div>
       {lineKeys.map((key, i) => (
         <div key={key} className="space-y-2">

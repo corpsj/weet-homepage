@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { Building2, Users, MapPin, Phone, Mail, Award, Heart, Target } from 'lucide-react';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { CountUp } from '@/components/ui/CountUp';
+import { COMPANY } from '@/lib/constants';
 
 const stats = [
   { value: 50, suffix: '+', label: '시공 완료' },
@@ -31,11 +32,11 @@ const values = [
 ];
 
 const companyInfo = [
-  { icon: Building2, label: '회사명', value: '주식회사 위트(weet)' },
-  { icon: MapPin, label: '주소', value: '전남 함평군 대동면 금산길 205-27' },
-  { icon: Users, label: '사업자번호', value: '660-86-01862' },
-  { icon: Phone, label: '대표번호', value: '010-9645-2348', href: 'tel:010-9645-2348' },
-  { icon: Mail, label: '이메일', value: 'contact@we-et.com', href: 'mailto:contact@we-et.com' },
+  { icon: Building2, label: '회사명', value: COMPANY.name },
+  { icon: MapPin, label: '주소', value: COMPANY.address },
+  { icon: Users, label: '사업자번호', value: COMPANY.businessNumber },
+  { icon: Phone, label: '대표번호', value: COMPANY.phone, href: COMPANY.phoneHref },
+  { icon: Mail, label: '이메일', value: COMPANY.email, href: COMPANY.emailHref },
 ];
 
 export default function CompanyPage() {

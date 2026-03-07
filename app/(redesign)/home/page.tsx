@@ -1,10 +1,18 @@
 import type { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import FullscreenHero from '@/components/sections/FullscreenHero';
+import { SectionLoading } from '@/components/ui/SectionLoading';
+import { COMPANY } from '@/lib/constants';
+import { KonamiEgg } from './KonamiEgg';
 
 const TrustBadges = dynamic(
   () => import('@/components/sections/TrustBadges').then((m) => m.TrustBadges),
-  { loading: () => <section className="py-16 bg-white" /> },
+  { loading: () => <SectionLoading className="py-16 bg-white" /> },
+);
+
+const BeforeAfterStories = dynamic(
+  () => import('@/components/sections/BeforeAfterStories').then((m) => m.BeforeAfterStories),
+  { loading: () => <SectionLoading className="py-16 bg-white" /> },
 );
 
 const ModelComparison = dynamic(
@@ -12,12 +20,12 @@ const ModelComparison = dynamic(
     import('@/components/sections/ModelComparison').then(
       (m) => m.ModelComparison,
     ),
-  { loading: () => <section className="py-16 bg-gray-50" /> },
+  { loading: () => <SectionLoading className="py-16 bg-gray-50" /> },
 );
 
 const HomeCTA = dynamic(
   () => import('./HomeCTA').then((m) => m.HomeCTA),
-  { loading: () => <section className="py-24 bg-gray-900" /> },
+  { loading: () => <SectionLoading className="py-24 bg-gray-900" /> },
 );
 
 export const metadata: Metadata = {
@@ -45,19 +53,19 @@ export const metadata: Metadata = {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: '위트(weet)',
-  url: 'https://www.we-et.com',
-  logo: 'https://www.we-et.com/logo.png',
+  name: COMPANY.name,
+  url: COMPANY.url,
+  logo: `${COMPANY.url}/logo.png`,
   description: '시스템 모듈러 건축 전문 기업',
   address: {
     '@type': 'PostalAddress',
-    streetAddress: '함평군 대동면 금산길 205-27',
+    streetAddress: COMPANY.addressShort,
     addressCountry: 'KR',
   },
-  telephone: '010-9645-2348',
+  telephone: COMPANY.phone,
   sameAs: [
-    'https://www.instagram.com/weet_kr/',
-    'https://blog.naver.com/we-et',
+    COMPANY.instagram,
+    COMPANY.blog,
   ],
 };
 
@@ -71,8 +79,10 @@ export default function RedesignHomePage() {
       <h1 className="sr-only">위트(weet) 모듈러 건축 전문 기업</h1>
       <FullscreenHero />
       <TrustBadges />
+      <BeforeAfterStories />
       <ModelComparison />
       <HomeCTA />
+      <KonamiEgg />
     </>
   );
 }
