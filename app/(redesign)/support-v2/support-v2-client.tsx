@@ -1,18 +1,18 @@
 "use client";
 
-import { useState } from 'react';
+import { useActionState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Phone, Mail, MessageCircle, ChevronDown, ChevronUp, ArrowRight } from 'lucide-react';
+import { Phone, Mail, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Badge } from '@/components/ui/badge';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { COMPANY } from '@/lib/constants';
-import { cn } from '@/lib/utils';
+import { submitInquiry } from '@/app/actions/submit-inquiry';
+import { toast } from 'sonner';
 
 const faqs = [
   { q: '시스템건축과 일반 건축의 차이는 무엇인가요?', a: '시스템건축은 공장에서 정밀하게 제작된 모듈을 현장에서 조립하는 방식으로, 일반 건축 대비 70% 빠른 시공과 균일한 품질을 보장합니다. 날씨나 현장 변수에 영향을 덜 받아 예측 가능한 공사 기간과 비용을 제공합니다.' },
@@ -30,12 +30,18 @@ const contactMethods = [
 ];
 
 export function SupportV2Client() {
-  const [formState, setFormState] = useState({ name: '', phone: '', email: '', message: '', submitted: false });
+  const [state, formAction, isPending] = useActionState(submitInquiry, null);
+  const formRef = useRef<HTMLFormElement>(null);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormState((prev) => ({ ...prev, submitted: true }));
-  };
+  useEffect(() => {
+    if (!state) return;
+    if (state.success) {
+      toast.success(state.message);
+      formRef.current?.reset();
+    } else {
+      toast.error(state.message);
+    }
+  }, [state]);
 
   return (
     <div className="w-full">
@@ -91,34 +97,35 @@ export function SupportV2Client() {
             <ScrollReveal direction="left">
               <div>
                 <h2 className="text-h2 text-foreground mb-8">상담 신청</h2>
-                {formState.submitted ? (
+                {state?.success ? (
                   <div className="p-8 rounded-2xl bg-primary/10 border border-primary/20 text-center">
                     <div className="text-4xl mb-4">✓</div>
                     <h3 className="text-xl font-semibold text-foreground mb-2">문의가 접수되었습니다</h3>
                     <p className="text-muted-foreground">1-2 영업일 내에 연락드리겠습니다.</p>
                   </div>
                 ) : (
-                  <form onSubmit={handleSubmit} className="space-y-4">
+                  <form ref={formRef} action={formAction} className="space-y-4">
+                    <input type="hidden" name="category" value="고객지원" />
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label htmlFor="inquiry-name" className="text-sm font-medium text-foreground mb-1.5 block">이름 <span className="text-destructive">*</span></label>
-                        <Input id="inquiry-name" placeholder="홍길동" value={formState.name} onChange={(e) => setFormState((p) => ({ ...p, name: e.target.value }))} required className="h-12" />
+                        <Input id="inquiry-name" name="name" placeholder="홍길동" required className="h-12" />
                       </div>
                       <div>
                         <label htmlFor="inquiry-phone" className="text-sm font-medium text-foreground mb-1.5 block">연락처 <span className="text-destructive">*</span></label>
-                        <Input id="inquiry-phone" placeholder="010-0000-0000" value={formState.phone} onChange={(e) => setFormState((p) => ({ ...p, phone: e.target.value }))} required className="h-12" />
+                        <Input id="inquiry-phone" name="phone" placeholder="010-0000-0000" required className="h-12" />
                       </div>
                     </div>
                     <div>
                       <label htmlFor="inquiry-email" className="text-sm font-medium text-foreground mb-1.5 block">이메일</label>
-                      <Input id="inquiry-email" type="email" placeholder="example@email.com" value={formState.email} onChange={(e) => setFormState((p) => ({ ...p, email: e.target.value }))} className="h-12" />
+                      <Input id="inquiry-email" name="email" type="email" placeholder="example@email.com" className="h-12" />
                     </div>
                     <div>
                       <label htmlFor="inquiry-message" className="text-sm font-medium text-foreground mb-1.5 block">문의 내용 <span className="text-destructive">*</span></label>
-                      <Textarea id="inquiry-message" placeholder="궁금한 점이나 요청사항을 자유롭게 작성해주세요" value={formState.message} onChange={(e) => setFormState((p) => ({ ...p, message: e.target.value }))} required rows={5} className="resize-none" />
+                      <Textarea id="inquiry-message" name="message" placeholder="궁금한 점이나 요청사항을 자유롭게 작성해주세요" required rows={5} className="resize-none" />
                     </div>
-                    <Button type="submit" size="lg" className="w-full bg-primary text-[#2D2D2A] hover:bg-primary/90 rounded-full h-14 text-base font-semibold">
-                      상담 신청하기
+                    <Button type="submit" size="lg" disabled={isPending} className="w-full bg-primary text-[#2D2D2A] hover:bg-primary/90 rounded-full h-14 text-base font-semibold disabled:opacity-60">
+                      {isPending ? '접수 중...' : '상담 신청하기'}
                     </Button>
                     <p className="text-xs text-muted-foreground text-center">
                       제출 시 개인정보 처리방침에 동의하는 것으로 간주됩니다.

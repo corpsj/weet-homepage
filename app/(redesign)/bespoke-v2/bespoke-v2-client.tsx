@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from 'react';
+import { useActionState, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowRight, CheckCircle, Palette, Ruler, MessageSquare } from 'lucide-react';
+import { CheckCircle, Palette, Ruler, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -11,6 +11,8 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ScrollReveal } from '@/components/ui/ScrollReveal';
+import { submitInquiry } from '@/app/actions/submit-inquiry';
+import { toast } from 'sonner';
 
 const useCases = [
   { title: '카페·음료', desc: '독특한 공간감으로 차별화된 카페 경험' },
@@ -29,12 +31,20 @@ const steps = [
 ];
 
 export function BespokeV2Client() {
-  const [formState, setFormState] = useState({ name: '', phone: '', purpose: '', budget: '', message: '', submitted: false });
+  const [state, formAction, isPending] = useActionState(submitInquiry, null);
+  const formRef = useRef<HTMLFormElement>(null);
+  const [purpose, setPurpose] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormState((p) => ({ ...p, submitted: true }));
-  };
+  useEffect(() => {
+    if (!state) return;
+    if (state.success) {
+      toast.success(state.message);
+      formRef.current?.reset();
+      setPurpose('');
+    } else {
+      toast.error(state.message);
+    }
+  }, [state]);
 
   return (
     <div className="w-full">
@@ -101,27 +111,29 @@ export function BespokeV2Client() {
           <ScrollReveal>
             <div className="max-w-2xl mx-auto">
               <h2 className="text-h2 text-foreground mb-8 text-center">견적 문의</h2>
-              {formState.submitted ? (
+              {state?.success ? (
                 <div className="p-10 rounded-2xl bg-primary/10 border border-primary/20 text-center">
                   <div className="text-5xl mb-4">✓</div>
                   <h3 className="text-xl font-semibold text-foreground mb-2">문의가 접수되었습니다</h3>
                   <p className="text-muted-foreground">전문 상담사가 1-2 영업일 내에 연락드리겠습니다.</p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form ref={formRef} action={formAction} className="space-y-4">
+                  <input type="hidden" name="category" value="비스포크" />
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label htmlFor="bespoke-name" className="text-sm font-medium text-foreground mb-1.5 block">이름 <span className="text-destructive">*</span></label>
-                      <Input id="bespoke-name" placeholder="홍길동" value={formState.name} onChange={(e) => setFormState((p) => ({ ...p, name: e.target.value }))} required className="h-12" />
+                      <Input id="bespoke-name" name="name" placeholder="홍길동" required className="h-12" />
                     </div>
                     <div>
                       <label htmlFor="bespoke-phone" className="text-sm font-medium text-foreground mb-1.5 block">연락처 <span className="text-destructive">*</span></label>
-                      <Input id="bespoke-phone" placeholder="010-0000-0000" value={formState.phone} onChange={(e) => setFormState((p) => ({ ...p, phone: e.target.value }))} required className="h-12" />
+                      <Input id="bespoke-phone" name="phone" placeholder="010-0000-0000" required className="h-12" />
                     </div>
                   </div>
                   <div>
                     <label htmlFor="bespoke-purpose" className="text-sm font-medium text-foreground mb-1.5 block">용도</label>
-                    <Select onValueChange={(v) => setFormState((p) => ({ ...p, purpose: v }))}>
+                    <input type="hidden" name="purpose" value={purpose} />
+                    <Select value={purpose} onValueChange={setPurpose}>
                       <SelectTrigger id="bespoke-purpose" className="h-12">
                         <SelectValue placeholder="용도를 선택해주세요" />
                       </SelectTrigger>
@@ -133,10 +145,10 @@ export function BespokeV2Client() {
                   </div>
                   <div>
                     <label htmlFor="bespoke-message" className="text-sm font-medium text-foreground mb-1.5 block">요구사항</label>
-                    <Textarea id="bespoke-message" placeholder="원하시는 공간에 대해 자유롭게 설명해주세요" value={formState.message} onChange={(e) => setFormState((p) => ({ ...p, message: e.target.value }))} rows={5} className="resize-none" />
+                    <Textarea id="bespoke-message" name="message" placeholder="원하시는 공간에 대해 자유롭게 설명해주세요" rows={5} className="resize-none" />
                   </div>
-                  <Button type="submit" size="lg" className="w-full bg-primary text-[#2D2D2A] hover:bg-primary/90 rounded-full h-14 text-base font-semibold">
-                    견적 문의하기
+                  <Button type="submit" size="lg" disabled={isPending} className="w-full bg-primary text-[#2D2D2A] hover:bg-primary/90 rounded-full h-14 text-base font-semibold disabled:opacity-60">
+                    {isPending ? '접수 중...' : '견적 문의하기'}
                   </Button>
                 </form>
               )}
