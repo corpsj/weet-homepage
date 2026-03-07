@@ -1,359 +1,406 @@
 'use client';
 
-import { useState, useActionState, useRef, useEffect } from 'react';
+import { useState, useMemo, useEffect, useRef, useActionState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import {
-  ArrowLeft,
-  ArrowRight,
-  Check,
-  MapPin,
-  Ruler,
-  Home,
-  Palette,
-  Send,
-  Layers,
-  Settings,
-} from 'lucide-react';
+import { Check, ArrowRight, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { cn } from '@/lib/utils';
 import { submitInquiry } from '@/app/actions/submit-inquiry';
 import { productTaglines, sectionHeadlines, successMessages } from '@/lib/witty-copy';
 import { toast } from 'sonner';
 import type { SizeCategory } from '@/lib/types';
 
-/* ─────────────────────────────────────────
-   Step definitions
-   ───────────────────────────────────────── */
+/* ═══════════════════════════════════════════════
+   Types
+   ═══════════════════════════════════════════════ */
 
-const STEPS = [
-  { id: 'purpose', label: '용도', icon: Home },
-  { id: 'size', label: '사이즈', icon: Ruler },
-  { id: 'exterior', label: '외장', icon: Palette },
-  { id: 'interior', label: '내장', icon: Layers },
-  { id: 'options', label: '옵션', icon: Settings },
-  { id: 'location', label: '설치 장소', icon: MapPin },
-  { id: 'contact', label: '연락처', icon: Send },
-] as const;
+interface MaterialOption {
+  id: string;
+  label: string;
+  price: number;
+  desc: string;
+  color?: string;
+}
 
-const STEP_COPY = [
-  { title: '어떤 용도로 쓸 건가요?', subtitle: '용도에 맞는 집이 행복의 시작이에요' },
-  { title: '어디에 놓을 건가요?', subtitle: '크기가 곧 가능성입니다' },
-  { title: '겉은 어떻게 할까요?', subtitle: '첫인상은 외장이 결정해요' },
-  { title: '안은요?', subtitle: '매일 마주하는 공간이니까요' },
-  { title: '뭐 더 넣을까요?', subtitle: '있으면 좋고, 없어도 괜찮아요' },
-  { title: '어디에 설치할까요?', subtitle: '좋은 곳에 좋은 집을 놓아야죠' },
-  { title: '거의 다 왔어요!', subtitle: '연락처만 남겨주시면 맞춤 견적을 보내드려요' },
+interface CheckOption {
+  id: string;
+  label: string;
+  price: number;
+  desc: string;
+}
+
+interface Config {
+  size: SizeCategory;
+  exteriorWall: string;
+  roof: string;
+  floor: string;
+  wallFinish: string;
+  kitchen: string[];
+  bathroom: string[];
+  systems: string[];
+  outdoor: string[];
+}
+
+interface PresetDef {
+  name: string;
+  desc: string;
+  badge?: string;
+  config: Config;
+}
+
+/* ═══════════════════════════════════════════════
+   Constants — Pricing & Materials
+   ═══════════════════════════════════════════════ */
+
+const BASE_PRICES: Record<SizeCategory, number> = { S: 2500, M: 3800, L: 6500, XL: 8900 };
+
+const MODEL_INFO: { size: SizeCategory; dims: string; area: string }[] = [
+  { size: 'S', dims: '3×6m', area: '18㎡' },
+  { size: 'M', dims: '3×9m', area: '27㎡' },
+  { size: 'L', dims: '6×9m', area: '54㎡' },
+  { size: 'XL', dims: '6×12m', area: '72㎡' },
 ];
 
-/* ─────────────────────────────────────────
-   Purpose options
-   ───────────────────────────────────────── */
-
-const PURPOSES = [
-  {
-    id: 'farmhouse',
-    label: '농막·체류형 쉼터',
-    emoji: '🌿',
-    desc: '주말엔 여기서 힐링하고 싶어요',
-    witty: '건축 허가 없이 내 땅에 쏙',
-    sizes: ['S', 'M'] as SizeCategory[],
-  },
-  {
-    id: 'secondhouse',
-    label: '세컨하우스·주말주택',
-    emoji: '🏡',
-    desc: '금요일 저녁이 기다려지는 집',
-    witty: '주말마다 떠나는 내 집',
-    sizes: ['M', 'L'] as SizeCategory[],
-  },
-  {
-    id: 'primary',
-    label: '본 주거·단독주택',
-    emoji: '🏠',
-    desc: '진짜 집, 제대로 지어볼까요',
-    witty: '온 가족이 함께하는 공간',
-    sizes: ['L', 'XL'] as SizeCategory[],
-  },
-  {
-    id: 'commercial',
-    label: '상업·사무 공간',
-    emoji: '🏢',
-    desc: '일하는 공간도 위트있게',
-    witty: '비즈니스에 맞춤 설계',
-    sizes: ['M', 'L', 'XL'] as SizeCategory[],
-  },
+const EXTERIOR_WALL_OPTIONS: MaterialOption[] = [
+  { id: 'vinyl', label: '비닐 사이딩', price: 0, desc: '기본 단열 성능의 경제적 마감', color: '#E8E4DE' },
+  { id: 'galvalume', label: '갈바륨 강판', price: 180, desc: '내구성과 모던한 외관', color: '#8B8D8F' },
+  { id: 'zinc', label: '징크 패널', price: 250, desc: '프리미엄 금속 마감, 반영구적', color: '#6B6E70' },
+  { id: 'cedar', label: '적삼목 사이딩', price: 350, desc: '천연 목재의 따뜻한 질감', color: '#A0704E' },
 ];
 
-/* ─────────────────────────────────────────
-   Size options
-   ───────────────────────────────────────── */
-
-const SIZE_OPTIONS: { size: SizeCategory; dims: string; area: string; price: string }[] = [
-  { size: 'S', dims: '3×6m', area: '18㎡', price: '2,500만~' },
-  { size: 'M', dims: '3×9m', area: '27㎡', price: '3,800만~' },
-  { size: 'L', dims: '6×9m', area: '54㎡', price: '6,500만~' },
-  { size: 'XL', dims: '6×12m', area: '72㎡', price: '8,900만~' },
+const ROOF_OPTIONS: MaterialOption[] = [
+  { id: 'shingle', label: '아스팔트 슁글', price: 0, desc: '가성비 좋은 기본 지붕재', color: '#5C5C5C' },
+  { id: 'zinc_standing', label: '스탠딩심 징크', price: 120, desc: '현대적 디자인, 우수한 방수 성능', color: '#7A7D80' },
+  { id: 'flat_roof', label: '평지붕 방수', price: 80, desc: '옥상 활용 가능한 플랫 루프', color: '#9E9E9E' },
 ];
 
-/* ─────────────────────────────────────────
-   Exterior styles
-   ───────────────────────────────────────── */
-
-const EXTERIOR_STYLES = [
-  {
-    id: 'modern',
-    label: '모던 미니멀',
-    desc: '깔끔하고 세련된, 도시적인 감각',
-    color: '#E8E8E8',
-    personality: '심플 이즈 베스트',
-  },
-  {
-    id: 'natural',
-    label: '내추럴 우드',
-    desc: '자연과 어우러지는 따뜻한 나무결',
-    color: '#C4A882',
-    personality: '자연이 좋아하는 집',
-  },
-  {
-    id: 'classic',
-    label: '클래식 블랙',
-    desc: '시간이 지나도 변하지 않는 묵직함',
-    color: '#2D2D2A',
-    personality: '묵직한 존재감',
-  },
-  {
-    id: 'custom',
-    label: '커스텀',
-    desc: '나만의 스타일로, 비스포크',
-    color: '#FFCA0D',
-    gradient: true as const,
-    personality: '세상에 하나뿐인 집',
-  },
+const FLOOR_OPTIONS: MaterialOption[] = [
+  { id: 'laminate', label: '강마루 (LPM)', price: 0, desc: '관리 쉬운 실용적 바닥재', color: '#D4C5A9' },
+  { id: 'engineered', label: '강화마루', price: 100, desc: '원목 느낌의 고급 바닥재', color: '#B8956A' },
+  { id: 'spc', label: 'SPC 타일', price: 80, desc: '방수·내구성 우수한 타일형 바닥', color: '#C4B9A8' },
+  { id: 'solid_wood', label: '원목마루', price: 250, desc: '천연 원목의 프리미엄 질감', color: '#8B6E4E' },
 ];
 
-/* ─────────────────────────────────────────
-   Interior styles
-   ───────────────────────────────────────── */
-
-const INTERIOR_STYLES = [
-  {
-    id: 'white',
-    label: '화이트 미니멀',
-    desc: '밝고 깨끗한 공간의 정석',
-    color: '#F5F5F5',
-    personality: '깔끔한 게 최고',
-  },
-  {
-    id: 'wood',
-    label: '원목 내추럴',
-    desc: '원목의 따뜻함이 가득한 공간',
-    color: '#D4B896',
-    personality: '나무 향기가 나는 집',
-  },
-  {
-    id: 'gray',
-    label: '모던 그레이',
-    desc: '세련되고 차분한 모던 감성',
-    color: '#9E9E9E',
-    personality: '어른의 취향',
-  },
-  {
-    id: 'custom',
-    label: '커스텀',
-    desc: '직접 고르는 나만의 인테리어',
-    color: '#FFCA0D',
-    gradient: true as const,
-    personality: '취향을 담은 공간',
-  },
+const WALL_FINISH_OPTIONS: MaterialOption[] = [
+  { id: 'silk', label: '실크 벽지', price: 0, desc: '깔끔한 기본 마감', color: '#F5F0E8' },
+  { id: 'eco_paint', label: '친환경 도장', price: 50, desc: '저VOC 친환경 페인트', color: '#EDE8DF' },
+  { id: 'diatomite', label: '규조토 도장', price: 80, desc: '습도 조절, 탈취 기능', color: '#E0D8CC' },
+  { id: 'wood_panel', label: '원목 패널 (포인트)', price: 180, desc: '벽면 포인트 원목 마감', color: '#A0845C' },
 ];
 
-/* ─────────────────────────────────────────
-   Special options (grouped)
-   ───────────────────────────────────────── */
+const KITCHEN_OPTIONS: CheckOption[] = [
+  { id: 'builtin', label: '빌트인 가전 패키지', price: 350, desc: '오븐+전기레인지+후드' },
+  { id: 'island', label: '아일랜드 식탁', price: 200, desc: '개방형 주방 활용' },
+  { id: 'quartz', label: '쿼츠 상판 업그레이드', price: 150, desc: '내구성 우수한 프리미엄 상판' },
+];
 
-const OPTION_GROUPS = [
+const BATHROOM_OPTIONS: CheckOption[] = [
+  { id: 'dry_separation', label: '건식 분리 시스템', price: 80, desc: '건식·습식 분리 설계' },
+  { id: 'whirlpool', label: '월풀 욕조', price: 180, desc: '릴렉스를 위한 욕조' },
+  { id: 'rain_shower', label: '레인샤워 시스템', price: 60, desc: '호텔식 레인샤워' },
+];
+
+const SYSTEMS_OPTIONS: CheckOption[] = [
+  { id: 'ac_pipe', label: '에어컨 사전 배관', price: 50, desc: '입주 후 에어컨 설치 편리' },
+  { id: 'smart_home', label: '스마트홈 패키지', price: 200, desc: '조명·난방·보안 원격 제어' },
+  { id: 'solar', label: '태양광 패널 (3kW)', price: 400, desc: '전기요금 절감, 친환경' },
+  { id: 'ev_charger', label: '전기차 충전 콘센트', price: 30, desc: 'EV 충전 인프라 사전 설치' },
+  { id: 'soundproofing', label: '방음 강화', price: 120, desc: '이중 유리 + 방음 단열재' },
+  { id: 'extra_window', label: '추가 창문 (1개소)', price: 40, desc: '채광 확대' },
+];
+
+const OUTDOOR_OPTIONS: CheckOption[] = [
+  { id: 'deck', label: '테라스 데크 (3×3m)', price: 150, desc: '야외 생활 공간 확보' },
+  { id: 'water_tap', label: '외부 수전', price: 30, desc: '정원·세차 용수 확보' },
+  { id: 'lighting', label: '외부 조명 패키지', price: 50, desc: '현관·데크 조명 세트' },
+  { id: 'storage', label: '외부 수납장', price: 80, desc: '정원용품·장비 보관' },
+];
+
+/* ═══════════════════════════════════════════════
+   Presets
+   ═══════════════════════════════════════════════ */
+
+const DEFAULT_CONFIG: Config = {
+  size: 'S',
+  exteriorWall: 'vinyl',
+  roof: 'shingle',
+  floor: 'laminate',
+  wallFinish: 'silk',
+  kitchen: [],
+  bathroom: [],
+  systems: [],
+  outdoor: [],
+};
+
+const PRESETS: PresetDef[] = [
   {
-    category: '주방',
-    emoji: '🍳',
-    items: [
-      { id: 'builtinKitchen', label: '빌트인 주방' },
-      { id: 'islandTable', label: '아일랜드 식탁' },
-    ],
+    name: '농막 기본형',
+    desc: '실용적인 최소 구성',
+    config: { ...DEFAULT_CONFIG },
   },
   {
-    category: '욕실',
-    emoji: '🚿',
-    items: [
-      { id: 'dryBathroom', label: '건식 욕실' },
-      { id: 'bathtub', label: '욕조 옵션' },
-    ],
+    name: '세컨하우스 추천',
+    desc: '주말 체류에 딱 맞는 구성',
+    badge: '인기',
+    config: {
+      size: 'M',
+      exteriorWall: 'galvalume',
+      roof: 'shingle',
+      floor: 'engineered',
+      wallFinish: 'eco_paint',
+      kitchen: ['builtin'],
+      bathroom: ['dry_separation'],
+      systems: ['ac_pipe'],
+      outdoor: [],
+    },
   },
   {
-    category: '설비',
-    emoji: '⚙️',
-    items: [
-      { id: 'heating', label: '난방 시스템' },
-      { id: 'aircon', label: '에어컨 사전 배관' },
-      { id: 'smartHome', label: '스마트홈 패키지' },
-    ],
-  },
-  {
-    category: '외부',
-    emoji: '🌳',
-    items: [
-      { id: 'terrace', label: '테라스/데크' },
-      { id: 'outdoorFaucet', label: '외부 수전' },
-      { id: 'outdoorLighting', label: '외부 조명' },
-    ],
-  },
-  {
-    category: '기타',
-    emoji: '✨',
-    items: [
-      { id: 'soundproofing', label: '방음 강화' },
-      { id: 'extraWindows', label: '추가 창문' },
-    ],
+    name: '프리미엄 하우스',
+    desc: '품격있는 본 주거 구성',
+    config: {
+      size: 'L',
+      exteriorWall: 'cedar',
+      roof: 'zinc_standing',
+      floor: 'solid_wood',
+      wallFinish: 'wood_panel',
+      kitchen: ['builtin', 'island'],
+      bathroom: ['rain_shower'],
+      systems: ['ac_pipe'],
+      outdoor: [],
+    },
   },
 ];
 
-const ALL_OPTION_IDS = OPTION_GROUPS.flatMap(g => g.items.map(i => i.id));
+/* ═══════════════════════════════════════════════
+   Price calculation helper
+   ═══════════════════════════════════════════════ */
 
-const initialState = { success: false, message: '' };
+function calcTotal(c: Config): number {
+  let total = BASE_PRICES[c.size];
+  total += EXTERIOR_WALL_OPTIONS.find(o => o.id === c.exteriorWall)?.price ?? 0;
+  total += ROOF_OPTIONS.find(o => o.id === c.roof)?.price ?? 0;
+  total += FLOOR_OPTIONS.find(o => o.id === c.floor)?.price ?? 0;
+  total += WALL_FINISH_OPTIONS.find(o => o.id === c.wallFinish)?.price ?? 0;
+  for (const id of c.kitchen) total += KITCHEN_OPTIONS.find(o => o.id === id)?.price ?? 0;
+  for (const id of c.bathroom) total += BATHROOM_OPTIONS.find(o => o.id === id)?.price ?? 0;
+  for (const id of c.systems) total += SYSTEMS_OPTIONS.find(o => o.id === id)?.price ?? 0;
+  for (const id of c.outdoor) total += OUTDOOR_OPTIONS.find(o => o.id === id)?.price ?? 0;
+  return total;
+}
 
-/* ═════════════════════════════════════════
-   QuoteClient Component
-   ═════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════
+   Animated number hook (CountUp-style)
+   ═══════════════════════════════════════════════ */
+
+function useAnimatedNumber(target: number, duration = 500) {
+  const [display, setDisplay] = useState(target);
+  const prevRef = useRef(target);
+  const rafRef = useRef(0);
+
+  useEffect(() => {
+    const start = prevRef.current;
+    const diff = target - start;
+    if (diff === 0) return;
+
+    const startTime = performance.now();
+    const animate = (time: number) => {
+      const elapsed = time - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+      setDisplay(Math.round(start + diff * eased));
+      if (progress < 1) {
+        rafRef.current = requestAnimationFrame(animate);
+      } else {
+        prevRef.current = target;
+      }
+    };
+
+    rafRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(rafRef.current);
+  }, [target, duration]);
+
+  return display;
+}
+
+/* ═══════════════════════════════════════════════
+   Form initial state
+   ═══════════════════════════════════════════════ */
+
+const initialFormState = { success: false, message: '' };
+
+/* ═══════════════════════════════════════════════
+   COMPONENT
+   ═══════════════════════════════════════════════ */
 
 export function QuoteClient() {
-  const [step, setStep] = useState(0);
-  const [purpose, setPurpose] = useState('');
-  const [size, setSize] = useState<SizeCategory | ''>('');
-  const [exterior, setExterior] = useState('');
-  const [interior, setInterior] = useState('');
-  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
-  const [location, setLocation] = useState('');
-  const [locationDetail, setLocationDetail] = useState('');
+  /* ── state ── */
+  const [config, setConfig] = useState<Config>({ ...DEFAULT_CONFIG });
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [additionalMessage, setAdditionalMessage] = useState('');
 
-  const [state, formAction, isPending] = useActionState(submitInquiry, initialState);
+  const [formState, formAction, isPending] = useActionState(submitInquiry, initialFormState);
   const formRef = useRef<HTMLFormElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
 
-  const prevCountRef = useRef(0);
-  const [showCareful, setShowCareful] = useState(false);
+  /* easter egg state */
   const fullOptionsToastRef = useRef(false);
+  const [clickedPresets, setClickedPresets] = useState<Set<number>>(new Set());
+  const allPresetsClickedRef = useRef(false);
 
-  useEffect(() => {
-    if (state.success) {
-      toast.success(successMessages.quote);
-    } else if (state.message && !state.success) {
-      toast.error(state.message);
-    }
-  }, [state]);
+  /* ── computed ── */
+  const totalPrice = useMemo(() => calcTotal(config), [config]);
+  const animatedPrice = useAnimatedNumber(totalPrice);
+  const isOverBillion = totalPrice > 10000;
+  const modelInfo = MODEL_INFO.find(m => m.size === config.size);
 
-  // 인비져블: 풀옵션 이스터에그
+  const isFullOptions = useMemo(() => {
+    return (
+      config.kitchen.length === KITCHEN_OPTIONS.length &&
+      config.bathroom.length === BATHROOM_OPTIONS.length &&
+      config.systems.length === SYSTEMS_OPTIONS.length &&
+      config.outdoor.length === OUTDOOR_OPTIONS.length
+    );
+  }, [config.kitchen, config.bathroom, config.systems, config.outdoor]);
+
+  /* ── helpers ── */
+  const updateRadio = (key: 'exteriorWall' | 'roof' | 'floor' | 'wallFinish', value: string) => {
+    setConfig(prev => ({ ...prev, [key]: value }));
+  };
+
+  const toggleCheck = (key: 'kitchen' | 'bathroom' | 'systems' | 'outdoor', id: string) => {
+    setConfig(prev => ({
+      ...prev,
+      [key]: prev[key].includes(id) ? prev[key].filter(v => v !== id) : [...prev[key], id],
+    }));
+  };
+
+  const applyPreset = (preset: PresetDef, index: number) => {
+    setConfig({ ...preset.config });
+    toast(`'${preset.name}' 구성이 적용되었어요`);
+    setClickedPresets(prev => {
+      const next = new Set(prev);
+      next.add(index);
+      return next;
+    });
+  };
+
+  const scrollToContact = () => {
+    contactRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  /* ── easter eggs ── */
   useEffect(() => {
-    if (
-      selectedOptions.length === ALL_OPTION_IDS.length &&
-      !fullOptionsToastRef.current
-    ) {
+    if (isFullOptions && !fullOptionsToastRef.current) {
       fullOptionsToastRef.current = true;
-      toast('풀옵션이시네요! 😎', { duration: 2500 });
+      toast('풀옵션이시네요! 프리미엄 상담 연결해 드릴게요 😎', { duration: 3000 });
     }
-  }, [selectedOptions]);
+  }, [isFullOptions]);
 
-  const canProceed = (): boolean => {
-    switch (step) {
-      case 0: return purpose !== '';
-      case 1: return size !== '';
-      case 2: return exterior !== '';
-      case 3: return interior !== '';
-      case 4: return true;
-      case 5: return location !== '';
-      case 6: return name !== '' && phone !== '';
-      default: return false;
+  useEffect(() => {
+    if (clickedPresets.size === PRESETS.length && !allPresetsClickedRef.current) {
+      allPresetsClickedRef.current = true;
+      toast('다 둘러보셨네요 :)', { duration: 2000 });
     }
-  };
+  }, [clickedPresets]);
 
-  const next = () => {
-    if (canProceed() && step < STEPS.length - 1) {
-      setStep(step + 1);
+  /* ── form handling ── */
+  useEffect(() => {
+    if (formState.success) {
+      toast.success(successMessages.quote);
+    } else if (formState.message && !formState.success) {
+      toast.error(formState.message);
     }
-  };
-
-  const prev = () => {
-    if (step > 0) {
-      prevCountRef.current += 1;
-      // 인비져블: 꼼꼼하시네요 이스터에그 (뒤로 3회 이상)
-      if (prevCountRef.current >= 3 && !showCareful) {
-        setShowCareful(true);
-      }
-      setStep(step - 1);
-    }
-  };
-
-  const recommendedSizes = purpose
-    ? PURPOSES.find(p => p.id === purpose)?.sizes ?? []
-    : [];
-
-  // 인비져블: 프리미엄 구성 감지
-  const isPremium =
-    size === 'XL' &&
-    exterior === 'custom' &&
-    interior === 'custom' &&
-    selectedOptions.length >= 5;
-
-  // 인비져블: 상황별 다음 버튼 텍스트
-  const getNextLabel = (): string => {
-    if (step >= 5) return '거의 다 됐어요';
-    if (step >= 4) return '좋아요, 다음';
-    return '다음';
-  };
-
-  // 인비져블: 집 짓기 진행 이모지
-  const getProgressEmoji = (): string => {
-    if (step <= 1) return '🏗️';
-    if (step <= 4) return '🏠';
-    return '🏡';
-  };
+  }, [formState]);
 
   const buildMessage = (): string => {
-    const purposeLabel = PURPOSES.find(p => p.id === purpose)?.label ?? '';
-    const sizeOpt = SIZE_OPTIONS.find(s => s.size === size);
-    const exteriorLabel =
-      EXTERIOR_STYLES.find(e => e.id === exterior)?.label ?? '';
-    const interiorLabel =
-      INTERIOR_STYLES.find(i => i.id === interior)?.label ?? '';
-    const allItems = OPTION_GROUPS.flatMap(g => g.items);
-    const optionLabels = selectedOptions
-      .map(id => allItems.find(gi => gi.id === id)?.label)
-      .filter(Boolean);
+    const m = modelInfo;
+    const extWall = EXTERIOR_WALL_OPTIONS.find(o => o.id === config.exteriorWall);
+    const roof = ROOF_OPTIONS.find(o => o.id === config.roof);
+    const floor = FLOOR_OPTIONS.find(o => o.id === config.floor);
+    const wall = WALL_FINISH_OPTIONS.find(o => o.id === config.wallFinish);
 
-    return [
-      '[견적 요청]',
-      `용도: ${purposeLabel}`,
-      `사이즈: ${size} (${sizeOpt?.dims ?? ''} / ${sizeOpt?.area ?? ''})`,
-      `외장 스타일: ${exteriorLabel}`,
-      `내장 스타일: ${interiorLabel}`,
-      `설치 장소: ${location}${locationDetail ? ` — ${locationDetail}` : ''}`,
-      optionLabels.length > 0 ? `선택 옵션: ${optionLabels.join(', ')}` : '',
-      additionalMessage ? `추가 요청: ${additionalMessage}` : '',
-    ]
-      .filter(Boolean)
-      .join('\n');
+    const priceLabel = (price: number) => (price > 0 ? `(+${price}만)` : '(포함)');
+
+    const lines: string[] = [
+      '[모듈러 홈 견적 요청]',
+      `모델: ${config.size} (${m?.dims ?? ''} / ${m?.area ?? ''})`,
+      `기본가: ${BASE_PRICES[config.size].toLocaleString()}만`,
+      '',
+      '[외장 마감]',
+      `외벽: ${extWall?.label ?? ''} ${priceLabel(extWall?.price ?? 0)}`,
+      `지붕: ${roof?.label ?? ''} ${priceLabel(roof?.price ?? 0)}`,
+      '',
+      '[내장 마감]',
+      `바닥: ${floor?.label ?? ''} ${priceLabel(floor?.price ?? 0)}`,
+      `벽체: ${wall?.label ?? ''} ${priceLabel(wall?.price ?? 0)}`,
+    ];
+
+    const addCheckSection = (title: string, ids: string[], options: CheckOption[]) => {
+      if (ids.length === 0) return;
+      lines.push('', `[${title}]`);
+      for (const id of ids) {
+        const opt = options.find(o => o.id === id);
+        if (opt) lines.push(`${opt.label} (+${opt.price}만)`);
+      }
+    };
+
+    addCheckSection('주방', config.kitchen, KITCHEN_OPTIONS);
+    addCheckSection('욕실', config.bathroom, BATHROOM_OPTIONS);
+    addCheckSection('설비', config.systems, SYSTEMS_OPTIONS);
+    addCheckSection('외부', config.outdoor, OUTDOOR_OPTIONS);
+
+    if (additionalMessage.trim()) {
+      lines.push('', `[추가 요청]`, additionalMessage.trim());
+    }
+
+    lines.push('', `예상 견적: ₩${totalPrice.toLocaleString()}만~`);
+
+    return lines.join('\n');
   };
+
+  /* ── sidebar data ── */
+  const sidebarItems = useMemo(() => {
+    const items: { label: string; value: string; price: number }[] = [];
+
+    const ext = EXTERIOR_WALL_OPTIONS.find(o => o.id === config.exteriorWall);
+    if (ext) items.push({ label: '외벽', value: ext.label, price: ext.price });
+
+    const roof = ROOF_OPTIONS.find(o => o.id === config.roof);
+    if (roof) items.push({ label: '지붕', value: roof.label, price: roof.price });
+
+    const floor = FLOOR_OPTIONS.find(o => o.id === config.floor);
+    if (floor) items.push({ label: '바닥', value: floor.label, price: floor.price });
+
+    const wall = WALL_FINISH_OPTIONS.find(o => o.id === config.wallFinish);
+    if (wall) items.push({ label: '벽체', value: wall.label, price: wall.price });
+
+    const addChecks = (label: string, ids: string[], opts: CheckOption[]) => {
+      for (const id of ids) {
+        const o = opts.find(x => x.id === id);
+        if (o) items.push({ label, value: o.label, price: o.price });
+      }
+    };
+
+    addChecks('주방', config.kitchen, KITCHEN_OPTIONS);
+    addChecks('욕실', config.bathroom, BATHROOM_OPTIONS);
+    addChecks('설비', config.systems, SYSTEMS_OPTIONS);
+    addChecks('외부', config.outdoor, OUTDOOR_OPTIONS);
+
+    return items;
+  }, [config]);
 
   /* ═══════════════════════════════════════
      Success state
      ═══════════════════════════════════════ */
 
-  if (state.success) {
+  if (formState.success) {
     return (
       <div className="min-h-[80vh] flex items-center justify-center px-4">
         <motion.div
@@ -362,24 +409,15 @@ export function QuoteClient() {
           transition={{ duration: 0.5, type: 'spring', bounce: 0.4 }}
           className="text-center max-w-md"
         >
-          {/* 인비져블: 컨페티 느낌 스케일 바운스 (primary yellow #FFCA0D) */}
           <motion.div
             className="w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-6"
             style={{ backgroundColor: 'rgba(255, 202, 13, 0.2)' }}
             animate={{ scale: [1, 1.15, 1] }}
             transition={{ repeat: 2, duration: 0.5, delay: 0.3 }}
           >
-            <motion.div
-              initial={{ rotate: -10 }}
-              animate={{ rotate: [0, 10, -10, 0] }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-            >
-              <Check className="h-10 w-10" style={{ color: '#FFCA0D' }} />
-            </motion.div>
+            <Check className="h-10 w-10" style={{ color: '#FFCA0D' }} />
           </motion.div>
-          <h2 className="text-2xl font-bold text-foreground mb-3">
-            견적 요청 완료
-          </h2>
+          <h2 className="text-2xl font-bold text-foreground mb-3">견적 요청 완료</h2>
           <p className="text-muted-foreground">{successMessages.quote}</p>
         </motion.div>
       </div>
@@ -387,552 +425,561 @@ export function QuoteClient() {
   }
 
   /* ═══════════════════════════════════════
+     Render helpers
+     ═══════════════════════════════════════ */
+
+  const PriceBadge = ({ price }: { price: number }) =>
+    price === 0 ? (
+      <Badge variant="secondary" className="text-xs font-medium">포함</Badge>
+    ) : (
+      <Badge className="text-xs font-medium bg-primary/10 text-primary hover:bg-primary/10 border-0">
+        +{price}만
+      </Badge>
+    );
+
+  const SectionTitle = ({ title, subtitle }: { title: string; subtitle?: string }) => (
+    <div className="mb-6">
+      <h3 className="text-xl font-bold text-foreground">{title}</h3>
+      {subtitle && <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>}
+    </div>
+  );
+
+  const SubSectionTitle = ({ title }: { title: string }) => (
+    <h4 className="text-sm font-semibold text-muted-foreground mb-3 uppercase tracking-wide">{title}</h4>
+  );
+
+  /* ── Radio option card ── */
+  const RadioCard = ({
+    option,
+    selected,
+    onSelect,
+  }: {
+    option: MaterialOption;
+    selected: boolean;
+    onSelect: () => void;
+  }) => (
+    <motion.button
+      type="button"
+      whileTap={{ scale: 0.98 }}
+      onClick={onSelect}
+      className={cn(
+        'flex items-start gap-3 p-4 rounded-xl border text-left transition-all w-full',
+        selected ? 'border-primary ring-2 ring-primary/20 bg-primary/5' : 'border-border hover:border-primary/30',
+      )}
+    >
+      {option.color && (
+        <div
+          className="w-8 h-8 rounded-lg flex-shrink-0 border border-border/30"
+          style={{ backgroundColor: option.color }}
+        />
+      )}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-sm font-semibold text-foreground">{option.label}</span>
+          <PriceBadge price={option.price} />
+        </div>
+        <p className="text-xs text-muted-foreground mt-0.5">{option.desc}</p>
+      </div>
+      {selected && (
+        <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center flex-shrink-0 mt-0.5">
+          <Check className="h-3 w-3 text-[#2D2D2A]" />
+        </div>
+      )}
+    </motion.button>
+  );
+
+  /* ── Checkbox option card ── */
+  const CheckCard = ({
+    option,
+    checked,
+    onToggle,
+  }: {
+    option: CheckOption;
+    checked: boolean;
+    onToggle: () => void;
+  }) => (
+    <motion.button
+      type="button"
+      whileTap={{ scale: 0.98 }}
+      onClick={onToggle}
+      className={cn(
+        'flex items-start gap-3 p-4 rounded-xl border text-left transition-all w-full',
+        checked ? 'border-primary ring-2 ring-primary/20 bg-primary/5' : 'border-border hover:border-primary/30',
+      )}
+    >
+      <div
+        className={cn(
+          'w-5 h-5 rounded flex items-center justify-center flex-shrink-0 mt-0.5',
+          checked ? 'bg-primary' : 'border-2 border-border',
+        )}
+      >
+        {checked && <Check className="h-3 w-3 text-[#2D2D2A]" />}
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center justify-between gap-2">
+          <span className="text-sm font-semibold text-foreground">{option.label}</span>
+          <PriceBadge price={option.price} />
+        </div>
+        <p className="text-xs text-muted-foreground mt-0.5">{option.desc}</p>
+      </div>
+    </motion.button>
+  );
+
+  /* ═══════════════════════════════════════
      Main render
      ═══════════════════════════════════════ */
 
   return (
-    <div className="min-h-[80vh] py-12 md:py-20">
-      <div className="max-w-3xl mx-auto px-4 md:px-6">
-        <div className="text-center mb-10">
-          <h1 className="text-h2 text-foreground mb-3">
-            {sectionHeadlines.quote}
-          </h1>
-          <p className="text-body-lg text-muted-foreground">
-            {sectionHeadlines.quoteSub}
-          </p>
+    <div className="min-h-screen py-12 md:py-20 pb-28 lg:pb-20">
+      <div className="max-w-7xl mx-auto px-4 md:px-6">
+        {/* ── Page Header ── */}
+        <div className="text-center mb-12">
+          <h1 className="text-h2 text-foreground mb-3">{sectionHeadlines.quote}</h1>
+          <p className="text-body-lg text-muted-foreground">{sectionHeadlines.quoteSub}</p>
         </div>
 
-        <div className="flex flex-col items-center mb-10">
-          <div className="flex items-center gap-1.5 md:gap-2 mb-3">
-            {STEPS.map((s, i) => (
-              <div key={s.id} className="flex items-center gap-1.5 md:gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    if (i < step) setStep(i);
-                  }}
-                  className={cn(
-                    'w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center text-xs md:text-sm font-medium transition-all',
-                    i < step && 'bg-primary text-[#2D2D2A] cursor-pointer',
-                    i === step && 'bg-foreground text-background',
-                    i > step && 'bg-muted text-muted-foreground cursor-default'
-                  )}
-                  disabled={i > step}
-                  aria-label={`${s.label} 단계`}
-                >
-                  {i < step ? <Check className="h-3.5 w-3.5" /> : i + 1}
-                </button>
-                {i < STEPS.length - 1 && (
-                  <div
-                    className={cn(
-                      'w-4 md:w-6 h-0.5',
-                      i < step ? 'bg-primary' : 'bg-muted'
-                    )}
-                  />
-                )}
-              </div>
-            ))}
-            <span className="ml-2 text-lg" aria-hidden="true">
-              {getProgressEmoji()}
-            </span>
-          </div>
-
-          {/* 인비져블: 꼼꼼하시네요 이스터에그 */}
-          <AnimatePresence>
-            {showCareful && (
-              <motion.p
-                initial={{ opacity: 0, y: -5 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0 }}
-                className="text-xs text-muted-foreground"
-              >
-                꼼꼼하시네요 :)
-              </motion.p>
-            )}
-          </AnimatePresence>
-        </div>
-
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={step}
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -30 }}
-            transition={{ duration: 0.25 }}
-          >
-            <div className="mb-6">
-              <h2 className="text-xl font-semibold text-foreground">
-                {STEP_COPY[step].title}
-              </h2>
-              <p className="text-sm text-muted-foreground mt-1">
-                {STEP_COPY[step].subtitle}
-              </p>
-            </div>
-
-            {/* ═══ Step 0: 용도 선택 ═══ */}
-            {step === 0 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {PURPOSES.map(p => (
-                  <Card
-                    key={p.id}
-                    className={cn(
-                      'cursor-pointer transition-all hover:shadow-md',
-                      purpose === p.id
-                        ? 'border-primary ring-2 ring-primary/20'
-                        : 'border-border'
-                    )}
-                    onClick={() => setPurpose(p.id)}
-                  >
-                    <CardContent className="p-5">
-                      <div className="flex items-start gap-3">
-                        <span className="text-2xl" aria-hidden="true">
-                          {p.emoji}
-                        </span>
-                        <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-foreground">
-                            {p.label}
-                          </p>
-                          <p className="text-sm text-muted-foreground mt-0.5">
-                            {p.desc}
-                          </p>
-                          <p className="text-xs text-primary mt-1 font-medium">
-                            {p.witty}
-                          </p>
-                          <div className="flex gap-1.5 mt-2">
-                            {p.sizes.map(s => (
-                              <Badge
-                                key={s}
-                                variant="secondary"
-                                className="text-xs"
-                              >
-                                {s}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            )}
-
-            {/* ═══ Step 1: 사이즈 선택 ═══ */}
-            {step === 1 && (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {SIZE_OPTIONS.map(opt => {
-                  const isRecommended = recommendedSizes.includes(opt.size);
+        {/* ── Split-screen Grid ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8 lg:gap-12">
+          {/* ════════════ LEFT: Scrollable Options ════════════ */}
+          <div className="space-y-14">
+            {/* ── Section 0: 인기 구성 (Presets) ── */}
+            <ScrollReveal>
+              <SectionTitle title="인기 구성" subtitle="잘 팔리는 조합을 먼저 확인해보세요" />
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {PRESETS.map((preset, i) => {
+                  const presetPrice = calcTotal(preset.config);
                   return (
-                    <Card
-                      key={opt.size}
-                      className={cn(
-                        'cursor-pointer transition-all hover:shadow-md relative',
-                        size === opt.size
-                          ? 'border-primary ring-2 ring-primary/20'
-                          : 'border-border',
-                        isRecommended &&
-                          size !== opt.size &&
-                          'border-primary/40'
-                      )}
-                      onClick={() => setSize(opt.size)}
-                    >
-                      <CardContent className="p-5 text-center">
-                        {isRecommended && (
-                          <Badge className="absolute -top-2 right-2 bg-primary text-[#2D2D2A] text-[10px]">
-                            추천
-                          </Badge>
+                    <motion.div key={preset.name} whileTap={{ scale: 0.97 }}>
+                      <Card
+                        className={cn(
+                          'cursor-pointer transition-all hover:shadow-md relative h-full',
+                          JSON.stringify(config) === JSON.stringify(preset.config)
+                            ? 'border-primary ring-2 ring-primary/20'
+                            : 'border-border',
                         )}
-                        <p className="text-3xl font-bold text-foreground mb-1">
-                          {opt.size}
-                        </p>
-                        <p className="text-xs text-primary font-medium mb-2">
-                          {productTaglines[opt.size]}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {opt.dims}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {opt.area}
-                        </p>
-                        <p className="text-sm font-medium text-foreground mt-2">
-                          ₩{opt.price}
-                        </p>
-                      </CardContent>
-                    </Card>
+                        onClick={() => applyPreset(preset, i)}
+                      >
+                        <CardContent className="p-5">
+                          {preset.badge && (
+                            <Badge className="absolute -top-2.5 right-3 bg-primary text-[#2D2D2A] text-[10px] font-bold">
+                              {preset.badge}
+                            </Badge>
+                          )}
+                          <p className="font-bold text-foreground text-base">{preset.name}</p>
+                          <p className="text-xs text-muted-foreground mt-1">{preset.desc}</p>
+                          <p className="text-lg font-bold text-foreground mt-3">
+                            ₩{presetPrice.toLocaleString()}만~
+                          </p>
+                        </CardContent>
+                      </Card>
+                    </motion.div>
                   );
                 })}
               </div>
-            )}
+            </ScrollReveal>
 
-            {/* ═══ Step 2: 외장 스타일 ═══ */}
-            {step === 2 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {EXTERIOR_STYLES.map(style => (
-                  <Card
-                    key={style.id}
-                    className={cn(
-                      'cursor-pointer transition-all hover:shadow-md',
-                      exterior === style.id
-                        ? 'border-primary ring-2 ring-primary/20'
-                        : 'border-border'
-                    )}
-                    onClick={() => setExterior(style.id)}
-                  >
-                    <CardContent className="p-5">
-                      <div className="flex items-start gap-3">
-                        <div
-                          className="w-10 h-10 rounded-full flex-shrink-0 border border-border/50"
-                          style={{
-                            background:
-                              'gradient' in style
-                                ? 'conic-gradient(#E8E8E8, #C4A882, #2D2D2A, #FFCA0D, #E8E8E8)'
-                                : style.color,
-                          }}
-                        />
-                        <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-foreground">
-                            {style.label}
-                          </p>
-                          <p className="text-sm text-muted-foreground mt-0.5">
-                            {style.desc}
-                          </p>
-                          <p className="text-xs text-primary mt-1 font-medium">
-                            {style.personality}
-                          </p>
+            {/* ── Section 1: 모델 선택 ── */}
+            <ScrollReveal>
+              <SectionTitle title="모델 선택" subtitle="공간의 시작은 사이즈부터" />
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                {MODEL_INFO.map(m => (
+                  <motion.div key={m.size} whileTap={{ scale: 0.97 }}>
+                    <Card
+                      className={cn(
+                        'cursor-pointer transition-all hover:shadow-md h-full',
+                        config.size === m.size
+                          ? 'border-primary ring-2 ring-primary/20'
+                          : 'border-border',
+                      )}
+                      onClick={() => setConfig(prev => ({ ...prev, size: m.size }))}
+                    >
+                      <CardContent className="p-5 text-center">
+                        <p className="text-4xl font-black text-foreground">{m.size}</p>
+                        <p className="text-xs text-primary font-medium mt-1">
+                          {productTaglines[m.size]}
+                        </p>
+                        <div className="mt-3 space-y-0.5">
+                          <p className="text-sm text-muted-foreground">{m.dims}</p>
+                          <p className="text-sm text-muted-foreground">{m.area}</p>
                         </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+                        <p className="text-sm font-bold text-foreground mt-2">
+                          ₩{BASE_PRICES[m.size].toLocaleString()}만~
+                        </p>
+                      </CardContent>
+                    </Card>
+                  </motion.div>
                 ))}
               </div>
-            )}
+            </ScrollReveal>
 
-            {/* ═══ Step 3: 내장 스타일 ═══ */}
-            {step === 3 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {INTERIOR_STYLES.map(style => (
-                  <Card
-                    key={style.id}
-                    className={cn(
-                      'cursor-pointer transition-all hover:shadow-md',
-                      interior === style.id
-                        ? 'border-primary ring-2 ring-primary/20'
-                        : 'border-border'
-                    )}
-                    onClick={() => setInterior(style.id)}
-                  >
-                    <CardContent className="p-5">
-                      <div className="flex items-start gap-3">
-                        <div
-                          className={cn(
-                            'w-10 h-10 rounded-full flex-shrink-0',
-                            style.id === 'white' && 'border border-border'
-                          )}
-                          style={{
-                            background:
-                              'gradient' in style
-                                ? 'conic-gradient(#F5F5F5, #D4B896, #9E9E9E, #FFCA0D, #F5F5F5)'
-                                : style.color,
-                          }}
-                        />
-                        <div className="flex-1 min-w-0">
-                          <p className="font-semibold text-foreground">
-                            {style.label}
-                          </p>
-                          <p className="text-sm text-muted-foreground mt-0.5">
-                            {style.desc}
-                          </p>
-                          <p className="text-xs text-primary mt-1 font-medium">
-                            {style.personality}
-                          </p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+            {/* ── Section 2: 외장 마감 ── */}
+            <ScrollReveal>
+              <SectionTitle title="외장 마감" subtitle="첫인상을 결정짓는 외관 소재" />
+
+              <SubSectionTitle title="외벽 마감재" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+                {EXTERIOR_WALL_OPTIONS.map(opt => (
+                  <RadioCard
+                    key={opt.id}
+                    option={opt}
+                    selected={config.exteriorWall === opt.id}
+                    onSelect={() => updateRadio('exteriorWall', opt.id)}
+                  />
                 ))}
               </div>
-            )}
 
-            {/* ═══ Step 4: 특수 옵션 ═══ */}
-            {step === 4 && (
-              <div className="space-y-6">
-                {OPTION_GROUPS.map(group => (
-                  <div key={group.category}>
-                    <p className="text-sm font-medium text-foreground mb-2">
-                      {group.emoji} {group.category}
+              <SubSectionTitle title="지붕 마감재" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {ROOF_OPTIONS.map(opt => (
+                  <RadioCard
+                    key={opt.id}
+                    option={opt}
+                    selected={config.roof === opt.id}
+                    onSelect={() => updateRadio('roof', opt.id)}
+                  />
+                ))}
+              </div>
+            </ScrollReveal>
+
+            {/* ── Section 3: 내장 마감 ── */}
+            <ScrollReveal>
+              <SectionTitle title="내장 마감" subtitle="매일 마주하는 공간의 질감" />
+
+              <SubSectionTitle title="바닥재" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+                {FLOOR_OPTIONS.map(opt => (
+                  <RadioCard
+                    key={opt.id}
+                    option={opt}
+                    selected={config.floor === opt.id}
+                    onSelect={() => updateRadio('floor', opt.id)}
+                  />
+                ))}
+              </div>
+
+              <SubSectionTitle title="벽체 마감" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {WALL_FINISH_OPTIONS.map(opt => (
+                  <RadioCard
+                    key={opt.id}
+                    option={opt}
+                    selected={config.wallFinish === opt.id}
+                    onSelect={() => updateRadio('wallFinish', opt.id)}
+                  />
+                ))}
+              </div>
+            </ScrollReveal>
+
+            {/* ── Section 4: 주방·욕실 ── */}
+            <ScrollReveal>
+              <SectionTitle title="주방·욕실" subtitle="생활의 핵심 공간을 업그레이드" />
+
+              <SubSectionTitle title="주방" />
+              <div className="mb-3">
+                <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/50 mb-3">
+                  <Check className="h-4 w-4 text-primary" />
+                  <span className="text-sm text-foreground">기본 주방 (싱크대+가스레인지)</span>
+                  <Badge variant="secondary" className="text-xs ml-auto">포함</Badge>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-8">
+                {KITCHEN_OPTIONS.map(opt => (
+                  <CheckCard
+                    key={opt.id}
+                    option={opt}
+                    checked={config.kitchen.includes(opt.id)}
+                    onToggle={() => toggleCheck('kitchen', opt.id)}
+                  />
+                ))}
+              </div>
+
+              <SubSectionTitle title="욕실" />
+              <div className="mb-3">
+                <div className="flex items-center gap-2 p-3 rounded-lg bg-muted/50 mb-3">
+                  <Check className="h-4 w-4 text-primary" />
+                  <span className="text-sm text-foreground">기본 욕실 (샤워부스+세면대+양변기)</span>
+                  <Badge variant="secondary" className="text-xs ml-auto">포함</Badge>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {BATHROOM_OPTIONS.map(opt => (
+                  <CheckCard
+                    key={opt.id}
+                    option={opt}
+                    checked={config.bathroom.includes(opt.id)}
+                    onToggle={() => toggleCheck('bathroom', opt.id)}
+                  />
+                ))}
+              </div>
+            </ScrollReveal>
+
+            {/* ── Section 5: 설비·기능 ── */}
+            <ScrollReveal>
+              <SectionTitle title="설비·기능" subtitle="편리함을 더하는 스마트 옵션" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {SYSTEMS_OPTIONS.map(opt => (
+                  <CheckCard
+                    key={opt.id}
+                    option={opt}
+                    checked={config.systems.includes(opt.id)}
+                    onToggle={() => toggleCheck('systems', opt.id)}
+                  />
+                ))}
+              </div>
+            </ScrollReveal>
+
+            {/* ── Section 6: 외부 옵션 ── */}
+            <ScrollReveal>
+              <SectionTitle title="외부 옵션" subtitle="집 밖 공간도 위트있게" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {OUTDOOR_OPTIONS.map(opt => (
+                  <CheckCard
+                    key={opt.id}
+                    option={opt}
+                    checked={config.outdoor.includes(opt.id)}
+                    onToggle={() => toggleCheck('outdoor', opt.id)}
+                  />
+                ))}
+              </div>
+            </ScrollReveal>
+
+            {/* ── Section 7: 연락처 + 최종 요약 ── */}
+            <ScrollReveal>
+              <div ref={contactRef}>
+                <SectionTitle title="견적 요청" subtitle="맞춤 견적을 받아보세요" />
+
+                {/* Summary card */}
+                <Card className="mb-6">
+                  <CardContent className="p-5">
+                    <p className="text-sm font-bold text-foreground mb-4">구성 요약</p>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">모델</span>
+                        <span className="font-medium text-foreground">
+                          {config.size} · {modelInfo?.dims} · {modelInfo?.area}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">기본가</span>
+                        <span className="font-medium text-foreground">
+                          {BASE_PRICES[config.size].toLocaleString()}만
+                        </span>
+                      </div>
+                      <div className="border-t my-2" />
+                      {sidebarItems.map((item, i) => (
+                        <div key={`${item.label}-${item.value}-${i}`} className="flex justify-between">
+                          <span className="text-muted-foreground">{item.value}</span>
+                          <span className={cn('font-medium', item.price > 0 ? 'text-primary' : 'text-muted-foreground')}>
+                            {item.price > 0 ? `+${item.price}만` : '포함'}
+                          </span>
+                        </div>
+                      ))}
+                      <div className="border-t my-2" />
+                      <div className="flex justify-between items-center">
+                        <span className="font-bold text-foreground">예상 견적</span>
+                        <span className="text-lg font-black text-foreground">
+                          ₩{totalPrice.toLocaleString()}만~
+                          {isOverBillion && <Sparkles className="inline-block h-4 w-4 ml-1 text-primary" />}
+                        </span>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Contact form */}
+                <form ref={formRef} action={formAction} className="space-y-4">
+                  <input type="hidden" name="category" value="Quote" />
+                  <input type="hidden" name="message" value={buildMessage()} />
+
+                  <div>
+                    <label htmlFor="quote-name" className="text-sm font-medium text-foreground mb-1.5 block">
+                      이름 <span className="text-destructive">*</span>
+                    </label>
+                    <Input
+                      id="quote-name"
+                      name="name"
+                      value={name}
+                      onChange={e => setName(e.target.value)}
+                      placeholder="홍길동"
+                      required
+                      className="h-11"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="quote-phone" className="text-sm font-medium text-foreground mb-1.5 block">
+                      연락처 <span className="text-destructive">*</span>
+                    </label>
+                    <Input
+                      id="quote-phone"
+                      name="phone"
+                      type="tel"
+                      value={phone}
+                      onChange={e => setPhone(e.target.value)}
+                      placeholder="010-1234-5678"
+                      required
+                      className="h-11"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="quote-email" className="text-sm font-medium text-foreground mb-1.5 block">
+                      이메일
+                    </label>
+                    <Input
+                      id="quote-email"
+                      name="email"
+                      type="email"
+                      value={email}
+                      onChange={e => setEmail(e.target.value)}
+                      placeholder="email@example.com"
+                      className="h-11"
+                    />
+                  </div>
+
+                  <div>
+                    <label htmlFor="quote-additional" className="text-sm font-medium text-foreground mb-1.5 block">
+                      추가 요청사항
+                    </label>
+                    <Textarea
+                      id="quote-additional"
+                      value={additionalMessage}
+                      onChange={e => setAdditionalMessage(e.target.value)}
+                      placeholder="설치 예정 지역, 입주 시기, 특별 요청 등을 자유롭게 적어주세요"
+                      rows={3}
+                      className="resize-none"
+                    />
+                  </div>
+
+                  <Button
+                    type="submit"
+                    disabled={isPending || !name || !phone}
+                    className="w-full h-12 bg-primary text-[#2D2D2A] hover:bg-primary/90 font-bold rounded-xl text-base"
+                  >
+                    {isPending ? '전송 중...' : '이 구성으로 상담하기'}
+                    {!isPending && <ArrowRight className="h-4 w-4 ml-2" />}
+                  </Button>
+
+                  <p className="text-xs text-center text-muted-foreground mt-2">
+                    실제 가격은 현장 조건에 따라 달라질 수 있습니다
+                  </p>
+                </form>
+              </div>
+            </ScrollReveal>
+          </div>
+
+          {/* ════════════ RIGHT: Sticky Sidebar (Desktop) ════════════ */}
+          <div className="hidden lg:block">
+            <div className="lg:sticky lg:top-24 lg:self-start">
+              <Card className="rounded-2xl border shadow-sm">
+                <CardContent className="p-6">
+                  <p className="text-sm font-bold text-foreground mb-4">내 구성</p>
+
+                  {/* Model display */}
+                  <div className="text-center mb-5 py-3 bg-muted/30 rounded-xl">
+                    <p className="text-4xl font-black text-foreground">{config.size}</p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {modelInfo?.dims} · {modelInfo?.area}
                     </p>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {group.items.map(opt => (
-                        <button
-                          type="button"
-                          key={opt.id}
-                          onClick={() => {
-                            setSelectedOptions(prev =>
-                              prev.includes(opt.id)
-                                ? prev.filter(id => id !== opt.id)
-                                : [...prev, opt.id]
-                            );
-                          }}
-                          className={cn(
-                            'flex items-center gap-3 p-3.5 rounded-xl border text-left transition-all',
-                            selectedOptions.includes(opt.id)
-                              ? 'border-primary bg-primary/5'
-                              : 'border-border hover:border-primary/30'
-                          )}
+                  </div>
+
+                  {/* Price lines */}
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-muted-foreground">기본가</span>
+                      <span className="font-medium text-foreground">
+                        {BASE_PRICES[config.size].toLocaleString()}만
+                      </span>
+                    </div>
+
+                    <div className="border-t my-3" />
+
+                    <AnimatePresence mode="popLayout">
+                      {sidebarItems.map((item, i) => (
+                        <motion.div
+                          key={`${item.label}-${item.value}`}
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          exit={{ opacity: 0, height: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="flex justify-between"
                         >
-                          <div
+                          <span className="text-muted-foreground truncate mr-2">{item.value}</span>
+                          <span
                             className={cn(
-                              'w-5 h-5 rounded flex items-center justify-center flex-shrink-0',
-                              selectedOptions.includes(opt.id)
-                                ? 'bg-primary'
-                                : 'border border-border'
+                              'font-medium flex-shrink-0',
+                              item.price > 0 ? 'text-primary' : 'text-muted-foreground',
                             )}
                           >
-                            {selectedOptions.includes(opt.id) && (
-                              <Check className="h-3 w-3 text-[#2D2D2A]" />
-                            )}
-                          </div>
-                          <span className="text-sm font-medium text-foreground">
-                            {opt.label}
+                            {item.price > 0 ? `+${item.price}만` : '포함'}
                           </span>
-                        </button>
+                        </motion.div>
                       ))}
-                    </div>
+                    </AnimatePresence>
                   </div>
-                ))}
-                <Textarea
-                  value={additionalMessage}
-                  onChange={e => setAdditionalMessage(e.target.value)}
-                  placeholder="추가 요청사항이 있으시면 자유롭게 적어주세요"
-                  rows={3}
-                  className="resize-none mt-2"
-                />
-              </div>
-            )}
 
-            {/* ═══ Step 5: 설치 장소 ═══ */}
-            {step === 5 && (
-              <div className="space-y-6">
-                <div>
-                  <label
-                    htmlFor="quote-location"
-                    className="text-sm font-medium text-foreground mb-1.5 block"
-                  >
-                    지역 <span className="text-destructive">*</span>
-                  </label>
-                  <Input
-                    id="quote-location"
-                    value={location}
-                    onChange={e => setLocation(e.target.value)}
-                    placeholder="예: 경기도 양평군, 강원도 홍천군"
-                    className="h-11"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="quote-location-detail"
-                    className="text-sm font-medium text-foreground mb-1.5 block"
-                  >
-                    상세 정보
-                  </label>
-                  <Textarea
-                    id="quote-location-detail"
-                    value={locationDetail}
-                    onChange={e => setLocationDetail(e.target.value)}
-                    placeholder="서울에서 1시간이면 갈 수 있는 곳이면 좋겠죠? 부지 면적, 도로 접근성, 전기/수도 여부 등을 알려주세요"
-                    rows={3}
-                    className="resize-none"
-                  />
-                </div>
-              </div>
-            )}
+                  {/* Total */}
+                  <div className="border-t my-4" />
+                  <div className="text-center">
+                    <p className="text-xs text-muted-foreground mb-1">예상 견적</p>
+                    <p className="text-3xl font-black text-foreground">
+                      ₩{animatedPrice.toLocaleString()}만~
+                      {isOverBillion && (
+                        <motion.span
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          className="inline-block ml-1"
+                        >
+                          <Sparkles className="inline-block h-5 w-5 text-primary" />
+                        </motion.span>
+                      )}
+                    </p>
+                  </div>
 
-            {/* ═══ Step 6: 연락처 + 요약 ═══ */}
-            {step === 6 && (
-              <form ref={formRef} action={formAction} className="space-y-5">
-                <input type="hidden" name="category" value="Quote" />
-                <input type="hidden" name="message" value={buildMessage()} />
+                  {/* CTA */}
+                  <Button
+                    type="button"
+                    onClick={scrollToContact}
+                    className="w-full h-12 mt-5 bg-primary text-[#2D2D2A] hover:bg-primary/90 font-bold rounded-xl text-base"
+                  >
+                    이 구성으로 상담하기
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
 
-                <div>
-                  <label
-                    htmlFor="quote-name"
-                    className="text-sm font-medium text-foreground mb-1.5 block"
-                  >
-                    이름 <span className="text-destructive">*</span>
-                  </label>
-                  <Input
-                    id="quote-name"
-                    name="name"
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                    placeholder="홍길동"
-                    required
-                    className="h-11"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="quote-phone"
-                    className="text-sm font-medium text-foreground mb-1.5 block"
-                  >
-                    연락처 <span className="text-destructive">*</span>
-                  </label>
-                  <Input
-                    id="quote-phone"
-                    name="phone"
-                    type="tel"
-                    value={phone}
-                    onChange={e => setPhone(e.target.value)}
-                    placeholder="010-1234-5678"
-                    required
-                    className="h-11"
-                  />
-                </div>
-                <div>
-                  <label
-                    htmlFor="quote-email"
-                    className="text-sm font-medium text-foreground mb-1.5 block"
-                  >
-                    이메일
-                  </label>
-                  <Input
-                    id="quote-email"
-                    name="email"
-                    type="email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
-                    placeholder="email@example.com"
-                    className="h-11"
-                  />
-                </div>
-
-                <div className="bg-muted/50 rounded-xl p-5 mt-6">
-                  <p className="text-sm font-medium text-foreground mb-3">
-                    견적 요약 {isPremium && '✨'}
+                  <p className="text-[11px] text-center text-muted-foreground mt-3">
+                    참고가이며 실제 가격은 상담 후 확정됩니다
                   </p>
-                  <div className="text-sm text-muted-foreground space-y-2">
-                    <div className="flex items-center gap-2">
-                      <span className="text-foreground/70 w-16 flex-shrink-0">
-                        용도
-                      </span>
-                      <span>
-                        {PURPOSES.find(p => p.id === purpose)?.emoji}{' '}
-                        {PURPOSES.find(p => p.id === purpose)?.label}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-foreground/70 w-16 flex-shrink-0">
-                        사이즈
-                      </span>
-                      <Badge variant="secondary" className="text-xs">
-                        {size}
-                      </Badge>
-                      <span>
-                        {SIZE_OPTIONS.find(s => s.size === size)?.area}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-foreground/70 w-16 flex-shrink-0">
-                        외장
-                      </span>
-                      <div
-                        className="w-4 h-4 rounded-full border border-border/50"
-                        style={{
-                          background:
-                            EXTERIOR_STYLES.find(e => e.id === exterior)
-                              ?.color ?? 'transparent',
-                        }}
-                      />
-                      <span>
-                        {EXTERIOR_STYLES.find(e => e.id === exterior)?.label}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-foreground/70 w-16 flex-shrink-0">
-                        내장
-                      </span>
-                      <div
-                        className={cn(
-                          'w-4 h-4 rounded-full',
-                          interior === 'white' && 'border border-border'
-                        )}
-                        style={{
-                          background:
-                            INTERIOR_STYLES.find(i => i.id === interior)
-                              ?.color ?? 'transparent',
-                        }}
-                      />
-                      <span>
-                        {INTERIOR_STYLES.find(i => i.id === interior)?.label}
-                      </span>
-                    </div>
-                    {location && (
-                      <div className="flex items-start gap-2">
-                        <span className="text-foreground/70 w-16 flex-shrink-0">
-                          장소
-                        </span>
-                        <span>{location}</span>
-                      </div>
-                    )}
-                    {selectedOptions.length > 0 && (
-                      <div className="flex items-start gap-2">
-                        <span className="text-foreground/70 w-16 flex-shrink-0">
-                          옵션
-                        </span>
-                        <div className="flex flex-wrap gap-1">
-                          {selectedOptions.map(id => {
-                            const label = OPTION_GROUPS.flatMap(
-                              g => g.items
-                            ).find(gi => gi.id === id)?.label;
-                            return label ? (
-                              <Badge
-                                key={id}
-                                variant="outline"
-                                className="text-xs"
-                              >
-                                {label}
-                              </Badge>
-                            ) : null;
-                          })}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
 
-                <Button
-                  type="submit"
-                  disabled={isPending || !canProceed()}
-                  className="w-full h-12 bg-primary text-[#2D2D2A] hover:bg-primary/90 font-semibold rounded-xl text-base mt-4"
-                >
-                  {isPending ? '전송 중...' : '견적 요청하기'}
-                </Button>
-              </form>
-            )}
-          </motion.div>
-        </AnimatePresence>
-
-        {step < STEPS.length - 1 && (
-          <div className="flex justify-between mt-10">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={prev}
-              disabled={step === 0}
-              className="rounded-full px-6 h-11"
-            >
-              <ArrowLeft className="h-4 w-4 mr-2" /> 이전
-            </Button>
-            <Button
-              type="button"
-              onClick={next}
-              disabled={!canProceed()}
-              className="rounded-full px-6 h-11 bg-foreground text-background hover:bg-foreground/90"
-            >
-              {getNextLabel()} <ArrowRight className="h-4 w-4 ml-2" />
-            </Button>
+                  {/* weet :) watermark */}
+                  <p className="text-[10px] text-muted-foreground/20 text-right mt-4 select-none">
+                    weet :)
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
           </div>
-        )}
+        </div>
+      </div>
+
+      {/* ════════════ MOBILE: Sticky Bottom Bar ════════════ */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t shadow-lg lg:hidden">
+        <div className="flex items-center justify-between px-4 py-3 max-w-lg mx-auto">
+          <div>
+            <p className="text-xs text-muted-foreground">예상 견적</p>
+            <p className="text-lg font-black text-foreground">
+              ₩{animatedPrice.toLocaleString()}만~
+              {isOverBillion && <Sparkles className="inline-block h-4 w-4 ml-1 text-primary" />}
+            </p>
+          </div>
+          <Button
+            type="button"
+            onClick={scrollToContact}
+            className="h-10 px-5 bg-primary text-[#2D2D2A] hover:bg-primary/90 font-bold rounded-xl text-sm"
+          >
+            상담하기
+            <ArrowRight className="h-4 w-4 ml-1" />
+          </Button>
+        </div>
       </div>
     </div>
   );
