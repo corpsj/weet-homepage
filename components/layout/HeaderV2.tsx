@@ -6,192 +6,188 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-
-const navItems = [
-  { href: '/modular-v2', label: '모듈러건축 소개' },
-  { href: '/products-v2', label: '제품 소개' },
-  { href: '/bespoke-v2', label: 'BESPOKE' },
-  { href: '/solution-v2', label: 'SOLUTION' },
-  { href: '/company-v2', label: '회사소개' },
-  { href: '/support-v2', label: '고객지원' },
-];
+import { V2_NAV_ITEMS } from '@/lib/navigation';
+import {
+  NavigationMenu,
+  NavigationMenuList,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  navigationMenuTriggerStyle,
+} from '@/components/ui/navigation-menu';
+import { Sheet, SheetContent, SheetTrigger, SheetClose } from '@/components/ui/sheet';
 
 export function HeaderV2() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [lastScrollY, setLastScrollY] = useState(0);
   const pathname = usePathname();
 
   useEffect(() => {
-    let lastScrollY = window.scrollY;
-
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
-      
+
       setIsScrolled(currentScrollY >= 50);
 
       if (currentScrollY < 50) {
         setIsHidden(false);
-      } else if (currentScrollY > lastScrollY && !isMobileMenuOpen) {
+      } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
         setIsHidden(true);
       } else if (currentScrollY < lastScrollY) {
         setIsHidden(false);
       }
 
-      lastScrollY = currentScrollY;
+      setLastScrollY(currentScrollY);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [isMobileMenuOpen]);
-
-  useEffect(() => {
-    if (isMobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isMobileMenuOpen]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && isMobileMenuOpen) {
-        setIsMobileMenuOpen(false);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isMobileMenuOpen]);
-
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [pathname]);
+  }, [lastScrollY]);
 
   const headerClass = cn(
-    'fixed top-0 left-0 right-0 w-full transition-all duration-300',
-    isScrolled ? 'bg-white/95 backdrop-blur-md border-b border-gray-100 text-gray-900' : 'bg-transparent text-gray-900',
+    'fixed top-0 left-0 right-0 w-full transition-all duration-300 z-50',
+    isScrolled
+      ? 'bg-background/95 backdrop-blur-md border-b border-border shadow-sm'
+      : 'bg-background/80 backdrop-blur-sm',
     isHidden ? '-translate-y-full' : 'translate-y-0'
   );
 
+  const headerHeight = isScrolled ? 'h-16' : 'h-20';
+
   return (
-    <>
-      <header 
-        className={headerClass}
-        style={{ zIndex: 100 }}
-      >
-        <div className="mx-auto max-w-[1440px] px-4 md:px-6 lg:px-8 h-[64px] lg:h-[72px] flex items-center justify-between">
-          <Link 
-            href="/" 
-            className="flex items-center gap-2 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md min-h-[44px] min-w-[44px]"
-            aria-label="위트 홈으로 가기"
-          >
-            <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full bg-primary flex items-center justify-center font-bold text-black text-sm lg:text-base">
-              weet:)
-            </div>
-          </Link>
-
-          <nav aria-label="메인 메뉴" className="hidden lg:flex items-center gap-8">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "text-sm font-medium transition-colors hover:text-primary min-h-[44px] flex items-center",
-                  pathname === item.href ? "text-primary" : "text-current"
-                )}
-              >
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-
-          <div className="hidden lg:block">
-            <Link
-              href="/support-v2"
-              className="bg-primary text-black rounded-full px-6 py-2.5 font-medium min-h-[44px] flex items-center justify-center hover:bg-[#E5A410] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
-            >
-              상담 신청
-            </Link>
+    <header className={headerClass}>
+      <div className={cn(
+        'mx-auto max-w-7xl px-4 md:px-6 lg:px-8 flex items-center justify-between transition-all duration-300',
+        headerHeight
+      )}>
+        {/* Logo */}
+        <Link
+          href="/home"
+          className="flex items-center gap-2 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md"
+          aria-label="위트 홈으로 가기"
+        >
+          <div className="w-9 h-9 rounded-full bg-primary flex items-center justify-center font-bold text-[#2D2D2A] text-xs leading-none">
+            weet:)
           </div>
+          <span className="hidden sm:block font-semibold text-foreground text-sm tracking-tight">
+            시스템건축
+          </span>
+        </Link>
 
-          <button
-            type="button"
-            className="lg:hidden w-[44px] h-[44px] flex items-center justify-center text-current focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md"
-            onClick={() => setIsMobileMenuOpen(true)}
-            aria-expanded={isMobileMenuOpen}
-            aria-controls="mobile-menu"
-            aria-label="메뉴 열기"
+        {/* Desktop Navigation */}
+        <NavigationMenu className="hidden lg:flex">
+          <NavigationMenuList>
+            {V2_NAV_ITEMS.map((item) => {
+              const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+              return (
+                <NavigationMenuItem key={item.href}>
+                  <NavigationMenuLink asChild>
+                    <Link
+                      href={item.href}
+                      className={cn(
+                        navigationMenuTriggerStyle(),
+                        'text-sm font-medium transition-colors bg-transparent hover:bg-transparent focus:bg-transparent',
+                        isActive
+                          ? 'text-primary border-b-2 border-primary rounded-none'
+                          : 'text-foreground/80 hover:text-foreground'
+                      )}
+                    >
+                      {item.label}
+                    </Link>
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+              );
+            })}
+          </NavigationMenuList>
+        </NavigationMenu>
+
+        {/* Desktop CTA */}
+        <div className="hidden lg:block">
+          <Link
+            href="/support-v2"
+            className="inline-flex items-center justify-center bg-primary text-[#2D2D2A] rounded-full px-5 py-2.5 text-sm font-semibold min-h-[44px] hover:bg-primary/90 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
           >
-            <Menu size={24} />
-          </button>
+            상담 신청
+          </Link>
         </div>
-      </header>
 
-      <AnimatePresence>
-        {isMobileMenuOpen && (
-          <motion.div
-            id="mobile-menu"
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '100%' }}
-            transition={{ type: 'tween', duration: 0.3 }}
-            className="fixed inset-0 bg-white"
-            style={{ zIndex: 200 }}
-            role="dialog"
-            aria-modal="true"
-            aria-label="모바일 메인 메뉴"
-          >
-            <div className="flex flex-col h-full px-4 pt-4 pb-8">
-              <div className="flex items-center justify-between h-[64px] mb-8">
-                <Link 
-                  href="/" 
-                  className="flex items-center gap-2 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md min-h-[44px] min-w-[44px]"
-                  onClick={() => setIsMobileMenuOpen(false)}
+        {/* Mobile Menu */}
+        <Sheet>
+          <SheetTrigger asChild>
+            <button
+              type="button"
+              className="lg:hidden w-11 h-11 flex items-center justify-center text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md"
+              aria-label="메뉴 열기"
+            >
+              <Menu size={22} />
+            </button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-[300px] sm:w-[360px] p-0 bg-background">
+            <div className="flex flex-col h-full">
+              {/* Sheet Header */}
+              <div className="flex items-center justify-between px-6 h-16 border-b border-border">
+                <Link
+                  href="/home"
+                  className="flex items-center gap-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md"
                 >
-                  <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center font-bold text-black text-sm">
+                  <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center font-bold text-[#2D2D2A] text-xs">
                     weet:)
                   </div>
+                  <span className="font-semibold text-foreground text-sm">시스템건축</span>
                 </Link>
-                <button
-                  type="button"
-                  className="w-[44px] h-[44px] flex items-center justify-center text-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  aria-label="메뉴 닫기"
-                >
-                  <X size={24} />
-                </button>
+                <SheetClose asChild>
+                  <button
+                    type="button"
+                    className="w-10 h-10 flex items-center justify-center text-foreground/60 hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md transition-colors"
+                    aria-label="메뉴 닫기"
+                  >
+                    <X size={20} />
+                  </button>
+                </SheetClose>
               </div>
 
-              <nav className="flex flex-col flex-1 overflow-y-auto">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      "text-xl font-semibold h-[56px] flex items-center border-b border-gray-100",
-                      pathname === item.href ? "text-primary" : "text-gray-900"
-                    )}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
+              {/* Sheet Nav */}
+              <nav className="flex flex-col flex-1 overflow-y-auto px-4 py-4" aria-label="모바일 메뉴">
+                {V2_NAV_ITEMS.map((item) => {
+                  const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
+                  return (
+                    <SheetClose asChild key={item.href}>
+                      <Link
+                        href={item.href}
+                        className={cn(
+                          'flex items-center min-h-[56px] px-3 text-base font-medium rounded-lg transition-colors border-b border-border/50 last:border-0',
+                          isActive
+                            ? 'text-primary bg-primary/5'
+                            : 'text-foreground hover:text-primary hover:bg-primary/5'
+                        )}
+                      >
+                        {item.label}
+                        {isActive && (
+                          <span className="ml-auto w-1.5 h-1.5 rounded-full bg-primary" />
+                        )}
+                      </Link>
+                    </SheetClose>
+                  );
+                })}
               </nav>
 
-              <div className="mt-auto pt-6">
-                <Link
-                  href="/support-v2"
-                  className="bg-primary text-black rounded-full w-full py-4 text-lg font-medium min-h-[44px] flex items-center justify-center hover:bg-[#E5A410] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
-                >
-                  상담 신청
-                </Link>
+              {/* Sheet CTA */}
+              <div className="px-6 py-6 border-t border-border">
+                <SheetClose asChild>
+                  <Link
+                    href="/support-v2"
+                    className="flex items-center justify-center w-full bg-primary text-[#2D2D2A] rounded-full py-4 text-base font-semibold min-h-[52px] hover:bg-primary/90 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-primary"
+                  >
+                    상담 신청
+                  </Link>
+                </SheetClose>
+                <p className="text-center text-xs text-muted-foreground mt-3">
+                  카카오톡 · 전화 · 이메일 상담 가능
+                </p>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+          </SheetContent>
+        </Sheet>
+      </div>
+    </header>
   );
 }

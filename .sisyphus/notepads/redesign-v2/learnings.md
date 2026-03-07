@@ -180,3 +180,13 @@
 - Wraps with AnimatePresence mode="wait"
 - Uses pageTransition variants for smooth route transitions
 - Respects prefers-reduced-motion (renders plain div)
+
+## [2026-03-07] T10: Redesign layout created
+
+- Created `app/(redesign)/layout.tsx` with HeaderV2 + FooterV2 + PageTransition + KakaoProvider + Toaster
+- Route group `(redesign)` ensures layout only applies to pages inside `app/(redesign)/`
+- Metadata: title "weet:) | 시스템건축", description "시스템건축의 새로운 기준 — 이동식주택과 현장건축 전문 기업 위트"
+- Main element has `pt-20` for header offset
+- Includes FloatingKakaoCTA and AIChatbot components
+- Build passes with zero errors
+- All component exports verified: HeaderV2, FooterV2, PageTransition, KakaoProvider, Toaster, FloatingKakaoCTA, AIChatbot

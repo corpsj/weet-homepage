@@ -1,135 +1,130 @@
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
-import { COMPANY } from '@/lib/constants';
+import { Separator } from '@/components/ui/separator';
+import { COMPANY, BRAND_V2 } from '@/lib/constants';
+import { V2_NAV_ITEMS } from '@/lib/navigation';
 
 export function FooterV2() {
+  const supportItems = [
+    { label: `전화: ${COMPANY.phone}`, href: COMPANY.phoneHref, external: false },
+    { label: `이메일: ${COMPANY.email}`, href: COMPANY.emailHref, external: false },
+    { label: '카카오톡 상담', href: 'https://pf.kakao.com/_xnxkxnxn', external: true },
+  ];
+
+  const socialItems = [
+    { label: '인스타그램', href: COMPANY.instagram },
+    { label: '네이버 블로그', href: COMPANY.blog },
+    { label: '당근마켓', href: COMPANY.daangn },
+  ];
+
   return (
-    <footer className="bg-gray-900 text-white w-full">
-      <div className="mx-auto max-w-[1440px] px-4 md:px-6 lg:px-8 py-12 md:py-16">
+    <footer className="w-full bg-[#2D2D2A] text-white/90">
+      <div className="mx-auto max-w-7xl px-4 md:px-6 lg:px-8 py-14 md:py-20">
+        {/* Main Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8">
-          
-          <div className="flex flex-col gap-6">
-            <Link 
-              href="/" 
-              className="inline-flex items-center gap-2 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md w-fit"
+
+          {/* Brand Column */}
+          <div className="flex flex-col gap-5 lg:col-span-1">
+            <Link
+              href="/home"
+              className="inline-flex items-center gap-2.5 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-md w-fit"
             >
-              <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center font-bold text-black text-base">
+              <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center font-bold text-[#2D2D2A] text-xs">
                 weet:)
               </div>
+              <span className="font-bold text-white text-lg tracking-tight">
+                {BRAND_V2.concept}
+              </span>
             </Link>
-            <p className="text-xl font-medium">위트있는 집, 위트있는 삶</p>
-              <div className="text-gray-400 text-sm leading-relaxed space-y-1">
+            <p className="text-white/60 text-sm leading-relaxed">
+              {BRAND_V2.tagline}
+            </p>
+            <div className="text-white/40 text-xs leading-relaxed space-y-1">
               <p>{COMPANY.nameShort}</p>
-              <p>{COMPANY.addressShort}</p>
               <p>사업자등록번호 {COMPANY.businessNumber}</p>
+              <p>{COMPANY.addressShort}</p>
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 lg:ml-8">
-            <h3 className="text-lg font-semibold">제품</h3>
-            <ul className="flex flex-col gap-3 text-gray-400 text-sm">
-              <li>
-                <Link href="/products?category=3x6" className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center">
-                  3X6 집
-                </Link>
-              </li>
-              <li>
-                <Link href="/products?category=3x9" className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center">
-                  3X9 집
-                </Link>
-              </li>
-              <li>
-                <Link href="/products?category=18py" className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center">
-                  18평 단독주택
-                </Link>
-              </li>
-              <li>
-                <Link href="/products?category=25py" className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center">
-                  25평 단독주택
-                </Link>
-              </li>
-              <li>
-                <Link href="/products?category=30py" className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center">
-                  30평 단독주택
-                </Link>
-              </li>
+          {/* Navigation Column */}
+          <div className="flex flex-col gap-4">
+            <h3 className="text-sm font-semibold text-white/50 uppercase tracking-wider">메뉴</h3>
+            <ul className="flex flex-col gap-2">
+              {V2_NAV_ITEMS.map((item) => (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    className="text-sm text-white/70 hover:text-primary transition-colors min-h-[36px] inline-flex items-center"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
+          {/* Support Column */}
           <div className="flex flex-col gap-4">
-            <h3 className="text-lg font-semibold">서비스</h3>
-            <ul className="flex flex-col gap-3 text-gray-400 text-sm">
-              <li>
-                <Link href="/modular-v2" className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center">
-                  모듈러건축 소개
-                </Link>
-              </li>
-              <li>
-                <Link href="/bespoke" className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center">
-                  BESPOKE
-                </Link>
-              </li>
-              <li>
-                <Link href="/solution" className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center">
-                  SOLUTION
-                </Link>
-              </li>
-              <li>
-                <Link href="/support-v2" className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center">
-                  고객지원
-                </Link>
-              </li>
+            <h3 className="text-sm font-semibold text-white/50 uppercase tracking-wider">고객지원</h3>
+            <ul className="flex flex-col gap-2">
+              {supportItems.map((item) =>
+                item.external ? (
+                  <li key={item.label}>
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-sm text-white/70 hover:text-primary transition-colors min-h-[36px] inline-flex items-center"
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                ) : (
+                  <li key={item.label}>
+                    <a
+                      href={item.href}
+                      className="text-sm text-white/70 hover:text-primary transition-colors min-h-[36px] inline-flex items-center"
+                    >
+                      {item.label}
+                    </a>
+                  </li>
+                )
+              )}
             </ul>
           </div>
 
+          {/* Social Column */}
           <div className="flex flex-col gap-4">
-            <h3 className="text-lg font-semibold">연결</h3>
-            <ul className="flex flex-col gap-3 text-gray-400 text-sm">
-              <li>
-                <a 
-                  href={COMPANY.instagram}
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center"
-                >
-                  Instagram
-                </a>
-              </li>
-              <li>
-                <a 
-                  href={COMPANY.daangn}
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center"
-                >
-                  당근마켓
-                </a>
-              </li>
-              <li>
-                <a 
-                  href={COMPANY.blog}
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="hover:text-primary transition-colors min-h-[44px] inline-flex items-center"
-                >
-                  네이버 블로그
-                </a>
-              </li>
+            <h3 className="text-sm font-semibold text-white/50 uppercase tracking-wider">소셜</h3>
+            <ul className="flex flex-col gap-2">
+              {socialItems.map((item) => (
+                <li key={item.label}>
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-white/70 hover:text-primary transition-colors min-h-[36px] inline-flex items-center"
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
-          
         </div>
 
-        <div className="mt-16 pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-gray-500">
-          <p>Copyright &copy; weet All rights reserved</p>
+        {/* Divider */}
+        <Separator className="my-10 opacity-20" />
+
+        {/* Bottom Bar */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-white/30">
+          <p>Copyright &copy; {new Date().getFullYear()} weet:) All rights reserved.</p>
           <div className="flex flex-wrap items-center gap-4 md:gap-6">
-            <Link href="/privacy" className="hover:text-white transition-colors">
+            <Link href="/privacy" className="hover:text-white/60 transition-colors">
               개인정보 처리방침
             </Link>
-            <Link href="/terms" className="hover:text-white transition-colors">
+            <Link href="/terms" className="hover:text-white/60 transition-colors">
               이용약관
             </Link>
-            <p>전화: {COMPANY.phone}</p>
           </div>
         </div>
       </div>
