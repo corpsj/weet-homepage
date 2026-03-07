@@ -283,7 +283,7 @@ export function QuoteClient() {
 
   const applyPreset = (preset: PresetDef, index: number) => {
     setConfig({ ...preset.config });
-    toast(`'${preset.name}' 구성이 적용되었어요`);
+    toast(`${preset.name} 구성이 적용되었습니다.`);
     setClickedPresets(prev => {
       const next = new Set(prev);
       next.add(index);
@@ -299,14 +299,14 @@ export function QuoteClient() {
   useEffect(() => {
     if (isFullOptions && !fullOptionsToastRef.current) {
       fullOptionsToastRef.current = true;
-      toast('풀옵션이시네요! 프리미엄 상담 연결해 드릴게요 😎', { duration: 3000 });
+      toast('풀옵션 구성입니다. 전담 컨설턴트가 안내드리겠습니다.', { duration: 3000 });
     }
   }, [isFullOptions]);
 
   useEffect(() => {
     if (clickedPresets.size === PRESETS.length && !allPresetsClickedRef.current) {
       allPresetsClickedRef.current = true;
-      toast('다 둘러보셨네요 :)', { duration: 2000 });
+      toast('모든 구성을 확인하셨습니다.', { duration: 2000 });
     }
   }, [clickedPresets]);
 
@@ -544,7 +544,7 @@ export function QuoteClient() {
           <div className="space-y-14">
             {/* ── Section 0: 인기 구성 (Presets) ── */}
             <ScrollReveal>
-              <SectionTitle title="인기 구성" subtitle="잘 팔리는 조합을 먼저 확인해보세요" />
+              <SectionTitle title="인기 구성" subtitle="검증된 조합으로 시작할 수 있습니다" />
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 {PRESETS.map((preset, i) => {
                   const presetPrice = calcTotal(preset.config);
@@ -672,7 +672,7 @@ export function QuoteClient() {
 
             {/* ── Section 4: 주방·욕실 ── */}
             <ScrollReveal>
-              <SectionTitle title="주방·욕실" subtitle="생활의 핵심 공간을 업그레이드" />
+              <SectionTitle title="주방·욕실" subtitle="기본 구성 외 추가 가능한 옵션" />
 
               <SubSectionTitle title="주방" />
               <div className="mb-3">
@@ -715,7 +715,7 @@ export function QuoteClient() {
 
             {/* ── Section 5: 설비·기능 ── */}
             <ScrollReveal>
-              <SectionTitle title="설비·기능" subtitle="편리함을 더하는 스마트 옵션" />
+              <SectionTitle title="설비·기능" subtitle="난방, 전기, 단열 관련 옵션" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {SYSTEMS_OPTIONS.map(opt => (
                   <CheckCard
@@ -730,7 +730,7 @@ export function QuoteClient() {
 
             {/* ── Section 6: 외부 옵션 ── */}
             <ScrollReveal>
-              <SectionTitle title="외부 옵션" subtitle="집 밖 공간도 위트있게" />
+              <SectionTitle title="외부 옵션" subtitle="외부 공간 확장 및 부대시설" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {OUTDOOR_OPTIONS.map(opt => (
                   <CheckCard
@@ -746,7 +746,7 @@ export function QuoteClient() {
             {/* ── Section 7: 연락처 + 최종 요약 ── */}
             <ScrollReveal>
               <div ref={contactRef}>
-                <SectionTitle title="견적 요청" subtitle="맞춤 견적을 받아보세요" />
+                <SectionTitle title="견적 요청" subtitle="구성 확인 후 상담을 신청하세요" />
 
                 {/* Summary card */}
                 <Card className="mb-6">
