@@ -190,3 +190,11 @@
 - Includes FloatingKakaoCTA and AIChatbot components
 - Build passes with zero errors
 - All component exports verified: HeaderV2, FooterV2, PageTransition, KakaoProvider, Toaster, FloatingKakaoCTA, AIChatbot
+
+## [2026-03-07] T15: Products page created
+- Created `app/(redesign)/products-v2/page.tsx` with metadata title `이동식주택 제품 | weet:)` and server/client split to keep Next.js metadata support while using client tabs.
+- Added dual navigation UI in `app/(redesign)/products-v2/products-v2-client.tsx` using shadcn Tabs (`용도별 보기`, `사이즈별 보기`) with mobile horizontal scroll.
+- Implemented purpose cards for 4 categories using `PurposeCategory`, `PURPOSE_TO_SIZE_MAP`, `PURPOSE_LABELS`, and commercial category routing to `/bespoke-v2`.
+- Implemented size cards for S/M/L/XL with fixed dimensions, 면적, 추천 용도, and 총 가격 only (no 월납입/할부/리스 text).
+- Added dark `체류형 쉼터` section (`#2D2D2A`) with 상담 CTA to `/support-v2`, plus final CTA section `견적 받기` to `/bespoke-v2`.
+- Verification: LSP diagnostics clean on both new files and `npm run build` passed with `/products-v2` generated successfully.
