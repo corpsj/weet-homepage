@@ -1,16 +1,21 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { isKakaoReady, openKakaoChannel } from '@/lib/kakao';
 import { ConsultationModal } from './ConsultationModal';
 
+const HIDDEN_PATHS = ['/quote'];
+
 export function FloatingKakaoCTA() {
+  const pathname = usePathname();
   const [isVisible, setIsVisible] = useState(true);
   const [showTooltip, setShowTooltip] = useState(false);
   const [hasPulsed, setHasPulsed] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const lastScrollY = useRef(0);
+  const isHidden = HIDDEN_PATHS.includes(pathname);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -41,6 +46,8 @@ export function FloatingKakaoCTA() {
       setShowModal(true);
     }
   }, []);
+
+  if (isHidden) return null;
 
   return (
     <>

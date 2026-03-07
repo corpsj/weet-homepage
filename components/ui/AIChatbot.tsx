@@ -1,11 +1,14 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Send, Bot, User } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { announceToScreenReader, trapFocus } from '@/lib/a11y';
 import { COMPANY } from '@/lib/constants';
+
+const HIDDEN_PATHS = ['/quote'];
 
 type Message = {
   role: 'user' | 'assistant';
@@ -41,6 +44,7 @@ function getReply(input: string): string {
 }
 
 export function AIChatbot() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     { role: 'assistant', content: '안녕하세요! 위트 AI 상담봇이에요 🏠\n시스템건축에 대해 궁금한 거 편하게 물어보세요!' },
@@ -49,6 +53,7 @@ export function AIChatbot() {
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const modalRef = useRef<HTMLDivElement>(null);
+  const isHidden = HIDDEN_PATHS.includes(pathname);
 
   useEffect(() => {
     if (!isOpen || !modalRef.current) return;
@@ -80,6 +85,8 @@ export function AIChatbot() {
     e.preventDefault();
     handleSend();
   };
+
+  if (isHidden) return null;
 
   return (
     <>
