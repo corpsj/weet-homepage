@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -52,6 +53,17 @@ export function FullscreenHero() {
         >
           <source src="/videos/hero.mp4" type="video/mp4" />
         </video>
+      )}
+
+      {videoFailed && (
+        <Image
+          src="/images/hero_main.webp"
+          alt="위트 시스템건축"
+          fill
+          className="object-cover"
+          priority
+          sizes="100vw"
+        />
       )}
 
       <div

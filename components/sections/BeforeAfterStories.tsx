@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, MapPin, Calendar, Ruler } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -17,6 +18,8 @@ interface ProjectStory {
   description: string;
   beforeDesc: string;
   afterDesc: string;
+  beforeImage: string;
+  afterImage: string;
 }
 
 const stories: ProjectStory[] = [
@@ -30,6 +33,8 @@ const stories: ProjectStory[] = [
     description: '주말마다 가족이 함께 쉴 수 있는 전원 세컨하우스',
     beforeDesc: '방치된 빈 토지',
     afterDesc: '가족의 주말 쉼터',
+    beforeImage: '/images/modular/osc.webp',
+    afterImage: '/images/products/medium/36+36집-2.webp',
   },
   {
     id: 'story-2',
@@ -41,6 +46,8 @@ const stories: ProjectStory[] = [
     description: '텃밭 관리와 휴식을 위한 농막',
     beforeDesc: '황무지 농지',
     afterDesc: '텃밭과 쉼터가 있는 공간',
+    beforeImage: '/images/modular/prefabrication.webp',
+    afterImage: '/images/products/small/private/3x9.webp',
   },
   {
     id: 'story-3',
@@ -52,6 +59,8 @@ const stories: ProjectStory[] = [
     description: '제주 이주를 꿈꾸는 가족의 본 주거 공간',
     beforeDesc: '빈 대지',
     afterDesc: '제주의 새로운 보금자리',
+    beforeImage: '/images/modular/prefabricated-building.webp',
+    afterImage: '/images/products/large/L-3.webp',
   },
 ];
 
@@ -84,20 +93,25 @@ export function BeforeAfterStories() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.3 }}
-                  className={cn(
-                    'absolute inset-0 flex items-center justify-center',
-                    beforeAfter === 'before'
-                      ? 'bg-gradient-to-br from-gray-400 to-gray-500'
-                      : 'bg-gradient-to-br from-primary/20 via-green-100 to-primary/10'
-                  )}
+                  className="absolute inset-0"
                 >
-                  <div className="text-center p-8">
-                    <p className="text-lg font-medium text-foreground/80 mb-2">
-                      {beforeAfter === 'before' ? 'Before' : 'After'}
-                    </p>
-                    <p className="text-2xl font-bold text-foreground">
-                      {beforeAfter === 'before' ? activeStory.beforeDesc : activeStory.afterDesc}
-                    </p>
+                  <Image
+                    src={beforeAfter === 'before' ? activeStory.beforeImage : activeStory.afterImage}
+                    alt={`${activeStory.title} ${beforeAfter === 'before' ? '시공 전' : '시공 후'}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                  <div className="absolute inset-0 bg-black/30" />
+                  <div className="relative z-10 flex items-center justify-center h-full">
+                    <div className="text-center p-8">
+                      <p className="text-lg font-medium text-white/80 mb-2">
+                        {beforeAfter === 'before' ? 'Before' : 'After'}
+                      </p>
+                      <p className="text-2xl font-bold text-white">
+                        {beforeAfter === 'before' ? activeStory.beforeDesc : activeStory.afterDesc}
+                      </p>
+                    </div>
                   </div>
                 </motion.div>
               </AnimatePresence>
