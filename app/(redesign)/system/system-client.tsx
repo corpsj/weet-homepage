@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowRight, CheckCircle, Clock, Wrench, Home, Building2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -89,7 +90,16 @@ export function SystemClient() {
           </ScrollReveal>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <ScrollReveal direction="left">
-              <Card className="bg-white/5 border-white/10 text-white h-full">
+              <Card className="bg-white/5 border-white/10 text-white h-full overflow-hidden">
+                <div className="relative h-48 overflow-hidden rounded-t-lg">
+                  <Image
+                    src="/images/modular/main-image.webp"
+                    alt="이동식주택"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </div>
                 <CardHeader className="pb-4">
                   <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-4">
                     <Home className="h-6 w-6 text-primary" />
@@ -111,7 +121,16 @@ export function SystemClient() {
               </Card>
             </ScrollReveal>
             <ScrollReveal direction="right">
-              <Card className="bg-white/5 border-white/10 text-white h-full">
+              <Card className="bg-white/5 border-white/10 text-white h-full overflow-hidden">
+                <div className="relative h-48 overflow-hidden rounded-t-lg">
+                  <Image
+                    src="/images/company/factory.webp"
+                    alt="현장건축"
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </div>
                 <CardHeader className="pb-4">
                   <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4">
                     <Building2 className="h-6 w-6 text-white/70" />

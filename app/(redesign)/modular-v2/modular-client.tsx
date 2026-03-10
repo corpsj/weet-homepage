@@ -2,6 +2,7 @@
 
 import { useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, Factory, Truck, Clock, Wrench, Recycle, Shield, Ruler, BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -39,10 +40,10 @@ const qaItems = [
 ];
 
 const timeline = [
-  { step: '01', title: '상담·설계', desc: '용도, 부지, 예산에 맞는 맞춤 설계', duration: '2~3주', icon: Ruler },
-  { step: '02', title: '공장 제작', desc: '통제된 환경에서 고품질 모듈 제작', duration: '4~6주', icon: Factory },
-  { step: '03', title: '운송', desc: '완성된 모듈을 현장으로 안전 운송', duration: '1~2일', icon: Truck },
-  { step: '04', title: '현장 설치', desc: '크레인으로 모듈 설치 및 연결', duration: '1~3일', icon: Wrench },
+  { step: '01', title: '상담·설계', desc: '용도, 부지, 예산에 맞는 맞춤 설계', duration: '2~3주', icon: Ruler, image: '/images/support/step1.webp' },
+  { step: '02', title: '공장 제작', desc: '통제된 환경에서 고품질 모듈 제작', duration: '4~6주', icon: Factory, image: '/images/modular/prefabrication.webp' },
+  { step: '03', title: '운송', desc: '완성된 모듈을 현장으로 안전 운송', duration: '1~2일', icon: Truck, image: '/images/modular/crane-illustration.webp' },
+  { step: '04', title: '현장 설치', desc: '크레인으로 모듈 설치 및 연결', duration: '1~3일', icon: Wrench, image: '/images/modular/prefabricated-building.webp' },
 ];
 
 const comparison = [
@@ -146,6 +147,15 @@ export function ModularClient() {
                     <div className="hidden lg:block absolute top-8 left-full w-full h-0.5 bg-white/10 -translate-x-1/2" />
                   )}
                   <div className="bg-white/5 border border-white/10 rounded-2xl p-6 h-full">
+                    <div className="relative h-36 -mx-6 -mt-6 mb-4 overflow-hidden rounded-t-2xl">
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      />
+                    </div>
                     <div className="w-14 h-14 rounded-full bg-primary/20 flex items-center justify-center mb-4">
                       <item.icon className="h-7 w-7 text-primary" />
                     </div>
