@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { CheckCircle, Palette, Ruler, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -15,9 +16,9 @@ import { submitInquiry } from '@/app/actions/submit-inquiry';
 import { toast } from 'sonner';
 
 const useCases = [
-  { title: '카페·음료', desc: '독특한 공간감으로 차별화된 카페 경험' },
-  { title: '팝업스토어', desc: '브랜드 아이덴티티를 담은 임시 매장' },
-  { title: '스마트팜', desc: '농업 생산성을 높이는 맞춤 시설' },
+  { title: '카페·음료', desc: '독특한 공간감으로 차별화된 카페 경험', image: '/images/bespoke/small-cafe-v2.webp' },
+  { title: '팝업스토어', desc: '브랜드 아이덴티티를 담은 임시 매장', image: '/images/bespoke/popup-store-v2.webp' },
+  { title: '스마트팜', desc: '농업 생산성을 높이는 맞춤 시설', image: '/images/bespoke/smart-farm-v2.webp' },
   { title: '사무공간', desc: '효율적인 업무 환경을 위한 모듈 오피스' },
   { title: '게스트하우스', desc: '수익형 숙박 시설로 활용' },
   { title: '갤러리·전시', desc: '예술 작품을 위한 특별한 공간' },
@@ -76,7 +77,18 @@ export function BespokeV2Client() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-20">
             {useCases.map((item, i) => (
               <ScrollReveal key={item.title} delay={i * 0.07}>
-                <Card className="hover:shadow-md transition-shadow border-border h-full">
+                <Card className="hover:shadow-md transition-shadow border-border h-full overflow-hidden">
+                  {item.image && (
+                    <div className="relative h-40 overflow-hidden">
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      />
+                    </div>
+                  )}
                   <CardHeader className="pb-3">
                     <CardTitle className="text-base">{item.title}</CardTitle>
                   </CardHeader>

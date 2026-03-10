@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowRight, MapPin, Phone, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -64,18 +65,49 @@ export function CompanyV2Client() {
               </div>
             </ScrollReveal>
             <ScrollReveal direction="right">
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { value: '100+', label: '시공 사례' },
-                  { value: '5년+', label: '업력' },
-                  { value: '10년', label: '구조 보증' },
-                  { value: '98%', label: '고객 만족도' },
-                ].map((stat) => (
-                  <div key={stat.label} className="p-6 rounded-2xl bg-foreground/5 border border-border text-center">
-                    <div className="text-3xl font-bold text-primary mb-1">{stat.value}</div>
-                    <div className="text-sm text-muted-foreground">{stat.label}</div>
+              <div>
+                <div className="grid grid-cols-2 gap-3 mb-6">
+                  <div className="relative aspect-[4/3] rounded-xl overflow-hidden col-span-2">
+                    <Image
+                      src="/images/company/factory.webp"
+                      alt="위트 생산 시설"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
                   </div>
-                ))}
+                  <div className="relative aspect-square rounded-xl overflow-hidden">
+                    <Image
+                      src="/images/company/workshop.webp"
+                      alt="위트 작업장"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 50vw, 25vw"
+                    />
+                  </div>
+                  <div className="relative aspect-square rounded-xl overflow-hidden">
+                    <Image
+                      src="/images/company/lab_new.webp"
+                      alt="위트 연구소"
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 1024px) 50vw, 25vw"
+                    />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  {[
+                    { value: '100+', label: '시공 사례' },
+                    { value: '5년+', label: '업력' },
+                    { value: '10년', label: '구조 보증' },
+                    { value: '98%', label: '고객 만족도' },
+                  ].map((stat) => (
+                    <div key={stat.label} className="p-6 rounded-2xl bg-foreground/5 border border-border text-center">
+                      <div className="text-3xl font-bold text-primary mb-1">{stat.value}</div>
+                      <div className="text-sm text-muted-foreground">{stat.label}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             </ScrollReveal>
           </div>

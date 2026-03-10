@@ -1,5 +1,6 @@
 "use client";
 
+import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ArrowRight, Wifi, Camera, Zap, Leaf } from 'lucide-react';
@@ -13,6 +14,7 @@ const solutions = [
     icon: Wifi,
     title: '스마트홈 IoT',
     badge: 'IoT',
+    image: '/images/solution/iot.webp',
     desc: '조명, 냉난방, 보안을 스마트폰으로 제어하는 통합 스마트홈 시스템',
     features: ['원격 제어', '에너지 모니터링', '자동화 설정', '음성 인식 연동'],
   },
@@ -20,6 +22,7 @@ const solutions = [
     icon: Camera,
     title: '보안·CCTV',
     badge: 'CCTV',
+    image: '/images/solution/cctv.webp',
     desc: '24시간 실시간 모니터링과 AI 기반 이상 감지 보안 시스템',
     features: ['HD 화질 카메라', '야간 촬영', '모션 감지', '클라우드 저장'],
   },
@@ -27,6 +30,7 @@ const solutions = [
     icon: Zap,
     title: '태양광 발전',
     badge: '에너지',
+    image: '/images/solution/network_hero.webp',
     desc: '자체 발전으로 전기료를 절감하고 친환경 생활을 실현하는 태양광 시스템',
     features: ['패널 설치', '배터리 저장', '잉여 전력 판매', '에너지 독립'],
   },
@@ -34,6 +38,7 @@ const solutions = [
     icon: Leaf,
     title: '친환경 설계',
     badge: '그린',
+    image: '/images/solution/design_hero.webp',
     desc: '단열, 환기, 자재 선택까지 환경을 고려한 지속 가능한 건축 솔루션',
     features: ['고성능 단열재', '열회수 환기', '친환경 자재', '탄소 저감'],
   },
@@ -69,7 +74,16 @@ export function SolutionsClient() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {solutions.map((sol, i) => (
               <ScrollReveal key={sol.title} delay={i * 0.1}>
-                <Card className="hover:shadow-lg transition-shadow border-border h-full">
+                <Card className="hover:shadow-lg transition-shadow border-border h-full overflow-hidden">
+                  <div className="relative h-44 overflow-hidden">
+                    <Image
+                      src={sol.image}
+                      alt={sol.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  </div>
                   <CardHeader className="pb-4">
                     <div className="flex items-start justify-between mb-4">
                       <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
