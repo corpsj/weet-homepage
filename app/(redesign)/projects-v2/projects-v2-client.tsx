@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowRight, MapPin } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -12,12 +13,12 @@ import { ScrollReveal } from '@/components/ui/ScrollReveal';
 import { cn } from '@/lib/utils';
 
 const projects = [
-  { id: 1, name: '전남 함평 단독주택', location: '전남 함평군', size: '54㎡', category: '단독주택', year: '2024' },
-  { id: 2, name: '경기 양평 세컨하우스', location: '경기 양평군', size: '27㎡', category: '세컨하우스', year: '2024' },
-  { id: 3, name: '제주 서귀포 카페', location: '제주 서귀포시', size: '72㎡', category: '상업시설', year: '2023' },
-  { id: 4, name: '강원 홍천 농막', location: '강원 홍천군', size: '18㎡', category: '농막', year: '2023' },
-  { id: 5, name: '충남 태안 세컨하우스', location: '충남 태안군', size: '36㎡', category: '세컨하우스', year: '2023' },
-  { id: 6, name: '경북 안동 단독주택', location: '경북 안동시', size: '66㎡', category: '단독주택', year: '2024' },
+  { id: 1, name: '전남 함평 단독주택', location: '전남 함평군', size: '54㎡', category: '단독주택', year: '2024', image: '/images/products/large/L-1.webp' },
+  { id: 2, name: '경기 양평 세컨하우스', location: '경기 양평군', size: '27㎡', category: '세컨하우스', year: '2024', image: '/images/products/medium/36+36집-1.webp' },
+  { id: 3, name: '제주 서귀포 카페', location: '제주 서귀포시', size: '72㎡', category: '상업시설', year: '2023', image: '/images/bespoke/small-cafe-v2.webp' },
+  { id: 4, name: '강원 홍천 농막', location: '강원 홍천군', size: '18㎡', category: '농막', year: '2023', image: '/images/products/small/private/3x6-house.webp' },
+  { id: 5, name: '충남 태안 세컨하우스', location: '충남 태안군', size: '36㎡', category: '세컨하우스', year: '2023', image: '/images/products/medium/39+33서재.webp' },
+  { id: 6, name: '경북 안동 단독주택', location: '경북 안동시', size: '66㎡', category: '단독주택', year: '2024', image: '/images/products/large/L-2.webp' },
 ];
 
 const categories = ['전체', '단독주택', '세컨하우스', '상업시설', '농막'];
@@ -86,13 +87,17 @@ export function ProjectsV2Client() {
               <ScrollReveal key={project.id} delay={i * 0.06}>
                 <Card className="group overflow-hidden hover:shadow-lg transition-shadow border-border">
                   <div className="aspect-video bg-gray-100 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-                      <span className="text-gray-400 text-sm">시공 사진</span>
-                    </div>
-                    <div className="absolute top-3 left-3">
-                      <Badge className="bg-primary text-[#2D2D2A] border-0 text-xs">{project.category}</Badge>
-                    </div>
-                  </div>
+                     <Image
+                       src={project.image}
+                       alt={project.name}
+                       fill
+                       className="object-cover group-hover:scale-105 transition-transform duration-500"
+                       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                     />
+                     <div className="absolute top-3 left-3">
+                       <Badge className="bg-primary text-[#2D2D2A] border-0 text-xs">{project.category}</Badge>
+                     </div>
+                   </div>
                   <CardContent className="p-5">
                     <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
                       {project.name}
