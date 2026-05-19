@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Noto_Sans_KR } from "next/font/google";
+import { Noto_Sans_KR, Geist } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/components/layout/ClientLayout";
 
@@ -87,6 +87,10 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import Script from 'next/script';
 
 import { LanguageProvider } from '@/contexts/LanguageContext';
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+
 
 export default function RootLayout({
   children,
@@ -133,7 +137,7 @@ export default function RootLayout({
   ];
 
   return (
-    <html lang="ko" className={noto.variable}>
+    <html lang="ko" className={cn("font-sans", geist.variable)}>
       <head>
         <script
           type="application/ld+json"

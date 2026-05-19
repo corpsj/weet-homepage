@@ -149,12 +149,6 @@ export default function ProductGrid({
     const [filterCategory, setFilterCategory] = useState(initialCategory);
     const [filterStatus, setFilterStatus] = useState(initialStatus);
 
-    // Update local state when props change (e.g. navigation)
-    useEffect(() => {
-        setFilterCategory(initialCategory);
-        setFilterStatus(initialStatus);
-    }, [initialCategory, initialStatus]);
-
     const updateFilters = (newCategory: string, newStatus: string) => {
         const params = new URLSearchParams();
         if (newCategory !== 'All') params.set('category', newCategory);

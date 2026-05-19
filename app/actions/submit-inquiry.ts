@@ -16,7 +16,7 @@ export async function submitInquiry(prevState: any, formData: FormData) {
         return { success: false, message: '필수 항목을 입력해주세요.' };
     }
 
-    // eslint-disable-next-line
+     
     const { error } = await (supabase as any)
         .from('inquiries')
         .insert({

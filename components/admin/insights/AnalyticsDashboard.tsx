@@ -80,7 +80,8 @@ export default function AnalyticsDashboard({
         (trafficStats.rows.reduce((acc: number, row: any) => acc + parseFloat(row.metricValues[3].value), 0) / trafficStats.rows.length).toFixed(0)
         : 0;
 
-    const CustomTooltip = ({ active, payload, label }: any) => {
+    // CustomTooltip component moved outside render to avoid recreation on each render
+    const customTooltipContent = ({ active, payload, label }: any) => {
         if (active && payload && payload.length) {
             return (
                 <div className="bg-white p-4 border border-gray-100 shadow-xl rounded-xl">
@@ -178,7 +179,7 @@ export default function AnalyticsDashboard({
                                     axisLine={false}
                                     dx={-10}
                                 />
-                                <Tooltip content={<CustomTooltip />} />
+                                <Tooltip content={customTooltipContent} />
                                 <Area
                                     type="monotone"
                                     dataKey="users"
@@ -223,7 +224,7 @@ export default function AnalyticsDashboard({
                                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                     ))}
                                 </Pie>
-                                <Tooltip content={<CustomTooltip />} />
+                                <Tooltip content={customTooltipContent} />
                             </PieChart>
                         </ResponsiveContainer>
                         {/* Center Text */}
@@ -263,7 +264,7 @@ export default function AnalyticsDashboard({
                                     axisLine={false}
                                     tickLine={false}
                                 />
-                                <Tooltip content={<CustomTooltip />} />
+                                <Tooltip content={customTooltipContent} />
                                 <Bar
                                     dataKey="value"
                                     name="세션 수"
@@ -293,7 +294,7 @@ export default function AnalyticsDashboard({
                                     axisLine={false}
                                     tickLine={false}
                                 />
-                                <Tooltip content={<CustomTooltip />} />
+                                <Tooltip content={customTooltipContent} />
                                 <Bar
                                     dataKey="value"
                                     name="방문자"

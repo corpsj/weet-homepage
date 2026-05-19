@@ -1,0 +1,4 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- 지붕 오버레이 - 빨간색 -->
+  <polygon points="180,250 400,150 620,250" fill="#DC143C" opacity="0.7"/>
+</svg>

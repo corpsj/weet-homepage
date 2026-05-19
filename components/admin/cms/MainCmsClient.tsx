@@ -406,10 +406,8 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
         new Set(products.filter(p => p.is_signature).map(p => p.id))
     );
 
-    // Sync from server when products prop updates
-    useEffect(() => {
-        setOptimisticIds(new Set(products.filter(p => p.is_signature).map(p => p.id)));
-    }, [products]);
+    // Initialize from server - no need to sync on every prop change
+    // The initial state is already set from products prop
 
     const handleToggle = (productId: string) => {
         const currentStatus = optimisticIds.has(productId);

@@ -44,6 +44,12 @@ const navigationKo = [
     ],
   },
   {
+    name: '주문제작',
+    href: '/customize',
+    width: 85,
+    submenu: [],
+  },
+  {
     name: 'SOLUTION',
     href: '/solution',
     width: 155,
@@ -114,6 +120,12 @@ const navigationEn = [
     ],
   },
   {
+    name: 'Customize',
+    href: '/customize',
+    width: 85,
+    submenu: [],
+  },
+  {
     name: 'SOLUTION',
     href: '/solution',
     width: 155,
@@ -155,7 +167,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [mounted, setMounted] = useState(false);
+  const [mounted] = useState(true);
   const { language, setLanguage } = useLanguage();
 
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
@@ -183,12 +195,6 @@ export default function Header() {
   const handleMenuHover = useCallback((menuName: string) => {
     setActiveMenu(menuName);
     setShowMegaMenu(true);
-  }, []);
-
-
-
-  useEffect(() => {
-    setMounted(true);
   }, []);
 
   useEffect(() => {
@@ -408,48 +414,60 @@ export default function Header() {
                   className="mb-8 last:mb-0"
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  <button
-                    onClick={() => setExpandedMenu(isExpanded ? null : item.name)}
-                    className="flex items-center justify-between w-full text-left mb-3"
-                    type="button"
-                  >
-                    <span className="block text-lg md:text-xl font-bold text-black hover:text-gray-600 transition-colors">
-                      {item.name}
-                    </span>
-                    {hasSubmenu && (
-                      <ChevronDown
-                        className={cn(
-                          "w-6 h-6 text-black transition-transform duration-300",
-                          isExpanded && "rotate-180"
-                        )}
-                      />
-                    )}
-                  </button>
-
-                  <AnimatePresence>
-                    {isExpanded && hasSubmenu && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
-                        className="overflow-hidden"
+                  {hasSubmenu ? (
+                    <>
+                      <button
+                        onClick={() => setExpandedMenu(isExpanded ? null : item.name)}
+                        className="flex items-center justify-between w-full text-left mb-3"
+                        type="button"
                       >
-                        <div className="ml-4 space-y-2 pb-2">
-                          {item.submenu.map((subitem, idx) => (
-                            <Link
-                              key={idx}
-                              href={subitem.href}
-                              onClick={handleMobileMenuClose}
-                              className="block text-sm md:text-base text-gray-600 hover:text-black transition-colors py-1"
-                            >
-                              {subitem.name}
-                            </Link>
-                          ))}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                        <span className="block text-lg md:text-xl font-bold text-black hover:text-gray-600 transition-colors">
+                          {item.name}
+                        </span>
+                        {hasSubmenu && (
+                          <ChevronDown
+                            className={cn(
+                              "w-6 h-6 text-black transition-transform duration-300",
+                              isExpanded && "rotate-180"
+                            )}
+                          />
+                        )}
+                      </button>
+
+                      <AnimatePresence>
+                        {isExpanded && hasSubmenu && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.3, ease: "easeInOut" }}
+                            className="overflow-hidden"
+                          >
+                            <div className="ml-4 space-y-2 pb-2">
+                              {item.submenu.map((subitem, idx) => (
+                                <Link
+                                  key={idx}
+                                  href={subitem.href}
+                                  onClick={handleMobileMenuClose}
+                                  className="block text-sm md:text-base text-gray-600 hover:text-black transition-colors py-1"
+                                >
+                                  {subitem.name}
+                                </Link>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      onClick={handleMobileMenuClose}
+                      className="block text-lg md:text-xl font-bold text-black hover:text-gray-600 transition-colors mb-3"
+                    >
+                      {item.name}
+                    </Link>
+                  )}
                 </div>
               );
             })}

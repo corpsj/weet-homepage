@@ -1,0 +1,34 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <!-- 배경 -->
+  <rect width="800" height="600" fill="#f5f5f5"/>
+  
+  <!-- 땅 -->
+  <rect x="0" y="500" width="800" height="100" fill="#8B7355"/>
+  
+  <!-- 집 본체 (벽) -->
+  <rect x="200" y="250" width="400" height="250" fill="#D4C5B0" stroke="#8B7355" stroke-width="2"/>
+  
+  <!-- 문 -->
+  <rect x="350" y="380" width="100" height="120" fill="#6B5340" rx="5"/>
+  <circle cx="440" cy="440" r="5" fill="#FDB813"/>
+  
+  <!-- 창문 2 개 -->
+  <rect x="240" y="300" width="80" height="80" fill="#A8D5E5" stroke="#8B7355" stroke-width="2"/>
+  <rect x="480" y="300" width="80" height="80" fill="#A8D5E5" stroke="#8B7355" stroke-width="2"/>
+  
+  <!-- 지붕 (삼각형) -->
+  <polygon points="180,250 400,150 620,250" fill="#8B4513" stroke="#6B3310" stroke-width="2"/>
+  
+  <!-- 굴뚝 -->
+  <rect x="500" y="120" width="40" height="60" fill="#A0522D"/>
+  
+  <!-- 하늘 -->
+  <circle cx="700" cy="80" r="40" fill="#FDB813"/>
+  
+  <!-- 나무 -->
+  <rect x="50" y="400" width="30" height="100" fill="#6B5340"/>
+  <circle cx="65" cy="380" r="40" fill="#228B22"/>
+  
+  <rect x="720" y="420" width="25" height="80" fill="#6B5340"/>
+  <circle cx="732" cy="400" r="35" fill="#228B22"/>
+</svg>

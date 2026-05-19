@@ -201,7 +201,7 @@ export default function BespokePage() {
             <p className="text-gray-600 leading-relaxed mb-8 text-lg break-keep">
               {section.body}
             </p>
-            <button className="border-b-2 border-black pb-1 text-lg font-medium hover:text-primary hover:border-primary transition-colors">
+            <button className="border-b-2 border-black pb-1 text-lg font-medium hover:text-primary hover:border-primary transition-colors min-h-[44px] inline-flex items-center">
               {section.cta}
             </button>
           </motion.div>

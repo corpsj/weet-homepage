@@ -33,13 +33,6 @@ export default function ImageModal({
 }: ImageModalProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    // Reset index when modal opens with new images
-    useEffect(() => {
-        if (isOpen) {
-            setCurrentIndex(0);
-        }
-    }, [isOpen, images]);
-
     // Handle keyboard navigation
     useEffect(() => {
         if (!isOpen) return;
@@ -93,10 +86,12 @@ export default function ImageModal({
 
     if (!isOpen) return null;
 
+    // Use images as key to force remount when images change
     return createPortal(
         <AnimatePresence>
             {isOpen && (
                 <motion.div
+                    key={images.join(',')}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}

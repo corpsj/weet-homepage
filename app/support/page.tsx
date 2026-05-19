@@ -180,6 +180,8 @@ export default function SupportPage() {
             {copy.quickCards.map((card, idx) => (
               <FadeIn key={card.id} delay={idx * 0.1} className="h-full">
                 <div
+                  role="button"
+                  tabIndex={0}
                   onClick={() => scrollToForm(card.title)}
                   className="group h-full bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col items-start justify-between min-h-[220px] cursor-pointer"
                 >

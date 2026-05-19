@@ -234,7 +234,7 @@ export default function CompanyPage() {
                 <h3 className="text-[11px] md:text-[18px] font-bold mb-3 md:mb-4 text-black break-keep">{t.company.crew.design.title}</h3>
                 <button
                   onClick={() => openModal('design')}
-                  className="bg-[#2D2D2D] text-white w-full md:w-auto px-0 md:px-12 py-1.5 md:py-2.5 text-[10px] md:text-[14px] font-medium hover:bg-primary-dark transition-colors duration-200 mt-auto rounded-sm md:rounded-none"
+                  className="bg-[#2D2D2D] text-white w-full md:w-auto px-0 md:px-12 py-3 md:py-3.5 min-h-[44px] text-[10px] md:text-[14px] font-medium hover:bg-primary-dark transition-colors duration-200 mt-auto rounded-sm md:rounded-none"
                 >
                   {t.company.crew.more}
                 </button>
@@ -253,7 +253,7 @@ export default function CompanyPage() {
                 <h3 className="text-[11px] md:text-[18px] font-bold mb-3 md:mb-4 text-black break-keep">{t.company.crew.construction.title}</h3>
                 <button
                   onClick={() => openModal('construction')}
-                  className="bg-[#2D2D2D] text-white w-full md:w-auto px-0 md:px-12 py-1.5 md:py-2.5 text-[10px] md:text-[14px] font-medium hover:bg-primary-dark transition-colors duration-200 mt-auto rounded-sm md:rounded-none"
+                  className="bg-[#2D2D2D] text-white w-full md:w-auto px-0 md:px-12 py-3 md:py-3.5 min-h-[44px] text-[10px] md:text-[14px] font-medium hover:bg-primary-dark transition-colors duration-200 mt-auto rounded-sm md:rounded-none"
                 >
                   {t.company.crew.more}
                 </button>
@@ -272,7 +272,7 @@ export default function CompanyPage() {
                 <h3 className="text-[11px] md:text-[18px] font-bold mb-3 md:mb-4 text-black break-keep">{t.company.crew.solution.title}</h3>
                 <button
                   onClick={() => openModal('solution')}
-                  className="bg-[#2D2D2D] text-white w-full md:w-auto px-0 md:px-12 py-1.5 md:py-2.5 text-[10px] md:text-[14px] font-medium hover:bg-primary-dark transition-colors duration-200 mt-auto rounded-sm md:rounded-none"
+                  className="bg-[#2D2D2D] text-white w-full md:w-auto px-0 md:px-12 py-3 md:py-3.5 min-h-[44px] text-[10px] md:text-[14px] font-medium hover:bg-primary-dark transition-colors duration-200 mt-auto rounded-sm md:rounded-none"
                 >
                   {t.company.crew.more}
                 </button>

@@ -22,7 +22,6 @@ export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
-            setCurrentImageIndex(0); // Reset to first image on open
         } else {
             document.body.style.overflow = 'unset';
         }
@@ -32,6 +31,9 @@ export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
     }, [isOpen]);
 
     if (!isOpen || !data) return null;
+
+    // Reset index when data changes by using key prop on inner content
+    const key = data.name + data.images.length;
 
     const nextImage = () => {
         setCurrentImageIndex((prev) => (prev + 1) % data.images.length);
@@ -44,6 +46,7 @@ export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300" onClick={onClose}>
             <div
+                key={key}
                 className="bg-white w-full max-w-5xl h-[85vh] rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden animate-in fade-in zoom-in-95 duration-300"
                 onClick={(e) => e.stopPropagation()}
             >

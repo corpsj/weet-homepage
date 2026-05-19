@@ -145,8 +145,8 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
             </div>
 
             {/* Scroll Down Indicator */}
-            <motion.div
-                className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center cursor-pointer"
+            <motion.button
+                className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center cursor-pointer min-h-[44px]"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1, duration: 1 }}
@@ -161,7 +161,7 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                         <path d="M7 10L12 15L17 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                     </svg>
                 </motion.div>
-            </motion.div>
+            </motion.button>
         </section>
     );
 }

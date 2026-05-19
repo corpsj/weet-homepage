@@ -13,7 +13,7 @@ type Product = Database['public']['Tables']['products']['Row'];
 export async function getHeroSlides() {
     const supabase = await createClient();
     console.log('--- SERVER: getHeroSlides START ---');
-    // eslint-disable-next-line
+     
     const { data, error } = await (supabase as any)
         .from('hero_slides')
         .select('*')
@@ -39,7 +39,7 @@ export async function createHeroSlide(data: { title: string; subtitle: string; i
         const { title, subtitle, image_url } = data;
 
         // Get max sort_order
-        // eslint-disable-next-line
+         
         const { data: maxOrderData, error: maxOrderError } = await (supabase as any)
             .from('hero_slides')
             .select('sort_order')
@@ -53,7 +53,7 @@ export async function createHeroSlide(data: { title: string; subtitle: string; i
 
         const nextOrder = (maxOrderData?.sort_order || 0) + 1;
 
-        // eslint-disable-next-line
+         
         const { error } = await (supabase as any)
             .from('hero_slides')
             .insert({
@@ -85,7 +85,7 @@ export async function updateHeroSlide(id: number, data: { title: string; subtitl
         const supabase = createServiceRoleClient();
         const { title, subtitle, image_url } = data;
 
-        // eslint-disable-next-line
+         
         const { error } = await (supabase as any)
             .from('hero_slides')
             .update({
@@ -113,7 +113,7 @@ export async function updateHeroSlide(id: number, data: { title: string; subtitl
 export async function deleteHeroSlide(id: number) {
     // Use Service Role Client to bypass RLS
     const supabase = createServiceRoleClient();
-    // eslint-disable-next-line
+     
     const { error } = await (supabase as any)
         .from('hero_slides')
         .delete()
@@ -136,7 +136,7 @@ export async function reorderHeroSlides(ids: number[]) {
         // Sequential updates to avoid partial upsert validation issues
         for (let i = 0; i < ids.length; i++) {
             const id = ids[i];
-            // eslint-disable-next-line
+             
             const { error } = await (supabase as any)
                 .from('hero_slides')
                 .update({ sort_order: i })
@@ -162,7 +162,7 @@ export async function reorderHeroSlides(ids: number[]) {
 
 export async function getSignatureProducts() {
     const supabase = await createClient();
-    // eslint-disable-next-line
+     
     const { data, error } = await (supabase as any)
         .from('products')
         .select('*')
@@ -182,7 +182,7 @@ export async function updateSignatureStatus(productId: string, isSignature: bool
 
     // Check current count if enabling
     if (isSignature) {
-        // eslint-disable-next-line
+         
         const { count, error: countError } = await (supabase as any)
             .from('products')
             .select('*', { count: 'exact', head: true })
@@ -194,7 +194,7 @@ export async function updateSignatureStatus(productId: string, isSignature: bool
         }
     }
 
-    // eslint-disable-next-line
+     
     const { error } = await (supabase as any)
         .from('products')
         .update({ is_signature: isSignature })
