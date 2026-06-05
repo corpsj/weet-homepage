@@ -1,10 +1,13 @@
 'use server';
 
-import { getSupabaseAdmin, supabase } from '@/lib/supabase';
+import { getSupabaseAdmin } from '@/lib/supabase';
 import { Inquiry, InquiryUpdate } from '@/types/supabase';
 import { revalidatePath } from 'next/cache';
+import { requireAdmin } from '@/lib/admin-auth';
 
 export async function getInquiries(page = 1, limit = 20, status?: string) {
+    await requireAdmin();
+
     const admin = getSupabaseAdmin();
     let query = admin
         .from('inquiries')
@@ -32,6 +35,8 @@ export async function getInquiries(page = 1, limit = 20, status?: string) {
 }
 
 export async function getInquiry(id: string) {
+    await requireAdmin();
+
     const admin = getSupabaseAdmin();
     const { data, error } = await admin
         .from('inquiries')
@@ -48,6 +53,8 @@ export async function getInquiry(id: string) {
 }
 
 export async function updateInquiryStatus(id: string, status: 'new' | 'read' | 'replied') {
+    await requireAdmin();
+
     const admin = getSupabaseAdmin();
     const { error } = await admin
         .from('inquiries')
@@ -64,6 +71,8 @@ export async function updateInquiryStatus(id: string, status: 'new' | 'read' | '
 }
 
 export async function replyToInquiry(id: string, replyContent: string) {
+    await requireAdmin();
+
     const admin = getSupabaseAdmin();
     const { error } = await admin
         .from('inquiries')
@@ -87,6 +96,8 @@ export async function replyToInquiry(id: string, replyContent: string) {
 }
 
 export async function deleteInquiry(id: string) {
+    await requireAdmin();
+
     const admin = getSupabaseAdmin();
     const { error } = await admin
         .from('inquiries')

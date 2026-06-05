@@ -1,10 +1,10 @@
 'use client';
 
 import {
-    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-    BarChart, Bar, PieChart, Pie, Cell, Legend, Area, AreaChart
+    XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+    BarChart, Bar, PieChart, Pie, Cell, Area, AreaChart
 } from 'recharts';
-import { ArrowUpRight, Users, MousePointer, Clock, TrendingUp, Monitor, Smartphone, Globe } from 'lucide-react';
+import { ArrowUpRight, Users, MousePointer, Clock, TrendingUp, Monitor } from 'lucide-react';
 import Link from 'next/link';
 
 interface AnalyticsMetric {
@@ -33,6 +33,24 @@ interface AnalyticsDashboardProps {
 }
 
 const COLORS = ['#111827', '#4B5563', '#9CA3AF', '#D1D5DB', '#E5E7EB'];
+
+function CustomTooltip({ active, payload, label }: any) {
+    if (active && payload && payload.length) {
+        return (
+            <div className="bg-white p-4 border border-gray-100 shadow-xl rounded-xl">
+                <p className="text-sm font-bold text-gray-900 mb-2">{label}</p>
+                {payload.map((entry: any, index: number) => (
+                    <div key={index} className="flex items-center gap-2 text-xs mb-1 last:mb-0">
+                        <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
+                        <span className="text-gray-500">{entry.name}:</span>
+                        <span className="font-medium text-gray-900">{entry.value.toLocaleString()}</span>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+    return null;
+}
 
 export default function AnalyticsDashboard({
     trafficStats,
@@ -79,25 +97,6 @@ export default function AnalyticsDashboard({
     const avgSession = trafficStats?.rows ?
         (trafficStats.rows.reduce((acc: number, row: any) => acc + parseFloat(row.metricValues[3].value), 0) / trafficStats.rows.length).toFixed(0)
         : 0;
-
-    // CustomTooltip component moved outside render to avoid recreation on each render
-    const customTooltipContent = ({ active, payload, label }: any) => {
-        if (active && payload && payload.length) {
-            return (
-                <div className="bg-white p-4 border border-gray-100 shadow-xl rounded-xl">
-                    <p className="text-sm font-bold text-gray-900 mb-2">{label}</p>
-                    {payload.map((entry: any, index: number) => (
-                        <div key={index} className="flex items-center gap-2 text-xs mb-1 last:mb-0">
-                            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: entry.color }} />
-                            <span className="text-gray-500">{entry.name}:</span>
-                            <span className="font-medium text-gray-900">{entry.value.toLocaleString()}</span>
-                        </div>
-                    ))}
-                </div>
-            );
-        }
-        return null;
-    };
 
     return (
         <div className="space-y-8 animate-fade-in">
@@ -179,7 +178,7 @@ export default function AnalyticsDashboard({
                                     axisLine={false}
                                     dx={-10}
                                 />
-                                <Tooltip content={customTooltipContent} />
+                                <Tooltip content={<CustomTooltip />} />
                                 <Area
                                     type="monotone"
                                     dataKey="users"
@@ -224,7 +223,7 @@ export default function AnalyticsDashboard({
                                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                     ))}
                                 </Pie>
-                                <Tooltip content={customTooltipContent} />
+                                <Tooltip content={<CustomTooltip />} />
                             </PieChart>
                         </ResponsiveContainer>
                         {/* Center Text */}
@@ -264,7 +263,7 @@ export default function AnalyticsDashboard({
                                     axisLine={false}
                                     tickLine={false}
                                 />
-                                <Tooltip content={customTooltipContent} />
+                                <Tooltip content={<CustomTooltip />} />
                                 <Bar
                                     dataKey="value"
                                     name="세션 수"
@@ -294,7 +293,7 @@ export default function AnalyticsDashboard({
                                     axisLine={false}
                                     tickLine={false}
                                 />
-                                <Tooltip content={customTooltipContent} />
+                                <Tooltip content={<CustomTooltip />} />
                                 <Bar
                                     dataKey="value"
                                     name="방문자"

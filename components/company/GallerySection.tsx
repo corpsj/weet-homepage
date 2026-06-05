@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Image from 'next/image';
 import { createClient } from '@/utils/supabase/client';
 import { Database } from '@/types/supabase';
@@ -14,7 +14,7 @@ export default function GallerySection() {
     const [items, setItems] = useState<GalleryItem[]>([]);
     const [loading, setLoading] = useState(true);
     const { language } = useLanguage();
-    const supabase = createClient();
+    const supabase = useMemo(() => createClient(), []);
 
     useEffect(() => {
         const fetchItems = async () => {
@@ -36,7 +36,7 @@ export default function GallerySection() {
         };
 
         fetchItems();
-    }, []);
+    }, [supabase]);
 
     const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 

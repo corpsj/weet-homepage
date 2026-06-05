@@ -8,6 +8,7 @@ import { Loader2, X } from 'lucide-react';
 import { toast } from 'sonner';
 import ImageUpload from '@/components/admin/media/ImageUpload';
 import MultiImageUpload from '@/components/admin/media/MultiImageUpload';
+import Image from 'next/image';
 
 interface ProductFormProps {
     initialData?: Product;
@@ -298,7 +299,13 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
                             {formData.sub_images?.map((url, index) => (
                                 <div key={index} className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden border">
-                                    <img src={url} alt={`Sub ${index}`} className="w-full h-full object-cover" />
+                                    <Image
+                                        src={url}
+                                        alt={`Sub ${index}`}
+                                        fill
+                                        sizes="(max-width: 768px) 50vw, 220px"
+                                        className="object-cover"
+                                    />
                                     <button
                                         type="button"
                                         onClick={() => handleSubImageRemove(index)}

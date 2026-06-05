@@ -4,7 +4,6 @@ import SignatureLineClient from './SignatureLineClient';
 
 async function getSignatureProducts(): Promise<Product[]> {
   const supabase = await createClient();
-   
   const { data, error } = await (supabase as any)
     .from('products')
     .select('*')

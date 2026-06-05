@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -33,12 +33,17 @@ export default function ImageModal({
 }: ImageModalProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
+    const handleClose = useCallback(() => {
+        setCurrentIndex(0);
+        onClose();
+    }, [onClose]);
+
     // Handle keyboard navigation
     useEffect(() => {
         if (!isOpen) return;
 
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') onClose();
+            if (e.key === 'Escape') handleClose();
 
             // Internal carousel navigation
             if (e.key === 'ArrowRight') {
@@ -64,7 +69,7 @@ export default function ImageModal({
             window.removeEventListener('keydown', handleKeyDown);
             document.body.style.overflow = 'unset';
         };
-    }, [isOpen, onClose, onNext, onPrev, hasNext, hasPrev, currentIndex, images.length]);
+    }, [isOpen, handleClose, onNext, onPrev, hasNext, hasPrev, currentIndex, images.length]);
 
     const handleNext = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -97,7 +102,7 @@ export default function ImageModal({
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
                     className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 md:p-8"
-                    onClick={onClose}
+                    onClick={handleClose}
                 >
                     <motion.div
                         initial={{ scale: 0.95, opacity: 0 }}
@@ -160,7 +165,7 @@ export default function ImageModal({
                             {/* Header */}
                             <div className="p-6 border-b border-gray-100 flex items-center justify-end">
                                 <button
-                                    onClick={onClose}
+                                    onClick={handleClose}
                                     className="p-1 hover:bg-gray-100 rounded-full transition-colors"
                                 >
                                     <X className="w-6 h-6 text-black" />

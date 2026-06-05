@@ -78,6 +78,94 @@ export interface Database {
         }
         Relationships: []
       }
+      bespoke_option_groups: {
+        Row: {
+          id: string
+          key: string
+          title: string
+          description: string | null
+          selection_type: 'single' | 'multiple'
+          required: boolean
+          display_order: number
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          key: string
+          title: string
+          description?: string | null
+          selection_type?: 'single' | 'multiple'
+          required?: boolean
+          display_order?: number
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          key?: string
+          title?: string
+          description?: string | null
+          selection_type?: 'single' | 'multiple'
+          required?: boolean
+          display_order?: number
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      bespoke_options: {
+        Row: {
+          id: string
+          group_id: string
+          label: string
+          description: string | null
+          price_delta: number
+          lead_time_note: string | null
+          badge: string | null
+          display_order: number
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          group_id: string
+          label: string
+          description?: string | null
+          price_delta?: number
+          lead_time_note?: string | null
+          badge?: string | null
+          display_order?: number
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          group_id?: string
+          label?: string
+          description?: string | null
+          price_delta?: number
+          lead_time_note?: string | null
+          badge?: string | null
+          display_order?: number
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bespoke_options_group_id_fkey"
+            columns: ["group_id"]
+            referencedRelation: "bespoke_option_groups"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
       inquiries: {
         Row: {
           id: string
@@ -333,6 +421,16 @@ export type Product = Database['public']['Tables']['products']['Row']
 export type ProductInsert = Database['public']['Tables']['products']['Insert']
 export type ProductUpdate = Database['public']['Tables']['products']['Update']
 
+export type BespokeOptionGroup = Database['public']['Tables']['bespoke_option_groups']['Row']
+export type BespokeOptionGroupInsert = Database['public']['Tables']['bespoke_option_groups']['Insert']
+export type BespokeOptionGroupUpdate = Database['public']['Tables']['bespoke_option_groups']['Update']
+export type BespokeOption = Database['public']['Tables']['bespoke_options']['Row']
+export type BespokeOptionInsert = Database['public']['Tables']['bespoke_options']['Insert']
+export type BespokeOptionUpdate = Database['public']['Tables']['bespoke_options']['Update']
+export type BespokeOptionGroupWithOptions = BespokeOptionGroup & {
+  options: BespokeOption[]
+}
+
 export type Faq = Database['public']['Tables']['faqs']['Row']
 export type FaqInsert = Database['public']['Tables']['faqs']['Insert']
 export type FaqUpdate = Database['public']['Tables']['faqs']['Update']
@@ -340,6 +438,10 @@ export type FaqUpdate = Database['public']['Tables']['faqs']['Update']
 export type Inquiry = Database['public']['Tables']['inquiries']['Row']
 export type InquiryInsert = Database['public']['Tables']['inquiries']['Insert']
 export type InquiryUpdate = Database['public']['Tables']['inquiries']['Update']
+
+export type GalleryItem = Database['public']['Tables']['gallery']['Row']
+export type GalleryInsert = Database['public']['Tables']['gallery']['Insert']
+export type GalleryUpdate = Database['public']['Tables']['gallery']['Update']
 
 export type Project = Database['public']['Tables']['projects']['Row']
 export type ProjectInsert = Database['public']['Tables']['projects']['Insert']

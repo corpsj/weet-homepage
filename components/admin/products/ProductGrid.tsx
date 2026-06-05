@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Plus, Edit, LayoutGrid, List } from 'lucide-react';
@@ -146,8 +146,6 @@ export default function ProductGrid({
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState<Product | undefined>(undefined);
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-    const [filterCategory, setFilterCategory] = useState(initialCategory);
-    const [filterStatus, setFilterStatus] = useState(initialStatus);
 
     const updateFilters = (newCategory: string, newStatus: string) => {
         const params = new URLSearchParams();
@@ -159,14 +157,12 @@ export default function ProductGrid({
 
     const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newValue = e.target.value;
-        setFilterCategory(newValue);
-        updateFilters(newValue, filterStatus);
+        updateFilters(newValue, initialStatus);
     };
 
     const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newValue = e.target.value;
-        setFilterStatus(newValue);
-        updateFilters(filterCategory, newValue);
+        updateFilters(initialCategory, newValue);
     };
 
     const handleCreate = () => {
@@ -211,7 +207,7 @@ export default function ProductGrid({
 
                     {/* Filters */}
                     <select
-                        value={filterCategory}
+                        value={initialCategory}
                         onChange={handleCategoryChange}
                         className="px-3 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-black bg-white"
                     >
@@ -223,7 +219,7 @@ export default function ProductGrid({
                     </select>
 
                     <select
-                        value={filterStatus}
+                        value={initialStatus}
                         onChange={handleStatusChange}
                         className="px-3 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-black bg-white"
                     >

@@ -1,6 +1,6 @@
 import nextCoreWebVitals from 'eslint-config-next/core-web-vitals';
 
-export default [
+const eslintConfig = [
   {
     ignores: ['.next/**', 'out/**', 'build/**', 'node_modules/**'],
   },
@@ -11,3 +11,5 @@ export default [
     },
   },
 ];
+
+export default eslintConfig;

@@ -2,6 +2,7 @@
 
 import { getSupabaseAdmin, supabase } from '@/lib/supabase';
 import { revalidatePath } from 'next/cache';
+import { requireAdmin } from '@/lib/admin-auth';
 
 export interface Notice {
     id: string;
@@ -28,6 +29,8 @@ export async function getNotices() {
 }
 
 export async function createNotice(notice: { title: string; content: string; is_pinned?: boolean; is_active?: boolean }) {
+    await requireAdmin();
+
     const admin = getSupabaseAdmin();
     const { data, error } = await admin
         .from('notices')
@@ -46,6 +49,8 @@ export async function createNotice(notice: { title: string; content: string; is_
 }
 
 export async function updateNotice(id: string, notice: any) {
+    await requireAdmin();
+
     const admin = getSupabaseAdmin();
     const { data, error } = await admin
         .from('notices')
@@ -65,6 +70,8 @@ export async function updateNotice(id: string, notice: any) {
 }
 
 export async function deleteNotice(id: string) {
+    await requireAdmin();
+
     const admin = getSupabaseAdmin();
     const { error } = await admin
         .from('notices')

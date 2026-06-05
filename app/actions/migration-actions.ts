@@ -1,6 +1,7 @@
 'use server';
 
 import { supabaseAdmin } from '@/lib/supabase';
+import { requireAdmin } from '@/lib/admin-auth';
 
 const productsData = [
     {
@@ -267,6 +268,8 @@ const productsData = [
 ];
 
 export async function migrateProducts() {
+    await requireAdmin();
+
     console.log('Starting migration...');
 
     // 1. Clear existing data

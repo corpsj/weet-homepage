@@ -8,11 +8,12 @@ import {
     getTopPages
 } from '@/lib/analytics';
 import { unstable_cache } from 'next/cache';
+import { requireAdmin } from '@/lib/admin-auth';
 
 // Cache configuration
 const CACHE_TIME = 3600; // 1 hour
 
-export const fetchTrafficStats = unstable_cache(
+const cachedTrafficStats = unstable_cache(
     async (startDate?: string, endDate?: string) => {
         return await getTrafficStats(startDate, endDate);
     },
@@ -20,7 +21,7 @@ export const fetchTrafficStats = unstable_cache(
     { revalidate: CACHE_TIME, tags: ['analytics'] }
 );
 
-export const fetchUserDemographics = unstable_cache(
+const cachedUserDemographics = unstable_cache(
     async (startDate?: string, endDate?: string) => {
         return await getUserDemographics(startDate, endDate);
     },
@@ -28,7 +29,7 @@ export const fetchUserDemographics = unstable_cache(
     { revalidate: CACHE_TIME, tags: ['analytics'] }
 );
 
-export const fetchCityDemographics = unstable_cache(
+const cachedCityDemographics = unstable_cache(
     async (startDate?: string, endDate?: string) => {
         return await getCityDemographics(startDate, endDate);
     },
@@ -36,7 +37,7 @@ export const fetchCityDemographics = unstable_cache(
     { revalidate: CACHE_TIME, tags: ['analytics'] }
 );
 
-export const fetchAcquisitionSources = unstable_cache(
+const cachedAcquisitionSources = unstable_cache(
     async (startDate?: string, endDate?: string) => {
         return await getAcquisitionSources(startDate, endDate);
     },
@@ -44,10 +45,35 @@ export const fetchAcquisitionSources = unstable_cache(
     { revalidate: CACHE_TIME, tags: ['analytics'] }
 );
 
-export const fetchTopPages = unstable_cache(
+const cachedTopPages = unstable_cache(
     async (startDate?: string, endDate?: string) => {
         return await getTopPages(startDate, endDate);
     },
     ['analytics-top-pages'],
     { revalidate: CACHE_TIME, tags: ['analytics'] }
 );
+
+export async function fetchTrafficStats(startDate?: string, endDate?: string) {
+    await requireAdmin();
+    return cachedTrafficStats(startDate, endDate);
+}
+
+export async function fetchUserDemographics(startDate?: string, endDate?: string) {
+    await requireAdmin();
+    return cachedUserDemographics(startDate, endDate);
+}
+
+export async function fetchCityDemographics(startDate?: string, endDate?: string) {
+    await requireAdmin();
+    return cachedCityDemographics(startDate, endDate);
+}
+
+export async function fetchAcquisitionSources(startDate?: string, endDate?: string) {
+    await requireAdmin();
+    return cachedAcquisitionSources(startDate, endDate);
+}
+
+export async function fetchTopPages(startDate?: string, endDate?: string) {
+    await requireAdmin();
+    return cachedTopPages(startDate, endDate);
+}

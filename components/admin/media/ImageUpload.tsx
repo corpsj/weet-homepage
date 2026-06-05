@@ -4,7 +4,6 @@ import { useState, useRef } from 'react';
 import { Upload, X, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import Image from 'next/image';
-import { createClient } from '@/utils/supabase/client';
 import imageCompression from 'browser-image-compression';
 import { uploadImageAction } from '@/app/actions/storage-actions';
 
@@ -27,7 +26,6 @@ export default function ImageUpload({
 }: ImageUploadProps) {
     const [loading, setLoading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
-    const supabase = createClient();
 
     const handleClick = () => {
         inputRef.current?.click();

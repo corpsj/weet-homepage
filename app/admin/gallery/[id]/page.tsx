@@ -1,73 +1,29 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import { createClient } from '@/utils/supabase/client';
-import { Database } from '@/types/supabase';
+import { notFound } from 'next/navigation';
 import GalleryForm from '@/components/admin/gallery/GalleryForm';
-import { Loader2 } from 'lucide-react';
+import { getGalleryItemForAdmin } from '@/app/actions/gallery-actions';
 
-type GalleryItem = Database['public']['Tables']['gallery']['Row'];
+export const dynamic = 'force-dynamic';
 
-export default function EditGalleryPage() {
-    const params = useParams();
-    const [item, setItem] = useState<GalleryItem | null>(null);
-    const [loading, setLoading] = useState(true);
-    const supabase = createClient();
+export default async function EditGalleryPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const item = await getGalleryItemForAdmin(id);
 
-    const itemId = (() => {
-        const raw = params?.id;
-        if (typeof raw === 'string') return raw;
-        if (Array.isArray(raw)) return raw[0];
-        return undefined;
-    })();
+  if (!item) {
+    notFound();
+  }
 
-    useEffect(() => {
-        if (!itemId) {
-            setLoading(false);
-            return;
-        }
+  return (
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight text-gray-900">이미지 수정</h1>
+        <p className="text-gray-500 text-sm mt-1">프로젝트 이미지를 수정합니다.</p>
+      </div>
 
-        const fetchItem = async (id: string) => {
-            try {
-                const { data, error } = await supabase
-                    .from('gallery')
-                    .select('*')
-                    .eq('id', id)
-                    .single();
-
-                if (error) throw error;
-                setItem(data);
-            } catch (error) {
-                console.error('Error fetching gallery item:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchItem(itemId);
-    }, [itemId, supabase]);
-
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center h-64">
-                <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
-            </div>
-        );
-    }
-
-    if (!item) {
-        return <div>이 아이템을 찾을 수 없습니다.</div>;
-    }
-
-    return (
-        <div className="space-y-6">
-            <div>
-                <h1 className="text-2xl font-bold tracking-tight text-gray-900">이미지 수정</h1>
-                <p className="text-gray-500 text-sm mt-1">프로젝트 이미지를 수정합니다.</p>
-            </div>
-
-            <GalleryForm initialData={item} />
-        </div>
-    );
+      <GalleryForm initialData={item} />
+    </div>
+  );
 }

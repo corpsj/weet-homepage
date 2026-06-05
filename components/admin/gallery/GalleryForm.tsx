@@ -6,14 +6,13 @@ import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import { createClient } from '@/utils/supabase/client';
 import { toast } from 'sonner';
 import { Loader2, Plus, X, Upload, GripVertical } from 'lucide-react';
-import { Database } from '@/types/supabase';
+import { GalleryItem } from '@/types/supabase';
 import imageCompression from 'browser-image-compression';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-
-type GalleryItem = Database['public']['Tables']['gallery']['Row'];
+import { saveGalleryItem } from '@/app/actions/gallery-actions';
+import { uploadImageAction } from '@/app/actions/storage-actions';
 
 const formSchema = z.object({
     title: z.string().min(1, '제목을 입력해주세요.'),
@@ -30,7 +29,6 @@ interface GalleryFormProps {
 
 export default function GalleryForm({ initialData }: GalleryFormProps) {
     const router = useRouter();
-    const supabase = createClient();
     const [loading, setLoading] = useState(false);
     const [images, setImages] = useState<string[]>(
         initialData ? [initialData.image_url, ...(initialData.sub_images || [])].filter(Boolean) : []
@@ -81,20 +79,21 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
                 }
 
                 const fileExt = fileToUpload.name.split('.').pop();
-                const fileName = `${Math.random()}.${fileExt}`;
+                const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
                 const filePath = `gallery/${fileName}`;
 
-                const { error: uploadError } = await supabase.storage
-                    .from('images')
-                    .upload(filePath, fileToUpload);
+                const formData = new FormData();
+                formData.append('file', fileToUpload);
+                formData.append('bucket', 'images');
+                formData.append('path', filePath);
 
-                if (uploadError) throw uploadError;
+                const result = await uploadImageAction(formData);
 
-                const { data: { publicUrl } } = supabase.storage
-                    .from('images')
-                    .getPublicUrl(filePath);
+                if (!result.success || !result.url) {
+                    throw new Error(result.error || 'Upload failed');
+                }
 
-                newImages.push(publicUrl);
+                newImages.push(result.url);
             }
 
             setImages((prev) => [...prev, ...newImages]);
@@ -135,34 +134,18 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
             const mainImage = images[0];
             const subImages = images.slice(1);
 
-            if (initialData) {
-                // Update
-                const { error } = await supabase
-                    .from('gallery')
-                    .update({
-                        ...parsed,
-                        image_url: mainImage,
-                        sub_images: subImages,
-                        updated_at: new Date().toISOString(),
-                    })
-                    .eq('id', initialData.id);
+            const result = await saveGalleryItem({
+                ...(initialData ? { id: initialData.id } : {}),
+                ...parsed,
+                image_url: mainImage,
+                sub_images: subImages,
+            });
 
-                if (error) throw error;
-                toast.success('수정되었습니다.');
-            } else {
-                // Create
-                const { error } = await supabase
-                    .from('gallery')
-                    .insert({
-                        ...parsed,
-                        image_url: mainImage,
-                        sub_images: subImages,
-                    });
-
-                if (error) throw error;
-                toast.success('등록되었습니다.');
+            if (!result.success) {
+                throw new Error(result.message || 'Save failed');
             }
 
+            toast.success(initialData ? '수정되었습니다.' : '등록되었습니다.');
             router.push('/admin/gallery');
             router.refresh();
         } catch (error) {

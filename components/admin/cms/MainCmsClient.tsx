@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useTransition, useEffect } from 'react';
+import { useMemo, useState, useTransition, useEffect } from 'react';
 import { Save, Plus, Trash2, GripVertical, Image as ImageIcon, Loader2 } from 'lucide-react';
 import Image from 'next/image';
 import { Database } from '@/types/supabase';
@@ -401,39 +401,42 @@ function HeroSlideForm({
 function SignatureLineEditor({ products }: { products: Product[] }) {
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
-    // Local optimistic state
-    const [optimisticIds, setOptimisticIds] = useState<Set<string>>(
-        new Set(products.filter(p => p.is_signature).map(p => p.id))
+    const serverSignatureIds = useMemo(
+        () => new Set(products.filter(p => p.is_signature).map(p => p.id)),
+        [products]
     );
-
-    // Initialize from server - no need to sync on every prop change
-    // The initial state is already set from products prop
+    const [pendingOverrides, setPendingOverrides] = useState<Record<string, boolean>>({});
+    const optimisticIds = useMemo(() => {
+        const next = new Set(serverSignatureIds);
+        Object.entries(pendingOverrides).forEach(([id, isSignature]) => {
+            if (isSignature) next.add(id);
+            else next.delete(id);
+        });
+        return next;
+    }, [serverSignatureIds, pendingOverrides]);
 
     const handleToggle = (productId: string) => {
         const currentStatus = optimisticIds.has(productId);
         const newStatus = !currentStatus;
 
         // 1. Optimistic Update
-        setOptimisticIds(prev => {
-            const next = new Set(prev);
-            if (newStatus) next.add(productId);
-            else next.delete(productId);
-            return next;
-        });
+        setPendingOverrides(prev => ({ ...prev, [productId]: newStatus }));
 
         // 2. Server Action
         startTransition(async () => {
             try {
                 await updateSignatureStatus(productId, newStatus);
+                setPendingOverrides(prev => {
+                    const { [productId]: _, ...rest } = prev;
+                    return rest;
+                });
                 router.refresh();
             } catch (error: any) {
                 // Revert on error
                 toast.error(error.message || '업데이트 실패');
-                setOptimisticIds(prev => {
-                    const next = new Set(prev);
-                    if (currentStatus) next.add(productId); // Restore old status
-                    else next.delete(productId);
-                    return next;
+                setPendingOverrides(prev => {
+                    const { [productId]: _, ...rest } = prev;
+                    return rest;
                 });
             }
         });

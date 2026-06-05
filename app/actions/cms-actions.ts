@@ -4,6 +4,7 @@ import { createClient } from '@/utils/supabase/server';
 import { createServiceRoleClient } from '@/utils/supabase/service';
 import { revalidatePath } from 'next/cache';
 import { Database } from '@/types/supabase';
+import { requireAdmin } from '@/lib/admin-auth';
 
 type HeroSlide = Database['public']['Tables']['hero_slides']['Row'];
 type Product = Database['public']['Tables']['products']['Row'];
@@ -11,9 +12,9 @@ type Product = Database['public']['Tables']['products']['Row'];
 // --- Hero Slides ---
 
 export async function getHeroSlides() {
+    await requireAdmin();
+
     const supabase = await createClient();
-    console.log('--- SERVER: getHeroSlides START ---');
-     
     const { data, error } = await (supabase as any)
         .from('hero_slides')
         .select('*')
@@ -24,22 +25,17 @@ export async function getHeroSlides() {
         return [];
     }
 
-    console.log('--- SERVER: getHeroSlides SUCCESS ---', {
-        count: data?.length,
-        firstTitle: data?.[0]?.title,
-        columns: data && data.length > 0 ? Object.keys(data[0]) : 'no data'
-    });
     return data as HeroSlide[];
 }
 
 export async function createHeroSlide(data: { title: string; subtitle: string; image_url: string }) {
+    await requireAdmin();
+
     try {
-        console.log('--- SERVER: createHeroSlide START ---', data);
         const supabase = createServiceRoleClient();
         const { title, subtitle, image_url } = data;
 
         // Get max sort_order
-         
         const { data: maxOrderData, error: maxOrderError } = await (supabase as any)
             .from('hero_slides')
             .select('sort_order')
@@ -53,7 +49,6 @@ export async function createHeroSlide(data: { title: string; subtitle: string; i
 
         const nextOrder = (maxOrderData?.sort_order || 0) + 1;
 
-         
         const { error } = await (supabase as any)
             .from('hero_slides')
             .insert({
@@ -71,7 +66,6 @@ export async function createHeroSlide(data: { title: string; subtitle: string; i
 
         revalidatePath('/admin/main');
         revalidatePath('/');
-        console.log('--- SERVER: createHeroSlide SUCCESS ---');
         return { success: true };
     } catch (error: any) {
         console.error('--- SERVER: createHeroSlide FAILED ---', error);
@@ -80,12 +74,12 @@ export async function createHeroSlide(data: { title: string; subtitle: string; i
 }
 
 export async function updateHeroSlide(id: number, data: { title: string; subtitle: string; image_url: string }) {
+    await requireAdmin();
+
     try {
-        console.log('--- SERVER: updateHeroSlide START ---', id, data);
         const supabase = createServiceRoleClient();
         const { title, subtitle, image_url } = data;
 
-         
         const { error } = await (supabase as any)
             .from('hero_slides')
             .update({
@@ -102,7 +96,6 @@ export async function updateHeroSlide(id: number, data: { title: string; subtitl
 
         revalidatePath('/admin/main');
         revalidatePath('/');
-        console.log('--- SERVER: updateHeroSlide SUCCESS ---');
         return { success: true };
     } catch (error: any) {
         console.error('--- SERVER: updateHeroSlide FAILED ---', error);
@@ -111,9 +104,10 @@ export async function updateHeroSlide(id: number, data: { title: string; subtitl
 }
 
 export async function deleteHeroSlide(id: number) {
+    await requireAdmin();
+
     // Use Service Role Client to bypass RLS
     const supabase = createServiceRoleClient();
-     
     const { error } = await (supabase as any)
         .from('hero_slides')
         .delete()
@@ -129,14 +123,14 @@ export async function deleteHeroSlide(id: number) {
 }
 
 export async function reorderHeroSlides(ids: number[]) {
+    await requireAdmin();
+
     try {
-        console.log('--- SERVER: reorderHeroSlides START ---', ids);
         const supabase = createServiceRoleClient();
 
         // Sequential updates to avoid partial upsert validation issues
         for (let i = 0; i < ids.length; i++) {
             const id = ids[i];
-             
             const { error } = await (supabase as any)
                 .from('hero_slides')
                 .update({ sort_order: i })
@@ -150,7 +144,6 @@ export async function reorderHeroSlides(ids: number[]) {
 
         revalidatePath('/admin/main');
         revalidatePath('/');
-        console.log('--- SERVER: reorderHeroSlides SUCCESS ---');
         return { success: true };
     } catch (error: any) {
         console.error('--- SERVER: reorderHeroSlides FAILED ---', error);
@@ -161,8 +154,9 @@ export async function reorderHeroSlides(ids: number[]) {
 // --- Signature Line ---
 
 export async function getSignatureProducts() {
+    await requireAdmin();
+
     const supabase = await createClient();
-     
     const { data, error } = await (supabase as any)
         .from('products')
         .select('*')
@@ -178,11 +172,12 @@ export async function getSignatureProducts() {
 }
 
 export async function updateSignatureStatus(productId: string, isSignature: boolean) {
+    await requireAdmin();
+
     const supabase = createServiceRoleClient();
 
     // Check current count if enabling
     if (isSignature) {
-         
         const { count, error: countError } = await (supabase as any)
             .from('products')
             .select('*', { count: 'exact', head: true })
@@ -194,7 +189,6 @@ export async function updateSignatureStatus(productId: string, isSignature: bool
         }
     }
 
-     
     const { error } = await (supabase as any)
         .from('products')
         .update({ is_signature: isSignature })

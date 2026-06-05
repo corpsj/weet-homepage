@@ -83,6 +83,7 @@ export default function InquiryForm({ category = 'General Inquiry' }: { category
         <div className="w-full">
             <form action={handleSubmit} className="space-y-5">
                 <input type="hidden" name="category" value={category} />
+                <input type="text" name="website" tabIndex={-1} autoComplete="off" className="hidden" />
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
                         <label className="block text-sm font-medium text-gray-900 mb-2">이름 <span className="text-red-500">*</span></label>

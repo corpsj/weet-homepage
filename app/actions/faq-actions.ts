@@ -3,6 +3,7 @@
 import { getSupabaseAdmin, supabase } from '@/lib/supabase';
 import { Faq, FaqInsert, FaqUpdate } from '@/types/supabase';
 import { revalidatePath } from 'next/cache';
+import { requireAdmin } from '@/lib/admin-auth';
 
 export async function getFaqs() {
     const { data, error } = await supabase
@@ -35,6 +36,8 @@ export async function getFaq(id: number) {
 }
 
 export async function createFaq(faq: FaqInsert) {
+    await requireAdmin();
+
     const admin = getSupabaseAdmin();
     const { data, error } = await admin
         .from('faqs')
@@ -53,6 +56,8 @@ export async function createFaq(faq: FaqInsert) {
 }
 
 export async function updateFaq(id: number, faq: FaqUpdate) {
+    await requireAdmin();
+
     const admin = getSupabaseAdmin();
     const { data, error } = await admin
         .from('faqs')
@@ -72,6 +77,8 @@ export async function updateFaq(id: number, faq: FaqUpdate) {
 }
 
 export async function deleteFaq(id: number) {
+    await requireAdmin();
+
     const admin = getSupabaseAdmin();
     const { error } = await admin
         .from('faqs')
@@ -89,6 +96,8 @@ export async function deleteFaq(id: number) {
 }
 
 export async function updateFaqOrder(items: { id: number; order_index: number }[]) {
+    await requireAdmin();
+
     const admin = getSupabaseAdmin();
 
     // This might be better as a loop or a stored procedure for bulk updates

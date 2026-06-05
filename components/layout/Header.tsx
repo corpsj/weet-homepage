@@ -167,7 +167,6 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [mounted] = useState(true);
   const { language, setLanguage } = useLanguage();
 
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
@@ -377,7 +376,7 @@ export default function Header() {
       </header>
 
       {/* Full Screen Mobile Menu - Rendered via Portal */}
-      {mounted && mobileMenuOpen && createPortal(
+      {typeof document !== 'undefined' && mobileMenuOpen && createPortal(
         <div className="lg:hidden fixed inset-0 bg-white z-[100] overflow-y-auto animate-fade-in">
           {/* Header with Close Button */}
           <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">

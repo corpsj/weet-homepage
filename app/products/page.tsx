@@ -306,9 +306,7 @@ export default function ProductsPage() {
         if (activeProductData) {
             const category = activeProductData.sizeCategory;
             // Also expand S if subcategory private/public? "S" is the key in sidebarStructure
-            if (!expandedCategories.includes(category)) {
-                setExpandedCategories(prev => [...prev, category]);
-            }
+            setExpandedCategories(prev => prev.includes(category) ? prev : [...prev, category]);
         }
     }, [activeProduct, products]);
 

@@ -3,8 +3,11 @@
 import { revalidatePath } from 'next/cache';
 import { supabaseAdmin } from '@/lib/supabase';
 import { Project, ProjectInsert, ProjectUpdate } from '@/types/supabase';
+import { requireAdmin } from '@/lib/admin-auth';
 
 export async function getProjects(status?: string): Promise<Project[]> {
+    await requireAdmin();
+
     let query = supabaseAdmin
         .from('projects')
         .select('*')
@@ -25,6 +28,8 @@ export async function getProjects(status?: string): Promise<Project[]> {
 }
 
 export async function getProject(id: string): Promise<Project | null> {
+    await requireAdmin();
+
     const { data, error } = await supabaseAdmin
         .from('projects')
         .select('*')
@@ -40,6 +45,8 @@ export async function getProject(id: string): Promise<Project | null> {
 }
 
 export async function createProject(data: ProjectInsert) {
+    await requireAdmin();
+
     const { error } = await supabaseAdmin
         .from('projects')
         .insert(data as never);
@@ -54,6 +61,8 @@ export async function createProject(data: ProjectInsert) {
 }
 
 export async function updateProject(id: string, data: ProjectUpdate) {
+    await requireAdmin();
+
     const { error } = await supabaseAdmin
         .from('projects')
         .update(data as never)
@@ -70,6 +79,8 @@ export async function updateProject(id: string, data: ProjectUpdate) {
 }
 
 export async function deleteProject(id: string) {
+    await requireAdmin();
+
     const { error } = await supabaseAdmin
         .from('projects')
         .delete()

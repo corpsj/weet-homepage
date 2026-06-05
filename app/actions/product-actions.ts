@@ -1,11 +1,13 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
-import { redirect } from 'next/navigation';
 import { supabaseAdmin } from '@/lib/supabase';
 import { ProductInsert, ProductUpdate } from '@/types/supabase';
+import { requireAdmin } from '@/lib/admin-auth';
 
 export async function createProduct(data: ProductInsert) {
+    await requireAdmin();
+
     const { error } = await supabaseAdmin
         .from('products')
         .insert(data as never);
@@ -20,6 +22,8 @@ export async function createProduct(data: ProductInsert) {
 }
 
 export async function updateProduct(id: string, data: ProductUpdate) {
+    await requireAdmin();
+
     const { error } = await supabaseAdmin
         .from('products')
         .update(data as never)
@@ -36,6 +40,8 @@ export async function updateProduct(id: string, data: ProductUpdate) {
 }
 
 export async function deleteProduct(id: string) {
+    await requireAdmin();
+
     const { error } = await supabaseAdmin
         .from('products')
         .delete()
@@ -51,6 +57,8 @@ export async function deleteProduct(id: string) {
 }
 
 export async function toggleProductStatus(id: string, isActive: boolean) {
+    await requireAdmin();
+
     const { error } = await supabaseAdmin
         .from('products')
         .update({ is_active: isActive } as never)
@@ -66,6 +74,8 @@ export async function toggleProductStatus(id: string, isActive: boolean) {
 }
 
 export async function reorderProducts(orderedIds: string[]) {
+    await requireAdmin();
+
     try {
         // 각 제품의 display_order를 배열 인덱스로 업데이트
         for (let i = 0; i < orderedIds.length; i++) {

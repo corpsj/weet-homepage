@@ -35,6 +35,11 @@ export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
     // Reset index when data changes by using key prop on inner content
     const key = data.name + data.images.length;
 
+    const handleClose = () => {
+        setCurrentImageIndex(0);
+        onClose();
+    };
+
     const nextImage = () => {
         setCurrentImageIndex((prev) => (prev + 1) % data.images.length);
     };
@@ -44,7 +49,7 @@ export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
     };
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300" onClick={onClose}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300" onClick={handleClose}>
             <div
                 key={key}
                 className="bg-white w-full max-w-5xl h-[85vh] rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden animate-in fade-in zoom-in-95 duration-300"
@@ -52,7 +57,7 @@ export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
             >
                 {/* Close Button (Mobile: Top Right, Desktop: Absolute) */}
                 <button
-                    onClick={onClose}
+                    onClick={handleClose}
                     className="absolute top-4 right-4 z-20 p-2 bg-white/80 hover:bg-white rounded-full transition-colors shadow-sm md:hidden"
                 >
                     <X className="w-6 h-6 text-black" />

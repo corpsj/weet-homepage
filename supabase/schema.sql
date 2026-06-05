@@ -121,3 +121,79 @@ BEGIN
         ALTER TABLE inquiries ADD COLUMN replied_at TIMESTAMPTZ;
     END IF;
 END $$;
+
+-- 주문제작 옵션 그룹
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE TABLE IF NOT EXISTS bespoke_option_groups (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  key TEXT NOT NULL UNIQUE,
+  title TEXT NOT NULL,
+  description TEXT,
+  selection_type TEXT NOT NULL DEFAULT 'single' CHECK (selection_type IN ('single', 'multiple')),
+  required BOOLEAN NOT NULL DEFAULT true,
+  display_order INTEGER NOT NULL DEFAULT 0,
+  is_active BOOLEAN NOT NULL DEFAULT true,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS bespoke_options (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  group_id UUID NOT NULL REFERENCES bespoke_option_groups(id) ON DELETE CASCADE,
+  label TEXT NOT NULL,
+  description TEXT,
+  price_delta INTEGER NOT NULL DEFAULT 0,
+  lead_time_note TEXT,
+  badge TEXT,
+  display_order INTEGER NOT NULL DEFAULT 0,
+  is_active BOOLEAN NOT NULL DEFAULT true,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE (group_id, label)
+);
+
+CREATE INDEX IF NOT EXISTS idx_bespoke_option_groups_order
+  ON bespoke_option_groups(display_order, created_at);
+
+CREATE INDEX IF NOT EXISTS idx_bespoke_option_groups_active
+  ON bespoke_option_groups(is_active);
+
+CREATE INDEX IF NOT EXISTS idx_bespoke_options_group_order
+  ON bespoke_options(group_id, display_order, created_at);
+
+CREATE INDEX IF NOT EXISTS idx_bespoke_options_active
+  ON bespoke_options(is_active);
+
+CREATE TRIGGER update_bespoke_option_groups_updated_at
+  BEFORE UPDATE ON bespoke_option_groups
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_bespoke_options_updated_at
+  BEFORE UPDATE ON bespoke_options
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
+ALTER TABLE bespoke_option_groups ENABLE ROW LEVEL SECURITY;
+ALTER TABLE bespoke_options ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Anyone can view active bespoke option groups" ON bespoke_option_groups
+  FOR SELECT USING (is_active = true);
+
+CREATE POLICY "Authenticated users can manage bespoke option groups" ON bespoke_option_groups
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+CREATE POLICY "Anyone can view active bespoke options" ON bespoke_options
+  FOR SELECT USING (
+    is_active = true
+    AND EXISTS (
+      SELECT 1
+      FROM bespoke_option_groups groups
+      WHERE groups.id = bespoke_options.group_id
+      AND groups.is_active = true
+    )
+  );
+
+CREATE POLICY "Authenticated users can manage bespoke options" ON bespoke_options
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);

@@ -16,6 +16,7 @@ import {
     Link2,
     Image as ImageIcon,
     FolderKanban,
+    SlidersHorizontal,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -54,6 +55,11 @@ const navigation: { title: string; items: NavItem[] }[] = [
                 name: '제품 관리',
                 href: '/admin/products',
                 icon: Package
+            },
+            {
+                name: '주문제작 옵션',
+                href: '/admin/bespoke',
+                icon: SlidersHorizontal
             },
 
             {
