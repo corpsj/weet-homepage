@@ -52,7 +52,7 @@ function GridCard({ product, onEdit }: { product: Product; onEdit: (p: Product) 
 
                 {/* Status Badge */}
                 <div className="absolute top-3 left-3">
-                    <ProductStatusToggle id={product.id} isActive={product.is_active} />
+                    <ProductStatusToggle id={product.id} isActive={product.is_active ?? false} />
                 </div>
             </div>
 
@@ -117,7 +117,7 @@ function ListRow({ product, onEdit }: { product: Product; onEdit: (p: Product) =
 
             {/* Status */}
             <div className="flex-shrink-0">
-                <ProductStatusToggle id={product.id} isActive={product.is_active} />
+                <ProductStatusToggle id={product.id} isActive={product.is_active ?? false} />
             </div>
 
             {/* Actions */}

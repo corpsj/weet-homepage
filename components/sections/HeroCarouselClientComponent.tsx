@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { useTranslation } from '@/hooks/useTranslation';
 
 export interface Slide {
-    id: number;
+    id: string;
     image_url: string;
     title?: string;
     subtitle?: string;

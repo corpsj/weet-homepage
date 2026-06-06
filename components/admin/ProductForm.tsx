@@ -85,7 +85,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
     const handleSubImageRemove = (indexToRemove: number) => {
         setFormData(prev => ({
             ...prev,
-            sub_images: (prev.sub_images || []).filter((_, index) => index !== indexToRemove)
+            sub_images: (prev.sub_images || []).filter((_image: string, index: number) => index !== indexToRemove)
         }));
     };
 
@@ -173,7 +173,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                         <input
                             type="checkbox"
                             name="is_active"
-                            checked={formData.is_active}
+                            checked={formData.is_active ?? false}
                             onChange={handleChange}
                             className="w-4 h-4 text-black border-gray-300 rounded focus:ring-black"
                         />
@@ -184,7 +184,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                         <input
                             type="checkbox"
                             name="is_signature"
-                            checked={formData.is_signature}
+                            checked={formData.is_signature ?? false}
                             onChange={handleChange}
                             className="w-4 h-4 text-black border-gray-300 rounded focus:ring-black"
                         />
@@ -297,7 +297,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                     <div>
                         <label className="block text-sm font-medium text-gray-700 mb-1">서브 이미지 (추가)</label>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
-                            {formData.sub_images?.map((url, index) => (
+                            {formData.sub_images?.map((url: string, index: number) => (
                                 <div key={index} className="relative aspect-video bg-gray-100 rounded-lg overflow-hidden border">
                                     <Image
                                         src={url}

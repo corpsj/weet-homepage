@@ -44,7 +44,7 @@ const navigationKo = [
     ],
   },
   {
-    name: '주문제작',
+    name: '주문하기',
     href: '/customize',
     width: 85,
     submenu: [],
@@ -120,7 +120,7 @@ const navigationEn = [
     ],
   },
   {
-    name: 'Customize',
+    name: 'Order',
     href: '/customize',
     width: 85,
     submenu: [],

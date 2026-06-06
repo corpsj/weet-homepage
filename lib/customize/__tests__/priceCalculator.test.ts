@@ -1,102 +1,179 @@
-import { describe, it, expect } from 'vitest';
-import { calculateTotalPrice, formatPrice } from '../priceCalculator';
-import { Model, OptionItem } from '../config';
+import { describe, expect, it } from 'vitest';
+import {
+  calculateEstimate,
+  decodeConfig,
+  encodeConfig,
+  formatOptionPrice,
+  formatWon,
+  getDefaultSelections,
+  toggleOptionSelection,
+} from '../priceCalculator';
+import type { CustomizeCatalog } from '../types';
 
-describe('priceCalculator', () => {
-  // 테스트용 모델 데이터
-  const sModel: Model = {
-    id: 'S',
-    name: 'S',
-    size: '3x6m',
-    area: 18,
-    basePrice: 50000000,
-    imagePath: '/images/customize/models/s-model.webp',
-  };
+const catalog: CustomizeCatalog = {
+  models: [
+    {
+      id: 'compact-3x6',
+      code: '3x6',
+      nameKo: 'Compact 3x6',
+      nameEn: null,
+      widthM: 3,
+      lengthM: 6,
+      areaSqm: 18,
+      basePrice: 27900000,
+      floorplanImagePath: null,
+      floorplanOverlayPath: null,
+      displayOrder: 10,
+      isActive: true,
+    },
+  ],
+  categories: [
+    {
+      id: 'cat-exterior',
+      key: 'exterior',
+      nameKo: '외장',
+      nameEn: null,
+      descriptionKo: null,
+      descriptionEn: null,
+      selectionType: 'single',
+      required: true,
+      displayOrder: 10,
+      isActive: true,
+    },
+    {
+      id: 'cat-energy',
+      key: 'energy',
+      nameKo: '에너지',
+      nameEn: null,
+      descriptionKo: null,
+      descriptionEn: null,
+      selectionType: 'multiple',
+      required: false,
+      displayOrder: 20,
+      isActive: true,
+    },
+  ],
+  options: [
+    {
+      id: '00000000-0000-0000-0000-000000000001',
+      categoryId: 'cat-exterior',
+      categoryKey: 'exterior',
+      key: 'basic',
+      nameKo: '기본 외장',
+      nameEn: null,
+      shortDescriptionKo: '기본',
+      shortDescriptionEn: null,
+      detailDescriptionKo: null,
+      detailDescriptionEn: null,
+      priceType: 'included',
+      price: 0,
+      isDefault: true,
+      availableModelIds: ['compact-3x6'],
+      imagePath: null,
+      overlayImagePath: null,
+      overlayLabelKo: null,
+      overlayLabelEn: null,
+      displayOrder: 10,
+      isActive: true,
+    },
+    {
+      id: '00000000-0000-0000-0000-000000000002',
+      categoryId: 'cat-exterior',
+      categoryKey: 'exterior',
+      key: 'cedar',
+      nameKo: '적삼목',
+      nameEn: null,
+      shortDescriptionKo: '목재',
+      shortDescriptionEn: null,
+      detailDescriptionKo: null,
+      detailDescriptionEn: null,
+      priceType: 'fixed',
+      price: 2200000,
+      isDefault: false,
+      availableModelIds: ['compact-3x6'],
+      imagePath: null,
+      overlayImagePath: null,
+      overlayLabelKo: null,
+      overlayLabelEn: null,
+      displayOrder: 20,
+      isActive: true,
+    },
+    {
+      id: '00000000-0000-0000-0000-000000000003',
+      categoryId: 'cat-energy',
+      categoryKey: 'energy',
+      key: 'solar',
+      nameKo: '태양광',
+      nameEn: null,
+      shortDescriptionKo: '상담',
+      shortDescriptionEn: null,
+      detailDescriptionKo: null,
+      detailDescriptionEn: null,
+      priceType: 'consult',
+      price: 0,
+      isDefault: false,
+      availableModelIds: ['compact-3x6'],
+      imagePath: null,
+      overlayImagePath: null,
+      overlayLabelKo: null,
+      overlayLabelEn: null,
+      displayOrder: 10,
+      isActive: true,
+    },
+  ],
+  includedSpecs: [],
+  conflicts: [
+    {
+      optionId: '00000000-0000-0000-0000-000000000002',
+      conflictsWithOptionId: '00000000-0000-0000-0000-000000000003',
+      reasonKo: null,
+      reasonEn: null,
+    },
+  ],
+};
 
-  const mModel: Model = {
-    id: 'M',
-    name: 'M',
-    size: '3x9m',
-    area: 27,
-    basePrice: 70000000,
-    imagePath: '/images/customize/models/m-model.webp',
-  };
-
-  // 테스트용 옵션 데이터
-  const cedarOption: OptionItem = {
-    id: 'wood-cedar',
-    name: '적삼목',
-    price: 15000000,
-    imagePath: '/images/customize/exterior/wood-cedar.webp',
-  };
-
-  const silkWallpaperOption: OptionItem = {
-    id: 'wallpaper-silk',
-    name: '실크벽지',
-    price: 5000000,
-    imagePath: '/images/customize/interior/wallpaper-silk.webp',
-  };
-
-  const refrigeratorOption: OptionItem = {
-    id: 'refrigerator',
-    name: '냉장고',
-    price: 1200000,
-    imagePath: '/images/customize/kitchen/refrigerator.webp',
-  };
-
-  describe('calculateTotalPrice', () => {
-    it('기본가만 계산 (옵션 없음)', () => {
-      const total = calculateTotalPrice(sModel, []);
-      expect(total).toBe(50000000);
-    });
-
-    it('단일 옵션 추가', () => {
-      const total = calculateTotalPrice(sModel, [cedarOption]);
-      expect(total).toBe(65000000); // 50,000,000 + 15,000,000
-    });
-
-    it('다중 옵션 추가', () => {
-      const total = calculateTotalPrice(sModel, [
-        cedarOption,
-        silkWallpaperOption,
-      ]);
-      expect(total).toBe(70000000); // 50,000,000 + 15,000,000 + 5,000,000
-    });
-
-    it('모든 옵션 선택 시 총합', () => {
-      const total = calculateTotalPrice(sModel, [
-        cedarOption,
-        silkWallpaperOption,
-        refrigeratorOption,
-      ]);
-      expect(total).toBe(71200000); // 50,000,000 + 15,000,000 + 5,000,000 + 1,200,000
-    });
-
-    it('다른 모델에서도 정확한 계산', () => {
-      const total = calculateTotalPrice(mModel, [cedarOption]);
-      expect(total).toBe(85000000); // 70,000,000 + 15,000,000
-    });
+describe('customize price calculator', () => {
+  it('formats won values and option price labels', () => {
+    expect(formatWon(27900000)).toBe('₩27,900,000');
+    expect(formatOptionPrice(catalog.options[0])).toBe('포함');
+    expect(formatOptionPrice(catalog.options[1])).toBe('₩2,200,000');
+    expect(formatOptionPrice(catalog.options[2])).toBe('상담');
   });
 
-  describe('formatPrice', () => {
-    it('가격 0 일 때 "₩0" 반환', () => {
-      expect(formatPrice(0)).toBe('₩0');
+  it('builds default selections and calculates consult options as 0', () => {
+    const defaults = getDefaultSelections(catalog, 'compact-3x6');
+    const selected = {
+      ...defaults,
+      'cat-energy': ['00000000-0000-0000-0000-000000000003'],
+    };
+    const estimate = calculateEstimate(catalog, 'compact-3x6', selected);
+
+    expect(estimate?.estimatedTotal).toBe(27900000);
+    expect(estimate?.consultOptionCount).toBe(1);
+  });
+
+  it('replaces single category selections and removes conflicting options', () => {
+    const selected = {
+      'cat-exterior': ['00000000-0000-0000-0000-000000000001'],
+      'cat-energy': ['00000000-0000-0000-0000-000000000003'],
+    };
+    const next = toggleOptionSelection({
+      catalog,
+      selectedOptions: selected,
+      category: catalog.categories[0],
+      option: catalog.options[1],
     });
 
-    it('일반 가격 포맷팅 (천 단위 구분)', () => {
-      expect(formatPrice(50000000)).toBe('₩50,000,000');
-    });
+    expect(next['cat-exterior']).toEqual(['00000000-0000-0000-0000-000000000002']);
+    expect(next['cat-energy']).toEqual([]);
+  });
 
-    it('1 억 이상 가격 포맷팅', () => {
-      expect(formatPrice(100000000)).toBe('₩100,000,000');
-    });
+  it('round-trips compressed share config', () => {
+    const selected = { 'cat-exterior': ['00000000-0000-0000-0000-000000000001'] };
+    const encoded = encodeConfig('compact-3x6', selected);
+    const decoded = decodeConfig(encoded);
 
-    it('천 단위 미만 가격 포맷팅', () => {
-      expect(formatPrice(1200000)).toBe('₩1,200,000');
-    });
-
-    it('홀수 금액 포맷팅', () => {
-      expect(formatPrice(71200000)).toBe('₩71,200,000');
-    });
+    expect(decoded?.modelId).toBe('compact-3x6');
+    expect(decoded?.selectedOptions).toEqual(selected);
   });
 });

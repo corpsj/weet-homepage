@@ -1,26 +1,28 @@
-'use client';
+import type { Metadata } from 'next';
+import CustomizeConfigurator from '@/components/customize/CustomizeConfigurator';
+import { getPublicCustomizeCatalog } from '@/app/actions/customize-actions';
 
-import VisualArea from '@/components/customize/VisualArea';
-import OptionSidebar from '@/components/customize/OptionSidebar';
-import { MobileOptionDrawer } from '@/components/customize/MobileOptionDrawer';
-import { StickyPriceBar } from '@/components/customize/StickyPriceBar';
+export const dynamic = 'force-dynamic';
 
-export default function CustomizePage() {
-  return (
-    <div className="min-h-screen bg-white min-w-[320px]">
-      <div className="flex flex-col lg:flex-row h-[calc(100dvh-100px)] lg:h-[calc(100dvh-180px)] pt-[100px] lg:pt-[180px]">
-        <div className="w-full lg:w-[60%] h-[55vh] lg:h-full overflow-auto">
-          <VisualArea />
-        </div>
+export const metadata: Metadata = {
+  title: '주문하기',
+  description: '위트 이동식주택을 모델과 옵션별로 구성하고 상담을 요청하세요.',
+  alternates: {
+    canonical: '/customize',
+  },
+  openGraph: {
+    url: '/customize',
+    title: '주문하기',
+    description: '위트 이동식주택을 모델과 옵션별로 구성하고 상담을 요청하세요.',
+  },
+};
 
-        <div className="hidden lg:block w-full lg:w-[40%] h-full">
-          <OptionSidebar />
-        </div>
-      </div>
+export default async function CustomizePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ c?: string }>;
+}) {
+  const [{ c }, catalog] = await Promise.all([searchParams, getPublicCustomizeCatalog()]);
 
-      <MobileOptionDrawer />
-
-      <StickyPriceBar />
-    </div>
-  );
+  return <CustomizeConfigurator catalog={catalog} initialConfig={c ?? null} />;
 }

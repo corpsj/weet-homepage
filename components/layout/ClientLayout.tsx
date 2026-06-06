@@ -13,6 +13,7 @@ export default function ClientLayout({
     const pathname = usePathname();
     // Check if current path is admin
     const isAdmin = pathname?.startsWith('/admin') || pathname?.includes('/admin/');
+    const isConfigurator = pathname?.startsWith('/customize');
 
     if (isAdmin) {
         return (
@@ -20,6 +21,15 @@ export default function ClientLayout({
                 <Toaster position="top-right" richColors />
                 {children}
             </div>
+        );
+    }
+
+    if (isConfigurator) {
+        return (
+            <>
+                {children}
+                <Toaster position="top-right" richColors />
+            </>
         );
     }
 

@@ -20,7 +20,7 @@ export async function getFaqs() {
     return data as Faq[];
 }
 
-export async function getFaq(id: number) {
+export async function getFaq(id: string) {
     const { data, error } = await supabase
         .from('faqs')
         .select('*')
@@ -55,7 +55,7 @@ export async function createFaq(faq: FaqInsert) {
     return { success: true, message: 'FAQ가 생성되었습니다.', data };
 }
 
-export async function updateFaq(id: number, faq: FaqUpdate) {
+export async function updateFaq(id: string, faq: FaqUpdate) {
     await requireAdmin();
 
     const admin = getSupabaseAdmin();
@@ -76,7 +76,7 @@ export async function updateFaq(id: number, faq: FaqUpdate) {
     return { success: true, message: 'FAQ가 수정되었습니다.', data };
 }
 
-export async function deleteFaq(id: number) {
+export async function deleteFaq(id: string) {
     await requireAdmin();
 
     const admin = getSupabaseAdmin();
@@ -95,7 +95,7 @@ export async function deleteFaq(id: number) {
     return { success: true, message: 'FAQ가 삭제되었습니다.' };
 }
 
-export async function updateFaqOrder(items: { id: number; order_index: number }[]) {
+export async function updateFaqOrder(items: { id: string; order_index: number }[]) {
     await requireAdmin();
 
     const admin = getSupabaseAdmin();

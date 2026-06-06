@@ -14,7 +14,9 @@ async function getHeroSlides() {
   }
 
   return (data || []).map(slide => ({
-    ...slide,
+    id: slide.id,
+    image_url: slide.image_url,
+    title: slide.title,
     subtitle: slide.subtitle || ''
   }));
 }
@@ -23,7 +25,7 @@ export default async function HeroCarousel() {
   const slides = await getHeroSlides();
   const initialSlides: Slide[] = slides.length > 0 ? slides : [
     {
-      id: 1,
+      id: 'fallback-main',
       image_url: '/images/hero_main.webp',
       title: 'Welcome to weet:)',
       subtitle: 'We make dreams come true.',

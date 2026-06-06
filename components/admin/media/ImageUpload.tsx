@@ -14,6 +14,8 @@ interface ImageUploadProps {
     className?: string;
     bucket?: string;
     quality?: 'high' | 'standard';
+    pathPrefix?: string;
+    recommendedSize?: { width: number; height: number };
 }
 
 export default function ImageUpload({
@@ -22,7 +24,9 @@ export default function ImageUpload({
     onUploadStart,
     className = '',
     bucket = 'products',
-    quality = 'high'
+    quality = 'high',
+    pathPrefix = '',
+    recommendedSize
 }: ImageUploadProps) {
     const [loading, setLoading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -39,6 +43,24 @@ export default function ImageUpload({
         setLoading(true);
         onUploadStart?.();
         try {
+            if (recommendedSize && file.type.startsWith('image/')) {
+                const imageUrl = URL.createObjectURL(file);
+                try {
+                    const dimensions = await new Promise<{ width: number; height: number }>((resolve, reject) => {
+                        const img = new window.Image();
+                        img.onload = () => resolve({ width: img.naturalWidth, height: img.naturalHeight });
+                        img.onerror = reject;
+                        img.src = imageUrl;
+                    });
+
+                    if (dimensions.width !== recommendedSize.width || dimensions.height !== recommendedSize.height) {
+                        toast.warning(`권장 크기는 ${recommendedSize.width}x${recommendedSize.height}px입니다. 현재 ${dimensions.width}x${dimensions.height}px 파일을 업로드합니다.`);
+                    }
+                } finally {
+                    URL.revokeObjectURL(imageUrl);
+                }
+            }
+
             let fileToUpload = file;
 
             // Compress/Convert to WebP if it's an image
@@ -69,7 +91,8 @@ export default function ImageUpload({
 
             const fileExt = fileToUpload.name.split('.').pop();
             const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-            const filePath = `${fileName}`;
+            const cleanPrefix = pathPrefix.replace(/^\/+|\/+$/g, '');
+            const filePath = cleanPrefix ? `${cleanPrefix}/${fileName}` : fileName;
 
             const formData = new FormData();
             formData.append('file', fileToUpload);

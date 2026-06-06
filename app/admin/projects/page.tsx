@@ -47,16 +47,16 @@ export default function AdminProjectsPage() {
         }
     };
 
-    const statusLabel = (status: string) => {
+    const statusLabel = (status: string | null) => {
         switch (status) {
             case 'completed': return '완료';
             case 'in_progress': return '진행중';
             case 'planned': return '계획중';
-            default: return status;
+            default: return status || '미지정';
         }
     };
 
-    const statusColor = (status: string) => {
+    const statusColor = (status: string | null) => {
         switch (status) {
             case 'completed': return 'text-green-600 bg-green-50';
             case 'in_progress': return 'text-blue-600 bg-blue-50';

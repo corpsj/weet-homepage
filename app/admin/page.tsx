@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, BarChart3, ClipboardList, FolderKanban, MessageSquare, Package } from 'lucide-react';
+import { ArrowRight, BarChart3, FolderKanban, MessageSquare, Package, SlidersHorizontal } from 'lucide-react';
 import { requireAdmin } from '@/lib/admin-auth';
 import { getSupabaseAdmin } from '@/lib/supabase';
 
@@ -21,11 +21,11 @@ async function getCount(table: string, filters?: (query: any) => any) {
 export default async function AdminPage() {
   await requireAdmin();
 
-  const [activeProducts, newInquiries, projects, bespokeGroups] = await Promise.all([
+  const [activeProducts, newConsultations, projects, activeOptions] = await Promise.all([
     getCount('products', (query) => query.eq('is_active', true)),
-    getCount('inquiries', (query) => query.eq('status', 'new')),
+    getCount('customize_consultations', (query) => query.eq('status', '신규')),
     getCount('projects'),
-    getCount('bespoke_option_groups', (query) => query.eq('is_active', true)),
+    getCount('customize_options', (query) => query.eq('is_active', true)),
   ]);
 
   const stats = [
@@ -37,9 +37,9 @@ export default async function AdminPage() {
       tone: 'bg-gray-950 text-white',
     },
     {
-      label: '신규 문의',
-      value: newInquiries,
-      href: '/admin/inquiries',
+      label: '신규 상담',
+      value: newConsultations,
+      href: '/admin/consultations',
       icon: MessageSquare,
       tone: 'bg-primary text-black',
     },
@@ -51,18 +51,18 @@ export default async function AdminPage() {
       tone: 'bg-white text-gray-950',
     },
     {
-      label: '주문제작 그룹',
-      value: bespokeGroups,
-      href: '/admin/bespoke',
-      icon: ClipboardList,
+      label: '활성 옵션',
+      value: activeOptions,
+      href: '/admin/customize',
+      icon: SlidersHorizontal,
       tone: 'bg-white text-gray-950',
     },
   ];
 
   const shortcuts = [
     { title: '제품 추가', href: '/admin/products/new', description: '제품 이미지, 스펙, 노출 상태를 등록합니다.' },
-    { title: '주문제작 옵션', href: '/admin/bespoke', description: 'BESPOKE 페이지의 선택 항목을 관리합니다.' },
-    { title: '문의 확인', href: '/admin/inquiries', description: '새 상담 요청과 답변 상태를 확인합니다.' },
+    { title: '주문 구성', href: '/admin/customize', description: '모델, 옵션, 평면 오버레이와 충돌 관계를 관리합니다.' },
+    { title: '상담 확인', href: '/admin/consultations', description: '새 주문 상담과 내부 메모, 처리 상태를 확인합니다.' },
     { title: '웹 로그 분석', href: '/admin/insights', description: 'GA 기반 방문자, 유입, 인기 페이지 차트를 확인합니다.' },
   ];
 

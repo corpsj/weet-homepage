@@ -73,7 +73,7 @@ export async function createHeroSlide(data: { title: string; subtitle: string; i
     }
 }
 
-export async function updateHeroSlide(id: number, data: { title: string; subtitle: string; image_url: string }) {
+export async function updateHeroSlide(id: string, data: { title: string; subtitle: string; image_url: string }) {
     await requireAdmin();
 
     try {
@@ -103,7 +103,7 @@ export async function updateHeroSlide(id: number, data: { title: string; subtitl
     }
 }
 
-export async function deleteHeroSlide(id: number) {
+export async function deleteHeroSlide(id: string) {
     await requireAdmin();
 
     // Use Service Role Client to bypass RLS
@@ -122,7 +122,7 @@ export async function deleteHeroSlide(id: number) {
     revalidatePath('/');
 }
 
-export async function reorderHeroSlides(ids: number[]) {
+export async function reorderHeroSlides(ids: string[]) {
     await requireAdmin();
 
     try {

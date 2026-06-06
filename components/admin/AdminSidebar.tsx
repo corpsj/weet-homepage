@@ -17,6 +17,7 @@ import {
     Image as ImageIcon,
     FolderKanban,
     SlidersHorizontal,
+    ClipboardList,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -57,8 +58,8 @@ const navigation: { title: string; items: NavItem[] }[] = [
                 icon: Package
             },
             {
-                name: '주문제작 옵션',
-                href: '/admin/bespoke',
+                name: '주문 구성',
+                href: '/admin/customize',
                 icon: SlidersHorizontal
             },
 
@@ -87,7 +88,8 @@ const navigation: { title: string; items: NavItem[] }[] = [
     {
         title: "Commerce",
         items: [
-            { name: '문의 관리', href: '/admin/inquiries', icon: MessageSquare },
+            { name: '상담 관리', href: '/admin/consultations', icon: ClipboardList },
+            { name: '레거시 문의', href: '/admin/inquiries', icon: MessageSquare },
         ]
     },
     {

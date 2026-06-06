@@ -160,7 +160,7 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
         });
     };
 
-    const handleDelete = async (id: number) => {
+    const handleDelete = async (id: string) => {
         if (!confirm('정말 삭제하시겠습니까?')) return;
         startTransition(async () => {
             try {
@@ -216,7 +216,7 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
     );
 }
 
-function SortableHeroSlideItem({ slide, onDelete }: { slide: HeroSlide, onDelete: (id: number) => void }) {
+function SortableHeroSlideItem({ slide, onDelete }: { slide: HeroSlide, onDelete: (id: string) => void }) {
     const {
         attributes,
         listeners,
