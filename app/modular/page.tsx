@@ -176,7 +176,7 @@ export default function ModularPage() {
   return (
     <div className="min-h-screen bg-white">
       {/* Hero */}
-      <section id="what-is-modular" className="bg-[#E8E8E8] py-16 lg:py-24 scroll-mt-[180px]">
+      <section id="what-is-modular" className="bg-gray-50 py-16 lg:py-24 scroll-mt-[180px]">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
             <div>
@@ -231,7 +231,7 @@ export default function ModularPage() {
         <section
           key={section.id}
           id={section.id}
-          className={`${section.bg === 'light' ? 'bg-white' : 'bg-[#E8E8E8]'} py-16 lg:py-24 scroll-mt-[180px]`}
+          className={`${section.bg === 'light' ? 'bg-white' : 'bg-gray-50'} py-16 lg:py-24 scroll-mt-[180px]`}
         >
           <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
@@ -264,6 +264,28 @@ export default function ModularPage() {
           </div>
         </section>
       ))}
+
+      {/* CTA Section */}
+      <section className="bg-gray-900 py-20 lg:py-32 text-center px-4">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-3xl lg:text-4xl font-black text-white mb-6">
+            {language === 'KO' ? '나에게 맞는 위트 찾기' : 'Find your weet'}
+          </h2>
+          <p className="text-gray-300 text-lg mb-10 leading-relaxed">
+            {language === 'KO'
+              ? '위트의 모듈러 기술로 완성된 다양한 제품 라인업을 확인하고, 내게 필요한 공간을 직접 구성해보세요.'
+              : 'Explore our product lineup built with advanced modular technology, and customize your own space.'}
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="/products" className="inline-flex h-14 items-center justify-center rounded-lg bg-white px-8 text-sm font-bold text-gray-900 transition-colors hover:bg-gray-100">
+              {language === 'KO' ? '제품 전체 보기' : 'View all products'}
+            </a>
+            <a href="/customize" className="inline-flex h-14 items-center justify-center rounded-lg border border-gray-600 bg-transparent px-8 text-sm font-bold text-white transition-colors hover:bg-gray-800">
+              {language === 'KO' ? '나만의 위트 만들기' : 'Customize your weet'}
+            </a>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

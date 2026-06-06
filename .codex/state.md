@@ -2,7 +2,7 @@
 
 ## Active task
 
-위트 `/bespoke` 복원, DB 기반 `/customize` 주문 컨피규레이터 신규 구축, 홈/support 전환, Supabase customize schema 적용, 관리자 주문 구성/상담 관리 구현.
+위트 전체 UI 정밀 polish 및 랜딩 배경색 재조정. Public pages, legal pages, login, and admin were brought into a Tesla-inspired product-led premium architectural showroom/operations-console system.
 
 ## Current phase
 
@@ -10,52 +10,35 @@ complete
 
 ## Changes made
 
-- `/bespoke` 공개 페이지를 이전 showcase 페이지로 복원하고 잘못된 BESPOKE 옵션 관리 코드를 제거.
-- Supabase 원격 schema/migration 백업 후 `202606060002_customize_configurator.sql` 적용.
-- `customize_models/categories/options/option_conflicts/included_specs/consultations` 테이블과 seed/RLS 추가.
-- `/customize`를 DB catalog 기반 컨피규레이터로 재작성.
-- `/admin/customize`, `/admin/consultations` 추가.
-- 홈을 구성 CTA 중심으로 재작성하고 `/support`를 구매 과정/FAQ/A/S 안내 페이지로 재작성.
-- Header `/customize` 메뉴명을 `주문하기`로 변경.
-- old customize store/proto e2e를 제거하고 새 e2e를 추가.
-- `202606060003_lock_customize_admin_policies.sql`로 새 customize 테이블의 authenticated-wide admin RLS 정책을 제거하고 관리자 mutation을 requireAdmin + service role 경로로 고정.
-- Supabase CLI 타입 재생성과 원격 schema dump를 성공적으로 완료하고, 기존 코드가 쓰던 type alias를 생성 타입 하단에 복구.
-- 타입 재생성 후 드러난 레거시 CMS/FAQ/product/project/inquiry nullable/id 타입 불일치를 정리.
-- Pro 1차 MUST_FIX 반영: `submitCustomizeConsultation`에서 insert 후 `.select('id').single()`을 제거하고 사전 생성 id로 insert-only RLS와 호환되게 수정.
-- Pro 1차 MUST_FIX 반영: `/customize` 평면도에서 `model.floorplanImagePath`를 `base-floorplan-image` 레이어로 실제 렌더링하고, seed 기본 이미지를 1000x420 평면도 SVG로 교체.
-- Playwright에 base floorplan/footprint 검증과 실제 UI 상담 제출 후 service-role 확인/삭제 테스트를 추가.
-- GPT-5.5 Pro 2차 리뷰가 `VERDICT: PASS`를 반환.
+- Delegated the frontend implementation step to Antigravity IDE/Gemini and accepted the intended UI changes.
+- Replaced the homepage beige/tan background system with white, gray, charcoal, and restrained muted yellow accents while preserving the required H1, subcopy, and customize CTA.
+- Quieted global header/footer styling and preserved the hidden `/admin` link on the footer word `True` with default cursor behavior.
+- Added mobile product cards with collapsible details and a soft `/customize` CTA while keeping desktop product storytelling.
+- Polished `/modular`, `/bespoke`, `/solution`, solution detail image placeholders, `/projects`, `/support`, `/company`, `/login`, `/privacy`, and `/terms`.
+- Added responsive `AdminShell` with mobile topbar/drawer, refined admin settings danger section, and made consultation manager rows mobile-safe.
+- Applied Pro cycle 1 MUST_FIX: changed the mobile menu portal breakpoint from `lg:hidden` to `xl:hidden` and added a 1100px tablet header Playwright check.
+- Applied Pro cycle 1 MUST_FIX: rewrote `/privacy` around actual customize consultations, legacy inquiries, Supabase auth/admin cookies, conditional Vercel/GA/Clarity analytics, and manual admin deletion.
+- Applied Pro cycle 1 MUST_FIX: amended `/terms` with content/media usage rights and user-provided material obligations.
+- Applied Pro cycle 1 MUST_FIX: kept the existing dangerous migration `confirm()` flow, strengthened its warning text, and added a Playwright assertion that the confirmation dialog appears and can be dismissed.
 
 ## Commands run
 
-- `supabase migration list --linked`
-- `supabase db dump --linked --schema public`
-- `supabase migration fetch --linked`
-- `supabase db push --linked --dry-run`
-- `supabase db push --linked`
-- `DOTENV_CONFIG_PATH=.env.local node -r dotenv/config ...` for remote table counts
-- `supabase gen types typescript --linked --schema public > types/supabase.ts`
-- `supabase db push --linked --dry-run` for `202606060003_lock_customize_admin_policies.sql`
-- `supabase db push --linked` for `202606060003_lock_customize_admin_policies.sql`
-- `supabase gen types typescript --linked --schema public > /tmp/weet-supabase-types.ts && mv /tmp/weet-supabase-types.ts types/supabase.ts`
-- `supabase db dump --linked --schema public > /tmp/weet-public-schema.sql && mv /tmp/weet-public-schema.sql supabase/schema.sql`
-- remote Supabase anon insert/service-role verify/delete smoke test for `customize_consultations`
 - `npm run lint`
 - `npm run test`
 - `npm run build`
-- `npx playwright test`
-- GPT-5.5 Pro review cycle 1 in Chrome: `VERDICT: REVISE`
-- `npx playwright test` after Pro MUST_FIX: 11 passed
-- GPT-5.5 Pro review cycle 2 in Chrome: `VERDICT: PASS`
-- final `npm run lint`
-- final `npm run test`
-- final `npm run build`
-- final `npx playwright test`
-- final service-role consultation count check: `customize_consultations=0`
+- `E2E_ADMIN_ID=<redacted> E2E_ADMIN_PASSWORD=<redacted> npx playwright test`
+- `E2E_ADMIN_ID=<redacted> E2E_ADMIN_PASSWORD=<redacted> npx playwright test e2e/public-pages.spec.ts -g 'mobile drawer opens'`
+- `npx playwright test e2e/header-navigation.spec.ts -g 'mobile menu should have'`
+- `git diff --check`
+- Playwright DOM/screenshot evidence scripts against `http://127.0.0.1:3000`
+- GPT-5.5 Pro cycle 1 review in Chrome with marker `WEET_UI_POLISH_REVIEW_20260607_0048`
+- GPT-5.5 Pro cycle 2 review in Chrome with marker `WEET_UI_POLISH_REVIEW_20260607_0059`
 
 ## Current failures
 
-- None currently. Latest lint, unit tests, build, Playwright, Supabase migration checks, type generation, schema dump, and remote consultation smoke test passed.
+- No current lint, unit test, build, Playwright, or diff-check failures.
+- Build continues to show the pre-existing Next.js warning that the `middleware` file convention is deprecated in favor of `proxy`.
+- During Playwright traffic the dev server also logged non-blocking admin runtime warnings from older subcomponents: missing `sizes`/LCP hints on some admin images, Recharts zero-width container warnings on `/admin/insights`, and a DnD `aria-describedby` hydration mismatch in `/admin/main`.
 
 ## Pro review cycles
 
@@ -67,21 +50,25 @@ PASS
 
 ## Applied Pro feedback
 
-- Removed `.select('id').single()` from public consultation insert path and returned a server-generated UUID, preserving insert-only RLS without public consultation select.
-- Rendered the configured model `floorplanImagePath` as the base floorplan image layer and added Playwright assertions for base image and right-edge-fixed footprint.
+- Fixed the header lg-to-xl mobile menu breakpoint mismatch and added a tablet breakpoint E2E test.
+- Rewrote `/privacy` to match actual code-level data flows and conditional analytics loading.
+- Added content/media rights and user material obligations to `/terms`.
+- Verified the dangerous data migration action uses an explicit confirmation dialog before execution.
 
 ## Skipped Pro feedback
 
-- Optional compression of `?c=` state was not applied because the task only required a compressed-looking non-human-readable configuration string and Pro marked it optional.
-- Optional stricter selectedOptions category count/cardinality normalization was not applied because Pro marked it optional and current zod/server filtering already limits option IDs.
-- Optional `.kiro/` cleanup was not applied; `.kiro/` is unrelated untracked user/workspace state and will not be committed.
+- OPTIONAL: Legal-page negative assertion for “legal review needed” copy was not added because it was advisory.
+- OPTIONAL: Remaining advisory raw `<a>` links in products/modular CTAs were left as advisory.
+- OPTIONAL: Unrelated `AGENTS.md` and `.kiro/` review is release hygiene and not part of this UI implementation.
 
 ## Remaining risks
 
-- Admin pages require authenticated admin session for live browser validation.
-- Browser warnings remain for restored BESPOKE images missing `sizes`; this matches restored page behavior and is non-blocking.
-- Next.js warns that the legacy `middleware` convention is deprecated in favor of `proxy`; this predates the task and is non-blocking for current validation.
+- `AGENTS.md` and `.kiro/` were already dirty/untracked before this task and remain unrelated to the UI implementation.
+- The privacy/terms pages are service-specific drafts, not formal legal advice.
+- Admin authenticated tests require `E2E_ADMIN_ID` and `E2E_ADMIN_PASSWORD`; the tests skip when those env vars are absent.
+- Existing admin and support subcomponents outside the touched files still contain some older `rounded-xl`/placeholder styling, but mobile overflow checks passed across the required admin routes.
+- Existing admin image/chart/DnD runtime warnings remain release hygiene items; they did not fail the final Playwright suite or Pro review.
 
 ## Next step
 
-Commit all intended changes except unrelated `.kiro/`, then push `zoo/customize-configurator` to GitHub.
+Hand off the completed UI polish work with validation and Pro review results. No push or commit was requested.

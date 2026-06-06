@@ -50,7 +50,7 @@ export default function ConsultationManager({ consultations, count }: Consultati
       </div>
 
       <div className="overflow-hidden rounded-lg border border-gray-200 bg-white">
-        <div className="grid grid-cols-[110px_1fr_140px_150px_1.2fr_160px] gap-4 border-b border-gray-200 bg-gray-50 px-4 py-3 text-xs font-bold uppercase text-gray-500">
+        <div className="hidden grid-cols-[110px_1fr_140px_150px_1.2fr_160px] gap-4 border-b border-gray-200 bg-gray-50 px-4 py-3 text-xs font-bold uppercase text-gray-500 lg:grid">
           <span>상태</span>
           <span>이름</span>
           <span>연락처</span>
@@ -64,19 +64,37 @@ export default function ConsultationManager({ consultations, count }: Consultati
         ) : (
           consultations.map((item) => (
             <div key={item.id} className="border-b border-gray-100 last:border-b-0">
-              <div className="grid grid-cols-[110px_1fr_140px_150px_1.2fr_160px] gap-4 px-4 py-4 text-sm">
-                <select
-                  value={item.status}
-                  onChange={(event) => runAction('상태 변경', () => updateCustomizeConsultationStatus(item.id, event.target.value as ConsultationStatus))}
-                  className="h-9 rounded-lg border border-gray-300 px-2 text-sm"
-                >
-                  {STATUSES.map((status) => <option key={status} value={status}>{status}</option>)}
-                </select>
-                <strong className="text-gray-950">{item.customerName}</strong>
-                <span>{item.phone}</span>
-                <span>{item.region}</span>
-                <span className="truncate text-gray-600">{item.memo || '-'}</span>
-                <span className="text-gray-500">{new Date(item.createdAt).toLocaleString('ko-KR')}</span>
+              <div className="grid gap-3 px-4 py-4 text-sm lg:grid-cols-[110px_1fr_140px_150px_1.2fr_160px] lg:items-center lg:gap-4">
+                <div className="flex items-center justify-between gap-3 lg:block">
+                  <span className="text-xs font-bold uppercase text-gray-400 lg:hidden">상태</span>
+                  <select
+                    value={item.status}
+                    onChange={(event) => runAction('상태 변경', () => updateCustomizeConsultationStatus(item.id, event.target.value as ConsultationStatus))}
+                    className="h-9 w-32 rounded-lg border border-gray-300 px-2 text-sm lg:w-full"
+                  >
+                    {STATUSES.map((status) => <option key={status} value={status}>{status}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <span className="mb-1 block text-xs font-bold uppercase text-gray-400 lg:hidden">이름</span>
+                  <strong className="text-gray-950">{item.customerName}</strong>
+                </div>
+                <div>
+                  <span className="mb-1 block text-xs font-bold uppercase text-gray-400 lg:hidden">연락처</span>
+                  <span>{item.phone}</span>
+                </div>
+                <div>
+                  <span className="mb-1 block text-xs font-bold uppercase text-gray-400 lg:hidden">지역</span>
+                  <span>{item.region}</span>
+                </div>
+                <div className="min-w-0">
+                  <span className="mb-1 block text-xs font-bold uppercase text-gray-400 lg:hidden">메모</span>
+                  <span className="block truncate text-gray-600">{item.memo || '-'}</span>
+                </div>
+                <div>
+                  <span className="mb-1 block text-xs font-bold uppercase text-gray-400 lg:hidden">생성일</span>
+                  <span className="text-gray-500">{new Date(item.createdAt).toLocaleString('ko-KR')}</span>
+                </div>
               </div>
 
               <details className="group px-4 pb-4">
@@ -109,7 +127,7 @@ export default function ConsultationManager({ consultations, count }: Consultati
                         onChange={(event) => setMemos((current) => ({ ...current, [item.id]: event.target.value }))}
                         className="min-h-24 w-full rounded-lg border border-gray-300 p-3 text-sm outline-none focus:ring-2 focus:ring-black/20"
                       />
-                      <div className="mt-3 flex justify-between gap-3">
+                      <div className="mt-3 flex flex-col justify-between gap-3 sm:flex-row">
                         <Button variant="outline" onClick={() => runAction('내부 메모 저장', () => updateCustomizeConsultationMemo(item.id, memos[item.id] ?? ''))}>
                           <Save className="h-4 w-4" />
                           메모 저장

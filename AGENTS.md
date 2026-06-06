@@ -76,6 +76,8 @@ For browser-based review and validation, prefer fast read-only DOM evidence befo
 
 - Use `chrome:control-chrome` for the GPT-5.5 Pro review step because it depends on the user's logged-in Chrome/ChatGPT state.
 
+- For frontend implementation, UI/UX design, layout, component styling, page composition, or other visual product work, use the `antigravity-frontend` skill and delegate the implementation step to Antigravity IDE/Gemini through Computer Use. Wait until Antigravity finishes, accept only intended changes, then return to Codex to inspect git status/diff, verify files, run validation, create review packets, request GPT-5.5 Pro review, and continue the local repository workflow.
+
 - Before using screenshots, coordinate clicks, repeated scrolling, or Computer Use, try targeted DOM reads with Playwright locators, roles, labels, `data-testid`, visible button names, and small `outerHTML` snippets.
 
 - If a watcher snapshot such as `latest.json` exists for a ChatGPT workflow, read it before active actions.

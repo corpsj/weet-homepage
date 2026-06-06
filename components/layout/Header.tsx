@@ -226,15 +226,15 @@ export default function Header() {
       >
         <div className="max-w-[1600px] mx-auto">
           {/* Main Header */}
-          <div className="relative flex items-center h-[105px] md:h-[135px] lg:h-[110px] px-4 md:px-8 lg:px-[64px]">
+          <div className="relative flex items-center h-[70px] md:h-[80px] lg:h-[80px] px-4 md:px-8 lg:px-[64px]">
             {/* Logo */}
             <Link href="/" className="absolute left-4 md:left-8 lg:left-[64px] top-1/2 -translate-y-1/2 xl:static xl:transform-none">
-              <div className="w-[80px] h-[80px] md:w-[100px] md:h-[100px] lg:w-[90px] lg:h-[90px] relative select-none">
+              <div className="w-[60px] h-[60px] relative select-none">
                 <Image
                   src="/images/logo_new.webp"
                   alt="위트(weet) 로고"
                   fill
-                  sizes="(max-width: 768px) 80px, (max-width: 1024px) 100px, 90px"
+                  sizes="60px"
                   className="object-contain"
                   priority
                   draggable={false}
@@ -339,8 +339,7 @@ export default function Header() {
             >
               <div className="flex justify-center w-full">
                 <div
-                  className="flex py-6 gap-[60px] pl-[60px] pr-[180px] rounded-b-2xl shadow-sm pointer-events-auto"
-                  style={{ backgroundColor: '#EBEBEB' }}
+                  className="flex py-6 gap-[60px] pl-[60px] pr-[180px] rounded-b-2xl shadow-sm pointer-events-auto bg-gray-50 border-t border-gray-100"
                   onMouseEnter={() => setShowMegaMenu(true)}
                 >
                   {navigation.map((item) => (
@@ -377,7 +376,7 @@ export default function Header() {
 
       {/* Full Screen Mobile Menu - Rendered via Portal */}
       {typeof document !== 'undefined' && mobileMenuOpen && createPortal(
-        <div className="lg:hidden fixed inset-0 bg-white z-[100] overflow-y-auto animate-fade-in">
+        <div className="xl:hidden fixed inset-0 bg-white z-[100] overflow-y-auto animate-fade-in">
           {/* Header with Close Button */}
           <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
             <Link href="/" onClick={handleMobileMenuClose}>

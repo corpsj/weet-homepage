@@ -100,7 +100,7 @@ const navigation: { title: string; items: NavItem[] }[] = [
     }
 ];
 
-export default function AdminSidebar({ user }: { user?: any }) {
+export default function AdminSidebar({ user, onClose }: { user?: any, onClose?: () => void }) {
     const pathname = usePathname();
     const router = useRouter();
     const supabase = createClient();
@@ -137,8 +137,9 @@ export default function AdminSidebar({ user }: { user?: any }) {
                                     <Link
                                         key={item.name}
                                         href={item.href}
+                                        onClick={onClose}
                                         className={cn(
-                                            "flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-all duration-200 group",
+                                            "flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group",
                                             isActive
                                                 ? "bg-white/10 text-white shadow-lg backdrop-blur-sm"
                                                 : "text-gray-400 hover:bg-white/5 hover:text-white"

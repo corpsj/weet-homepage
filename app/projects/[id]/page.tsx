@@ -42,11 +42,11 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   }
 
   return (
-    <div className="container mx-auto px-4 py-16">
-      <div className="max-w-4xl mx-auto">
+    <main className="min-h-screen bg-white px-4 pb-32 pt-16 md:px-8 lg:pt-20">
+      <div className="mx-auto max-w-5xl">
         <Link 
           href="/projects"
-          className="inline-flex items-center text-sm text-gray-500 hover:text-blue-600 mb-8 transition-colors"
+          className="mb-8 inline-flex items-center text-sm font-bold text-gray-500 transition-colors hover:text-gray-900"
         >
           ← 목록으로 돌아가기
         </Link>
@@ -54,14 +54,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <header className="mb-10">
           <div className="flex gap-2 mb-4">
             {project.tags?.map((tag: string) => (
-              <span key={tag} className="text-sm font-medium text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+              <span key={tag} className="rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-gray-600">
                 {tag}
               </span>
             ))}
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-6">{project.title}</h1>
+          <h1 className="mb-6 text-4xl font-black text-gray-900 md:text-5xl">{project.title}</h1>
           
-          <div className="flex flex-wrap gap-y-4 gap-x-12 p-6 bg-gray-50 rounded-xl text-sm border border-gray-100">
+          <div className="grid gap-4 rounded-lg border border-gray-100 bg-gray-50 p-6 text-sm sm:grid-cols-3">
             <div>
               <span className="text-gray-500 block mb-1">고객사</span>
               <span className="font-medium text-gray-900">{project.client}</span>
@@ -78,15 +78,23 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </header>
 
         <div className="space-y-12">
-          {project.images?.[0] && (
-            <div className="relative aspect-video rounded-2xl overflow-hidden shadow-sm">
+          {project.images?.[0] ? (
+            <div className="relative aspect-video overflow-hidden rounded-lg bg-gray-100 shadow-sm">
               <Image
                 src={project.images[0]}
                 alt={project.title}
                 fill
+                sizes="(max-width: 1024px) 100vw, 960px"
                 className="object-cover"
                 priority
               />
+            </div>
+          ) : (
+            <div className="flex aspect-video items-center justify-center rounded-lg border border-gray-100 bg-gray-50 text-center text-gray-400">
+              <div>
+                <p className="text-sm font-black uppercase tracking-[0.18em]">Image Coming Soon</p>
+                <p className="mt-2 text-xs font-medium text-gray-500">{project.title}</p>
+              </div>
             </div>
           )}
 
@@ -97,11 +105,12 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           {project.images && project.images.length > 1 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {project.images.slice(1).map((img: string, i: number) => (
-                <div key={i} className="relative aspect-[4/3] rounded-xl overflow-hidden bg-gray-100">
+                <div key={i} className="relative aspect-[4/3] overflow-hidden rounded-lg bg-gray-100">
                   <Image
                     src={img}
                     alt={`${project.title} gallery ${i + 1}`}
                     fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
                     className="object-cover hover:scale-105 transition-transform duration-500"
                   />
                 </div>
@@ -110,6 +119,6 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           )}
         </div>
       </div>
-    </div>
+    </main>
   );
 }

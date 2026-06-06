@@ -24,7 +24,7 @@ export default function AdminSettingsPage() {
     const userId = userEmail.split('@')[0];
 
     const handleMigration = async () => {
-        if (!confirm('기존 데이터를 데이터베이스로 이관하시겠습니까? (중복 데이터가 생성될 수 있습니다)')) {
+        if (!confirm('위험 작업입니다. 기존 제품 데이터를 데이터베이스로 이관하시겠습니까? 이미 데이터가 있으면 중복 데이터가 생성될 수 있습니다.')) {
             return;
         }
 
@@ -48,7 +48,7 @@ export default function AdminSettingsPage() {
 
             <div className="space-y-6">
                 {/* Account Settings (Placeholder) */}
-                <div className="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                <div className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm md:p-8">
                     <h2 className="text-lg font-bold text-gray-900 mb-4">계정 설정</h2>
                     <div className="grid gap-6 max-w-xl">
                         <div>
@@ -70,7 +70,7 @@ export default function AdminSettingsPage() {
                 </div>
 
                 {/* Notification Settings (Placeholder) */}
-                <div className="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                <div className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm md:p-8">
                     <h2 className="text-lg font-bold text-gray-900 mb-4">알림 설정</h2>
                     <div className="space-y-4">
                         <div className="flex items-center justify-between max-w-xl">
@@ -84,29 +84,34 @@ export default function AdminSettingsPage() {
                 </div>
 
                 {/* Data Management */}
-                <div className="bg-white p-8 rounded-xl border border-gray-200 shadow-sm">
+                <div className="rounded-lg border border-gray-200 bg-white p-5 shadow-sm md:p-8">
                     <h2 className="text-lg font-bold text-gray-900 mb-4">데이터 관리</h2>
-                    <div className="p-4 bg-gray-50 rounded-lg border border-gray-200">
-                        <h3 className="font-medium text-gray-900 mb-2">초기 데이터 이관 (Migration)</h3>
-                        <p className="text-sm text-gray-500 mb-4">
-                            하드코딩된 제품 데이터를 Supabase 데이터베이스로 복사합니다.
-                            <br />
-                            이미 데이터가 존재하는 경우 중복될 수 있으니 주의하세요.
-                        </p>
-                        <button
-                            onClick={handleMigration}
-                            disabled={migrating}
-                            className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 flex items-center gap-2"
-                        >
-                            {migrating && <Loader2 className="w-4 h-4 animate-spin" />}
-                            데이터 이관 실행
-                        </button>
-                        {message && (
-                            <p className={`mt-2 text-sm ${message.includes('오류') ? 'text-red-600' : 'text-green-600'}`}>
-                                {message}
+                    <details className="rounded-lg border border-red-200 bg-red-50/60">
+                        <summary className="cursor-pointer px-4 py-3 text-sm font-bold text-red-700">
+                            고급 / 위험 작업
+                        </summary>
+                        <div className="border-t border-red-200 bg-white p-4">
+                            <h3 className="font-medium text-gray-900 mb-2">초기 데이터 이관 (Migration)</h3>
+                            <p className="text-sm text-gray-500 mb-4">
+                                하드코딩된 제품 데이터를 Supabase 데이터베이스로 복사합니다.
+                                <br />
+                                이미 데이터가 존재하는 경우 중복될 수 있으니 주의하세요.
                             </p>
-                        )}
-                    </div>
+                            <button
+                                onClick={handleMigration}
+                                disabled={migrating}
+                                className="flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-50"
+                            >
+                                {migrating && <Loader2 className="w-4 h-4 animate-spin" />}
+                                데이터 이관 실행
+                            </button>
+                            {message && (
+                                <p className={`mt-2 text-sm ${message.includes('오류') ? 'text-red-600' : 'text-green-600'}`}>
+                                    {message}
+                                </p>
+                            )}
+                        </div>
+                    </details>
                 </div>
             </div>
         </div>

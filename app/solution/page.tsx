@@ -114,16 +114,16 @@ export default function SolutionPage() {
   const copy = COPY[language];
 
   return (
-    <div className="min-h-screen bg-[#F9FAFB] font-sans text-[#1A1A1A]">
-      <main>
-        <div className="max-w-[1200px] mx-auto px-4 py-20 md:py-24">
+    <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
+      <main className="pb-40 pt-16 lg:pt-20">
+        <div className="max-w-[1200px] mx-auto px-4 md:px-8">
 
-          <div className="text-center mb-16">
-            <h1 className="text-4xl md:text-[42px] font-extrabold text-[#1A1A1A] tracking-tight mb-6">
+          <div className="text-center mb-16 lg:mb-24">
+            <h1 className="text-3xl md:text-5xl font-black text-gray-900 tracking-tight mb-6">
               {copy.title}
             </h1>
             <div className="w-[1px] h-8 bg-gray-300 mx-auto mb-6"></div>
-            <p className="text-[#666666] text-base md:text-lg leading-relaxed max-w-2xl mx-auto break-keep px-4">
+            <p className="text-gray-600 text-sm md:text-lg leading-relaxed max-w-2xl mx-auto break-keep px-4">
               {copy.description}
             </p>
           </div>
@@ -132,30 +132,30 @@ export default function SolutionPage() {
             {copy.cards.map((item) => (
               <div
                 key={item.id}
-                className="group bg-white rounded-xl p-6 md:p-8 shadow-sm border border-transparent hover:border-[#FEBD16] hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all duration-300 flex flex-col items-center text-center cursor-default h-full relative overflow-hidden"
+                className="group relative flex h-full cursor-default flex-col items-center overflow-hidden rounded-lg border border-transparent bg-white p-6 text-center shadow-sm transition-all duration-300 hover:border-[#FEBD16] hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] md:p-8"
               >
                 <div className="absolute top-0 left-0 w-full h-[4px] bg-[#FEBD16] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-center"></div>
 
-                <div className="w-[80px] h-[80px] rounded-full bg-[#FAFAFA] border border-[#F0F0F0] flex items-center justify-center mb-6 group-hover:bg-[#FFF9E6] group-hover:border-[#FEBD16] transition-all duration-300">
-                  <div className="text-[#888] group-hover:text-[#E5A410] transition-colors duration-300">
+                <div className="w-[80px] h-[80px] rounded-full bg-gray-50 border border-gray-100 flex items-center justify-center mb-6 group-hover:bg-[#FFF9E6] group-hover:border-[#FEBD16] transition-all duration-300">
+                  <div className="text-gray-400 group-hover:text-[#E5A410] transition-colors duration-300">
                     {React.cloneElement(item.icon as React.ReactElement<{ size?: number }>, { size: 36 })}
                   </div>
                 </div>
 
-                <h3 className="text-[19px] font-bold text-[#1A1A1A] mb-1">{item.title}</h3>
-                <span className="text-[11px] text-[#999999] font-medium uppercase tracking-wider mb-5 block">
+                <h3 className="text-xl font-bold text-gray-900 mb-1">{item.title}</h3>
+                <span className="text-[11px] text-gray-400 font-medium uppercase tracking-wider mb-5 block">
                   {item.subtitle}
                 </span>
 
-                <p className="text-[#666666] text-[14px] leading-relaxed mb-8 break-keep px-1 flex-grow">
+                <p className="text-gray-600 text-[14px] leading-relaxed mb-8 break-keep px-1 flex-grow">
                   {item.desc}
                 </p>
 
                 <div className="w-full pt-6 border-t border-gray-100 mt-auto">
-                  <p className="text-xs text-[#888] font-medium mb-4">{item.detail}</p>
+                  <p className="text-xs text-gray-400 font-medium mb-4">{item.detail}</p>
                   <Link
                     href={item.href}
-                    className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-gray-100 text-sm font-bold text-[#1A1A1A] hover:bg-[#FEBD16] hover:text-white transition-all duration-300"
+                    className="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-full bg-gray-100 text-sm font-bold text-gray-900 hover:bg-[#FEBD16] hover:text-white transition-all duration-300"
                   >
                     {copy.cta} <ArrowRight size={14} />
                   </Link>

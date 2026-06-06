@@ -1,4 +1,5 @@
 import { login } from './actions'
+import Image from 'next/image';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -19,57 +20,80 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl">
-                <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 tracking-tight">
-                        관리자 로그인
-                    </h2>
-                    <p className="mt-2 text-center text-sm text-gray-600">
-                        모듈러 관리를 위해 로그인해주세요
-                    </p>
+        <div className="min-h-[calc(100vh-80px)] bg-gray-50 px-4 py-12 text-gray-900 sm:px-6 lg:px-8">
+            <div className="mx-auto grid max-w-6xl overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm lg:grid-cols-[1.05fr_0.95fr]">
+                <div className="relative hidden min-h-[620px] bg-gray-950 lg:block">
+                    <Image
+                        src="/images/company/factory.webp"
+                        alt="위트 제작 현장"
+                        fill
+                        sizes="50vw"
+                        className="object-cover opacity-70"
+                        priority
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/40 to-transparent" />
+                    <div className="absolute bottom-10 left-10 right-10">
+                        <p className="text-xs font-black uppercase tracking-[0.22em] text-gray-400">WEET OPERATIONS</p>
+                        <h1 className="mt-4 text-4xl font-black leading-tight text-white">
+                            제품, 상담, 프로젝트를 한 곳에서 관리합니다
+                        </h1>
+                        <p className="mt-5 max-w-xl text-sm leading-7 text-gray-300">
+                            공개 사이트의 제품 경험과 내부 운영 콘솔이 같은 기준으로 이어지도록 정돈했습니다.
+                        </p>
+                    </div>
                 </div>
-                <form className="mt-8 space-y-6">
-                    <div className="rounded-md shadow-sm -space-y-px">
-                        <div className="mb-4">
-                            <label htmlFor="id" className="block text-sm font-medium text-gray-700 mb-1">
-                                아이디
-                            </label>
-                            <input
-                                id="id"
-                                name="id"
-                                type="text"
-                                autoComplete="username"
-                                required
-                                className="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-black focus:border-transparent transition-all duration-200 sm:text-sm"
-                                placeholder="아이디를 입력하세요"
-                            />
-                        </div>
-                        <div>
-                            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                                비밀번호
-                            </label>
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                autoComplete="current-password"
-                                required
-                                className="appearance-none relative block w-full px-4 py-3 border border-gray-300 placeholder-gray-400 text-gray-900 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-1 focus:ring-black focus:border-transparent transition-all duration-200 sm:text-sm"
-                                placeholder="비밀번호를 입력하세요"
-                            />
-                        </div>
-                    </div>
 
-                    <div>
-                        <button
-                            formAction={login}
-                            className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-bold rounded-lg text-white bg-black hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5"
-                        >
-                            로그인
-                        </button>
+                <div className="flex min-h-[560px] items-center justify-center p-6 md:p-12">
+                    <div className="w-full max-w-md">
+                        <p className="text-xs font-black uppercase tracking-[0.2em] text-gray-500">ADMIN ACCESS</p>
+                        <h2 className="mt-4 text-3xl font-black tracking-tight text-gray-900">
+                            관리자 로그인
+                        </h2>
+                        <p className="mt-3 text-sm leading-6 text-gray-500">
+                            위트 운영 계정으로 접속해 제품 구성과 상담 흐름을 관리합니다.
+                        </p>
+
+                        <form className="mt-10 space-y-6">
+                            <div className="space-y-5">
+                                <div>
+                                    <label htmlFor="id" className="mb-2 block text-sm font-bold text-gray-700">
+                                        아이디
+                                    </label>
+                                    <input
+                                        id="id"
+                                        name="id"
+                                        type="text"
+                                        autoComplete="username"
+                                        required
+                                        className="relative block w-full appearance-none rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder:text-gray-400 transition-all duration-200 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-900/20 sm:text-sm"
+                                        placeholder="아이디를 입력하세요"
+                                    />
+                                </div>
+                                <div>
+                                    <label htmlFor="password" className="mb-2 block text-sm font-bold text-gray-700">
+                                        비밀번호
+                                    </label>
+                                    <input
+                                        id="password"
+                                        name="password"
+                                        type="password"
+                                        autoComplete="current-password"
+                                        required
+                                        className="relative block w-full appearance-none rounded-lg border border-gray-300 px-4 py-3 text-gray-900 placeholder:text-gray-400 transition-all duration-200 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-gray-900/20 sm:text-sm"
+                                        placeholder="비밀번호를 입력하세요"
+                                    />
+                                </div>
+                            </div>
+
+                            <button
+                                formAction={login}
+                                className="flex w-full justify-center rounded-lg border border-transparent bg-gray-900 px-4 py-3 text-sm font-bold text-white shadow-sm transition-colors duration-200 hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900/20 focus:ring-offset-2"
+                            >
+                                로그인
+                            </button>
+                        </form>
                     </div>
-                </form>
+                </div>
             </div>
         </div>
     )

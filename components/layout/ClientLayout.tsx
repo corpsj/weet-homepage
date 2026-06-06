@@ -36,7 +36,7 @@ export default function ClientLayout({
     return (
         <>
             <Header />
-            <main className="flex-1 pt-[70px] md:pt-[90px] lg:pt-[110px]">{children}</main>
+            <main className="flex-1 pt-[70px] md:pt-[80px] lg:pt-[80px]">{children}</main>
             <Footer />
             <Toaster position="top-right" richColors />
         </>

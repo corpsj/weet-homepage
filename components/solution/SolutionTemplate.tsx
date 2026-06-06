@@ -4,7 +4,7 @@ import { useState, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, Image as ImageIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import FeatureModal from './FeatureModal';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -50,6 +50,7 @@ export default function SolutionTemplate({
     const { language } = useLanguage();
     const navLinks = language === 'KO' ? NAV.KO : NAV.EN;
     const viewMoreLabel = language === 'KO' ? '자세히 보기' : 'View more';
+    const imagePendingLabel = language === 'KO' ? '이미지 준비 중' : 'Image pending';
     const containerRef = useRef<HTMLDivElement>(null);
     const { scrollYProgress } = useScroll({
         target: containerRef,
@@ -146,7 +147,7 @@ export default function SolutionTemplate({
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                                className="group bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500 border border-gray-100 flex flex-col"
+                                className="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500 border border-gray-100 flex flex-col"
                             >
                                 <div className="relative h-64 overflow-hidden cursor-pointer" onClick={() => openModal(feature)}>
                                     {feature.image ? (
@@ -159,8 +160,9 @@ export default function SolutionTemplate({
                                             className="object-cover group-hover:scale-105 transition-transform duration-700"
                                         />
                                     ) : (
-                                        <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
-                                            No Image
+                                        <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gray-100 text-gray-500">
+                                            <ImageIcon className="h-7 w-7" />
+                                            <span className="text-sm font-semibold">{imagePendingLabel}</span>
                                         </div>
                                     )}
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />

@@ -1,8 +1,9 @@
 'use client';
 
-import { X } from 'lucide-react';
+import { Image as ImageIcon, X } from 'lucide-react';
 import Image from 'next/image';
 import { useEffect } from 'react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface FeatureModalProps {
     isOpen: boolean;
@@ -16,6 +17,9 @@ interface FeatureModalProps {
 }
 
 export default function FeatureModal({ isOpen, onClose, feature }: FeatureModalProps) {
+    const { language } = useLanguage();
+    const imagePendingLabel = language === 'KO' ? '이미지 준비 중' : 'Image pending';
+
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = 'hidden';
@@ -32,7 +36,7 @@ export default function FeatureModal({ isOpen, onClose, feature }: FeatureModalP
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300" onClick={onClose}>
             <div
-                className="bg-white w-full max-w-4xl max-h-[85vh] rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden animate-in fade-in zoom-in-95 duration-300"
+                className="bg-white w-full max-w-4xl max-h-[85vh] rounded-lg shadow-2xl flex flex-col md:flex-row overflow-hidden animate-in fade-in zoom-in-95 duration-300"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Close Button Mobile */}
@@ -53,7 +57,10 @@ export default function FeatureModal({ isOpen, onClose, feature }: FeatureModalP
                             className="object-cover"
                         />
                     ) : (
-                        <div className="text-gray-400">No Image</div>
+                        <div className="flex flex-col items-center justify-center gap-3 text-gray-500">
+                            <ImageIcon className="h-7 w-7" />
+                            <span className="text-sm font-semibold">{imagePendingLabel}</span>
+                        </div>
                     )}
                 </div>
 
@@ -66,7 +73,12 @@ export default function FeatureModal({ isOpen, onClose, feature }: FeatureModalP
                             fill
                             className="object-cover"
                         />
-                    ) : null}
+                    ) : (
+                        <div className="flex h-full flex-col items-center justify-center gap-3 text-gray-500">
+                            <ImageIcon className="h-7 w-7" />
+                            <span className="text-sm font-semibold">{imagePendingLabel}</span>
+                        </div>
+                    )}
                 </div>
 
                 {/* Right: Content */}

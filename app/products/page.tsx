@@ -1,10 +1,10 @@
-﻿"use client";
+"use client";
 
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { getProducts } from "@/lib/products";
 import { Product } from "@/types/supabase";
-import { ChevronDown, ChevronUp, X } from "lucide-react";
+import { ChevronDown, Home, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -99,6 +99,12 @@ export default function ProductsPage() {
     const [products, setProducts] = useState<ProductData[]>([]);
     const [loading, setLoading] = useState(true);
     const [expandedCategories, setExpandedCategories] = useState<string[]>(["S", "M", "L", "XL", "DESIGN"]);
+    const [expandedMobileProducts, setExpandedMobileProducts] = useState<string[]>([]);
+
+    const toggleMobileProduct = (id: string) => {
+        setExpandedMobileProducts(prev => prev.includes(id) ? prev.filter(pid => pid !== id) : [...prev, id]);
+    };
+
     const [activeProduct, setActiveProduct] = useState<string>("");
     const productRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
     const sidebarRef = useRef<HTMLDivElement>(null);
@@ -390,17 +396,17 @@ export default function ProductsPage() {
 
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-[#EBEBEB]">
+            <div className="min-h-screen flex items-center justify-center bg-gray-50">
                 <div className="text-xl font-bold text-gray-500">{TEXT.loading}</div>
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-[#EBEBEB]">
+        <div className="min-h-screen bg-gray-50">
             <div className="flex flex-col lg:flex-row max-w-[1920px] mx-auto relative">
                 {/* Sidebar */}
-                <aside className="w-[280px] h-screen sticky top-0 hidden lg:flex flex-col pt-[140px] pb-10 pl-[60px] overflow-hidden">
+                <aside className="w-[280px] h-screen sticky top-0 hidden lg:flex flex-col pt-[140px] pb-10 pl-[60px] overflow-hidden bg-gray-50 border-r border-gray-100 z-10">
                     <div ref={sidebarRef} className="flex-1 overflow-y-auto pr-6 custom-scrollbar space-y-12">
                         {(Object.keys(sidebarStructure) as Array<keyof typeof sidebarStructure>).map((key) => {
                             const category = sidebarStructure[key];
@@ -517,7 +523,7 @@ export default function ProductsPage() {
                 </aside>
 
                 {/* Mobile Top Navigation */}
-                <div className={`lg:hidden sticky z-40 bg-[#EBEBEB]/95 backdrop-blur-sm border-b border-gray-200 shadow-sm transition-[top] duration-300 ${isHeaderVisible ? 'top-[105px] md:top-[135px] lg:top-[110px]' : 'top-0'}`}>
+                <div className={`lg:hidden sticky z-40 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm transition-[top] duration-300 ${isHeaderVisible ? 'top-[70px] md:top-[80px]' : 'top-0'}`}>
                     <div className="flex overflow-x-auto px-4 py-3 gap-6 no-scrollbar">
                         {(Object.keys(sidebarStructure) as Array<keyof typeof sidebarStructure>).map((key) => {
                             const category = sidebarStructure[key];
@@ -549,11 +555,15 @@ export default function ProductsPage() {
                 </div>
 
                 {/* Main Content */}
-                <main className="flex-1 min-h-screen pt-[100px] md:pt-[190px] lg:pt-[140px] px-4 lg:px-20 pb-40">
-                    {/* Active Product Overlay for Desktop (Optional, maybe minimal breadcrumb instead?) */}
-                    {/* Removing the sticky header inside main content to prevent conflicts, Sidebar handles navigation */}
+                <main className="flex-1 min-h-screen pt-[120px] md:pt-[160px] lg:pt-[140px] px-4 lg:px-20 pb-40 bg-white lg:bg-transparent">
+                    <div className="max-w-5xl mx-auto mb-10 lg:mb-32 text-center lg:text-left mt-4 lg:mt-0">
+                        <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">{isKO ? '제품 소개' : 'Products'}</h1>
+                        <p className="text-gray-600 text-sm md:text-lg">
+                            {isKO ? '작고 단단한 내 집, 필요한 크기와 목적에 맞는 구성을 찾아보세요.' : 'Find the right size and layout for your needs.'}
+                        </p>
+                    </div>
 
-                    <div className="max-w-5xl mx-auto space-y-[20vh]"> {/* Increased spacing for better scroll detection */}
+                    <div className="max-w-5xl mx-auto space-y-12 lg:space-y-[20vh]"> {/* Increased spacing for better scroll detection */}
                         {products.map((product, index) => {
                             // Check if this is the first product of its category to render the anchor
                             const isFirstOfCategory = index === 0 || products[index - 1].sizeCategory !== product.sizeCategory;
@@ -568,55 +578,68 @@ export default function ProductsPage() {
 
                                     <div
                                         ref={(el) => { productRefs.current[product.id] = el; }}
-                                        className="scroll-mt-32"
+                                        className="overflow-hidden rounded-lg border border-gray-100 bg-gray-50 shadow-sm scroll-mt-32 lg:border-none lg:bg-transparent lg:p-0 lg:shadow-none"
                                     >
-                                        {/* Product Header */}
-                                        <div className="mb-8">
-                                            <div className="flex items-baseline gap-4 mb-2">
-                                                <h2 className="text-4xl font-bold text-gray-900">{product.name}</h2>
-                                            </div>
-                                            {product.tagline && (
-                                                <p className="text-lg text-gray-600">{product.tagline}</p>
-                                            )}
-                                        </div>
-
-                                        {/* Main Image */}
-                                        <div
-                                            className="relative w-full aspect-[16/9] bg-gray-200 rounded-2xl overflow-hidden mb-12 shadow-sm cursor-pointer group"
-                                            onClick={() => openGallery(product)}
-                                        >
-                                            {product.imageUrl ? (
-                                                <>
-                                                    <Image
-                                                        src={product.imageUrl}
-                                                        alt={product.name}
-                                                        fill
-                                                        className="object-cover group-hover:scale-105 transition-transform duration-500"
-                                                        sizes="(max-width: 768px) 100vw, 80vw"
-                                                        priority={products.indexOf(product) < 2}
-                                                    />
-                                                    {/* Gallery hint icon */}
-                                                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
-                                                        <div className="bg-white/80 backdrop-blur-sm p-3 rounded-full">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6" /><path d="M9 21H3v-6" /><path d="M21 3l-7 7" /><path d="M3 21l7-7" /></svg>
-                                                        </div>
-                                                    </div>
-                                                    {/* Image count indicator if multiple */}
-                                                    {(product.subImages && product.subImages.length > 0) && (
-                                                        <div className="absolute bottom-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm">
-                                                            + {product.subImages.length + 1} Images
-                                                        </div>
-                                                    )}
-                                                </>
-                                            ) : (
-                                                <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                                                    No Image
+                                        <div className="p-5 lg:p-0">
+                                            {/* Product Header */}
+                                            <div className="mb-4 lg:mb-8">
+                                                <div className="flex items-baseline gap-4 mb-1 lg:mb-2">
+                                                    <h2 className="text-2xl lg:text-4xl font-bold text-gray-900">{product.name}</h2>
                                                 </div>
-                                            )}
+                                                {product.tagline && (
+                                                    <p className="text-sm lg:text-lg text-gray-600">{product.tagline}</p>
+                                                )}
+                                            </div>
+
+                                            {/* Main Image */}
+                                            <div
+                                                className="group relative aspect-[16/9] w-full cursor-pointer overflow-hidden rounded-lg bg-gray-200 lg:mb-12"
+                                                onClick={() => openGallery(product)}
+                                            >
+                                                {product.imageUrl ? (
+                                                    <>
+                                                        <Image
+                                                            src={product.imageUrl}
+                                                            alt={product.name}
+                                                            fill
+                                                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                                            sizes="(max-width: 768px) 100vw, 80vw"
+                                                            priority={products.indexOf(product) < 2}
+                                                        />
+                                                        {/* Gallery hint icon */}
+                                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
+                                                            <div className="bg-white/80 backdrop-blur-sm p-3 rounded-full">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6" /><path d="M9 21H3v-6" /><path d="M21 3l-7 7" /><path d="M3 21l7-7" /></svg>
+                                                            </div>
+                                                        </div>
+                                                        {/* Image count indicator if multiple */}
+                                                        {(product.subImages && product.subImages.length > 0) && (
+                                                            <div className="absolute bottom-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm">
+                                                                + {product.subImages.length + 1}
+                                                            </div>
+                                                        )}
+                                                    </>
+                                                ) : (
+                                                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 text-gray-400">
+                                                        <Home className="w-8 h-8 mb-2 opacity-50" />
+                                                        <span className="text-sm font-bold uppercase tracking-wider">Image Coming Soon</span>
+                                                    </div>
+                                                )}
+                                            </div>
+
+                                            {/* Mobile Accordion Toggle */}
+                                            <button
+                                                className="w-full mt-4 flex items-center justify-between lg:hidden text-gray-600 font-bold py-2 px-1 hover:text-gray-900"
+                                                onClick={() => toggleMobileProduct(product.id)}
+                                            >
+                                                <span>{expandedMobileProducts.includes(product.id) ? (isKO ? '상세정보 닫기' : 'Hide Details') : (isKO ? '상세정보 보기' : 'View Details')}</span>
+                                                <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${expandedMobileProducts.includes(product.id) ? 'rotate-180' : ''}`} />
+                                            </button>
                                         </div>
 
-                                        {/* Details Grid */}
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-20">
+                                        {/* Details Grid (Collapsible on Mobile) */}
+                                        <div className={`lg:block ${expandedMobileProducts.includes(product.id) ? 'block px-5 pb-5' : 'hidden'} lg:px-0 lg:pb-0`}>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-20">
                                             {/* Left: Description & Specs */}
                                             <div className="space-y-8">
                                                 <div>
@@ -660,7 +683,7 @@ export default function ProductsPage() {
                                             {/* Right: Floor Plan */}
                                             <div>
                                                 <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">{TEXT.floorPlan}</h3>
-                                                <div className="w-full aspect-[4/3] rounded-xl flex items-center justify-center relative overflow-hidden border border-gray-100">
+                                                <div className="relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-lg border border-gray-100">
                                                     {product.floorPlan.src ? (
                                                         <div className="relative w-full h-full">
                                                             <Image
@@ -673,7 +696,19 @@ export default function ProductsPage() {
                                                     ) : (
                                                         <div className="text-gray-400 text-sm">{TEXT.floorPlanWaiting}</div>
                                                     )}
-                                                </div>
+                                            </div>
+
+                                            {/* Soft CTA */}
+                                            <div className="mt-8 lg:mt-12 pt-6 border-t border-gray-100 flex justify-center lg:justify-start">
+                                                <a
+                                                    href={`/customize?product=${product.id}`}
+                                                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white border border-gray-200 text-gray-900 font-bold text-sm transition-colors hover:bg-gray-50"
+                                                >
+                                                    {isKO ? '비슷한 구성 만들기' : 'Customize this model'}
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                                                </a>
+                                            </div>
+                                        </div>
                                             </div>
                                         </div>
                                     </div>

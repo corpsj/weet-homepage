@@ -137,7 +137,7 @@ export default function RootLayout({
   ];
 
   return (
-    <html lang="ko" className={cn("font-sans", geist.variable)}>
+    <html lang="ko" data-scroll-behavior="smooth" className={cn("font-sans", geist.variable)}>
       <head>
         <script
           type="application/ld+json"

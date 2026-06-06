@@ -15,56 +15,101 @@ export const metadata: Metadata = {
 };
 
 export default function PrivacyPage() {
-    return (
-        <div className="min-h-screen bg-white pt-32 pb-24 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-3xl mx-auto">
-                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-8 pb-4 border-b border-gray-200">
-                    개인정보처리방침
-                </h1>
+  return (
+    <div className="min-h-screen bg-gray-50 px-4 pb-32 pt-16 sm:px-6 md:pt-20 lg:px-8">
+      <div className="mx-auto max-w-4xl rounded-lg border border-gray-100 bg-white p-8 shadow-sm md:p-12 lg:p-16">
+        <h1 className="mb-8 border-b border-gray-200 pb-6 text-3xl font-black text-gray-900 md:text-5xl">
+          개인정보처리방침
+        </h1>
 
-                <div className="prose prose-lg max-w-none text-gray-600 space-y-8">
-                    <p className="text-sm text-gray-400">최종 수정일: 2025년 12월 12일</p>
+        <div className="prose prose-lg max-w-none space-y-10 text-gray-600">
+          <p className="text-sm font-bold text-gray-400">최종 수정일: 2026년 6월 7일</p>
 
-                    <section>
-                        <h2 className="text-xl font-bold text-gray-900 mb-4">1. 개인정보의 처리 목적</h2>
-                        <p>
-                            회사는 다음의 목적을 위하여 개인정보를 처리합니다. 처리하고 있는 개인정보는 다음의 목적 이외의 용도로는 이용되지 않으며 이용 목적이 변경되는 경우에는 「개인정보 보호법」 제18조에 따라 별도의 동의를 받는 등 필요한 조치를 이행할 예정입니다.
-                        </p>
-                    </section>
+          <section>
+            <h2 className="mb-4 text-xl font-bold text-gray-900 md:text-2xl">1. 개인정보 처리 범위</h2>
+            <p>
+              주식회사 위트(WEET)는 홈페이지에서 이동식주택 구성 상담, 기존 문의 응대, 관리자 운영,
+              서비스 이용 통계 확인에 필요한 최소한의 개인정보를 처리합니다. 온라인 예상 견적은 상담을
+              시작하기 위한 참고 정보이며, 최종 계약 정보는 별도 상담과 계약 절차에서 확정됩니다.
+            </p>
+          </section>
 
-                    <section>
-                        <h2 className="text-xl font-bold text-gray-900 mb-4">2. 개인정보의 처리 및 보유 기간</h2>
-                        <p>
-                            회사는 법령에 따른 개인정보 보유·이용기간 또는 정보주체로부터 개인정보를 수집 시에 동의받은 개인정보 보유·이용기간 내에서 개인정보를 처리·보유합니다.
-                        </p>
-                    </section>
+          <section>
+            <h2 className="mb-4 text-xl font-bold text-gray-900 md:text-2xl">2. 수집 항목</h2>
+            <ul className="mt-2 list-disc space-y-3 pl-5">
+              <li>
+                <strong className="text-gray-900">주문 구성 상담:</strong> 이름, 연락처, 지역, 예상 구매 시기,
+                설치할 장소 지목, 구매 예산, 설치 주소, 추가 메모, 선택 모델, 선택 옵션, 예상 총액,
+                구성 URL, 구성 스냅샷(모델·옵션·포함 사양·금액·생성 시각)을 저장합니다.
+              </li>
+              <li>
+                <strong className="text-gray-900">기존 문의:</strong> 이름, 연락처, 이메일(선택), 문의 내용,
+                문의 분류, 처리 상태, 답변 내용과 답변 시각을 저장할 수 있습니다.
+              </li>
+              <li>
+                <strong className="text-gray-900">관리자 이용:</strong> Supabase 인증을 위한 관리자 이메일,
+                로그인 세션 쿠키, 관리자 화면에서 입력한 처리 상태와 내부 메모를 처리합니다.
+              </li>
+              <li>
+                <strong className="text-gray-900">자동 생성 정보:</strong> 서비스 이용 과정에서 IP 주소,
+                브라우저 정보, 접속 일시, 페이지 이용 기록, 쿠키가 생성될 수 있습니다.
+              </li>
+              <li>
+                <strong className="text-gray-900">분석 도구:</strong> Vercel Analytics는 기본 방문 통계를
+                처리할 수 있으며, Google Analytics와 Microsoft Clarity는 환경변수로 설정된 경우에만
+                로드되어 페이지 이용 통계를 처리합니다.
+              </li>
+            </ul>
+          </section>
 
-                    <section>
-                        <h2 className="text-xl font-bold text-gray-900 mb-4">3. 정보주체와 법정대리인의 권리·의무 및 그 행사방법</h2>
-                        <p>
-                            정보주체는 회사에 대해 언제든지 개인정보 열람·정정·삭제·처리정지 요구 등의 권리를 행사할 수 있습니다.
-                        </p>
-                    </section>
+          <section>
+            <h2 className="mb-4 text-xl font-bold text-gray-900 md:text-2xl">3. 이용 목적</h2>
+            <ul className="mt-2 list-disc space-y-2 pl-5">
+              <li>선택한 모델과 옵션을 바탕으로 상담 요청을 접수하고 구성 내용을 확인합니다.</li>
+              <li>현장 조건, 설치 가능성, 예상 일정, 견적 범위를 안내합니다.</li>
+              <li>기존 문의와 A/S 관련 요청을 확인하고 답변합니다.</li>
+              <li>관리자 화면에서 상담, 문의, 프로젝트, 제품 정보를 운영합니다.</li>
+              <li>서비스 안정성, 유입 경로, 인기 페이지 등 비즈니스 운영 지표를 확인합니다.</li>
+            </ul>
+          </section>
 
-                    <section>
-                        <h2 className="text-xl font-bold text-gray-900 mb-4">4. 처리하는 개인정보의 항목</h2>
-                        <p>
-                            회사는 다음의 개인정보 항목을 처리하고 있습니다.
-                        </p>
-                        <ul className="list-disc pl-5 mt-2 space-y-1">
-                            <li>성명, 전화번호, 이메일</li>
-                            <li>서비스 이용 기록, 접속 로그, 쿠키, 접속 IP 정보</li>
-                        </ul>
-                    </section>
+          <section>
+            <h2 className="mb-4 text-xl font-bold text-gray-900 md:text-2xl">4. 보유 및 삭제</h2>
+            <p>
+              상담과 문의 정보는 응대, 견적 검토, 분쟁 대응 등 이용 목적에 필요한 기간 동안 보관합니다.
+              이용자가 삭제를 요청하거나 보관 목적이 종료된 경우 관리자가 관리자 화면에서 수동으로 삭제할
+              수 있습니다. 단, 계약·대금 결제·소비자 분쟁 등 관계 법령에 따라 보관해야 하는 정보는 해당
+              기간 동안 보관할 수 있습니다.
+            </p>
+            <p className="mt-4">
+              Supabase 인증 쿠키와 세션 정보는 인증 상태 유지와 보안을 위해 사용되며, 만료·로그아웃·브라우저
+              설정에 따라 삭제됩니다. 분석 도구가 처리하는 정보의 보관 기간과 삭제 방식은 각 제공사의 정책을
+              따릅니다.
+            </p>
+          </section>
 
-                    <section>
-                        <h2 className="text-xl font-bold text-gray-900 mb-4">5. 개인정보의 파기</h2>
-                        <p>
-                            회사는 개인정보 보유기간의 경과, 처리목적 달성 등 개인정보가 불필요하게 되었을 때에는 지체없이 해당 개인정보를 파기합니다.
-                        </p>
-                    </section>
-                </div>
-            </div>
+          <section>
+            <h2 className="mb-4 text-xl font-bold text-gray-900 md:text-2xl">5. 처리 위탁 및 제3자 도구</h2>
+            <p>
+              위트는 서비스 제공을 위해 Supabase(데이터베이스와 인증), Vercel(호스팅과 기본 분석),
+              Google Analytics(설정된 경우), Microsoft Clarity(설정된 경우)를 사용할 수 있습니다. 각 도구는
+              서비스 운영, 보안, 통계 확인 목적에 한해 사용됩니다.
+            </p>
+          </section>
+
+          <section>
+            <h2 className="mb-4 text-xl font-bold text-gray-900 md:text-2xl">6. 이용자의 권리</h2>
+            <p>
+              이용자는 본인의 개인정보 열람, 정정, 삭제, 처리 정지를 요청할 수 있습니다. 요청은 아래 연락처로
+              접수할 수 있으며, 위트는 본인 확인 후 가능한 범위에서 지체 없이 처리합니다.
+            </p>
+            <ul className="mt-2 list-disc space-y-1 pl-5">
+              <li>담당 부서: 고객지원팀</li>
+              <li>연락처: 010-9645-2348</li>
+            </ul>
+          </section>
         </div>
-    );
+      </div>
+    </div>
+  );
 }

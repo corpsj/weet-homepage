@@ -128,23 +128,23 @@ export default function BespokePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <section id="what-is-bespoke" className="bg-[#EBEBEB] py-20 md:py-28 lg:py-32 overflow-hidden scroll-mt-[180px]">
+      <section id="what-is-bespoke" className="bg-gray-50 py-20 md:py-28 lg:py-32 overflow-hidden scroll-mt-[180px]">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-[50px] md:text-[70px] lg:text-[90px] font-bold mb-8 md:mb-12 leading-none tracking-tight">
+            <h1 className="text-[40px] md:text-[60px] lg:text-[80px] font-black mb-8 md:mb-12 leading-tight tracking-tight text-gray-900">
               {copy.headline}
             </h1>
 
             <div className="flex flex-col lg:flex-row gap-12 lg:gap-20">
               <div className="lg:w-[65%]">
-                <p className="text-[18px] md:text-[20px] leading-relaxed mb-6 text-gray-800 break-keep">
+                <p className="text-[16px] md:text-[20px] leading-relaxed mb-6 text-gray-600 break-keep">
                   {copy.lead}
                 </p>
-                <p className="text-[20px] md:text-[24px] font-semibold text-black break-keep">
+                <p className="text-[18px] md:text-[24px] font-bold text-gray-900 break-keep">
                   {copy.highlight}
                 </p>
               </div>
@@ -179,6 +179,7 @@ export default function BespokePage() {
               src={section.image.src}
               alt={section.image.alt}
               fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
               className="object-cover rounded-lg shadow-2xl hover:scale-105 transition-transform duration-500"
             />
           </motion.div>
@@ -193,17 +194,14 @@ export default function BespokePage() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <span className="text-primary font-bold tracking-widest text-sm mb-4 block">{section.badge}</span>
-            <h2 className="text-[40px] md:text-[60px] font-bold mb-6 leading-tight">{section.title}</h2>
-            <p className="text-[20px] md:text-[24px] font-medium mb-6 text-gray-900 break-keep">
+            <span className="text-gray-500 font-bold tracking-widest text-sm mb-4 block">{section.badge}</span>
+            <h2 className="text-[32px] md:text-[50px] lg:text-[60px] font-black mb-6 leading-tight text-gray-900">{section.title}</h2>
+            <p className="text-[18px] md:text-[24px] font-bold mb-6 text-gray-800 break-keep">
               {section.quote}
             </p>
-            <p className="text-gray-600 leading-relaxed mb-8 text-lg break-keep">
+            <p className="text-gray-600 leading-relaxed text-base md:text-lg break-keep">
               {section.body}
             </p>
-            <button className="border-b-2 border-black pb-1 text-lg font-medium hover:text-primary hover:border-primary transition-colors min-h-[44px] inline-flex items-center">
-              {section.cta}
-            </button>
           </motion.div>
         );
 
@@ -211,7 +209,7 @@ export default function BespokePage() {
           <section
             key={section.id}
             id={section.id === 'popup-store' ? 'examples' : undefined}
-            className={`${section.imageOnRight ? 'bg-white' : 'bg-[#F5F5F5]'} py-20 md:py-32 overflow-hidden scroll-mt-[180px]`}
+            className={`${section.imageOnRight ? 'bg-white' : 'bg-gray-50'} py-20 md:py-32 overflow-hidden scroll-mt-[180px]`}
           >
             <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
               <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
@@ -255,6 +253,7 @@ export default function BespokePage() {
                   src={IMAGES.find((img) => img.id === selectedId)!.src}
                   alt={IMAGES.find((img) => img.id === selectedId)!.alt}
                   fill
+                  sizes="100vw"
                   className="object-contain"
                   priority
                 />
