@@ -52,7 +52,8 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                         alt="Background"
                         fill
                         className="object-cover blur-2xl opacity-60 scale-110"
-                        priority
+                        loading={currentSlide === 0 ? 'eager' : 'lazy'}
+                        sizes="100vw"
                     />
                     <div className="absolute inset-0 bg-black/10" />
                 </motion.div>
@@ -75,7 +76,7 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                                 src={initialSlides[currentSlide].image_url}
                                 alt={initialSlides[currentSlide].title || 'Hero Image'}
                                 fill
-                                priority
+                                loading={currentSlide === 0 ? 'eager' : 'lazy'}
                                 className="object-cover"
                                 sizes="(max-width: 1400px) 100vw, 1400px"
                             />

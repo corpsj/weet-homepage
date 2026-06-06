@@ -1,7 +1,8 @@
 'use client';
 
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import {
-    XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+    XAxis, YAxis, CartesianGrid, Tooltip,
     BarChart, Bar, PieChart, Pie, Cell, Area, AreaChart
 } from 'recharts';
 import { ArrowUpRight, Users, MousePointer, Clock, TrendingUp, Monitor } from 'lucide-react';
@@ -50,6 +51,45 @@ function CustomTooltip({ active, payload, label }: any) {
         );
     }
     return null;
+}
+
+function ChartShell({ children, className }: { children: (size: { width: number; height: number }) => ReactNode; className: string }) {
+    const containerRef = useRef<HTMLDivElement>(null);
+    const [size, setSize] = useState({ width: 0, height: 0 });
+
+    useEffect(() => {
+        const node = containerRef.current;
+        if (!node) return;
+
+        const updateSize = (width: number, height: number) => {
+            const nextSize = {
+                width: Math.floor(width),
+                height: Math.floor(height),
+            };
+
+            setSize((current) => (
+                current.width === nextSize.width && current.height === nextSize.height ? current : nextSize
+            ));
+        };
+        const updateFromNode = () => {
+            const rect = node.getBoundingClientRect();
+            updateSize(rect.width, rect.height);
+        };
+        const observer = new ResizeObserver(([entry]) => {
+            updateSize(entry.contentRect.width, entry.contentRect.height);
+        });
+
+        updateFromNode();
+        observer.observe(node);
+
+        return () => observer.disconnect();
+    }, []);
+
+    return (
+        <div ref={containerRef} className={`${className} min-w-0`}>
+            {size.width > 0 && size.height > 0 ? children(size) : <div className="h-full w-full rounded-lg bg-gray-50" />}
+        </div>
+    );
 }
 
 export default function AnalyticsDashboard({
@@ -155,9 +195,9 @@ export default function AnalyticsDashboard({
                             </div>
                         </div>
                     </div>
-                    <div className="h-[350px]">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <AreaChart data={trafficData}>
+                    <ChartShell className="h-[350px]">
+                        {({ width, height }) => (
+                            <AreaChart width={width} height={height} data={trafficData}>
                                 <defs>
                                     <linearGradient id="colorUsers" x1="0" y1="0" x2="0" y2="1">
                                         <stop offset="5%" stopColor="#000000" stopOpacity={0.1} />
@@ -198,8 +238,8 @@ export default function AnalyticsDashboard({
                                     strokeDasharray="5 5"
                                 />
                             </AreaChart>
-                        </ResponsiveContainer>
-                    </div>
+                        )}
+                    </ChartShell>
                 </div>
 
                 {/* Device Breakdown */}
@@ -207,25 +247,27 @@ export default function AnalyticsDashboard({
                     <h3 className="text-lg font-bold text-gray-900 mb-2">기기별 접속</h3>
                     <p className="text-sm text-gray-500 mb-8">사용자 접속 환경 비율</p>
                     <div className="h-[300px] relative">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <PieChart>
-                                <Pie
-                                    data={deviceData}
-                                    cx="50%"
-                                    cy="50%"
-                                    innerRadius={80}
-                                    outerRadius={100}
-                                    paddingAngle={5}
-                                    dataKey="value"
-                                    stroke="none"
-                                >
-                                    {deviceData.map((entry: any, index: number) => (
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                    ))}
-                                </Pie>
-                                <Tooltip content={<CustomTooltip />} />
-                            </PieChart>
-                        </ResponsiveContainer>
+                        <ChartShell className="h-full">
+                            {({ width, height }) => (
+                                <PieChart width={width} height={height}>
+                                    <Pie
+                                        data={deviceData}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={80}
+                                        outerRadius={100}
+                                        paddingAngle={5}
+                                        dataKey="value"
+                                        stroke="none"
+                                    >
+                                        {deviceData.map((entry: any, index: number) => (
+                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip content={<CustomTooltip />} />
+                                </PieChart>
+                            )}
+                        </ChartShell>
                         {/* Center Text */}
                         <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
                             <Monitor className="w-6 h-6 text-gray-400 mb-1" />
@@ -250,9 +292,9 @@ export default function AnalyticsDashboard({
                 <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300">
                     <h3 className="text-lg font-bold text-gray-900 mb-2">유입 경로</h3>
                     <p className="text-sm text-gray-500 mb-8">사용자가 사이트를 찾은 방법 (Top 5)</p>
-                    <div className="h-[300px]">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={acquisitionData} layout="vertical" margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
+                    <ChartShell className="h-[300px]">
+                        {({ width, height }) => (
+                            <BarChart width={width} height={height} data={acquisitionData} layout="vertical" margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
                                 <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#f3f4f6" />
                                 <XAxis type="number" hide />
                                 <YAxis
@@ -272,17 +314,17 @@ export default function AnalyticsDashboard({
                                     barSize={20}
                                 />
                             </BarChart>
-                        </ResponsiveContainer>
-                    </div>
+                        )}
+                    </ChartShell>
                 </div>
 
                 {/* City/Region Stats (Top 5) */}
                 <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300">
                     <h3 className="text-lg font-bold text-gray-900 mb-2">지역별 분포</h3>
                     <p className="text-sm text-gray-500 mb-8">사용자 접속 지역 (Top 5)</p>
-                    <div className="h-[300px]">
-                        <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={cityData} layout="vertical" margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
+                    <ChartShell className="h-[300px]">
+                        {({ width, height }) => (
+                            <BarChart width={width} height={height} data={cityData} layout="vertical" margin={{ left: 0, right: 0, top: 0, bottom: 0 }}>
                                 <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#f3f4f6" />
                                 <XAxis type="number" hide />
                                 <YAxis
@@ -302,8 +344,8 @@ export default function AnalyticsDashboard({
                                     barSize={20}
                                 />
                             </BarChart>
-                        </ResponsiveContainer>
-                    </div>
+                        )}
+                    </ChartShell>
                 </div>
 
                 {/* Top Pages Table */}

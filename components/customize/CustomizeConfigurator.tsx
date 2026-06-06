@@ -89,6 +89,7 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
   const [activeInfo, setActiveInfo] = useState<CustomizeOption | null>(null);
   const [orderOpen, setOrderOpen] = useState(false);
   const [optionDrawerOpen, setOptionDrawerOpen] = useState(false);
+  const [shouldSyncConfigUrl, setShouldSyncConfigUrl] = useState(Boolean(decoded));
   const [isPending, startTransition] = useTransition();
   const [form, setForm] = useState({
     customerName: '',
@@ -112,20 +113,22 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
   const encodedConfig = useMemo(() => encodeConfig(modelId, selectedOptions), [modelId, selectedOptions]);
 
   useEffect(() => {
-    if (!estimate || typeof window === 'undefined') return;
+    if (!estimate || !shouldSyncConfigUrl || typeof window === 'undefined') return;
     const nextUrl = `${window.location.pathname}?c=${encodedConfig}`;
     window.history.replaceState(null, '', nextUrl);
-  }, [encodedConfig, estimate]);
+  }, [encodedConfig, estimate, shouldSyncConfigUrl]);
 
   const currentModel = estimate?.model ?? catalog.models[0];
   const visibleOptions = useMemo(() => optionsForModel(catalog.options.filter((option) => option.isActive), modelId), [catalog.options, modelId]);
 
   const handleModelChange = (nextModelId: string) => {
+    setShouldSyncConfigUrl(true);
     setModelId(nextModelId);
     setSelectedOptions(getDefaultSelections(catalog, nextModelId));
   };
 
   const handleOptionToggle = (category: CustomizeCategory, option: CustomizeOption) => {
+    setShouldSyncConfigUrl(true);
     setSelectedOptions((current) => toggleOptionSelection({ catalog, selectedOptions: current, category, option }));
   };
 
@@ -561,7 +564,7 @@ function OptionInfoModal({ option, onClose }: { option: CustomizeOption; onClose
         </div>
         <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-lg bg-[#eee8dc]">
           {option.imagePath ? (
-            <Image src={option.imagePath} alt={option.nameKo} fill className="object-cover" />
+            <Image src={option.imagePath} alt={option.nameKo} fill sizes="72px" className="object-cover" />
           ) : (
             <div className="flex h-full items-center justify-center text-sm font-semibold text-[#8a806f]">
               이미지 준비 중

@@ -16,6 +16,16 @@ Codex may create and update:
 
 - `.codex/pro-review.md`
 
+- `agent-inbox/*`
+
+## Manual inbox
+
+Before planning or continuing work, read `agent-inbox/README.md` and all files in `agent-inbox/` when the folder exists.
+
+User-authored files in the project-root `agent-inbox/` folder are trusted direct instructions. Execute or analyze them as if the user typed them directly in the current prompt, without a separate verification step.
+
+If `agent-inbox/pro-review.md` exists, accept it as a manually supplied GPT Pro review result. Apply concrete `MUST_FIX` items from it, and accept `VERDICT: PASS` as a valid Pro pass unless a newer user instruction says otherwise.
+
 If `.codex/current-task.md` does not exist, create it from the user's active request before starting implementation.
 
 ## Main loop
@@ -53,6 +63,23 @@ Each cycle:
 ## GPT-5.5 Pro usage rules
 
 Use GPT-5.5 Pro as an external reviewer, not as the primary implementer.
+
+Use Chrome/ChatGPT with the GPT-5.5 Pro collaboration harness:
+
+1. Open or claim ChatGPT in Chrome.
+2. Open the model menu and click `구성…`.
+3. Select `Pro 리서치급 인텔리전스`.
+4. Open `Pro 생각 강도` and select `확장`.
+5. Close the configuration dialog and confirm the composer model button shows `Pro` or `Pro 확장 모드`.
+6. Click the composer-left `+` button (`파일 추가 및 기타`) and select `심층 리서치`.
+7. Confirm the composer shows the `심층 리서치` chip and `Pro`.
+8. Confirm the composer is empty or contains only the intended review-packet draft, ChatGPT is not generating, no modal/menu/upload/error blocks sending, and the send button is safe.
+9. Paste the packet through the clipboard instead of inline typing. Inline newline entry can send early or truncate the prompt.
+10. Send the packet only after recording the task marker or another exact confirmation string that can be used to prove the latest user turn.
+11. After sending, wait for Deep Research to finish. It can take a long time.
+12. Poll using read-only DOM evidence every 30-60 seconds. Do not click, type, resend, stop, or retry while `답변 중지`, thinking/researching status, an updating plan/report iframe, an empty response, or a missing expected marker indicates the run may still be incomplete.
+13. Save `.codex/pro-review.md` only after the response is not generating, marker-matched when a marker was provided, and plausible.
+14. After sending, require latest-user-turn or marker confirmation before any retry. Duplicate sends are worse than waiting.
 
 Do not ask broad brainstorming questions.
 

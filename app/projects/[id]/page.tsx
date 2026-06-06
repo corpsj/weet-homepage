@@ -3,6 +3,8 @@ import { supabaseAdmin } from "@/lib/supabase";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
+import type { Project } from "@/types/supabase";
+import { getProjectHeroImage, hasValidProjectImageUrl, isPublicReadyProject } from "@/lib/projects/publicProjects";
 
 export const dynamic = 'force-dynamic';
 
@@ -10,11 +12,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const { id } = await params;
   const { data: project } = await supabaseAdmin
     .from("projects")
-    .select("title, description")
+    .select("*")
     .eq("id", id)
     .single();
 
-  if (!project) {
+  if (!project || !isPublicReadyProject(project as Project)) {
     return { title: "프로젝트" };
   }
 
@@ -40,6 +42,18 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   if (!project) {
     notFound();
   }
+
+  const publicProject = project as Project;
+  const heroImage = getProjectHeroImage(publicProject);
+
+  if (!heroImage || !isPublicReadyProject(publicProject)) {
+    notFound();
+  }
+
+  const galleryImages = (publicProject.images ?? [])
+    .slice(1)
+    .map((image) => image.trim())
+    .filter(hasValidProjectImageUrl);
 
   return (
     <main className="min-h-screen bg-white px-4 pb-32 pt-16 md:px-8 lg:pt-20">
@@ -78,33 +92,24 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </header>
 
         <div className="space-y-12">
-          {project.images?.[0] ? (
-            <div className="relative aspect-video overflow-hidden rounded-lg bg-gray-100 shadow-sm">
-              <Image
-                src={project.images[0]}
-                alt={project.title}
-                fill
-                sizes="(max-width: 1024px) 100vw, 960px"
-                className="object-cover"
-                priority
-              />
-            </div>
-          ) : (
-            <div className="flex aspect-video items-center justify-center rounded-lg border border-gray-100 bg-gray-50 text-center text-gray-400">
-              <div>
-                <p className="text-sm font-black uppercase tracking-[0.18em]">Image Coming Soon</p>
-                <p className="mt-2 text-xs font-medium text-gray-500">{project.title}</p>
-              </div>
-            </div>
-          )}
+          <div className="relative aspect-video overflow-hidden rounded-lg bg-gray-100 shadow-sm">
+            <Image
+              src={heroImage}
+              alt={project.title}
+              fill
+              sizes="(max-width: 1024px) 100vw, 960px"
+              className="object-cover"
+              priority
+            />
+          </div>
 
           <div className="prose prose-lg max-w-none text-gray-600 leading-relaxed whitespace-pre-wrap">
             {project.description}
           </div>
 
-          {project.images && project.images.length > 1 && (
+          {galleryImages.length > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {project.images.slice(1).map((img: string, i: number) => (
+              {galleryImages.map((img: string, i: number) => (
                 <div key={i} className="relative aspect-[4/3] overflow-hidden rounded-lg bg-gray-100">
                   <Image
                     src={img}

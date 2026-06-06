@@ -185,6 +185,7 @@ export default function ModularPage() {
                   src="/images/modular/main-image.webp"
                   alt={copy.hero.title}
                   fill
+                  sizes="(max-width: 1024px) 100vw, 42vw"
                   className="object-contain"
                   priority
                 />
@@ -240,6 +241,7 @@ export default function ModularPage() {
                   src={section.image}
                   alt={section.title}
                   fill
+                  sizes="(max-width: 1024px) 100vw, 44vw"
                   className="object-cover"
                 />
               </div>

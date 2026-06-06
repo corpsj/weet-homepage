@@ -20,7 +20,15 @@ interface ProductGridProps {
 }
 
 // Grid Card Component
-function GridCard({ product, onEdit }: { product: Product; onEdit: (p: Product) => void }) {
+function GridCard({
+    product,
+    onEdit,
+    priority = false,
+}: {
+    product: Product;
+    onEdit: (p: Product) => void;
+    priority?: boolean;
+}) {
     return (
         <div className="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all overflow-hidden flex flex-col">
             {/* Image Area */}
@@ -30,7 +38,7 @@ function GridCard({ product, onEdit }: { product: Product; onEdit: (p: Product) 
                         src={product.image_url}
                         alt={product.name}
                         fill
-                        loading="lazy"
+                        loading={priority ? 'eager' : 'lazy'}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
@@ -81,7 +89,15 @@ function GridCard({ product, onEdit }: { product: Product; onEdit: (p: Product) 
 }
 
 // List Row Component
-function ListRow({ product, onEdit }: { product: Product; onEdit: (p: Product) => void }) {
+function ListRow({
+    product,
+    onEdit,
+    priority = false,
+}: {
+    product: Product;
+    onEdit: (p: Product) => void;
+    priority?: boolean;
+}) {
     return (
         <div className="group bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition-all overflow-hidden flex items-center gap-4 p-4">
             {/* Thumbnail */}
@@ -91,7 +107,7 @@ function ListRow({ product, onEdit }: { product: Product; onEdit: (p: Product) =
                         src={product.image_url}
                         alt={product.name}
                         fill
-                        loading="lazy"
+                        loading={priority ? 'eager' : 'lazy'}
                         sizes="80px"
                         className="object-cover"
                     />
@@ -241,21 +257,23 @@ export default function ProductGrid({
 
             {viewMode === 'grid' ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
-                    {products.map((product) => (
+                    {products.map((product, index) => (
                         <GridCard
                             key={product.id}
                             product={product}
                             onEdit={handleEdit}
+                            priority={index === 0}
                         />
                     ))}
                 </div>
             ) : (
                 <div className="flex flex-col gap-4 mb-8">
-                    {products.map((product) => (
+                    {products.map((product, index) => (
                         <ListRow
                             key={product.id}
                             product={product}
                             onEdit={handleEdit}
+                            priority={index === 0}
                         />
                     ))}
                 </div>

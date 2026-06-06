@@ -76,6 +76,7 @@ export default function CompanyPage() {
                   src="/images/company/slogan.webp"
                   alt="We make dreams come true"
                   fill
+                  sizes="(max-width: 1024px) 100vw, 400px"
                   className="object-contain"
                   priority
                 />
@@ -126,6 +127,7 @@ export default function CompanyPage() {
                   src="/images/company/ci-logo.webp"
                   alt="위트(WEET) 로고"
                   fill
+                  sizes="(max-width: 768px) 300px, (max-width: 1024px) 350px, 400px"
                   className="object-contain"
                 />
               </div>
@@ -228,6 +230,7 @@ export default function CompanyPage() {
                     src="/images/company/crew-design-new.webp"
                     alt="Design Crew"
                     fill
+                    sizes="(max-width: 768px) 60px, 120px"
                     className="object-contain"
                   />
                 </div>
@@ -247,6 +250,7 @@ export default function CompanyPage() {
                     src="/images/company/crew-construction-new.webp"
                     alt="Construction Crew"
                     fill
+                    sizes="(max-width: 768px) 60px, 120px"
                     className="object-contain"
                   />
                 </div>
@@ -266,6 +270,7 @@ export default function CompanyPage() {
                     src="/images/company/crew-solution-new.webp"
                     alt="Solution Crew"
                     fill
+                    sizes="(max-width: 768px) 60px, 120px"
                     className="object-contain"
                   />
                 </div>

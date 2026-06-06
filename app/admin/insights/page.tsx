@@ -1,24 +1,11 @@
-import {
-    fetchTrafficStats,
-    fetchUserDemographics,
-    fetchAcquisitionSources,
-    fetchTopPages,
-    fetchCityDemographics
-} from '@/app/actions/analytics-actions';
+import { fetchAnalyticsDashboard } from '@/app/actions/analytics-actions';
 import AnalyticsDashboard from '@/components/admin/insights/AnalyticsDashboard';
 import { AlertTriangle } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
 export default async function InsightsPage() {
-    // Parallel data fetching
-    const [trafficStats, demographics, acquisition, topPages, cityStats] = await Promise.all([
-        fetchTrafficStats(),
-        fetchUserDemographics(),
-        fetchAcquisitionSources(),
-        fetchTopPages(),
-        fetchCityDemographics()
-    ]);
+    const { trafficStats, demographics, acquisition, topPages, cityStats } = await fetchAnalyticsDashboard();
 
     const isConfigured = trafficStats !== null && !(trafficStats as any)?.error;
 

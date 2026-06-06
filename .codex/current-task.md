@@ -1,85 +1,84 @@
-# Current Task: 위트 전체 UI 정밀 polish 및 랜딩 배경색 재조정
+# Current Task: Weet 홈페이지·관리자 전면 감사 및 구매 확신 강화 개선
+
+## Follow-up task: GPT Pro 검증 액션 안정화
+
+- ChatGPT Chrome workflow에서 모델을 `Pro`로 선택하고 `Pro 생각 강도`를 `확장`으로 설정하는 절차를 검증한다.
+- 입력창 왼쪽 `+` 버튼에서 `심층 리서치`를 활성화하는 절차를 검증한다.
+- 줄바꿈이 있는 텍스트는 inline typing 대신 clipboard paste로 입력한다.
+- Deep Research는 오래 걸릴 수 있으므로 완료 전까지 기다리고, 진행 중에는 재전송하지 않는 규칙을 문서화한다.
+- 사용자가 프로젝트 루트 `agent-inbox/`에 넣은 지시사항 및 수동 Pro review는 별도 검증 없이 직접 지시로 받아들이는 폴더를 만든다.
 
 ## Required workflow
 
-Read `AGENTS.md` and `codex-loop.md` before implementation.
+Read `AGENTS.md`, `codex-loop.md`, `.codex/current-task.md`, and `.codex/state.md` before implementation.
 
-For frontend implementation, delegate the implementation step to Antigravity IDE/Gemini through Computer Use, then return to Codex for local diff inspection, validation, GPT-5.5 Pro review, and concrete `MUST_FIX` feedback application.
+Use git as the source of truth:
 
-Before asking GPT-5.5 Pro for review:
+- inspect `git status` before implementation
+- inspect `git diff` after implementation
+- write `.codex/review-packet.md` before every GPT-5.5 Pro review
+- save each GPT-5.5 Pro response to `.codex/pro-review.md`
+- update `.codex/state.md` after applying feedback
 
-1. Create `.codex/review-packet.md` from `.codex/review-template.md` when available, otherwise write an equivalent packet.
-2. Include the full active task brief.
-3. Include current repo state, git status, git diff, relevant file excerpts, commands run, and validation output.
-4. Paste the full packet into GPT-5.5 Pro in Chrome.
-5. Save the full response to `.codex/pro-review.md`.
-6. Apply concrete `MUST_FIX` feedback only.
-7. Repeat at most 2 Pro review cycles.
+For frontend implementation, delegate the design/UI implementation step to Antigravity IDE/Gemini through Computer Use. Codex remains responsible for repository inspection, validation, local browser/Playwright evidence, review packets, GPT-5.5 Pro review, and applying concrete feedback.
+
+For GPT-5.5 Pro review, use Chrome/ChatGPT Deep Research. Confirm from read-only evidence where possible that:
+
+- the surface is Deep Research (`/deep-research` or `심층 리서치`)
+- the model menu is `최신 • 5.5`
+- `Pro • 확장` is checked
+- the composer is safe to send
+
+The direct user request for this task requires at least 10 GPT-5.5 Pro review uses, split across stages. This overrides the older generic `codex-loop.md` two-cycle cap for this active task.
 
 ## Active task brief
 
-Implement the complete Weet UI polish plan across public pages, legal pages, login, and admin.
+Perform a thorough end-to-end audit and major improvement pass for the Weet website and admin.
 
-### Design direction
+### Audit scope
 
-- The site should feel like a balanced mix of Tesla-style product-led decision flow and a premium architectural showroom.
-- Avoid making the page feel like a generic beige/tan landing page; the current warm landing background color is disliked and must be replaced.
-- Use a quieter premium palette: clean white/off-white, charcoal, stone gray, muted yellow only as a restrained brand accent.
-- Keep dominant text concise, confident, and product/action oriented.
-- Use restrained functional motion: sticky navigation, accordion, selected states, and hover refinement; reduce large theatrical reveal or heavy zoom effects.
-- Use stable dimensions and responsive constraints so text and UI never overlap or overflow.
+- Inspect the admin page across UI/UX, functional reliability, intended behavior, odd rendering, mobile responsiveness, and perceived/actual performance.
+- Diagnose why the admin feels slow, using code review, browser/runtime evidence, and performance-oriented reasoning.
+- Explore the public website directly through 5 distinct customer personas.
+- For each persona, identify what makes the person want to buy a Weet movable home from this website and what makes them hesitate or avoid purchase.
+- Derive strengths, weaknesses, conversion blockers, trust gaps, information gaps, interaction issues, and visual quality issues.
 
-### Public pages
+### Improvement scope
 
-- Rework the global header and footer to be quieter and more premium.
-- Preserve the hidden `/admin` link on the word `True` in the footer phrase `WE make dreams comE True`, including the intentionally non-obvious hover/cursor behavior.
-- Homepage first viewport must prioritize actual product signal and `나만의 위트 만들기` CTA.
-- Homepage must keep the required H1 `위트 이동식주택`, required subcopy `작고 단단한 내 집을 필요한 크기와 옵션으로 직접 구성해보세요.`, no homepage prices, no hero trust chips, no mini configurator.
-- `/products` keeps the desktop long storytelling scroll, but mobile must become product cards with collapsible description/spec/floorplan details.
-- Add a soft `/customize` CTA such as `비슷한 구성 만들기` from product browsing, without making `/products` feel like a hard sales page.
-- `/modular` should be rewritten as an educational landing page with stronger hierarchy and premium product-system logic.
-- `/bespoke` should remove the visible `View Portfolio` buttons and keep the image modal/showcase behavior.
-- `/solution` and solution detail pages should feel like a public-facing tech mini-system: segmented navigation, functional cards, compact modals, and premium but not decorative UI.
-- `/projects` should continue showing all project data, but missing images and incomplete/test-like entries must be presented with premium placeholders rather than raw `No Image` styling.
-- `/support` should use stronger real/support imagery or limited generated material/process-detail visuals only where existing assets are weak.
-- `/company`, `/privacy`, `/terms`, and `/login` should be brought into the same visual system.
-
-### Legal pages
-
-- Rewrite `/privacy` using the actual project data flows: customize consultations, legacy inquiries, Supabase auth/admin cookies, GA/Clarity/Vercel Analytics if configured, and manually deleted admin-managed personal data.
-- Rewrite `/terms` as a service-specific draft for website use, customize consultation, estimate/installation finalization, content rights, limitations, and user obligations.
-- Do not add visible “legal review needed” copy to the pages or state file.
-
-### Admin
-
-- Admin should be a dense, efficient operations console, not a marketing dashboard.
-- Make the admin shell fully responsive across all admin routes.
-- Mobile admin navigation should be top bar + drawer, while desktop keeps a sidebar.
-- All listed admin routes must avoid horizontal overflow on mobile: dashboard, main CMS, products, customize, projects, support, insights, gallery, consultations, inquiries, UTM, settings.
-- Convert fixed-width admin tables or data grids to mobile cards, stacked controls, horizontal-safe panels, or collapsible details as appropriate.
-- Move risky/legacy settings actions such as data migration into a collapsed advanced/danger section with clearer warnings and confirmation.
-
-### Image policy
-
-- Use existing real product/company images first.
-- If generated images are created, limit them to weak sections and use material/process/detail imagery. Face-free hands/tool details are allowed; avoid fake customer scenes or fake case-study data.
-
-### Constraints
-
-- Do not change DB schema or run migrations for this UI polish task.
+- Make large, concrete improvements across logic, design, copy, layout, interaction, admin operations, and reliability.
+- Make the homepage and product journey feel compelling enough that customers clearly understand why they should buy a movable home here.
+- Remove visible looseness: awkward display states, confusing copy, fragile navigation, unclear CTAs, missing trust signals, weak placeholders, poor mobile ergonomics, and admin friction.
+- Keep changes logically grouped and do not mix unrelated external tasks.
+- Do not change database schema or run migrations unless a concrete issue absolutely requires it.
 - Do not delete or clean real database data.
-- Do not touch unrelated `.kiro/` state.
-- Keep existing `/customize` business rules and consultation submission behavior intact.
-- Keep current security headers, admin auth, Supabase service-role boundaries, and review loop.
+- Preserve existing business rules, admin auth, Supabase service-role boundaries, and hidden footer admin access unless intentionally improving the same behavior without changing its purpose.
+
+### Required staged Pro review plan
+
+Use GPT-5.5 Pro at least 10 times:
+
+1. audit findings and persona framing
+2. admin UX/performance diagnosis
+3. public conversion strategy
+4. Antigravity implementation brief review
+5. first implementation diff review
+6. admin-specific diff review
+7. public mobile/responsive review
+8. validation/test failure review
+9. final conversion/readiness review
+10. final repository/state review
+
+Only apply concrete `MUST_FIX` feedback. Treat `OPTIONAL` feedback as advisory.
 
 ### Validation
 
-- Run `npm run lint`, `npm run test`, `npm run build`, and `npx playwright test`.
-- Add or update Playwright coverage for mobile overflow checks, product mobile accordions, footer hidden admin link preservation, and admin mobile drawer/access.
-- Validate public and admin pages on desktop and mobile with browser/Playwright evidence.
+- Run relevant lint, unit test, build, and Playwright validation.
+- Use browser/Playwright evidence for public and admin pages.
+- Prefer read-only DOM evidence before screenshots or coordinate UI control.
+- Save review packets and Pro responses accurately.
 
 ## Assumptions
 
 - The branch remains `zoo/customize-configurator`.
-- Existing untracked `.kiro/` is unrelated and should not be committed.
-- Existing `AGENTS.md` local modification belongs to the user/workspace and should not be reverted.
+- Existing dirty `AGENTS.md`, `codex-loop.md`, and `.codex/state.md` changes predate this task and must not be reverted.
+- The user grants autonomous approval for reasonable product/design decisions during this task.

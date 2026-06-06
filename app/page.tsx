@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, CheckCircle2, ClipboardCheck, Factory, Home, MapPinned, Ruler, Truck } from 'lucide-react';
+import { ArrowRight, Building2, CheckCircle2, ClipboardCheck, Clock3, Factory, Home, MapPinned, Ruler, ShieldCheck, Store, Truck, Wrench } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: '홈',
@@ -28,6 +28,61 @@ const siteChecks = [
   '전기·상하수 인입 조건',
   '지목과 인허가 확인 범위',
   '운반·설치 일정과 현장 준비 항목',
+];
+
+const buyingConfidence = [
+  {
+    icon: Clock3,
+    title: '예상 일정',
+    text: '구성 상담 후 현장 조건을 확인하고, 제작 가능 시점과 운반·설치 준비 일정을 함께 정리합니다.',
+  },
+  {
+    icon: MapPinned,
+    title: '부지 준비',
+    text: '진입로, 지목, 인입, 크레인 작업 반경처럼 실제 설치를 좌우하는 항목을 먼저 확인합니다.',
+  },
+  {
+    icon: ShieldCheck,
+    title: '사후 점검',
+    text: '문·창호, 욕실·설비, 마감처럼 생활 중 자주 쓰는 부분을 중심으로 인도 후 점검과 조치를 안내합니다.',
+  },
+  {
+    icon: Wrench,
+    title: '별도 비용 안내',
+    text: '운반, 설치, 기초, 인허가, 인입 공사처럼 현장별로 달라지는 항목은 상담 단계에서 분리해 설명합니다.',
+  },
+];
+
+const includedItems = [
+  '선택 모델과 옵션 기준 제품 견적',
+  '공장 제작 및 기본 품질 확인',
+  '상담용 구성 내역 저장',
+  '현장 조건 체크리스트 안내',
+];
+
+const excludedItems = [
+  '부지 토목·기초 공사',
+  '전기·상하수 등 인입 공사',
+  '운반·크레인·현장 설치 비용',
+  '지역별 인허가와 부대 행정 비용',
+];
+
+const buyerPaths = [
+  {
+    icon: Home,
+    title: '세컨드하우스·귀촌',
+    text: '작은 주거 공간을 빠르게 검토하고 싶은 가족에게 모델, 옵션, 설치 조건을 한 번에 정리해줍니다.',
+  },
+  {
+    icon: Store,
+    title: '카페·팝업·숙박 운영',
+    text: '수익을 내야 하는 공간은 일정과 설치 리스크가 중요합니다. 공장 제작 중심으로 오픈 시점을 예측하기 쉽게 만듭니다.',
+  },
+  {
+    icon: Building2,
+    title: '기관·법인 프로젝트',
+    text: '반복 설치, 농촌·복지·교육·업무용 모듈처럼 목적이 분명한 프로젝트를 표준 공정과 상담 기록으로 관리합니다.',
+  },
 ];
 
 export default function HomePage() {
@@ -122,6 +177,73 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-gray-100 bg-white px-4 py-14 md:px-8 lg:px-16">
+        <div className="mx-auto max-w-[1500px]">
+          <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+            <div>
+              <p className="text-sm font-black text-gray-500">BUYING CONFIDENCE</p>
+              <h2 className="mt-2 text-3xl font-black md:text-4xl text-gray-900">견적보다 먼저 불확실성을 줄입니다</h2>
+            </div>
+            <p className="max-w-xl text-sm leading-7 text-gray-600">
+              이동식주택은 제품 가격만으로 결정하기 어렵습니다. 위트는 제품, 현장, 일정, 별도 비용을 분리해 구매 결정을 선명하게 만듭니다.
+            </p>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {buyingConfidence.map((item) => (
+              <div key={item.title} className="rounded-lg border border-gray-200 bg-gray-50 p-5">
+                <item.icon className="h-6 w-6 text-gray-500" />
+                <h3 className="mt-5 text-lg font-black text-gray-900">{item.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-gray-600">{item.text}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-6 grid gap-4 lg:grid-cols-2">
+            <div className="rounded-lg border border-gray-200 bg-white p-6">
+              <h3 className="text-xl font-black text-gray-900">기본 포함</h3>
+              <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+                {includedItems.map((item) => (
+                  <li key={item} className="flex items-start gap-3 text-sm font-semibold leading-6 text-gray-800">
+                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary-dark" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-lg border border-gray-200 bg-white p-6">
+              <h3 className="text-xl font-black text-gray-900">현장별 별도 확인</h3>
+              <ul className="mt-5 grid gap-3 sm:grid-cols-2">
+                {excludedItems.map((item) => (
+                  <li key={item} className="flex items-start gap-3 text-sm font-semibold leading-6 text-gray-800">
+                    <ClipboardCheck className="mt-0.5 h-5 w-5 shrink-0 text-gray-400" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-gray-50 px-4 py-14 md:px-8 lg:px-16">
+        <div className="mx-auto max-w-[1500px]">
+          <div className="mb-8">
+            <p className="text-sm font-black text-gray-500">WHO IT FITS</p>
+            <h2 className="mt-2 text-3xl font-black md:text-4xl text-gray-900">사는 이유가 다른 고객에게, 확인 순서도 다르게</h2>
+          </div>
+          <div className="grid gap-4 lg:grid-cols-3">
+            {buyerPaths.map((path) => (
+              <div key={path.title} className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                <path.icon className="h-6 w-6 text-gray-500" />
+                <h3 className="mt-5 text-xl font-black text-gray-900">{path.title}</h3>
+                <p className="mt-3 text-sm leading-7 text-gray-600">{path.text}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

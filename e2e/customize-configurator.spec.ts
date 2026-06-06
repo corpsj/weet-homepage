@@ -12,6 +12,17 @@ const serviceClient = canUseServiceRole
   : null;
 
 test.describe('Customize configurator', () => {
+  test('clean customize load keeps a clean URL until the buyer changes configuration', async ({ page }) => {
+    await page.goto('/customize');
+    await page.waitForLoadState('networkidle');
+    await page.waitForTimeout(500);
+
+    await expect(page).toHaveURL(/\/customize$/);
+
+    await page.getByRole('button', { name: /Standard 3x9/ }).click();
+    await expect(page).toHaveURL(/\/customize\?c=/);
+  });
+
   test('desktop model and option flow updates estimated total and URL config', async ({ page }) => {
     await page.goto('/customize');
     await page.waitForLoadState('networkidle');

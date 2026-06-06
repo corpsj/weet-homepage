@@ -48,13 +48,14 @@ export default function GalleryList({ initialItems }: { initialItems: GalleryIte
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {items.map((item) => (
+        {items.map((item, index) => (
           <div key={item.id} className="group relative bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
             <div className="aspect-[4/3] relative bg-gray-100">
               <Image
                 src={item.image_url}
                 alt={item.title}
                 fill
+                loading={index === 0 ? 'eager' : 'lazy'}
                 sizes="(max-width: 768px) 100vw, 25vw"
                 className="object-cover"
               />

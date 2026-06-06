@@ -228,6 +228,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                                                         src={url}
                                                         alt={`Project image ${index + 1}`}
                                                         fill
+                                                        sizes="160px"
                                                         className={`object-cover rounded-lg border-2 ${
                                                             index === 0 ? 'border-primary' : 'border-transparent'
                                                         }`}

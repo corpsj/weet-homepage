@@ -10,9 +10,16 @@ interface ImageSliderProps {
     alt: string;
     className?: string;
     aspectRatio?: string;
+    sizes?: string;
 }
 
-export default function ImageSlider({ images, alt, className = '', aspectRatio = 'aspect-[541/422]' }: ImageSliderProps) {
+export default function ImageSlider({
+    images,
+    alt,
+    className = '',
+    aspectRatio = 'aspect-[541/422]',
+    sizes = '(max-width: 1024px) 100vw, 44vw',
+}: ImageSliderProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     if (!images || images.length === 0) return null;
@@ -42,6 +49,7 @@ export default function ImageSlider({ images, alt, className = '', aspectRatio =
                         src={images[currentIndex]}
                         alt={`${alt} - Image ${currentIndex + 1}`}
                         fill
+                        sizes={sizes}
                         className="object-cover"
                         priority={currentIndex === 0}
                     />

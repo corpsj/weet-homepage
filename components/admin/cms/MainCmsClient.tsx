@@ -195,8 +195,8 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
                     strategy={verticalListSortingStrategy}
                 >
                     <div className="space-y-4">
-                        {heroSlides.map((slide) => (
-                            <SortableHeroSlideItem key={slide.id} slide={slide} onDelete={handleDelete} />
+                        {heroSlides.map((slide, index) => (
+                            <SortableHeroSlideItem key={slide.id} slide={slide} onDelete={handleDelete} eager={index === 0} />
                         ))}
                     </div>
                 </SortableContext>
@@ -216,7 +216,15 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
     );
 }
 
-function SortableHeroSlideItem({ slide, onDelete }: { slide: HeroSlide, onDelete: (id: string) => void }) {
+function SortableHeroSlideItem({
+    slide,
+    onDelete,
+    eager = false,
+}: {
+    slide: HeroSlide;
+    onDelete: (id: string) => void;
+    eager?: boolean;
+}) {
     const {
         attributes,
         listeners,
@@ -279,7 +287,14 @@ function SortableHeroSlideItem({ slide, onDelete }: { slide: HeroSlide, onDelete
             </div>
             <div className="relative w-24 h-16 bg-gray-200 rounded-md overflow-hidden flex-shrink-0">
                 {slide.image_url ? (
-                    <Image src={slide.image_url} alt={slide.title} fill className="object-cover" />
+                    <Image
+                        src={slide.image_url}
+                        alt={slide.title}
+                        fill
+                        loading={eager ? 'eager' : 'lazy'}
+                        sizes="96px"
+                        className="object-cover"
+                    />
                 ) : (
                     <div className="absolute inset-0 flex items-center justify-center text-gray-400">
                         <ImageIcon className="w-6 h-6" />
@@ -465,7 +480,7 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
 
                                 <div className="w-10 h-10 bg-gray-100 rounded-md flex-shrink-0 relative overflow-hidden">
                                     {product.image_url && (
-                                        <Image src={product.image_url} alt={product.name} fill className="object-cover" />
+                                        <Image src={product.image_url} alt={product.name} fill sizes="40px" className="object-cover" />
                                     )}
                                 </div>
 
