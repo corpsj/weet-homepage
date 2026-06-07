@@ -1,8 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
 import {
     Search, Filter, Mail, Phone, Calendar,
     CheckCircle2, Clock, MessageSquare, Trash2,
@@ -31,6 +29,24 @@ interface Inquiry {
     reply_content: string | null;
     replied_at: string | null;
     created_at: string;
+}
+
+function formatKstDateTime(value: string, mode: 'short' | 'long' = 'short') {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '-';
+
+    const kstDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+    const year = kstDate.getUTCFullYear();
+    const month = String(kstDate.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(kstDate.getUTCDate()).padStart(2, '0');
+    const hours = String(kstDate.getUTCHours()).padStart(2, '0');
+    const minutes = String(kstDate.getUTCMinutes()).padStart(2, '0');
+
+    if (mode === 'long') {
+        return `${year}년 ${month}월 ${day}일 ${hours}:${minutes}`;
+    }
+
+    return `${month}.${day} ${hours}:${minutes}`;
 }
 
 export default function InquiryList({ initialInquiries }: { initialInquiries: Inquiry[] }) {
@@ -217,7 +233,7 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
                                     {inquiry.name}
                                 </h3>
                                 <span className="text-[11px] text-gray-400 whitespace-nowrap ml-2">
-                                    {format(new Date(inquiry.created_at), 'MM.dd HH:mm')}
+                                    {formatKstDateTime(inquiry.created_at)}
                                 </span>
                             </div>
                             <p className="text-[13px] text-gray-500 line-clamp-2 mb-3 leading-relaxed">{inquiry.message}</p>
@@ -266,7 +282,7 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
                                 )}
                                 <div className="flex items-center gap-2">
                                     <Calendar className="w-3.5 h-3.5" />
-                                    <span>{format(new Date(selectedInquiry.created_at), 'yyyy년 MM월 dd일 HH:mm', { locale: ko })}</span>
+                                    <span>{formatKstDateTime(selectedInquiry.created_at, 'long')}</span>
                                 </div>
                             </div>
                         </div>
@@ -302,7 +318,7 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
                             <ConsoleSectionTitle>답변 작성</ConsoleSectionTitle>
                             {selectedInquiry.replied_at && (
                                 <span className="text-[11px] font-bold text-gray-400">
-                                    최근 답변: {format(new Date(selectedInquiry.replied_at), 'yyyy.MM.dd HH:mm')}
+                                    최근 답변: {formatKstDateTime(selectedInquiry.replied_at)}
                                 </span>
                             )}
                         </div>

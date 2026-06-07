@@ -271,4 +271,6 @@ Continue the next improvement slice: convert remaining admin UTM/CMS/gallery/inq
 - Post-MUST_FIX validation passed: `git diff --check`, `npm run lint`, `npm test`, `npm run build`, and `npx playwright test e2e/public-pages.spec.ts`.
 - Post-MUST_FIX visual QA passed on local production server `http://localhost:3001`; evidence saved under `.codex/qa/post-pro-mustfix-20260607-v2/`.
 - GPT-5.5 Pro Deep Research closure marker `WEET_REVIEW_20260607_HOME_ADMIN_MUSTFIX_CLOSURE_06` returned `VERDICT: PASS` and `MUST_FIX: None`; latest result saved to `.codex/pro-review.md`.
-- Remaining pending completion work: commit, push, Vercel deployment/promotion, and real `we-et.com` production visual QA.
+- Commit `088555f` was pushed and promoted to production, but the first real `www.we-et.com` production QA found React hydration error #418 in admin pages.
+- Hydration fix applied after production QA: admin support/inquiry date display now uses deterministic KST formatting instead of locale/timezone-dependent render output.
+- Remaining pending completion work: commit/push the hydration fix, redeploy/promote again, and rerun real `we-et.com` production visual QA.

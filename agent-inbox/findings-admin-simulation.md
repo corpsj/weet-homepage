@@ -239,3 +239,4 @@ The first 10 administrator personas did not produce 100 unique hard bugs. Follow
 156. Post-fix visual QA verified desktop notice draft editor, desktop FAQ draft save flow, desktop inquiry rollback toast, and mobile notice card editor.
 157. Post-fix local QA report `.codex/qa/post-pro-mustfix-20260607-v2/report.json` shows all five targeted checks passing.
 158. GPT-5.5 Pro closure marker `WEET_REVIEW_20260607_HOME_ADMIN_MUSTFIX_CLOSURE_06` returned `VERDICT: PASS` and `MUST_FIX: None`.
+159. Production QA after commit `088555f` found React hydration error #418 on real `www.we-et.com` admin pages; fixed by replacing locale/timezone-dependent date rendering with deterministic KST formatting in support and inquiry admin screens.

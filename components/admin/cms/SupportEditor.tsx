@@ -34,6 +34,16 @@ interface Notice {
     created_at: string;
 }
 
+function formatKstDate(value: string) {
+    const date = new Date(value);
+    if (Number.isNaN(date.getTime())) return '-';
+    const kstDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+    const year = kstDate.getUTCFullYear();
+    const month = String(kstDate.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(kstDate.getUTCDate()).padStart(2, '0');
+    return `${year}.${month}.${day}`;
+}
+
 export default function SupportEditor({
     initialFAQs,
     initialNotices,
@@ -672,7 +682,7 @@ END $$;`}
                                                 </div>
                                             </td>
                                             <td className="px-4 py-3 text-gray-400 font-medium">
-                                                {new Date(notice.created_at).toLocaleDateString()}
+                                                {formatKstDate(notice.created_at)}
                                             </td>
                                             <td className="px-4 py-3 text-right">
                                                 <div className="flex justify-end gap-1">
