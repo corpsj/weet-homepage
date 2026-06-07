@@ -71,6 +71,10 @@ deployment
 - Re-ran admin console slice validation before deployment: `git diff --check`, `npm run lint`, `npm test`, `npm run build`, and `npx playwright test e2e/public-pages.spec.ts --grep "Admin responsive shell|admin console operations"` all passed.
 - Visually inspected `.codex/qa/admin-console-slice/pc-products.png`, `mobile-projects.png`, `mobile-consultations.png`, and `tablet-insights.png`; PC/tablet/mobile layouts showed readable console hierarchy, no obvious text overlap, and no horizontal squeeze in the checked screenshots.
 - Added a follow-up backlog note that the floating assistant badge can visually overlap lower empty/chart panel edges on mobile admin screens, while not blocking core controls in the inspected screenshots.
+- Committed admin console slice as `fdc1a31` and pushed `zoo/customize-configurator`; Vercel preview became Ready and was promoted to Production.
+- Production QA against `https://www.we-et.com` for `fdc1a31` found no console/page errors and no document horizontal overflow, but the closed tablet/mobile admin sidebar still exposed off-canvas nav links as horizontally offscreen interactive elements.
+- Fixed the closed mobile/tablet admin sidebar by adding `max-lg:invisible max-lg:pointer-events-none` to the hidden `AdminShell` sidebar wrapper while preserving desktop visibility.
+- Re-ran post-fix validation: `git diff --check`, `npm run lint`, `npm test`, `npx playwright test e2e/public-pages.spec.ts --grep "Admin responsive shell|admin console operations"`, and `npm run build` all passed.
 
 ## Commands run
 
@@ -135,6 +139,14 @@ deployment
 - Analyzed the user's Cockpit Tools hypothesis. `launchctl list` showed `application.com.jlcodes.cockpit-tools...` and `ai.hermes.gateway-codex`; `SkyComputerUseClient ... turn-ended` processes were orphaned under parent pid `1`; reopening the Computer Use helper did not restore the closed transport. This supports the hypothesis that launching/mediating Codex through Cockpit Tools or a gateway may leave the Computer Use MCP transport attached to a stale wrapper-managed session.
 - Fresh resumed validation: `computer-use:list_apps`, `computer-use:get_app_state("com.apple.Stickies")`, `git diff --check`, `npm run lint`, `npm test`, `npm run build`, `npx playwright test e2e/public-pages.spec.ts --grep "Admin responsive shell|admin console operations"`.
 - Visual inspection via local screenshot viewer: `.codex/qa/admin-console-slice/pc-products.png`, `.codex/qa/admin-console-slice/mobile-projects.png`, `.codex/qa/admin-console-slice/mobile-consultations.png`, `.codex/qa/admin-console-slice/tablet-insights.png`.
+- `git commit -m "Unify admin console operations pages"`
+- `git push origin zoo/customize-configurator`
+- `vercel ls weet-homepage --scope weets-projects-6c7745e8`
+- `vercel inspect https://weet-homepage-ysbks9mqd-weets-projects-6c7745e8.vercel.app --scope weets-projects-6c7745e8`
+- `vercel promote https://weet-homepage-ysbks9mqd-weets-projects-6c7745e8.vercel.app --scope weets-projects-6c7745e8 --yes`
+- `vercel inspect https://weet-homepage-n62bnqu1q-weets-projects-6c7745e8.vercel.app --scope weets-projects-6c7745e8`
+- Production authenticated Playwright QA against `https://www.we-et.com` for admin products/projects/consultations/insights on PC/tablet/mobile.
+- Post-sidebar-fix validation: `git diff --check`, `npm run lint`, `npm test`, `npx playwright test e2e/public-pages.spec.ts --grep "Admin responsive shell|admin console operations"`, `npm run build`.
 
 ## Current failures
 
@@ -188,10 +200,10 @@ PASS
 - Latest ChatGPT Deep Research attempt for marker `WEET_REVIEW_20260607_CUSTOMIZE_FLOORPLAN_CONFIDENCE_03` also ended in an iframe/empty loading bar after refresh, so a valid external Pro verdict is still unavailable.
 - No known outstanding `/customize` floorplan rendering defect remains after final `we-et.com` PC/tablet/mobile production validation for commit `5fff2fc`.
 - Admin products/projects/consultations/insights now use the first console system, but UTM/CMS/gallery/inquiries/edit forms/product modal still need visual unification.
-- Production `we-et.com` validation has not yet been run for the admin console slice because this slice is not committed/pushed/deployed yet.
+- Production `we-et.com` validation for `fdc1a31` was run and found the closed mobile/tablet sidebar off-canvas interaction issue, which is now fixed locally and pending final redeploy QA.
 - Computer Use was healthy in the resumed session, but Antigravity live input still needs a real implementation handoff or smoke test through the documented `Electron`/bundle-id/path target sequence before claiming a new successful frontend delegation.
-- Production `we-et.com` validation has not yet been run for the admin console slice because this slice is still awaiting commit/push/deployment.
+- Production `we-et.com` validation found and locally fixed the closed mobile/tablet sidebar off-canvas interaction issue; the fixed sidebar commit still needs push, Vercel promotion, and final production QA.
 
 ## Next step
 
-Commit and push the admin console slice, wait for Vercel deployment, promote if needed, then verify `we-et.com`/`www.we-et.com` on PC/tablet/mobile with visual evidence.
+Commit and push the admin sidebar visibility fix, wait for Vercel deployment, promote if needed, then rerun final `we-et.com`/`www.we-et.com` PC/tablet/mobile visual QA.

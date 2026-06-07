@@ -36,6 +36,9 @@ This file tracks bugs and improvements discovered during the recursive improveme
   - *Fix Details*: 현재 모델의 floorplan path/load status를 상위 `CustomizeConfigurator`에서 한 번 계산하고 기본 도면, 확대 모달, 상담 요청 모달 미리보기에 공유하도록 수정함. 로컬 E2E 10개, lint, unit test, production build 통과.
 - [x] 배포 검증: `agent-inbox/웹 접속 방법.md` 지시에 따라 브랜치 푸시 후 Vercel Promote를 통해 실제 `we-et.com` 화면에서 PC/tablet/mobile 검증을 수행함.
   - *Final Production Evidence*: 커밋 `5fff2fc`를 Vercel Production으로 Promote한 뒤 `https://we-et.com/customize?v=5fff2fc`에서 desktop/tablet/mobile Playwright QA를 실행함. compact/standard main SVG href 분리, zoom modal 즉시 standard SVG 표시, dialog footprint 0개, sticky CTA clearance, horizontal overflow 없음, console/page error 없음을 확인함.
+- [x] 관리자 페이지 모바일/태블릿: 닫힌 사이드바의 링크가 화면 왼쪽 밖에 남아 포커스 가능한 상태로 감지되는 문제를 수정함.
+  - *Root Cause*: `AdminShell`의 mobile sidebar가 `translate-x-full`로만 숨겨져 `visibility: visible` 상태를 유지했음.
+  - *Fix Details*: 닫힌 mobile/tablet sidebar wrapper에 `max-lg:invisible max-lg:pointer-events-none`을 추가하고 desktop `lg:translate-x-0` 동작은 유지함. 로컬 lint/unit/build/admin E2E 통과 후 재배포 검증 대상으로 지정함.
 - [ ] 공개 홈페이지: 운반/설치 비용 예시, 지역별 변수, 상담 후 가격 변동 기준을 더 구체적인 숫자/조건으로 보강해야 함.
 - [ ] 공개 홈페이지: `/support`에도 부지 가능성 자가진단을 독립 콘텐츠 또는 다운로드 체크리스트로 확장해야 함.
 - [ ] 공개 홈페이지: B2B/다량 구매/기관 상담 경로와 상담 폼 필드(수량, 납기, 목적, 부지 상태)를 추가해야 함.
