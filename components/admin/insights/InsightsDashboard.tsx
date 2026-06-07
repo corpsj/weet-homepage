@@ -45,7 +45,7 @@ export default function InsightsDashboard({
         <div className="space-y-8">
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                <div className="bg-white p-6 rounded-md border border-[#e5e5df]">
                     <h3 className="text-sm font-medium text-gray-500">총 문의 건수</h3>
                     <p className="text-3xl font-bold text-gray-900 mt-2">{totalInquiries}</p>
                 </div>
@@ -54,7 +54,7 @@ export default function InsightsDashboard({
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Monthly Trend Chart */}
-                <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                <div className="bg-white p-6 rounded-md border border-[#e5e5df]">
                     <h3 className="text-lg font-bold text-gray-900 mb-6">월별 문의 추이</h3>
                     <div className="h-[300px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
@@ -88,7 +88,7 @@ export default function InsightsDashboard({
                 </div>
 
                 {/* Status Distribution Chart */}
-                <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                <div className="bg-white p-6 rounded-md border border-[#e5e5df]">
                     <h3 className="text-lg font-bold text-gray-900 mb-6">문의 처리 현황</h3>
                     <div className="h-[300px] w-full">
                         <ResponsiveContainer width="100%" height="100%">

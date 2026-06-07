@@ -1,0 +1,291 @@
+{
+  "baseURL": "https://www.we-et.com",
+  "commit": "0b795e5",
+  "generatedAt": "2026-06-07T05:48:11.994Z",
+  "consoleMessages": [],
+  "pageErrors": [],
+  "summary": [
+    {
+      "viewport": {
+        "label": "pc",
+        "width": 1440,
+        "height": 960
+      },
+      "route": "/admin/products",
+      "probes": {
+        "PRODUCT READINESS": true,
+        "이미지 보완": true,
+        "현재 페이지 제품 검색": true
+      },
+      "metrics": {
+        "title": "위트(weet) - 시스템 건축 전문 기업",
+        "path": "/admin/products",
+        "overflowX": false,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "scrollHeight": 960,
+        "visibleInteractiveCount": 60,
+        "horizontallyOffscreenInteractive": [],
+        "bodyTextStart": "WEET CONSOLE\n운영\n대시보드\nUTM Builder\n콘텐츠\n랜딩 페이지\n제품 관리\n주문 구성\n프로젝트 관리\nFAQ 관리\n고객 인사이트\n갤러리 관리\n상담\n상담 관리\n레거시 문의\n시스템\n설정\nE\n\ne2e-0fe54585\n\n관리자\n\n로그아웃\n\nPRODUCT READINESS\n\n제품 관리 · 26건\n\n공개 제품, 이미지 상태, 가격 입력 여부를 빠르게 점검하고 모델별 준비도를 관리합니다.\n\n제품 추가\n\n현재 페이지 공개\n\n12"
+      }
+    },
+    {
+      "viewport": {
+        "label": "pc",
+        "width": 1440,
+        "height": 960
+      },
+      "route": "/admin/projects",
+      "probes": {
+        "PROJECT READINESS": true,
+        "IMAGE HEALTH": true,
+        "프로젝트명, 고객, 지역 검색": true
+      },
+      "metrics": {
+        "title": "위트(weet) - 시스템 건축 전문 기업",
+        "path": "/admin/projects",
+        "overflowX": false,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "scrollHeight": 960,
+        "visibleInteractiveCount": 20,
+        "horizontallyOffscreenInteractive": [],
+        "bodyTextStart": "WEET CONSOLE\n운영\n대시보드\nUTM Builder\n콘텐츠\n랜딩 페이지\n제품 관리\n주문 구성\n프로젝트 관리\nFAQ 관리\n고객 인사이트\n갤러리 관리\n상담\n상담 관리\n레거시 문의\n시스템\n설정\nE\n\ne2e-0fe54585\n\n관리자\n\n로그아웃\n\nPROJECT READINESS\n\n프로젝트 관리 · 2건\n\n공개 품질에 영향을 주는 이미지, 완료일, 고객/지역 정보를 한 화면에서 점검합니다.\n\n전체 상태\n완료\n진행중\n계획중\n새 프로"
+      }
+    },
+    {
+      "viewport": {
+        "label": "pc",
+        "width": 1440,
+        "height": 960
+      },
+      "route": "/admin/consultations",
+      "probes": {
+        "CONSULTATION SLA": true,
+        "SLA 위험": true,
+        "상태 저장 대기열": true
+      },
+      "metrics": {
+        "title": "위트(weet) - 시스템 건축 전문 기업",
+        "path": "/admin/consultations",
+        "overflowX": false,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "scrollHeight": 960,
+        "visibleInteractiveCount": 13,
+        "horizontallyOffscreenInteractive": [],
+        "bodyTextStart": "WEET CONSOLE\n운영\n대시보드\nUTM Builder\n콘텐츠\n랜딩 페이지\n제품 관리\n주문 구성\n프로젝트 관리\nFAQ 관리\n고객 인사이트\n갤러리 관리\n상담\n상담 관리\n레거시 문의\n시스템\n설정\nE\n\ne2e-0fe54585\n\n관리자\n\n로그아웃\n\nCONSULTATION SLA\n\n상담 관리 · 0건\n\n주문 상담을 최신순으로 확인하고, 2시간 이상 미처리된 요청을 먼저 처리합니다.\n\n상태 저장 대기열\n\n신규\n\n0\n\n먼저 배정할 상담"
+      }
+    },
+    {
+      "viewport": {
+        "label": "pc",
+        "width": 1440,
+        "height": 960
+      },
+      "route": "/admin/insights",
+      "probes": {
+        "TRAFFIC INTELLIGENCE": true
+      },
+      "metrics": {
+        "title": "위트(weet) - 시스템 건축 전문 기업",
+        "path": "/admin/insights",
+        "overflowX": false,
+        "scrollWidth": 1440,
+        "clientWidth": 1440,
+        "scrollHeight": 960,
+        "visibleInteractiveCount": 14,
+        "horizontallyOffscreenInteractive": [],
+        "bodyTextStart": "WEET CONSOLE\n운영\n대시보드\nUTM Builder\n콘텐츠\n랜딩 페이지\n제품 관리\n주문 구성\n프로젝트 관리\nFAQ 관리\n고객 인사이트\n갤러리 관리\n상담\n상담 관리\n레거시 문의\n시스템\n설정\nE\n\ne2e-0fe54585\n\n관리자\n\n로그아웃\n\nTRAFFIC INTELLIGENCE\n\n웹 로그 분석\n\n방문자 트래픽, 유입 경로, 사용자 행동을 운영 판단에 바로 연결합니다.\n\n총 방문자\n\n480\n\n최근 7일\n\n페이지뷰\n\n1,238"
+      }
+    },
+    {
+      "viewport": {
+        "label": "tablet",
+        "width": 834,
+        "height": 1112
+      },
+      "route": "/admin/products",
+      "probes": {
+        "PRODUCT READINESS": true,
+        "이미지 보완": true,
+        "현재 페이지 제품 검색": true
+      },
+      "metrics": {
+        "title": "위트(weet) - 시스템 건축 전문 기업",
+        "path": "/admin/products",
+        "overflowX": false,
+        "scrollWidth": 834,
+        "clientWidth": 834,
+        "scrollHeight": 1112,
+        "visibleInteractiveCount": 48,
+        "horizontallyOffscreenInteractive": [],
+        "bodyTextStart": "WEET CONSOLE\n\nPRODUCT READINESS\n\n제품 관리 · 26건\n\n공개 제품, 이미지 상태, 가격 입력 여부를 빠르게 점검하고 모델별 준비도를 관리합니다.\n\n제품 추가\n\n현재 페이지 공개\n\n12\n\n활성 상태 제품\n\n이미지 보완\n\n0\n\n깨진 URL 또는 미등록\n\n가격 보완\n\n0\n\n상담 전 기준가 확인\n\n전체 카테고리\nS\nM\nL\nXL\nSOLUTION\nDESIGN\n전체 상태\n활성\n비활성\n활성\n84\n18평 단독주택\n\n"
+      }
+    },
+    {
+      "viewport": {
+        "label": "tablet",
+        "width": 834,
+        "height": 1112
+      },
+      "route": "/admin/projects",
+      "probes": {
+        "PROJECT READINESS": true,
+        "IMAGE HEALTH": true,
+        "프로젝트명, 고객, 지역 검색": true
+      },
+      "metrics": {
+        "title": "위트(weet) - 시스템 건축 전문 기업",
+        "path": "/admin/projects",
+        "overflowX": false,
+        "scrollWidth": 834,
+        "clientWidth": 834,
+        "scrollHeight": 1112,
+        "visibleInteractiveCount": 8,
+        "horizontallyOffscreenInteractive": [],
+        "bodyTextStart": "WEET CONSOLE\n\nPROJECT READINESS\n\n프로젝트 관리 · 2건\n\n공개 품질에 영향을 주는 이미지, 완료일, 고객/지역 정보를 한 화면에서 점검합니다.\n\n전체 상태\n완료\n진행중\n계획중\n새 프로젝트\n\n현재 표시\n\n2\n\n필터 결과 기준\n\n공개 가능\n\n0\n\n보완 이슈 없음\n\n보완 필요\n\n2\n\n이미지·완료일·본문 점검\n\nIMAGE HEALTH\n\n1건이 유효한 대표 이미지를 사용 중입니다.\n\n준비도\n76\n테스트 입니다"
+      }
+    },
+    {
+      "viewport": {
+        "label": "tablet",
+        "width": 834,
+        "height": 1112
+      },
+      "route": "/admin/consultations",
+      "probes": {
+        "CONSULTATION SLA": true,
+        "SLA 위험": true,
+        "상태 저장 대기열": true
+      },
+      "metrics": {
+        "title": "위트(weet) - 시스템 건축 전문 기업",
+        "path": "/admin/consultations",
+        "overflowX": false,
+        "scrollWidth": 834,
+        "clientWidth": 834,
+        "scrollHeight": 1112,
+        "visibleInteractiveCount": 1,
+        "horizontallyOffscreenInteractive": [],
+        "bodyTextStart": "WEET CONSOLE\n\nCONSULTATION SLA\n\n상담 관리 · 0건\n\n주문 상담을 최신순으로 확인하고, 2시간 이상 미처리된 요청을 먼저 처리합니다.\n\n상태 저장 대기열\n\n신규\n\n0\n\n먼저 배정할 상담\n\n진행중\n\n0\n\n후속 통화 필요\n\nSLA 위험\n\n0\n\n2시간 이상 미처리\n\n완료\n\n0\n\n처리 완료 상담\n\n등록된 상담 요청이 없습니다."
+      }
+    },
+    {
+      "viewport": {
+        "label": "tablet",
+        "width": 834,
+        "height": 1112
+      },
+      "route": "/admin/insights",
+      "probes": {
+        "TRAFFIC INTELLIGENCE": true
+      },
+      "metrics": {
+        "title": "위트(weet) - 시스템 건축 전문 기업",
+        "path": "/admin/insights",
+        "overflowX": false,
+        "scrollWidth": 834,
+        "clientWidth": 834,
+        "scrollHeight": 1112,
+        "visibleInteractiveCount": 2,
+        "horizontallyOffscreenInteractive": [],
+        "bodyTextStart": "WEET CONSOLE\n\nTRAFFIC INTELLIGENCE\n\n웹 로그 분석\n\n방문자 트래픽, 유입 경로, 사용자 행동을 운영 판단에 바로 연결합니다.\n\n총 방문자\n\n480\n\n최근 7일\n\n페이지뷰\n\n1,238\n\n최근 7일\n\n평균 세션\n\n340초\n\n체류 시간\n\nHeatmaps\n\nMicrosoft Clarity\n\n사용자 행동 녹화 보기 →\n\n트래픽 추이\n\n최근 7일간의 방문자 및 페이지뷰 변화\n\n방문자\n페이지뷰\n05/31\n06/"
+      }
+    },
+    {
+      "viewport": {
+        "label": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "route": "/admin/products",
+      "probes": {
+        "PRODUCT READINESS": true,
+        "이미지 보완": true,
+        "현재 페이지 제품 검색": true
+      },
+      "metrics": {
+        "title": "위트(weet) - 시스템 건축 전문 기업",
+        "path": "/admin/products",
+        "overflowX": false,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "visibleInteractiveCount": 48,
+        "horizontallyOffscreenInteractive": [],
+        "bodyTextStart": "WEET CONSOLE\n\nPRODUCT READINESS\n\n제품 관리 · 26건\n\n공개 제품, 이미지 상태, 가격 입력 여부를 빠르게 점검하고 모델별 준비도를 관리합니다.\n\n제품 추가\n\n현재 페이지 공개\n\n12\n\n활성 상태 제품\n\n이미지 보완\n\n0\n\n깨진 URL 또는 미등록\n\n가격 보완\n\n0\n\n상담 전 기준가 확인\n\n전체 카테고리\nS\nM\nL\nXL\nSOLUTION\nDESIGN\n전체 상태\n활성\n비활성\n활성\n84\n18평 단독주택\n\n"
+      }
+    },
+    {
+      "viewport": {
+        "label": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "route": "/admin/projects",
+      "probes": {
+        "PROJECT READINESS": true,
+        "IMAGE HEALTH": true,
+        "프로젝트명, 고객, 지역 검색": true
+      },
+      "metrics": {
+        "title": "위트(weet) - 시스템 건축 전문 기업",
+        "path": "/admin/projects",
+        "overflowX": false,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "visibleInteractiveCount": 8,
+        "horizontallyOffscreenInteractive": [],
+        "bodyTextStart": "WEET CONSOLE\n\nPROJECT READINESS\n\n프로젝트 관리 · 2건\n\n공개 품질에 영향을 주는 이미지, 완료일, 고객/지역 정보를 한 화면에서 점검합니다.\n\n전체 상태\n완료\n진행중\n계획중\n새 프로젝트\n\n현재 표시\n\n2\n\n필터 결과 기준\n\n공개 가능\n\n0\n\n보완 이슈 없음\n\n보완 필요\n\n2\n\n이미지·완료일·본문 점검\n\nIMAGE HEALTH\n\n1건이 유효한 대표 이미지를 사용 중입니다.\n\n준비도\n76\n테스트 입니다"
+      }
+    },
+    {
+      "viewport": {
+        "label": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "route": "/admin/consultations",
+      "probes": {
+        "CONSULTATION SLA": true,
+        "SLA 위험": true,
+        "상태 저장 대기열": true
+      },
+      "metrics": {
+        "title": "위트(weet) - 시스템 건축 전문 기업",
+        "path": "/admin/consultations",
+        "overflowX": false,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "visibleInteractiveCount": 1,
+        "horizontallyOffscreenInteractive": [],
+        "bodyTextStart": "WEET CONSOLE\n\nCONSULTATION SLA\n\n상담 관리 · 0건\n\n주문 상담을 최신순으로 확인하고, 2시간 이상 미처리된 요청을 먼저 처리합니다.\n\n상태 저장 대기열\n\n신규\n\n0\n\n먼저 배정할 상담\n\n진행중\n\n0\n\n후속 통화 필요\n\nSLA 위험\n\n0\n\n2시간 이상 미처리\n\n완료\n\n0\n\n처리 완료 상담\n\n등록된 상담 요청이 없습니다."
+      }
+    },
+    {
+      "viewport": {
+        "label": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "route": "/admin/insights",
+      "probes": {
+        "TRAFFIC INTELLIGENCE": true
+      },
+      "metrics": {
+        "title": "위트(weet) - 시스템 건축 전문 기업",
+        "path": "/admin/insights",
+        "overflowX": false,
+        "scrollWidth": 390,
+        "clientWidth": 390,
+        "scrollHeight": 844,
+        "visibleInteractiveCount": 2,
+        "horizontallyOffscreenInteractive": [],
+        "bodyTextStart": "WEET CONSOLE\n\nTRAFFIC INTELLIGENCE\n\n웹 로그 분석\n\n방문자 트래픽, 유입 경로, 사용자 행동을 운영 판단에 바로 연결합니다.\n\n총 방문자\n\n480\n\n최근 7일\n\n페이지뷰\n\n1,238\n\n최근 7일\n\n평균 세션\n\n340초\n\n체류 시간\n\nHeatmaps\n\nMicrosoft Clarity\n\n사용자 행동 녹화 보기 →\n\n트래픽 추이\n\n최근 7일간의 방문자 및 페이지뷰 변화\n\n방문자\n페이지뷰\n05/31\n06/"
+      }
+    }
+  ]
+}

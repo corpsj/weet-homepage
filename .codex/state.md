@@ -6,9 +6,24 @@ Weet 홈페이지와 관리자 페이지 전면 재귀 개선 작업의 첫 구�
 
 ## Current phase
 
-deployment
+GPT-5.5 Pro review packet preparation for the homepage/admin full-surface slice.
 
 ## Changes made
+
+- 2026-06-07 current slice resumed after the user clarified that the work must cover both the whole public homepage experience and the complete admin redesign, not only a small admin dashboard pass.
+- Updated durable instructions so project image generation must use Chrome/ChatGPT visible web control with `최신 • 5.5` and Thinking/Pro `확장`, then `이미지 만들기`; this was recorded in `AGENTS.md`, `codex-loop.md`, `.codex/chatgpt-procedure.md`, `.codex/current-task.md`, `agent-inbox/UI-design.md`, and `agent-inbox/컴퓨터유즈,웹제어.md`.
+- Regenerated the admin/home UI guide image through Chrome/ChatGPT web control and saved it as `agent-inbox/generated-ui-reference-admin-console-v2.png` (PNG 1672x941, SHA-256 `8a9d48f42b6537c73ff55da398edefe58c2f0abf3863f409e0843fb0c31a12ab`).
+- Computer Use was healthy; Stickies was checked and visible but blank.
+- Antigravity IDE was controlled through Computer Use and completed two implementation handoffs: homepage/admin shell/main slice and remaining admin child surfaces slice. Codex accepted intended changes after final Antigravity completion.
+- Public homepage `app/page.tsx` now uses a full-bleed dark hero image, premium short headline, clear model-configuration CTA, process link, and a visible transparency section hint in the first viewport.
+- Admin shell/main route, sidebar/header, UTM, CMS main/support editor, customize manager, settings, products/product form/modal, projects, gallery, inquiries, insights, analytics, and related new/edit pages now share the premium console system.
+- Codex corrected Antigravity output by removing unused imports, removing prohibited tracking classes from changed homepage headings, fixing local image optimizer 400s from unsafe homepage asset paths, tightening hero viewport height, cleaning trailing whitespace, and bringing product new/edit route wrappers into `ConsolePageHeader`.
+- Targeted grep under `app/admin` and `components/admin` now finds 0 `tracking-tight`, `tracking-tighter`, `rounded-xl`, `rounded-2xl`, `rounded-3xl`, `shadow-xl`, `shadow-2xl`, or visible `대시보드` matches.
+- Local validation passed after all patches: `git diff --check`, `npm run lint`, `npm test` (3 files, 20 tests), `npm run build`, and `npx playwright test e2e/public-pages.spec.ts` (12 tests).
+- Visual QA against `http://localhost:3001` captured homepage and admin screens across PC `1440x960`, tablet `834x1112`, mobile `390x844`; evidence saved under `.codex/qa/visual-home-admin-20260607-final/`.
+- Visual QA covered `/`, `/admin`, `/admin/products`, product modal, product new/edit, `/admin/projects`, project new/edit, `/admin/gallery`, gallery new/edit, `/admin/inquiries`, `/admin/support`, `/admin/insights`, `/admin/utm`, and `/admin/settings`.
+- Visual QA recheck confirmed viewport-visible image failures `0`, product modal form loaded successfully after dynamic import, product modal overflow `false`, and no old `대시보드` label in audited admin body text.
+- `agent-inbox/findings-public-simulation.md`, `agent-inbox/findings-admin-simulation.md`, and `agent-inbox/implementation-backlog.md` were updated with current slice findings, fixed items, and remaining backlog.
 
 - `AGENTS.md`, `codex-loop.md`, `.codex/current-task.md`, `.codex/state.md`, `agent-inbox/README.md`, `agent-inbox/instructions.md`, 기존 `agent-inbox/*.md`를 읽었다.
 - Antigravity IDE에 frontend/design 구현을 위임했고, 의도한 변경 범위를 확인한 뒤 수락했다.
@@ -75,8 +90,29 @@ deployment
 - Production QA against `https://www.we-et.com` for `fdc1a31` found no console/page errors and no document horizontal overflow, but the closed tablet/mobile admin sidebar still exposed off-canvas nav links as horizontally offscreen interactive elements.
 - Fixed the closed mobile/tablet admin sidebar by adding `max-lg:invisible max-lg:pointer-events-none` to the hidden `AdminShell` sidebar wrapper while preserving desktop visibility.
 - Re-ran post-fix validation: `git diff --check`, `npm run lint`, `npm test`, `npx playwright test e2e/public-pages.spec.ts --grep "Admin responsive shell|admin console operations"`, and `npm run build` all passed.
+- Committed sidebar fix as `0b795e5`, pushed `zoo/customize-configurator`, waited for Vercel preview Ready, promoted the exact preview deployment to Production, and confirmed production deployment `dpl_4NVnsYLPqb4XPZadMg4cpDuypA2t` was Ready with aliases `https://www.we-et.com` and `https://we-et.com`.
+- Final authenticated production QA against `https://www.we-et.com` for commit `0b795e5` covered `/admin/products`, `/admin/projects`, `/admin/consultations`, and `/admin/insights` on PC `1440x960`, tablet `834x1112`, and mobile `390x844`.
+- Final production QA result: 12/12 route-viewport checks had all probes visible, `consoleMessages: 0`, `pageErrors: 0`, `overflowX: false`, and `horizontallyOffscreenInteractive: 0`.
+- Final production QA evidence saved to `.codex/qa/production-admin-console-0b795e5/summary.json` plus 12 screenshots. Visual spot-checks of `mobile-products.png`, `tablet-projects.png`, and `mobile-consultations.png` showed stable hierarchy, no drawer bleed, no text overlap, and no horizontal squeeze.
 
 ## Commands run
+
+- Current slice:
+  - `computer-use:list_apps`
+  - `computer-use:get_app_state("Antigravity IDE")`
+  - `computer-use:get_app_state("Stickies")`
+  - Chrome/ChatGPT web-control image generation with visible `5.5`, `Thinking`, `확장`, `이미지 만들기`
+  - `git status --short`
+  - `git diff --stat`
+  - `rg -n "tracking-tight|tracking-tighter|rounded-(xl|2xl|3xl)|shadow-xl|shadow-2xl|대시보드" app/admin components/admin -g '*.tsx'`
+  - `git diff --check`
+  - `npm run lint`
+  - `npm test`
+  - `npm run build`
+  - `npx playwright test e2e/public-pages.spec.ts`
+  - Local production visual QA against `http://localhost:3001`; screenshots and `report.json` saved under `.codex/qa/visual-home-admin-20260607-final/`
+  - Targeted visible-image/product-modal recheck against `http://localhost:3001`; saved `.codex/qa/visual-home-admin-20260607-final/recheck.json`
+  - Visual inspection of `pc-home.png`, `mobile-home.png`, `pc-admin.png`, `mobile-admin-gallery.png`, `mobile-admin-products-modal-new-loaded-recheck.png`, `pc-admin-projects-new.png`, `tablet-admin-gallery-new.png`, `mobile-admin-support.png`, and `mobile-admin-inquiries.png`
 
 - `git status --short`
 - `git diff --stat`
@@ -147,8 +183,21 @@ deployment
 - `vercel inspect https://weet-homepage-n62bnqu1q-weets-projects-6c7745e8.vercel.app --scope weets-projects-6c7745e8`
 - Production authenticated Playwright QA against `https://www.we-et.com` for admin products/projects/consultations/insights on PC/tablet/mobile.
 - Post-sidebar-fix validation: `git diff --check`, `npm run lint`, `npm test`, `npx playwright test e2e/public-pages.spec.ts --grep "Admin responsive shell|admin console operations"`, `npm run build`.
+- `git commit -m "Hide closed admin drawer controls"`
+- `git push origin zoo/customize-configurator`
+- `vercel inspect https://weet-homepage-el4alcjaq-weets-projects-6c7745e8.vercel.app --scope weets-projects-6c7745e8`
+- `vercel promote https://weet-homepage-el4alcjaq-weets-projects-6c7745e8.vercel.app --scope weets-projects-6c7745e8 --yes`
+- `vercel inspect https://weet-homepage-pm3y4xkqa-weets-projects-6c7745e8.vercel.app --scope weets-projects-6c7745e8`
+- Final production authenticated Playwright QA against `https://www.we-et.com` for admin products/projects/consultations/insights on PC/tablet/mobile; evidence saved under `.codex/qa/production-admin-console-0b795e5/`.
+- Visual inspection via local screenshot viewer: `.codex/qa/production-admin-console-0b795e5/mobile-products.png`, `.codex/qa/production-admin-console-0b795e5/tablet-projects.png`, `.codex/qa/production-admin-console-0b795e5/mobile-consultations.png`.
 
 ## Current failures
+
+- Current slice:
+  - In-app Browser control was searched for but not exposed in the available follow-up tools, so local browser UI validation used Playwright screenshots/interactions plus Computer Use visual checks instead.
+  - Initial visual QA counted offscreen lazy images as `badImages` on mobile gallery/product modal; targeted recheck limited to viewport-visible images and found 0 visible image failures.
+  - Initial product modal screenshot captured the dynamic import loading state; targeted recheck waited for `기본 정보` and confirmed the form loads correctly.
+  - Local analytics requests (`/_vercel/insights/script.js`, GA/Clarity, and route-change RSC aborts) appear as request aborts during local Playwright navigation; no page errors or visible UI breakage were observed.
 
 - 2026-06-07 GPT-5.5 Pro Deep Research review attempt marker `WEET_AUDIT_REVIEW_20260607_ADMIN_CUSTOMIZE_SLICE_01` was sent in Chrome with evidence for `최신 • 5.5`, checked `Pro • 확장`, and `심층 리서치`; the long packet was converted by ChatGPT into one `붙여넣은 마크다운(1).md` attachment plus a short marker prompt. After several read-only polls and screenshots, the conversation remained on a static empty loading bar with no assistant response, no `답변 중지` button, and no marker-matched output. No `.codex/pro-review.md` was saved for this attempt.
 - During the same Chrome attempt, direct clipboard paste and Playwright fill did not put the long packet into the contenteditable composer; ChatGPT converted the long markdown into file tiles. Duplicate file tile was removed before sending, leaving one attachment.
@@ -192,18 +241,34 @@ PASS
 
 ## Remaining risks
 
-- External GPT-5.5 Pro review did not produce a usable marker-matched response after 2 attempts in Chrome/Deep Research.
-- Admin child pages still need visual unification with the new premium console system.
+- Current slice still needs fresh GPT-5.5 Pro Deep Research review, concrete MUST_FIX application if any, commit/push, Vercel deployment, and final `we-et.com` production QA.
+- Admin child pages are visually unified under the premium console system, but deeper operational features remain: global search/command palette, readiness/media health scoring, unsaved-change guards, role-aware actions, audit log, and custom destructive confirmations.
 - Public homepage/product/customize flow still needs larger conversion upgrades: warranty/A/S proof, B2B/bulk inquiry, stronger generated or real product/install imagery, and more numeric transport/install cost guidance.
 - Existing Next middleware-to-proxy deprecation remains.
-- ChatGPT Deep Research may become stuck on both markdown file attachment review and shorter inline review packets in the current Chrome session.
-- Latest ChatGPT Deep Research attempt for marker `WEET_REVIEW_20260607_CUSTOMIZE_FLOORPLAN_CONFIDENCE_03` also ended in an iframe/empty loading bar after refresh, so a valid external Pro verdict is still unavailable.
+- ChatGPT Deep Research reports can render as visible report cards while ordinary assistant DOM appears empty; future review extraction should use visible DOM export controls and Downloads inspection as recorded in `agent-inbox/tool-control-runbook.md`.
 - No known outstanding `/customize` floorplan rendering defect remains after final `we-et.com` PC/tablet/mobile production validation for commit `5fff2fc`.
-- Admin products/projects/consultations/insights now use the first console system, but UTM/CMS/gallery/inquiries/edit forms/product modal still need visual unification.
-- Production `we-et.com` validation for `fdc1a31` was run and found the closed mobile/tablet sidebar off-canvas interaction issue, which is now fixed locally and pending final redeploy QA.
+- Admin UTM/CMS/gallery/inquiries/edit forms/product modal now use the console system; the next risk is functional depth rather than old surface styling.
 - Computer Use was healthy in the resumed session, but Antigravity live input still needs a real implementation handoff or smoke test through the documented `Electron`/bundle-id/path target sequence before claiming a new successful frontend delegation.
-- Production `we-et.com` validation found and locally fixed the closed mobile/tablet sidebar off-canvas interaction issue; the fixed sidebar commit still needs push, Vercel promotion, and final production QA.
+- Final production `we-et.com` validation for admin products/projects/consultations/insights passed on PC/tablet/mobile after the sidebar fix.
 
 ## Next step
 
-Commit and push the admin sidebar visibility fix, wait for Vercel deployment, promote if needed, then rerun final `we-et.com`/`www.we-et.com` PC/tablet/mobile visual QA.
+Continue the next improvement slice: convert remaining admin UTM/CMS/gallery/inquiries/edit-form/modal surfaces to the same console system, then repeat validation and Pro review.
+
+## 2026-06-07 GPT Pro file upload failure
+- Chrome/ChatGPT file chooser upload for `.codex/review-packet.md` failed with `Not allowed` from the Chrome extension file chooser.
+- Recovery path: paste the review-packet content directly into the ChatGPT Deep Research composer after confirming `최신 • 5.5`, `Pro • 확장`, and `심층 리서치`.
+
+## 2026-06-07 homepage/admin full-surface slice completion update
+
+- GPT-5.5 Pro Deep Research marker `WEET_REVIEW_20260607_HOME_ADMIN_FULL_SURFACE_05` returned `VERDICT: MUST_FIX` with five concrete blockers: notice body editing missing, FAQ/notice keypress autosave, admin count failures displayed as 0, inquiry optimistic updates without rollback, and homepage dark-section contrast.
+- Codex applied all five MUST_FIX items:
+  - `components/admin/cms/SupportEditor.tsx` now uses FAQ/notice draft state with explicit save/reset buttons and editable notice body content.
+  - `app/admin/page.tsx` now represents count failures as `{ count: null, error }` and displays `연결 오류` instead of fake zero values.
+  - `components/admin/inquiries/InquiryList.tsx` now checks action results, prevents duplicate pending mutations, shows failure toasts, and rolls back failed optimistic status/delete changes.
+  - `app/page.tsx` dark transparency text was raised from `text-gray-500` to `text-gray-400`.
+  - Mobile notice management was further improved from a table-only horizontal-scroll surface into a card editor with title/status/body/save/delete controls.
+- Post-MUST_FIX validation passed: `git diff --check`, `npm run lint`, `npm test`, `npm run build`, and `npx playwright test e2e/public-pages.spec.ts`.
+- Post-MUST_FIX visual QA passed on local production server `http://localhost:3001`; evidence saved under `.codex/qa/post-pro-mustfix-20260607-v2/`.
+- GPT-5.5 Pro Deep Research closure marker `WEET_REVIEW_20260607_HOME_ADMIN_MUSTFIX_CLOSURE_06` returned `VERDICT: PASS` and `MUST_FIX: None`; latest result saved to `.codex/pro-review.md`.
+- Remaining pending completion work: commit, push, Vercel deployment/promotion, and real `we-et.com` production visual QA.

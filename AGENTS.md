@@ -88,6 +88,8 @@ For browser-based review and validation, prefer fast read-only DOM evidence befo
 
 - For the current ChatGPT UI, set GPT Pro by opening the model dropdown, choosing `구성…`, selecting `Pro 리서치급 인텔리전스`, then setting `Pro 생각 강도` to `확장`. After closing the dialog, use the composer-left `+` button (`파일 추가 및 기타`) and select `심층 리서치`. Paste prompts through the clipboard instead of inline typing so newlines do not send the message early.
 
+- For ChatGPT image generation, use Chrome/ChatGPT web control only so the user can see the work. Open `새 채팅`, set the model harness to `최신 • 5.5` with Thinking/Pro `확장` before selecting `이미지 만들기`, and prove the active model/action chips from read-only DOM or visible evidence before sending. Never generate project UI/reference images with the local image tool when this web-control rule applies.
+
 - For frontend implementation, UI/UX design, layout, component styling, page composition, or other visual product work, use the `antigravity-frontend` skill and delegate the implementation step to Antigravity IDE/Gemini through Computer Use. Wait until Antigravity finishes, accept only intended changes, then return to Codex to inspect git status/diff, verify files, run validation, create review packets, request GPT-5.5 Pro review, and continue the local repository workflow.
 
 - Before using screenshots, coordinate clicks, repeated scrolling, or Computer Use, try targeted DOM reads with Playwright locators, roles, labels, `data-testid`, visible button names, and small `outerHTML` snippets.

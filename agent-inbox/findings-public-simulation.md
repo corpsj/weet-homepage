@@ -163,3 +163,33 @@ The first 10 personas did not produce 100 unique hard bugs. Following the user i
 - Add warranty/A/S/maintenance proof section near product and customize CTAs.
 - Add B2B/bulk inquiry variant and consultation form fields for timeline, quantity, intended use, and site status.
 - Upgrade public image system with high-quality product/interior/transport visuals.
+
+## 2026-06-07 homepage premium-first visual QA
+
+101. Fix verified: homepage hero was rebuilt into a full-bleed dark product/home image experience instead of a generic landing-page card composition.
+102. Fix verified: desktop first viewport now exposes the next `TRANSPARENCY` section hint, so the hero does not trap the visitor in a single full-screen panel.
+103. Fix verified: mobile first viewport shows the brand, hero headline, primary CTA, secondary process link, and the next transparency heading without horizontal overflow.
+104. Fix verified: the two homepage hero/support images that initially produced local Next image optimizer 400s were replaced with safer asset paths.
+105. Strength: the new headline `작은 공간, 선명한 기준.` feels younger and more editorial while staying clear for first-time buyers.
+106. Strength: `모델 구성하기` remains the first purchase-oriented CTA and points to `/customize`.
+107. Strength: `진행 과정 보기` gives anxious buyers a lower-pressure path before configuration.
+108. Strength: the trust copy explicitly names model selection, transport, installation, and expected cost transparency.
+109. Visual QA PC: screenshot `.codex/qa/visual-home-admin-20260607-final/pc-home.png` shows no text overlap, no horizontal squeeze, and the next section visible at the bottom edge.
+110. Visual QA tablet: screenshot `.codex/qa/visual-home-admin-20260607-final/tablet-home.png` was captured; report shows `overflowX: false`, hero visible, next transparency section visible.
+111. Visual QA mobile: screenshot `.codex/qa/visual-home-admin-20260607-final/mobile-home.png` shows CTA buttons stacked safely and no clipped hero text.
+112. Watch: public homepage still needs real/generated transport, install, interior, and proof visuals beyond the first hero image to reach category-leading depth.
+113. Watch: public pages outside the homepage still contain older rounded public UI patterns; these were not the current admin-focused implementation target.
+114. Watch: price guidance remains qualitative; buyers still need concrete delivery/install example ranges and conditions.
+115. Watch: warranty/A/S proof should be pulled closer to product/configuration CTAs.
+116. Watch: B2B and institution buyer flows remain a major conversion opportunity.
+117. Watch: generated homepage image replacement should be considered only through Chrome/ChatGPT web control with `최신 • 5.5` and Thinking/Pro `확장`.
+118. Watch: local QA request failures were limited to local Vercel Insights/GA aborts during route changes, not visible page breakage.
+119. Watch: homepage visual system is now darker and more premium; `/products`, `/projects`, `/support`, and `/company` should gradually inherit the same confidence/proof rhythm.
+120. Next candidate: add an install/transport proof strip using generated or real visual assets and a short “우리 땅에 들어올 수 있나?” self-check path.
+
+## 2026-06-07 Pro MUST_FIX closure public findings
+
+121. GPT-5.5 Pro found the homepage dark transparency section used `text-gray-500` on `#111111` for small text, below normal text contrast expectations.
+122. Fix verified: the dark-section eyebrow and feature body text now use `text-gray-400`.
+123. Post-fix local screenshot `.codex/qa/post-pro-mustfix-20260607-v2/desktop-home-contrast.png` confirms the updated class is rendered in the first transparency section.
+124. GPT-5.5 Pro closure marker `WEET_REVIEW_20260607_HOME_ADMIN_MUSTFIX_CLOSURE_06` returned `VERDICT: PASS` and `MUST_FIX: None`.

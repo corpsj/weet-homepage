@@ -1,19 +1,33 @@
 import Link from 'next/link';
 import {
-  ArrowRight,
   BarChart3,
   CheckCircle2,
-  Clock,
   FolderKanban,
   MessageSquare,
   Package,
   ShieldCheck,
   SlidersHorizontal,
+  Search,
+  Monitor,
+  Link2,
 } from 'lucide-react';
 import { requireAdmin } from '@/lib/admin-auth';
 import { getSupabaseAdmin } from '@/lib/supabase';
+import {
+  ConsolePageHeader,
+  ConsolePanel,
+  ConsoleSectionTitle,
+  ConsoleStatusPill,
+  consoleInputClass,
+  consoleSecondaryButtonClass,
+} from '@/components/admin/ConsolePrimitives';
 
 export const dynamic = 'force-dynamic';
+
+type CountResult = {
+  count: number | null;
+  error: string | null;
+};
 
 async function getCount(table: string, filters?: (query: any) => any) {
   try {
@@ -21,11 +35,35 @@ async function getCount(table: string, filters?: (query: any) => any) {
     let query = admin.from(table as never).select('id', { count: 'exact', head: true });
     if (filters) query = filters(query);
     const { count, error } = await query;
-    if (error) return 0;
-    return count || 0;
-  } catch {
-    return 0;
+    if (error) return { count: null, error: error.message };
+    return { count: count || 0, error: null };
+  } catch (error) {
+    return {
+      count: null,
+      error: error instanceof Error ? error.message : 'Unknown count error',
+    };
   }
+}
+
+function CountBadge({
+  result,
+  suffix,
+  dangerWhenZero = false,
+}: {
+  result: CountResult;
+  suffix: string;
+  dangerWhenZero?: boolean;
+}) {
+  if (result.error) {
+    return <ConsoleStatusPill tone="danger">연결 오류</ConsoleStatusPill>;
+  }
+
+  const count = result.count || 0;
+  return (
+    <ConsoleStatusPill tone={dangerWhenZero && count === 0 ? 'danger' : 'success'}>
+      {count}{suffix}
+    </ConsoleStatusPill>
+  );
 }
 
 export default async function AdminPage() {
@@ -38,184 +76,204 @@ export default async function AdminPage() {
     getCount('customize_options', (query) => query.eq('is_active', true)),
   ]);
 
-  const stats = [
-    {
-      label: '공개 제품',
-      value: activeProducts,
-      href: '/admin/products',
-      icon: Package,
-      tone: 'border-[#111111] bg-[#111111] text-white',
-      caption: '구매자가 볼 수 있는 제품 수',
-    },
-    {
-      label: '신규 상담',
-      value: newConsultations,
-      href: '/admin/consultations',
-      icon: MessageSquare,
-      tone: 'border-[#eab308] bg-[#eab308] text-[#111111]',
-      caption: '오늘 먼저 확인할 상담',
-    },
-    {
-      label: '프로젝트',
-      value: projects,
-      href: '/admin/projects',
-      icon: FolderKanban,
-      tone: 'border-[#e5e5e5] bg-white text-[#111111]',
-      caption: '공개/관리 대상 시공 사례',
-    },
-    {
-      label: '활성 옵션',
-      value: activeOptions,
-      href: '/admin/customize',
-      icon: SlidersHorizontal,
-      tone: 'border-[#e5e5e5] bg-white text-[#111111]',
-      caption: '주문하기에서 선택 가능한 옵션',
-    },
-  ];
+  const hasCountError = [activeProducts, newConsultations, projects, activeOptions].some(result => result.error);
+  const activeProductCount = activeProducts.count || 0;
+  const newConsultationCount = newConsultations.count || 0;
 
-  const shortcuts = [
-    { title: '제품 추가', href: '/admin/products/new', description: '제품 이미지, 스펙, 노출 상태 등록' },
-    { title: '주문 구성', href: '/admin/customize', description: '모델, 옵션, 도면 이미지, 충돌 관계 관리' },
-    { title: '상담 확인', href: '/admin/consultations', description: '신규 상담, 내부 메모, 처리 상태 확인' },
-    { title: '웹 로그 분석', href: '/admin/insights', description: '방문자, 유입, 인기 페이지 확인' },
-  ];
-
-  const workflow = [
-    {
-      label: '상담 응답',
-      value: newConsultations > 0 ? `${newConsultations}건 대기` : '대기 없음',
-      description: newConsultations > 0 ? '견적 전화를 먼저 처리하세요.' : '신규 상담 큐가 비어 있습니다.',
-      href: '/admin/consultations',
-      icon: Clock,
-      urgent: newConsultations > 0,
-    },
-    {
-      label: '공개 제품',
-      value: activeProducts > 0 ? '노출 중' : '노출 없음',
-      description: activeProducts > 0 ? '구매 전환 흐름이 열려 있습니다.' : '제품 공개 상태를 먼저 확인하세요.',
-      href: '/admin/products',
-      icon: Package,
-      urgent: activeProducts === 0,
-    },
-    {
-      label: '주문 도면',
-      value: activeOptions > 0 ? '옵션 활성' : '옵션 없음',
-      description: '모델별 도면과 옵션 오버레이를 주기적으로 확인하세요.',
-      href: '/admin/customize',
-      icon: SlidersHorizontal,
-      urgent: false,
-    },
-  ];
-
-  const readiness = [
-    { label: '도면', value: '모델별 단일 렌더링', icon: CheckCircle2 },
-    { label: '상담', value: '신규 상태 큐 분리', icon: MessageSquare },
-    { label: '보안', value: '관리자 권한 보호 유지', icon: ShieldCheck },
+  const quickActions = [
+    { title: '신규 상담', href: '/admin/consultations', icon: MessageSquare, urgent: !newConsultations.error && newConsultationCount > 0 },
+    { title: '제품 구성', href: '/admin/products', icon: Package, urgent: !activeProducts.error && activeProductCount === 0 },
+    { title: '주문 구성 관리', href: '/admin/customize', icon: SlidersHorizontal },
+    { title: '프로젝트 등록', href: '/admin/projects', icon: FolderKanban },
+    { title: '랜딩 페이지', href: '/admin/main', icon: Monitor },
+    { title: '캠페인 링크 생성', href: '/admin/utm', icon: Link2 },
   ];
 
   return (
-    <div className="space-y-10">
-      <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-        <div>
-          <p className="mb-2 text-xs font-bold text-[#8a6a12]">WEET OPERATIONS</p>
-          <h1 className="text-2xl font-black text-[#111111]">대시보드</h1>
-          <p className="mt-1 text-sm font-medium text-gray-500">운영 우선순위와 핵심 워크플로우 상태입니다.</p>
-        </div>
-        <Link
-          href="/admin/insights"
-          className="inline-flex h-9 items-center gap-2 rounded bg-white border border-[#e5e5e5] px-4 text-xs font-bold text-[#111] transition-colors hover:bg-gray-50 hover:border-gray-300"
-        >
-          <BarChart3 className="h-4 w-4" />
-          웹 로그 분석
-        </Link>
-      </div>
-
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        {stats.map((item) => (
-          <Link
-            key={item.label}
-            href={item.href}
-            className={`rounded-md border p-5 shadow-sm transition-colors hover:border-gray-400 ${item.tone}`}
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="text-[10px] font-bold opacity-80">{item.label}</p>
-                <p className="mt-2 text-3xl font-black">{item.value.toLocaleString('ko-KR')}</p>
-                <p className="mt-3 text-xs opacity-70">{item.caption}</p>
-              </div>
-              <item.icon className="h-5 w-5 opacity-80" />
-            </div>
-          </Link>
-        ))}
-      </div>
-
-      <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-        <div>
-          <div className="mb-4 flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-[#eab308]" />
-            <h2 className="text-sm font-bold text-[#111111]">오늘의 운영 레일</h2>
+    <div className="space-y-6">
+      <ConsolePageHeader
+        eyebrow="WEET OPERATIONS"
+        title="작업실"
+        description="운영 업무, 고객 상담, 콘텐츠 상태를 통합 관리하는 워크벤치입니다."
+        actions={
+          <div className="relative w-full md:w-64">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="명령 및 검색 (준비 중)"
+              className={`${consoleInputClass} w-full pl-9 bg-white`}
+              disabled
+            />
           </div>
-          <div className="grid gap-3 md:grid-cols-3">
-            {workflow.map((item) => (
+        }
+      />
+
+      <div className="grid gap-6 xl:grid-cols-[240px_1fr_280px] items-start">
+        {/* Left: Workflow Lane */}
+        <div className="space-y-6">
+          <section>
+            <ConsoleSectionTitle>운영 상태</ConsoleSectionTitle>
+            <ConsolePanel className="divide-y divide-[#e5e5df]">
+              <div className="flex items-center justify-between p-3">
+                <div className="flex items-center gap-2">
+                  <Package className="h-4 w-4 text-gray-500" />
+                  <span className="text-sm font-semibold text-gray-900">공개 제품</span>
+                </div>
+                <CountBadge result={activeProducts} suffix="개" dangerWhenZero />
+              </div>
+              <div className="flex items-center justify-between p-3">
+                <div className="flex items-center gap-2">
+                  <SlidersHorizontal className="h-4 w-4 text-gray-500" />
+                  <span className="text-sm font-semibold text-gray-900">활성 옵션</span>
+                </div>
+                {activeOptions.error ? (
+                  <ConsoleStatusPill tone="danger">연결 오류</ConsoleStatusPill>
+                ) : (
+                  <span className="text-sm font-bold text-gray-600">{activeOptions.count || 0}개</span>
+                )}
+              </div>
+              <div className="flex items-center justify-between p-3">
+                <div className="flex items-center gap-2">
+                  <FolderKanban className="h-4 w-4 text-gray-500" />
+                  <span className="text-sm font-semibold text-gray-900">프로젝트</span>
+                </div>
+                {projects.error ? (
+                  <ConsoleStatusPill tone="danger">연결 오류</ConsoleStatusPill>
+                ) : (
+                  <span className="text-sm font-bold text-gray-600">{projects.count || 0}건</span>
+                )}
+              </div>
+            </ConsolePanel>
+          </section>
+
+          <section>
+            <ConsoleSectionTitle>시스템 검증</ConsoleSectionTitle>
+            <ConsolePanel className="p-3 space-y-3">
+              <div className="flex items-center gap-3">
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+                <div className="flex-1">
+                  <p className="text-xs font-bold text-gray-900">도면 정합성</p>
+                  <p className="text-[11px] text-gray-500">단일 렌더링 검증 완료</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <ShieldCheck className="h-4 w-4 text-green-600" />
+                <div className="flex-1">
+                  <p className="text-xs font-bold text-gray-900">보안 및 접근</p>
+                  <p className="text-[11px] text-gray-500">관리자 인증 유지</p>
+                </div>
+              </div>
+            </ConsolePanel>
+          </section>
+        </div>
+
+        {/* Center: Real Task Queue */}
+        <div className="space-y-6">
+          <ConsoleSectionTitle>우선 처리 큐</ConsoleSectionTitle>
+          <ConsolePanel className="flex flex-col min-h-[400px] border-gray-200">
+            {hasCountError ? (
+              <div className="border-b border-[#e5e5df] bg-red-50 p-6">
+                <p className="text-sm font-black text-red-900">운영 데이터 연결을 확인해야 합니다.</p>
+                <p className="mt-2 text-xs font-medium leading-5 text-red-700">
+                  상담, 제품, 프로젝트, 옵션 중 일부 현황을 불러오지 못했습니다. 0건으로 간주하지 않고 연결 오류로 표시합니다.
+                </p>
+              </div>
+            ) : null}
+
+            {!newConsultations.error && newConsultationCount > 0 ? (
+              <div className="p-0">
+                <div className="border-b border-[#e5e5df] bg-gray-50 p-3 flex justify-between items-center">
+                  <h3 className="text-sm font-bold text-gray-900 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-yellow-500" />
+                    신규 상담 요청 ({newConsultationCount}건)
+                  </h3>
+                  <Link href="/admin/consultations" className="text-xs font-bold text-blue-600 hover:underline">
+                    모두 보기
+                  </Link>
+                </div>
+                <div className="p-6 text-center">
+                  <MessageSquare className="h-8 w-8 text-yellow-500 mx-auto mb-3" />
+                  <p className="text-sm font-semibold text-gray-900">확인 대기 중인 상담이 있습니다.</p>
+                  <p className="text-xs text-gray-500 mt-1">고객의 구성 내역과 현장 조건을 빠르게 확인하세요.</p>
+                  <Link
+                    href="/admin/consultations"
+                    className={`${consoleSecondaryButtonClass} mt-4`}
+                  >
+                    상담 큐 열기
+                  </Link>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-1 flex-col items-center justify-center p-8 text-center text-gray-400">
+                <CheckCircle2 className="h-10 w-10 mb-4 opacity-50" />
+                <p className="text-sm font-bold text-gray-600">
+                  {newConsultations.error ? '상담 현황을 불러오지 못했습니다.' : '처리할 신규 상담이 없습니다.'}
+                </p>
+                <p className="text-xs mt-2">
+                  {newConsultations.error ? '연결 상태를 확인한 뒤 다시 시도하세요.' : '모든 고객 요청이 처리되었습니다.'}
+                </p>
+              </div>
+            )}
+
+            {!activeProducts.error && activeProductCount === 0 && (
+              <div className="border-t border-[#e5e5df]">
+                <div className="border-b border-[#e5e5df] bg-red-50 p-3 flex justify-between items-center">
+                  <h3 className="text-sm font-bold text-red-900 flex items-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-red-500" />
+                    제품 노출 없음
+                  </h3>
+                </div>
+                <div className="p-6">
+                  <p className="text-sm font-semibold text-gray-900">공개된 제품이 없습니다.</p>
+                  <p className="text-xs text-gray-500 mt-1">고객이 구매 화면을 볼 수 있도록 제품을 노출 상태로 변경하세요.</p>
+                  <Link href="/admin/products" className={`${consoleSecondaryButtonClass} mt-4`}>
+                    제품 관리로 이동
+                  </Link>
+                </div>
+              </div>
+            )}
+          </ConsolePanel>
+        </div>
+
+        {/* Right: Quick Action Panel */}
+        <div className="space-y-6">
+          <ConsoleSectionTitle>빠른 실행</ConsoleSectionTitle>
+          <ConsolePanel className="p-2 space-y-1">
+            {quickActions.map((action) => (
               <Link
-                key={item.label}
-                href={item.href}
-                className="group rounded-md border border-[#e5e5e5] bg-white p-4 shadow-sm transition-colors hover:border-[#cfcfcf]"
+                key={action.title}
+                href={action.href}
+                className="group flex items-center justify-between rounded-md px-3 py-2 hover:bg-gray-50 transition-colors"
               >
-                <div className="mb-5 flex items-center justify-between gap-3">
-                  <item.icon className={item.urgent ? 'h-5 w-5 text-[#b45309]' : 'h-5 w-5 text-gray-500'} />
-                  <span className={item.urgent ? 'rounded bg-[#fff7ed] px-2 py-1 text-[11px] font-bold text-[#b45309]' : 'rounded bg-gray-100 px-2 py-1 text-[11px] font-bold text-gray-500'}>
-                    {item.urgent ? '주의' : '정상'}
+                <div className="flex items-center gap-3">
+                  <action.icon className="h-4 w-4 text-gray-500 group-hover:text-gray-900" />
+                  <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+                    {action.title}
                   </span>
                 </div>
-                <p className="text-xs font-bold text-gray-500">{item.label}</p>
-                <p className="mt-1 text-lg font-black text-[#111111]">{item.value}</p>
-                <p className="mt-3 min-h-[40px] text-xs leading-5 text-gray-500">{item.description}</p>
+                {action.urgent && (
+                  <span className="h-2 w-2 rounded-full bg-yellow-500" />
+                )}
               </Link>
             ))}
-          </div>
-        </div>
+          </ConsolePanel>
 
-        <div>
-          <div className="mb-4 flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-[#111111]" />
-            <h2 className="text-sm font-bold text-[#111111]">품질 상태</h2>
-          </div>
-          <div className="rounded-md border border-[#e5e5e5] bg-white shadow-sm">
-            {readiness.map((item, index) => (
-              <div key={item.label} className={index === 0 ? 'flex items-center gap-3 p-4' : 'flex items-center gap-3 border-t border-[#f0f0f0] p-4'}>
-                <item.icon className="h-4 w-4 text-[#111111]" />
-                <div>
-                  <p className="text-xs font-bold text-gray-500">{item.label}</p>
-                  <p className="text-sm font-bold text-[#111111]">{item.value}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <div className="mb-4 flex items-center gap-2">
-          <span className="h-2 w-2 rounded-full bg-[#eab308]" />
-          <h2 className="text-sm font-bold text-[#111111]">빠른 작업</h2>
-        </div>
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-          {shortcuts.map((item) => (
+          <ConsoleSectionTitle>분석 및 도구</ConsoleSectionTitle>
+          <ConsolePanel className="p-2 space-y-1">
             <Link
-              key={item.href}
-              href={item.href}
-              className="group flex min-h-[108px] flex-col justify-between rounded-md border border-[#e5e5e5] bg-white p-4 shadow-sm transition-colors hover:border-[#cfcfcf]"
+              href="/admin/insights"
+              className="group flex items-center justify-between rounded-md px-3 py-2 hover:bg-gray-50 transition-colors"
             >
-              <div>
-                <p className="text-sm font-bold text-[#111111]">{item.title}</p>
-                <p className="mt-2 text-xs leading-5 text-gray-500">{item.description}</p>
+              <div className="flex items-center gap-3">
+                <BarChart3 className="h-4 w-4 text-gray-500 group-hover:text-gray-900" />
+                <span className="text-sm font-medium text-gray-700 group-hover:text-gray-900">
+                  고객 인사이트
+                </span>
               </div>
-              <ArrowRight className="mt-4 h-4 w-4 shrink-0 text-gray-300 transition-colors group-hover:text-[#111111]" />
             </Link>
-          ))}
+          </ConsolePanel>
         </div>
-      </section>
+      </div>
     </div>
   );
 }

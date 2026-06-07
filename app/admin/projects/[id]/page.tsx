@@ -6,6 +6,7 @@ import { Project } from '@/types/supabase';
 import { getProject } from '@/app/actions/project-actions';
 import ProjectForm from '@/components/admin/projects/ProjectForm';
 import { Loader2 } from 'lucide-react';
+import { ConsolePageHeader } from '@/components/admin/ConsolePrimitives';
 
 export default function EditProjectPage() {
     const params = useParams();
@@ -53,10 +54,11 @@ export default function EditProjectPage() {
 
     return (
         <div className="space-y-6">
-            <div>
-                <h1 className="text-2xl font-bold tracking-tight text-gray-900">프로젝트 수정</h1>
-                <p className="text-gray-500 text-sm mt-1">프로젝트 정보를 수정합니다.</p>
-            </div>
+            <ConsolePageHeader
+                eyebrow="CONTENTS"
+                title="프로젝트 수정"
+                description="프로젝트 정보를 수정합니다."
+            />
 
             <ProjectForm initialData={project} />
         </div>

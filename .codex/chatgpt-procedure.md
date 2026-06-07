@@ -21,8 +21,8 @@ Default policy:
 4. Click `새 채팅` before every new Pro Research run or Thinking Image run.
 5. After `새 채팅`, prove the composer is empty, ChatGPT is not generating, and no modal/menu/upload/error blocks the composer.
 6. Apply the task-specific harness from scratch:
-   - Pro Research: `Pro • 확장` + `심층 리서치`
-   - Image Generation: `Thinking • 확장` + `이미지 만들기`
+   - Pro Research: `최신 • 5.5` + `Pro • 확장` + `심층 리서치`
+   - Image Generation: `최신 • 5.5` + Thinking/Pro `확장` + `이미지 만들기`
 7. Never assume the previous run's mode is still correct. Always re-confirm model and action chips from read-only DOM evidence before sending.
 
 Two tabs are allowed only when real parallelism is needed, such as monitoring a long Pro Research run while generating an image. In that case, name/track each tab by visible title and URL, and never send into a tab until its current conversation and composer state are proven.
@@ -76,20 +76,20 @@ Test prompt:
 다
 ```
 
-## ChatGPT Thinking Image Generation Procedure
+## ChatGPT GPT-5.5 Thinking Image Generation Procedure
 
 Use this procedure when the user asks Codex to generate an image through Chrome/ChatGPT rather than the local image tool.
 
 1. Open or claim the ChatGPT tab in Chrome, then click `새 채팅` for this run unless an active generation must be allowed to finish first.
 2. Start from a safe composer state: no active generation, no modal blocking the composer, and an empty composer.
-3. Confirm the model button shows `Thinking`. If another model is active, open the model dropdown and select `Thinking`. If the compact model button shows only `확장`, open it and confirm `Thinking • 확장` is checked.
+3. Open the model/configuration menu and confirm the image run uses the GPT-5.5 expanded harness: `최신 • 5.5` plus Thinking/Pro `확장`. If another model is active, configure the model before continuing.
 4. Click the composer-left `+` button labeled `파일 추가 및 기타`.
 5. Select `이미지 만들기`.
 6. Confirm the composer changed to image mode:
    - an `이미지` chip/button appears
    - the placeholder changes to `이미지 묘사 또는 편집`
    - image controls such as aspect ratio (`자동`) and `스타일` appear
-7. Re-confirm the model after enabling image mode. In observed UI, selecting `이미지 만들기` can switch the visible model control back to `Pro 확장 모드`; if so, reopen the model menu and select/confirm `Thinking • 확장`.
+7. Re-confirm the model after enabling image mode. In observed UI, selecting `이미지 만들기` can switch the visible model control; reopen the model menu if needed and verify `최신 • 5.5` plus Thinking/Pro `확장` is still active.
 8. Write a detailed image prompt before pasting. Image quality depends heavily on prompt specificity; do not send vague prompts such as `make a nice house image`.
 9. Always include the key production specs in the prompt:
    - aspect ratio: for example `square 1:1`, `landscape 16:9`, `portrait 9:16`, or `wide hero 21:9`
@@ -128,7 +128,7 @@ Constraints: no text, no logo, no watermark, no people, no distorted wheels, no 
 13. Before sending, verify from read-only DOM evidence:
    - the draft prompt is exactly the intended prompt
    - the `이미지` chip is still active
-   - `Thinking` / `Thinking • 확장` is selected
+   - `최신 • 5.5` plus Thinking/Pro `확장` is selected
    - no modal, upload state, or generation blocks sending
    - exactly one `프롬프트 보내기` button is enabled
 14. Click `프롬프트 보내기`.

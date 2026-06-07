@@ -29,17 +29,47 @@ interface NavItem {
 
 const navigation: { title: string; items: NavItem[] }[] = [
     {
-        title: "운영",
+        title: "작업",
         items: [
             {
-                name: '대시보드',
+                name: '작업실',
                 href: '/admin',
                 icon: Layers
             },
             {
-                name: 'UTM Builder',
-                href: '/admin/utm',
-                icon: Link2
+                name: '상담 관리',
+                href: '/admin/consultations',
+                icon: ClipboardList
+            }
+        ]
+    },
+    {
+        title: "고객",
+        items: [
+            {
+                name: '레거시 문의',
+                href: '/admin/inquiries',
+                icon: MessageSquare
+            }
+        ]
+    },
+    {
+        title: "제품/공간",
+        items: [
+            {
+                name: '제품 관리',
+                href: '/admin/products',
+                icon: Package
+            },
+            {
+                name: '주문 구성',
+                href: '/admin/customize',
+                icon: SlidersHorizontal
+            },
+            {
+                name: '프로젝트 관리',
+                href: '/admin/projects',
+                icon: FolderKanban
             }
         ]
     },
@@ -52,49 +82,40 @@ const navigation: { title: string; items: NavItem[] }[] = [
                 icon: Monitor
             },
             {
-                name: '제품 관리',
-                href: '/admin/products',
-                icon: Package
-            },
-            {
-                name: '주문 구성',
-                href: '/admin/customize',
-                icon: SlidersHorizontal
-            },
-
-            {
-                name: '프로젝트 관리',
-                href: '/admin/projects',
-                icon: FolderKanban
-            },
-            {
                 name: 'FAQ 관리',
                 href: '/admin/support',
                 icon: HelpCircle
             },
             {
-                name: '고객 인사이트',
-                href: '/admin/insights', // Keeping insights as per user request/existing folder
-                icon: BarChart3
-            },
-            {
                 name: '갤러리 관리',
                 href: '/admin/gallery',
                 icon: ImageIcon
-            },
+            }
         ]
     },
     {
-        title: "상담",
+        title: "데이터",
         items: [
-            { name: '상담 관리', href: '/admin/consultations', icon: ClipboardList },
-            { name: '레거시 문의', href: '/admin/inquiries', icon: MessageSquare },
+            {
+                name: '고객 인사이트',
+                href: '/admin/insights',
+                icon: BarChart3
+            },
+            {
+                name: 'UTM Builder',
+                href: '/admin/utm',
+                icon: Link2
+            }
         ]
     },
     {
         title: "시스템",
         items: [
-            { name: '설정', href: '/admin/settings', icon: Settings },
+            {
+                name: '설정',
+                href: '/admin/settings',
+                icon: Settings
+            }
         ]
     }
 ];

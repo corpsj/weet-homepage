@@ -45,22 +45,22 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
             />
 
             {/* Modal Content */}
-            <div className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-2xl shadow-xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="relative w-full max-w-4xl max-h-[90vh] bg-[#fbfbfa] rounded-md border border-[#e5e5df] shadow-[0_16px_48px_rgba(17,17,17,0.18)] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
                 {/* Header */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100 bg-white z-10">
-                    <h2 className="text-xl font-bold text-gray-900">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-[#e5e5df] bg-[#fbfbfa] z-10">
+                    <h2 className="text-lg font-black text-gray-900">
                         {product ? '제품 수정' : '새 제품 등록'}
                     </h2>
                     <button
                         onClick={onClose}
-                        className="p-2 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-full transition-colors"
+                        className="p-2 text-gray-400 hover:text-gray-900 hover:bg-[#e5e5df] rounded transition-colors"
                     >
                         <X className="w-5 h-5" />
                     </button>
                 </div>
 
                 {/* Body (Scrollable) */}
-                <div className="flex-1 overflow-y-auto p-6 bg-gray-50">
+                <div className="flex-1 overflow-y-auto p-6 bg-white">
                     <ProductForm
                         initialData={product}
                         onSuccess={onClose}

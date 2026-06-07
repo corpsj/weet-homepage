@@ -13,6 +13,13 @@ import imageCompression from 'browser-image-compression';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import { saveGalleryItem } from '@/app/actions/gallery-actions';
 import { uploadImageAction } from '@/app/actions/storage-actions';
+import {
+    ConsolePanel,
+    ConsoleSectionTitle,
+    consoleInputClass,
+    consolePrimaryButtonClass,
+    consoleSecondaryButtonClass
+} from '@/components/admin/ConsolePrimitives';
 
 const formSchema = z.object({
     title: z.string().min(1, '제목을 입력해주세요.'),
@@ -60,7 +67,6 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
             for (const file of files) {
                 let fileToUpload = file;
 
-                // Compress/Convert to WebP if it's an image
                 if (file.type.startsWith('image/')) {
                     const options = {
                         maxSizeMB: 10,
@@ -102,7 +108,6 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
             toast.error('이미지 업로드에 실패했습니다.');
         } finally {
             setUploading(false);
-            // Reset input
             e.target.value = '';
         }
     };
@@ -157,13 +162,13 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="max-w-4xl mx-auto space-y-8">
-            {/* Image Upload Section */}
-            <div className="bg-white p-6 rounded-xl border border-gray-200">
+        <form onSubmit={handleSubmit(onSubmit)} className="max-w-4xl mx-auto space-y-6">
+            <ConsolePanel className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                    <label className="block text-sm font-medium text-gray-700">
-                        이미지 (첫 번째 이미지가 대표 이미지가 됩니다)
-                    </label>
+                    <div>
+                        <ConsoleSectionTitle>이미지 등록</ConsoleSectionTitle>
+                        <p className="text-xs text-gray-500 mt-1">첫 번째 이미지가 대표 이미지가 됩니다.</p>
+                    </div>
                     <div className="relative">
                         <input
                             type="file"
@@ -176,10 +181,7 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
                         />
                         <label
                             htmlFor="image-upload"
-                            className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium cursor-pointer transition-colors ${uploading
-                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                : 'bg-black text-white hover:bg-gray-800'
-                                }`}
+                            className={`${consoleSecondaryButtonClass} flex items-center gap-2 cursor-pointer ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             {uploading ? (
                                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -207,27 +209,26 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
                                                     ref={provided.innerRef}
                                                     {...provided.draggableProps}
                                                     {...provided.dragHandleProps}
-                                                    className="relative flex-shrink-0 w-40 aspect-[4/3] group"
+                                                    className="relative flex-shrink-0 w-40 aspect-[4/3] group bg-[#f4f4f1] border border-[#e5e5df] rounded"
                                                 >
                                                     <Image
                                                         src={url}
                                                         alt={`Gallery image ${index + 1}`}
                                                         fill
                                                         sizes="160px"
-                                                        className={`object-cover rounded-lg border-2 ${index === 0 ? 'border-primary' : 'border-transparent'
-                                                            }`}
+                                                        className="object-cover rounded"
                                                     />
-                                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100">
+                                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors rounded flex items-center justify-center opacity-0 group-hover:opacity-100">
                                                         <button
                                                             type="button"
                                                             onClick={() => removeImage(index)}
-                                                            className="p-1 bg-white rounded-full text-red-600 hover:bg-red-50"
+                                                            className="p-1.5 bg-white rounded shadow text-red-600 hover:bg-red-50"
                                                         >
                                                             <X className="w-4 h-4" />
                                                         </button>
                                                     </div>
                                                     {index === 0 && (
-                                                        <span className="absolute top-2 left-2 px-2 py-0.5 bg-primary text-white text-xs font-bold rounded">
+                                                        <span className="absolute top-2 left-2 px-1.5 py-0.5 bg-black text-white text-[10px] font-bold rounded">
                                                             대표
                                                         </span>
                                                     )}
@@ -244,80 +245,74 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
                         </Droppable>
                     </DragDropContext>
                 ) : (
-                    <div className="h-40 flex items-center justify-center border-2 border-dashed border-gray-200 rounded-lg bg-gray-50">
-                        <p className="text-gray-500 text-sm">이미지를 업로드해주세요</p>
+                    <div className="h-40 flex items-center justify-center border border-dashed border-[#d8d8d2] rounded bg-[#fbfbfa]">
+                        <p className="text-gray-500 text-xs font-bold">이미지를 업로드해주세요</p>
                     </div>
                 )}
-            </div>
+            </ConsolePanel>
 
-            {/* Basic Info Section */}
-            <div className="bg-white p-6 rounded-xl border border-gray-200 space-y-6">
+            <ConsolePanel className="p-6 space-y-6">
+                <ConsoleSectionTitle>기본 정보</ConsoleSectionTitle>
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                        제목
-                    </label>
+                    <label className="block text-xs font-bold text-gray-600 mb-1">제목</label>
                     <input
                         {...register('title')}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/5"
+                        className={`${consoleInputClass} w-full`}
                         placeholder="프로젝트 제목을 입력하세요"
                     />
                     {errors.title && (
-                        <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
+                        <p className="text-red-500 text-xs mt-1 font-bold">{errors.title.message}</p>
                     )}
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                        설명
-                    </label>
+                    <label className="block text-xs font-bold text-gray-600 mb-1">설명</label>
                     <textarea
                         {...register('description')}
-                        rows={4}
-                        className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/5"
+                        rows={3}
+                        className={`${consoleInputClass} w-full resize-none`}
                         placeholder="프로젝트 설명을 입력하세요"
                     />
                 </div>
 
                 <div className="grid grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                            표시 순서
-                        </label>
+                        <label className="block text-xs font-bold text-gray-600 mb-1">표시 순서</label>
                         <input
                             type="number"
                             {...register('display_order', { valueAsNumber: true })}
-                            className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/5"
+                            className={`${consoleInputClass} w-full`}
                         />
                     </div>
 
-                    <div className="flex items-center gap-2 pt-8">
+                    <div className="flex items-center gap-2 pt-6">
                         <input
                             type="checkbox"
                             id="is_active"
                             {...register('is_active')}
-                            className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black"
+                            className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black accent-black cursor-pointer"
                         />
-                        <label htmlFor="is_active" className="text-sm font-medium text-gray-700 select-none">
+                        <label htmlFor="is_active" className="text-xs font-bold text-gray-700 cursor-pointer">
                             공개 여부
                         </label>
                     </div>
                 </div>
-            </div>
+            </ConsolePanel>
 
-            <div className="flex justify-end gap-4">
+            <div className="flex justify-end gap-3">
                 <button
                     type="button"
                     onClick={() => router.back()}
-                    className="px-6 py-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors font-medium"
+                    className={consoleSecondaryButtonClass}
                 >
                     취소
                 </button>
                 <button
                     type="submit"
                     disabled={loading}
-                    className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                    className={consolePrimaryButtonClass}
                 >
-                    {loading && <Loader2 className="w-4 h-4 animate-spin" />}
+                    {loading && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
                     {initialData ? '수정하기' : '등록하기'}
                 </button>
             </div>

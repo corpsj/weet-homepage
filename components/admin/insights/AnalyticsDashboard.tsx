@@ -39,7 +39,7 @@ const COLORS = ['#111827', '#4B5563', '#9CA3AF', '#D1D5DB', '#E5E7EB'];
 function CustomTooltip({ active, payload, label }: any) {
     if (active && payload && payload.length) {
         return (
-            <div className="rounded-md border border-[#d8d8d2] bg-white p-4 shadow-xl">
+            <div className="rounded-md border border-[#e5e5df] bg-white p-4 shadow-sm">
                 <p className="text-sm font-bold text-gray-900 mb-2">{label}</p>
                 {payload.map((entry: any, index: number) => (
                     <div key={index} className="flex items-center gap-2 text-xs mb-1 last:mb-0">

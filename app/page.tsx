@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Building2, CheckCircle2, ClipboardCheck, Clock3, Factory, Home, MapPinned, Ruler, ShieldCheck, Store, Truck, Wrench } from 'lucide-react';
+import { ArrowRight, Building2, CheckCircle2, Factory, Home, MapPinned, Ruler, Store, Truck, Wrench } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: '홈',
@@ -12,59 +12,41 @@ export const metadata: Metadata = {
   openGraph: {
     url: '/',
     title: '위트 이동식주택',
-    description: '작고 단단한 내 집을 필요한 크기와 옵션으로 직접 구성해보세요.',
+    description: '작은 공간, 선명한 기준. 내 집을 필요한 크기와 옵션으로 직접 구성해보세요.',
   },
 };
 
-const processSteps = [
-  { icon: Ruler, title: '구성', text: '3x6 또는 3x9 모델과 필요한 옵션을 먼저 정리합니다.' },
-  { icon: ClipboardCheck, title: '상담', text: '예상 총액과 선택 구성을 바탕으로 설치 조건을 확인합니다.' },
-  { icon: Factory, title: '제작', text: '공장 제작 중심으로 품질 편차와 현장 시간을 줄입니다.' },
-  { icon: Truck, title: '설치', text: '운반, 설치, 마감 확인까지 순서대로 진행합니다.' },
-];
-
-const siteChecks = [
-  '진입로와 크레인 작업 가능 여부',
-  '전기·상하수 인입 조건',
-  '지목과 인허가 확인 범위',
-  '운반·설치 일정과 현장 준비 항목',
-];
-
-const buyingConfidence = [
+const transparencyFeatures = [
   {
-    icon: Clock3,
-    title: '예상 일정',
-    text: '구성 상담 후 현장 조건을 확인하고, 제작 가능 시점과 운반·설치 준비 일정을 함께 정리합니다.',
-  },
-  {
-    icon: MapPinned,
-    title: '부지 준비',
-    text: '진입로, 지목, 인입, 크레인 작업 반경처럼 실제 설치를 좌우하는 항목을 먼저 확인합니다.',
-  },
-  {
-    icon: ShieldCheck,
-    title: '사후 점검',
-    text: '문·창호, 욕실·설비, 마감처럼 생활 중 자주 쓰는 부분을 중심으로 인도 후 점검과 조치를 안내합니다.',
+    icon: Ruler,
+    title: '모델 및 옵션 구성',
+    text: '3x6, 3x9 등 모듈러 베이스 모델과 라이프스타일에 맞는 옵션을 온라인에서 즉시 구성하고 예상 견적을 확인할 수 있습니다.',
   },
   {
     icon: Wrench,
-    title: '별도 비용 안내',
-    text: '운반, 설치, 기초, 인허가, 인입 공사처럼 현장별로 달라지는 항목은 상담 단계에서 분리해 설명합니다.',
+    title: '포함 및 별도 범위',
+    text: '제품 자체에 포함된 기본 사양과, 부지 토목·기초, 전기·상하수 인입 등 현장에서 별도로 발생하는 비용을 명확히 구분합니다.',
   },
-];
-
-const includedItems = [
-  '선택 모델과 옵션 기준 제품 견적',
-  '공장 제작 및 기본 품질 확인',
-  '상담용 구성 내역 저장',
-  '현장 조건 체크리스트 안내',
-];
-
-const excludedItems = [
-  '부지 토목·기초 공사',
-  '전기·상하수 등 인입 공사',
-  '운반·크레인·현장 설치 비용',
-  '지역별 인허가와 부대 행정 비용',
+  {
+    icon: MapPinned,
+    title: '현장 설치 조건',
+    text: '진입로 폭, 크레인 작업 반경, 인허가 가능 여부 등 제품 배송 전 확인해야 할 필수 요소를 사전에 체크합니다.',
+  },
+  {
+    icon: Truck,
+    title: '운송 및 현장 조립',
+    text: '공장 제작 후 현장까지의 운송 스케줄과 안전한 설치를 위한 가이드를 제공하여 현장 체류 시간을 최소화합니다.',
+  },
+  {
+    icon: CheckCircle2,
+    title: 'A/S 및 사후 관리',
+    text: '문·창호 단차, 욕실 누수 등 입주 후 발생할 수 있는 주요 AS 항목들에 대한 명확한 보증 기간과 대응 절차를 안내합니다.',
+  },
+  {
+    icon: Factory,
+    title: '공장 제작 기반',
+    text: '날씨와 현장 여건에 영향을 받지 않는 실내 공장 제작을 통해 일관된 시공 품질과 단축된 공기를 보장합니다.',
+  },
 ];
 
 const buyerPaths = [
@@ -87,208 +69,169 @@ const buyerPaths = [
 
 export default function HomePage() {
   return (
-    <main className="bg-white text-gray-900">
-      <section className="px-4 pb-14 pt-12 md:px-8 md:pb-20 md:pt-16 lg:px-16">
-        <div className="mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
-          <div className="max-w-xl">
-            <p className="mb-4 text-sm font-black uppercase tracking-[0.18em] text-gray-500">WEET MOBILE HOME</p>
-            <h1 className="text-4xl font-black leading-tight text-gray-900 md:text-6xl">
-              위트 이동식주택
+    <main className="bg-[#fbfbfa] text-[#111111] selection:bg-black selection:text-white">
+      {/* 1. First Viewport: Product-led, image-led, full-bleed hero */}
+      <section className="relative min-h-[calc(100svh-192px)] w-full bg-[#111] text-white overflow-hidden">
+        <Image
+          src="/images/hero_main.webp"
+          alt="위트 이동식주택 외관"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover opacity-60 mix-blend-overlay"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#111]/40 via-transparent to-[#111]" />
+
+        <div className="absolute inset-0 flex flex-col justify-end px-6 pb-28 md:px-12 md:pb-32 lg:px-24 mx-auto w-full z-10">
+          <div className="max-w-4xl">
+            <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-300">WEET MOBILE HOME</p>
+            <h1 className="text-5xl font-black leading-[1.1] md:text-7xl lg:text-[88px]">
+              작은 공간, <br />
+              선명한 기준.
             </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600 md:text-xl">
-              작고 단단한 내 집을 필요한 크기와 옵션으로 직접 구성해보세요.
+            <p className="mt-8 max-w-2xl text-sm leading-relaxed text-gray-300 md:text-base lg:text-lg">
+              이동식주택을 고를 때의 막연함을 없앱니다. <br className="hidden md:block" />
+              모델 선택부터 운송, 설치, 그리고 예상 비용까지 모든 과정을 투명하게 공개합니다.
             </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/customize"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-gray-900 px-5 text-sm font-bold text-white transition-colors hover:bg-gray-800"
+                className="inline-flex h-12 items-center justify-center gap-3 rounded bg-white px-8 text-sm font-bold text-[#111] transition-transform hover:scale-[1.02] active:scale-[0.98]"
               >
-                나만의 위트 만들기
+                모델 구성하기
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/support"
-                className="inline-flex h-12 items-center justify-center rounded-lg border border-gray-200 bg-white px-5 text-sm font-bold text-gray-900 transition-colors hover:bg-gray-50"
+                className="inline-flex h-12 items-center justify-center rounded px-8 text-sm font-bold text-white transition-colors hover:bg-white/10"
               >
                 진행 과정 보기
               </Link>
             </div>
           </div>
+        </div>
 
-          <div className="relative min-h-[360px] overflow-hidden rounded-lg border border-gray-100 bg-gray-50 shadow-sm md:min-h-[520px]">
-            <Image
-              src="/images/hero_main.webp"
-              alt="위트 이동식주택 외관"
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 58vw"
-              className="object-cover"
-            />
-          </div>
+        {/* Scroll Hint */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-3 opacity-60 z-10 hidden md:flex">
+          <span className="text-[9px] font-black uppercase tracking-[0.3em]">Scroll</span>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-white to-transparent" />
         </div>
       </section>
 
-      <section className="border-y border-gray-100 bg-gray-50 px-4 py-14 md:px-8 lg:px-16">
-        <div className="mx-auto max-w-[1500px]">
-          <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-            <div>
-              <p className="text-sm font-black text-gray-500">PROCESS</p>
-              <h2 className="mt-2 text-3xl font-black md:text-4xl text-gray-900">처음 선택부터 설치까지</h2>
+      {/* 2. Trust / Transparency Section */}
+      <section className="bg-[#111111] px-6 pt-16 pb-20 md:px-12 md:pt-20 md:pb-24 lg:px-24 lg:pt-20 lg:pb-32 text-white">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-16 md:mb-24 flex flex-col md:flex-row md:items-end md:justify-between gap-8">
+            <div className="max-w-2xl">
+              <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">TRANSPARENCY</p>
+              <h2 className="text-3xl font-black md:text-5xl lg:text-6xl">
+                불확실성은 남기지 않습니다.
+              </h2>
             </div>
-            <p className="max-w-xl text-sm leading-7 text-gray-600">
-              고객은 먼저 구성해보고, 위트는 그 구성을 바탕으로 현장 조건과 제작 가능성을 빠르게 좁혀갑니다.
+            <p className="max-w-md text-sm leading-relaxed text-gray-400">
+              '예상치 못한 현장 비용'과 '품질 편차'. 위트는 주택 설치의 가장 큰 리스크를 제거하기 위해 모든 기준을 선명하게 설계합니다.
             </p>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {processSteps.map((step) => (
-              <div key={step.title} className="rounded-lg border border-gray-100 bg-white shadow-sm p-5 transition-shadow hover:shadow-md">
-                <step.icon className="h-6 w-6 text-primary-dark" />
-                <h3 className="mt-5 text-xl font-black text-gray-900">{step.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-gray-600">{step.text}</p>
+          <div className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+            {transparencyFeatures.map((feature) => (
+              <div key={feature.title} className="group border-t border-white/10 pt-6">
+                <feature.icon className="h-6 w-6 text-gray-400 mb-5 transition-colors group-hover:text-white" />
+                <h3 className="text-lg font-bold">{feature.title}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-gray-400">
+                  {feature.text}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="px-4 py-14 md:px-8 lg:px-16">
-        <div className="mx-auto grid max-w-[1500px] gap-8 lg:grid-cols-[0.95fr_1.05fr] lg:items-center">
-          <div className="relative min-h-[360px] overflow-hidden rounded-lg border border-gray-100 bg-white shadow-sm md:min-h-[470px]">
+      {/* 3. Immersive Image Gallery / Proof */}
+      <section className="px-4 py-8 md:px-8 lg:px-12 bg-[#111111]">
+        <div className="mx-auto max-w-[1800px] grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="relative aspect-[4/5] overflow-hidden rounded bg-gray-900 group">
+            <Image
+              src="/images/products/small/private/3x6-house.webp"
+              alt="생활 동선"
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80" />
+            <div className="absolute bottom-6 left-6 right-6">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">DESIGN</p>
+              <p className="text-lg font-bold text-white">최적화된 생활 동선</p>
+            </div>
+          </div>
+          <div className="relative aspect-[4/5] overflow-hidden rounded bg-gray-900 group hidden md:block">
             <Image
               src="/images/company/factory.webp"
-              alt="위트 제작 현장"
+              alt="제작 환경"
               fill
-              sizes="(max-width: 1024px) 100vw, 46vw"
-              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80" />
+            <div className="absolute bottom-6 left-6 right-6">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">FACTORY</p>
+              <p className="text-lg font-bold text-white">표준화된 제작 환경</p>
+            </div>
           </div>
-          <div>
-            <p className="text-sm font-black text-gray-500">SITE CHECK</p>
-            <h2 className="mt-2 text-3xl font-black md:text-4xl text-gray-900">좋은 선택은 현장 확인에서 완성됩니다</h2>
-            <p className="mt-5 text-base leading-8 text-gray-600">
-              이동식주택은 제품만 고르면 끝나는 일이 아닙니다. 설치할 땅의 진입, 인입, 인허가 조건을 함께 확인해야 실제 일정과 비용이 선명해집니다.
-            </p>
-            <div className="mt-7 grid gap-3 sm:grid-cols-2">
-              {siteChecks.map((item) => (
-                <div key={item} className="flex items-start gap-3 rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary-dark" />
-                  <span className="text-sm font-semibold leading-6 text-gray-800">{item}</span>
-                </div>
-              ))}
+          <div className="relative aspect-[4/5] overflow-hidden rounded bg-gray-900 group">
+            <Image
+              src="/images/products/large/L-2.webp"
+              alt="설치 현장"
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80" />
+            <div className="absolute bottom-6 left-6 right-6">
+              <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-1">INSTALLATION</p>
+              <p className="text-lg font-bold text-white">안전한 현장 설치</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="border-y border-gray-100 bg-white px-4 py-14 md:px-8 lg:px-16">
-        <div className="mx-auto max-w-[1500px]">
-          <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-            <div>
-              <p className="text-sm font-black text-gray-500">BUYING CONFIDENCE</p>
-              <h2 className="mt-2 text-3xl font-black md:text-4xl text-gray-900">견적보다 먼저 불확실성을 줄입니다</h2>
-            </div>
-            <p className="max-w-xl text-sm leading-7 text-gray-600">
-              이동식주택은 제품 가격만으로 결정하기 어렵습니다. 위트는 제품, 현장, 일정, 별도 비용을 분리해 구매 결정을 선명하게 만듭니다.
-            </p>
+      {/* 4. Target Audience */}
+      <section className="bg-[#fbfbfa] px-6 py-20 md:px-12 lg:px-24 lg:py-32">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-16">
+            <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">WHO IT FITS</p>
+            <h2 className="text-3xl font-black md:text-4xl lg:text-5xl">
+              목적에 맞는 공간을 <br className="md:hidden" />
+              정확하게.
+            </h2>
           </div>
-
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-            {buyingConfidence.map((item) => (
-              <div key={item.title} className="rounded-lg border border-gray-200 bg-gray-50 p-5">
-                <item.icon className="h-6 w-6 text-gray-500" />
-                <h3 className="mt-5 text-lg font-black text-gray-900">{item.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-gray-600">{item.text}</p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-6 grid gap-4 lg:grid-cols-2">
-            <div className="rounded-lg border border-gray-200 bg-white p-6">
-              <h3 className="text-xl font-black text-gray-900">기본 포함</h3>
-              <ul className="mt-5 grid gap-3 sm:grid-cols-2">
-                {includedItems.map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm font-semibold leading-6 text-gray-800">
-                    <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary-dark" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="rounded-lg border border-gray-200 bg-white p-6">
-              <h3 className="text-xl font-black text-gray-900">현장별 별도 확인</h3>
-              <ul className="mt-5 grid gap-3 sm:grid-cols-2">
-                {excludedItems.map((item) => (
-                  <li key={item} className="flex items-start gap-3 text-sm font-semibold leading-6 text-gray-800">
-                    <ClipboardCheck className="mt-0.5 h-5 w-5 shrink-0 text-gray-400" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-gray-50 px-4 py-14 md:px-8 lg:px-16">
-        <div className="mx-auto max-w-[1500px]">
-          <div className="mb-8">
-            <p className="text-sm font-black text-gray-500">WHO IT FITS</p>
-            <h2 className="mt-2 text-3xl font-black md:text-4xl text-gray-900">사는 이유가 다른 고객에게, 확인 순서도 다르게</h2>
-          </div>
-          <div className="grid gap-4 lg:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-3">
             {buyerPaths.map((path) => (
-              <div key={path.title} className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-                <path.icon className="h-6 w-6 text-gray-500" />
-                <h3 className="mt-5 text-xl font-black text-gray-900">{path.title}</h3>
-                <p className="mt-3 text-sm leading-7 text-gray-600">{path.text}</p>
+              <div key={path.title} className="rounded border border-[#e5e5df] bg-white p-8 transition-shadow hover:shadow-md">
+                <path.icon className="h-6 w-6 text-gray-900 mb-6" />
+                <h3 className="text-xl font-black text-gray-900">{path.title}</h3>
+                <p className="mt-4 text-sm leading-relaxed text-gray-600">
+                  {path.text}
+                </p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="bg-[#1f2422] px-4 py-14 text-white md:px-8 lg:px-16">
-        <div className="mx-auto max-w-[1500px]">
-          <div className="mb-8 flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-            <div>
-              <p className="text-sm font-black text-gray-400">TRUST</p>
-              <h2 className="mt-2 text-3xl font-black md:text-4xl text-white">작게 보여도, 집답게 만듭니다</h2>
-            </div>
-            <p className="max-w-xl text-sm leading-7 text-gray-300">
-              실제 제품과 제작 환경을 기반으로, 이동식주택이 필요한 사람에게 필요한 만큼의 선택지를 제공합니다.
-            </p>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-3">
-            {[
-              { src: '/images/products/medium/36+36집-1.webp', title: '생활 동선', icon: Home },
-              { src: '/images/company/workshop.webp', title: '제작 환경', icon: Factory },
-              { src: '/images/products/medium/39+33서재.webp', title: '설치 활용', icon: MapPinned },
-            ].map((item) => (
-              <div key={item.title} className="overflow-hidden rounded-lg border border-white/15 bg-white/5">
-                <div className="relative aspect-[4/3]">
-                  <Image src={item.src} alt={item.title} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
-                </div>
-                <div className="flex items-center gap-3 p-4">
-                  <item.icon className="h-5 w-5 text-gray-300" />
-                  <span className="font-bold text-white">{item.title}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-4 py-16 md:px-8 lg:px-16 bg-white">
-        <div className="mx-auto max-w-[960px] text-center">
-          <h2 className="text-3xl font-black md:text-4xl text-gray-900">필요한 크기와 옵션부터 정해보세요</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-base leading-8 text-gray-600">
-            구성 결과는 상담 요청과 함께 저장되고, 위트가 현장 조건을 확인해 최종 견적과 제작 일정을 안내합니다.
+      {/* 5. CTA Section */}
+      <section className="bg-white px-6 py-24 md:px-12 lg:px-24 lg:py-32 text-center border-t border-[#e5e5df]">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="text-3xl font-black md:text-5xl lg:text-6xl">
+            지금 바로 구성해보세요
+          </h2>
+          <p className="mx-auto mt-6 max-w-xl text-sm leading-relaxed text-gray-600 md:text-base">
+            원하는 크기와 옵션을 선택하면 예상 견적과 함께 <br className="hidden md:block" />
+            위트 매니저가 현장 조건에 맞춘 정확한 안내를 도와드립니다.
           </p>
           <Link
             href="/customize"
-            className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-gray-900 px-6 text-sm font-bold text-white transition-colors hover:bg-gray-800"
+            className="mt-10 inline-flex h-14 items-center justify-center gap-3 rounded bg-[#111111] px-10 text-sm font-bold text-white transition-transform hover:scale-[1.02] active:scale-[0.98]"
           >
             나만의 위트 만들기
             <ArrowRight className="h-4 w-4" />

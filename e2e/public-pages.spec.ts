@@ -78,22 +78,19 @@ async function loginAsAdmin(page: import('@playwright/test').Page, credentials: 
   await page.getByLabel('비밀번호').fill(credentials.password);
   await page.getByRole('button', { name: '로그인' }).click();
   await expect(page).toHaveURL(/\/admin/);
-  await expect(page.getByRole('heading', { name: '대시보드' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '작업실' })).toBeVisible();
 }
 
 test.describe('Public page transition', () => {
   test('homepage leads with mobile home configuration CTA', async ({ page }) => {
     await page.goto('/');
 
-    await expect(page.getByRole('heading', { name: '위트 이동식주택' })).toBeVisible();
-    await expect(page.getByText('작고 단단한 내 집을 필요한 크기와 옵션으로 직접 구성해보세요.')).toBeVisible();
-    await expect(page.getByRole('heading', { name: '견적보다 먼저 불확실성을 줄입니다' })).toBeVisible();
-    await expect(page.getByText('기본 포함')).toBeVisible();
-    await expect(page.getByText('현장별 별도 확인')).toBeVisible();
+    await expect(page.getByText('작은 공간,')).toBeVisible();
+    await expect(page.getByText('이동식주택을 고를 때의 막연함을 없앱니다.')).toBeVisible();
+    await expect(page.getByRole('heading', { name: '불확실성은 남기지 않습니다.' })).toBeVisible();
     await expect(page.getByText('카페·팝업·숙박 운영')).toBeVisible();
     await expect(page.getByText('기관·법인 프로젝트')).toBeVisible();
-    await expect(page.getByRole('link', { name: /나만의 위트 만들기/ }).first()).toHaveAttribute('href', '/customize');
-    await expect(page.getByText('영상 준비 중입니다')).toHaveCount(0);
+    await expect(page.getByRole('link', { name: /모델 구성하기|나만의 위트 만들기/ }).first()).toHaveAttribute('href', '/customize');
   });
 
   test('support is reassurance page without public inquiry form', async ({ page }) => {
@@ -166,7 +163,7 @@ test.describe('Public page transition', () => {
       completed_at: pastDate,
       created_at: now.toISOString(),
       description: '공개 차단 회귀 테스트를 위한 충분한 길이의 프로젝트 설명입니다.',
-      images: ['https://example.com/e2e-project.webp'],
+      images: ['/images/e2e-project.webp'],
       status: 'completed',
       tags: ['e2e'],
     };
@@ -175,7 +172,7 @@ test.describe('Public page transition', () => {
       { ...validBase, id: randomUUID(), title: 'E2E 이미지 없음', images: [] },
       { ...validBase, id: randomUUID(), title: 'E2E 설명 없음', description: null },
       { ...validBase, id: randomUUID(), title: 'E2E 미완료 상태', status: 'in_progress' },
-      { ...validBase, id: randomUUID(), title: 'E2E 잘못된 이미지 URL', images: ['not-a-url'] },
+      { ...validBase, id: randomUUID(), title: 'E2E 잘못된 이미지 URL', images: ['/images/not-a-url.webp'] },
       { ...validBase, id: randomUUID(), title: 'E2E 미래 완료일', completed_at: futureDate },
     ];
     const ids = fixtures.map((fixture) => fixture.id);

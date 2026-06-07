@@ -10,6 +10,15 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { updateInquiryStatus, deleteInquiry, replyToInquiry } from '@/app/actions/inquiry-actions';
+import {
+    ConsolePanel,
+    ConsoleSectionTitle,
+    ConsoleStatusPill,
+    consoleInputClass,
+    consolePrimaryButtonClass,
+    consoleSecondaryButtonClass,
+    consoleIconButtonClass
+} from '@/components/admin/ConsolePrimitives';
 
 interface Inquiry {
     id: string;
@@ -31,6 +40,11 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
     const [searchTerm, setSearchTerm] = useState('');
     const [replyText, setReplyText] = useState('');
     const [isSending, setIsSending] = useState(false);
+    const [pendingIds, setPendingIds] = useState<Record<string, boolean>>({});
+
+    const setInquiryPending = (id: string, value: boolean) => {
+        setPendingIds(prev => ({ ...prev, [id]: value }));
+    };
 
     const filteredInquiries = inquiries.filter(inquiry => {
         const matchesStatus = filterStatus === 'all' || inquiry.status === filterStatus;
@@ -42,31 +56,57 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
     });
 
     const handleStatusChange = async (id: string, newStatus: 'new' | 'read' | 'replied') => {
-        setInquiries(inquiries.map(i => i.id === id ? { ...i, status: newStatus } : i));
+        if (pendingIds[id]) return;
+
+        const previousInquiries = inquiries;
+        const previousSelectedInquiry = selectedInquiry;
+        setInquiryPending(id, true);
+
+        setInquiries(previousInquiries.map(i => i.id === id ? { ...i, status: newStatus } : i));
         if (selectedInquiry?.id === id) {
             setSelectedInquiry({ ...selectedInquiry, status: newStatus });
         }
 
         try {
-            await updateInquiryStatus(id, newStatus);
+            const result = await updateInquiryStatus(id, newStatus);
+            if (!result.success) {
+                throw new Error(result.message || '상태 업데이트 실패');
+            }
         } catch (error) {
             console.error('Failed to update status:', error);
+            setInquiries(previousInquiries);
+            setSelectedInquiry(current => current?.id === id ? previousSelectedInquiry : current);
+            toast.error('문의 상태를 저장하지 못했습니다. 이전 상태로 복구했습니다.');
+        } finally {
+            setInquiryPending(id, false);
         }
     };
 
     const handleDelete = async (id: string) => {
         if (!confirm('정말 삭제하시겠습니까?')) return;
 
-        setInquiries(inquiries.filter(i => i.id !== id));
+        const previousInquiries = inquiries;
+        const previousSelectedInquiry = selectedInquiry;
+        setInquiryPending(id, true);
+
+        setInquiries(previousInquiries.filter(i => i.id !== id));
         if (selectedInquiry?.id === id) {
             setSelectedInquiry(null);
         }
 
         try {
-            await deleteInquiry(id);
+            const result = await deleteInquiry(id);
+            if (!result.success) {
+                throw new Error(result.message || '문의 삭제 실패');
+            }
+            toast.success('문의가 삭제되었습니다.');
         } catch (error) {
             console.error('Failed to delete inquiry:', error);
-            toast.error('삭제 중 오류가 발생했습니다.');
+            setInquiries(previousInquiries);
+            setSelectedInquiry(previousSelectedInquiry);
+            toast.error('삭제 중 오류가 발생했습니다. 이전 상태로 복구했습니다.');
+        } finally {
+            setInquiryPending(id, false);
         }
     };
 
@@ -75,9 +115,11 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
 
         setIsSending(true);
         try {
-            await replyToInquiry(selectedInquiry.id, replyText);
+            const result = await replyToInquiry(selectedInquiry.id, replyText);
+            if (!result.success) {
+                throw new Error(result.message || '답변 등록 실패');
+            }
 
-            // Update local state
             const updatedInquiry: Inquiry = {
                 ...selectedInquiry,
                 status: 'replied',
@@ -106,12 +148,11 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
         window.location.href = `mailto:${selectedInquiry.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     };
 
-    const getStatusColor = (status: string) => {
+    const getStatusTone = (status: string) => {
         switch (status) {
-            case 'new': return 'bg-blue-100 text-blue-700';
-            case 'read': return 'bg-gray-100 text-gray-700';
-            case 'replied': return 'bg-green-100 text-green-700';
-            default: return 'bg-gray-100 text-gray-700';
+            case 'new': return 'danger';
+            case 'replied': return 'success';
+            default: return 'neutral';
         }
     };
 
@@ -127,9 +168,9 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
     return (
         <div className="flex h-[calc(100vh-120px)] gap-6">
             {/* Left: List */}
-            <div className={`flex-1 flex flex-col bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden ${selectedInquiry ? 'hidden md:flex' : 'flex'}`}>
+            <div className={`flex-1 flex flex-col bg-white rounded-md border border-[#e5e5df] overflow-hidden ${selectedInquiry ? 'hidden md:flex' : 'flex'}`}>
                 {/* Search & Filter */}
-                <div className="p-4 border-b border-gray-200 space-y-3">
+                <div className="p-4 border-b border-[#e5e5df] space-y-3 bg-[#fbfbfa]">
                     <div className="relative">
                         <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
                         <input
@@ -137,7 +178,7 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
                             placeholder="이름, 이메일, 내용 검색..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="w-full pl-9 pr-4 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black/5"
+                            className={`${consoleInputClass} w-full pl-9`}
                         />
                     </div>
                     <div className="flex gap-2 overflow-x-auto pb-1">
@@ -145,9 +186,9 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
                             <button
                                 key={status}
                                 onClick={() => setFilterStatus(status)}
-                                className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors ${filterStatus === status
-                                    ? 'bg-black text-white'
-                                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                className={`px-3 py-1.5 rounded text-xs font-bold whitespace-nowrap transition-colors ${filterStatus === status
+                                    ? 'bg-[#111111] text-white'
+                                    : 'bg-white border border-[#e5e5df] text-gray-600 hover:bg-gray-50'
                                     }`}
                             >
                                 {status === 'all' ? '전체' : getStatusLabel(status)}
@@ -157,40 +198,40 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
                 </div>
 
                 {/* List Items */}
-                <div className="flex-1 overflow-y-auto divide-y divide-gray-100">
+                <div className="flex-1 overflow-y-auto divide-y divide-[#e5e5df]">
                     {filteredInquiries.map((inquiry) => (
                         <div
                             key={inquiry.id}
                             onClick={() => {
-                                setSelectedInquiry(inquiry);
-                                setReplyText(inquiry.reply_content || '');
-                                if (inquiry.status === 'new') {
+                                    setSelectedInquiry(inquiry);
+                                    setReplyText(inquiry.reply_content || '');
+                                if (inquiry.status === 'new' && !pendingIds[inquiry.id]) {
                                     handleStatusChange(inquiry.id, 'read');
                                 }
                             }}
-                            className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors ${selectedInquiry?.id === inquiry.id ? 'bg-blue-50 hover:bg-blue-50' : ''
+                            className={`p-4 cursor-pointer hover:bg-gray-50 transition-colors ${pendingIds[inquiry.id] ? 'pointer-events-none opacity-70' : ''} ${selectedInquiry?.id === inquiry.id ? 'bg-[#f4f4f1] hover:bg-[#f4f4f1]' : ''
                                 }`}
                         >
                             <div className="flex justify-between items-start mb-1">
-                                <h3 className={`font-medium text-sm ${inquiry.status === 'new' ? 'text-black font-bold' : 'text-gray-900'}`}>
+                                <h3 className={`text-sm ${inquiry.status === 'new' ? 'font-black text-gray-900' : 'font-bold text-gray-700'}`}>
                                     {inquiry.name}
                                 </h3>
-                                <span className="text-xs text-gray-400 whitespace-nowrap ml-2">
+                                <span className="text-[11px] text-gray-400 whitespace-nowrap ml-2">
                                     {format(new Date(inquiry.created_at), 'MM.dd HH:mm')}
                                 </span>
                             </div>
-                            <p className="text-sm text-gray-600 line-clamp-2 mb-2">{inquiry.message}</p>
+                            <p className="text-[13px] text-gray-500 line-clamp-2 mb-3 leading-relaxed">{inquiry.message}</p>
                             <div className="flex items-center gap-2">
-                                <span className={`px-2 py-0.5 rounded text-[10px] font-medium ${getStatusColor(inquiry.status)}`}>
+                                <ConsoleStatusPill tone={getStatusTone(inquiry.status) as any}>
                                     {getStatusLabel(inquiry.status)}
-                                </span>
+                                </ConsoleStatusPill>
                             </div>
                         </div>
                     ))}
                     {filteredInquiries.length === 0 && (
                         <div className="flex flex-col items-center justify-center h-64 text-gray-400">
-                            <MessageSquare className="w-8 h-8 mb-2 opacity-20" />
-                            <p className="text-sm">문의 내역이 없습니다.</p>
+                            <MessageSquare className="w-6 h-6 mb-3 opacity-20" />
+                            <p className="text-xs font-bold">조회된 문의가 없습니다.</p>
                         </div>
                     )}
                 </div>
@@ -198,33 +239,33 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
 
             {/* Right: Detail View */}
             {selectedInquiry ? (
-                <div className="flex-[1.5] bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden flex flex-col absolute inset-0 z-50 md:static md:inset-auto">
+                <div className="flex-[1.5] bg-white rounded-md border border-[#e5e5df] overflow-hidden flex flex-col absolute inset-0 z-50 md:static md:inset-auto">
                     {/* Header */}
-                    <div className="p-6 border-b border-gray-100 flex justify-between items-start bg-white">
+                    <div className="p-5 border-b border-[#e5e5df] flex justify-between items-start bg-[#fbfbfa]">
                         <div>
-                            <div className="flex items-center gap-3 mb-2">
-                                <h2 className="text-xl font-bold text-gray-900">{selectedInquiry.name}</h2>
-                                <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusColor(selectedInquiry.status)}`}>
+                            <div className="flex items-center gap-3 mb-3">
+                                <h2 className="text-lg font-black text-gray-900">{selectedInquiry.name}</h2>
+                                <ConsoleStatusPill tone={getStatusTone(selectedInquiry.status) as any}>
                                     {getStatusLabel(selectedInquiry.status)}
-                                </span>
+                                </ConsoleStatusPill>
                             </div>
-                            <div className="flex flex-col gap-1 text-sm text-gray-500">
+                            <div className="flex flex-col gap-1.5 text-xs font-medium text-gray-500">
                                 <div className="flex items-center gap-2">
-                                    <Mail className="w-4 h-4" />
-                                    <a href={`mailto:${selectedInquiry.email}`} className="hover:text-blue-600 hover:underline">
+                                    <Mail className="w-3.5 h-3.5" />
+                                    <a href={`mailto:${selectedInquiry.email}`} className="hover:text-gray-900 transition-colors">
                                         {selectedInquiry.email}
                                     </a>
                                 </div>
                                 {selectedInquiry.phone && (
                                     <div className="flex items-center gap-2">
-                                        <Phone className="w-4 h-4" />
-                                        <a href={`tel:${selectedInquiry.phone}`} className="hover:text-blue-600 hover:underline">
+                                        <Phone className="w-3.5 h-3.5" />
+                                        <a href={`tel:${selectedInquiry.phone}`} className="hover:text-gray-900 transition-colors">
                                             {selectedInquiry.phone}
                                         </a>
                                     </div>
                                 )}
                                 <div className="flex items-center gap-2">
-                                    <Calendar className="w-4 h-4" />
+                                    <Calendar className="w-3.5 h-3.5" />
                                     <span>{format(new Date(selectedInquiry.created_at), 'yyyy년 MM월 dd일 HH:mm', { locale: ko })}</span>
                                 </div>
                             </div>
@@ -232,59 +273,60 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
                         <div className="flex items-center gap-2">
                             <button
                                 onClick={() => setSelectedInquiry(null)}
-                                className="md:hidden p-2 hover:bg-gray-100 rounded-full"
+                                className={`${consoleIconButtonClass} md:hidden`}
                             >
-                                <X className="w-5 h-5 text-gray-500" />
+                                <X className="w-4 h-4 text-gray-500" />
                             </button>
                             <button
                                 onClick={() => handleDelete(selectedInquiry.id)}
-                                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                disabled={Boolean(pendingIds[selectedInquiry.id])}
+                                className={`${consoleIconButtonClass} text-red-600 hover:text-red-700 hover:bg-red-50 hover:border-red-200`}
                                 title="삭제"
                             >
-                                <Trash2 className="w-5 h-5" />
+                                <Trash2 className="w-4 h-4" />
                             </button>
                         </div>
                     </div>
 
                     {/* Content */}
-                    <div className="flex-1 p-8 overflow-y-auto bg-gray-50/50">
-                        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm min-h-[150px] mb-6">
-                            <h4 className="text-sm font-bold text-gray-900 mb-2">문의 내용</h4>
-                            <p className="text-gray-800 whitespace-pre-wrap leading-relaxed">
+                    <div className="flex-1 p-5 overflow-y-auto bg-white">
+                        <ConsoleSectionTitle>문의 내용</ConsoleSectionTitle>
+                        <div className="p-4 rounded-md border border-[#e5e5df] bg-[#fbfbfa] min-h-[120px] mb-6 mt-3">
+                            <p className="text-sm text-gray-800 whitespace-pre-wrap leading-relaxed">
                                 {selectedInquiry.message}
                             </p>
                         </div>
 
                         {/* Reply Section */}
-                        <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                            <div className="flex justify-between items-center mb-4">
-                                <h4 className="text-sm font-bold text-gray-900">답변 작성</h4>
-                                {selectedInquiry.replied_at && (
-                                    <span className="text-xs text-gray-500">
-                                        최근 답변: {format(new Date(selectedInquiry.replied_at), 'yyyy.MM.dd HH:mm')}
-                                    </span>
-                                )}
-                            </div>
+                        <div className="flex items-center justify-between mb-3">
+                            <ConsoleSectionTitle>답변 작성</ConsoleSectionTitle>
+                            {selectedInquiry.replied_at && (
+                                <span className="text-[11px] font-bold text-gray-400">
+                                    최근 답변: {format(new Date(selectedInquiry.replied_at), 'yyyy.MM.dd HH:mm')}
+                                </span>
+                            )}
+                        </div>
+                        <div className="p-4 rounded-md border border-[#e5e5df] bg-[#f4f4f1]">
                             <textarea
                                 value={replyText}
                                 onChange={(e) => setReplyText(e.target.value)}
-                                className="w-full h-40 p-4 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-black/5 resize-none mb-4"
+                                className="w-full h-32 p-3 border border-[#d8d8d2] rounded bg-white text-sm focus:outline-none focus:border-[#111111] focus:ring-1 focus:ring-[#111111] resize-none mb-4"
                                 placeholder="답변 내용을 입력하세요..."
                             />
-                            <div className="flex justify-end gap-3">
+                            <div className="flex justify-end gap-2">
                                 <button
                                     onClick={handleSendEmail}
-                                    className="flex items-center gap-2 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                                    className={consoleSecondaryButtonClass}
                                 >
-                                    <Mail className="w-4 h-4" />
+                                    <Mail className="w-3.5 h-3.5 mr-1" />
                                     메일 앱 열기
                                 </button>
                                 <button
                                     onClick={handleSaveReply}
                                     disabled={isSending || !replyText.trim()}
-                                    className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors text-sm font-medium disabled:bg-gray-400"
+                                    className={consolePrimaryButtonClass}
                                 >
-                                    <CheckCircle2 className="w-4 h-4" />
+                                    <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
                                     {isSending ? '저장 중...' : '답변 저장 및 완료 처리'}
                                 </button>
                             </div>
@@ -292,11 +334,9 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
                     </div>
                 </div>
             ) : (
-                <div className="hidden md:flex flex-[1.5] items-center justify-center bg-gray-50 rounded-xl border border-gray-200 border-dashed text-gray-400 flex-col gap-3">
-                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
-                        <MessageSquare className="w-8 h-8 opacity-50" />
-                    </div>
-                    <p>문의 내용을 확인하려면 목록에서 선택하세요.</p>
+                <div className="hidden md:flex flex-[1.5] items-center justify-center bg-[#fbfbfa] rounded-md border border-[#e5e5df] text-gray-400 flex-col gap-3">
+                    <MessageSquare className="w-8 h-8 opacity-20" />
+                    <p className="text-xs font-bold text-gray-500">문의 내역을 선택하여 상세 내용을 확인하세요.</p>
                 </div>
             )}
         </div>

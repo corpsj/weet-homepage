@@ -195,3 +195,47 @@ The first 10 administrator personas did not produce 100 unique hard bugs. Follow
 118. 위험: destructive action confirmation은 프로젝트 삭제 `confirm()` 수준이며, mobile-safe custom confirmation으로 개선 여지가 있다.
 119. 위험: command palette/global search는 아직 구현되지 않았다.
 120. 다음 추천: UTM/CMS/gallery/inquiries를 같은 console table/editor system으로 순차 전환하고, modal/form 계층까지 통일한다.
+
+## 2026-06-07 remaining admin surfaces console QA
+
+121. Fix verified: Antigravity implemented the second admin slice through Computer Use and Codex accepted the intended 14-file change set.
+122. Fix verified: `components/admin/AdminHeader.tsx` no longer exposes the old `대시보드` title; the main route remains `작업실`.
+123. Fix verified: `components/admin/inquiries/InquiryList.tsx` now uses compact console search/filter/list treatment on mobile without horizontal overflow.
+124. Fix verified: `components/admin/gallery/GalleryList.tsx` now presents gallery content as scan-friendly media records with squared panels.
+125. Fix verified: `components/admin/gallery/GalleryForm.tsx` and gallery new/edit pages now use the same console form panel system.
+126. Fix verified: `components/admin/projects/ProjectForm.tsx` and project new/edit pages now use console panels, compact labels, and mobile-safe stacking.
+127. Fix verified: `components/admin/ProductForm.tsx`, product new/edit pages, and `ProductModal.tsx` now share the new console form language.
+128. Fix verified: `components/admin/cms/SupportEditor.tsx` now aligns FAQ/notice management with the same off-white, thin-border console system.
+129. Fix verified: `components/admin/utm/UtmBuilder.tsx`, CMS main, customize manager, settings, insights, and analytics remain aligned with the first console slice.
+130. Fix verified: targeted grep found 0 `tracking-tight`, `tracking-tighter`, `rounded-xl`, `rounded-2xl`, `rounded-3xl`, `shadow-xl`, `shadow-2xl`, or visible `대시보드` matches under `app/admin` and `components/admin`.
+131. Visual QA PC: `pc-admin.png` shows a clear black sidebar, `작업실` hierarchy, compact status rail, central action queue, and right quick-action rail.
+132. Visual QA mobile: `mobile-admin-gallery.png` shows gallery cards with loaded transport/install images, no text overlap, and no horizontal overflow.
+133. Visual QA mobile: `mobile-admin-products-modal-new-loaded-recheck.png` shows the product modal form loaded with visible inputs, selects, checkboxes, and safe spacing.
+134. Visual QA tablet: `tablet-admin-gallery-new.png` shows the gallery creation form with safe controls and no clipped buttons.
+135. Visual QA mobile: `mobile-admin-support.png` shows FAQ management with clear tabs and action buttons.
+136. Visual QA mobile: `mobile-admin-inquiries.png` shows searchable inquiry records with readable status pills.
+137. Recheck: visible image failures were 0 for gallery and product modal after filtering to viewport-visible images.
+138. Recheck: initial image-failure report was caused by lazy/offscreen images and local analytics aborts, not broken visible UI.
+139. Recheck: product modal initially captured the dynamic import spinner; waiting for `기본 정보` confirmed the form loads correctly.
+140. Remaining opportunity: add admin global search/command palette so the disabled search input becomes an actual tool.
+141. Remaining opportunity: add unsaved-change guard to long product/project/gallery forms.
+142. Remaining opportunity: add media health/readiness scores for gallery and product images.
+143. Remaining opportunity: add role-aware action visibility and stronger destructive-action confirmations.
+144. Remaining opportunity: add recent activity/audit log so operations history is visible.
+145. Remaining opportunity: compress mobile product filters into a drawer or collapsible toolbar for repeated daily use.
+146. Risk watch: local `_vercel/insights/script.js`, GA, and Clarity requests abort during local Playwright navigation; production validation should distinguish analytics noise from real app errors.
+147. Risk watch: Next middleware-to-proxy deprecation remains unrelated to UI but should be scheduled.
+148. Risk watch: public homepage and admin now share a stronger premium tone, but public product/project/support pages still need the same proof-driven content upgrade.
+149. Validation: `git diff --check`, lint, Vitest, production build, and 12 Playwright E2E tests passed after the admin/product patches.
+150. Validation: `.codex/qa/visual-home-admin-20260607-final/report.json` and `recheck.json` contain 51 route/viewport/modal checks plus targeted image/modal recheck.
+
+## 2026-06-07 Pro MUST_FIX closure admin findings
+
+151. GPT-5.5 Pro found that notice records had `content` in the data model but no admin body editor; fixed by adding notice content textarea and explicit save/reset controls.
+152. GPT-5.5 Pro found FAQ/notice fields saved on every keypress; fixed by local draft state plus explicit save buttons to prevent request storms and response-order races.
+153. GPT-5.5 Pro found admin counts silently converted DB/query failures into `0`; fixed by structured count results and visible `연결 오류` state.
+154. GPT-5.5 Pro found inquiry status/delete/reply paths could leave UI and DB out of sync; fixed by result checks, pending locks, rollback, and failure toasts.
+155. Visual QA found mobile notice management still behaved like a clipped table even without document-level overflow; fixed by replacing the mobile table with a card editor.
+156. Post-fix visual QA verified desktop notice draft editor, desktop FAQ draft save flow, desktop inquiry rollback toast, and mobile notice card editor.
+157. Post-fix local QA report `.codex/qa/post-pro-mustfix-20260607-v2/report.json` shows all five targeted checks passing.
+158. GPT-5.5 Pro closure marker `WEET_REVIEW_20260607_HOME_ADMIN_MUSTFIX_CLOSURE_06` returned `VERDICT: PASS` and `MUST_FIX: None`.

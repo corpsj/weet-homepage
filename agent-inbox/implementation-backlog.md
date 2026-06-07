@@ -43,11 +43,29 @@ This file tracks bugs and improvements discovered during the recursive improveme
 - [ ] 공개 홈페이지: `/support`에도 부지 가능성 자가진단을 독립 콘텐츠 또는 다운로드 체크리스트로 확장해야 함.
 - [ ] 공개 홈페이지: B2B/다량 구매/기관 상담 경로와 상담 폼 필드(수량, 납기, 목적, 부지 상태)를 추가해야 함.
 - [ ] 공개 홈페이지: ChatGPT 이미지 생성 또는 실제 촬영 기반으로 hero/product/interior/transport/install proof visual을 업그레이드해야 함.
-- [ ] 관리자 페이지: 현재 리디자인은 shell/dashboard 중심이며, `products`, `projects`, `inquiries`, `insights`, `gallery`, `UTM`, `CMS` 하위 화면에는 기존 `rounded-xl/2xl/3xl`, `tracking-tight`, old SaaS card tone이 남아 있음.
-- [ ] 관리자 페이지: `products`, `projects`, `consultations`, `insights`는 1차 console tone으로 전환됐으나 `UTM`, `CMS`, `gallery`, `inquiries`, edit/new forms, modal 계층에는 기존 `rounded-xl/2xl/3xl`, old SaaS card tone이 여전히 남아 있음.
+- [x] 관리자 페이지: 현재 리디자인은 shell/dashboard 중심이며, `products`, `projects`, `inquiries`, `insights`, `gallery`, `UTM`, `CMS` 하위 화면에는 기존 `rounded-xl/2xl/3xl`, `tracking-tight`, old SaaS card tone이 남아 있음.
+  - *Fix Details*: 2026-06-07 두 번째 Antigravity handoff와 Codex 보정으로 `UTM`, `CMS`, `gallery`, `inquiries`, project/gallery/product edit-new forms, support editor, product modal, insights cleanup을 같은 console system으로 전환함.
+- [x] 관리자 페이지: `products`, `projects`, `consultations`, `insights`는 1차 console tone으로 전환됐으나 `UTM`, `CMS`, `gallery`, `inquiries`, edit/new forms, modal 계층에는 기존 `rounded-xl/2xl/3xl`, old SaaS card tone이 여전히 남아 있음.
+  - *Fix Details*: targeted grep under `app/admin` and `components/admin` now finds 0 `tracking-tight`, `tracking-tighter`, `rounded-xl`, `rounded-2xl`, `rounded-3xl`, `shadow-xl`, `shadow-2xl`, or visible `대시보드` matches.
 - [ ] 관리자 페이지: product/project/gallery readiness score, media health score, consultation SLA, integration health를 dashboard와 하위 목록에 연결해야 함.
 - [ ] 관리자 페이지: global search/command palette, unsaved-change guard, destructive action confirmation, role-aware action visibility를 추가해야 함.
 - [ ] 관리자 페이지: 모바일 제품 관리 필터 영역은 안정적으로 표시되지만 세로 공간을 많이 사용함. 다음 개선에서 필터를 접이식 toolbar 또는 drawer로 압축하면 반복 사용성이 좋아질 수 있음.
 - [ ] 관리자 페이지: 상담 관리 empty state는 정상이나, 신규 상담이 0건일 때 `주문하기 공개 페이지 확인`, `상담 폼 테스트`, `응답 템플릿 관리` 같은 다음 행동이 있으면 관리자 경험이 더 강해짐.
 - [ ] 관리자 페이지: 모바일 상담/인사이트 화면의 좌하단 floating assistant badge가 빈 패널 또는 차트 영역 가장자리를 일부 덮을 수 있음. 핵심 입력/버튼은 가리지 않지만, 다음 admin mobile polish에서 safe-area 위치 또는 hide-on-empty-state 규칙을 검토해야 함.
 - [ ] 기술 부채: `npm run build`가 통과하지만 Next middleware-to-proxy deprecation warning이 계속 남아 있음.
+
+## 2026-06-07 current slice completion evidence
+
+- [x] Chrome/ChatGPT image-generation rule was updated in `AGENTS.md`, `codex-loop.md`, `.codex/chatgpt-procedure.md`, `.codex/current-task.md`, `agent-inbox/UI-design.md`, and `agent-inbox/컴퓨터유즈,웹제어.md`.
+- [x] GPT-5.5 Thinking/Pro 확장 image run produced `agent-inbox/generated-ui-reference-admin-console-v2.png`.
+- [x] Antigravity IDE implemented homepage/admin UI changes and remaining admin-surface changes via Computer Use; Codex accepted intended changes and applied small verification fixes.
+- [x] Homepage hero was upgraded to a full-bleed premium product/home visual with visible next-section hint.
+- [x] Admin child surfaces now share the premium console visual language across main, UTM, CMS, customize, settings, products, projects, gallery, inquiries, support, insights, and product modal/form routes.
+- [x] Local validation passed: `git diff --check`, `npm run lint`, `npm test`, `npm run build`, `npx playwright test e2e/public-pages.spec.ts`.
+- [x] Visual QA evidence saved under `.codex/qa/visual-home-admin-20260607-final/`; targeted recheck confirmed visible images and product modal form load successfully.
+- [x] GPT-5.5 Pro MUST_FIX closure completed for the homepage/admin full-surface slice.
+  - *First Pro verdict*: marker `WEET_REVIEW_20260607_HOME_ADMIN_FULL_SURFACE_05` returned `MUST_FIX`.
+  - *Applied fixes*: editable notice body, FAQ/notice draft+explicit save, admin count error states, inquiry rollback/toasts/pending guards, homepage dark text contrast.
+  - *Extra visual fix*: mobile notice management no longer relies on an internally scrolling table; it now uses a card editor with title/status/body/save/delete visible.
+  - *Closure Pro verdict*: marker `WEET_REVIEW_20260607_HOME_ADMIN_MUSTFIX_CLOSURE_06` returned `VERDICT: PASS` and `MUST_FIX: None`.
+  - *Validation*: `git diff --check`, lint, Vitest, build, and 12 Playwright E2E tests passed after the fixes.

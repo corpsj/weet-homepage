@@ -8,7 +8,6 @@ import ImageUpload from '@/components/admin/media/ImageUpload';
 import { createHeroSlide, updateHeroSlide, deleteHeroSlide, updateSignatureStatus, reorderHeroSlides } from '@/app/actions/cms-actions';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { createClient } from '@/utils/supabase/client';
 import {
     DndContext,
     closestCenter,
@@ -26,6 +25,7 @@ import {
     useSortable
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
+import { ConsolePageHeader, ConsolePanel, ConsoleSectionTitle, consoleInputClass, consolePrimaryButtonClass, consoleSecondaryButtonClass } from '@/components/admin/ConsolePrimitives';
 
 type HeroSlide = Database['public']['Tables']['hero_slides']['Row'];
 type Product = Database['public']['Tables']['products']['Row'];
@@ -40,12 +40,11 @@ export default function MainCmsClient({ initialHeroSlides, initialProducts }: Ma
 
     return (
         <div className="space-y-6">
-            <div className="flex justify-between items-center">
-                <div>
-                    <h2 className="text-2xl font-bold text-gray-900">랜딩 페이지 관리</h2>
-                    <p className="text-gray-500 text-sm mt-1">홈페이지의 주요 섹션을 관리합니다.</p>
-                </div>
-            </div>
+            <ConsolePageHeader
+                eyebrow="CONTENTS"
+                title="랜딩 페이지 관리"
+                description="홈페이지의 주요 섹션 이미지를 관리합니다."
+            />
 
             {/* Tabs */}
             <div className="border-b border-gray-200">
@@ -72,13 +71,13 @@ export default function MainCmsClient({ initialHeroSlides, initialProducts }: Ma
             </div>
 
             {/* Content */}
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm p-6 min-h-[500px]">
+            <ConsolePanel className="p-6 min-h-[500px]">
                 {activeTab === 'hero' ? (
                     <HeroSectionEditor slides={initialHeroSlides} />
                 ) : (
                     <SignatureLineEditor products={initialProducts} />
                 )}
-            </div>
+            </ConsolePanel>
         </div>
     );
 }
@@ -88,14 +87,10 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
     const [heroSlides, setHeroSlides] = useState(slides);
-    const supabase = createClient();
 
-    // Sync state with props when server data changes
     useEffect(() => {
         setHeroSlides(slides);
     }, [slides]);
-
-    // ... rest of component
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -113,7 +108,6 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
                 const newIndex = items.findIndex((item) => item.id === over.id);
                 const newItems = arrayMove(items, oldIndex, newIndex);
 
-                // Update sort order in DB
                 updateSortOrder(newItems);
 
                 return newItems;
@@ -125,18 +119,15 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
         startTransition(async () => {
             try {
                 const ids = items.map(item => item.id);
-                console.log('Sending reorder request for IDs:', ids);
                 const result = await reorderHeroSlides(ids);
 
                 if (result.success) {
                     toast.success('순서가 저장되었습니다.');
                 } else {
-                    console.error('Server-side reorder failure:', result.error);
                     toast.error(`순서 저장 실패: ${result.error}`);
                 }
                 router.refresh();
             } catch (error: any) {
-                console.error('Client-side reorder exception:', error);
                 toast.error(`순서 저장 중 오류 발생: ${error.message || '알 수 없는 오류'}`);
                 router.refresh();
             }
@@ -174,14 +165,14 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
     };
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h3 className="text-lg font-bold text-gray-900">슬라이드 관리</h3>
+                <ConsoleSectionTitle>슬라이드 관리</ConsoleSectionTitle>
                 <button
                     onClick={() => setIsAdding(true)}
-                    className="text-sm text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1"
+                    className="text-xs text-blue-600 hover:text-blue-700 font-bold flex items-center gap-1"
                 >
-                    <Plus className="w-4 h-4" /> 슬라이드 추가
+                    <Plus className="w-4 h-4" /> 새 슬라이드
                 </button>
             </div>
 
@@ -194,7 +185,7 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
                     items={heroSlides.map(s => s.id)}
                     strategy={verticalListSortingStrategy}
                 >
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                         {heroSlides.map((slide, index) => (
                             <SortableHeroSlideItem key={slide.id} slide={slide} onDelete={handleDelete} eager={index === 0} />
                         ))}
@@ -203,8 +194,8 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
             </DndContext>
 
             {isAdding && (
-                <div className="border border-blue-200 rounded-lg p-4 bg-blue-50">
-                    <h4 className="font-bold mb-4">새 슬라이드</h4>
+                <div className="border border-[#e5e5df] rounded-md p-4 bg-[#fbfbfa]">
+                    <h4 className="text-sm font-bold text-gray-900 mb-4">새 슬라이드</h4>
                     <HeroSlideForm
                         onSubmit={handleCreate}
                         onCancel={() => setIsAdding(false)}
@@ -261,7 +252,7 @@ function SortableHeroSlideItem({
 
     if (isEditing) {
         return (
-            <div className="border border-blue-200 rounded-lg p-4 bg-blue-50" style={style} ref={setNodeRef}>
+            <div className="border border-[#e5e5df] rounded-md p-4 bg-[#fbfbfa]" style={style} ref={setNodeRef}>
                 <HeroSlideForm
                     initialData={slide}
                     onSubmit={handleUpdate}
@@ -276,7 +267,7 @@ function SortableHeroSlideItem({
         <div
             ref={setNodeRef}
             style={style}
-            className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg border border-gray-100 group"
+            className="flex items-center gap-4 p-3 bg-white rounded-md border border-[#e5e5df] hover:border-gray-300 transition-colors group"
         >
             <div
                 {...attributes}
@@ -285,44 +276,44 @@ function SortableHeroSlideItem({
             >
                 <GripVertical className="w-5 h-5" />
             </div>
-            <div className="relative w-24 h-16 bg-gray-200 rounded-md overflow-hidden flex-shrink-0">
+            <div className="relative w-20 h-14 bg-gray-100 rounded flex-shrink-0 border border-gray-200 overflow-hidden">
                 {slide.image_url ? (
                     <Image
                         src={slide.image_url}
                         alt={slide.title}
                         fill
                         loading={eager ? 'eager' : 'lazy'}
-                        sizes="96px"
+                        sizes="80px"
                         className="object-cover"
                     />
                 ) : (
                     <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                        <ImageIcon className="w-6 h-6" />
+                        <ImageIcon className="w-5 h-5" />
                     </div>
                 )}
             </div>
             <div className="flex-1 grid grid-cols-2 gap-4">
                 <div>
-                    <p className="text-xs font-medium text-gray-500 mb-1">메인 타이틀</p>
-                    <p className="text-sm font-bold">{slide.title}</p>
+                    <p className="text-[11px] font-bold text-gray-500 mb-0.5">메인 타이틀</p>
+                    <p className="text-sm font-bold text-gray-900">{slide.title}</p>
                 </div>
                 <div>
-                    <p className="text-xs font-medium text-gray-500 mb-1">서브 타이틀</p>
-                    <p className="text-sm text-gray-600">{slide.subtitle || '-'}</p>
+                    <p className="text-[11px] font-bold text-gray-500 mb-0.5">서브 타이틀</p>
+                    <p className="text-xs text-gray-600 truncate">{slide.subtitle || '-'}</p>
                 </div>
             </div>
             <div className="flex items-center gap-2">
                 <button
                     onClick={() => setIsEditing(true)}
-                    className="p-2 text-gray-400 hover:text-blue-600 transition-colors"
+                    className="px-2 py-1 text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors"
                 >
-                    <span className="text-xs font-medium">수정</span>
+                    수정
                 </button>
                 <button
                     onClick={() => onDelete(slide.id)}
-                    className="p-2 text-gray-400 hover:text-red-500 transition-colors"
+                    className="p-1.5 text-gray-400 hover:text-red-600 transition-colors"
                 >
-                    <Trash2 className="w-5 h-5" />
+                    <Trash2 className="w-4 h-4" />
                 </button>
             </div>
         </div>
@@ -361,7 +352,7 @@ function HeroSlideForm({
         <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex gap-6">
                 <div className="w-48 flex-shrink-0">
-                    <label className="block text-sm font-bold mb-2">이미지</label>
+                    <label className="block text-xs font-bold text-gray-600 mb-2">이미지</label>
                     <ImageUpload
                         value={imageUrl}
                         onChange={(url) => {
@@ -374,19 +365,19 @@ function HeroSlideForm({
                 </div>
                 <div className="flex-1 space-y-4">
                     <div>
-                        <label className="block text-sm font-bold mb-2">메인 타이틀</label>
+                        <label className="block text-xs font-bold text-gray-600 mb-1">메인 타이틀</label>
                         <input
                             name="title"
                             defaultValue={initialData?.title}
-                            className="w-full border border-gray-300 p-2 rounded"
+                            className={`${consoleInputClass} w-full`}
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-bold mb-2">서브 타이틀</label>
+                        <label className="block text-xs font-bold text-gray-600 mb-1">서브 타이틀</label>
                         <input
                             name="subtitle"
                             defaultValue={initialData?.subtitle || ''}
-                            className="w-full border border-gray-300 p-2 rounded"
+                            className={`${consoleInputClass} w-full`}
                         />
                     </div>
                 </div>
@@ -395,17 +386,17 @@ function HeroSlideForm({
                 <button
                     type="button"
                     onClick={onCancel}
-                    className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded"
+                    className={consoleSecondaryButtonClass}
                     disabled={isPending}
                 >
                     취소
                 </button>
                 <button
                     type="submit"
-                    className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 disabled:bg-gray-400 flex items-center gap-2"
+                    className={consolePrimaryButtonClass}
                     disabled={isPending || isUploading || !imageUrl}
                 >
-                    {(isPending || isUploading) && <Loader2 className="w-4 h-4 animate-spin" />}
+                    {(isPending || isUploading) && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
                     저장
                 </button>
             </div>
@@ -434,10 +425,8 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
         const currentStatus = optimisticIds.has(productId);
         const newStatus = !currentStatus;
 
-        // 1. Optimistic Update
         setPendingOverrides(prev => ({ ...prev, [productId]: newStatus }));
 
-        // 2. Server Action
         startTransition(async () => {
             try {
                 await updateSignatureStatus(productId, newStatus);
@@ -447,7 +436,6 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
                 });
                 router.refresh();
             } catch (error: any) {
-                // Revert on error
                 toast.error(error.message || '업데이트 실패');
                 setPendingOverrides(prev => {
                     const { [productId]: _, ...rest } = prev;
@@ -458,35 +446,35 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
     };
 
     return (
-        <div className="space-y-8">
+        <div className="space-y-6">
             <div>
-                <h3 className="text-lg font-bold text-gray-900 mb-4">노출 제품 선택 (최대 10개)</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <ConsoleSectionTitle>노출 제품 선택 (최대 10개)</ConsoleSectionTitle>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
                     {products.map((product) => {
                         const isSelected = optimisticIds.has(product.id);
                         return (
                             <div
                                 key={product.id}
                                 onClick={() => !isPending && handleToggle(product.id)}
-                                className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${isSelected
-                                    ? 'border-black bg-gray-50 ring-1 ring-black'
-                                    : 'border-gray-200 hover:border-gray-300'
+                                className={`flex items-center gap-3 p-3 rounded-md border cursor-pointer transition-all ${isSelected
+                                    ? 'border-gray-900 bg-[#f4f4f1] shadow-sm'
+                                    : 'border-[#e5e5df] hover:border-gray-400 bg-white'
                                     } ${isPending ? 'opacity-70' : ''}`}
                             >
-                                <div className={`w-5 h-5 rounded border flex items-center justify-center transition-colors ${isSelected ? 'bg-black border-black' : 'border-gray-300 bg-white'
+                                <div className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors ${isSelected ? 'bg-gray-900 border-gray-900' : 'border-gray-300 bg-white'
                                     }`}>
-                                    {isSelected && <div className="w-2 h-2 bg-white rounded-full" />}
+                                    {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
                                 </div>
 
-                                <div className="w-10 h-10 bg-gray-100 rounded-md flex-shrink-0 relative overflow-hidden">
+                                <div className="w-10 h-10 bg-gray-100 rounded border border-gray-200 flex-shrink-0 relative overflow-hidden">
                                     {product.image_url && (
                                         <Image src={product.image_url} alt={product.name} fill sizes="40px" className="object-cover" />
                                     )}
                                 </div>
 
                                 <div className="min-w-0">
-                                    <p className="text-sm font-medium text-gray-900 truncate">{product.name}</p>
-                                    <p className="text-xs text-gray-500">{product.size_category}</p>
+                                    <p className="text-sm font-bold text-gray-900 truncate">{product.name}</p>
+                                    <p className="text-[11px] text-gray-500">{product.size_category}</p>
                                 </div>
                             </div>
                         )

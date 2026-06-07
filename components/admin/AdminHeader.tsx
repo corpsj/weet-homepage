@@ -12,7 +12,7 @@ export default function AdminHeader() {
 
     const getPageTitle = (segment: string) => {
         const titles: Record<string, string> = {
-            'admin': '대시보드',
+            'admin': '작업실',
             'products': '제품 관리',
             'inquiries': '문의 관리',
             'settings': '설정',

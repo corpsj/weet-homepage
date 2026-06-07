@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation';
 import { supabaseAdmin } from '@/lib/supabase';
 import ProductForm from '@/components/admin/ProductForm';
+import { ConsolePageHeader } from '@/components/admin/ConsolePrimitives';
 
 // 빌드 시 정적 생성 방지
 export const dynamic = 'force-dynamic';
@@ -23,8 +24,12 @@ export default async function EditProductPage({ params }: PageProps) {
     }
 
     return (
-        <div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-8">제품 수정</h1>
+        <div className="space-y-6">
+            <ConsolePageHeader
+                eyebrow="MODEL INVENTORY"
+                title="제품 수정"
+                description={`${product.name ?? '제품'}의 공개 상태, 스펙, 이미지 구성을 점검합니다.`}
+            />
             <ProductForm initialData={product} />
         </div>
     );

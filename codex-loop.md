@@ -85,6 +85,16 @@ Use Chrome/ChatGPT with the GPT-5.5 Pro collaboration harness:
 15. Save `.codex/pro-review.md` only after the response is not generating, marker-matched when a marker was provided, and plausible.
 16. After sending, require latest-user-turn or marker confirmation before any retry. Duplicate sends are worse than waiting.
 
+## GPT-5.5 image generation rules
+
+Use Chrome/ChatGPT web control for project image generation so the user can watch the run.
+
+1. Click `새 채팅` for every separate image run unless an active generation must be allowed to finish first.
+2. Configure the model harness before enabling image mode: `최신 • 5.5` plus Thinking/Pro `확장`.
+3. Select `이미지 만들기` from the composer-left `+` menu only after the model harness is confirmed.
+4. Re-confirm from read-only DOM or visible evidence that the prompt draft is correct, `이미지 만들기` is active, `최신 • 5.5` and `확장` are active, ChatGPT is not generating, and the send button is safe.
+5. Paste prompts through the clipboard. Do not use the local image generation tool for these project UI/reference images unless the user explicitly waives the web-control requirement.
+
 Do not ask broad brainstorming questions.
 
 Ask it to review the current concrete implementation, repository state, diff, and validation output.

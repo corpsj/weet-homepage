@@ -1,0 +1,46 @@
+{
+  "checks": [
+    {
+      "name": "homepage transparency label class",
+      "contrastClasses": "mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400",
+      "ok": true
+    },
+    {
+      "name": "notice content draft editor visible",
+      "ok": true,
+      "saveVisible": true
+    },
+    {
+      "name": "faq draft editor requires explicit save",
+      "ok": true,
+      "dirtyVisible": true
+    },
+    {
+      "name": "inquiry failed read update shows rollback toast",
+      "ok": true
+    },
+    {
+      "name": "mobile support notice card no horizontal overflow",
+      "ok": true,
+      "mobileOverflow": false,
+      "mobileSaveVisible": true,
+      "mobileTextareaVisible": true
+    }
+  ],
+  "consoleErrors": [
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Refused to execute script from 'http://localhost:3001/_vercel/insights/script.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Refused to execute script from 'http://localhost:3001/_vercel/insights/script.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Refused to execute script from 'http://localhost:3001/_vercel/insights/script.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.",
+    "Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "Refused to execute script from 'http://localhost:3001/_vercel/insights/script.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.",
+    "Failed to load resource: net::ERR_FAILED",
+    "Failed to update status: TypeError: Failed to fetch\n    at I (http://localhost:3001/_next/static/chunks/228oj19jyxe16.js:1:100147)",
+    "mobile: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "mobile: Refused to execute script from 'http://localhost:3001/_vercel/insights/script.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled.",
+    "mobile: Failed to load resource: the server responded with a status of 404 (Not Found)",
+    "mobile: Refused to execute script from 'http://localhost:3001/_vercel/insights/script.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled."
+  ]
+}
