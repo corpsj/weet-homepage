@@ -1,0 +1,349 @@
+[
+  {
+    "scope": "public",
+    "viewport": "pc",
+    "route": "/",
+    "loadMs": 2117,
+    "overflowX": false,
+    "h1": [
+      "위트 이동식주택"
+    ],
+    "errors": [],
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/pc-home.png"
+  },
+  {
+    "scope": "public",
+    "viewport": "pc",
+    "route": "/products",
+    "loadMs": 1256,
+    "overflowX": false,
+    "h1": [
+      "제품 소개"
+    ],
+    "errors": [],
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/pc-products.png"
+  },
+  {
+    "scope": "public",
+    "viewport": "pc",
+    "route": "/customize",
+    "loadMs": 1437,
+    "overflowX": false,
+    "h1": [
+      "Compact 3x6"
+    ],
+    "errors": [],
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/pc-customize.png"
+  },
+  {
+    "scope": "public",
+    "viewport": "pc",
+    "route": "/support",
+    "loadMs": 1206,
+    "overflowX": false,
+    "h1": [
+      "진행 과정과 확인사항"
+    ],
+    "errors": [],
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/pc-support.png"
+  },
+  {
+    "scope": "public",
+    "viewport": "pc",
+    "route": "/projects",
+    "loadMs": 1004,
+    "overflowX": false,
+    "h1": [
+      "Projects"
+    ],
+    "errors": [],
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/pc-projects.png"
+  },
+  {
+    "scope": "customize-interaction",
+    "viewport": "pc",
+    "route": "/customize",
+    "before": {
+      "baseImages": 1,
+      "footprints": 0,
+      "overflowX": false
+    },
+    "after": {
+      "baseImages": 1,
+      "footprints": 0,
+      "overflowX": false
+    },
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/pc-customize-standard.png"
+  },
+  {
+    "scope": "admin",
+    "viewport": "pc",
+    "route": "/admin",
+    "loadMs": 1292,
+    "dashboard": {
+      "overflowX": false,
+      "h1": [
+        "대시보드"
+      ],
+      "navTexts": [
+        "대시보드",
+        "UTM Builder",
+        "랜딩 페이지",
+        "제품 관리",
+        "주문 구성",
+        "프로젝트 관리",
+        "FAQ 관리",
+        "고객 인사이트",
+        "갤러리 관리",
+        "상담 관리",
+        "레거시 문의",
+        "설정"
+      ],
+      "bodyText": "WEET CONSOLE\n운영\n대시보드\nUTM Builder\n콘텐츠\n랜딩 페이지\n제품 관리\n주문 구성\n프로젝트 관리\nFAQ 관리\n고객 인사이트\n갤러리 관리\n상담\n상담 관리\n레거시 문의\n시스템\n설정\nA\n\naudit-c1c59uh3\n\n관리자\n\n로그아웃\n\nWEET OPERATIONS\n\n대시보드\n\n운영 우선순위와 핵심 워크플로우 상태입니다.\n\n웹 로그 분석\n\n공개 제품\n\n26\n\n구매자가 볼 수 있는 제품 수\n\n신규 상담\n\n0\n\n오늘 먼저 확인할 상담\n\n프로젝트\n\n2\n\n공개/관리 대상 시공 사례\n\n활성 옵션\n\n30\n\n주문하기에서 선택 가능한 옵션\n\n오늘의 운영 레일\n정상\n\n상담 응답\n\n대기 없음\n\n신규 상담 큐가 비어 있습니다.\n\n정상\n\n공개 제품\n\n노출 중\n\n구매 전환 흐름이 열려 있습니다.\n\n정상\n\n주문 도면\n\n옵션 활성\n\n모델별 도면과 옵션 오버레이를 주기적으로 확인하세요.\n\n품질 상태\n\n도면\n\n모델별 단일 렌더링\n\n상담\n\n신규 상태 큐 분리\n\n보안\n\n관리자 권한 보호 유지\n\n빠른 작업\n\n제품 추가\n\n제품 이미지, 스펙, 노출 상태 등록\n\n주문 구성\n\n모델, 옵션, 도면 이미지, 충돌 관계 관리\n\n상담 확인\n\n신규 상담, 내부 메모, 처리 상태 확인\n\n웹 로그 분석\n\n방문자, 유입, 인기 페이지 확인"
+    },
+    "drawer": null,
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/pc-admin.png"
+  },
+  {
+    "scope": "public",
+    "viewport": "tablet",
+    "route": "/",
+    "loadMs": 1800,
+    "overflowX": false,
+    "h1": [
+      "위트 이동식주택"
+    ],
+    "errors": [],
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/tablet-home.png"
+  },
+  {
+    "scope": "public",
+    "viewport": "tablet",
+    "route": "/products",
+    "loadMs": 1130,
+    "overflowX": false,
+    "h1": [
+      "제품 소개"
+    ],
+    "errors": [],
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/tablet-products.png"
+  },
+  {
+    "scope": "public",
+    "viewport": "tablet",
+    "route": "/customize",
+    "loadMs": 1013,
+    "overflowX": false,
+    "h1": [
+      "Compact 3x6"
+    ],
+    "errors": [],
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/tablet-customize.png"
+  },
+  {
+    "scope": "public",
+    "viewport": "tablet",
+    "route": "/support",
+    "loadMs": 976,
+    "overflowX": false,
+    "h1": [
+      "진행 과정과 확인사항"
+    ],
+    "errors": [],
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/tablet-support.png"
+  },
+  {
+    "scope": "public",
+    "viewport": "tablet",
+    "route": "/projects",
+    "loadMs": 951,
+    "overflowX": false,
+    "h1": [
+      "Projects"
+    ],
+    "errors": [],
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/tablet-projects.png"
+  },
+  {
+    "scope": "customize-interaction",
+    "viewport": "tablet",
+    "route": "/customize",
+    "before": {
+      "baseImages": 1,
+      "footprints": 0,
+      "overflowX": false
+    },
+    "after": {
+      "baseImages": 1,
+      "footprints": 0,
+      "overflowX": false
+    },
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/tablet-customize-standard.png"
+  },
+  {
+    "scope": "admin",
+    "viewport": "tablet",
+    "route": "/admin",
+    "loadMs": 1288,
+    "dashboard": {
+      "overflowX": false,
+      "h1": [
+        "대시보드"
+      ],
+      "navTexts": [
+        "대시보드",
+        "UTM Builder",
+        "랜딩 페이지",
+        "제품 관리",
+        "주문 구성",
+        "프로젝트 관리",
+        "FAQ 관리",
+        "고객 인사이트",
+        "갤러리 관리",
+        "상담 관리",
+        "레거시 문의",
+        "설정"
+      ],
+      "bodyText": "WEET CONSOLE\nWEET CONSOLE\n운영\n대시보드\nUTM Builder\n콘텐츠\n랜딩 페이지\n제품 관리\n주문 구성\n프로젝트 관리\nFAQ 관리\n고객 인사이트\n갤러리 관리\n상담\n상담 관리\n레거시 문의\n시스템\n설정\nA\n\naudit-c1c59uh3\n\n관리자\n\n로그아웃\n\nWEET OPERATIONS\n\n대시보드\n\n운영 우선순위와 핵심 워크플로우 상태입니다.\n\n웹 로그 분석\n\n공개 제품\n\n26\n\n구매자가 볼 수 있는 제품 수\n\n신규 상담\n\n0\n\n오늘 먼저 확인할 상담\n\n프로젝트\n\n2\n\n공개/관리 대상 시공 사례\n\n활성 옵션\n\n30\n\n주문하기에서 선택 가능한 옵션\n\n오늘의 운영 레일\n정상\n\n상담 응답\n\n대기 없음\n\n신규 상담 큐가 비어 있습니다.\n\n정상\n\n공개 제품\n\n노출 중\n\n구매 전환 흐름이 열려 있습니다.\n\n정상\n\n주문 도면\n\n옵션 활성\n\n모델별 도면과 옵션 오버레이를 주기적으로 확인하세요.\n\n품질 상태\n\n도면\n\n모델별 단일 렌더링\n\n상담\n\n신규 상태 큐 분리\n\n보안\n\n관리자 권한 보호 유지\n\n빠른 작업\n\n제품 추가\n\n제품 이미지, 스펙, 노출 상태 등록\n\n주문 구성\n\n모델, 옵션, 도면 이미지, 충돌 관계 관리\n\n상담 확인\n\n신규 상담, 내부 메모, 처리 상태 확인\n\n웹 로그 분석\n\n방문자, 유입, 인기 페이지 확인"
+    },
+    "drawer": {
+      "visibleLinks": [
+        "대시보드",
+        "UTM Builder",
+        "랜딩 페이지",
+        "제품 관리",
+        "주문 구성",
+        "프로젝트 관리",
+        "FAQ 관리",
+        "고객 인사이트",
+        "갤러리 관리",
+        "상담 관리",
+        "레거시 문의",
+        "설정"
+      ],
+      "overflowX": false
+    },
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/tablet-admin.png"
+  },
+  {
+    "scope": "public",
+    "viewport": "mobile",
+    "route": "/",
+    "loadMs": 1817,
+    "overflowX": false,
+    "h1": [
+      "위트 이동식주택"
+    ],
+    "errors": [],
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/mobile-home.png"
+  },
+  {
+    "scope": "public",
+    "viewport": "mobile",
+    "route": "/products",
+    "loadMs": 1211,
+    "overflowX": false,
+    "h1": [
+      "제품 소개"
+    ],
+    "errors": [],
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/mobile-products.png"
+  },
+  {
+    "scope": "public",
+    "viewport": "mobile",
+    "route": "/customize",
+    "loadMs": 1055,
+    "overflowX": false,
+    "h1": [
+      "Compact 3x6"
+    ],
+    "errors": [],
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/mobile-customize.png"
+  },
+  {
+    "scope": "public",
+    "viewport": "mobile",
+    "route": "/support",
+    "loadMs": 971,
+    "overflowX": false,
+    "h1": [
+      "진행 과정과 확인사항"
+    ],
+    "errors": [],
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/mobile-support.png"
+  },
+  {
+    "scope": "public",
+    "viewport": "mobile",
+    "route": "/projects",
+    "loadMs": 963,
+    "overflowX": false,
+    "h1": [
+      "Projects"
+    ],
+    "errors": [],
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/mobile-projects.png"
+  },
+  {
+    "scope": "customize-interaction",
+    "viewport": "mobile",
+    "route": "/customize",
+    "before": {
+      "baseImages": 1,
+      "footprints": 0,
+      "overflowX": false
+    },
+    "after": {
+      "baseImages": 1,
+      "footprints": 0,
+      "overflowX": false
+    },
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/mobile-customize-standard.png"
+  },
+  {
+    "scope": "admin",
+    "viewport": "mobile",
+    "route": "/admin",
+    "loadMs": 1417,
+    "dashboard": {
+      "overflowX": false,
+      "h1": [
+        "대시보드"
+      ],
+      "navTexts": [
+        "대시보드",
+        "UTM Builder",
+        "랜딩 페이지",
+        "제품 관리",
+        "주문 구성",
+        "프로젝트 관리",
+        "FAQ 관리",
+        "고객 인사이트",
+        "갤러리 관리",
+        "상담 관리",
+        "레거시 문의",
+        "설정"
+      ],
+      "bodyText": "WEET CONSOLE\nWEET CONSOLE\n운영\n대시보드\nUTM Builder\n콘텐츠\n랜딩 페이지\n제품 관리\n주문 구성\n프로젝트 관리\nFAQ 관리\n고객 인사이트\n갤러리 관리\n상담\n상담 관리\n레거시 문의\n시스템\n설정\nA\n\naudit-c1c59uh3\n\n관리자\n\n로그아웃\n\nWEET OPERATIONS\n\n대시보드\n\n운영 우선순위와 핵심 워크플로우 상태입니다.\n\n웹 로그 분석\n\n공개 제품\n\n26\n\n구매자가 볼 수 있는 제품 수\n\n신규 상담\n\n0\n\n오늘 먼저 확인할 상담\n\n프로젝트\n\n2\n\n공개/관리 대상 시공 사례\n\n활성 옵션\n\n30\n\n주문하기에서 선택 가능한 옵션\n\n오늘의 운영 레일\n정상\n\n상담 응답\n\n대기 없음\n\n신규 상담 큐가 비어 있습니다.\n\n정상\n\n공개 제품\n\n노출 중\n\n구매 전환 흐름이 열려 있습니다.\n\n정상\n\n주문 도면\n\n옵션 활성\n\n모델별 도면과 옵션 오버레이를 주기적으로 확인하세요.\n\n품질 상태\n\n도면\n\n모델별 단일 렌더링\n\n상담\n\n신규 상태 큐 분리\n\n보안\n\n관리자 권한 보호 유지\n\n빠른 작업\n\n제품 추가\n\n제품 이미지, 스펙, 노출 상태 등록\n\n주문 구성\n\n모델, 옵션, 도면 이미지, 충돌 관계 관리\n\n상담 확인\n\n신규 상담, 내부 메모, 처리 상태 확인\n\n웹 로그 분석\n\n방문자, 유입, 인기 페이지 확인"
+    },
+    "drawer": {
+      "visibleLinks": [
+        "대시보드",
+        "UTM Builder",
+        "랜딩 페이지",
+        "제품 관리",
+        "주문 구성",
+        "프로젝트 관리",
+        "FAQ 관리",
+        "고객 인사이트",
+        "갤러리 관리",
+        "상담 관리",
+        "레거시 문의",
+        "설정"
+      ],
+      "overflowX": false
+    },
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/visual-audit/mobile-admin.png"
+  }
+]

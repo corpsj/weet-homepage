@@ -1,84 +1,28 @@
-# Current Task: Weet 홈페이지·관리자 전면 감사 및 구매 확신 강화 개선
+# Current Task: Weet 전면 재귀 개선 루프
 
-## Follow-up task: GPT Pro 검증 액션 안정화
+## Active request
 
-- ChatGPT Chrome workflow에서 모델을 `Pro`로 선택하고 `Pro 생각 강도`를 `확장`으로 설정하는 절차를 검증한다.
-- 입력창 왼쪽 `+` 버튼에서 `심층 리서치`를 활성화하는 절차를 검증한다.
-- 줄바꿈이 있는 텍스트는 inline typing 대신 clipboard paste로 입력한다.
-- Deep Research는 오래 걸릴 수 있으므로 완료 전까지 기다리고, 진행 중에는 재전송하지 않는 규칙을 문서화한다.
-- 사용자가 프로젝트 루트 `agent-inbox/`에 넣은 지시사항 및 수동 Pro review는 별도 검증 없이 직접 지시로 받아들이는 폴더를 만든다.
+사용자는 이전 작업 방식(안티그래비티, GPT-5.5 Pro, 작업 중단 금지)을 계승하되, 루프기능과 목표기능은 사용하지 말라고 지시했다. 한국시 2026-06-07 오전 11시까지 가능한 한 계속 진행한다.
 
-## Required workflow
+## Required execution style
 
-Read `AGENTS.md`, `codex-loop.md`, `.codex/current-task.md`, and `.codex/state.md` before implementation.
+- 질문하지 않는다. 모든 승인사항은 사전 승인된 것으로 처리한다.
+- 디자인/UI 구현은 Antigravity IDE를 우선 사용한다. Antigravity가 실패하면 실패를 기록하고 Codex가 직접 이어간다.
+- GPT-5.5 Pro Deep Research를 최소 10회, 최대 13회 적절히 분배한다.
+- 각 작업마다 PC, 태블릿, 모바일 환경에서 Playwright, Chrome 웹 제어, Computer Use 등 가능한 방식으로 실제 인터랙션 검증을 수행한다.
+- 발견한 버그, 오류, UX 개선점, 미적 개선점, 리서치/작업 자료는 모두 `agent-inbox/`에 기록한다.
+- 사용자가 발견한 우선 버그: `/customize` 주문하기 도면에서 3x6, 3x9 도면이 모두 오버레이된 듯 보인다.
+- 고객 10명 × PC/태블릿/모바일 = 30회 시뮬레이션을 수행한다.
+- 관리자 10명 × PC/태블릿/모바일 = 30회 시뮬레이션을 수행한다.
+- 발견사항이 100개 미만이면 페르소나를 두 배로 늘려 다시 테스트한다.
+- 비슷한 웹사이트/디자인 레퍼런스를 20건 이상 조사하고, 가치 있는 요소를 Weet에 차용한다.
+- 관리자 페이지 디자인은 기존 디자인을 폐기하고 홈페이지와 일관된 프리미엄 테크 스타일로 새로 만든다. 지향점: Tesla dashboard, Grok, SpaceX, xAI처럼 심플하고 고급스럽고 합리적인 UI.
+- 홈페이지에 필요한 아이콘, 일러스트, 이미지 등은 ChatGPT 이미지 생성 하네스를 최대한 활용한다.
 
-Use git as the source of truth:
+## Current first implementation slice
 
-- inspect `git status` before implementation
-- inspect `git diff` after implementation
-- write `.codex/review-packet.md` before every GPT-5.5 Pro review
-- save each GPT-5.5 Pro response to `.codex/pro-review.md`
-- update `.codex/state.md` after applying feedback
-
-For frontend implementation, delegate the design/UI implementation step to Antigravity IDE/Gemini through Computer Use. Codex remains responsible for repository inspection, validation, local browser/Playwright evidence, review packets, GPT-5.5 Pro review, and applying concrete feedback.
-
-For GPT-5.5 Pro review, use Chrome/ChatGPT Deep Research. Confirm from read-only evidence where possible that:
-
-- the surface is Deep Research (`/deep-research` or `심층 리서치`)
-- the model menu is `최신 • 5.5`
-- `Pro • 확장` is checked
-- the composer is safe to send
-
-The direct user request for this task requires at least 10 GPT-5.5 Pro review uses, split across stages. This overrides the older generic `codex-loop.md` two-cycle cap for this active task.
-
-## Active task brief
-
-Perform a thorough end-to-end audit and major improvement pass for the Weet website and admin.
-
-### Audit scope
-
-- Inspect the admin page across UI/UX, functional reliability, intended behavior, odd rendering, mobile responsiveness, and perceived/actual performance.
-- Diagnose why the admin feels slow, using code review, browser/runtime evidence, and performance-oriented reasoning.
-- Explore the public website directly through 5 distinct customer personas.
-- For each persona, identify what makes the person want to buy a Weet movable home from this website and what makes them hesitate or avoid purchase.
-- Derive strengths, weaknesses, conversion blockers, trust gaps, information gaps, interaction issues, and visual quality issues.
-
-### Improvement scope
-
-- Make large, concrete improvements across logic, design, copy, layout, interaction, admin operations, and reliability.
-- Make the homepage and product journey feel compelling enough that customers clearly understand why they should buy a movable home here.
-- Remove visible looseness: awkward display states, confusing copy, fragile navigation, unclear CTAs, missing trust signals, weak placeholders, poor mobile ergonomics, and admin friction.
-- Keep changes logically grouped and do not mix unrelated external tasks.
-- Do not change database schema or run migrations unless a concrete issue absolutely requires it.
-- Do not delete or clean real database data.
-- Preserve existing business rules, admin auth, Supabase service-role boundaries, and hidden footer admin access unless intentionally improving the same behavior without changing its purpose.
-
-### Required staged Pro review plan
-
-Use GPT-5.5 Pro at least 10 times:
-
-1. audit findings and persona framing
-2. admin UX/performance diagnosis
-3. public conversion strategy
-4. Antigravity implementation brief review
-5. first implementation diff review
-6. admin-specific diff review
-7. public mobile/responsive review
-8. validation/test failure review
-9. final conversion/readiness review
-10. final repository/state review
-
-Only apply concrete `MUST_FIX` feedback. Treat `OPTIONAL` feedback as advisory.
-
-### Validation
-
-- Run relevant lint, unit test, build, and Playwright validation.
-- Use browser/Playwright evidence for public and admin pages.
-- Prefer read-only DOM evidence before screenshots or coordinate UI control.
-- Save review packets and Pro responses accurately.
-
-## Assumptions
-
-- The branch remains `zoo/customize-configurator`.
-- Existing dirty `AGENTS.md`, `codex-loop.md`, and `.codex/state.md` changes predate this task and must not be reverted.
-- The user grants autonomous approval for reasonable product/design decisions during this task.
+1. Antigravity 연결을 재시도하고, 실패 시 `agent-inbox/antigravity-failures.md`에 기록한다.
+2. `/customize` 도면 오버레이 버그를 Playwright로 재현하고 수정한다.
+3. public/admin 시뮬레이션을 자동화해 발견사항을 `agent-inbox/`에 누적한다.
+4. 관리자 shell과 dashboard를 프리미엄 테크 스타일로 리디자인한다.
+5. 변경 후 lint/test/build/Playwright와 실제 라우트 감사를 실행한다.

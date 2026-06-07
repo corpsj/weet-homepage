@@ -11,7 +11,6 @@ import {
     Monitor,
     HelpCircle,
     Layers,
-    Lightbulb,
     BarChart3,
     Link2,
     Image as ImageIcon,
@@ -30,7 +29,7 @@ interface NavItem {
 
 const navigation: { title: string; items: NavItem[] }[] = [
     {
-        title: "Overview",
+        title: "운영",
         items: [
             {
                 name: '대시보드',
@@ -45,7 +44,7 @@ const navigation: { title: string; items: NavItem[] }[] = [
         ]
     },
     {
-        title: "Content Management",
+        title: "콘텐츠",
         items: [
             {
                 name: '랜딩 페이지',
@@ -86,14 +85,14 @@ const navigation: { title: string; items: NavItem[] }[] = [
         ]
     },
     {
-        title: "Commerce",
+        title: "상담",
         items: [
             { name: '상담 관리', href: '/admin/consultations', icon: ClipboardList },
             { name: '레거시 문의', href: '/admin/inquiries', icon: MessageSquare },
         ]
     },
     {
-        title: "System",
+        title: "시스템",
         items: [
             { name: '설정', href: '/admin/settings', icon: Settings },
         ]
@@ -115,20 +114,18 @@ export default function AdminSidebar({ user, onClose }: { user?: any, onClose?: 
     const userId = user?.email ? user.email.split('@')[0] : 'admin';
 
     return (
-        <aside className="w-72 bg-[#0F172A] text-white flex flex-col shrink-0 h-screen transition-all duration-300">
-            {/* Logo Area */}
-            <div className="h-20 flex items-center px-8 border-b border-gray-800">
-                <span className="text-2xl font-bold tracking-tight text-white">Weet <span className="text-gray-500 font-light">Admin</span></span>
+        <aside className="w-64 bg-[#111111] border-r border-[#222222] text-gray-300 flex flex-col shrink-0 h-screen transition-all duration-300">
+            <div className="h-16 flex items-center px-6 border-b border-[#222222]">
+                <span className="text-xl font-bold text-white">WEET <span className="text-gray-400 font-medium text-xs ml-1">CONSOLE</span></span>
             </div>
 
-            {/* Navigation */}
-            <nav className="flex-1 px-4 py-6 space-y-8 overflow-y-auto custom-scrollbar">
+            <nav className="flex-1 px-3 py-6 space-y-8 overflow-y-auto custom-scrollbar">
                 {navigation.map((section) => (
                     <div key={section.title}>
-                        <h3 className="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                        <h3 className="px-3 text-[10px] font-bold text-gray-500 mb-3">
                             {section.title}
                         </h3>
-                        <div className="space-y-1">
+                        <div className="space-y-0.5">
                             {section.items.map((item) => {
                                 const isActive = item.href === '/admin'
                                     ? pathname === '/admin'
@@ -139,15 +136,15 @@ export default function AdminSidebar({ user, onClose }: { user?: any, onClose?: 
                                         href={item.href}
                                         onClick={onClose}
                                         className={cn(
-                                            "flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group",
+                                            "flex items-center gap-3 px-3 py-2 text-sm font-medium transition-colors group",
                                             isActive
-                                                ? "bg-white/10 text-white shadow-lg backdrop-blur-sm"
-                                                : "text-gray-400 hover:bg-white/5 hover:text-white"
+                                                ? "bg-[#1a1a1a] text-[#eab308] border-l-2 border-[#eab308]"
+                                                : "text-gray-400 hover:bg-[#1a1a1a] hover:text-white border-l-2 border-transparent"
                                         )}
                                     >
                                         <item.icon className={cn(
-                                            "w-5 h-5 transition-colors",
-                                            isActive ? "text-white" : "text-gray-500 group-hover:text-white"
+                                            "w-4 h-4 transition-colors",
+                                            isActive ? "text-[#eab308]" : "text-gray-500 group-hover:text-gray-300"
                                         )} />
                                         {item.name}
                                     </Link>
@@ -158,22 +155,21 @@ export default function AdminSidebar({ user, onClose }: { user?: any, onClose?: 
                 ))}
             </nav>
 
-            {/* Footer / User Profile */}
-            <div className="p-4 border-t border-gray-800 bg-[#0B1120]">
-                <div className="flex items-center gap-3 px-4 py-3 mb-2">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-700 to-gray-600 flex items-center justify-center text-sm font-bold">
+            <div className="p-4 border-t border-[#222222] bg-[#0a0a0a]">
+                <div className="flex items-center gap-3 px-2 py-2 mb-2">
+                    <div className="w-8 h-8 rounded bg-[#1a1a1a] border border-[#333] flex items-center justify-center text-xs font-bold text-gray-300">
                         {userId[0].toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium text-white truncate">{userId}</p>
-                        <p className="text-xs text-gray-500 truncate">Administrator</p>
+                        <p className="text-[10px] text-gray-500">관리자</p>
                     </div>
                 </div>
                 <button
                     onClick={handleLogout}
-                    className="flex items-center gap-3 px-4 py-2 text-sm font-medium text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg w-full transition-colors"
+                    className="flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-[#ef4444] hover:text-[#f87171] hover:bg-[#ef4444]/10 rounded border border-transparent transition-colors w-full"
                 >
-                    <LogOut className="w-4 h-4" />
+                    <LogOut className="w-3.5 h-3.5" />
                     로그아웃
                 </button>
             </div>

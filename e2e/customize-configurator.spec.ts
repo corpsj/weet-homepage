@@ -30,14 +30,13 @@ test.describe('Customize configurator', () => {
     await expect(page.getByRole('heading', { name: 'Compact 3x6' })).toBeVisible();
     await expect(page.getByText('₩27,900,000', { exact: true })).toBeVisible();
     await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('href', /dummy-base\.svg/);
-    await expect(page.getByTestId('model-footprint')).toHaveAttribute('x', '400');
-    await expect(page.getByTestId('model-footprint')).toHaveAttribute('width', '600');
+    await expect(page.getByTestId('model-footprint')).toHaveCount(0);
 
     await page.getByRole('button', { name: /Standard 3x9/ }).click();
     await expect(page.getByRole('heading', { name: 'Standard 3x9' })).toBeVisible();
     await expect(page.getByText('₩34,900,000', { exact: true })).toBeVisible();
-    await expect(page.getByTestId('model-footprint')).toHaveAttribute('x', '100');
-    await expect(page.getByTestId('model-footprint')).toHaveAttribute('width', '900');
+    await expect(page.getByTestId('base-floorplan-image')).toHaveCount(1);
+    await expect(page.getByTestId('model-footprint')).toHaveCount(0);
 
     await page.getByRole('button', { name: /적삼목 포인트/ }).click();
     await expect(page.getByText('₩37,100,000')).toBeVisible();
@@ -116,5 +115,44 @@ test.describe('Customize configurator', () => {
     await expect(drawer.getByRole('heading', { name: '외장' })).toBeVisible();
     await drawer.getByRole('button', { name: /적삼목 포인트/ }).click();
     await expect(page.getByText('₩30,100,000', { exact: true })).toBeVisible();
+  });
+
+  test('mobile floorplan zoom opens with the selected floorplan and closes safely', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/customize');
+    await page.waitForLoadState('networkidle');
+
+    await page.getByTestId('floorplan-zoom-open').click();
+
+    const dialog = page.getByRole('dialog').filter({ hasText: '도면 확대' });
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByTestId('floorplan-zoom-canvas')).toBeVisible();
+    await expect(dialog.getByTestId('base-floorplan-image')).toHaveCount(1);
+    await expect(dialog.getByTestId('model-footprint')).toHaveCount(0);
+
+    await dialog.getByTestId('floorplan-zoom-close').click();
+    await expect(dialog).not.toBeVisible();
+  });
+
+  test('tablet and mobile model changes keep the floorplan image single-rendered', async ({ page }) => {
+    for (const viewport of [
+      { width: 834, height: 1112 },
+      { width: 390, height: 844 },
+    ]) {
+      await page.setViewportSize(viewport);
+      await page.goto('/customize');
+      await page.waitForLoadState('networkidle');
+
+      await page.getByRole('button', { name: '옵션 구성' }).click();
+      const drawer = page.getByRole('dialog').filter({ hasText: '이동식주택 구성' });
+      await drawer.getByRole('button', { name: /Standard 3x9/ }).click();
+      await drawer.getByRole('button', { name: /닫기|Close/ }).click();
+
+      await expect(page.getByRole('heading', { name: 'Standard 3x9' })).toBeVisible();
+      await expect(page.getByText('₩34,900,000', { exact: true })).toBeVisible();
+      await expect(page.getByTestId('base-floorplan-image')).toHaveCount(1);
+      await expect(page.getByTestId('model-footprint')).toHaveCount(0);
+      await expect(page).toHaveURL(/\/customize\?c=/);
+    }
   });
 });

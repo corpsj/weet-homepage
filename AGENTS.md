@@ -80,6 +80,8 @@ For browser-based review and validation, prefer fast read-only DOM evidence befo
 
 - Use `chrome:control-chrome` for the GPT-5.5 Pro review step because it depends on the user's logged-in Chrome/ChatGPT state.
 
+- For Chrome/ChatGPT two-track work, use one ChatGPT tab by default but click `새 채팅` before every separate Pro Research or Thinking Image run. The last run's mode persists: image generation can leave `이미지 만들기` active, and research can leave `심층 리서치` active. Never assume the composer mode is correct; after `새 채팅`, re-confirm the model/action harness from read-only DOM evidence before sending.
+
 - When collaborating with GPT-5.5 Pro in Chrome, use the ChatGPT Deep Research surface and set the model menu to `최신 • 5.5` with `Pro • 확장` checked before sending review packets or collaboration prompts. Prove this from read-only DOM evidence whenever possible: the URL or surface indicates `/deep-research` or `심층 리서치`, the model menu shows `최신 • 5.5`, and `Pro • 확장` is checked. If any of these are not true, set them before sending.
 
 - For the current ChatGPT UI, set GPT Pro by opening the model dropdown, choosing `구성…`, selecting `Pro 리서치급 인텔리전스`, then setting `Pro 생각 강도` to `확장`. After closing the dialog, use the composer-left `+` button (`파일 추가 및 기타`) and select `심층 리서치`. Paste prompts through the clipboard instead of inline typing so newlines do not send the message early.

@@ -9,25 +9,25 @@ export default function AdminShell({ children, user }: { children: React.ReactNo
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-[100dvh] overflow-hidden bg-gray-50">
+    <div className="flex h-[100dvh] overflow-hidden bg-[#fbfbfa]">
       {/* Mobile header */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 h-16 bg-[#0F172A] z-40 flex items-center justify-between px-4">
-        <span className="text-xl font-bold text-white tracking-tight">
-          Weet <span className="text-gray-500 font-light">Admin</span>
+      <div className="lg:hidden fixed top-0 left-0 right-0 h-14 bg-[#111111] border-b border-[#222222] z-40 flex items-center justify-between px-4">
+        <span className="text-lg font-bold text-white">
+          WEET <span className="text-gray-400 font-medium text-xs ml-1">CONSOLE</span>
         </span>
         <button 
           onClick={() => setSidebarOpen(!sidebarOpen)} 
           aria-label={sidebarOpen ? '관리자 메뉴 닫기' : '관리자 메뉴 열기'}
           className="text-gray-400 hover:text-white p-2 focus:outline-none"
         >
-          {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
+          {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
         </button>
       </div>
 
       {/* Overlay for mobile */}
       {sidebarOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden transition-opacity"
+          className="fixed inset-0 bg-black/60 z-40 lg:hidden transition-opacity backdrop-blur-sm"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -41,8 +41,10 @@ export default function AdminShell({ children, user }: { children: React.ReactNo
       </div>
 
       {/* Main content */}
-      <main className="flex-1 overflow-y-auto pt-16 lg:pt-0 p-4 md:p-8 w-full max-w-full">
-        {children}
+      <main className="flex-1 overflow-y-auto pt-14 lg:pt-0 p-4 md:p-8 w-full max-w-full">
+        <div className="mx-auto max-w-6xl">
+          {children}
+        </div>
       </main>
     </div>
   );

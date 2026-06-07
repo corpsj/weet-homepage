@@ -89,6 +89,7 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
   const [activeInfo, setActiveInfo] = useState<CustomizeOption | null>(null);
   const [orderOpen, setOrderOpen] = useState(false);
   const [optionDrawerOpen, setOptionDrawerOpen] = useState(false);
+  const [planViewerOpen, setPlanViewerOpen] = useState(false);
   const [shouldSyncConfigUrl, setShouldSyncConfigUrl] = useState(Boolean(decoded));
   const [isPending, startTransition] = useTransition();
   const [form, setForm] = useState({
@@ -193,7 +194,7 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
       <div className="mx-auto flex min-h-[calc(100dvh-64px)] max-w-[1800px] flex-col lg:flex-row">
         <section className="flex min-h-[calc(100dvh-190px)] flex-1 flex-col lg:w-[64%] lg:min-h-[calc(100dvh-64px)]">
           <div className="flex flex-1 items-center justify-center px-4 py-5 md:px-8 lg:px-10">
-            <FloorplanPreview model={currentModel} selectedOptions={selectedOptionsList} />
+            <FloorplanPreview model={currentModel} selectedOptions={selectedOptionsList} onOpenViewer={() => setPlanViewerOpen(true)} />
           </div>
 
           <div className="border-t border-[#d8d0c3] bg-[#eee8dc]/80 px-4 pb-28 pt-3 lg:hidden">
@@ -255,6 +256,8 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
       </Sheet>
 
       {activeInfo && <OptionInfoModal option={activeInfo} onClose={() => setActiveInfo(null)} />}
+
+      {planViewerOpen && <FloorplanZoomModal model={currentModel} selectedOptions={selectedOptionsList} onClose={() => setPlanViewerOpen(false)} />}
 
       {orderOpen && estimate && (
         <OrderModal
@@ -441,11 +444,15 @@ function OptionCard({
   );
 }
 
-function FloorplanPreview({ model, selectedOptions }: { model: CustomizeModel; selectedOptions: CustomizeOption[] }) {
-  const box = floorplanSize(model);
-  const selectedLabels = selectedOptions.filter((option) => option.overlayLabelKo);
-  const hasBaseImage = Boolean(model.floorplanImagePath);
-
+function FloorplanPreview({
+  model,
+  selectedOptions,
+  onOpenViewer,
+}: {
+  model: CustomizeModel;
+  selectedOptions: CustomizeOption[];
+  onOpenViewer?: () => void;
+}) {
   return (
     <div className="w-full max-w-[1100px]">
       <div className="mb-4 flex items-end justify-between gap-4">
@@ -460,68 +467,148 @@ function FloorplanPreview({ model, selectedOptions }: { model: CustomizeModel; s
       </div>
 
       <div className="relative overflow-hidden rounded-lg border border-[#d8d0c3] bg-[#fbfaf7] shadow-sm">
-        <svg viewBox="0 0 1000 420" className="aspect-[1000/420] w-full" data-testid="floorplan-canvas">
-          <defs>
-            <pattern id="floor-grid" width="24" height="24" patternUnits="userSpaceOnUse">
-              <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#e4ddd1" strokeWidth="1" />
-            </pattern>
-          </defs>
-          <rect width="1000" height="420" fill="#f5f1ea" />
-          {hasBaseImage ? (
-            <image
-              data-testid="base-floorplan-image"
-              href={model.floorplanImagePath ?? undefined}
-              x="0"
-              y="0"
-              width="1000"
-              height="420"
-              preserveAspectRatio="xMidYMid meet"
-            />
-          ) : (
-            <>
-              <rect x={box.x} y={box.y} width={box.width} height={box.height} fill="#f8f4ec" stroke="#2f3432" strokeWidth="12" className="transition-all duration-[600ms]" />
-              <rect x={box.x + 12} y={box.y + 12} width={box.width - 24} height={box.height - 24} fill="url(#floor-grid)" stroke="#bfb4a2" strokeWidth="2" className="transition-all duration-[600ms]" />
-              <BasePlanObjects box={box} />
-            </>
-          )}
+        {onOpenViewer && (
+          <button
+            type="button"
+            data-testid="floorplan-zoom-open"
+            aria-label="도면 크게 보기"
+            onClick={onOpenViewer}
+            className="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-md border border-[#d8d0c3] bg-[#fbfaf7]/95 text-[#2f3432] shadow-sm backdrop-blur transition-colors hover:border-[#b9aa94] hover:bg-white focus:outline-none focus:ring-2 focus:ring-[#b88b26]/40"
+          >
+            <Maximize2 className="h-4 w-4" />
+          </button>
+        )}
+        <FloorplanCanvas model={model} selectedOptions={selectedOptions} testId="floorplan-canvas" />
+      </div>
+    </div>
+  );
+}
 
-          <rect
-            data-testid="model-footprint"
-            x={box.x}
-            y={box.y}
-            width={box.width}
-            height={box.height}
-            fill="transparent"
-            stroke="#2f3432"
-            strokeWidth="6"
-            className="transition-all duration-[600ms]"
-          />
+function FloorplanCanvas({
+  model,
+  selectedOptions,
+  testId,
+  className,
+}: {
+  model: CustomizeModel;
+  selectedOptions: CustomizeOption[];
+  testId: string;
+  className?: string;
+}) {
+  const box = floorplanSize(model);
+  const selectedLabels = selectedOptions.filter((option) => option.overlayLabelKo);
+  const hasBaseImage = Boolean(model.floorplanImagePath);
+  const gridId = `${testId}-grid`;
 
-          {selectedOptions.map((option) => option.overlayImagePath ? (
-            <image
-              key={option.id}
-              href={option.overlayImagePath}
-              x="0"
-              y="0"
-              width="1000"
-              height="420"
-              opacity="0.88"
-              className="transition-opacity duration-[250ms]"
-            />
-          ) : null)}
+  return (
+    <svg viewBox="0 0 1000 420" className={cn('aspect-[1000/420] w-full', className)} data-testid={testId}>
+      <defs>
+        <pattern id={gridId} width="24" height="24" patternUnits="userSpaceOnUse">
+          <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#e4ddd1" strokeWidth="1" />
+        </pattern>
+      </defs>
+      <rect width="1000" height="420" fill="#f5f1ea" />
+      {hasBaseImage ? (
+        <image
+          data-testid="base-floorplan-image"
+          href={model.floorplanImagePath ?? undefined}
+          x="0"
+          y="0"
+          width="1000"
+          height="420"
+          preserveAspectRatio="xMidYMid meet"
+        />
+      ) : (
+        <>
+          <rect x={box.x} y={box.y} width={box.width} height={box.height} fill="#f8f4ec" stroke="#2f3432" strokeWidth="12" className="transition-all duration-[600ms]" />
+          <rect x={box.x + 12} y={box.y + 12} width={box.width - 24} height={box.height - 24} fill={`url(#${gridId})`} stroke="#bfb4a2" strokeWidth="2" className="transition-all duration-[600ms]" />
+          <BasePlanObjects box={box} />
+        </>
+      )}
 
-          {selectedLabels.map((option, index) => {
-            const position = (PLAN_LABEL_POSITIONS[option.categoryKey] ?? PLAN_LABEL_POSITIONS.interior)(box, index);
-            return (
-              <g key={option.id} className="transition-all duration-[250ms]">
-                <rect x={position.x - 8} y={position.y - 19} width={Math.max(58, (option.overlayLabelKo?.length ?? 2) * 14 + 20)} height="30" rx="6" fill="#2f3432" />
-                <text x={position.x + 4} y={position.y + 1} fill="#fbfaf7" fontSize="15" fontWeight="700">
-                  {option.overlayLabelKo}
-                </text>
-              </g>
-            );
-          })}
-        </svg>
+      {!hasBaseImage && (
+        <rect
+          data-testid="model-footprint"
+          x={box.x}
+          y={box.y}
+          width={box.width}
+          height={box.height}
+          fill="transparent"
+          stroke="#2f3432"
+          strokeWidth="6"
+          className="transition-all duration-[600ms]"
+        />
+      )}
+
+      {selectedOptions.map((option) => option.overlayImagePath ? (
+        <image
+          key={option.id}
+          href={option.overlayImagePath}
+          x="0"
+          y="0"
+          width="1000"
+          height="420"
+          opacity="0.88"
+          className="transition-opacity duration-[250ms]"
+        />
+      ) : null)}
+
+      {selectedLabels.map((option, index) => {
+        const position = (PLAN_LABEL_POSITIONS[option.categoryKey] ?? PLAN_LABEL_POSITIONS.interior)(box, index);
+        return (
+          <g key={option.id} className="transition-all duration-[250ms]">
+            <rect x={position.x - 8} y={position.y - 19} width={Math.max(58, (option.overlayLabelKo?.length ?? 2) * 14 + 20)} height="30" rx="6" fill="#2f3432" />
+            <text x={position.x + 4} y={position.y + 1} fill="#fbfaf7" fontSize="15" fontWeight="700">
+              {option.overlayLabelKo}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+function FloorplanZoomModal({ model, selectedOptions, onClose }: { model: CustomizeModel; selectedOptions: CustomizeOption[]; onClose: () => void }) {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose]);
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/60 p-3 backdrop-blur-sm md:p-6" onClick={onClose}>
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="floorplan-zoom-title"
+        className="mx-auto flex min-h-[calc(100dvh-24px)] w-full max-w-6xl flex-col justify-center md:min-h-[calc(100dvh-48px)]"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="overflow-hidden rounded-lg border border-[#d8d0c3] bg-[#fbfaf7] shadow-2xl">
+          <div className="flex items-start justify-between gap-4 border-b border-[#e2dacd] px-4 py-3 md:px-5">
+            <div>
+              <p className="text-xs font-bold text-[#8a806f]">도면 확대</p>
+              <h2 id="floorplan-zoom-title" className="text-lg font-black text-[#2f3432] md:text-xl">{model.nameKo}</h2>
+              <p className="mt-1 text-xs font-bold text-[#6b5a2b]">{formatModelStartPrice(model.basePrice)}</p>
+            </div>
+            <button
+              type="button"
+              data-testid="floorplan-zoom-close"
+              aria-label="도면 확대 닫기"
+              onClick={onClose}
+              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-[#d8d0c3] text-[#2f3432] transition-colors hover:bg-[#f4f0e8] focus:outline-none focus:ring-2 focus:ring-[#b88b26]/40"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+          <div className="bg-[#f4f0e8] p-2 md:p-5">
+            <div className="overflow-auto rounded-lg border border-[#d8d0c3] bg-[#fbfaf7]" aria-label="확대 도면 보기 영역">
+              <FloorplanCanvas model={model} selectedOptions={selectedOptions} testId="floorplan-zoom-canvas" className="min-w-[640px] md:min-w-0" />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
