@@ -6,7 +6,7 @@ Weet 홈페이지와 관리자 페이지 전면 재귀 개선 작업의 첫 구�
 
 ## Current phase
 
-review-packet-prep
+deployment-validation
 
 ## Changes made
 
@@ -36,6 +36,13 @@ review-packet-prep
 - base floorplan 이미지가 로드 실패하면 생성형 `model-footprint` fallback을 다시 표시하도록 `window.Image()` preloader 기반 상태 판별을 추가했다.
 - E2E에 compact/standard base image href 차이 검증과 base image 요청 실패 시 `model-footprint` width `600` fallback 검증을 추가했다.
 - `agent-inbox/gpt프로 심층리서치 대기.md`와 `agent-inbox/웹 접속 방법.md`를 읽었다. 이후 웹 검증은 브랜치 푸시/Vercel 배포 후 실제 `we-et.com` 화면에서 수행해야 한다.
+- 커밋 `1f4c37a`를 `zoo/customize-configurator`에 push했고, Vercel Deployments에서 해당 Ready preview를 `Promote to Production`으로 승격했다.
+- Vercel production build detail에서 커밋 `1f4c37a`, `Production`, `Ready`, 도메인 `www.we-et.com` 연결을 확인했다.
+- `https://we-et.com/customize`가 `https://www.we-et.com/customize`로 307 redirect되고, `https://www.we-et.com/customize`가 200으로 응답함을 확인했다.
+- 공개 도메인 PC/tablet/mobile Playwright QA에서 기본 화면의 compact/standard href 분리, generated footprint 0개, sticky CTA clearance, console/page error 없음, horizontal overflow 없음을 확인했다.
+- 공개 도메인 모바일 DOM 직접 검사에서 확대 모달이 열리는 순간 `Standard 3x9` base SVG 대신 generated `model-footprint` fallback을 표시하는 실제 UX 문제를 발견했다.
+- 확대 모달/상담 모달 도면이 기본 화면과 같은 floorplan image load status를 공유하도록 `CustomizeConfigurator` 상위에서 경로와 상태를 계산해 전달하게 수정했다.
+- 수정 후 `npx playwright test e2e/customize-configurator.spec.ts`, `npm run lint`, `npm test`, `npm run build`, `git diff --check`가 통과했다.
 
 ## Commands run
 
@@ -60,6 +67,16 @@ review-packet-prep
 - Node/Playwright mobile floorplan zoom visual audit and screenshot `.codex/visual-audit/mobile-customize-zoom.png`
 - `.codex/qa/customize-confidence/summary.json` browser audit: PC/tablet/mobile all had `floorplans: 1`, `footprints: 0`, no console errors, no page errors, no horizontal offscreen controls, and the final checklist item above the order button.
 - `.codex/qa/customize-confidence/summary.json` now also confirms compact uses `/images/customize/compact-3x6-base.svg`, standard uses `/images/customize/standard-3x9-base.svg`, and `hrefsDiffer: true` on PC/tablet/mobile.
+- `git push origin zoo/customize-configurator`
+- Chrome/Vercel: opened Deployment Actions for latest `1f4c37a`, selected `Promote to Production`, confirmed modal for commit `1f4c37a Fix customize floorplans and confidence checks`, waited until production build was `Ready`.
+- `curl -I https://we-et.com/customize`
+- `curl -I https://www.we-et.com/customize`
+- Node/Playwright production QA against `https://we-et.com/customize` for desktop/tablet/mobile, screenshots and `summary.json` saved under `.codex/qa/production-customize/`.
+- Node/Playwright production DOM inspection for zoom modal: reproduced modal fallback `model-footprint` while main page used `/images/customize/standard-3x9-base.svg`.
+- `npx playwright test e2e/customize-configurator.spec.ts`
+- `npm run lint`
+- `npm test`
+- `npm run build`
 
 ## Current failures
 
@@ -72,6 +89,8 @@ review-packet-prep
 - 2026-06-07 new mobile sticky-bar regression test initially failed because smooth scrolling caused coordinate reads before scroll completion; the test now disables smooth scroll and waits for the bottom scroll position before measuring.
 - 2026-06-07 delayed ChatGPT Deep Research report cards for marker `WEET_AUDIT_REVIEW_20260607_ADMIN_CUSTOMIZE_SLICE_01` appeared in the Deep Research home, but opening the conversation still showed a collapsed/empty assistant iframe/loading bar. `응답 복사` returned empty text, so no complete `.codex/pro-review.md` was saved. A visible snippet about broken floorplan image fallback was locally verified and fixed.
 - 2026-06-07 GPT-5.5 Pro Deep Research attempt marker `WEET_REVIEW_20260607_CUSTOMIZE_FLOORPLAN_CONFIDENCE_03` was sent with DOM proof for `심층 리서치`, `최신 • 5.5`, and checked `Pro • 확장`; after generation stopped, the assistant response remained an iframe/empty loading bar. Refresh per `agent-inbox/gpt프로 심층리서치 대기.md` did not recover it, so the tab was closed/reopened and no `.codex/pro-review.md` was saved.
+- 2026-06-07 first production QA script failed with a Node-side `window is not defined` reference while calculating visible order button boxes; the script was corrected to use the viewport height and rerun successfully.
+- 2026-06-07 production QA found a real zoom-modal transient fallback: main `Standard 3x9` used `/images/customize/standard-3x9-base.svg`, but the newly opened zoom dialog initially rendered generated `model-footprint` because image load status was not shared across canvases. Fixed locally by sharing floorplan path/status from `CustomizeConfigurator`.
 
 ## Pro review cycles
 
@@ -97,8 +116,8 @@ unavailable
 - Existing Next middleware-to-proxy deprecation remains.
 - ChatGPT Deep Research may become stuck on both markdown file attachment review and shorter inline review packets in the current Chrome session.
 - Latest ChatGPT Deep Research attempt for marker `WEET_REVIEW_20260607_CUSTOMIZE_FLOORPLAN_CONFIDENCE_03` also ended in an iframe/empty loading bar after refresh, so a valid external Pro verdict is still unavailable.
-- Real deployment verification on `we-et.com` is still pending; new `agent-inbox/웹 접속 방법.md` says localhost is insufficient for final web access checks.
+- The latest local follow-up fix for shared floorplan image status still needs a new commit, push, Vercel production promotion, and final `we-et.com` PC/tablet/mobile verification.
 
 ## Next step
 
-Update `.codex/review-packet.md` with the model-specific floorplan fix and `/customize` conversion-confidence slice, request GPT-5.5 Pro review in Chrome/Deep Research if the surface can be proven safe, and do not save `.codex/pro-review.md` until a marker-matched Pro response or trusted manual `agent-inbox/pro-review.md` exists.
+Commit and push the shared floorplan image status fix, promote the new Vercel deployment to production, rerun PC/tablet/mobile QA on `we-et.com`, update `.codex/review-packet.md`, and do not save `.codex/pro-review.md` until a marker-matched Pro response or trusted manual `agent-inbox/pro-review.md` exists.

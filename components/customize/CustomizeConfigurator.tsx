@@ -82,6 +82,7 @@ const MODEL_FALLBACK_FLOORPLANS: Record<string, string> = {
   'compact-3x6': '/images/customize/compact-3x6-base.svg',
   'standard-3x9': '/images/customize/standard-3x9-base.svg',
 };
+type FloorplanImageStatus = 'missing' | 'loading' | 'loaded' | 'failed';
 
 const inputClass = 'h-11 rounded-lg border-gray-300 bg-[#fbfaf7] text-sm focus-visible:ring-[#b88b26]';
 const selectClass = 'h-11 w-full rounded-lg border border-gray-300 bg-[#fbfaf7] px-3 text-sm outline-none focus:ring-2 focus:ring-[#b88b26]/30';
@@ -95,7 +96,7 @@ function floorplanImagePathForModel(model: CustomizeModel) {
   return configuredPath;
 }
 
-function useFloorplanImageStatus(path: string | null) {
+function useFloorplanImageStatus(path: string | null): FloorplanImageStatus {
   const [result, setResult] = useState<{ path: string; status: 'loaded' | 'failed' } | null>(null);
 
   useEffect(() => {
@@ -164,6 +165,8 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
   }, [encodedConfig, estimate, shouldSyncConfigUrl]);
 
   const currentModel = estimate?.model ?? catalog.models[0];
+  const currentFloorplanImagePath = currentModel ? floorplanImagePathForModel(currentModel) : null;
+  const currentFloorplanImageStatus = useFloorplanImageStatus(currentFloorplanImagePath);
   const visibleOptions = useMemo(() => optionsForModel(catalog.options.filter((option) => option.isActive), modelId), [catalog.options, modelId]);
 
   const handleModelChange = (nextModelId: string) => {
@@ -238,7 +241,13 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
       <div className="mx-auto flex min-h-[calc(100dvh-64px)] max-w-[1800px] flex-col lg:flex-row">
         <section className="flex min-h-[calc(100dvh-190px)] flex-1 flex-col lg:w-[64%] lg:min-h-[calc(100dvh-64px)] lg:overflow-y-auto">
           <div className="flex flex-1 items-center justify-center px-4 py-8 md:px-8 lg:px-10">
-            <FloorplanPreview model={currentModel} selectedOptions={selectedOptionsList} onOpenViewer={() => setPlanViewerOpen(true)} />
+            <FloorplanPreview
+              model={currentModel}
+              selectedOptions={selectedOptionsList}
+              floorplanImagePath={currentFloorplanImagePath}
+              floorplanImageStatus={currentFloorplanImageStatus}
+              onOpenViewer={() => setPlanViewerOpen(true)}
+            />
           </div>
 
           <div className="border-t border-[#d8d0c3] bg-[#eee8dc]/80 px-4 pb-28 pt-3 lg:hidden">
@@ -305,12 +314,22 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
 
       {activeInfo && <OptionInfoModal option={activeInfo} onClose={() => setActiveInfo(null)} />}
 
-      {planViewerOpen && <FloorplanZoomModal model={currentModel} selectedOptions={selectedOptionsList} onClose={() => setPlanViewerOpen(false)} />}
+      {planViewerOpen && (
+        <FloorplanZoomModal
+          model={currentModel}
+          selectedOptions={selectedOptionsList}
+          floorplanImagePath={currentFloorplanImagePath}
+          floorplanImageStatus={currentFloorplanImageStatus}
+          onClose={() => setPlanViewerOpen(false)}
+        />
+      )}
 
       {orderOpen && estimate && (
         <OrderModal
           estimate={estimate}
           selectedOptions={selectedOptionsList}
+          floorplanImagePath={currentFloorplanImagePath}
+          floorplanImageStatus={currentFloorplanImageStatus}
           form={form}
           setForm={setForm}
           isPending={isPending}
@@ -495,10 +514,14 @@ function OptionCard({
 function FloorplanPreview({
   model,
   selectedOptions,
+  floorplanImagePath,
+  floorplanImageStatus,
   onOpenViewer,
 }: {
   model: CustomizeModel;
   selectedOptions: CustomizeOption[];
+  floorplanImagePath?: string | null;
+  floorplanImageStatus?: FloorplanImageStatus;
   onOpenViewer?: () => void;
 }) {
   return (
@@ -526,7 +549,13 @@ function FloorplanPreview({
             <Maximize2 className="h-4 w-4" />
           </button>
         )}
-        <FloorplanCanvas model={model} selectedOptions={selectedOptions} testId="floorplan-canvas" />
+        <FloorplanCanvas
+          model={model}
+          selectedOptions={selectedOptions}
+          floorplanImagePath={floorplanImagePath}
+          floorplanImageStatus={floorplanImageStatus}
+          testId="floorplan-canvas"
+        />
       </div>
     </div>
   );
@@ -535,18 +564,23 @@ function FloorplanPreview({
 function FloorplanCanvas({
   model,
   selectedOptions,
+  floorplanImagePath,
+  floorplanImageStatus,
   testId,
   className,
 }: {
   model: CustomizeModel;
   selectedOptions: CustomizeOption[];
+  floorplanImagePath?: string | null;
+  floorplanImageStatus?: FloorplanImageStatus;
   testId: string;
   className?: string;
 }) {
   const box = floorplanSize(model);
   const selectedLabels = selectedOptions.filter((option) => option.overlayLabelKo);
-  const floorplanImagePath = floorplanImagePathForModel(model);
-  const imageStatus = useFloorplanImageStatus(floorplanImagePath);
+  const resolvedFloorplanImagePath = floorplanImagePath ?? floorplanImagePathForModel(model);
+  const localImageStatus = useFloorplanImageStatus(resolvedFloorplanImagePath);
+  const imageStatus = floorplanImageStatus ?? localImageStatus;
   const hasBaseImage = imageStatus === 'loaded';
   const gridId = `${testId}-grid`;
 
@@ -561,7 +595,7 @@ function FloorplanCanvas({
       {hasBaseImage ? (
         <image
           data-testid="base-floorplan-image"
-          href={floorplanImagePath ?? undefined}
+          href={resolvedFloorplanImagePath ?? undefined}
           x="0"
           y="0"
           width="1000"
@@ -618,7 +652,19 @@ function FloorplanCanvas({
   );
 }
 
-function FloorplanZoomModal({ model, selectedOptions, onClose }: { model: CustomizeModel; selectedOptions: CustomizeOption[]; onClose: () => void }) {
+function FloorplanZoomModal({
+  model,
+  selectedOptions,
+  floorplanImagePath,
+  floorplanImageStatus,
+  onClose,
+}: {
+  model: CustomizeModel;
+  selectedOptions: CustomizeOption[];
+  floorplanImagePath?: string | null;
+  floorplanImageStatus?: FloorplanImageStatus;
+  onClose: () => void;
+}) {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose();
@@ -655,7 +701,14 @@ function FloorplanZoomModal({ model, selectedOptions, onClose }: { model: Custom
           </div>
           <div className="bg-[#f4f0e8] p-2 md:p-5">
             <div className="overflow-auto rounded-lg border border-[#d8d0c3] bg-[#fbfaf7]" aria-label="확대 도면 보기 영역">
-              <FloorplanCanvas model={model} selectedOptions={selectedOptions} testId="floorplan-zoom-canvas" className="min-w-[640px] md:min-w-0" />
+              <FloorplanCanvas
+                model={model}
+                selectedOptions={selectedOptions}
+                floorplanImagePath={floorplanImagePath}
+                floorplanImageStatus={floorplanImageStatus}
+                testId="floorplan-zoom-canvas"
+                className="min-w-[640px] md:min-w-0"
+              />
             </div>
           </div>
         </div>
@@ -719,6 +772,8 @@ function OptionInfoModal({ option, onClose }: { option: CustomizeOption; onClose
 function OrderModal({
   estimate,
   selectedOptions,
+  floorplanImagePath,
+  floorplanImageStatus,
   form,
   setForm,
   isPending,
@@ -728,6 +783,8 @@ function OrderModal({
 }: {
   estimate: NonNullable<ReturnType<typeof calculateEstimate>>;
   selectedOptions: CustomizeOption[];
+  floorplanImagePath?: string | null;
+  floorplanImageStatus?: FloorplanImageStatus;
   form: {
     customerName: string;
     phone: string;
@@ -766,7 +823,12 @@ function OrderModal({
             </div>
             <Maximize2 className="h-5 w-5 text-[#8a806f]" />
           </div>
-          <FloorplanPreview model={estimate.model} selectedOptions={selectedOptions} />
+          <FloorplanPreview
+            model={estimate.model}
+            selectedOptions={selectedOptions}
+            floorplanImagePath={floorplanImagePath}
+            floorplanImageStatus={floorplanImageStatus}
+          />
         </div>
 
         <div className="max-h-[90dvh] overflow-y-auto p-5 md:p-8">

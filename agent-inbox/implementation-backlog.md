@@ -28,6 +28,9 @@ This file tracks bugs and improvements discovered during the recursive improveme
   - *Fix Details*: conversion confidence 영역의 모바일 하단 여백을 늘리고, 최하단 스크롤에서 마지막 체크 항목이 `주문하기` 버튼 위에 남는지 E2E와 좌표 기반 QA로 검증함.
 - [x] GPT Pro delayed-report snippet에서 지적된 `floorplanImagePath` 존재 여부만으로 fallback을 끄는 리스크를 로컬 검증으로 재현/수정함.
   - *Fix Details*: SVG `<image>` onError 의존 대신 `window.Image()` preloader로 base floorplan 로드 성공/실패를 판별하고, 실패 시 generated fallback 도면을 보여줌.
+- [x] 실제 `we-et.com` 모바일 검증 중 `/customize` 확대 모달이 열리는 순간 `Standard 3x9` base SVG 대신 generated `model-footprint` fallback을 잠깐 표시하는 문제를 발견함.
+  - *Root Cause*: 기본 도면과 확대 모달의 `FloorplanCanvas`가 각각 별도 이미지 로드 상태를 시작해, 기본 화면에서 이미 로드된 SVG 상태가 모달에 공유되지 않았음.
+  - *Fix Details*: 현재 모델의 floorplan path/load status를 상위 `CustomizeConfigurator`에서 한 번 계산하고 기본 도면, 확대 모달, 상담 요청 모달 미리보기에 공유하도록 수정함. 로컬 E2E 10개, lint, unit test, production build 통과.
 - [ ] 배포 검증: `agent-inbox/웹 접속 방법.md` 지시에 따라 브랜치 푸시 후 Vercel 배포 또는 Promote를 통해 실제 `we-et.com` 화면에서 PC/tablet/mobile 검증을 수행해야 함.
 - [ ] 공개 홈페이지: 운반/설치 비용 예시, 지역별 변수, 상담 후 가격 변동 기준을 더 구체적인 숫자/조건으로 보강해야 함.
 - [ ] 공개 홈페이지: `/support`에도 부지 가능성 자가진단을 독립 콘텐츠 또는 다운로드 체크리스트로 확장해야 함.

@@ -1,6 +1,6 @@
 # Weet Review Packet - Customize Floorplan + Confidence Slice
 
-Marker: `WEET_REVIEW_20260607_CUSTOMIZE_FLOORPLAN_CONFIDENCE_03`
+Marker: `WEET_REVIEW_20260607_CUSTOMIZE_PRODUCTION_ZOOM_04`
 Generated: 2026-06-07 KST
 
 ## Active Task Brief
@@ -15,6 +15,23 @@ The user requested a recursive improvement loop for the Weet movable-home websit
 - User-reported bug: `/customize` order page shows the 3x6 and 3x9 floorplans at the same size / visually confused.
 
 This packet covers the current `/customize` slice: model-specific floorplan correction, image failure fallback, conversion-confidence content, and mobile sticky CTA safety.
+
+## Latest Addendum - Production Zoom Finding
+
+- Commit `1f4c37a` was pushed to `zoo/customize-configurator` and promoted to Vercel Production through Chrome/Vercel.
+- Vercel production detail showed commit `1f4c37a`, `Production`, `Ready`, and custom domain `www.we-et.com`.
+- `https://we-et.com/customize` returned a 307 redirect to `https://www.we-et.com/customize`; `https://www.we-et.com/customize` returned 200.
+- Production PC/tablet/mobile Playwright QA confirmed the main floorplan uses distinct SVGs:
+  - compact: `/images/customize/compact-3x6-base.svg`
+  - standard: `/images/customize/standard-3x9-base.svg`
+- Production QA then found an additional real UX issue: the zoom modal initially rendered generated `model-footprint` fallback instead of the already-loaded `Standard 3x9` SVG because the modal `FloorplanCanvas` started a separate image-load status.
+- Local fix applied after that finding: `CustomizeConfigurator` now computes the current floorplan path/load status once and passes it to the main preview, zoom modal, and consultation modal preview.
+- Post-fix local validation passed:
+  - `npx playwright test e2e/customize-configurator.spec.ts`
+  - `npm run lint`
+  - `npm test`
+  - `npm run build`
+  - `git diff --check`
 
 ## Current Progress And State
 
