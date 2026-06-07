@@ -32,6 +32,16 @@ This packet covers the current `/customize` slice: model-specific floorplan corr
   - `npm test`
   - `npm run build`
   - `git diff --check`
+- Follow-up commit `5fff2fc` was pushed and promoted to Vercel Production.
+- Final production QA on `https://we-et.com/customize?v=5fff2fc` passed on desktop/tablet/mobile:
+  - main compact SVG count 1 with `/images/customize/compact-3x6-base.svg`
+  - main standard SVG count 1 with `/images/customize/standard-3x9-base.svg`
+  - zoom dialog standard SVG count 1 immediately after opening
+  - zoom dialog `model-footprint` count 0
+  - sticky CTA clearance passed
+  - no horizontal overflow
+  - no console/page errors
+- Visual inspection of `.codex/qa/production-customize-postfix/mobile-zoom-immediate.png` and `desktop-zoom-immediate.png` confirmed the actual `Standard 3x9` SVG is visible in the zoom modal.
 
 ## Current Progress And State
 

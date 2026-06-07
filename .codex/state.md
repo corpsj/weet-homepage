@@ -6,7 +6,7 @@ Weet 홈페이지와 관리자 페이지 전면 재귀 개선 작업의 첫 구�
 
 ## Current phase
 
-deployment-validation
+slice-production-validated
 
 ## Changes made
 
@@ -43,6 +43,10 @@ deployment-validation
 - 공개 도메인 모바일 DOM 직접 검사에서 확대 모달이 열리는 순간 `Standard 3x9` base SVG 대신 generated `model-footprint` fallback을 표시하는 실제 UX 문제를 발견했다.
 - 확대 모달/상담 모달 도면이 기본 화면과 같은 floorplan image load status를 공유하도록 `CustomizeConfigurator` 상위에서 경로와 상태를 계산해 전달하게 수정했다.
 - 수정 후 `npx playwright test e2e/customize-configurator.spec.ts`, `npm run lint`, `npm test`, `npm run build`, `git diff --check`가 통과했다.
+- 커밋 `5fff2fc`를 `zoo/customize-configurator`에 push했고, Vercel Deployments에서 해당 Ready preview를 `Promote to Production`으로 승격했다.
+- Vercel production build detail에서 커밋 `5fff2fc`, `Production`, `Ready`, 도메인 `www.we-et.com` 연결을 확인했다.
+- 최종 공개 도메인 QA를 `https://we-et.com/customize?v=5fff2fc`에서 PC/tablet/mobile로 재실행했고, compact/standard main SVG href 분리, zoom modal 즉시 standard SVG 표시, dialog footprint 0개, sticky CTA clearance, horizontal overflow 없음, console/page error 없음을 확인했다.
+- `.codex/qa/production-customize-postfix/mobile-zoom-immediate.png`와 `desktop-zoom-immediate.png`를 시각 확인했고, 확대 모달이 실제 `Standard 3x9` 도면을 표시함을 확인했다.
 
 ## Commands run
 
@@ -77,6 +81,11 @@ deployment-validation
 - `npm run lint`
 - `npm test`
 - `npm run build`
+- `git commit -m "Share customize floorplan image status"`
+- `git push origin zoo/customize-configurator`
+- Chrome/Vercel: opened Deployment Actions for latest `5fff2fc`, selected `Promote to Production`, confirmed modal for commit `5fff2fc Share customize floorplan image status`, waited until production build was `Ready`.
+- Node/Playwright production QA against `https://we-et.com/customize?v=5fff2fc` for desktop/tablet/mobile, screenshots and `summary.json` saved under `.codex/qa/production-customize-postfix/`.
+- Visual inspection of `.codex/qa/production-customize-postfix/mobile-zoom-immediate.png` and `.codex/qa/production-customize-postfix/desktop-zoom-immediate.png`.
 
 ## Current failures
 
@@ -116,8 +125,8 @@ unavailable
 - Existing Next middleware-to-proxy deprecation remains.
 - ChatGPT Deep Research may become stuck on both markdown file attachment review and shorter inline review packets in the current Chrome session.
 - Latest ChatGPT Deep Research attempt for marker `WEET_REVIEW_20260607_CUSTOMIZE_FLOORPLAN_CONFIDENCE_03` also ended in an iframe/empty loading bar after refresh, so a valid external Pro verdict is still unavailable.
-- The latest local follow-up fix for shared floorplan image status still needs a new commit, push, Vercel production promotion, and final `we-et.com` PC/tablet/mobile verification.
+- No known outstanding `/customize` floorplan rendering defect remains after final `we-et.com` PC/tablet/mobile production validation for commit `5fff2fc`.
 
 ## Next step
 
-Commit and push the shared floorplan image status fix, promote the new Vercel deployment to production, rerun PC/tablet/mobile QA on `we-et.com`, update `.codex/review-packet.md`, and do not save `.codex/pro-review.md` until a marker-matched Pro response or trusted manual `agent-inbox/pro-review.md` exists.
+Continue the broader recursive improvement backlog: admin child page visual unification, public conversion proof imagery/content, and GPT-5.5 Pro review retry only if Chrome/ChatGPT produces a marker-matched usable response. Do not save `.codex/pro-review.md` until a marker-matched Pro response or trusted manual `agent-inbox/pro-review.md` exists.
