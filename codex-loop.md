@@ -44,21 +44,23 @@ Each cycle:
 
 5. Run relevant validation commands.
 
-6. Inspect `git diff`.
+6. Perform visual analysis for the changed surface. Use screenshots, visible DOM/accessibility evidence, Playwright screenshot assertions, canvas/image pixel checks, or Computer Use visual state as appropriate. Do not rely only on terminal, text, or ordinary DOM output when the feature has a rendered UI.
 
-7. Create `.codex/review-packet.md` from `.codex/review-template.md`.
+7. Inspect `git diff`.
 
-8. Open Chrome and ask GPT-5.5 Pro to review the full packet.
+8. Create `.codex/review-packet.md` from `.codex/review-template.md`.
 
-9. Save the complete GPT-5.5 Pro response to `.codex/pro-review.md`.
+9. Open Chrome and ask GPT-5.5 Pro to review the full packet.
 
-10. Parse the response.
+10. Save the complete GPT-5.5 Pro response to `.codex/pro-review.md`.
 
-11. Apply concrete `MUST_FIX` items only.
+11. Parse the response.
 
-12. Re-run relevant validation commands.
+12. Apply concrete `MUST_FIX` items only.
 
-13. Update `.codex/state.md`.
+13. Re-run relevant validation commands and repeat visual analysis for the affected UI.
+
+14. Update `.codex/state.md`.
 
 ## GPT-5.5 Pro usage rules
 
@@ -88,6 +90,8 @@ Do not ask broad brainstorming questions.
 Ask it to review the current concrete implementation, repository state, diff, and validation output.
 
 The Pro review must receive enough context to judge the actual current project state without guessing.
+
+For any UI, browser, image, document, or app-facing work, the review packet must include visual analysis evidence or a clear note that visual inspection was impossible. Screenshots alone are not enough unless they were actually inspected and summarized.
 
 ## Completion conditions
 

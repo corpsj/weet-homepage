@@ -1,0 +1,242 @@
+[
+  {
+    "viewport": {
+      "name": "desktop",
+      "width": 1440,
+      "height": 960,
+      "drawer": false
+    },
+    "compactDom": {
+      "url": "https://www.we-et.com/customize?v=5fff2fc",
+      "title": "주문하기 | 위트(weet)",
+      "mainImageCount": 1,
+      "mainImageHrefs": [
+        "/images/customize/compact-3x6-base.svg"
+      ],
+      "mainFootprintCount": 0,
+      "dialogImageCount": 0,
+      "dialogImageHrefs": [],
+      "dialogImageBoxes": [],
+      "dialogFootprintCount": 0,
+      "dialogFootprintBoxes": [],
+      "horizontalOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440
+    },
+    "standardDom": {
+      "url": "https://www.we-et.com/customize?c=eyJ2ZXJzaW9uIjoxLCJtb2RlbElkIjoic3RhbmRhcmQtM3g5Iiwic2VsZWN0ZWRPcHRpb25zIjp7Ijc0ODQxNTZmLWE2MDItNDM2NS04OWQzLWEwNGFhNDA1ZTQ3YiI6WyI4YTUxMmUwNC0zYmVhLTQ5MWItODVjZi04ODExZjUyZjgyNDYiXSwiOGI1YTUwMjQtZTRmYi00ZmNkLTlhYjUtNWQwYWJiZTdlMWVjIjpbIjczNWEyZTJiLTYwNDAtNDg5ZS04ZTk2LWFjODQzNzlmMGVkMyJdLCI0NjU5OWMzZS05MmVhLTQ4NDctYWQ3My0yOGE4ZTA3YWIwYmIiOlsiNjFjN2Y5MTUtODljMy00NzNiLWJkZjktOWQ1OGRkZjdmMjA0Il0sImY5MTU4Yzc4LTg3ODUtNDBkNC1iZGI3LTc1ZGQ2NzM0NTNlZCI6WyI1MmQzYTA2Ni00MWUyLTRmODUtOTkyYi1lYzQ1OTMyMWU5Y2YiXSwiZGUxOTZjOTItMjA5Yi00NzE4LWJkZDEtMWZlMmIwMTAyNzc2IjpbIjYzZGJmNDZjLWFkMDYtNGI0Yi04ZWQwLTYxMjMwOTU2N2NjZCJdLCIyZTdmYzdmZi04NDkyLTQ2MWEtYTU2MC04MzU2YzUwNWY0MmMiOlsiMzNmYzg0ZWQtN2I3Yi00NzZjLTljZmItYzYwNWJiYzE2Y2VjIl0sImIwOWY5MWU2LTUzOTMtNDU1MS1iYTc0LWU2NWI3MjkyOWY1NiI6WyJhNTMzOTNjNC1lNmQ3LTQ2N2YtOTA3NC0zM2NhZThiZGJjNTkiXX19",
+      "title": "주문하기 | 위트(weet)",
+      "mainImageCount": 1,
+      "mainImageHrefs": [
+        "/images/customize/standard-3x9-base.svg"
+      ],
+      "mainFootprintCount": 0,
+      "dialogImageCount": 0,
+      "dialogImageHrefs": [],
+      "dialogImageBoxes": [],
+      "dialogFootprintCount": 0,
+      "dialogFootprintBoxes": [],
+      "horizontalOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440
+    },
+    "zoomImmediateDom": {
+      "url": "https://www.we-et.com/customize?c=eyJ2ZXJzaW9uIjoxLCJtb2RlbElkIjoic3RhbmRhcmQtM3g5Iiwic2VsZWN0ZWRPcHRpb25zIjp7Ijc0ODQxNTZmLWE2MDItNDM2NS04OWQzLWEwNGFhNDA1ZTQ3YiI6WyI4YTUxMmUwNC0zYmVhLTQ5MWItODVjZi04ODExZjUyZjgyNDYiXSwiOGI1YTUwMjQtZTRmYi00ZmNkLTlhYjUtNWQwYWJiZTdlMWVjIjpbIjczNWEyZTJiLTYwNDAtNDg5ZS04ZTk2LWFjODQzNzlmMGVkMyJdLCI0NjU5OWMzZS05MmVhLTQ4NDctYWQ3My0yOGE4ZTA3YWIwYmIiOlsiNjFjN2Y5MTUtODljMy00NzNiLWJkZjktOWQ1OGRkZjdmMjA0Il0sImY5MTU4Yzc4LTg3ODUtNDBkNC1iZGI3LTc1ZGQ2NzM0NTNlZCI6WyI1MmQzYTA2Ni00MWUyLTRmODUtOTkyYi1lYzQ1OTMyMWU5Y2YiXSwiZGUxOTZjOTItMjA5Yi00NzE4LWJkZDEtMWZlMmIwMTAyNzc2IjpbIjYzZGJmNDZjLWFkMDYtNGI0Yi04ZWQwLTYxMjMwOTU2N2NjZCJdLCIyZTdmYzdmZi04NDkyLTQ2MWEtYTU2MC04MzU2YzUwNWY0MmMiOlsiMzNmYzg0ZWQtN2I3Yi00NzZjLTljZmItYzYwNWJiYzE2Y2VjIl0sImIwOWY5MWU2LTUzOTMtNDU1MS1iYTc0LWU2NWI3MjkyOWY1NiI6WyJhNTMzOTNjNC1lNmQ3LTQ2N2YtOTA3NC0zM2NhZThiZGJjNTkiXX19",
+      "title": "주문하기 | 위트(weet)",
+      "mainImageCount": 1,
+      "mainImageHrefs": [
+        "/images/customize/standard-3x9-base.svg"
+      ],
+      "mainFootprintCount": 0,
+      "dialogImageCount": 1,
+      "dialogImageHrefs": [
+        "/images/customize/standard-3x9-base.svg"
+      ],
+      "dialogImageBoxes": [
+        {
+          "x": 166.00074768066406,
+          "y": 291.8125,
+          "width": 1107.99853515625,
+          "height": 465.359375
+        }
+      ],
+      "dialogFootprintCount": 0,
+      "dialogFootprintBoxes": [],
+      "horizontalOverflow": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440
+    },
+    "firstCheckPressed": "true",
+    "stickyClearancePx": 22.125,
+    "consoleMessages": [],
+    "pageErrors": [],
+    "passed": {
+      "compactMain": true,
+      "standardMain": true,
+      "zoomStandard": true,
+      "noOverflow": true,
+      "stickyClearance": true,
+      "noRuntimeErrors": true
+    }
+  },
+  {
+    "viewport": {
+      "name": "tablet",
+      "width": 834,
+      "height": 1112,
+      "drawer": true
+    },
+    "compactDom": {
+      "url": "https://www.we-et.com/customize?v=5fff2fc",
+      "title": "주문하기 | 위트(weet)",
+      "mainImageCount": 1,
+      "mainImageHrefs": [
+        "/images/customize/compact-3x6-base.svg"
+      ],
+      "mainFootprintCount": 0,
+      "dialogImageCount": 0,
+      "dialogImageHrefs": [],
+      "dialogImageBoxes": [],
+      "dialogFootprintCount": 0,
+      "dialogFootprintBoxes": [],
+      "horizontalOverflow": false,
+      "scrollWidth": 834,
+      "clientWidth": 834
+    },
+    "standardDom": {
+      "url": "https://www.we-et.com/customize?c=eyJ2ZXJzaW9uIjoxLCJtb2RlbElkIjoic3RhbmRhcmQtM3g5Iiwic2VsZWN0ZWRPcHRpb25zIjp7Ijc0ODQxNTZmLWE2MDItNDM2NS04OWQzLWEwNGFhNDA1ZTQ3YiI6WyI4YTUxMmUwNC0zYmVhLTQ5MWItODVjZi04ODExZjUyZjgyNDYiXSwiOGI1YTUwMjQtZTRmYi00ZmNkLTlhYjUtNWQwYWJiZTdlMWVjIjpbIjczNWEyZTJiLTYwNDAtNDg5ZS04ZTk2LWFjODQzNzlmMGVkMyJdLCI0NjU5OWMzZS05MmVhLTQ4NDctYWQ3My0yOGE4ZTA3YWIwYmIiOlsiNjFjN2Y5MTUtODljMy00NzNiLWJkZjktOWQ1OGRkZjdmMjA0Il0sImY5MTU4Yzc4LTg3ODUtNDBkNC1iZGI3LTc1ZGQ2NzM0NTNlZCI6WyI1MmQzYTA2Ni00MWUyLTRmODUtOTkyYi1lYzQ1OTMyMWU5Y2YiXSwiZGUxOTZjOTItMjA5Yi00NzE4LWJkZDEtMWZlMmIwMTAyNzc2IjpbIjYzZGJmNDZjLWFkMDYtNGI0Yi04ZWQwLTYxMjMwOTU2N2NjZCJdLCIyZTdmYzdmZi04NDkyLTQ2MWEtYTU2MC04MzU2YzUwNWY0MmMiOlsiMzNmYzg0ZWQtN2I3Yi00NzZjLTljZmItYzYwNWJiYzE2Y2VjIl0sImIwOWY5MWU2LTUzOTMtNDU1MS1iYTc0LWU2NWI3MjkyOWY1NiI6WyJhNTMzOTNjNC1lNmQ3LTQ2N2YtOTA3NC0zM2NhZThiZGJjNTkiXX19",
+      "title": "주문하기 | 위트(weet)",
+      "mainImageCount": 1,
+      "mainImageHrefs": [
+        "/images/customize/standard-3x9-base.svg"
+      ],
+      "mainFootprintCount": 0,
+      "dialogImageCount": 0,
+      "dialogImageHrefs": [],
+      "dialogImageBoxes": [],
+      "dialogFootprintCount": 0,
+      "dialogFootprintBoxes": [],
+      "horizontalOverflow": false,
+      "scrollWidth": 834,
+      "clientWidth": 834
+    },
+    "zoomImmediateDom": {
+      "url": "https://www.we-et.com/customize?c=eyJ2ZXJzaW9uIjoxLCJtb2RlbElkIjoic3RhbmRhcmQtM3g5Iiwic2VsZWN0ZWRPcHRpb25zIjp7Ijc0ODQxNTZmLWE2MDItNDM2NS04OWQzLWEwNGFhNDA1ZTQ3YiI6WyI4YTUxMmUwNC0zYmVhLTQ5MWItODVjZi04ODExZjUyZjgyNDYiXSwiOGI1YTUwMjQtZTRmYi00ZmNkLTlhYjUtNWQwYWJiZTdlMWVjIjpbIjczNWEyZTJiLTYwNDAtNDg5ZS04ZTk2LWFjODQzNzlmMGVkMyJdLCI0NjU5OWMzZS05MmVhLTQ4NDctYWQ3My0yOGE4ZTA3YWIwYmIiOlsiNjFjN2Y5MTUtODljMy00NzNiLWJkZjktOWQ1OGRkZjdmMjA0Il0sImY5MTU4Yzc4LTg3ODUtNDBkNC1iZGI3LTc1ZGQ2NzM0NTNlZCI6WyI1MmQzYTA2Ni00MWUyLTRmODUtOTkyYi1lYzQ1OTMyMWU5Y2YiXSwiZGUxOTZjOTItMjA5Yi00NzE4LWJkZDEtMWZlMmIwMTAyNzc2IjpbIjYzZGJmNDZjLWFkMDYtNGI0Yi04ZWQwLTYxMjMwOTU2N2NjZCJdLCIyZTdmYzdmZi04NDkyLTQ2MWEtYTU2MC04MzU2YzUwNWY0MmMiOlsiMzNmYzg0ZWQtN2I3Yi00NzZjLTljZmItYzYwNWJiYzE2Y2VjIl0sImIwOWY5MWU2LTUzOTMtNDU1MS1iYTc0LWU2NWI3MjkyOWY1NiI6WyJhNTMzOTNjNC1lNmQ3LTQ2N2YtOTA3NC0zM2NhZThiZGJjNTkiXX19",
+      "title": "주문하기 | 위트(weet)",
+      "mainImageCount": 1,
+      "mainImageHrefs": [
+        "/images/customize/standard-3x9-base.svg"
+      ],
+      "mainFootprintCount": 0,
+      "dialogImageCount": 1,
+      "dialogImageHrefs": [
+        "/images/customize/standard-3x9-base.svg"
+      ],
+      "dialogImageBoxes": [
+        {
+          "x": 46.01785659790039,
+          "y": 444.6875,
+          "width": 741.9642333984375,
+          "height": 311.625
+        }
+      ],
+      "dialogFootprintCount": 0,
+      "dialogFootprintBoxes": [],
+      "horizontalOverflow": false,
+      "scrollWidth": 834,
+      "clientWidth": 834
+    },
+    "firstCheckPressed": "true",
+    "stickyClearancePx": 110.203125,
+    "consoleMessages": [],
+    "pageErrors": [],
+    "passed": {
+      "compactMain": true,
+      "standardMain": true,
+      "zoomStandard": true,
+      "noOverflow": true,
+      "stickyClearance": true,
+      "noRuntimeErrors": true
+    }
+  },
+  {
+    "viewport": {
+      "name": "mobile",
+      "width": 390,
+      "height": 844,
+      "drawer": true
+    },
+    "compactDom": {
+      "url": "https://www.we-et.com/customize?v=5fff2fc",
+      "title": "주문하기 | 위트(weet)",
+      "mainImageCount": 1,
+      "mainImageHrefs": [
+        "/images/customize/compact-3x6-base.svg"
+      ],
+      "mainFootprintCount": 0,
+      "dialogImageCount": 0,
+      "dialogImageHrefs": [],
+      "dialogImageBoxes": [],
+      "dialogFootprintCount": 0,
+      "dialogFootprintBoxes": [],
+      "horizontalOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390
+    },
+    "standardDom": {
+      "url": "https://www.we-et.com/customize?c=eyJ2ZXJzaW9uIjoxLCJtb2RlbElkIjoic3RhbmRhcmQtM3g5Iiwic2VsZWN0ZWRPcHRpb25zIjp7Ijc0ODQxNTZmLWE2MDItNDM2NS04OWQzLWEwNGFhNDA1ZTQ3YiI6WyI4YTUxMmUwNC0zYmVhLTQ5MWItODVjZi04ODExZjUyZjgyNDYiXSwiOGI1YTUwMjQtZTRmYi00ZmNkLTlhYjUtNWQwYWJiZTdlMWVjIjpbIjczNWEyZTJiLTYwNDAtNDg5ZS04ZTk2LWFjODQzNzlmMGVkMyJdLCI0NjU5OWMzZS05MmVhLTQ4NDctYWQ3My0yOGE4ZTA3YWIwYmIiOlsiNjFjN2Y5MTUtODljMy00NzNiLWJkZjktOWQ1OGRkZjdmMjA0Il0sImY5MTU4Yzc4LTg3ODUtNDBkNC1iZGI3LTc1ZGQ2NzM0NTNlZCI6WyI1MmQzYTA2Ni00MWUyLTRmODUtOTkyYi1lYzQ1OTMyMWU5Y2YiXSwiZGUxOTZjOTItMjA5Yi00NzE4LWJkZDEtMWZlMmIwMTAyNzc2IjpbIjYzZGJmNDZjLWFkMDYtNGI0Yi04ZWQwLTYxMjMwOTU2N2NjZCJdLCIyZTdmYzdmZi04NDkyLTQ2MWEtYTU2MC04MzU2YzUwNWY0MmMiOlsiMzNmYzg0ZWQtN2I3Yi00NzZjLTljZmItYzYwNWJiYzE2Y2VjIl0sImIwOWY5MWU2LTUzOTMtNDU1MS1iYTc0LWU2NWI3MjkyOWY1NiI6WyJhNTMzOTNjNC1lNmQ3LTQ2N2YtOTA3NC0zM2NhZThiZGJjNTkiXX19",
+      "title": "주문하기 | 위트(weet)",
+      "mainImageCount": 1,
+      "mainImageHrefs": [
+        "/images/customize/standard-3x9-base.svg"
+      ],
+      "mainFootprintCount": 0,
+      "dialogImageCount": 0,
+      "dialogImageHrefs": [],
+      "dialogImageBoxes": [],
+      "dialogFootprintCount": 0,
+      "dialogFootprintBoxes": [],
+      "horizontalOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390
+    },
+    "zoomImmediateDom": {
+      "url": "https://www.we-et.com/customize?c=eyJ2ZXJzaW9uIjoxLCJtb2RlbElkIjoic3RhbmRhcmQtM3g5Iiwic2VsZWN0ZWRPcHRpb25zIjp7Ijc0ODQxNTZmLWE2MDItNDM2NS04OWQzLWEwNGFhNDA1ZTQ3YiI6WyI4YTUxMmUwNC0zYmVhLTQ5MWItODVjZi04ODExZjUyZjgyNDYiXSwiOGI1YTUwMjQtZTRmYi00ZmNkLTlhYjUtNWQwYWJiZTdlMWVjIjpbIjczNWEyZTJiLTYwNDAtNDg5ZS04ZTk2LWFjODQzNzlmMGVkMyJdLCI0NjU5OWMzZS05MmVhLTQ4NDctYWQ3My0yOGE4ZTA3YWIwYmIiOlsiNjFjN2Y5MTUtODljMy00NzNiLWJkZjktOWQ1OGRkZjdmMjA0Il0sImY5MTU4Yzc4LTg3ODUtNDBkNC1iZGI3LTc1ZGQ2NzM0NTNlZCI6WyI1MmQzYTA2Ni00MWUyLTRmODUtOTkyYi1lYzQ1OTMyMWU5Y2YiXSwiZGUxOTZjOTItMjA5Yi00NzE4LWJkZDEtMWZlMmIwMTAyNzc2IjpbIjYzZGJmNDZjLWFkMDYtNGI0Yi04ZWQwLTYxMjMwOTU2N2NjZCJdLCIyZTdmYzdmZi04NDkyLTQ2MWEtYTU2MC04MzU2YzUwNWY0MmMiOlsiMzNmYzg0ZWQtN2I3Yi00NzZjLTljZmItYzYwNWJiYzE2Y2VjIl0sImIwOWY5MWU2LTUzOTMtNDU1MS1iYTc0LWU2NWI3MjkyOWY1NiI6WyJhNTMzOTNjNC1lNmQ3LTQ2N2YtOTA3NC0zM2NhZThiZGJjNTkiXX19",
+      "title": "주문하기 | 위트(weet)",
+      "mainImageCount": 1,
+      "mainImageHrefs": [
+        "/images/customize/standard-3x9-base.svg"
+      ],
+      "mainFootprintCount": 0,
+      "dialogImageCount": 1,
+      "dialogImageHrefs": [
+        "/images/customize/standard-3x9-base.svg"
+      ],
+      "dialogImageBoxes": [
+        {
+          "x": 22.003719329833984,
+          "y": 332.09375,
+          "width": 639.9925537109375,
+          "height": 268.796875
+        }
+      ],
+      "dialogFootprintCount": 0,
+      "dialogFootprintBoxes": [],
+      "horizontalOverflow": false,
+      "scrollWidth": 390,
+      "clientWidth": 390
+    },
+    "firstCheckPressed": "true",
+    "stickyClearancePx": 109.984375,
+    "consoleMessages": [],
+    "pageErrors": [],
+    "passed": {
+      "compactMain": true,
+      "standardMain": true,
+      "zoomStandard": true,
+      "noOverflow": true,
+      "stickyClearance": true,
+      "noRuntimeErrors": true
+    }
+  }
+]

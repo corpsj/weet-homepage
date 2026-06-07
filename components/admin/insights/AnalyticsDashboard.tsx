@@ -5,8 +5,9 @@ import {
     XAxis, YAxis, CartesianGrid, Tooltip,
     BarChart, Bar, PieChart, Pie, Cell, Area, AreaChart
 } from 'recharts';
-import { ArrowUpRight, Users, MousePointer, Clock, TrendingUp, Monitor } from 'lucide-react';
+import { ArrowUpRight, Users, MousePointer, Clock, Monitor } from 'lucide-react';
 import Link from 'next/link';
+import { ConsoleMetricCard, ConsolePanel } from '@/components/admin/ConsolePrimitives';
 
 interface AnalyticsMetric {
     value: string;
@@ -38,7 +39,7 @@ const COLORS = ['#111827', '#4B5563', '#9CA3AF', '#D1D5DB', '#E5E7EB'];
 function CustomTooltip({ active, payload, label }: any) {
     if (active && payload && payload.length) {
         return (
-            <div className="bg-white p-4 border border-gray-100 shadow-xl rounded-xl">
+            <div className="rounded-md border border-[#d8d8d2] bg-white p-4 shadow-xl">
                 <p className="text-sm font-bold text-gray-900 mb-2">{label}</p>
                 {payload.map((entry: any, index: number) => (
                     <div key={index} className="flex items-center gap-2 text-xs mb-1 last:mb-0">
@@ -87,7 +88,7 @@ function ChartShell({ children, className }: { children: (size: { width: number;
 
     return (
         <div ref={containerRef} className={`${className} min-w-0`}>
-            {size.width > 0 && size.height > 0 ? children(size) : <div className="h-full w-full rounded-lg bg-gray-50" />}
+            {size.width > 0 && size.height > 0 ? children(size) : <div className="h-full w-full rounded-md bg-[#f4f4f1]" />}
         </div>
     );
 }
@@ -139,9 +140,9 @@ export default function AnalyticsDashboard({
         : 0;
 
     return (
-        <div className="space-y-8 animate-fade-in">
+        <div className="space-y-6 animate-fade-in">
             {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
                 <SummaryCard
                     title="총 방문자"
                     value={totalUsers.toLocaleString()}
@@ -161,11 +162,10 @@ export default function AnalyticsDashboard({
                     icon={<Clock className="w-5 h-5 text-black" />}
                 />
                 <Link href="https://clarity.microsoft.com/projects" target="_blank" className="block group">
-                    <div className="bg-black rounded-2xl p-6 text-white hover:shadow-xl transition-all duration-300 h-full flex flex-col justify-between relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -mr-16 -mt-16 blur-2xl group-hover:bg-white/10 transition-colors" />
+                    <div className="relative flex h-full flex-col justify-between overflow-hidden rounded-md border border-[#111111] bg-[#111111] p-4 text-white shadow-sm transition-colors hover:bg-[#1f1f1f]">
                         <div className="flex justify-between items-start relative z-10">
                             <div>
-                                <p className="text-white/60 text-xs font-medium uppercase tracking-wider">Heatmaps</p>
+                                <p className="text-xs font-bold text-white/60">Heatmaps</p>
                                 <h3 className="text-xl font-bold mt-1">Microsoft Clarity</h3>
                             </div>
                             <ArrowUpRight className="w-5 h-5 text-white/60 group-hover:text-white transition-colors" />
@@ -176,9 +176,9 @@ export default function AnalyticsDashboard({
             </div>
 
             {/* Main Charts Row */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                 {/* Traffic Trend */}
-                <div className="lg:col-span-2 bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300">
+                <ConsolePanel className="p-5 lg:col-span-2">
                     <div className="flex justify-between items-center mb-8">
                         <div>
                             <h3 className="text-lg font-bold text-gray-900">트래픽 추이</h3>
@@ -240,10 +240,10 @@ export default function AnalyticsDashboard({
                             </AreaChart>
                         )}
                     </ChartShell>
-                </div>
+                </ConsolePanel>
 
                 {/* Device Breakdown */}
-                <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300">
+                <ConsolePanel className="p-5">
                     <h3 className="text-lg font-bold text-gray-900 mb-2">기기별 접속</h3>
                     <p className="text-sm text-gray-500 mb-8">사용자 접속 환경 비율</p>
                     <div className="h-[300px] relative">
@@ -283,13 +283,13 @@ export default function AnalyticsDashboard({
                             </div>
                         ))}
                     </div>
-                </div>
+                </ConsolePanel>
             </div>
 
             {/* Secondary Row */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
                 {/* Acquisition Channels (Top 5) */}
-                <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300">
+                <ConsolePanel className="p-5">
                     <h3 className="text-lg font-bold text-gray-900 mb-2">유입 경로</h3>
                     <p className="text-sm text-gray-500 mb-8">사용자가 사이트를 찾은 방법 (Top 5)</p>
                     <ChartShell className="h-[300px]">
@@ -316,10 +316,10 @@ export default function AnalyticsDashboard({
                             </BarChart>
                         )}
                     </ChartShell>
-                </div>
+                </ConsolePanel>
 
                 {/* City/Region Stats (Top 5) */}
-                <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300">
+                <ConsolePanel className="p-5">
                     <h3 className="text-lg font-bold text-gray-900 mb-2">지역별 분포</h3>
                     <p className="text-sm text-gray-500 mb-8">사용자 접속 지역 (Top 5)</p>
                     <ChartShell className="h-[300px]">
@@ -346,10 +346,10 @@ export default function AnalyticsDashboard({
                             </BarChart>
                         )}
                     </ChartShell>
-                </div>
+                </ConsolePanel>
 
                 {/* Top Pages Table */}
-                <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden lg:col-span-1">
+                <ConsolePanel className="p-5 lg:col-span-1">
                     <h3 className="text-lg font-bold text-gray-900 mb-2">인기 페이지</h3>
                     <p className="text-sm text-gray-500 mb-6">가장 많이 조회된 페이지</p>
                     <div className="overflow-x-auto">
@@ -374,7 +374,7 @@ export default function AnalyticsDashboard({
                             </tbody>
                         </table>
                     </div>
-                </div>
+                </ConsolePanel>
             </div>
         </div>
     );
@@ -382,20 +382,15 @@ export default function AnalyticsDashboard({
 
 function SummaryCard({ title, value, subtext, icon }: { title: string, value: string, subtext: string, icon: React.ReactNode }) {
     return (
-        <div className="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition-all duration-300 group">
-            <div className="flex justify-between items-start mb-4">
-                <div>
-                    <h3 className="text-sm font-medium text-gray-500 group-hover:text-gray-700 transition-colors">{title}</h3>
-                    <p className="text-2xl font-bold text-gray-900 mt-1 tracking-tight">{value}</p>
-                </div>
-                <div className="p-3 bg-gray-50 rounded-xl group-hover:bg-gray-100 transition-colors">
+        <ConsoleMetricCard
+            label={title}
+            value={value}
+            caption={subtext}
+            icon={
+                <div className="grid h-8 w-8 place-items-center rounded-md border border-[#e5e5df] bg-[#f4f4f1]">
                     {icon}
                 </div>
-            </div>
-            <div className="flex items-center gap-1 text-xs text-gray-400">
-                <TrendingUp className="w-3 h-3 text-green-500" />
-                <span className="text-green-600 font-medium">{subtext}</span>
-            </div>
-        </div>
+            }
+        />
     );
 }

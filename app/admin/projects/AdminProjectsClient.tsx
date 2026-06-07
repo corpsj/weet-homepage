@@ -8,6 +8,17 @@ import { toast } from 'sonner';
 import { Project } from '@/types/supabase';
 import { getProjects, deleteProject } from '@/app/actions/project-actions';
 import { getProjectHeroImage, getProjectPublicIssues } from '@/lib/projects/publicProjects';
+import {
+    ConsoleMetricCard,
+    ConsolePageHeader,
+    ConsolePanel,
+    ConsoleStatusPill,
+    ReadinessRing,
+    consoleIconButtonClass,
+    consoleInputClass,
+    consolePrimaryButtonClass,
+    consoleSelectClass,
+} from '@/components/admin/ConsolePrimitives';
 
 interface AdminProjectsClientProps {
     initialProjects: Project[];
@@ -30,13 +41,31 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
     const [loading, setLoading] = useState(false);
     const [deleting, setDeleting] = useState<string | null>(null);
     const [filterStatus, setFilterStatus] = useState('All');
+    const [searchTerm, setSearchTerm] = useState('');
     const didUseInitialData = useRef(false);
     const visibleSummary = useMemo(() => {
         const withImages = projects.filter((project) => getProjectHeroImage(project)).length;
         const incomplete = projects.filter((project) => getProjectPublicIssues(project).length > 0).length;
+        const ready = projects.length - incomplete;
 
-        return { withImages, incomplete };
+        return { withImages, incomplete, ready };
     }, [projects]);
+    const filteredProjects = useMemo(() => {
+        const normalized = searchTerm.trim().toLowerCase();
+        if (!normalized) return projects;
+
+        return projects.filter((project) => {
+            return [
+                project.title,
+                project.client,
+                project.location,
+                project.status,
+                ...(project.tags ?? []),
+            ]
+                .filter(Boolean)
+                .some((value) => value!.toLowerCase().includes(normalized));
+        });
+    }, [projects, searchTerm]);
 
     const fetchProjects = useCallback(async (status: string) => {
         try {
@@ -85,14 +114,16 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
         }
     };
 
-    const statusColor = (status: string | null) => {
+    const statusColor = (status: string | null): 'neutral' | 'success' | 'warning' | 'dark' => {
         switch (status) {
-            case 'completed': return 'text-green-600 bg-green-50';
-            case 'in_progress': return 'text-blue-600 bg-blue-50';
-            case 'planned': return 'text-orange-600 bg-orange-50';
-            default: return 'text-gray-600 bg-gray-50';
+            case 'completed': return 'success';
+            case 'in_progress': return 'dark';
+            case 'planned': return 'warning';
+            default: return 'neutral';
         }
     };
+
+    const readinessScore = (issues: string[]) => Math.max(0, 100 - issues.length * 12);
 
     if (loading && projects.length === 0) {
         return (
@@ -104,55 +135,52 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
 
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between">
-                <div>
-                    <h1 className="text-2xl font-bold tracking-tight text-gray-900">
-                        프로젝트 관리 <span className="text-sm font-normal text-gray-500 ml-2">Total {projects.length}</span>
-                    </h1>
-                    <p className="text-gray-500 text-sm mt-1">
-                        공개 품질에 영향을 주는 이미지·기본 정보를 한 화면에서 빠르게 확인합니다.
-                        {loading && <span className="ml-2 text-gray-400">필터 적용 중...</span>}
-                    </p>
-                </div>
-                <div className="flex items-center gap-3">
-                    <select
-                        value={filterStatus}
-                        onChange={(e) => setFilterStatus(e.target.value)}
-                        disabled={loading}
-                        className="px-3 py-2 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-black bg-white"
-                    >
-                        <option value="All">전체 상태</option>
-                        <option value="completed">완료</option>
-                        <option value="in_progress">진행중</option>
-                        <option value="planned">계획중</option>
-                    </select>
-                    <Link
-                        href="/admin/projects/new"
-                        className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors text-sm font-medium"
-                    >
-                        <Plus className="w-4 h-4" />
-                        새 프로젝트
-                    </Link>
-                </div>
-            </div>
+            <ConsolePageHeader
+                eyebrow="PROJECT READINESS"
+                title={`프로젝트 관리 · ${projects.length.toLocaleString('ko-KR')}건`}
+                description={`공개 품질에 영향을 주는 이미지, 완료일, 고객/지역 정보를 한 화면에서 점검합니다.${loading ? ' 필터 적용 중...' : ''}`}
+                actions={
+                    <>
+                        <select
+                            value={filterStatus}
+                            onChange={(e) => setFilterStatus(e.target.value)}
+                            disabled={loading}
+                            className={consoleSelectClass}
+                        >
+                            <option value="All">전체 상태</option>
+                            <option value="completed">완료</option>
+                            <option value="in_progress">진행중</option>
+                            <option value="planned">계획중</option>
+                        </select>
+                        <Link href="/admin/projects/new" className={consolePrimaryButtonClass}>
+                            <Plus className="h-4 w-4" />
+                            새 프로젝트
+                        </Link>
+                    </>
+                }
+            />
 
             <div className="grid gap-3 sm:grid-cols-3">
-                <div className="rounded-lg border border-gray-200 bg-white p-4">
-                    <p className="text-xs font-semibold text-gray-500">현재 표시</p>
-                    <p className="mt-2 text-2xl font-black text-gray-900">{projects.length}</p>
-                </div>
-                <div className="rounded-lg border border-gray-200 bg-white p-4">
-                    <p className="text-xs font-semibold text-gray-500">유효 이미지</p>
-                    <p className="mt-2 text-2xl font-black text-gray-900">{visibleSummary.withImages}</p>
-                </div>
-                <div className="rounded-lg border border-gray-200 bg-white p-4">
-                    <p className="text-xs font-semibold text-gray-500">보완 필요</p>
-                    <p className="mt-2 text-2xl font-black text-gray-900">{visibleSummary.incomplete}</p>
-                </div>
+                <ConsoleMetricCard label="현재 표시" value={projects.length.toLocaleString('ko-KR')} caption="필터 결과 기준" tone="dark" />
+                <ConsoleMetricCard label="공개 가능" value={visibleSummary.ready.toLocaleString('ko-KR')} caption="보완 이슈 없음" />
+                <ConsoleMetricCard label="보완 필요" value={visibleSummary.incomplete.toLocaleString('ko-KR')} caption="이미지·완료일·본문 점검" tone={visibleSummary.incomplete > 0 ? 'warning' : 'neutral'} />
             </div>
 
-            <div className="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
-                <div className="grid grid-cols-[88px_minmax(180px,1fr)_110px_160px_120px_120px] gap-4 border-b border-gray-100 bg-gray-50 px-4 py-3 text-xs font-bold uppercase tracking-wider text-gray-500 max-lg:hidden">
+            <ConsolePanel>
+                <div className="flex flex-col gap-3 border-b border-[#e5e5df] bg-[#f4f4f1] p-4 md:flex-row md:items-center md:justify-between">
+                    <div>
+                        <p className="text-xs font-bold text-[#8a6a12]">IMAGE HEALTH</p>
+                        <p className="mt-1 text-sm font-semibold text-[#111111]">{visibleSummary.withImages.toLocaleString('ko-KR')}건이 유효한 대표 이미지를 사용 중입니다.</p>
+                    </div>
+                    <input
+                        value={searchTerm}
+                        onChange={(event) => setSearchTerm(event.target.value)}
+                        placeholder="프로젝트명, 고객, 지역 검색"
+                        className={`${consoleInputClass} w-full md:w-72`}
+                    />
+                </div>
+                <div className="grid grid-cols-[72px_88px_minmax(180px,1fr)_110px_160px_120px_120px] gap-4 border-b border-[#e5e5df] bg-[#fbfbfa] px-4 py-3 text-xs font-bold text-gray-500 max-lg:hidden">
+                    <span>준비도</span>
                     <span>이미지</span>
                     <span>프로젝트</span>
                     <span>상태</span>
@@ -160,16 +188,21 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
                     <span>완료일</span>
                     <span className="text-right">관리</span>
                 </div>
-                {projects.map((project, index) => {
+                {filteredProjects.map((project, index) => {
                     const publicIssues = getProjectPublicIssues(project);
                     const heroImage = getProjectHeroImage(project);
 
                     return (
                         <div
                             key={project.id}
-                            className="grid gap-4 border-b border-gray-100 px-4 py-4 last:border-b-0 lg:grid-cols-[88px_minmax(180px,1fr)_110px_160px_120px_120px] lg:items-center"
+                            className="grid gap-4 border-b border-[#f0f0ec] px-4 py-4 last:border-b-0 lg:grid-cols-[72px_88px_minmax(180px,1fr)_110px_160px_120px_120px] lg:items-center"
                         >
-                            <div className="relative h-20 w-20 overflow-hidden rounded-lg bg-gray-100">
+                            <div className="flex items-center justify-between lg:block">
+                                <span className="text-xs font-bold text-gray-400 lg:hidden">준비도</span>
+                                <ReadinessRing score={readinessScore(publicIssues)} />
+                            </div>
+
+                            <div className="relative h-20 w-20 overflow-hidden rounded-md border border-[#e5e5df] bg-[#f4f4f1]">
                                 {heroImage ? (
                                     <Image
                                         src={heroImage}
@@ -181,7 +214,7 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
                                     />
                                 ) : (
                                     <div className="absolute inset-0 flex items-center justify-center px-2 text-center text-xs font-semibold text-gray-400">
-                                        {project.images?.[0] ? 'Invalid Image' : 'No Image'}
+                                        {project.images?.[0] ? 'URL 확인' : '이미지 없음'}
                                     </div>
                                 )}
                             </div>
@@ -190,33 +223,25 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
                                 <h3 className="truncate font-semibold text-gray-900">{project.title}</h3>
                                 <div className="mt-2 flex flex-wrap gap-1.5">
                                     {publicIssues.length === 0 ? (
-                                        <span className="rounded border border-green-200 bg-green-50 px-2 py-0.5 text-xs font-semibold text-green-700">
-                                            공개 가능
-                                        </span>
+                                        <ConsoleStatusPill tone="success">공개 가능</ConsoleStatusPill>
                                     ) : (
                                         publicIssues.slice(0, 3).map((issue) => (
-                                            <span key={issue} className="rounded border border-amber-200 bg-amber-50 px-2 py-0.5 text-xs font-semibold text-amber-700">
+                                            <ConsoleStatusPill key={issue} tone="warning">
                                                 {publicIssueLabels[issue] ?? issue}
-                                            </span>
+                                            </ConsoleStatusPill>
                                         ))
                                     )}
                                     {publicIssues.length > 3 && (
-                                        <span className="rounded border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs text-gray-500">
-                                            +{publicIssues.length - 3}
-                                        </span>
+                                        <ConsoleStatusPill>+{publicIssues.length - 3}</ConsoleStatusPill>
                                     )}
                                     {project.tags?.slice(0, 2).map((tag) => (
-                                        <span key={tag} className="rounded border border-gray-200 bg-gray-50 px-2 py-0.5 text-xs text-gray-600">
-                                            {tag}
-                                        </span>
+                                        <ConsoleStatusPill key={tag}>{tag}</ConsoleStatusPill>
                                     ))}
                                 </div>
                             </div>
 
                             <div>
-                                <span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-medium ${statusColor(project.status)}`}>
-                                    {statusLabel(project.status)}
-                                </span>
+                                <ConsoleStatusPill tone={statusColor(project.status)}>{statusLabel(project.status)}</ConsoleStatusPill>
                             </div>
 
                             <div className="space-y-1 text-sm text-gray-600">
@@ -242,7 +267,7 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
                             <div className="flex justify-start gap-2 lg:justify-end">
                                 <Link
                                     href={`/admin/projects/${project.id}`}
-                                    className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-black transition-colors hover:bg-gray-50"
+                                    className={consoleIconButtonClass}
                                     aria-label={`${project.title} 수정`}
                                 >
                                     <Pencil className="h-4 w-4" />
@@ -251,7 +276,7 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
                                     type="button"
                                     onClick={() => handleDelete(project.id)}
                                     disabled={deleting === project.id}
-                                    className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-red-100 bg-white text-red-600 transition-colors hover:bg-red-50 disabled:opacity-60"
+                                    className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-red-200 bg-white text-red-600 transition-colors hover:bg-red-50 disabled:opacity-60"
                                     aria-label={`${project.title} 삭제`}
                                 >
                                     {deleting === project.id ? (
@@ -264,10 +289,10 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
                         </div>
                     );
                 })}
-            </div>
+            </ConsolePanel>
 
-            {projects.length === 0 && (
-                <div className="text-center py-12 bg-white rounded-lg border border-gray-200 border-dashed">
+            {filteredProjects.length === 0 && (
+                <div className="rounded-md border border-dashed border-[#d8d8d2] bg-white py-12 text-center">
                     <p className="text-gray-500">등록된 프로젝트가 없습니다.</p>
                 </div>
             )}

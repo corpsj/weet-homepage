@@ -298,4 +298,46 @@ test.describe('Admin responsive shell', () => {
       await credentials.cleanup();
     }
   });
+
+  test('admin console operations pages expose readiness controls across devices', async ({ page }) => {
+    const credentials = await createE2EAdminCredentials();
+    const viewports = [
+      { label: 'pc', width: 1440, height: 960 },
+      { label: 'tablet', width: 834, height: 1112 },
+      { label: 'mobile', width: 390, height: 844 },
+    ];
+
+    try {
+      await page.setViewportSize(viewports[0]);
+      await loginAsAdmin(page, credentials);
+
+      for (const viewport of viewports) {
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+
+        await page.goto('/admin/products');
+        await expect(page.getByText('PRODUCT READINESS')).toBeVisible();
+        await expect(page.getByPlaceholder('현재 페이지 제품 검색')).toBeVisible();
+        await expect(page.getByText('이미지 보완')).toBeVisible();
+
+        await page.goto('/admin/projects');
+        await expect(page.getByText('PROJECT READINESS')).toBeVisible();
+        await expect(page.getByText('IMAGE HEALTH')).toBeVisible();
+        await expect(page.getByPlaceholder('프로젝트명, 고객, 지역 검색')).toBeVisible();
+
+        await page.goto('/admin/consultations');
+        await expect(page.getByText('CONSULTATION SLA')).toBeVisible();
+        await expect(page.getByText('SLA 위험')).toBeVisible();
+
+        await page.goto('/admin/insights');
+        await expect(page.getByText('TRAFFIC INTELLIGENCE')).toBeVisible();
+
+        const overflowX = await page.evaluate(() => {
+          return document.documentElement.scrollWidth > document.documentElement.clientWidth;
+        });
+        expect(overflowX, `${viewport.label} admin console overflow`).toBeFalsy();
+      }
+    } finally {
+      await credentials.cleanup();
+    }
+  });
 });

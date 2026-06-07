@@ -1,6 +1,7 @@
 import { fetchAnalyticsDashboard } from '@/app/actions/analytics-actions';
 import AnalyticsDashboard from '@/components/admin/insights/AnalyticsDashboard';
 import { AlertTriangle } from 'lucide-react';
+import { ConsolePageHeader, ConsolePanel } from '@/components/admin/ConsolePrimitives';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,15 +12,16 @@ export default async function InsightsPage() {
 
     return (
         <div className="space-y-8">
-            <div>
-                <h1 className="text-2xl font-bold text-gray-900">웹 로그 분석</h1>
-                <p className="text-gray-500 mt-1">방문자 트래픽, 유입 경로, 사용자 행동을 분석합니다.</p>
-            </div>
+            <ConsolePageHeader
+                eyebrow="TRAFFIC INTELLIGENCE"
+                title="웹 로그 분석"
+                description="방문자 트래픽, 유입 경로, 사용자 행동을 운영 판단에 바로 연결합니다."
+            />
 
             {!isConfigured ? (
-                <div className="bg-white border border-gray-200 rounded-2xl p-12 text-center shadow-sm">
+                <ConsolePanel className="p-8 text-center md:p-12">
                     <div className="flex justify-center mb-6">
-                        <div className="p-4 bg-yellow-50 rounded-full">
+                        <div className="grid h-16 w-16 place-items-center rounded-md border border-[#fed7aa] bg-[#fff7ed]">
                             <AlertTriangle className="w-10 h-10 text-yellow-500" />
                         </div>
                     </div>
@@ -30,34 +32,34 @@ export default async function InsightsPage() {
                     </p>
 
                     {(trafficStats as any)?.error && (
-                        <div className="text-left bg-red-50 p-4 rounded-xl border border-red-100 text-sm text-red-600 mb-8 max-w-lg mx-auto">
+                        <div className="mx-auto mb-8 max-w-lg rounded-md border border-red-100 bg-red-50 p-4 text-left text-sm text-red-600">
                             <p className="font-bold mb-1">연동 오류:</p>
                             <p>{(trafficStats as any).error}</p>
                         </div>
                     )}
 
-                    <div className="text-sm text-gray-500 bg-gray-50 p-6 rounded-xl border border-gray-100 inline-block text-left">
+                    <div className="inline-block rounded-md border border-[#e5e5df] bg-[#f4f4f1] p-6 text-left text-sm text-gray-500">
                         <p className="font-medium mb-3 text-gray-900">필요한 환경 변수 (.env.local):</p>
                         <ul className="space-y-2">
                             <li className="flex items-center gap-2">
                                 <div className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-                                <code className="bg-white px-2 py-0.5 rounded border border-gray-200">NEXT_PUBLIC_GA_ID</code>
+                                <code className="rounded border border-gray-200 bg-white px-2 py-0.5">NEXT_PUBLIC_GA_ID</code>
                             </li>
                             <li className="flex items-center gap-2">
                                 <div className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-                                <code className="bg-white px-2 py-0.5 rounded border border-gray-200">GA_PROPERTY_ID</code>
+                                <code className="rounded border border-gray-200 bg-white px-2 py-0.5">GA_PROPERTY_ID</code>
                             </li>
                             <li className="flex items-center gap-2">
                                 <div className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-                                <code className="bg-white px-2 py-0.5 rounded border border-gray-200">GOOGLE_CLIENT_EMAIL</code>
+                                <code className="rounded border border-gray-200 bg-white px-2 py-0.5">GOOGLE_CLIENT_EMAIL</code>
                             </li>
                             <li className="flex items-center gap-2">
                                 <div className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-                                <code className="bg-white px-2 py-0.5 rounded border border-gray-200">GOOGLE_PRIVATE_KEY</code>
+                                <code className="rounded border border-gray-200 bg-white px-2 py-0.5">GOOGLE_PRIVATE_KEY</code>
                             </li>
                         </ul>
                     </div>
-                </div>
+                </ConsolePanel>
             ) : (
                 <AnalyticsDashboard
                     trafficStats={trafficStats}

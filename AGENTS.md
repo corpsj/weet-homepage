@@ -80,6 +80,8 @@ For browser-based review and validation, prefer fast read-only DOM evidence befo
 
 - Use `chrome:control-chrome` for the GPT-5.5 Pro review step because it depends on the user's logged-in Chrome/ChatGPT state.
 
+- Every verification, execution, fix, browser review, and QA pass must include visual analysis, not only DOM/text/terminal evidence. Use screenshots, visible DOM/accessibility evidence, Playwright screenshots, canvas/image pixel checks, or Computer Use visual state as appropriate. When a page or app is visually rendered, inspect what a human would see and record visual findings or explain why visual inspection was not possible.
+
 - For Chrome/ChatGPT two-track work, use one ChatGPT tab by default but click `새 채팅` before every separate Pro Research or Thinking Image run. The last run's mode persists: image generation can leave `이미지 만들기` active, and research can leave `심층 리서치` active. Never assume the composer mode is correct; after `새 채팅`, re-confirm the model/action harness from read-only DOM evidence before sending.
 
 - When collaborating with GPT-5.5 Pro in Chrome, use the ChatGPT Deep Research surface and set the model menu to `최신 • 5.5` with `Pro • 확장` checked before sending review packets or collaboration prompts. Prove this from read-only DOM evidence whenever possible: the URL or surface indicates `/deep-research` or `심층 리서치`, the model menu shows `최신 • 5.5`, and `Pro • 확장` is checked. If any of these are not true, set them before sending.

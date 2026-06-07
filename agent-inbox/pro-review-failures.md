@@ -66,3 +66,51 @@ This file records Chrome/ChatGPT review failures so future agents can avoid repe
   - Following `agent-inbox/gpt프로 심층리서치 대기.md`, the conversation was refreshed. The response still appeared as an iframe/empty loading bar.
   - The blank tab was closed and ChatGPT was reopened.
   - `.codex/pro-review.md` was not saved because no complete marker-matched assistant response was extractable.
+
+## 2026-06-07 admin console slice attempt 4
+
+- Marker: `WEET_REVIEW_20260607_ADMIN_CONSOLE_SLICE_04`
+- Chrome evidence before send:
+  - Fresh `새 채팅` was clicked.
+  - Model menu showed `최신 • 5.5`.
+  - `Pro • 확장` was checked.
+  - Composer-left `+` menu `심층 리서치` was selected and the composer showed the `심층 리서치` chip.
+  - The long review packet paste became one `붙여넣은 텍스트 (1).txt` tile; `텍스트 필드에 표시` did not convert it inline.
+  - A short inline marker prompt was added, with one expected attachment tile and enabled `프롬프트 보내기`; no `답변 중지` was visible before send.
+- Failure:
+  - After send, conversation URL became `https://chatgpt.com/c/6a24f4b6-b610-8320-b8f1-a949bad16634` and `답변 중지` appeared.
+  - After about 60 seconds, `답변 중지` disappeared but the assistant response area contained only an iframe/empty loading state with no `VERDICT:` output.
+  - Following `agent-inbox/gpt프로 심층리서치 대기.md`, the conversation was refreshed; the iframe/empty response persisted.
+  - Screenshot evidence saved to `.codex/chatgpt-admin-console-review-poll1.png` and `.codex/chatgpt-admin-console-review-after-refresh.png`.
+  - The blank tab was closed. `.codex/pro-review.md` was not saved.
+
+## 2026-06-07 admin console slice attempt 5
+
+- Marker: `WEET_REVIEW_20260607_ADMIN_CONSOLE_SLICE_04`
+- Chrome evidence before send:
+  - A direct `https://chatgpt.com/deep-research` surface was used after the normal `새 채팅` flow repeatedly mixed the old failed conversation with the new composer.
+  - Model menu showed `최신 • 5.5`.
+  - `Pro • 확장` was checked.
+  - The Deep Research composer was on `/deep-research` and showed the research surface.
+  - The composer initially contained an unrelated saved draft (`야. 컴퓨터유즈,웹제어.md 파일 봐봐.`); it was cleared and replaced with the intended inline prompt.
+  - DOM evidence confirmed marker `WEET_REVIEW_20260607_ADMIN_CONSOLE_SLICE_04`, no attachment tiles, no `답변 중지`, and enabled `프롬프트 보내기`.
+- Failure:
+  - After send, conversation URL became `https://chatgpt.com/c/6a24f737-4018-83a7-b9a7-b6ca18f83440` and `답변 중지` appeared briefly.
+  - After about 65 seconds, `답변 중지` disappeared but the conversation contained only the user message; the only `VERDICT:` text was from the requested output template in the prompt.
+  - The assistant section was empty (`ChatGPT의 말:` with no response text). Refresh did not recover output.
+  - A new tab reopened the same conversation and inspected `.qMYqUG_convSearchResultHighlightRoot` plus download/report-like controls; it still contained only the user message and no downloadable research result.
+  - `.codex/pro-review.md` was not saved because no complete marker-matched assistant response was available.
+- Additional tool-control issue:
+  - New inbox instruction `agent-inbox/작업도중스티어링.md` required checking the macOS Stickies app. `open -a Stickies` succeeded, but Computer Use `get_app_state("Stickies")` timed out twice after 120 seconds, so Stickies content could not be read.
+- Conclusion:
+  - Admin console slice now has two failed Chrome/Deep Research review attempts (`attempt 4` and `attempt 5`) without a usable Pro response.
+  - Per `codex-loop.md`, do not save `.codex/pro-review.md` from either attempt and do not treat the visible report-card snippets as a valid Pro verdict.
+
+## 2026-06-07 admin console slice report recovery
+
+- The apparent empty assistant response was a false negative caused by reading only ordinary assistant message DOM.
+- The completed Deep Research report was visible in the Chrome tab as a special report card. It was exposed by `dom_cua.get_visible_dom()`, not by `[data-message-author-role="assistant"]`.
+- Visible DOM exposed `내보내기`, `내용 복사`, `마크다운으로 내보내기`, `Word로 내보내기`, `PDF로 내보내기`, and a report text node beginning `VERDICT: PASS`.
+- Clicking `마크다운으로 내보내기` did not trigger a Playwright download event but silently created `~/Downloads/deep-research-report (1).md`.
+- The markdown report was copied to `.codex/pro-review.md`.
+- Correct future procedure is documented in `agent-inbox/tool-control-runbook.md`.

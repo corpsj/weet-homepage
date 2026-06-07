@@ -1,0 +1,224 @@
+[
+  {
+    "viewport": "pc",
+    "route": "/admin/products",
+    "probes": {
+      "PRODUCT READINESS": true,
+      "이미지 보완": true,
+      "현재 페이지 제품 검색": true
+    },
+    "metrics": {
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "overflowX": false,
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "visibleInteractiveCount": 39,
+      "offscreenInteractive": []
+    }
+  },
+  {
+    "viewport": "pc",
+    "route": "/admin/projects",
+    "probes": {
+      "PROJECT READINESS": true,
+      "IMAGE HEALTH": true,
+      "프로젝트명, 고객, 지역 검색": true
+    },
+    "metrics": {
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "overflowX": false,
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "visibleInteractiveCount": 20,
+      "offscreenInteractive": []
+    }
+  },
+  {
+    "viewport": "pc",
+    "route": "/admin/consultations",
+    "probes": {
+      "CONSULTATION SLA": true,
+      "SLA 위험": true,
+      "상태 저장 대기열": true
+    },
+    "metrics": {
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "overflowX": false,
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "visibleInteractiveCount": 13,
+      "offscreenInteractive": []
+    }
+  },
+  {
+    "viewport": "pc",
+    "route": "/admin/insights",
+    "probes": {
+      "TRAFFIC INTELLIGENCE": true
+    },
+    "metrics": {
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "overflowX": false,
+      "viewport": {
+        "width": 1440,
+        "height": 960
+      },
+      "visibleInteractiveCount": 14,
+      "offscreenInteractive": []
+    }
+  },
+  {
+    "viewport": "tablet",
+    "route": "/admin/products",
+    "probes": {
+      "PRODUCT READINESS": true,
+      "이미지 보완": true,
+      "현재 페이지 제품 검색": true
+    },
+    "metrics": {
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "overflowX": false,
+      "viewport": {
+        "width": 834,
+        "height": 1112
+      },
+      "visibleInteractiveCount": 15,
+      "offscreenInteractive": []
+    }
+  },
+  {
+    "viewport": "tablet",
+    "route": "/admin/projects",
+    "probes": {
+      "PROJECT READINESS": true,
+      "IMAGE HEALTH": true,
+      "프로젝트명, 고객, 지역 검색": true
+    },
+    "metrics": {
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "overflowX": false,
+      "viewport": {
+        "width": 834,
+        "height": 1112
+      },
+      "visibleInteractiveCount": 6,
+      "offscreenInteractive": []
+    }
+  },
+  {
+    "viewport": "tablet",
+    "route": "/admin/consultations",
+    "probes": {
+      "CONSULTATION SLA": true,
+      "SLA 위험": true,
+      "상태 저장 대기열": true
+    },
+    "metrics": {
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "overflowX": false,
+      "viewport": {
+        "width": 834,
+        "height": 1112
+      },
+      "visibleInteractiveCount": 1,
+      "offscreenInteractive": []
+    }
+  },
+  {
+    "viewport": "tablet",
+    "route": "/admin/insights",
+    "probes": {
+      "TRAFFIC INTELLIGENCE": true
+    },
+    "metrics": {
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "overflowX": false,
+      "viewport": {
+        "width": 834,
+        "height": 1112
+      },
+      "visibleInteractiveCount": 2,
+      "offscreenInteractive": []
+    }
+  },
+  {
+    "viewport": "mobile",
+    "route": "/admin/products",
+    "probes": {
+      "PRODUCT READINESS": true,
+      "이미지 보완": true,
+      "현재 페이지 제품 검색": true
+    },
+    "metrics": {
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "overflowX": false,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "visibleInteractiveCount": 7,
+      "offscreenInteractive": []
+    }
+  },
+  {
+    "viewport": "mobile",
+    "route": "/admin/projects",
+    "probes": {
+      "PROJECT READINESS": true,
+      "IMAGE HEALTH": true,
+      "프로젝트명, 고객, 지역 검색": true
+    },
+    "metrics": {
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "overflowX": false,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "visibleInteractiveCount": 4,
+      "offscreenInteractive": []
+    }
+  },
+  {
+    "viewport": "mobile",
+    "route": "/admin/consultations",
+    "probes": {
+      "CONSULTATION SLA": true,
+      "SLA 위험": true,
+      "상태 저장 대기열": true
+    },
+    "metrics": {
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "overflowX": false,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "visibleInteractiveCount": 1,
+      "offscreenInteractive": []
+    }
+  },
+  {
+    "viewport": "mobile",
+    "route": "/admin/insights",
+    "probes": {
+      "TRAFFIC INTELLIGENCE": true
+    },
+    "metrics": {
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "overflowX": false,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "visibleInteractiveCount": 2,
+      "offscreenInteractive": []
+    }
+  }
+]

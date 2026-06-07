@@ -1,399 +1,421 @@
-# Weet Review Packet - Customize Floorplan + Confidence Slice
+# GPT-5.5 Pro Review Request
 
-Marker: `WEET_REVIEW_20260607_CUSTOMIZE_PRODUCTION_ZOOM_04`
-Generated: 2026-06-07 KST
+Marker: `WEET_REVIEW_20260607_ADMIN_CONSOLE_SLICE_04`
 
-## Active Task Brief
+You are reviewing an existing local Next.js project. You cannot see my computer, repository, terminal, git history, previous Codex actions, browser state, database state, generated files, runtime logs, or hidden files. All relevant context is included below.
 
-The user requested a recursive improvement loop for the Weet movable-home website, with these standing constraints:
+Return only this exact format:
 
-- Use Antigravity IDE/Gemini through Computer Use for frontend implementation, then Codex verifies and accepts only intended changes.
-- Use GPT-5.5 Pro Deep Research in Chrome for review when the surface is safe.
-- Do not ask the user for approval.
-- Test real interactions across PC, tablet, and mobile.
-- Record bugs, UX concerns, simulations, and future work in `agent-inbox/`.
-- User-reported bug: `/customize` order page shows the 3x6 and 3x9 floorplans at the same size / visually confused.
+~~~
+VERDICT: PASS | REVISE
 
-This packet covers the current `/customize` slice: model-specific floorplan correction, image failure fallback, conversion-confidence content, and mobile sticky CTA safety.
+CONTEXT_GAPS:
+- ...
 
-## Latest Addendum - Production Zoom Finding
+MUST_FIX:
+- ...
 
-- Commit `1f4c37a` was pushed to `zoo/customize-configurator` and promoted to Vercel Production through Chrome/Vercel.
-- Vercel production detail showed commit `1f4c37a`, `Production`, `Ready`, and custom domain `www.we-et.com`.
-- `https://we-et.com/customize` returned a 307 redirect to `https://www.we-et.com/customize`; `https://www.we-et.com/customize` returned 200.
-- Production PC/tablet/mobile Playwright QA confirmed the main floorplan uses distinct SVGs:
-  - compact: `/images/customize/compact-3x6-base.svg`
-  - standard: `/images/customize/standard-3x9-base.svg`
-- Production QA then found an additional real UX issue: the zoom modal initially rendered generated `model-footprint` fallback instead of the already-loaded `Standard 3x9` SVG because the modal `FloorplanCanvas` started a separate image-load status.
-- Local fix applied after that finding: `CustomizeConfigurator` now computes the current floorplan path/load status once and passes it to the main preview, zoom modal, and consultation modal preview.
-- Post-fix local validation passed:
-  - `npx playwright test e2e/customize-configurator.spec.ts`
-  - `npm run lint`
-  - `npm test`
-  - `npm run build`
-  - `git diff --check`
-- Follow-up commit `5fff2fc` was pushed and promoted to Vercel Production.
-- Final production QA on `https://we-et.com/customize?v=5fff2fc` passed on desktop/tablet/mobile:
-  - main compact SVG count 1 with `/images/customize/compact-3x6-base.svg`
-  - main standard SVG count 1 with `/images/customize/standard-3x9-base.svg`
-  - zoom dialog standard SVG count 1 immediately after opening
-  - zoom dialog `model-footprint` count 0
-  - sticky CTA clearance passed
-  - no horizontal overflow
-  - no console/page errors
-- Visual inspection of `.codex/qa/production-customize-postfix/mobile-zoom-immediate.png` and `desktop-zoom-immediate.png` confirmed the actual `Standard 3x9` SVG is visible in the zoom modal.
+OPTIONAL:
+- ...
 
-## Current Progress And State
+TESTS_TO_RUN:
+- ...
 
-- Antigravity IDE implemented the first draft of the `/customize` conversion-confidence section.
-- Codex reviewed the Antigravity diff, accepted intended changes, and continued validation/fixes locally.
-- Actual root cause for the floorplan bug was confirmed: public `customize_models` data currently points both `compact-3x6` and `standard-3x9` to `/images/customize/dummy-base.svg`.
-- Added model-specific fallback SVG assets:
-  - `/images/customize/compact-3x6-base.svg`
-  - `/images/customize/standard-3x9-base.svg`
-- Added code that replaces the placeholder `dummy-base.svg` with the correct model-specific local SVG.
-- Added a `window.Image()` preloader so a broken base SVG path falls back to generated footprint rendering instead of hiding the fallback.
-- Added model comparison, recommended-use copy, included/separate scope, and a 5-item site readiness checklist below the floorplan.
-- Fixed a real mobile bug where the final checklist item could sit under the sticky `주문하기` CTA.
-- Updated `agent-inbox/implementation-backlog.md`, `agent-inbox/pro-review-failures.md`, and `.codex/state.md`.
+RISK_NOTES:
+- ...
+~~~
 
-## Project Snapshot
+## 1. Active Task
 
-- Repo: `/Users/zoopark-studio/Documents/dev/weet-homepage`
-- Framework: Next.js 16.2.7 App Router
-- Route: `/customize`
-- Component: `components/customize/CustomizeConfigurator.tsx`
-- E2E: `e2e/customize-configurator.spec.ts`
-- Local audit server: `http://localhost:3000`
-- Deployment validation note: `agent-inbox/웹 접속 방법.md` now instructs future web checks to use actual `we-et.com` after Vercel deployment, not localhost.
+Original user request: continue the previous recursive Weet homepage/admin improvement workflow using Antigravity, GPT-5.5 Pro, no silent stops, extensive PC/tablet/mobile testing, and trusted `agent-inbox/` records. The user wants the admin page redesigned away from the old UI into a premium, simple, technical console consistent with Tesla dashboard / Grok / SpaceX / xAI references. The user also requires findings and UX improvement ideas to be stored in `agent-inbox/`.
 
-## Git Status
+Active slice reviewed here:
+- Unify core admin child pages under the new premium technical console direction.
+- Preserve prior GPT Pro `MUST_FIX` behavior around public project readiness and admin invalid image rendering.
+- Add PC/tablet/mobile authenticated admin regression coverage.
+- Record Antigravity/Computer Use failures and QA findings in `agent-inbox/`.
 
-```text
- M .codex/review-packet.md
+Non-goals for this slice:
+- UTM, CMS, gallery, inquiries, edit/new forms, and product modal full redesign are intentionally left as follow-up backlog.
+- Production deployment has not yet happened for this slice; local build and authenticated local QA are complete.
+
+## 2. Project Snapshot
+
+Purpose: Weet homepage and admin console for a Korean movable modular-home company.
+
+Stack:
+- Next.js 16.2.7 app router, React 19, TypeScript, Tailwind.
+- Supabase auth/database/storage.
+- Playwright E2E, Vitest unit tests.
+
+Important routes/modules:
+- Public: `/`, `/products`, `/projects`, `/customize`, `/support`.
+- Admin: `/admin`, `/admin/products`, `/admin/projects`, `/admin/consultations`, `/admin/insights`.
+- Project readiness helpers: `lib/projects/publicProjects.ts`.
+- Admin shell: `components/admin/AdminShell.tsx`, `components/admin/AdminSidebar.tsx`.
+
+Database/external services:
+- Supabase service role is available locally for E2E-only temporary admin users and fixture seeding.
+- Google Analytics can be configured or absent; `/admin/insights` has a configured and unconfigured state.
+
+## 3. Current Progress
+
+Changes made in this slice:
+- Generated a UI reference image before UI implementation per `agent-inbox/UI-design.md`; saved as `agent-inbox/generated-ui-reference-admin-console.png`.
+- Attempted Antigravity IDE delegation through Computer Use; Computer Use timed out, so failure was recorded in `agent-inbox/antigravity-failures.md` and `.codex/state.md`.
+- Added `components/admin/ConsolePrimitives.tsx` with console page header, metric card, panel, status pill, readiness ring, and shared form/button classes.
+- Updated `/admin/products` product grid/list to use console primitives, readiness rings, defensive image URL validation, current-page search, and image/price readiness metrics.
+- Updated `/admin/projects` to use console primitives, search, readiness ring, issue chips, safer image placeholder copy, and summary cards.
+- Updated `/admin/consultations` to show SLA-oriented metrics and row-level SLA pills while keeping status/memo server actions intact.
+- Updated `/admin/insights` to remove old rounded marketing-dashboard styling and use console panels/headers.
+- Added Playwright coverage proving the admin operations pages expose readiness/SLA controls across PC/tablet/mobile.
+- Appended QA observations and remaining work to `agent-inbox/findings-admin-simulation.md` and `agent-inbox/implementation-backlog.md`.
+
+Known user-authored concurrent instruction:
+- `agent-inbox/안티그래비티의 작업범위.md` gained a line saying Antigravity IDE Computer Use must work somehow. I did not revert it. I retried Antigravity recovery and recorded the continued Computer Use timeout.
+
+## 4. Repository State
+
+Current branch:
+~~~text
+zoo/customize-configurator...origin/zoo/customize-configurator
+~~~
+
+Recent commits:
+~~~text
+0730eec Record production customize verification
+5fff2fc Share customize floorplan image status
+1f4c37a Fix customize floorplans and confidence checks
+eeadb4b feat: update configurator UI, admin shell, and add design documents
+1b69c8e feat: update customize configurator and admin pages with test updates
+~~~
+
+Git status:
+~~~text
  M .codex/state.md
+ M agent-inbox/antigravity-failures.md
+ M agent-inbox/findings-admin-simulation.md
  M agent-inbox/implementation-backlog.md
- M agent-inbox/pro-review-failures.md
- M components/customize/CustomizeConfigurator.tsx
- M e2e/customize-configurator.spec.ts
+ M "agent-inbox/안티그래비티의 작업범위.md"
+ M app/admin/insights/page.tsx
+ M app/admin/projects/AdminProjectsClient.tsx
+ M components/admin/consultations/ConsultationManager.tsx
+ M components/admin/insights/AnalyticsDashboard.tsx
+ M components/admin/products/ProductGrid.tsx
+ M e2e/public-pages.spec.ts
 ?? .codex/qa/
-?? agent-inbox/UI-design.md
-?? agent-inbox/gpt프로 심층리서치 대기.md
-?? agent-inbox/안티그래비티의 작업범위.md
-?? agent-inbox/웹 접속 방법.md
-?? public/images/customize/compact-3x6-base.svg
-?? public/images/customize/standard-3x9-base.svg
-```
+?? agent-inbox/generated-ui-reference-admin-console.png
+?? components/admin/ConsolePrimitives.tsx
+~~~
 
-## Changed Files
+Changed files:
+~~~text
+.codex/state.md
+agent-inbox/antigravity-failures.md
+agent-inbox/findings-admin-simulation.md
+agent-inbox/implementation-backlog.md
+agent-inbox/안티그래비티의 작업범위.md
+app/admin/insights/page.tsx
+app/admin/projects/AdminProjectsClient.tsx
+components/admin/consultations/ConsultationManager.tsx
+components/admin/insights/AnalyticsDashboard.tsx
+components/admin/products/ProductGrid.tsx
+e2e/public-pages.spec.ts
+components/admin/ConsolePrimitives.tsx (new)
+agent-inbox/generated-ui-reference-admin-console.png (new generated UI reference image)
+.codex/qa/admin-console-slice/* (new local QA evidence)
+~~~
 
-Implementation:
+Diff stat:
+~~~text
+ .codex/state.md                                    |   8 +
+ agent-inbox/antigravity-failures.md                |  12 ++
+ agent-inbox/findings-admin-simulation.md           |  33 ++++
+ agent-inbox/implementation-backlog.md              |   6 +
+ agent-inbox/안티그래비티의 작업범위.md             |   1 +
+ app/admin/insights/page.tsx                        |  28 +--
+ app/admin/projects/AdminProjectsClient.tsx         | 173 +++++++++-------
+ components/admin/consultations/ConsultationManager.tsx | 104 ++++++++--
+ components/admin/insights/AnalyticsDashboard.tsx   |  61 +++---
+ components/admin/products/ProductGrid.tsx          | 220 +++++++++++++++------
+ e2e/public-pages.spec.ts                           |  42 ++++
+~~~
 
-- `components/customize/CustomizeConfigurator.tsx`
-- `e2e/customize-configurator.spec.ts`
-- `public/images/customize/compact-3x6-base.svg`
-- `public/images/customize/standard-3x9-base.svg`
+## 5. Git Diff / Relevant Excerpts
 
-Records and review artifacts:
+New shared console primitives:
+~~~tsx
+// components/admin/ConsolePrimitives.tsx
+export const consoleInputClass =
+  'h-10 rounded-md border border-[#d8d8d2] bg-[#fbfbfa] px-3 text-sm text-[#111111] outline-none transition-colors placeholder:text-gray-400 focus:border-[#111111] focus:ring-2 focus:ring-[#111111]/10 disabled:cursor-not-allowed disabled:opacity-60';
 
-- `.codex/review-packet.md`
-- `.codex/state.md`
-- `.codex/qa/customize-confidence/*`
-- `agent-inbox/implementation-backlog.md`
-- `agent-inbox/pro-review-failures.md`
-- `agent-inbox/UI-design.md`
-- `agent-inbox/gpt프로 심층리서치 대기.md`
-- `agent-inbox/안티그래비티의 작업범위.md`
-- `agent-inbox/웹 접속 방법.md`
+export const consolePrimaryButtonClass =
+  'inline-flex h-10 items-center justify-center gap-2 rounded-md border border-[#111111] bg-[#111111] px-4 text-sm font-bold text-white transition-colors hover:bg-[#2a2a2a] focus:outline-none focus:ring-2 focus:ring-[#111111]/20 disabled:cursor-not-allowed disabled:opacity-60';
 
-## Git Diff
+export function ConsolePageHeader({ eyebrow, title, description, actions }) {
+  return (
+    <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <div className="min-w-0">
+        <p className="mb-2 text-xs font-bold text-[#8a6a12]">{eyebrow}</p>
+        <h1 className="text-2xl font-black text-[#111111]">{title}</h1>
+        <p className="mt-1 max-w-2xl text-sm font-medium leading-6 text-gray-500">{description}</p>
+      </div>
+      {actions && <div className="flex shrink-0 flex-wrap items-center gap-2">{actions}</div>}
+    </div>
+  );
+}
 
-Current tracked diff stat:
+export function ConsoleMetricCard({ label, value, caption, icon, tone = 'neutral' }) {
+  const toneClass = {
+    neutral: 'border-[#e5e5df] bg-white text-[#111111]',
+    dark: 'border-[#111111] bg-[#111111] text-white',
+    accent: 'border-[#eab308] bg-[#eab308] text-[#111111]',
+    warning: 'border-[#fed7aa] bg-[#fff7ed] text-[#7c2d12]',
+  }[tone];
+  return <div className={cn('rounded-md border p-4 shadow-sm', toneClass)}>{/* metric */}</div>;
+}
 
-```text
- .codex/review-packet.md                        | 615 ++++++++++---------------
- .codex/state.md                                |  28 +-
- agent-inbox/implementation-backlog.md          |  15 +-
- agent-inbox/pro-review-failures.md             |   8 +
- components/customize/CustomizeConfigurator.tsx | 179 ++++++-
- e2e/customize-configurator.spec.ts             |  76 ++-
- 6 files changed, 548 insertions(+), 373 deletions(-)
-```
+export function ConsoleStatusPill({ children, tone = 'neutral' }) {
+  const toneClass = {
+    neutral: 'border-[#d8d8d2] bg-[#f4f4f1] text-gray-600',
+    success: 'border-[#bbf7d0] bg-[#f0fdf4] text-[#166534]',
+    warning: 'border-[#fed7aa] bg-[#fff7ed] text-[#9a3412]',
+    danger: 'border-[#fecaca] bg-[#fef2f2] text-[#b91c1c]',
+    dark: 'border-[#111111] bg-[#111111] text-white',
+  }[tone];
+  return <span className={cn('inline-flex items-center rounded-md border px-2 py-1 text-xs font-bold', toneClass)}>{children}</span>;
+}
 
-Untracked SVG assets are new and intentional.
+export function ReadinessRing({ score }: { score: number }) {
+  const safeScore = Math.max(0, Math.min(100, score));
+  const color = safeScore >= 85 ? '#16a34a' : safeScore >= 65 ? '#eab308' : '#ef4444';
+  return (
+    <div className="grid h-10 w-10 place-items-center rounded-full text-xs font-black text-[#111111]"
+      style={{ background: `conic-gradient(${color} ${safeScore * 3.6}deg, #e7e5df 0deg)` }}
+      aria-label={`준비도 ${safeScore}점`}>
+      <span className="grid h-8 w-8 place-items-center rounded-full bg-white">{safeScore}</span>
+    </div>
+  );
+}
+~~~
 
-Key code diff excerpts:
+Product image/readiness logic:
+~~~tsx
+// components/admin/products/ProductGrid.tsx
+const hasValidProductImageUrl = (value: string | null | undefined) => {
+  if (!value) return false;
+  return /^https?:\/\/.+/i.test(value) || value.startsWith('/images/');
+};
 
-```diff
-+const PLACEHOLDER_FLOORPLAN_PATH = '/images/customize/dummy-base.svg';
-+const MODEL_FALLBACK_FLOORPLANS: Record<string, string> = {
-+  'compact-3x6': '/images/customize/compact-3x6-base.svg',
-+  'standard-3x9': '/images/customize/standard-3x9-base.svg',
-+};
-+
-+function floorplanImagePathForModel(model: CustomizeModel) {
-+  const configuredPath = model.floorplanImagePath?.trim();
-+  const fallbackPath = MODEL_FALLBACK_FLOORPLANS[model.id];
-+
-+  if (!configuredPath) return fallbackPath ?? null;
-+  if (configuredPath === PLACEHOLDER_FLOORPLAN_PATH) return fallbackPath ?? configuredPath;
-+  return configuredPath;
-+}
-```
+const getProductReadinessScore = (product: Product) => {
+  let score = 100;
+  if (!product.is_active) score -= 20;
+  if (!product.price) score -= 16;
+  if (!hasValidProductImageUrl(product.image_url)) score -= 24;
+  if (!product.description || product.description.length < 24) score -= 16;
+  if (!product.size) score -= 12;
+  if (!product.floor_plan_url) score -= 12;
+  return Math.max(0, score);
+};
 
-```diff
-+function useFloorplanImageStatus(path: string | null) {
-+  const [result, setResult] = useState<{ path: string; status: 'loaded' | 'failed' } | null>(null);
-+
-+  useEffect(() => {
-+    if (!path) return;
-+
-+    let cancelled = false;
-+    const image = new window.Image();
-+
-+    image.onload = () => {
-+      if (!cancelled) setResult({ path, status: 'loaded' });
-+    };
-+    image.onerror = () => {
-+      if (!cancelled) setResult({ path, status: 'failed' });
-+    };
-+    image.src = path;
-+
-+    return () => {
-+      cancelled = true;
-+    };
-+  }, [path]);
-+
-+  if (!path) return 'missing';
-+  if (result?.path !== path) return 'loading';
-+  return result.status;
-+}
-```
+const imageUrl = hasValidProductImageUrl(product.image_url) ? product.image_url : null;
+{imageUrl ? <Image src={imageUrl} ... /> : <div>이미지 점검 필요</div>}
+<ReadinessRing score={readinessScore} />
+<ConsoleStatusPill tone={product.is_active ? 'success' : 'neutral'}>
+  {product.is_active ? '공개' : '비공개'}
+</ConsoleStatusPill>
+~~~
 
-```diff
--  const hasBaseImage = Boolean(model.floorplanImagePath);
-+  const floorplanImagePath = floorplanImagePathForModel(model);
-+  const imageStatus = useFloorplanImageStatus(floorplanImagePath);
-+  const hasBaseImage = imageStatus === 'loaded';
-```
+Project readiness/search logic:
+~~~tsx
+// app/admin/projects/AdminProjectsClient.tsx
+const filteredProjects = useMemo(() => {
+  const normalized = searchTerm.trim().toLowerCase();
+  if (!normalized) return projects;
+  return projects.filter((project) => {
+    return [project.title, project.client, project.location, project.status, ...(project.tags ?? [])]
+      .filter(Boolean)
+      .some((value) => value!.toLowerCase().includes(normalized));
+  });
+}, [projects, searchTerm]);
 
-```diff
-+          <div className="border-t border-[#d8d0c3] bg-[#fbfaf7] px-4 py-12 md:px-8 lg:px-10">
-+            <ConversionConfidenceSection catalog={catalog} />
-+          </div>
-```
-
-The added `ConversionConfidenceSection` includes:
-
-- `어떤 모델이 적합할까요?`
-- model cards with dimensions, area, starting price, and recommended-use copy
-- `포함 사항 및 별도 준비`
-- `현장 체크리스트` with 5 togglable readiness checks and `aria-pressed`
-- mobile bottom padding `pb-32 lg:pb-10` so final checklist content clears the sticky CTA
-
-Key E2E diff excerpts:
-
-```diff
--    await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('href', /dummy-base\.svg/);
-+    await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('href', /compact-3x6-base\.svg/);
-...
-+    await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('href', /standard-3x9-base\.svg/);
-```
-
-```diff
-+  test('floorplan falls back to generated footprint when the base image fails', async ({ page }) => {
-+    await page.route('**/compact-3x6-base.svg', (route) => route.abort());
-+    await page.goto('/customize');
-+    await page.waitForLoadState('networkidle');
-+
-+    await expect(page.getByRole('heading', { level: 1, name: 'Compact 3x6' })).toBeVisible();
-+    await expect(page.getByTestId('base-floorplan-image')).toHaveCount(0);
-+    await expect(page.getByTestId('model-footprint')).toHaveCount(1);
-+    await expect(page.getByTestId('model-footprint')).toHaveAttribute('width', '600');
-+  });
-```
-
-```diff
-+  test('conversion confidence section appears on mobile and toggles work safely', async ({ page }) => {
-+    await page.setViewportSize({ width: 390, height: 844 });
-+    ...
-+    await page.evaluate(() => {
-+      document.documentElement.style.scrollBehavior = 'auto';
-+      window.scrollTo(0, document.documentElement.scrollHeight);
-+    });
-+    await page.waitForFunction(
-+      () => window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2
-+    );
-+    const [lastBox, orderBox] = await Promise.all([lastCheck.boundingBox(), orderButton.boundingBox()]);
-+    expect(lastBox!.y + lastBox!.height).toBeLessThanOrEqual(orderBox!.y - 8);
-+  });
-```
-
-## Relevant File Excerpts
-
-Actual public catalog evidence gathered with the Supabase anon client:
-
-```json
-[
-  {
-    "id": "compact-3x6",
-    "floorplan_image_path": "/images/customize/dummy-base.svg"
-  },
-  {
-    "id": "standard-3x9",
-    "floorplan_image_path": "/images/customize/dummy-base.svg"
+const statusColor = (status: string | null): 'neutral' | 'success' | 'warning' | 'dark' => {
+  switch (status) {
+    case 'completed': return 'success';
+    case 'in_progress': return 'dark';
+    case 'planned': return 'warning';
+    default: return 'neutral';
   }
-]
-```
+};
 
-This is why code now treats `dummy-base.svg` as a placeholder, not a trustworthy final model-specific floorplan.
+const publicIssues = getProjectPublicIssues(project);
+const heroImage = getProjectHeroImage(project);
+<ReadinessRing score={readinessScore(publicIssues)} />
+{heroImage ? <Image src={heroImage} ... /> : <div>{project.images?.[0] ? 'URL 확인' : '이미지 없음'}</div>}
+~~~
 
-`FloorplanCanvas` behavior now:
+Consultation SLA logic:
+~~~tsx
+// components/admin/consultations/ConsultationManager.tsx
+const getAgeMinutes = (createdAt: string) => {
+  const time = Date.parse(createdAt);
+  if (Number.isNaN(time)) return 0;
+  return Math.max(0, Math.floor((Date.now() - time) / 60000));
+};
 
-- If the resolved model-specific floorplan loads: render `<image data-testid="base-floorplan-image" href="...model-specific.svg" />`.
-- If no image exists or the image load fails: render generated fallback grid, base objects, and `model-footprint`.
-- Option overlay images and selected option labels still render after either base path.
+const summary = consultations.reduce(
+  (current, item) => {
+    current[item.status] += 1;
+    if (item.status !== '완료' && getAgeMinutes(item.createdAt) >= 120) current.slaRisk += 1;
+    return current;
+  },
+  { 신규: 0, 진행중: 0, 완료: 0, 보류: 0, slaRisk: 0 } as Record<ConsultationStatus, number> & { slaRisk: number }
+);
 
-## Commands Run
+<ConsoleMetricCard label="SLA 위험" value={summary.slaRisk.toLocaleString('ko-KR')} caption="2시간 이상 미처리" tone={summary.slaRisk > 0 ? 'warning' : 'neutral'} />
+<ConsoleStatusPill tone={isSlaRisk ? 'danger' : statusTone(item.status)}>
+  {isSlaRisk ? 'SLA 위험' : formatAge(ageMinutes)}
+</ConsoleStatusPill>
+~~~
 
-```text
-git status --short
+Insights style conversion:
+~~~tsx
+// app/admin/insights/page.tsx
+<ConsolePageHeader
+  eyebrow="TRAFFIC INTELLIGENCE"
+  title="웹 로그 분석"
+  description="방문자 트래픽, 유입 경로, 사용자 행동을 운영 판단에 바로 연결합니다."
+/>
+{!isConfigured ? (
+  <ConsolePanel className="p-8 text-center md:p-12">...</ConsolePanel>
+) : (
+  <AnalyticsDashboard ... />
+)}
+
+// components/admin/insights/AnalyticsDashboard.tsx
+<ConsolePanel className="p-5 lg:col-span-2">...traffic chart...</ConsolePanel>
+<ConsoleMetricCard label={title} value={value} caption={subtext} icon={...} />
+~~~
+
+New E2E coverage:
+~~~ts
+// e2e/public-pages.spec.ts
+test('admin console operations pages expose readiness controls across devices', async ({ page }) => {
+  const credentials = await createE2EAdminCredentials();
+  const viewports = [
+    { label: 'pc', width: 1440, height: 960 },
+    { label: 'tablet', width: 834, height: 1112 },
+    { label: 'mobile', width: 390, height: 844 },
+  ];
+  try {
+    await page.setViewportSize(viewports[0]);
+    await loginAsAdmin(page, credentials);
+    for (const viewport of viewports) {
+      await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      await page.goto('/admin/products');
+      await expect(page.getByText('PRODUCT READINESS')).toBeVisible();
+      await expect(page.getByPlaceholder('현재 페이지 제품 검색')).toBeVisible();
+      await expect(page.getByText('이미지 보완')).toBeVisible();
+      await page.goto('/admin/projects');
+      await expect(page.getByText('PROJECT READINESS')).toBeVisible();
+      await expect(page.getByText('IMAGE HEALTH')).toBeVisible();
+      await expect(page.getByPlaceholder('프로젝트명, 고객, 지역 검색')).toBeVisible();
+      await page.goto('/admin/consultations');
+      await expect(page.getByText('CONSULTATION SLA')).toBeVisible();
+      await expect(page.getByText('SLA 위험')).toBeVisible();
+      await page.goto('/admin/insights');
+      await expect(page.getByText('TRAFFIC INTELLIGENCE')).toBeVisible();
+      const overflowX = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+      expect(overflowX, `${viewport.label} admin console overflow`).toBeFalsy();
+    }
+  } finally {
+    await credentials.cleanup();
+  }
+});
+~~~
+
+## 6. Validation State
+
+Commands run:
+~~~text
+git status --short --branch
 git diff --stat
-git diff --check
-curl -I http://localhost:3000/customize
 npm run lint
 npm test
-npx playwright test e2e/customize-configurator.spec.ts
+npx playwright test e2e/public-pages.spec.ts --grep "Admin responsive shell|admin console operations"
+npx playwright test e2e/public-pages.spec.ts e2e/customize-configurator.spec.ts
+git diff --check
 npm run build
-Node/Supabase public query for customize_models floorplan paths
-Node/Playwright PC/tablet/mobile interaction audit for /customize
-```
+Node/Playwright authenticated admin QA script over PC/tablet/mobile × products/projects/consultations/insights
+Computer Use attempts: list_apps, get_app_state("Antigravity IDE")
+Antigravity recovery: open -a "Antigravity IDE"; ps aux | rg -i "Antigravity|antigravity"; get_app_state("Antigravity IDE")
+~~~
 
-## Test / Lint / Build Output
-
-`git diff --check`: passed with no output.
-
-`npm run lint`: passed after rerunning sequentially. One earlier lint invocation failed due a filesystem race while Playwright was concurrently creating/removing `test-results`; rerun after `rm -rf test-results` passed.
-
-```text
+Validation output summary:
+~~~text
+npm run lint
 > eslint . --max-warnings=0
-```
+PASS
 
-`npm test`:
+npm test
+Test Files 3 passed (3)
+Tests 20 passed (20)
 
-```text
-Test Files  3 passed (3)
-Tests       20 passed (20)
-```
+npx playwright test e2e/public-pages.spec.ts --grep "Admin responsive shell|admin console operations"
+3 passed (19.3s)
 
-`npx playwright test e2e/customize-configurator.spec.ts`:
+npx playwright test e2e/public-pages.spec.ts e2e/customize-configurator.spec.ts
+22 passed (20.0s)
 
-```text
-10 passed (5.4s)
-```
+git diff --check
+PASS
 
-`npm run build`:
-
-```text
+npm run build
 ✓ Compiled successfully
-✓ Generating static pages using 27 workers (20/20)
-Route /customize is dynamic server-rendered
-```
+✓ Finished TypeScript
+✓ Generated static pages (20/20)
+Warning remains: The "middleware" file convention is deprecated. Please use "proxy" instead.
+~~~
 
-Known unrelated build warning:
-
-```text
-⚠ The "middleware" file convention is deprecated. Please use "proxy" instead.
-```
-
-## Browser / Playwright Findings
-
-Generated QA artifacts:
-
-- `.codex/qa/customize-confidence/desktop-compact.png`
-- `.codex/qa/customize-confidence/desktop-standard-confidence.png`
-- `.codex/qa/customize-confidence/tablet-compact.png`
-- `.codex/qa/customize-confidence/tablet-standard-confidence.png`
-- `.codex/qa/customize-confidence/mobile-compact.png`
-- `.codex/qa/customize-confidence/mobile-standard-confidence.png`
-- `.codex/qa/customize-confidence/summary.json`
-
-PC/tablet/mobile audit summary:
-
-```json
+Browser/Playwright findings:
+~~~json
 {
-  "desktop": {
-    "compactHref": "/images/customize/compact-3x6-base.svg",
-    "standardHref": "/images/customize/standard-3x9-base.svg",
-    "hrefsDiffer": true,
-    "floorplans": 1,
-    "footprints": 0,
-    "horizontallyOffscreen": [],
-    "lastCheckAboveOrderButton": true,
-    "consoleMessages": [],
-    "pageErrors": []
-  },
-  "tablet": {
-    "compactHref": "/images/customize/compact-3x6-base.svg",
-    "standardHref": "/images/customize/standard-3x9-base.svg",
-    "hrefsDiffer": true,
-    "floorplans": 1,
-    "footprints": 0,
-    "horizontallyOffscreen": [],
-    "lastCheckAboveOrderButton": true,
-    "consoleMessages": [],
-    "pageErrors": []
-  },
-  "mobile": {
-    "compactHref": "/images/customize/compact-3x6-base.svg",
-    "standardHref": "/images/customize/standard-3x9-base.svg",
-    "hrefsDiffer": true,
-    "floorplans": 1,
-    "footprints": 0,
-    "horizontallyOffscreen": [],
-    "lastCheckBottom": 668,
-    "orderButtonTop": 778,
-    "lastCheckAboveOrderButton": true,
-    "consoleMessages": [],
-    "pageErrors": []
+  "qaArtifact": ".codex/qa/admin-console-slice/summary.json",
+  "screenshots": ".codex/qa/admin-console-slice/*.png",
+  "checks": "12 screens: 4 admin routes × PC/tablet/mobile",
+  "result": {
+    "overflowX": false,
+    "visibleOffscreenInteractiveControls": 0,
+    "consoleErrors": 0,
+    "pageErrors": 0,
+    "expectedProbesVisible": true
   }
 }
-```
+~~~
 
 Visual inspection:
+- `pc-products.png`: product cards use black/off-white/yellow console tone, readiness rings, active/image status chips.
+- `pc-projects.png`: project table uses readiness rings and issue chips; invalid/missing image states are placeholders, not broken `<Image>` renders.
+- `mobile-products.png`: no horizontal overflow; controls stack vertically. The local Next dev overlay appears in screenshots but is not production UI.
+- `mobile-consultations.png`: SLA metric cards stack cleanly; empty state is stable.
 
-- Desktop Compact shows a shorter 600-width plan.
-- Desktop Standard shows a longer 900-width plan.
-- Mobile Standard keeps the option button, confidence content, checklist toggles, and sticky order CTA functional.
-- Full-page screenshots can show sticky bars in the middle due screenshot mechanics, but coordinate checks confirm final checklist content clears the fixed order CTA in actual viewport geometry.
+## 7. Current Failures / Risks
 
-## Current Failures Or Risks
+Current failures:
+- Antigravity IDE could not be controlled through Computer Use. `list_apps` and `get_app_state("Antigravity IDE")` timed out after 120s. A later recovery attempt proved Antigravity IDE and its Weet workspace language server were running, but `get_app_state("Antigravity IDE")` still timed out. This was recorded in `agent-inbox/antigravity-failures.md`.
+- The user-authored instruction now says Antigravity IDE Computer Use must work somehow; this remains an environmental/tooling blocker for future frontend delegation.
 
-- GPT-5.5 Pro Deep Research for the earlier marker eventually showed report-card snippets, but the conversation still opened as a collapsed/empty assistant iframe. No complete response could be copied, so `.codex/pro-review.md` has not been saved.
-- One concrete Pro snippet about broken floorplan-image fallback was locally verified and fixed.
-- Current packet has not yet received a valid GPT-5.5 Pro review.
-- Real `we-et.com` / Vercel deployment validation is still pending per `agent-inbox/웹 접속 방법.md`.
-- Model recommendation copy is still hard-coded for the current two model IDs.
-- Transport/crane/foundation/utility/permit costs are listed as separate scope, but numeric examples are still future work.
-- Existing Next middleware-to-proxy warning remains.
+Known risks:
+- UTM, CMS, gallery, inquiries, edit/new forms, and ProductModal still retain old rounded SaaS styling.
+- Product readiness score is heuristic and UI-only; it is not yet persisted or connected to dashboard aggregates.
+- Consultation SLA threshold is hardcoded at 120 minutes and uses local browser time; acceptable for visual triage, but a real SLA system should be server-backed.
+- Build still warns about Next middleware-to-proxy deprecation.
+- Production `we-et.com` validation has not yet been run for this slice; it should happen after commit/push/Vercel promote.
 
-## Exact Review Questions
+## 8. Exact Review Questions
 
-Please review this packet as GPT-5.5 Pro.
-
-Return exactly these sections:
-
-1. `VERDICT: PASS` or `VERDICT: REVISE`
-2. `MUST_FIX`
-3. `OPTIONAL`
-4. `RATIONALE`
-
-Focus only on concrete issues in this current `/customize` floorplan/confidence slice.
-
-Questions:
-
-- Is treating `/images/customize/dummy-base.svg` as a placeholder and substituting model-specific local SVGs acceptable, or should the DB be migrated immediately instead?
-- Is the `window.Image()` preloader fallback approach safe for SVG floorplans in a client component?
-- Are the added E2E tests sufficient for: model-specific floorplan href, fallback on image failure, mobile sticky CTA clearance, and floorplan single-rendering?
-- Should the model recommendation copy be data-driven before completion, given the current catalog has only two active model IDs?
-- Are there any concrete `MUST_FIX` items before this slice can be considered complete?
+1. VERDICT: PASS or REVISE for this admin console slice before commit/deploy?
+2. Are there any concrete `MUST_FIX` regressions in the new console primitives, product/project/consultation/insights admin changes, or E2E coverage?
+3. Is the defensive product/project image validation sufficient to avoid admin list crashes from bad stored URLs?
+4. Is the consultation SLA UI safe enough as an operational visual triage feature, or does the hardcoded client-side 120-minute age create a required fix?
+5. Are there any missing tests that must be added before deployment?

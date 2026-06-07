@@ -162,3 +162,36 @@ The first 10 administrator personas did not produce 100 unique hard bugs. Follow
 - Add admin global search/command palette for fast navigation.
 - Add unsaved-change guards and destructive action confirmations across edit forms.
 - Add role-aware visibility for marketing-only, content-only, support-only, and owner-level actions.
+
+## 2026-06-07 admin console slice QA
+
+### Evidence baseline
+
+- Local authenticated QA used a temporary service-role-created `@weet.com` admin account and deleted it after the run.
+- Audited routes: `/admin/products`, `/admin/projects`, `/admin/consultations`, `/admin/insights`.
+- Audited viewports: PC `1440x960`, tablet `834x1112`, mobile `390x844`.
+- Evidence saved to `.codex/qa/admin-console-slice/summary.json` and 12 screenshots in `.codex/qa/admin-console-slice/`.
+- All 12 route/viewport checks showed `overflowX: false`, visible offscreen interactive controls `0`, console/page errors `0`, and expected console probes visible.
+
+### New observations
+
+101. 제품 관리 PC: 제품 준비도 카드, 이미지 보완, 가격 보완이 상단에 고정되어 제품 운영 화면의 목적이 더 선명해졌다.
+102. 제품 관리 PC: 각 제품 카드에 준비도 링이 추가되어 공개 가능성 판단이 빠르다.
+103. 제품 관리 mobile: 필터/검색이 안정적으로 쌓이지만 첫 화면 세로 공간을 많이 사용한다. 다음 개선에서 접이식 toolbar가 유리하다.
+104. 제품 관리 mobile: 이미지·가격 보완 수가 0일 때도 상태 카드가 남아 있어 운영 안정감을 준다.
+105. 프로젝트 관리 PC: invalid image URL이 있어도 `getProjectHeroImage` 기반 placeholder로 안전하게 렌더링된다.
+106. 프로젝트 관리 PC: 프로젝트 준비도 링과 public issue chip이 같은 행에 있어 공개 차단 사유가 명확하다.
+107. 프로젝트 관리 mobile/tablet: 검색 input과 상태 filter가 overflow 없이 유지된다.
+108. 상담 관리 PC: 신규/진행/SLA 위험/완료 metric이 생겨 상담팀 리더가 우선순위를 즉시 볼 수 있다.
+109. 상담 관리 mobile: 상담이 0건일 때 empty state가 안정적이지만, 다음 행동 링크가 없어서 약간 정적이다.
+110. 상담 관리 tablet: 상세 `details` 영역은 기존보다 console tone과 잘 맞지만 실제 상담 데이터가 많을 때 펼침 행 밀도 검증이 추가로 필요하다.
+111. 인사이트 PC: 장식적인 큰 radius와 원형 blur가 제거되어 shell/dashboard와 더 잘 맞는다.
+112. 인사이트 mobile: GA 미연동 상태와 연동 완료 상태 모두 header가 같은 console hierarchy를 쓴다.
+113. 공통: `ConsolePrimitives` 도입으로 다음 하위 페이지 통일 비용이 줄었다.
+114. 공통: `ReadinessRing`은 제품/프로젝트에 유용하므로 갤러리 media health에도 재사용 가능하다.
+115. 공통: console tone은 현재 black/off-white/yellow 조합이며, 공개 홈페이지와도 브랜드 bridge가 생긴다.
+116. 위험: `UTM Builder`, `CMS`, `gallery`, `inquiries`, edit/new forms는 아직 old SaaS rounded-card tone이 남아 있다.
+117. 위험: Product modal은 아직 `rounded-2xl shadow-xl` tone이라 새 콘솔과 완전히 맞지 않는다.
+118. 위험: destructive action confirmation은 프로젝트 삭제 `confirm()` 수준이며, mobile-safe custom confirmation으로 개선 여지가 있다.
+119. 위험: command palette/global search는 아직 구현되지 않았다.
+120. 다음 추천: UTM/CMS/gallery/inquiries를 같은 console table/editor system으로 순차 전환하고, modal/form 계층까지 통일한다.

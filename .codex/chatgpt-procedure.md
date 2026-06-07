@@ -4,6 +4,8 @@
 
 Use one Chrome ChatGPT tab by default, but start a new chat for every separate run.
 
+All Chrome/ChatGPT verification must pair DOM/text checks with visual analysis. When a report, generated image, modal, composer, or download UI is visible, inspect screenshots or visible DOM/accessibility output as a human-facing surface. Do not conclude that a response is empty or complete from ordinary DOM text alone if the screen may show a special report card, iframe, image viewer, or generated artifact.
+
 This is required because ChatGPT preserves the last composer mode:
 
 - after image generation, the composer can remain in `이미지 만들기` mode
