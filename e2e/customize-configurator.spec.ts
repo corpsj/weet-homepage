@@ -27,15 +27,16 @@ test.describe('Customize configurator', () => {
     await page.goto('/customize');
     await page.waitForLoadState('networkidle');
 
-    await expect(page.getByRole('heading', { name: 'Compact 3x6' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: 'Compact 3x6' })).toBeVisible();
     await expect(page.getByText('₩27,900,000', { exact: true })).toBeVisible();
-    await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('href', /dummy-base\.svg/);
+    await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('href', /compact-3x6-base\.svg/);
     await expect(page.getByTestId('model-footprint')).toHaveCount(0);
 
     await page.getByRole('button', { name: /Standard 3x9/ }).click();
-    await expect(page.getByRole('heading', { name: 'Standard 3x9' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: 'Standard 3x9' })).toBeVisible();
     await expect(page.getByText('₩34,900,000', { exact: true })).toBeVisible();
     await expect(page.getByTestId('base-floorplan-image')).toHaveCount(1);
+    await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('href', /standard-3x9-base\.svg/);
     await expect(page.getByTestId('model-footprint')).toHaveCount(0);
 
     await page.getByRole('button', { name: /적삼목 포인트/ }).click();
@@ -56,7 +57,7 @@ test.describe('Customize configurator', () => {
     await expect(page.getByText('상담 후 최종 확정')).toBeVisible();
     await expect(page.getByText('이름')).toBeVisible();
     await expect(page.getByText('연락처')).toBeVisible();
-    await expect(page.getByText('지역')).toBeVisible();
+    await expect(page.locator('label').filter({ hasText: '지역' })).toBeVisible();
   });
 
   test('consultation submission succeeds with insert-only RLS and stores snapshot', async ({ page }) => {
@@ -128,6 +129,7 @@ test.describe('Customize configurator', () => {
     await expect(dialog).toBeVisible();
     await expect(dialog.getByTestId('floorplan-zoom-canvas')).toBeVisible();
     await expect(dialog.getByTestId('base-floorplan-image')).toHaveCount(1);
+    await expect(dialog.getByTestId('base-floorplan-image')).toHaveAttribute('href', /compact-3x6-base\.svg/);
     await expect(dialog.getByTestId('model-footprint')).toHaveCount(0);
 
     await dialog.getByTestId('floorplan-zoom-close').click();
@@ -148,11 +150,75 @@ test.describe('Customize configurator', () => {
       await drawer.getByRole('button', { name: /Standard 3x9/ }).click();
       await drawer.getByRole('button', { name: /닫기|Close/ }).click();
 
-      await expect(page.getByRole('heading', { name: 'Standard 3x9' })).toBeVisible();
+      await expect(page.getByRole('heading', { level: 1, name: 'Standard 3x9' })).toBeVisible();
       await expect(page.getByText('₩34,900,000', { exact: true })).toBeVisible();
       await expect(page.getByTestId('base-floorplan-image')).toHaveCount(1);
+      await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('href', /standard-3x9-base\.svg/);
       await expect(page.getByTestId('model-footprint')).toHaveCount(0);
       await expect(page).toHaveURL(/\/customize\?c=/);
     }
+  });
+
+  test('floorplan falls back to generated footprint when the base image fails', async ({ page }) => {
+    await page.route('**/compact-3x6-base.svg', (route) => route.abort());
+    await page.goto('/customize');
+    await page.waitForLoadState('networkidle');
+
+    await expect(page.getByRole('heading', { level: 1, name: 'Compact 3x6' })).toBeVisible();
+    await expect(page.getByTestId('base-floorplan-image')).toHaveCount(0);
+    await expect(page.getByTestId('model-footprint')).toHaveCount(1);
+    await expect(page.getByTestId('model-footprint')).toHaveAttribute('width', '600');
+  });
+
+  test('conversion confidence section is visible and toggling checks does not break floorplan', async ({ page }) => {
+    await page.goto('/customize');
+    await page.waitForLoadState('networkidle');
+
+    await expect(page.getByRole('heading', { name: '어떤 모델이 적합할까요?' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '포함 사항 및 별도 준비' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '현장 체크리스트' })).toBeVisible();
+
+    await expect(page.getByText('기본 구조 (골조, 외장재, 지붕)')).toBeVisible();
+    await expect(page.getByText('운반 및 하차 (크레인 등)')).toBeVisible();
+    await expect(page.getByTestId('base-floorplan-image')).toHaveCount(1);
+    await expect(page.getByTestId('model-footprint')).toHaveCount(0);
+
+    const checkItem = page.getByTestId('site-check-item').first();
+    await checkItem.click();
+    await expect(checkItem).toHaveAttribute('aria-pressed', 'true');
+
+    await expect(page.getByTestId('base-floorplan-image')).toHaveCount(1);
+    await expect(page.getByTestId('model-footprint')).toHaveCount(0);
+  });
+
+  test('conversion confidence section appears on mobile and toggles work safely', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/customize');
+    await page.waitForLoadState('networkidle');
+
+    await expect(page.getByRole('button', { name: '옵션 구성' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '어떤 모델이 적합할까요?' })).toBeVisible();
+
+    const checkItem = page.getByTestId('site-check-item').first();
+    await checkItem.click();
+    await expect(checkItem).toHaveAttribute('aria-pressed', 'true');
+
+    await expect(page.getByTestId('base-floorplan-image')).toHaveCount(1);
+    await expect(page.getByTestId('model-footprint')).toHaveCount(0);
+
+    await page.evaluate(() => {
+      document.documentElement.style.scrollBehavior = 'auto';
+      window.scrollTo(0, document.documentElement.scrollHeight);
+    });
+    await page.waitForFunction(
+      () => window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2
+    );
+    const lastCheck = page.getByTestId('site-check-item').last();
+    const orderButton = page.getByRole('button', { name: '주문하기' });
+    const [lastBox, orderBox] = await Promise.all([lastCheck.boundingBox(), orderButton.boundingBox()]);
+
+    expect(lastBox).not.toBeNull();
+    expect(orderBox).not.toBeNull();
+    expect(lastBox!.y + lastBox!.height).toBeLessThanOrEqual(orderBox!.y - 8);
   });
 });

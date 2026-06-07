@@ -20,6 +20,8 @@ import {
   SlidersHorizontal,
   Waves,
   X,
+  CheckCircle2,
+  AlertCircle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -75,8 +77,50 @@ const PLAN_LABEL_POSITIONS: Record<string, (box: ReturnType<typeof floorplanSize
   connectivity: (box, index) => ({ x: box.x + box.width - 208 + index * 96, y: box.y - 42 }),
 };
 
+const PLACEHOLDER_FLOORPLAN_PATH = '/images/customize/dummy-base.svg';
+const MODEL_FALLBACK_FLOORPLANS: Record<string, string> = {
+  'compact-3x6': '/images/customize/compact-3x6-base.svg',
+  'standard-3x9': '/images/customize/standard-3x9-base.svg',
+};
+
 const inputClass = 'h-11 rounded-lg border-gray-300 bg-[#fbfaf7] text-sm focus-visible:ring-[#b88b26]';
 const selectClass = 'h-11 w-full rounded-lg border border-gray-300 bg-[#fbfaf7] px-3 text-sm outline-none focus:ring-2 focus:ring-[#b88b26]/30';
+
+function floorplanImagePathForModel(model: CustomizeModel) {
+  const configuredPath = model.floorplanImagePath?.trim();
+  const fallbackPath = MODEL_FALLBACK_FLOORPLANS[model.id];
+
+  if (!configuredPath) return fallbackPath ?? null;
+  if (configuredPath === PLACEHOLDER_FLOORPLAN_PATH) return fallbackPath ?? configuredPath;
+  return configuredPath;
+}
+
+function useFloorplanImageStatus(path: string | null) {
+  const [result, setResult] = useState<{ path: string; status: 'loaded' | 'failed' } | null>(null);
+
+  useEffect(() => {
+    if (!path) return;
+
+    let cancelled = false;
+    const image = new window.Image();
+
+    image.onload = () => {
+      if (!cancelled) setResult({ path, status: 'loaded' });
+    };
+    image.onerror = () => {
+      if (!cancelled) setResult({ path, status: 'failed' });
+    };
+    image.src = path;
+
+    return () => {
+      cancelled = true;
+    };
+  }, [path]);
+
+  if (!path) return 'missing';
+  if (result?.path !== path) return 'loading';
+  return result.status;
+}
 
 export default function CustomizeConfigurator({ catalog, initialConfig }: CustomizeConfiguratorProps) {
   const decoded = useMemo(() => decodeConfig(initialConfig), [initialConfig]);
@@ -192,8 +236,8 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
       <ConfiguratorAppBar />
 
       <div className="mx-auto flex min-h-[calc(100dvh-64px)] max-w-[1800px] flex-col lg:flex-row">
-        <section className="flex min-h-[calc(100dvh-190px)] flex-1 flex-col lg:w-[64%] lg:min-h-[calc(100dvh-64px)]">
-          <div className="flex flex-1 items-center justify-center px-4 py-5 md:px-8 lg:px-10">
+        <section className="flex min-h-[calc(100dvh-190px)] flex-1 flex-col lg:w-[64%] lg:min-h-[calc(100dvh-64px)] lg:overflow-y-auto">
+          <div className="flex flex-1 items-center justify-center px-4 py-8 md:px-8 lg:px-10">
             <FloorplanPreview model={currentModel} selectedOptions={selectedOptionsList} onOpenViewer={() => setPlanViewerOpen(true)} />
           </div>
 
@@ -206,6 +250,10 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
               <SlidersHorizontal className="h-4 w-4" />
               옵션 구성
             </Button>
+          </div>
+
+          <div className="border-t border-[#d8d0c3] bg-[#fbfaf7] px-4 py-12 md:px-8 lg:px-10">
+            <ConversionConfidenceSection catalog={catalog} />
           </div>
         </section>
 
@@ -497,7 +545,9 @@ function FloorplanCanvas({
 }) {
   const box = floorplanSize(model);
   const selectedLabels = selectedOptions.filter((option) => option.overlayLabelKo);
-  const hasBaseImage = Boolean(model.floorplanImagePath);
+  const floorplanImagePath = floorplanImagePathForModel(model);
+  const imageStatus = useFloorplanImageStatus(floorplanImagePath);
+  const hasBaseImage = imageStatus === 'loaded';
   const gridId = `${testId}-grid`;
 
   return (
@@ -511,7 +561,7 @@ function FloorplanCanvas({
       {hasBaseImage ? (
         <image
           data-testid="base-floorplan-image"
-          href={model.floorplanImagePath ?? undefined}
+          href={floorplanImagePath ?? undefined}
           x="0"
           y="0"
           width="1000"
@@ -798,6 +848,127 @@ function Field({ label, required, className, children }: { label: string; requir
       </Label>
       {children}
     </div>
+  );
+}
+
+function ConversionConfidenceSection({ catalog }: { catalog: CustomizeCatalog }) {
+  return (
+    <div className="mx-auto max-w-[1100px] space-y-12 pb-32 lg:pb-10">
+      <section>
+        <h3 className="mb-4 text-xl font-black text-[#2f3432]">어떤 모델이 적합할까요?</h3>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {catalog.models.map((model) => (
+            <div key={model.id} className="rounded-lg border border-[#ded5c8] bg-[#fbfaf7] p-5 shadow-sm">
+              <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <h4 className="text-lg font-bold text-[#2f3432]">{model.nameKo}</h4>
+                  <p className="mt-1 text-sm font-semibold text-[#8a806f]">{model.widthM}m x {model.lengthM}m · {model.areaSqm}m²</p>
+                </div>
+                <span className="w-fit shrink-0 rounded-full bg-[#f4f0e8] px-3 py-1 text-sm font-bold text-[#6b5a2b]">
+                  {formatModelStartPrice(model.basePrice)}~
+                </span>
+              </div>
+              <p className="text-sm leading-relaxed text-[#5f574d]">
+                {model.id === 'compact-3x6'
+                  ? '농막, 소형 주말주택, 프라이빗 아지트로 가장 많이 선택하는 베스트셀러 모델입니다.'
+                  : '더 넓은 공간이 필요한 분들을 위한 프리미엄 모델로, 쾌적한 거주 환경을 제공합니다.'}
+              </p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section>
+        <h3 className="mb-4 text-xl font-black text-[#2f3432]">포함 사항 및 별도 준비</h3>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="rounded-lg border border-[#ded5c8] bg-[#fbfaf7] p-5">
+            <div className="mb-4 flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#efe6d4] text-[#6b5a2b]">
+                <CheckCircle2 className="h-4 w-4" />
+              </div>
+              <h4 className="font-bold text-[#2f3432]">위트 포함 사항</h4>
+            </div>
+            <ul className="space-y-2 text-sm text-[#5f574d]">
+              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#b9aa94]" />기본 구조 (골조, 외장재, 지붕)</li>
+              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#b9aa94]" />기본 마감 (단열, 내장재, 바닥재)</li>
+              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#b9aa94]" />기본 전기 배선 및 조명</li>
+              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#b9aa94]" />선택한 기본/유상 옵션 전체</li>
+            </ul>
+          </div>
+          <div className="rounded-lg border border-[#ded5c8] bg-[#fbfaf7] p-5">
+            <div className="mb-4 flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-md bg-[#f4ecec] text-[#8a5b5b]">
+                <AlertCircle className="h-4 w-4" />
+              </div>
+              <h4 className="font-bold text-[#2f3432]">현장 별도 준비 (비용 별도)</h4>
+            </div>
+            <ul className="space-y-2 text-sm text-[#5f574d]">
+              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#d2baba]" />운반 및 하차 (크레인 등)</li>
+              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#d2baba]" />현장 설치 (수평 작업, 용접 등)</li>
+              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#d2baba]" />기초 공사 (줄기초, 독립기초 등)</li>
+              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#d2baba]" />상하수도 및 전기 인입 공사</li>
+              <li className="flex items-center gap-2"><span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#d2baba]" />각종 인허가 및 부지 조건 검토</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <div className="mb-4">
+          <h3 className="text-xl font-black text-[#2f3432]">현장 체크리스트</h3>
+          <p className="mt-1 text-sm text-[#756d61]">설치 전 필수 확인 항목입니다. 가볍게 셀프 체크해보세요.</p>
+        </div>
+        <div className="space-y-3">
+          <SiteCheckItem
+            title="도로 폭 및 진입로"
+            desc="5톤 이상 트럭이 진입하고 회전할 수 있는 3~4m 이상의 도로 폭이 확보되어 있나요?"
+          />
+          <SiteCheckItem
+            title="크레인 및 트럭 작업 공간"
+            desc="제품을 하차하고 설치하기 위한 크레인 작업 공간이 확보되어 있나요? (전선 등 장애물 확인)"
+          />
+          <SiteCheckItem
+            title="전기 및 상하수도"
+            desc="제품과 연결할 전기, 상수도, 하수도 배관이 설치 위치 근처까지 인입되어 있나요?"
+          />
+          <SiteCheckItem
+            title="기초 및 수평"
+            desc="설치할 바닥면의 평탄화 작업이 되어 있으며, 지반이 침하되지 않도록 단단한가요?"
+          />
+          <SiteCheckItem
+            title="지역 인허가"
+            desc="해당 부지에 이동식 주택 또는 농막 설치가 가능한지 지자체에 확인하셨나요?"
+          />
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function SiteCheckItem({ title, desc }: { title: string; desc: string }) {
+  const [checked, setChecked] = useState(false);
+  return (
+    <button
+      type="button"
+      data-testid="site-check-item"
+      aria-pressed={checked}
+      onClick={() => setChecked(!checked)}
+      className={cn(
+        'flex w-full items-start gap-4 rounded-lg border p-4 text-left transition-colors',
+        checked ? 'border-[#2f3432] bg-[#efe6d4] shadow-sm' : 'border-[#ded5c8] bg-[#fbfaf7] hover:border-[#b9aa94]'
+      )}
+    >
+      <span className={cn(
+        'mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border transition-colors duration-200',
+        checked ? 'border-[#2f3432] bg-[#2f3432] text-white' : 'border-[#bcb2a3] bg-[#fbfaf7]'
+      )}>
+        {checked && <Check className="h-4 w-4" />}
+      </span>
+      <div>
+        <span className="block font-bold text-[#2f3432]">{title}</span>
+        <span className="mt-1 block text-sm leading-relaxed text-[#5f574d]">{desc}</span>
+      </div>
+    </button>
   );
 }
 
