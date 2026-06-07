@@ -1,0 +1,30 @@
+{
+  "baseURL": "https://www.we-et.com",
+  "commit": "cb04ae9",
+  "checks": [
+    {
+      "label": "desktop",
+      "homeOverflow": false,
+      "supportOverflow": false,
+      "transparencyClass": "mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400",
+      "hasContrastClass": true,
+      "meaningfulErrors": []
+    },
+    {
+      "label": "tablet",
+      "homeOverflow": false,
+      "supportOverflow": false,
+      "transparencyClass": "mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400",
+      "hasContrastClass": true,
+      "meaningfulErrors": []
+    },
+    {
+      "label": "mobile",
+      "homeOverflow": false,
+      "supportOverflow": false,
+      "transparencyClass": "mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400",
+      "hasContrastClass": true,
+      "meaningfulErrors": []
+    }
+  ]
+}

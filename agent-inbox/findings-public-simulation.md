@@ -193,3 +193,8 @@ The first 10 personas did not produce 100 unique hard bugs. Following the user i
 122. Fix verified: the dark-section eyebrow and feature body text now use `text-gray-400`.
 123. Post-fix local screenshot `.codex/qa/post-pro-mustfix-20260607-v2/desktop-home-contrast.png` confirms the updated class is rendered in the first transparency section.
 124. GPT-5.5 Pro closure marker `WEET_REVIEW_20260607_HOME_ADMIN_MUSTFIX_CLOSURE_06` returned `VERDICT: PASS` and `MUST_FIX: None`.
+125. Final production QA after commit `cb04ae9` verified `https://www.we-et.com?v=cb04ae9` on desktop, tablet, and mobile with homepage horizontal overflow `false`.
+126. Final production QA verified the homepage dark transparency heading uses `text-gray-400` on all three production viewports.
+127. Visual QA desktop: `.codex/qa/production-home-admin-cb04ae9/desktop-home.png` shows the full-bleed dark product/home hero, clear primary CTA, and a visible hint of the next `TRANSPARENCY` section.
+128. Visual QA mobile/tablet: production screenshots in `.codex/qa/production-home-admin-cb04ae9/` show the hero and CTA stack without text clipping or horizontal overflow.
+129. Remaining opportunity: the homepage is now premium-first, but future proof content should add real/generated transport, installation, interior, warranty, and site-readiness visuals near conversion CTAs.

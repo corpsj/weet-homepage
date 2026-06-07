@@ -240,3 +240,10 @@ The first 10 administrator personas did not produce 100 unique hard bugs. Follow
 157. Post-fix local QA report `.codex/qa/post-pro-mustfix-20260607-v2/report.json` shows all five targeted checks passing.
 158. GPT-5.5 Pro closure marker `WEET_REVIEW_20260607_HOME_ADMIN_MUSTFIX_CLOSURE_06` returned `VERDICT: PASS` and `MUST_FIX: None`.
 159. Production QA after commit `088555f` found React hydration error #418 on real `www.we-et.com` admin pages; fixed by replacing locale/timezone-dependent date rendering with deterministic KST formatting in support and inquiry admin screens.
+160. Final production QA after commit `cb04ae9` verified the hydration fix on real `https://www.we-et.com?v=cb04ae9` across desktop, tablet, and mobile.
+161. Final production QA verified support-admin horizontal overflow remained `false` across desktop, tablet, and mobile after notice body editing was added.
+162. Visual QA desktop: `.codex/qa/production-home-admin-cb04ae9/desktop-admin-support-notice.png` confirms notice title/status/body controls are visible in the production admin editor.
+163. Visual QA mobile: `.codex/qa/production-home-admin-cb04ae9/mobile-admin-support-notice.png` confirms the mobile notice editor is now a usable card surface rather than a clipped table.
+164. Visual QA desktop: `.codex/qa/production-home-admin-cb04ae9/desktop-admin-inquiry-rollback.png` confirms the real production inquiry list/detail layout keeps the premium console structure after the intentional rollback test.
+165. Final production QA filtered the intentionally aborted inquiry status request and reported no meaningful console/page errors in the real deployed admin flow.
+166. Remaining opportunity: convert the disabled-looking admin search affordance into a real global command/search tool before adding more dashboard summary surfaces.

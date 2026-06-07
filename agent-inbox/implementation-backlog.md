@@ -69,3 +69,8 @@ This file tracks bugs and improvements discovered during the recursive improveme
   - *Extra visual fix*: mobile notice management no longer relies on an internally scrolling table; it now uses a card editor with title/status/body/save/delete visible.
   - *Closure Pro verdict*: marker `WEET_REVIEW_20260607_HOME_ADMIN_MUSTFIX_CLOSURE_06` returned `VERDICT: PASS` and `MUST_FIX: None`.
   - *Validation*: `git diff --check`, lint, Vitest, build, and 12 Playwright E2E tests passed after the fixes.
+- [x] Production deployment and real-domain QA completed for the homepage/admin full-surface slice.
+  - *Production fix*: commit `cb04ae9` replaced locale/timezone-dependent admin date rendering with deterministic KST formatting to remove React hydration error #418 found on `www.we-et.com`.
+  - *Deployment*: commit `cb04ae9` was pushed, Vercel preview was promoted, and aliases `https://www.we-et.com` / `https://we-et.com` were Ready.
+  - *Final Evidence*: `.codex/qa/production-home-admin-cb04ae9/summary.json` shows desktop/tablet/mobile production QA passed with no homepage/support horizontal overflow, `text-gray-400` contrast class present, and no meaningful console/page errors.
+  - *Visual Evidence*: production screenshots confirm the homepage hero, mobile notice editor, and inquiry rollback surface render without clipping or broken layout.

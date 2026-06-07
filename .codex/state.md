@@ -6,7 +6,7 @@ Weet 홈페이지와 관리자 페이지 전면 재귀 개선 작업의 첫 구�
 
 ## Current phase
 
-GPT-5.5 Pro review packet preparation for the homepage/admin full-surface slice.
+complete
 
 ## Changes made
 
@@ -222,6 +222,7 @@ GPT-5.5 Pro review packet preparation for the homepage/admin full-surface slice.
 - 2026-06-07 Antigravity smoke test blocked: could not type `안녕` because Computer Use remained `Transport closed` even after reopening the local Codex Computer Use app.
 - 2026-06-07 Antigravity skill improvement completed, but live prompt input remains blocked by the current Computer Use `Transport closed` state.
 - 2026-06-07 Cockpit Tools launch path may be contributing to the Computer Use failure. Recommended next test is quitting Codex and Cockpit Tools, clearing stale `SkyComputerUseClient` turn clients, launching `/Applications/Codex.app` directly, then checking `computer-use:list_apps` before any Antigravity action.
+- 2026-06-07 final resume: `computer-use:list_apps` succeeded and confirmed Antigravity IDE is running, but `get_app_state("com.apple.Stickies")` and `get_app_state("Stickies")` both returned `cgWindowNotFound`; no visible Stickies note could be read in this closing pass.
 
 ## Pro review cycles
 
@@ -241,7 +242,7 @@ PASS
 
 ## Remaining risks
 
-- Current slice still needs fresh GPT-5.5 Pro Deep Research review, concrete MUST_FIX application if any, commit/push, Vercel deployment, and final `we-et.com` production QA.
+- Required homepage/admin full-surface slice is complete: GPT-5.5 Pro closure passed, concrete MUST_FIX feedback was applied, branch commits were pushed, Vercel production was promoted, and final `www.we-et.com` PC/tablet/mobile QA passed.
 - Admin child pages are visually unified under the premium console system, but deeper operational features remain: global search/command palette, readiness/media health scoring, unsaved-change guards, role-aware actions, audit log, and custom destructive confirmations.
 - Public homepage/product/customize flow still needs larger conversion upgrades: warranty/A/S proof, B2B/bulk inquiry, stronger generated or real product/install imagery, and more numeric transport/install cost guidance.
 - Existing Next middleware-to-proxy deprecation remains.
@@ -253,7 +254,7 @@ PASS
 
 ## Next step
 
-Continue the next improvement slice: convert remaining admin UTM/CMS/gallery/inquiries/edit-form/modal surfaces to the same console system, then repeat validation and Pro review.
+No required completion step remains for this slice. Optional next slice: deepen public proof content and admin operational depth (command palette, readiness/media health, audit log, unsaved-change guards, role-aware actions).
 
 ## 2026-06-07 GPT Pro file upload failure
 - Chrome/ChatGPT file chooser upload for `.codex/review-packet.md` failed with `Not allowed` from the Chrome extension file chooser.
@@ -273,4 +274,6 @@ Continue the next improvement slice: convert remaining admin UTM/CMS/gallery/inq
 - GPT-5.5 Pro Deep Research closure marker `WEET_REVIEW_20260607_HOME_ADMIN_MUSTFIX_CLOSURE_06` returned `VERDICT: PASS` and `MUST_FIX: None`; latest result saved to `.codex/pro-review.md`.
 - Commit `088555f` was pushed and promoted to production, but the first real `www.we-et.com` production QA found React hydration error #418 in admin pages.
 - Hydration fix applied after production QA: admin support/inquiry date display now uses deterministic KST formatting instead of locale/timezone-dependent render output.
-- Remaining pending completion work: commit/push the hydration fix, redeploy/promote again, and rerun real `we-et.com` production visual QA.
+- Hydration fix completion: commit `cb04ae9` was pushed, Vercel preview `https://weet-homepage-7dgft4oaw-weets-projects-6c7745e8.vercel.app` was promoted, production `https://weet-homepage-nzd7juci5-weets-projects-6c7745e8.vercel.app` became Ready with aliases `https://www.we-et.com` and `https://we-et.com`.
+- Final production QA after commit `cb04ae9` ran against `https://www.we-et.com?v=cb04ae9` on desktop, tablet, and mobile. It verified homepage horizontal overflow `false`, support admin horizontal overflow `false`, dark-section contrast class `text-gray-400`, and no meaningful console/page errors on all three viewports.
+- Final visual evidence was inspected from `.codex/qa/production-home-admin-cb04ae9/`: desktop homepage shows a premium full-bleed dark hero with the next `TRANSPARENCY` section visible; mobile support admin shows notice title/status/body/save/delete controls without clipping; desktop inquiry admin shows the premium console list/detail layout after an intentional failed-status rollback test.

@@ -127,3 +127,4 @@ Live recovery:
 - 2026-06-07 after Codex relaunch: `get_app_state("com.apple.Stickies")` and `get_app_state("Stickies")` both succeeded.
 - Current visible note says to check `agent-inbox`, deeply analyze and fix why Antigravity IDE could not be used through Computer Use, remember that research is in progress, and never stop research mid-generation.
 - A Codex heartbeat automation named `Stickies steering monitor` was created with id `stickies-steering-monitor` to re-check Stickies every 5 minutes in this thread.
+- 2026-06-07 final resume: `computer-use:list_apps` succeeded and showed Stickies running, but both `get_app_state("com.apple.Stickies")` and `get_app_state("Stickies")` returned `cgWindowNotFound`. Treat this as "no visible Stickies window found" rather than a Computer Use transport failure; retry after the Stickies note window is visible.
