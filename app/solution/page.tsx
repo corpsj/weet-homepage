@@ -193,8 +193,18 @@ export default function SolutionPage() {
           <div className="grid gap-8 border-b border-gray-200 pb-12 lg:grid-cols-[280px_1fr] lg:gap-16 lg:pb-16">
             <p className="text-sm font-bold text-gray-500">{copy.eyebrow}</p>
             <div>
-              <h1 className="max-w-4xl text-4xl font-black leading-tight text-gray-950 md:text-6xl lg:text-[72px]">
-                {copy.title}
+              <h1
+                aria-label={copy.title}
+                className="max-w-4xl text-4xl font-black leading-tight text-gray-950 md:text-6xl lg:text-[72px]"
+              >
+                {language === 'KO' ? (
+                  <>
+                    <span className="block md:inline">공간 운영까지</span>
+                    <span className="block md:inline md:before:content-['\\00a0']">설계합니다</span>
+                  </>
+                ) : (
+                  copy.title
+                )}
               </h1>
               <p className="mt-6 max-w-3xl text-lg leading-relaxed text-gray-600 md:text-xl break-keep">
                 {copy.description}

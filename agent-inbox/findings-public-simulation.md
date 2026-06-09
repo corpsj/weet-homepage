@@ -222,3 +222,5 @@ The first 10 personas did not produce 100 unique hard bugs. Following the user i
 148. Remaining opportunity: `/modular` could add concrete lead-time ranges, factory QC checkpoints, transport access constraints, and install-day proof metrics.
 149. Production QA after commit `1631e9f` found `/bespoke` H1 still read only `BESPOKE`, which weakened the requested commercial-space positioning in the first viewport.
 150. Fix applied after production QA: `/bespoke` H1 changed to `상업 공간 맞춤 솔루션` in Korean and `Commercial Space Custom Solutions` in English; E2E heading expectation was updated.
+151. Production visual QA after commit `02ab2e1` found mobile `/solution` H1 wrapping as `설계합니 / 다`, which looked unpolished even though there was no horizontal overflow.
+152. Fix applied after production QA: Korean `/solution` H1 now renders as intentional mobile lines `공간 운영까지` and `설계합니다`, while tablet/desktop keep an inline heading.
