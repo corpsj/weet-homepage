@@ -7,9 +7,9 @@ import {
   ArrowRight,
   CheckCircle2,
   LockKeyhole,
-  Paintbrush,
   Router,
   SlidersHorizontal,
+  Zap,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 
@@ -49,32 +49,32 @@ type PageCopy = {
 const COPY: Record<Lang, PageCopy> = {
   KO: {
     eyebrow: "WEET OPERATION OPTIONS",
-    title: "운영까지 준비된 모듈러 공간",
+    title: "테크 옵션으로 완성하는 모듈러 공간",
     lead:
-      "좋은 공간은 예쁜 외관에서 끝나지 않습니다. Weet는 보안, 연결, 원격 준비, 브랜드 마감을 실제 운영자가 매일 겪는 문제 기준으로 설계합니다.",
-    heroLabel: "옵션은 장식이 아니라 운영 리스크 관리입니다",
-    heroTitle: "상담 때 장비명이 아니라 운영 상황부터 묻습니다.",
+      "Weet 솔루션은 장비 나열이 아니라 보안, 네트워크, 제어, 에너지 스택을 공간 목적에 맞춰 조합하는 테크 옵션 레이어입니다.",
+    heroLabel: "옵션은 장식이 아니라 운영 시스템입니다",
+    heroTitle: "스펙보다 먼저 사용 흐름과 제어 범위를 정의합니다.",
     heroBody:
-      "무인으로 열어야 하는지, 결제가 끊기면 안 되는지, 입실 전 냉난방이 필요한지, 상권에서 첫인상이 중요한지부터 확인한 뒤 필요한 옵션만 조합합니다.",
+      "출입 권한, 결제망, 원격 제어, 전력 부하를 먼저 정리한 뒤 실제로 필요한 옵션만 선택합니다.",
     selectLabel: "선택 기준",
-    detailLabel: "포함되는 것",
+    detailLabel: "포함 스펙",
     proofLabel: "운영자가 체감하는 변화",
     processTitle: "옵션을 붙이는 방식도 다릅니다",
     processLead:
-      "완공 후 장비를 덧붙이는 방식이 아니라, 출입 동선·배선·조명·마감 위치를 설계 단계에서 함께 잡습니다.",
+      "완공 후 장비를 덧붙이는 방식이 아니라, 배선·센서·제어 패널·전력 부하를 설계 단계에서 함께 잡습니다.",
     ctaPrimary: "주문 옵션 확인",
-    ctaSecondary: "상담으로 현장 맞추기",
+    ctaSecondary: "테크 옵션 문의",
     packages: [
       {
         id: "security",
         href: "/solution/cctv",
         image: "/images/solution/generated/kr-security-realphoto.webp",
         icon: LockKeyhole,
-        title: "안심 출입",
-        subtitle: "CCTV · 스마트락 · 센서등",
-        problem: "운영자가 항상 머물 수 없는 외곽·야간·예약제 공간의 보안 공백을 줄입니다.",
+        title: "보안 코어 (Security Core)",
+        subtitle: "CCTV · 스마트락 · 센서 및 접근 로깅",
+        problem: "야간·무인 운영에서 생기는 보안 공백을 줄입니다.",
         promise: "출입 기록, 야간 감지, 현관 조명을 하나의 운영 흐름으로 설계합니다.",
-        details: ["현관/창측 사각지대 검토", "CCTV와 센서등 위치 제안", "스마트락 권한 방식 정리"],
+        details: ["현관/창측 사각지대 검토", "CCTV와 센서등 위치 제안", "스마트락 권한/접근 방식 정리"],
         proof: "밤에도 누가 들어왔는지, 어떤 알림을 받아야 하는지 명확해집니다.",
       },
       {
@@ -82,72 +82,72 @@ const COPY: Record<Lang, PageCopy> = {
         href: "/solution/network",
         image: "/images/solution/generated/kr-network-realphoto.webp",
         icon: Router,
-        title: "끊김 없는 연결",
-        subtitle: "POS · 예약 · 게스트 Wi-Fi",
-        problem: "결제, 예약, 원격 제어가 인터넷 품질에 묶이는 상업 공간의 손실 리스크를 줄입니다.",
-        promise: "운영망, 고객망, 장비망을 구분하고 현장 조건에 맞는 회선과 라우터를 제안합니다.",
-        details: ["POS/업무/게스트망 분리", "라우터와 통신함 위치 계획", "백업 회선 필요성 점검"],
-        proof: "카드 결제와 예약 확인이 끊기지 않아 운영자가 현장에서 덜 불안합니다.",
+        title: "네트워크 패브릭 (Network Fabric)",
+        subtitle: "POS · 게스트 Wi-Fi · 라우터/위성망",
+        problem: "결제, 예약, 원격 제어가 인터넷 품질에 묶이는 리스크를 줄입니다.",
+        promise: "운영망, 고객망, 장비망을 구분하고 용도별 회선과 라우터 구성을 제안합니다.",
+        details: ["POS/업무/게스트망 분리", "라우터/위성망/LTE 통신함 계획", "백업 회선 필요성 점검"],
+        proof: "카드 결제와 예약 확인이 고객 Wi-Fi 트래픽에 덜 흔들립니다.",
       },
       {
         id: "control",
         href: "/solution/iot",
         image: "/images/solution/generated/kr-control-realphoto.webp",
         icon: SlidersHorizontal,
-        title: "원격 준비",
-        subtitle: "조명 · 냉난방 · 환기",
-        problem: "입실 전마다 현장에 가야 하는 숙박·체험·무인 운영의 반복 업무를 줄입니다.",
+        title: "제어 계층 (Control Layer)",
+        subtitle: "IoT 조명 · 냉난방 제어 · 환기 스케줄링",
+        problem: "입실 전마다 수동으로 확인해야 하는 반복 업무를 줄입니다.",
         promise: "조명, 공조, 환기, 도어 상태를 예약과 운영 시간에 맞춰 제어할 수 있게 구성합니다.",
-        details: ["스마트 스위치/온도 패널", "입실 전 냉난방 스케줄", "도어 상태와 운영 알림"],
+        details: ["스마트 스위치/온도 패널", "입실 전 냉난방 자동 스케줄", "도어 상태 및 운영 알림"],
         proof: "고객이 도착하기 전 공간 상태를 미리 준비하고, 불필요한 방문을 줄입니다.",
       },
       {
-        id: "brand",
-        href: "/solution/design",
-        image: "/images/solution/generated/kr-brandfit-realphoto.webp",
-        icon: Paintbrush,
-        title: "현장 완성",
-        subtitle: "외장 · 간판 · 데크 동선",
-        problem: "모듈러가 현장 상권, 브랜드 톤, 고객 진입 동선과 따로 노는 느낌을 줄입니다.",
-        promise: "외장재, 간판 자리, 데크·조경·배수 마감을 함께 정리해 첫인상을 완성합니다.",
-        details: ["브랜드 톤에 맞는 외장", "간판/조명 자리 사전 계획", "데크·조경·배수 디테일"],
-        proof: "공간이 ‘놓인 건물’이 아니라 바로 영업 가능한 상업 장소처럼 보입니다.",
+        id: "energy",
+        href: "/solution/energy",
+        image: "/images/customize/options/solar-panel.webp",
+        icon: Zap,
+        title: "에너지 스택 (Energy Stack)",
+        subtitle: "태양광 · ESS · EV 충전기 · 부하 설계",
+        problem: "높은 전기 요금과 전력 수급 불안정 리스크를 해소합니다.",
+        promise: "안정적이고 효율적인 전력 인프라로 독립적인 모듈러 운영을 지원합니다.",
+        details: ["태양광 패널 지붕 통합", "잉여 전력 보관용 ESS 연동", "방문객 EV 충전기 및 부하 설계"],
+        proof: "전력 사용량이 체계적으로 관리되고, 에너지 독립성이 강화됩니다.",
       },
     ],
     process: [
-      { title: "운영 상황 인터뷰", body: "무인, 예약제, 상시 상주, 야간 운영 여부를 먼저 확인합니다." },
-      { title: "현장 리스크 표시", body: "출입, 통신, 공조, 간판, 배수 위치를 도면과 현장 조건 위에 표시합니다." },
-      { title: "필요 옵션만 확정", body: "장비 스펙보다 운영자가 실제로 받을 알림과 관리 범위를 먼저 정합니다." },
+      { title: "사용 흐름 진단", body: "무인, 상시 상주, 전력 부하, 네트워크 환경을 먼저 파악합니다." },
+      { title: "시스템 맵 구성", body: "출입, 통신, 공조, 전력 연결 지점을 하나의 옵션 맵으로 정리합니다." },
+      { title: "필요 옵션만 확정", body: "장비 스펙보다 운영자가 실제로 받을 알림과 제어 범위를 먼저 정합니다." },
     ],
   },
   EN: {
     eyebrow: "WEET OPERATION OPTIONS",
-    title: "Modular Spaces Ready To Operate",
+    title: "Modular Spaces Completed With Tech Options",
     lead:
-      "A good space does not end with a beautiful shell. Weet plans security, connection, remote readiness, and site finish around the problems operators face every day.",
-    heroLabel: "Options are risk control, not decoration",
-    heroTitle: "We start with the operating situation, not a device list.",
+      "A good space does not end with a beautiful shell. Weet plans security, connection, remote control, and energy management around the problems operators face every day.",
+    heroLabel: "Options are operating systems",
+    heroTitle: "We define usage flow and control scope before device specs.",
     heroBody:
-      "We check whether the space runs unmanned, whether payments must never fail, whether HVAC is needed before arrival, and whether first impression matters in the local market.",
-    selectLabel: "How to choose",
-    detailLabel: "What is included",
+      "We check whether the space runs unmanned, whether payments must never fail, and whether power load is stable, before combining the right options.",
+    selectLabel: "Selection Criteria",
+    detailLabel: "Included Specs",
     proofLabel: "Operational change",
     processTitle: "The option workflow is different",
     processLead:
-      "We do not bolt devices on after completion. Access flow, wiring, lighting, and finish details are planned with the space.",
-    ctaPrimary: "Check order options",
-    ctaSecondary: "Match my site",
+      "We do not bolt devices on after completion. Wiring, sensors, control panels, and power loads are planned with the space.",
+    ctaPrimary: "Check Options",
+    ctaSecondary: "Consultation",
     packages: [
       {
         id: "security",
         href: "/solution/cctv",
         image: "/images/solution/generated/kr-security-realphoto.webp",
         icon: LockKeyhole,
-        title: "Secure Access",
-        subtitle: "CCTV · smart lock · sensor light",
-        problem: "Reduce security gaps in remote, night, and reservation-based spaces where staff cannot stay all day.",
+        title: "Security Core",
+        subtitle: "CCTV · smart lock · sensors/access logging",
+        problem: "Reduce security gaps in night and unmanned operations.",
         promise: "Access logs, night detection, and entrance lighting are planned as one operating flow.",
-        details: ["Entrance blind-spot review", "CCTV and sensor-light placement", "Smart-lock permission planning"],
+        details: ["Blind-spot review", "CCTV and sensor-light placement", "Smart-lock permission planning"],
         proof: "Operators know who entered at night and which alerts deserve attention.",
       },
       {
@@ -155,41 +155,41 @@ const COPY: Record<Lang, PageCopy> = {
         href: "/solution/network",
         image: "/images/solution/generated/kr-network-realphoto.webp",
         icon: Router,
-        title: "Stable Connection",
-        subtitle: "POS · booking · guest Wi-Fi",
+        title: "Network Fabric",
+        subtitle: "POS · guest Wi-Fi · router/satellite readiness",
         problem: "Reduce losses when payment, booking, or remote control depends on unstable connectivity.",
-        promise: "We separate operator, guest, and device networks and recommend the right line and router for the site.",
+        promise: "We separate operator, guest, and device networks and recommend the right line and router.",
         details: ["POS/work/guest network split", "Router and network-box placement", "Backup-line review"],
-        proof: "Payments and reservations stay reliable, so operators feel less exposed on site.",
+        proof: "Payments and reservations are less affected by guest traffic and device load.",
       },
       {
         id: "control",
         href: "/solution/iot",
         image: "/images/solution/generated/kr-control-realphoto.webp",
         icon: SlidersHorizontal,
-        title: "Remote Ready",
-        subtitle: "lighting · HVAC · ventilation",
-        problem: "Reduce repeated site visits for hospitality, experience rooms, and unmanned operations.",
+        title: "Control Layer",
+        subtitle: "IoT lighting · HVAC · ventilation schedules",
+        problem: "Reduce repeated manual checks for unmanned operations.",
         promise: "Lighting, HVAC, ventilation, and door state can follow booking time and operating hours.",
         details: ["Smart switches and temperature panels", "Pre-arrival HVAC schedule", "Door state and operation alerts"],
         proof: "The space can be prepared before guests arrive, with fewer unnecessary visits.",
       },
       {
-        id: "brand",
-        href: "/solution/design",
-        image: "/images/solution/generated/kr-brandfit-realphoto.webp",
-        icon: Paintbrush,
-        title: "Site Finish",
-        subtitle: "facade · signage · deck flow",
-        problem: "Prevent the module from feeling detached from the brand, local market, and customer flow.",
-        promise: "Facade, signage position, deck, landscape, and drainage details are aligned before completion.",
-        details: ["Brand-fit exterior palette", "Sign and lighting placement", "Deck, planting, and drainage detail"],
-        proof: "The space reads as a business-ready site, not just a placed building.",
+        id: "energy",
+        href: "/solution/energy",
+        image: "/images/customize/options/solar-panel.webp",
+        icon: Zap,
+        title: "Energy Stack",
+        subtitle: "solar · ESS · EV charger · load planning",
+        problem: "Resolve high utility costs and unstable power supply risks.",
+        promise: "We support independent modular operation with stable and efficient power infrastructure.",
+        details: ["Roof-integrated solar panels", "ESS for surplus power", "EV chargers and load planning"],
+        proof: "Power consumption is systematically managed, and energy independence is strengthened.",
       },
     ],
     process: [
-      { title: "Operating interview", body: "We first check unmanned, reservation-only, staffed, and night-operation needs." },
-      { title: "Site risk map", body: "Access, connection, HVAC, signage, and drainage points are marked against the real site." },
+      { title: "Operating interview", body: "We first check unmanned, power load, and network needs." },
+      { title: "System map", body: "Access, connection, HVAC, and power points are organized as one option map." },
       { title: "Option confirmation", body: "We define actual alerts and management scope before chasing device specs." },
     ],
   },
@@ -200,89 +200,104 @@ export default function SolutionPage() {
   const copy = COPY[language];
 
   return (
-    <main className="min-h-screen bg-[#f7f6f1] text-neutral-950">
-      <section className="mx-auto max-w-[1440px] px-4 pb-12 pt-24 md:px-8 lg:pb-16 lg:pt-32">
-        <div className="grid gap-10 border-b border-neutral-300 pb-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(440px,0.7fr)] lg:gap-16 lg:pb-14">
+    <main className="min-h-screen bg-[#fcfbfa] text-[#2f3432]">
+      {/* Hero Section */}
+      <section className="mx-auto max-w-[1200px] px-6 pb-12 pt-28 md:px-10 lg:pb-16 lg:pt-36">
+        <div className="grid gap-8 border-b border-[#e6dfd3] pb-10 lg:grid-cols-[1fr_0.8fr] lg:gap-16 lg:pb-14">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.22em] text-neutral-500">{copy.eyebrow}</p>
-            <h1 className="mt-4 max-w-5xl text-4xl font-black leading-[1.04] text-neutral-950 md:text-6xl lg:text-[76px] break-keep">
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0d6e66]">{copy.eyebrow}</p>
+            <h1 className="mt-4 text-4xl font-black leading-tight text-[#2f3432] md:text-5xl lg:text-6xl break-keep">
               {copy.title}
             </h1>
-            <p className="mt-6 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl break-keep">
+            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-[#5a625e] md:text-xl break-keep">
               {copy.lead}
             </p>
           </div>
 
-          <div className="self-end rounded-md border border-neutral-300 bg-white p-5">
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#A77B00]">{copy.heroLabel}</p>
-            <h2 className="mt-3 text-2xl font-black leading-tight text-neutral-950 md:text-3xl break-keep">
+          <div className="self-end rounded-lg border border-[#e6dfd3] bg-[#f5f2eb] p-6 shadow-sm">
+            <div className="flex items-center gap-2 mb-3">
+              <span className="flex h-2 w-2 rounded-full bg-[#f5a623]"></span>
+              <p className="text-xs font-bold uppercase tracking-wider text-[#7a6a3a]">{copy.heroLabel}</p>
+            </div>
+            <h2 className="text-xl font-bold leading-snug text-[#2f3432] break-keep">
               {copy.heroTitle}
             </h2>
-            <p className="mt-4 text-base leading-relaxed text-neutral-600 break-keep">{copy.heroBody}</p>
+            <p className="mt-3 text-sm leading-relaxed text-[#5a625e] break-keep">{copy.heroBody}</p>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-[1440px] px-4 pb-16 md:px-8 lg:pb-24">
-        <div className="grid gap-6">
+      {/* Technical Modules Table Layout */}
+      <section className="mx-auto max-w-[1200px] px-6 pb-16 md:px-10 lg:pb-24">
+        <div className="flex flex-col gap-6">
           {copy.packages.map((pkg, index) => {
             const Icon = pkg.icon;
             return (
               <article
                 key={pkg.id}
-                className="grid gap-0 overflow-hidden rounded-md border border-neutral-300 bg-white lg:grid-cols-[minmax(340px,0.78fr)_1fr]"
+                className="group relative flex flex-col overflow-hidden rounded-xl border border-[#e6dfd3] bg-white transition-shadow hover:shadow-md lg:flex-row"
               >
-                <Link href={pkg.href} className="group relative block aspect-[16/10] overflow-hidden bg-neutral-200 lg:aspect-auto">
-                  <Image
-                    src={pkg.image}
-                    alt={`${pkg.title} ${pkg.subtitle}`}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 42vw"
-                    priority
-                    className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                  />
-                  <div className="absolute left-4 top-4 rounded-sm bg-neutral-950/85 px-3 py-2 text-xs font-black text-white backdrop-blur">
-                    {String(index + 1).padStart(2, "0")}
-                  </div>
-                </Link>
-
-                <div className="grid gap-8 p-5 md:p-8 lg:grid-cols-[minmax(220px,0.75fr)_1fr] lg:p-10">
-                  <div>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-sm border border-neutral-300 bg-[#FEBD16] text-neutral-950">
-                      <Icon className="h-6 w-6" strokeWidth={1.7} />
+                {/* Visual Strip */}
+                <div className="relative w-full shrink-0 border-b border-[#e6dfd3] bg-[#fcfbfa] p-4 lg:w-[280px] lg:border-b-0 lg:border-r lg:p-6">
+                  <div className="relative mb-4 flex items-center justify-between">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-md border border-[#c4e3e0] bg-[#e6f4f2] text-[#0d6e66]">
+                      <Icon className="h-5 w-5" strokeWidth={2} />
                     </div>
-                    <h2 className="mt-5 text-3xl font-black leading-tight text-neutral-950 md:text-4xl break-keep">
-                      {pkg.title}
-                    </h2>
-                    <p className="mt-2 text-sm font-black uppercase tracking-[0.14em] text-neutral-500">{pkg.subtitle}</p>
-                    <p className="mt-5 text-base font-semibold leading-relaxed text-neutral-800 break-keep">{pkg.promise}</p>
-                    <Link
-                      href={pkg.href}
-                      className="mt-6 inline-flex h-11 items-center gap-2 rounded-sm border border-neutral-950 px-4 text-sm font-black text-neutral-950 transition-colors hover:bg-neutral-950 hover:text-white"
-                    >
-                      {copy.detailLabel}
-                      <ArrowRight className="h-4 w-4" />
-                    </Link>
+                    <span className="font-mono text-xs font-bold text-[#a3b3ac]">
+                      MOD_0{index + 1}
+                    </span>
                   </div>
+                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-md border border-[#e6dfd3]">
+                    <Image
+                      src={pkg.image}
+                      alt={pkg.title}
+                      fill
+                      sizes="(max-width: 1024px) 100vw, 280px"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                </div>
 
-                  <div className="grid gap-6">
-                    <div>
-                      <p className="text-xs font-black uppercase tracking-[0.16em] text-neutral-500">{copy.selectLabel}</p>
-                      <p className="mt-2 text-lg font-bold leading-relaxed text-neutral-950 break-keep">{pkg.problem}</p>
-                    </div>
+                {/* Specs Console */}
+                <div className="flex w-full flex-col p-6 lg:flex-row lg:p-0">
+                  <div className="flex flex-1 flex-col justify-center border-b border-[#e6dfd3] pb-6 lg:border-b-0 lg:border-r lg:p-8 lg:pb-8">
+                    <h2 className="text-2xl font-black text-[#2f3432]">{pkg.title}</h2>
+                    <p className="mt-1 font-mono text-xs text-[#0d6e66]">{pkg.subtitle}</p>
+                    <p className="mt-4 text-sm leading-relaxed text-[#5a625e]">{pkg.promise}</p>
 
-                    <ul className="grid gap-3">
+                    <div className="mt-6 flex flex-wrap gap-2">
                       {pkg.details.map((item) => (
-                        <li key={item} className="flex gap-3 text-sm font-semibold leading-relaxed text-neutral-700 break-keep">
-                          <CheckCircle2 className="mt-0.5 h-4 w-4 flex-shrink-0 text-[#C69200]" />
+                        <span key={item} className="inline-flex items-center gap-1.5 rounded bg-[#f5f2eb] px-2.5 py-1 text-xs font-bold text-[#5a625e]">
+                          <CheckCircle2 className="h-3 w-3 text-[#f5a623]" />
                           {item}
-                        </li>
+                        </span>
                       ))}
-                    </ul>
+                    </div>
+                  </div>
 
-                    <div className="rounded-md bg-neutral-950 px-5 py-5 text-white">
-                      <p className="text-xs font-black uppercase tracking-[0.16em] text-neutral-400">{copy.proofLabel}</p>
-                      <p className="mt-2 text-sm font-semibold leading-relaxed break-keep">{pkg.proof}</p>
+                  {/* Impact Column */}
+                  <div className="flex w-full shrink-0 flex-col justify-between pt-6 lg:w-[320px] lg:p-8 lg:pt-8 bg-[#fcfbfa]">
+                    <div>
+                      <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#a3b3ac]">{copy.selectLabel}</p>
+                      <p className="mt-1.5 text-sm font-semibold leading-relaxed text-[#2f3432]">{pkg.problem}</p>
+                    </div>
+
+                    <div className="mt-6 border-t border-[#e6dfd3] pt-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="h-1.5 w-1.5 rounded-full bg-[#0d6e66]"></div>
+                        <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#a3b3ac]">{copy.proofLabel}</p>
+                      </div>
+                      <p className="text-xs font-medium leading-relaxed text-[#0d6e66]">{pkg.proof}</p>
+                    </div>
+
+                    <div className="mt-6">
+                      <Link
+                        href={pkg.href}
+                        className="inline-flex h-9 w-full items-center justify-between rounded border border-[#0d6e66] px-4 text-xs font-bold text-[#0d6e66] transition-colors hover:bg-[#e6f4f2]"
+                      >
+                        {copy.detailLabel}
+                        <ArrowRight className="h-3.5 w-3.5" />
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -292,41 +307,41 @@ export default function SolutionPage() {
         </div>
       </section>
 
-      <section className="border-y border-neutral-300 bg-white">
-        <div className="mx-auto grid max-w-[1440px] gap-8 px-4 py-14 md:px-8 lg:grid-cols-[minmax(260px,0.5fr)_1fr] lg:py-20">
+      {/* Workflow Strip */}
+      <section className="border-y border-[#e6dfd3] bg-[#f5f2eb]">
+        <div className="mx-auto grid max-w-[1200px] gap-8 px-6 py-12 md:px-10 lg:grid-cols-[300px_1fr] lg:py-16">
           <div>
-            <p className="text-xs font-black uppercase tracking-[0.22em] text-neutral-500">WORKFLOW</p>
-            <h2 className="mt-3 text-3xl font-black leading-tight text-neutral-950 md:text-5xl break-keep">
+            <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#f5a623]">Workflow</p>
+            <h2 className="mt-2 text-2xl font-black leading-tight text-[#2f3432] break-keep">
               {copy.processTitle}
             </h2>
-            <p className="mt-5 max-w-xl text-base leading-relaxed text-neutral-600 break-keep">{copy.processLead}</p>
+            <p className="mt-4 text-sm leading-relaxed text-[#5a625e] break-keep">{copy.processLead}</p>
           </div>
 
-          <ol className="grid gap-4">
+          <div className="grid gap-6 md:grid-cols-3">
             {copy.process.map((step, index) => (
-              <li key={step.title} className="grid gap-3 border-b border-neutral-200 pb-5 last:border-b-0 md:grid-cols-[72px_1fr]">
-                <span className="text-2xl font-black text-[#C69200]">{String(index + 1).padStart(2, "0")}</span>
-                <div>
-                  <h3 className="text-xl font-black text-neutral-950 break-keep">{step.title}</h3>
-                  <p className="mt-2 text-base leading-relaxed text-neutral-600 break-keep">{step.body}</p>
-                </div>
-              </li>
+              <div key={step.title} className="flex flex-col border-t-2 border-[#e6dfd3] pt-4">
+                <span className="font-mono text-sm font-bold text-[#f5a623]">0{index + 1}</span>
+                <h3 className="mt-2 text-base font-bold text-[#2f3432] break-keep">{step.title}</h3>
+                <p className="mt-2 text-xs leading-relaxed text-[#5a625e] break-keep">{step.body}</p>
+              </div>
             ))}
-          </ol>
+          </div>
         </div>
       </section>
 
-      <section className="mx-auto flex max-w-[1440px] flex-col gap-3 px-4 py-12 md:px-8 sm:flex-row">
+      {/* Footer CTAs */}
+      <section className="mx-auto flex max-w-[1200px] flex-col gap-4 px-6 py-12 md:px-10 sm:flex-row">
         <Link
           href="/customize"
-          className="inline-flex h-12 items-center justify-center gap-2 rounded-sm bg-[#FEBD16] px-6 text-sm font-black text-neutral-950 transition-colors hover:bg-[#E2A80F]"
+          className="inline-flex h-11 items-center justify-center gap-2 rounded bg-[#febd16] px-6 text-sm font-bold text-[#2f3432] transition-colors hover:bg-[#e2a80f]"
         >
           {copy.ctaPrimary}
           <ArrowRight className="h-4 w-4" />
         </Link>
         <Link
           href="/support"
-          className="inline-flex h-12 items-center justify-center rounded-sm border border-neutral-300 px-6 text-sm font-black text-neutral-800 transition-colors hover:border-neutral-950 hover:text-neutral-950"
+          className="inline-flex h-11 items-center justify-center rounded border border-[#d8d0c3] bg-white px-6 text-sm font-bold text-[#5a625e] transition-colors hover:border-[#2f3432] hover:text-[#2f3432]"
         >
           {copy.ctaSecondary}
         </Link>

@@ -137,7 +137,7 @@ describe('customize price calculator', () => {
     expect(formatWon(27900000)).toBe('₩27,900,000');
     expect(formatOptionPrice(catalog.options[0])).toBe('포함');
     expect(formatOptionPrice(catalog.options[1])).toBe('₩2,200,000');
-    expect(formatOptionPrice(catalog.options[2])).toBe('상담');
+    expect(formatOptionPrice(catalog.options[2])).toBe('협의');
   });
 
   it('builds default selections and calculates consult options as 0', () => {

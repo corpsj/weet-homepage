@@ -53,10 +53,10 @@ const navigationKo = [
     width: 155,
     submenu: [
       { name: '운영 솔루션', href: '/solution' },
-      { name: '보안', href: '/solution/cctv' },
-      { name: '통신망', href: '/solution/network' },
-      { name: '원격 제어', href: '/solution/iot' },
-      { name: '브랜드/현장 디자인', href: '/solution/design' },
+      { name: '보안 (Security)', href: '/solution/cctv' },
+      { name: '네트워크 (Network)', href: '/solution/network' },
+      { name: '원격 제어 (Control)', href: '/solution/iot' },
+      { name: '에너지 (Energy Stack)', href: '/solution/energy' },
     ],
   },
   {
@@ -128,10 +128,10 @@ const navigationEn = [
     width: 155,
     submenu: [
       { name: 'Operational Packages', href: '/solution' },
-      { name: 'Security', href: '/solution/cctv' },
-      { name: 'Network', href: '/solution/network' },
-      { name: 'Remote Control', href: '/solution/iot' },
-      { name: 'Brand & Site Fit', href: '/solution/design' },
+      { name: 'Security Core', href: '/solution/cctv' },
+      { name: 'Network Fabric', href: '/solution/network' },
+      { name: 'Control Layer', href: '/solution/iot' },
+      { name: 'Energy Stack', href: '/solution/energy' },
     ],
   },
   {
@@ -244,7 +244,7 @@ export default function Header() {
             <div className="xl:hidden absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-[60] flex items-center gap-2">
               <Link
                 href="/customize"
-                className="flex items-center justify-center px-3 md:px-4 py-1.5 md:py-2 bg-gray-900 text-white rounded text-[12px] md:text-[13px] font-bold hover:bg-gray-800 transition-colors whitespace-nowrap"
+              className="flex items-center justify-center rounded-sm bg-[#FEBD16] px-3 py-1.5 text-[12px] font-bold text-[#2f3432] shadow-[0_8px_18px_rgba(254,189,22,0.22)] transition-colors hover:bg-[#E2A80F] md:px-4 md:py-2 md:text-[13px] whitespace-nowrap"
                 aria-label={language === 'KO' ? '주문하기' : 'Order'}
               >
                 {language === 'KO' ? '주문하기' : 'Order'}
@@ -261,10 +261,10 @@ export default function Header() {
 
             {/* Desktop Navigation */}
             <nav
-              className="hidden xl:flex absolute left-[140px] right-[280px] top-0 bottom-0 items-center justify-center pointer-events-none"
+              className="hidden xl:flex absolute left-[140px] right-[330px] top-0 bottom-0 items-center justify-center pointer-events-none"
               onMouseEnter={handleMegaMenuEnter}
             >
-              <div className="flex pointer-events-auto gap-[60px] pb-[70px] -mb-[70px]">
+              <div className="flex pointer-events-auto gap-[clamp(28px,3.1vw,58px)] pb-[70px] -mb-[70px]">
                 {navigation.map((item) => (
                   <div
                     key={item.name}
@@ -272,7 +272,7 @@ export default function Header() {
                   >
                     <Link
                       href={item.href}
-                      className="relative inline-block text-black font-bold text-[15px] hover:text-gray-700 transition-colors whitespace-nowrap group"
+                      className="relative inline-block text-[#2f3432] font-bold text-[15px] hover:text-[#0d6e66] transition-colors whitespace-nowrap group"
                     >
                       <span className="relative z-10">{item.name}</span>
                       <span className={cn(
@@ -286,26 +286,17 @@ export default function Header() {
             </nav>
 
             {/* Desktop Right Side Content */}
-            <div className="hidden xl:flex absolute right-[64px] top-1/2 -translate-y-1/2 items-center gap-6">
-              {/* Primary CTA */}
-              <Link
-                href="/customize"
-                className="flex items-center justify-center px-6 py-2 bg-gray-900 text-white border border-gray-900 rounded-sm text-[13px] font-bold hover:bg-white hover:text-gray-900 transition-colors whitespace-nowrap"
-                aria-label={language === 'KO' ? '주문하기' : 'Configure'}
-              >
-                {language === 'KO' ? '주문하기' : 'Configure'}
-              </Link>
-
+            <div className="hidden xl:flex absolute right-[64px] top-1/2 -translate-y-1/2 items-center gap-5">
               {/* Social Icons & Language Switcher Block */}
               <div className="flex flex-col items-end gap-1">
                 <div className="flex items-center space-x-3 text-gray-400">
-                  <Link href="https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/" target="_blank" className="hover:text-gray-800 transition-colors" aria-label="Daangn">
+                  <Link href="https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/" target="_blank" className="hover:text-[#0d6e66] transition-colors" aria-label="Daangn">
                     <Carrot className="w-[14px] h-[14px]" />
                   </Link>
-                  <Link href="https://blog.naver.com/we-et" target="_blank" className="hover:text-gray-800 transition-colors font-bold text-[14px] leading-none" aria-label="Naver Blog">
+                  <Link href="https://blog.naver.com/we-et" target="_blank" className="hover:text-[#0d6e66] transition-colors font-bold text-[14px] leading-none" aria-label="Naver Blog">
                     N
                   </Link>
-                  <Link href="https://www.instagram.com/weet_kr/" target="_blank" className="hover:text-gray-800 transition-colors" aria-label="Instagram">
+                  <Link href="https://www.instagram.com/weet_kr/" target="_blank" className="hover:text-[#0d6e66] transition-colors" aria-label="Instagram">
                     <Instagram className="w-[14px] h-[14px]" />
                   </Link>
                 </div>
@@ -313,19 +304,27 @@ export default function Header() {
                 <div className="flex items-center gap-1.5 text-[10px] font-medium">
                   <button
                     onClick={() => setLanguage('KO')}
-                    className={cn("transition-colors", language === 'KO' ? "text-gray-800 font-bold" : "text-gray-300 hover:text-gray-500")}
+                    className={cn("transition-colors", language === 'KO' ? "font-bold text-[#2f3432]" : "text-gray-300 hover:text-[#0d6e66]")}
                   >
                     KO
                   </button>
                   <span className="text-gray-200">|</span>
                   <button
                     onClick={() => setLanguage('EN')}
-                    className={cn("transition-colors", language === 'EN' ? "text-gray-800 font-bold" : "text-gray-300 hover:text-gray-500")}
+                    className={cn("transition-colors", language === 'EN' ? "font-bold text-[#2f3432]" : "text-gray-300 hover:text-[#0d6e66]")}
                   >
                     EN
                   </button>
                 </div>
               </div>
+              {/* Primary CTA */}
+              <Link
+                href="/customize"
+                className="flex h-10 items-center justify-center rounded-sm bg-[#FEBD16] px-6 text-[13px] font-bold text-[#2f3432] shadow-[0_10px_24px_rgba(254,189,22,0.24)] transition-colors hover:bg-[#E2A80F] whitespace-nowrap"
+                aria-label={language === 'KO' ? '주문하기' : 'Configure'}
+              >
+                {language === 'KO' ? '주문하기' : 'Configure'}
+              </Link>
             </div>
 
           </div>
@@ -338,7 +337,7 @@ export default function Header() {
             >
               <div className="flex justify-center w-full">
                 <div
-                  className="flex py-6 gap-[60px] pl-[60px] pr-[180px] rounded-b-md shadow-sm pointer-events-auto bg-gray-50 border-t border-gray-100"
+                  className="flex py-6 gap-[clamp(28px,3.1vw,58px)] pl-[60px] pr-[220px] rounded-b-md shadow-sm pointer-events-auto bg-gray-50 border-t border-gray-100"
                   onMouseEnter={() => setShowMegaMenu(true)}
                 >
                   {navigation.map((item) => (
@@ -356,7 +355,7 @@ export default function Header() {
                             <Link
                               key={idx}
                               href={subitem.href}
-                              className="relative inline-block text-[13px] text-gray-600 hover:text-black transition-colors group"
+                              className="relative inline-block text-[13px] text-gray-600 hover:text-[#0d6e66] transition-colors group"
                             >
                               <span className="relative z-10">{subitem.name}</span>
                               <span className="absolute bottom-[1px] left-0 right-0 h-[6px] bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-200 -z-0" />
@@ -404,7 +403,7 @@ export default function Header() {
             <Link
               href="/customize"
               onClick={handleMobileMenuClose}
-              className="flex items-center justify-center w-full py-4 mb-8 bg-gray-900 text-white rounded-md font-bold text-lg hover:bg-gray-800 transition-colors shadow-sm"
+              className="flex items-center justify-center w-full py-4 mb-8 bg-[#FEBD16] text-[#2f3432] rounded-md font-bold text-lg hover:bg-[#E2A80F] transition-colors shadow-sm"
             >
               {language === 'KO' ? '모델 구성하기' : 'Configure Model'}
             </Link>
@@ -425,13 +424,13 @@ export default function Header() {
                         className="flex items-center justify-between w-full text-left mb-3"
                         type="button"
                       >
-                        <span className="block text-lg md:text-xl font-bold text-black hover:text-gray-600 transition-colors">
+                        <span className="block text-lg md:text-xl font-bold text-[#2f3432] hover:text-[#0d6e66] transition-colors">
                           {item.name}
                         </span>
                         {hasSubmenu && (
                           <ChevronDown
                             className={cn(
-                              "w-6 h-6 text-black transition-transform duration-300",
+                              "w-6 h-6 text-[#2f3432] transition-transform duration-300",
                               isExpanded && "rotate-180"
                             )}
                           />
@@ -453,7 +452,7 @@ export default function Header() {
                                   key={idx}
                                   href={subitem.href}
                                   onClick={handleMobileMenuClose}
-                                  className="block text-sm md:text-base text-gray-600 hover:text-black transition-colors py-1"
+                                  className="block text-sm md:text-base text-gray-600 hover:text-[#0d6e66] transition-colors py-1"
                                 >
                                   {subitem.name}
                                 </Link>
@@ -467,7 +466,7 @@ export default function Header() {
                     <Link
                       href={item.href}
                       onClick={handleMobileMenuClose}
-                      className="block text-lg md:text-xl font-bold text-black hover:text-gray-600 transition-colors mb-3"
+                      className="block text-lg md:text-xl font-bold text-[#2f3432] hover:text-[#0d6e66] transition-colors mb-3"
                     >
                       {item.name}
                     </Link>
@@ -484,14 +483,14 @@ export default function Header() {
             <div className="flex items-center gap-3 text-xs font-medium">
               <button
                 onClick={() => setLanguage('KO')}
-                className={cn("font-bold transition-colors", language === 'KO' ? "text-black" : "text-gray-400 hover:text-black")}
+                className={cn("font-bold transition-colors", language === 'KO' ? "text-[#2f3432]" : "text-gray-400 hover:text-[#0d6e66]")}
               >
                 KO
               </button>
               <span className="text-gray-300">|</span>
               <button
                 onClick={() => setLanguage('EN')}
-                className={cn("font-bold transition-colors", language === 'EN' ? "text-black" : "text-gray-400 hover:text-black")}
+                className={cn("font-bold transition-colors", language === 'EN' ? "text-[#2f3432]" : "text-gray-400 hover:text-[#0d6e66]")}
               >
                 EN
               </button>
@@ -500,7 +499,7 @@ export default function Header() {
               <Link
                 href="https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/"
                 target="_blank"
-                className="flex items-center gap-2 text-gray-700 hover:text-black transition-colors"
+                className="flex items-center gap-2 text-gray-700 hover:text-[#0d6e66] transition-colors"
                 onClick={handleMobileMenuClose}
               >
                 <Carrot className="w-5 h-5" />
@@ -509,7 +508,7 @@ export default function Header() {
               <Link
                 href="https://blog.naver.com/we-et"
                 target="_blank"
-                className="flex items-center gap-2 text-gray-700 hover:text-black transition-colors"
+                className="flex items-center gap-2 text-gray-700 hover:text-[#0d6e66] transition-colors"
                 onClick={handleMobileMenuClose}
               >
                 <span className="text-xl font-bold">N</span>
@@ -518,7 +517,7 @@ export default function Header() {
               <Link
                 href="https://www.instagram.com/weet_kr/"
                 target="_blank"
-                className="flex items-center gap-2 text-gray-700 hover:text-black transition-colors"
+                className="flex items-center gap-2 text-gray-700 hover:text-[#0d6e66] transition-colors"
                 onClick={handleMobileMenuClose}
               >
                 <Instagram className="w-5 h-5" />

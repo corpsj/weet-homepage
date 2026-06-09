@@ -69,6 +69,14 @@ This file tracks bugs and improvements discovered during the recursive improveme
 - [ ] 공개 홈페이지: `/solution` 옵션 상세에 실제 상담 사례 2~3개(무인 카페, 독채 스테이, 현장 사무실)를 추가하면 구매자가 자기 상황에 더 빨리 대입할 수 있음.
 - [ ] 공개 홈페이지: `/solution` 옵션별 유지보수 책임, 모니터링 대응 시간, 장비 보증 범위를 숫자와 조건으로 명시하면 신뢰도가 더 올라감.
 - [ ] 공개 홈페이지: production QA에서 자동 이미지 메트릭이 tablet/mobile `/solution` header logo를 `naturalWidth: 0`으로 간헐 보고하지만 스크린샷은 정상임. 다음 QA 스크립트에서 로고 lazy-load 안정화 대기 또는 visible-pixel 체크로 측정 방식을 보강해야 함.
+- [x] 주문하기: 2026-06-10 00:34 KST Chrome/ChatGPT 제어 타임아웃으로 임시 대체했던 `mini-washer`, `bed-frame`, `solar-panel`, `ess`, `ev-charger`, `iot-package`, `security-package`, `satellite-internet`, `cellular-router` 옵션 이미지를 모두 실제 옵션별 이미지로 재생성함.
+  - *Fix Details*: Stickies의 `크롬 고쳤어. 다시 테스트 시작해` 지시 이후 Chrome/ChatGPT visible web control에서 `최신 • 5.5`, `Thinking • 확장`, `이미지 만들기`를 확인하고 옵션마다 새 채팅/단일 프롬프트로 생성했다.
+  - *Retry Notes*: `ess`, `iot-package`, `cellular-router`는 초기 기술용어 프롬프트가 생성 중 상태에서 멈춰, 전송 중복 없이 상태를 확인한 뒤 더 단순한 실물 장면 프롬프트로 재시도해 성공했다.
+  - *QA Evidence*: `.codex/qa/current/customize-options-contact.webp`에 30개 옵션 이미지 contact sheet를 재생성했고, 9개 교체 이미지가 모두 옵션 주제와 일치함을 시각 확인했다.
+- [x] 주문하기: 옵션 상세 모달의 이미지 영역이 비어 보이는 문제를 수정함.
+  - *Root Cause*: 캐시버스트 쿼리가 붙은 public option image를 `next/image` optimizer가 `/_next/image`로 프록시하면서 HTTP 400을 반환했고, 이미지 `onError`가 `<img>`를 숨겼다.
+  - *Fix Details*: `OptionInfoModal`의 `Image`에 `unoptimized`를 추가해 `/images/customize/options/*.webp?v=20260610-0137`을 직접 로드하게 했다.
+  - *QA Evidence*: `.codex/qa/current/desktop-modal-iot-package-fixed.png`, `.codex/qa/current/desktop-modal-cellular-router.png`, `.codex/qa/current/desktop-modal-solar-panel.png` 수동 확인 및 `.codex/qa/current/visual-summary.json`의 `modalProblems: []`.
 - [x] 관리자 페이지: 현재 리디자인은 shell/dashboard 중심이며, `products`, `projects`, `inquiries`, `insights`, `gallery`, `UTM`, `CMS` 하위 화면에는 기존 `rounded-xl/2xl/3xl`, `tracking-tight`, old SaaS card tone이 남아 있음.
   - *Fix Details*: 2026-06-07 두 번째 Antigravity handoff와 Codex 보정으로 `UTM`, `CMS`, `gallery`, `inquiries`, project/gallery/product edit-new forms, support editor, product modal, insights cleanup을 같은 console system으로 전환함.
 - [x] 관리자 페이지: `products`, `projects`, `consultations`, `insights`는 1차 console tone으로 전환됐으나 `UTM`, `CMS`, `gallery`, `inquiries`, edit/new forms, modal 계층에는 기존 `rounded-xl/2xl/3xl`, old SaaS card tone이 여전히 남아 있음.

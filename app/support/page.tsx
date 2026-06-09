@@ -8,7 +8,7 @@ export const dynamic = 'force-dynamic';
 
 const steps = [
   { title: '구성', text: '원하는 모델과 옵션을 먼저 구성합니다.', icon: Ruler },
-  { title: '상담 요청', text: '구성 결과와 함께 상담 정보를 남깁니다.', icon: ClipboardCheck },
+  { title: '주문 요청', text: '구성 결과와 함께 주문 정보를 남깁니다.', icon: ClipboardCheck },
   { title: '현장 확인', text: '진입로, 인입, 지목과 설치 조건을 확인합니다.', icon: MapPinned },
   { title: '견적·계약', text: '현장 조건을 반영해 최종 견적과 일정을 확정합니다.', icon: Home },
   { title: '제작', text: '공장 제작과 품질 확인을 진행합니다.', icon: Factory },
@@ -58,7 +58,7 @@ export default async function SupportPage() {
             </p>
             <Link
               href="/customize"
-              className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-[#2f3432] px-5 text-sm font-bold text-white transition-colors hover:bg-[#1f2422]"
+              className="mt-8 inline-flex h-12 items-center justify-center gap-2 rounded-lg bg-[#0d6e66] px-5 text-sm font-bold text-white transition-colors hover:bg-[#095a54]"
             >
               나만의 위트 만들기
               <ArrowRight className="h-4 w-4" />

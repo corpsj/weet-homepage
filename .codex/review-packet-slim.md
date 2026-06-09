@@ -1,981 +1,658 @@
-# GPT-5.5 Pro Review Packet (Slim Retry)
+# GPT-5.5 Pro Review Packet
 
-Marker: `WEET_REVIEW_20260609_SOLUTION_RENEWAL_06`
+Marker: WEET_REVIEW_20260610_CUSTOMIZE_SOLUTION_CLOSURE_02
 
-## Why this is a retry
+## Active Task Brief
 
-The full local review packet `.codex/review-packet.md` exists and includes the full diff, but the first Chrome/ChatGPT run `WEET_REVIEW_20260609_SOLUTION_RENEWAL_05` hung after reading a 113k markdown attachment. This slim retry keeps the review focused while preserving the full packet locally.
+Review the final closure state for Weet's solution/header/customize renewal. The previous GPT-5.5 Pro review (marker WEET_REVIEW_20260610_CUSTOMIZE_SOLUTION_FINAL_01) returned REVISE with one concrete MUST_FIX: replace 9 temporary option-modal images. That MUST_FIX has been applied, plus a visual QA-discovered modal rendering bug was fixed.
 
-## Task
+User goals:
+- Make Weet feel like a leading, young, premium Korean movable-home brand.
+- Rebuild /solution as technical option systems, not field/site concepts, and avoid black-heavy styling.
+- Reposition/restyle header 주문하기 without nav crowding or black CTA styling.
+- Rework /customize around Tesla/Porsche-style ordering: full-width stepper, remove 상담 신청, steps 모델 / 공간 구성 / 무드 & 소재 / 스마트 테크, remove 확인사항, replace 상담 요청 with 주문하기.
+- Fill option info modals with real descriptions and photorealistic Korean-context images generated via Chrome/ChatGPT visible web control.
+- Center floorplans and add 3x6 -> 3x9 interactive expansion.
 
-Review Weet public `/solution` and solution detail renewal. User required Korean photorealistic option-focused images, not big house/building images. User wants a premium/trendy Korean mobile-home/modular-space site.
+## Current Progress / State
 
-## What changed
+Implementation is complete locally. Validation and visual QA passed. This packet asks for closure review before commit/push/deploy.
 
-- `/solution` rebuilt as four customer-facing operation options: `안심 출입`, `끊김 없는 연결`, `원격 준비`, `현장 완성`.
-- Detail pages `/solution/cctv`, `/solution/network`, `/solution/iot`, `/solution/design` rebuilt with: recommended sites, scope, consultation decisions, outcomes, CTAs.
-- Four final generated assets added under `public/images/solution/generated/`:
-  - `kr-security-realphoto.webp`: CCTV/sensor-light/smart-lock close-up; earlier large-building security image was rejected after Stickies steering.
-  - `kr-network-realphoto.webp`: POS/router/network cabinet in Korean roadside modular cafe.
-  - `kr-control-realphoto.webp`: smart switch/control panel/phone detail in Korean modular interior.
-  - `kr-brandfit-realphoto.webp`: facade/sign-frame/deck/planting/drainage site-finish detail.
-- Metadata and E2E assertion updated.
-- Antigravity was attempted but produced no code diff, recorded as failure; Codex implemented directly.
+Important latest fix: option modal images use cache-busted public paths such as /images/customize/options/iot-package.webp?v=20260610-0137. Next Image optimizer returned HTTP 400 when proxying those query-bearing public URLs, so modal images appeared as blank beige boxes. The modal Image now uses `unoptimized`, and visual QA confirms nonzero natural dimensions and visible rendering.
 
-## Git status
+## Project Snapshot
+
+- Next.js app router project.
+- Branch: zoo/customize-configurator.
+- Key changed surfaces: /solution, /solution/* detail pages, /customize configurator, header, customize actions/tests, floorplan SVGs, public option image assets.
+- New route: /solution/energy.
+
+## Git Status
 
 ```text
 ## zoo/customize-configurator...origin/zoo/customize-configurator
+ M .codex/current-task.md
+ M .codex/pro-review.md
+ M .codex/review-packet-slim.md
  M .codex/review-packet.md
  M .codex/state.md
- M agent-inbox/antigravity-failures.md
- M agent-inbox/findings-public-simulation.md
+ M agent-inbox/customizer-image-generation.md
  M agent-inbox/implementation-backlog.md
- M agent-inbox/pro-review-failures.md
+ M agent-inbox/tool-control-runbook.md
+ M app/actions/customize-actions.ts
+ M app/customize/layout.tsx
+ M app/customize/page.tsx
+ M app/privacy/page.tsx
  M app/solution/cctv/layout.tsx
  M app/solution/cctv/page.tsx
  M app/solution/design/layout.tsx
  M app/solution/design/page.tsx
- M app/solution/iot/layout.tsx
  M app/solution/iot/page.tsx
+ M app/solution/layout.tsx
  M app/solution/network/layout.tsx
  M app/solution/network/page.tsx
  M app/solution/page.tsx
+ M app/support/page.tsx
+ M app/terms/page.tsx
+ M components/customize/CustomizeConfigurator.tsx
+ M components/layout/Header.tsx
+ M components/solution/FeatureModal.tsx
  M components/solution/SolutionTemplate.tsx
+ M e2e/customize-configurator.spec.ts
  M e2e/public-pages.spec.ts
+ M lib/customize/__tests__/priceCalculator.test.ts
+ M lib/customize/priceCalculator.ts
+ M public/images/customize/compact-3x6-base.svg
+ M public/images/customize/standard-3x9-base.svg
+?? .codex/qa/current/
+?? .codex/qa/production-solution-fb62d34/
 ?? .codex/qa/solution-renewal-20260609/
 ?? .codex/qa/solution-renewal-before-20260609/
-?? agent-inbox/solution-renewal-assets.md
-?? public/images/solution/generated/
+?? app/solution/energy/
+?? public/images/customize/options/
+?? test-results/
 
 ```
 
-## Diff stat
+## Changed Files / Diff Stat
 
 ```text
- app/solution/cctv/layout.tsx             |   8 +-
- app/solution/cctv/page.tsx               | 146 +++------
- app/solution/design/layout.tsx           |   8 +-
- app/solution/design/page.tsx             | 144 +++------
- app/solution/iot/layout.tsx              |   8 +-
- app/solution/iot/page.tsx                | 146 +++------
- app/solution/network/layout.tsx          |   8 +-
- app/solution/network/page.tsx            | 146 +++------
- app/solution/page.tsx                    | 498 +++++++++++++++++--------------
- components/solution/SolutionTemplate.tsx | 388 ++++++++++++------------
- e2e/public-pages.spec.ts                 |  13 +-
- 11 files changed, 692 insertions(+), 821 deletions(-)
+ .codex/current-task.md                          |   68 +-
+ .codex/pro-review.md                            |   22 +-
+ .codex/review-packet-slim.md                    | 1808 +++++----
+ .codex/review-packet.md                         | 4501 ++++++++++++-----------
+ .codex/state.md                                 |  160 +-
+ agent-inbox/customizer-image-generation.md      |   76 +
+ agent-inbox/implementation-backlog.md           |    8 +
+ agent-inbox/tool-control-runbook.md             |   45 +
+ app/actions/customize-actions.ts                |    4 +-
+ app/customize/layout.tsx                        |    2 +-
+ app/customize/page.tsx                          |    4 +-
+ app/privacy/page.tsx                            |    2 +-
+ app/solution/cctv/layout.tsx                    |    4 +-
+ app/solution/cctv/page.tsx                      |   16 +-
+ app/solution/design/layout.tsx                  |   12 +-
+ app/solution/design/page.tsx                    |   56 +-
+ app/solution/iot/page.tsx                       |   16 +-
+ app/solution/layout.tsx                         |    4 +-
+ app/solution/network/layout.tsx                 |    4 +-
+ app/solution/network/page.tsx                   |   22 +-
+ app/solution/page.tsx                           |  297 +-
+ app/support/page.tsx                            |    4 +-
+ app/terms/page.tsx                              |    8 +-
+ components/customize/CustomizeConfigurator.tsx  |  393 +-
+ components/layout/Header.tsx                    |   77 +-
+ components/solution/FeatureModal.tsx            |    8 +-
+ components/solution/SolutionTemplate.tsx        |   78 +-
+ e2e/customize-configurator.spec.ts              |   87 +-
+ e2e/public-pages.spec.ts                        |   13 +-
+ lib/customize/__tests__/priceCalculator.test.ts |    2 +-
+ lib/customize/priceCalculator.ts                |    4 +-
+ public/images/customize/compact-3x6-base.svg    |   96 +-
+ public/images/customize/standard-3x9-base.svg   |  124 +-
+ 33 files changed, 4002 insertions(+), 4023 deletions(-)
 
 ```
 
-## Main package/data lines
+Untracked generated assets / QA evidence:
 
 ```text
-app/solution/page.tsx:20:  href: string;
-app/solution/page.tsx:21:  image: string;
-app/solution/page.tsx:23:  title: string;
-app/solution/page.tsx:24:  subtitle: string;
-app/solution/page.tsx:25:  problem: string;
-app/solution/page.tsx:26:  promise: string;
-app/solution/page.tsx:27:  details: string[];
-app/solution/page.tsx:28:  proof: string;
-app/solution/page.tsx:33:  title: string;
-app/solution/page.tsx:43:  ctaPrimary: string;
-app/solution/page.tsx:44:  ctaSecondary: string;
-app/solution/page.tsx:46:  process: Array<{ title: string; body: string }>;
-app/solution/page.tsx:52:    title: "운영까지 준비된 모듈러 공간",
-app/solution/page.tsx:65:    ctaPrimary: "주문 옵션 확인",
-app/solution/page.tsx:66:    ctaSecondary: "상담으로 현장 맞추기",
-app/solution/page.tsx:70:        href: "/solution/cctv",
-app/solution/page.tsx:71:        image: "/images/solution/generated/kr-security-realphoto.webp",
-app/solution/page.tsx:73:        title: "안심 출입",
-app/solution/page.tsx:74:        subtitle: "CCTV · 스마트락 · 센서등",
-app/solution/page.tsx:75:        problem: "운영자가 항상 머물 수 없는 외곽·야간·예약제 공간의 보안 공백을 줄입니다.",
-app/solution/page.tsx:76:        promise: "출입 기록, 야간 감지, 현관 조명을 하나의 운영 흐름으로 설계합니다.",
-app/solution/page.tsx:77:        details: ["현관/창측 사각지대 검토", "CCTV와 센서등 위치 제안", "스마트락 권한 방식 정리"],
-app/solution/page.tsx:78:        proof: "밤에도 누가 들어왔는지, 어떤 알림을 받아야 하는지 명확해집니다.",
-app/solution/page.tsx:82:        href: "/solution/network",
-app/solution/page.tsx:83:        image: "/images/solution/generated/kr-network-realphoto.webp",
-app/solution/page.tsx:85:        title: "끊김 없는 연결",
-app/solution/page.tsx:86:        subtitle: "POS · 예약 · 게스트 Wi-Fi",
-app/solution/page.tsx:87:        problem: "결제, 예약, 원격 제어가 인터넷 품질에 묶이는 상업 공간의 손실 리스크를 줄입니다.",
-app/solution/page.tsx:88:        promise: "운영망, 고객망, 장비망을 구분하고 현장 조건에 맞는 회선과 라우터를 제안합니다.",
-app/solution/page.tsx:89:        details: ["POS/업무/게스트망 분리", "라우터와 통신함 위치 계획", "백업 회선 필요성 점검"],
-app/solution/page.tsx:90:        proof: "카드 결제와 예약 확인이 끊기지 않아 운영자가 현장에서 덜 불안합니다.",
-app/solution/page.tsx:94:        href: "/solution/iot",
-app/solution/page.tsx:95:        image: "/images/solution/generated/kr-control-realphoto.webp",
-app/solution/page.tsx:97:        title: "원격 준비",
-app/solution/page.tsx:98:        subtitle: "조명 · 냉난방 · 환기",
-app/solution/page.tsx:99:        problem: "입실 전마다 현장에 가야 하는 숙박·체험·무인 운영의 반복 업무를 줄입니다.",
-app/solution/page.tsx:100:        promise: "조명, 공조, 환기, 도어 상태를 예약과 운영 시간에 맞춰 제어할 수 있게 구성합니다.",
-app/solution/page.tsx:101:        details: ["스마트 스위치/온도 패널", "입실 전 냉난방 스케줄", "도어 상태와 운영 알림"],
-app/solution/page.tsx:102:        proof: "고객이 도착하기 전 공간 상태를 미리 준비하고, 불필요한 방문을 줄입니다.",
-app/solution/page.tsx:106:        href: "/solution/design",
-app/solution/page.tsx:107:        image: "/images/solution/generated/kr-brandfit-realphoto.webp",
-app/solution/page.tsx:109:        title: "현장 완성",
-app/solution/page.tsx:110:        subtitle: "외장 · 간판 · 데크 동선",
-app/solution/page.tsx:111:        problem: "모듈러가 현장 상권, 브랜드 톤, 고객 진입 동선과 따로 노는 느낌을 줄입니다.",
-app/solution/page.tsx:112:        promise: "외장재, 간판 자리, 데크·조경·배수 마감을 함께 정리해 첫인상을 완성합니다.",
-app/solution/page.tsx:113:        details: ["브랜드 톤에 맞는 외장", "간판/조명 자리 사전 계획", "데크·조경·배수 디테일"],
-app/solution/page.tsx:114:        proof: "공간이 ‘놓인 건물’이 아니라 바로 영업 가능한 상업 장소처럼 보입니다.",
-app/solution/page.tsx:118:      { title: "운영 상황 인터뷰", body: "무인, 예약제, 상시 상주, 야간 운영 여부를 먼저 확인합니다." },
-app/solution/page.tsx:119:      { title: "현장 리스크 표시", body: "출입, 통신, 공조, 간판, 배수 위치를 도면과 현장 조건 위에 표시합니다." },
-app/solution/page.tsx:120:      { title: "필요 옵션만 확정", body: "장비 스펙보다 운영자가 실제로 받을 알림과 관리 범위를 먼저 정합니다." },
-app/solution/page.tsx:125:    title: "Modular Spaces Ready To Operate",
-app/solution/page.tsx:138:    ctaPrimary: "Check order options",
-app/solution/page.tsx:139:    ctaSecondary: "Match my site",
-app/solution/page.tsx:143:        href: "/solution/cctv",
-app/solution/page.tsx:144:        image: "/images/solution/generated/kr-security-realphoto.webp",
-app/solution/page.tsx:146:        title: "Secure Access",
-app/solution/page.tsx:147:        subtitle: "CCTV · smart lock · sensor light",
-app/solution/page.tsx:148:        problem: "Reduce security gaps in remote, night, and reservation-based spaces where staff cannot stay all day.",
-app/solution/page.tsx:149:        promise: "Access logs, night detection, and entrance lighting are planned as one operating flow.",
-app/solution/page.tsx:150:        details: ["Entrance blind-spot review", "CCTV and sensor-light placement", "Smart-lock permission planning"],
-app/solution/page.tsx:151:        proof: "Operators know who entered at night and which alerts deserve attention.",
-app/solution/page.tsx:155:        href: "/solution/network",
-app/solution/page.tsx:156:        image: "/images/solution/generated/kr-network-realphoto.webp",
-app/solution/page.tsx:158:        title: "Stable Connection",
-app/solution/page.tsx:159:        subtitle: "POS · booking · guest Wi-Fi",
-app/solution/page.tsx:160:        problem: "Reduce losses when payment, booking, or remote control depends on unstable connectivity.",
-app/solution/page.tsx:161:        promise: "We separate operator, guest, and device networks and recommend the right line and router for the site.",
-app/solution/page.tsx:162:        details: ["POS/work/guest network split", "Router and network-box placement", "Backup-line review"],
-app/solution/page.tsx:163:        proof: "Payments and reservations stay reliable, so operators feel less exposed on site.",
-app/solution/page.tsx:167:        href: "/solution/iot",
-app/solution/page.tsx:168:        image: "/images/solution/generated/kr-control-realphoto.webp",
-app/solution/page.tsx:170:        title: "Remote Ready",
-app/solution/page.tsx:171:        subtitle: "lighting · HVAC · ventilation",
-app/solution/page.tsx:172:        problem: "Reduce repeated site visits for hospitality, experience rooms, and unmanned operations.",
-app/solution/page.tsx:173:        promise: "Lighting, HVAC, ventilation, and door state can follow booking time and operating hours.",
-app/solution/page.tsx:174:        details: ["Smart switches and temperature panels", "Pre-arrival HVAC schedule", "Door state and operation alerts"],
-app/solution/page.tsx:175:        proof: "The space can be prepared before guests arrive, with fewer unnecessary visits.",
-app/solution/page.tsx:179:        href: "/solution/design",
-app/solution/page.tsx:180:        image: "/images/solution/generated/kr-brandfit-realphoto.webp",
-app/solution/page.tsx:182:        title: "Site Finish",
-app/solution/page.tsx:183:        subtitle: "facade · signage · deck flow",
-app/solution/page.tsx:184:        problem: "Prevent the module from feeling detached from the brand, local market, and customer flow.",
-app/solution/page.tsx:185:        promise: "Facade, signage position, deck, landscape, and drainage details are aligned before completion.",
-app/solution/page.tsx:186:        details: ["Brand-fit exterior palette", "Sign and lighting placement", "Deck, planting, and drainage detail"],
-app/solution/page.tsx:187:        proof: "The space reads as a business-ready site, not just a placed building.",
-app/solution/page.tsx:191:      { title: "Operating interview", body: "We first check unmanned, reservation-only, staffed, and night-operation needs." },
-app/solution/page.tsx:192:      { title: "Site risk map", body: "Access, connection, HVAC, signage, and drainage points are marked against the real site." },
-app/solution/page.tsx:193:      { title: "Option confirmation", body: "We define actual alerts and management scope before chasing device specs." },
-app/solution/page.tsx:324:          {copy.ctaPrimary}
-app/solution/page.tsx:331:          {copy.ctaSecondary}
-app/solution/iot/page.tsx:7:  href: "/solution/iot",
-app/solution/iot/page.tsx:8:  image: "/images/solution/generated/kr-control-realphoto.webp",
-app/solution/iot/page.tsx:12:      title: "현장에 가지 않아도 준비되게",
-app/solution/iot/page.tsx:17:      problem:
-app/solution/iot/page.tsx:27:      ctaPrimary: "주문 옵션에서 원격 준비 확인",
-app/solution/iot/page.tsx:28:      ctaSecondary: "운영 방식 상담",
-app/solution/iot/page.tsx:32:      title: "Prepare The Space Without Visiting",
-app/solution/iot/page.tsx:37:      problem:
-app/solution/iot/page.tsx:47:      ctaPrimary: "Check remote readiness in order options",
-app/solution/iot/page.tsx:48:      ctaSecondary: "Discuss operating workflow",
-app/solution/network/page.tsx:7:  href: "/solution/network",
-app/solution/network/page.tsx:8:  image: "/images/solution/generated/kr-network-realphoto.webp",
-app/solution/network/page.tsx:12:      title: "결제와 예약이 끊기지 않게",
-app/solution/network/page.tsx:17:      problem:
-app/solution/network/page.tsx:27:      ctaPrimary: "주문 옵션에서 연결 확인",
-app/solution/network/page.tsx:28:      ctaSecondary: "통신 환경 상담",
-app/solution/network/page.tsx:32:      title: "Keep Payment And Booking Online",
-app/solution/network/page.tsx:37:      problem:
-app/solution/network/page.tsx:47:      ctaPrimary: "Check connection in order options",
-app/solution/network/page.tsx:48:      ctaSecondary: "Discuss network conditions",
-app/solution/cctv/page.tsx:7:  href: "/solution/cctv",
-app/solution/cctv/page.tsx:8:  image: "/images/solution/generated/kr-security-realphoto.webp",
-app/solution/cctv/page.tsx:12:      title: "무인 운영도 안심되게",
-app/solution/cctv/page.tsx:17:      problem:
-app/solution/cctv/page.tsx:27:      ctaPrimary: "주문 옵션에서 보안 확인",
-app/solution/cctv/page.tsx:28:      ctaSecondary: "현장 보안 상담",
-app/solution/cctv/page.tsx:32:      title: "Make Unmanned Operation Feel Safe",
-app/solution/cctv/page.tsx:37:      problem:
-app/solution/cctv/page.tsx:47:      ctaPrimary: "Check security in order options",
-app/solution/cctv/page.tsx:48:      ctaSecondary: "Discuss site security",
-app/solution/design/page.tsx:7:  href: "/solution/design",
-app/solution/design/page.tsx:8:  image: "/images/solution/generated/kr-brandfit-realphoto.webp",
-app/solution/design/page.tsx:12:      title: "상권과 브랜드에 어긋나지 않게",
-app/solution/design/page.tsx:17:      problem:
-app/solution/design/page.tsx:27:      ctaPrimary: "주문 옵션에서 현장 완성 확인",
-app/solution/design/page.tsx:28:      ctaSecondary: "브랜드 현장 상담",
-app/solution/design/page.tsx:32:      title: "Fit The Brand And Local Market",
-app/solution/design/page.tsx:37:      problem:
-app/solution/design/page.tsx:47:      ctaPrimary: "Check site finish in order options",
-app/solution/design/page.tsx:48:      ctaSecondary: "Discuss brand site fit",
+.codex/qa/current/chrome-chatgpt-recovery.png
+.codex/qa/current/customize-options-contact.webp
+.codex/qa/current/desktop-customize-3x9-expansion-final-after-cachefix.png
+.codex/qa/current/desktop-customize-3x9-expansion-mid-after-cachefix.png
+.codex/qa/current/desktop-customize-expansion-mid.png
+.codex/qa/current/desktop-customize-initial-after-cachefix.png
+.codex/qa/current/desktop-customize-initial.png
+.codex/qa/current/desktop-customize-standard-expanding.png
+.codex/qa/current/desktop-customize-standard-final.png
+.codex/qa/current/desktop-home-header-after-cachefix.png
+.codex/qa/current/desktop-home-header.png
+.codex/qa/current/desktop-modal-basic-bathroom.png
+.codex/qa/current/desktop-modal-basic-sink.png
+.codex/qa/current/desktop-modal-basic-window.png
+.codex/qa/current/desktop-modal-bidet.png
+.codex/qa/current/desktop-modal-birch-panel.png
+.codex/qa/current/desktop-modal-built-in-storage.png
+.codex/qa/current/desktop-modal-cedar-point.png
+.codex/qa/current/desktop-modal-cellular-router.png
+.codex/qa/current/desktop-modal-ev-charger.png
+.codex/qa/current/desktop-modal-extra-window.png
+.codex/qa/current/desktop-modal-folding-table.png
+.codex/qa/current/desktop-modal-iot-package-fixed.png
+.codex/qa/current/desktop-modal-iot-package-longwait.png
+.codex/qa/current/desktop-modal-iot-package.png
+.codex/qa/current/desktop-modal-paper-wall.png
+.codex/qa/current/desktop-modal-ribbed-steel-white.png
+.codex/qa/current/desktop-modal-satellite-internet.png
+.codex/qa/current/desktop-modal-security-package.png
+.codex/qa/current/desktop-modal-silk-wallpaper.png
+.codex/qa/current/desktop-modal-smart-lock.png
+.codex/qa/current/desktop-modal-solar-panel.png
+.codex/qa/current/desktop-modal-spc-natural-oak.png
+.codex/qa/current/desktop-modal-spc-white-oak.png
+.codex/qa/current/desktop-modal-standard-lock.png
+.codex/qa/current/desktop-modal-zinc-gray.png
+.codex/qa/current/desktop-option-modal-basic-window.png
+.codex/qa/current/desktop-option-modal-iot-package.png
+.codex/qa/current/desktop-option-modal-mini-washer.png
+.codex/qa/current/desktop-option-modal-solar-panel.png
+.codex/qa/current/desktop-option-modal-zinc-gray.png
+.codex/qa/current/desktop-solution-after-cachefix.png
+.codex/qa/current/desktop-solution.png
+.codex/qa/current/mobile-customize-after-cachefix.png
+.codex/qa/current/mobile-customize-initial.png
+.codex/qa/current/mobile-home-header-after-cachefix.png
+.codex/qa/current/mobile-home-header.png
+.codex/qa/current/mobile-solution-after-cachefix.png
+.codex/qa/current/mobile-solution.png
+.codex/qa/current/option-file-stats.json
+.codex/qa/current/tablet-customize-after-cachefix.png
+.codex/qa/current/tablet-customize-initial.png
+.codex/qa/current/tablet-home-header-after-cachefix.png
+.codex/qa/current/tablet-home-header.png
+.codex/qa/current/tablet-solution-after-cachefix.png
+.codex/qa/current/tablet-solution.png
+.codex/qa/current/visual-summary.json
+app/solution/energy/layout.tsx
+app/solution/energy/page.tsx
+public/images/customize/options/basic-bathroom.webp
+public/images/customize/options/basic-sink.webp
+public/images/customize/options/basic-window.webp
+public/images/customize/options/bed-frame.webp
+public/images/customize/options/bidet.webp
+public/images/customize/options/birch-panel.webp
+public/images/customize/options/built-in-fridge.webp
+public/images/customize/options/built-in-storage.webp
+public/images/customize/options/cedar-point.webp
+public/images/customize/options/cellular-router.webp
+public/images/customize/options/dry-vanity.webp
+public/images/customize/options/ess.webp
+public/images/customize/options/ev-charger.webp
+public/images/customize/options/extra-window.webp
+public/images/customize/options/folding-table.webp
+public/images/customize/options/iot-package.webp
+public/images/customize/options/mini-washer.webp
+public/images/customize/options/paper-wall.webp
+public/images/customize/options/porcelain-tile.webp
+public/images/customize/options/ribbed-steel-white.webp
+public/images/customize/options/satellite-internet.webp
+public/images/customize/options/security-package.webp
+public/images/customize/options/silk-wallpaper.webp
+public/images/customize/options/smart-lock.webp
+public/images/customize/options/solar-panel.webp
+public/images/customize/options/spc-natural-oak.webp
+public/images/customize/options/spc-white-oak.webp
+public/images/customize/options/standard-lock.webp
+public/images/customize/options/wide-window.webp
+public/images/customize/options/zinc-gray.webp
 
 ```
 
-## Main page excerpt
+## Relevant File Excerpts
+
+### components/customize/CustomizeConfigurator.tsx (steps, modal image, floorplan)
 
 ```tsx
-"use client";
+  70:   bathroom: (box) => ({ x: box.x + box.width - 148, y: box.y + 78 }),
+  71:   furniture: (box, index) => ({ x: box.x + box.width * 0.36, y: box.y + 82 + index * 34 }),
+  72:   energy: (box, index) => ({ x: box.x + 70 + index * 108, y: box.y - 42 }),
+  73:   connectivity: (box, index) => ({ x: box.x + box.width - 208 + index * 96, y: box.y - 42 }),
+  74: };
+  75:
+  76: const PLACEHOLDER_FLOORPLAN_PATH = '/images/customize/dummy-base.svg';
+  77: const MODEL_FALLBACK_FLOORPLANS: Record<string, string> = {
+  78:   'compact-3x6': '/images/customize/compact-3x6-base.svg',
+  79:   'standard-3x9': '/images/customize/standard-3x9-base.svg',
+  80: };
+  81: const OPTION_IMAGE_VERSION = '20260610-0137';
+  82: type FloorplanImageStatus = 'missing' | 'loading' | 'loaded' | 'failed';
+  83:
+  84: type ConfigStep = 'space' | 'included' | 'mood' | 'smart';
+  85: const STEPS: { id: ConfigStep; label: string; categories?: string[] }[] = [
+  86:   { id: 'space', label: '모델', categories: ['model'] },
+  87:   { id: 'included', label: '공간 구성', categories: ['windows', 'door', 'sink', 'bathroom', 'furniture'] },
+  88:   { id: 'mood', label: '무드 & 소재', categories: ['exterior', 'interior', 'flooring'] },
+  89:   { id: 'smart', label: '스마트 테크', categories: ['energy', 'connectivity'] },
+  90: ];
+  91:
+  92: type ConsultationDraft = {
+  93:   customerName: string;
+  94:   phone: string;
+  95:   region: string;
+  96:   purchaseTimeline: string;
+  97:   landType: string;
+  98:   installAddress: string;
+  99:   budgetRange: string;
+ 100:   memo: string;
+ 101: };
+ 102:
+ 103: const inputClass = 'h-11 rounded-lg border-gray-300 bg-[#fbfaf7] text-sm focus-visible:ring-[#b88b26]';
+ 104: const selectClass = 'h-11 w-full rounded-lg border border-gray-300 bg-[#fbfaf7] px-3 text-sm outline-none focus:ring-2 focus:ring-[#b88b26]/30';
+ 105:
+ 106: function floorplanImagePathForModel(model: CustomizeModel) {
+ 107:   const configuredPath = model.floorplanImagePath?.trim();
+ 108:   const fallbackPath = MODEL_FALLBACK_FLOORPLANS[model.id];
+ 109:
+ 110:   if (!configuredPath) return fallbackPath ?? null;
+ 111:   if (configuredPath === PLACEHOLDER_FLOORPLAN_PATH) return fallbackPath ?? configuredPath;
+ 112:   return configuredPath;
+ 113: }
+ 114:
+ 115: function buildSelectionsForModelChange(
 
-import Image from "next/image";
-import Link from "next/link";
-import type { LucideIcon } from "lucide-react";
-import {
-  ArrowRight,
-  CheckCircle2,
-  LockKeyhole,
-  Paintbrush,
-  Router,
-  SlidersHorizontal,
-} from "lucide-react";
-import { useLanguage } from "@/contexts/LanguageContext";
+ 189: function StepperBar({ currentStep, setCurrentStep, stepCounts }: { currentStep: ConfigStep; setCurrentStep: (step: ConfigStep) => void; stepCounts: Record<ConfigStep, number> }) {
+ 190:   const stepIndex = STEPS.findIndex((s) => s.id === currentStep);
+ 191:   return (
+ 192:     <div className="border-b border-[#d8d0c3] bg-[#fbfaf7]/95 px-4 py-3 backdrop-blur lg:px-10">
+ 193:       <div className="mx-auto flex max-w-[1800px] w-full gap-1 rounded-lg bg-[#efe6d4] p-1">
+ 194:         {STEPS.map((step, index) => {
+ 195:           const isCurrent = currentStep === step.id;
+ 196:           const isComplete = index < stepIndex;
+ 197:
+ 198:           return (
+ 199:             <button
+ 200:               key={step.id}
+ 201:               type="button"
+ 202:               data-testid={`customize-step-${step.id}`}
+ 203:               aria-current={isCurrent ? 'step' : undefined}
+ 204:               data-state={isCurrent ? 'current' : isComplete ? 'complete' : 'upcoming'}
+ 205:               onClick={() => setCurrentStep(step.id)}
+ 206:               className={cn(
+ 207:                 'relative flex min-h-9 flex-1 items-center justify-center rounded-md px-1 py-2 text-xs font-bold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26]',
+ 208:                 isCurrent && 'bg-[#fbfaf7] text-[#2f3432] shadow-sm',
+ 209:                 !isCurrent && isComplete && 'bg-[#e6dcc9] text-[#4f473d]',
+ 210:                 !isCurrent && !isComplete && 'text-[#8a806f] hover:text-[#2f3432]'
+ 211:               )}
+ 212:             >
+ 213:               {step.label}
+ 214:               {stepCounts[step.id] > 0 && step.id !== 'space' && (
+ 215:                 <span aria-hidden="true" className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#b88b26] px-1 text-[9px] text-white">
+ 216:                   {stepCounts[step.id]}
+ 217:                 </span>
+ 218:               )}
+ 219:             </button>
+ 220:           );
+ 221:         })}
+ 222:       </div>
 
-type Lang = "KO" | "EN";
+ 783:     <svg viewBox="0 0 1000 420" className={cn('aspect-[1000/420] w-full', className)} data-testid={testId}>
+ 784:       <defs>
+ 785:         <pattern id={gridId} width="24" height="24" patternUnits="userSpaceOnUse">
+ 786:           <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#e4ddd1" strokeWidth="1" />
+ 787:         </pattern>
+ 788:       </defs>
+ 789:       <rect width="1000" height="420" fill="#f5f1ea" />
+ 790:
+ 791:       {hasBaseImage ? (
+ 792:         <g className="transition-all duration-[600ms] motion-reduce:transition-none">
+ 793:           <image
+ 794:             data-testid="base-floorplan-image"
+ 795:             href={resolvedFloorplanImagePath ?? undefined}
+ 796:             x="0"
+ 797:             y="0"
+ 798:             width="1000"
+ 799:             height="420"
+ 800:             preserveAspectRatio="xMidYMid meet"
+ 801:           />
+ 802:         </g>
+ 803:       ) : (
+ 804:         <>
+ 805:           <rect x={box.x} y={box.y} width={box.width} height={box.height} fill="#f8f4ec" stroke="#2f3432" strokeWidth="12" className="transition-all duration-[600ms] motion-reduce:transition-none" />
+ 806:           <rect x={box.x + 12} y={box.y + 12} width={box.width - 24} height={box.height - 24} fill={`url(#${gridId})`} stroke="#bfb4a2" strokeWidth="2" className="transition-all duration-[600ms] motion-reduce:transition-none" />
+ 807:           <BasePlanObjects box={box} />
+ 808:         </>
+ 809:       )}
+ 810:
+ 811:       {!hasBaseImage && (
+ 812:         <rect
+ 813:           data-testid="model-footprint"
+ 814:           x={box.x}
+ 815:           y={box.y}
+ 816:           width={box.width}
+ 817:           height={box.height}
+ 818:           fill="transparent"
+ 819:           stroke="#2f3432"
+ 820:           strokeWidth="6"
+ 821:           className="transition-all duration-[600ms] motion-reduce:transition-none"
+ 822:         />
+ 823:       )}
+ 824:
+ 825:       <motion.rect
+ 826:         data-testid="floorplan-expansion-shell"
+ 827:         initial={false}
+ 828:         animate={{ x: box.x, width: box.width }}
+ 829:         transition={{ duration: 0.6, ease: "easeInOut" }}
+ 830:         y={box.y}
+ 831:         height={box.height}
+ 832:         rx="6"
+ 833:         fill="transparent"
 
-type PackageCopy = {
-  id: string;
-  href: string;
-  image: string;
-  icon: LucideIcon;
-  title: string;
-  subtitle: string;
-  problem: string;
-  promise: string;
-  details: string[];
-  proof: string;
-};
-
-type PageCopy = {
-  eyebrow: string;
-  title: string;
-  lead: string;
-  heroLabel: string;
-  heroTitle: string;
-  heroBody: string;
-  selectLabel: string;
-  detailLabel: string;
-  proofLabel: string;
-  processTitle: string;
-  processLead: string;
-  ctaPrimary: string;
-  ctaSecondary: string;
-  packages: PackageCopy[];
-  process: Array<{ title: string; body: string }>;
-};
-
-const COPY: Record<Lang, PageCopy> = {
-  KO: {
-    eyebrow: "WEET OPERATION OPTIONS",
-    title: "운영까지 준비된 모듈러 공간",
-    lead:
-      "좋은 공간은 예쁜 외관에서 끝나지 않습니다. Weet는 보안, 연결, 원격 준비, 브랜드 마감을 실제 운영자가 매일 겪는 문제 기준으로 설계합니다.",
-    heroLabel: "옵션은 장식이 아니라 운영 리스크 관리입니다",
-    heroTitle: "상담 때 장비명이 아니라 운영 상황부터 묻습니다.",
-    heroBody:
-      "무인으로 열어야 하는지, 결제가 끊기면 안 되는지, 입실 전 냉난방이 필요한지, 상권에서 첫인상이 중요한지부터 확인한 뒤 필요한 옵션만 조합합니다.",
-    selectLabel: "선택 기준",
-    detailLabel: "포함되는 것",
-    proofLabel: "운영자가 체감하는 변화",
-    processTitle: "옵션을 붙이는 방식도 다릅니다",
-    processLead:
-      "완공 후 장비를 덧붙이는 방식이 아니라, 출입 동선·배선·조명·마감 위치를 설계 단계에서 함께 잡습니다.",
-    ctaPrimary: "주문 옵션 확인",
-    ctaSecondary: "상담으로 현장 맞추기",
-    packages: [
-      {
-        id: "security",
-        href: "/solution/cctv",
-        image: "/images/solution/generated/kr-security-realphoto.webp",
-        icon: LockKeyhole,
-        title: "안심 출입",
-        subtitle: "CCTV · 스마트락 · 센서등",
-        problem: "운영자가 항상 머물 수 없는 외곽·야간·예약제 공간의 보안 공백을 줄입니다.",
-        promise: "출입 기록, 야간 감지, 현관 조명을 하나의 운영 흐름으로 설계합니다.",
-        details: ["현관/창측 사각지대 검토", "CCTV와 센서등 위치 제안", "스마트락 권한 방식 정리"],
-        proof: "밤에도 누가 들어왔는지, 어떤 알림을 받아야 하는지 명확해집니다.",
-      },
-      {
-        id: "network",
-        href: "/solution/network",
-        image: "/images/solution/generated/kr-network-realphoto.webp",
-        icon: Router,
-        title: "끊김 없는 연결",
-        subtitle: "POS · 예약 · 게스트 Wi-Fi",
-        problem: "결제, 예약, 원격 제어가 인터넷 품질에 묶이는 상업 공간의 손실 리스크를 줄입니다.",
-        promise: "운영망, 고객망, 장비망을 구분하고 현장 조건에 맞는 회선과 라우터를 제안합니다.",
-        details: ["POS/업무/게스트망 분리", "라우터와 통신함 위치 계획", "백업 회선 필요성 점검"],
-        proof: "카드 결제와 예약 확인이 끊기지 않아 운영자가 현장에서 덜 불안합니다.",
-      },
-      {
-        id: "control",
-        href: "/solution/iot",
-        image: "/images/solution/generated/kr-control-realphoto.webp",
-        icon: SlidersHorizontal,
-        title: "원격 준비",
-        subtitle: "조명 · 냉난방 · 환기",
-        problem: "입실 전마다 현장에 가야 하는 숙박·체험·무인 운영의 반복 업무를 줄입니다.",
-        promise: "조명, 공조, 환기, 도어 상태를 예약과 운영 시간에 맞춰 제어할 수 있게 구성합니다.",
-        details: ["스마트 스위치/온도 패널", "입실 전 냉난방 스케줄", "도어 상태와 운영 알림"],
-        proof: "고객이 도착하기 전 공간 상태를 미리 준비하고, 불필요한 방문을 줄입니다.",
-      },
-      {
-        id: "brand",
-        href: "/solution/design",
-        image: "/images/solution/generated/kr-brandfit-realphoto.webp",
-        icon: Paintbrush,
-        title: "현장 완성",
-        subtitle: "외장 · 간판 · 데크 동선",
-        problem: "모듈러가 현장 상권, 브랜드 톤, 고객 진입 동선과 따로 노는 느낌을 줄입니다.",
-        promise: "외장재, 간판 자리, 데크·조경·배수 마감을 함께 정리해 첫인상을 완성합니다.",
-        details: ["브랜드 톤에 맞는 외장", "간판/조명 자리 사전 계획", "데크·조경·배수 디테일"],
-        proof: "공간이 ‘놓인 건물’이 아니라 바로 영업 가능한 상업 장소처럼 보입니다.",
-      },
-    ],
-    process: [
-      { title: "운영 상황 인터뷰", body: "무인, 예약제, 상시 상주, 야간 운영 여부를 먼저 확인합니다." },
-      { title: "현장 리스크 표시", body: "출입, 통신, 공조, 간판, 배수 위치를 도면과 현장 조건 위에 표시합니다." },
-      { title: "필요 옵션만 확정", body: "장비 스펙보다 운영자가 실제로 받을 알림과 관리 범위를 먼저 정합니다." },
-    ],
-  },
-  EN: {
-    eyebrow: "WEET OPERATION OPTIONS",
-    title: "Modular Spaces Ready To Operate",
-    lead:
-      "A good space does not end with a beautiful shell. Weet plans security, connection, remote readiness, and site finish around the problems operators face every day.",
-    heroLabel: "Options are risk control, not decoration",
-    heroTitle: "We start with the operating situation, not a device list.",
-    heroBody:
-      "We check whether the space runs unmanned, whether payments must never fail, whether HVAC is needed before arrival, and whether first impression matters in the local market.",
-    selectLabel: "How to choose",
-    detailLabel: "What is included",
-    proofLabel: "Operational change",
-    processTitle: "The option workflow is different",
-    processLead:
-      "We do not bolt devices on after completion. Access flow, wiring, lighting, and finish details are planned with the space.",
-    ctaPrimary: "Check order options",
-    ctaSecondary: "Match my site",
-    packages: [
-      {
-        id: "security",
-        href: "/solution/cctv",
-        image: "/images/solution/generated/kr-security-realphoto.webp",
-        icon: LockKeyhole,
-        title: "Secure Access",
-        subtitle: "CCTV · smart lock · sensor light",
-        problem: "Reduce security gaps in remote, night, and reservation-based spaces where staff cannot stay all day.",
-        promise: "Access logs, night detection, and entrance lighting are planned as one operating flow.",
-        details: ["Entrance blind-spot review", "CCTV and sensor-light placement", "Smart-lock permission planning"],
-        proof: "Operators know who entered at night and which alerts deserve attention.",
-      },
-      {
-        id: "network",
-        href: "/solution/network",
-        image: "/images/solution/generated/kr-network-realphoto.webp",
-        icon: Router,
-        title: "Stable Connection",
-        subtitle: "POS · booking · guest Wi-Fi",
-        problem: "Reduce losses when payment, booking, or remote control depends on unstable connectivity.",
-        promise: "We separate operator, guest, and device networks and recommend the right line and router for the site.",
-        details: ["POS/work/guest network split", "Router and network-box placement", "Backup-line review"],
-        proof: "Payments and reservations stay reliable, so operators feel less exposed on site.",
-      },
-      {
-        id: "control",
-        href: "/solution/iot",
-        image: "/images/solution/generated/kr-control-realphoto.webp",
-        icon: SlidersHorizontal,
-        title: "Remote Ready",
-        subtitle: "lighting · HVAC · ventilation",
-        problem: "Reduce repeated site visits for hospitality, experience rooms, and unmanned operations.",
-        promise: "Lighting, HVAC, ventilation, and door state can follow booking time and operating hours.",
-        details: ["Smart switches and temperature panels", "Pre-arrival HVAC schedule", "Door state and operation alerts"],
-        proof: "The space can be prepared before guests arrive, with fewer unnecessary visits.",
-      },
-      {
-        id: "brand",
-        href: "/solution/design",
-        image: "/images/solution/generated/kr-brandfit-realphoto.webp",
-        icon: Paintbrush,
-        title: "Site Finish",
-        subtitle: "facade · signage · deck flow",
-        problem: "Prevent the module from feeling detached from the brand, local market, and customer flow.",
-        promise: "Facade, signage position, deck, landscape, and drainage details are aligned before completion.",
-        details: ["Brand-fit exterior palette", "Sign and lighting placement", "Deck, planting, and drainage detail"],
-        proof: "The space reads as a business-ready site, not just a placed building.",
-      },
-    ],
-    process: [
-      { title: "Operating interview", body: "We first check unmanned, reservation-only, staffed, and night-operation needs." },
-      { title: "Site risk map", body: "Access, connection, HVAC, signage, and drainage points are marked against the real site." },
-      { title: "Option confirmation", body: "We define actual alerts and management scope before chasing device specs." },
-    ],
-  },
-};
-
-export default function SolutionPage() {
-  const { language } = useLanguage();
-  const copy = COPY[language];
-
-  return (
-    <main className="min-h-screen bg-[#f7f6f1] text-neutral-950">
-      <section className="mx-auto max-w-[1440px] px-4 pb-12 pt-24 md:px-8 lg:pb-16 lg:pt-32">
-        <div className="grid gap-10 border-b border-neutral-300 pb-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(440px,0.7fr)] lg:gap-16 lg:pb-14">
-          <div>
-            <p className="text-xs font-black uppercase tracking-[0.22em] text-neutral-500">{copy.eyebrow}</p>
-            <h1 className="mt-4 max-w-5xl text-4xl font-black leading-[1.04] text-neutral-950 md:text-6xl lg:text-[76px] break-keep">
-              {copy.title}
-            </h1>
-            <p className="mt-6 max-w-3xl text-lg leading-relaxed text-neutral-600 md:text-xl break-keep">
-              {copy.lead}
-            </p>
-          </div>
-
-          <div className="self-end rounded-md border border-neutral-300 bg-white p-5">
-            <p className="text-xs font-black uppercase tracking-[0.2em] text-[#A77B00]">{copy.heroLabel}</p>
-            <h2 className="mt-3 text-2xl font-black leading-tight text-neutral-950 md:text-3xl break-keep">
-              {copy.heroTitle}
-            </h2>
-            <p className="mt-4 text-base leading-relaxed text-neutral-600 break-keep">{copy.heroBody}</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-[1440px] px-4 pb-16 md:px-8 lg:pb-24">
-        <div className="grid gap-6">
-          {copy.packages.map((pkg, index) => {
-            const Icon = pkg.icon;
-            return (
-              <article
-                key={pkg.id}
-                className="grid gap-0 overflow-hidden rounded-md border border-neutral-300 bg-white lg:grid-cols-[minmax(340px,0.78fr)_1fr]"
-              >
-                <Link href={pkg.href} className="group relative block aspect-[16/10] overflow-hidden bg-neutral-200 lg:aspect-auto">
-                  <Image
-                    src={pkg.image}
-                    alt={`${pkg.title} ${pkg.subtitle}`}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 42vw"
-                    priority
-                    className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-                  />
-                  <div className="absolute left-4 top-4 rounded-sm bg-neutral-950/85 px-3 py-2 text-xs font-black text-white backdrop-blur">
-                    {String(index + 1).padStart(2, "0")}
-                  </div>
-                </Link>
-
-                <div className="grid gap-8 p-5 md:p-8 lg:grid-cols-[minmax(220px,0.75fr)_1fr] lg:p-10">
-                  <div>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-sm border border-neutral-300 bg-[#FEBD16] text-neutral-950">
-                      <Icon className="h-6 w-6" strokeWidth={1.7} />
-                    </div>
-                    <h2 className="mt-5 text-3xl font-black leading-tight text-neutral-950 md:text-4xl break-keep">
-                      {pkg.title}
-                    </h2>
-                    <p className="mt-2 text-sm font-black uppercase tracking-[0.14em] text-neutral-500">{pkg.subtitle}</p>
-                    <p className="mt-5 text-base font-semibold leading-relaxed text-neutral-800 break-keep">{pkg.promise}</p>
-                    <Link
-                      href={pkg.href}
-
+1015:   const optionKey = option.key || option.id;
+1016:   const fallback = FALLBACK_CATALOG[optionKey] || FALLBACK_CATALOG[option.id];
+1017:
+1018:   const imagePath = `/images/customize/options/${optionKey}.webp?v=${OPTION_IMAGE_VERSION}`;
+1019:   const desc = option.detailDescriptionKo || option.shortDescriptionKo || fallback?.desc || '상세 정보가 준비 중입니다.';
+1020:   const specs = fallback?.specs || [];
+1021:
+1022:   return (
+1023:     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#4b4033]/35 p-4" onClick={onClose}>
+1024:       <div className="w-full max-w-xl rounded-lg bg-[#fbfaf7] p-5 shadow-2xl" onClick={(event) => event.stopPropagation()}>
+1025:         <div className="mb-4 flex items-start justify-between gap-4">
+1026:           <div>
+1027:             <div className="mb-1 flex items-center gap-2">
+1028:               {option.priceType === 'included' && <span className="rounded bg-[#efe6d4] px-2 py-0.5 text-[11px] font-black text-[#8a806f]">기본 포함</span>}
+1029:               {option.priceType === 'consult' && <span className="rounded bg-[#f4f0e8] px-2 py-0.5 text-[11px] font-black text-[#a56f16]">스펙 협의</span>}
+1030:               {option.priceType === 'fixed' && <p className="text-xs font-bold text-[#8a806f]">{formatOptionPrice(option)}</p>}
+1031:             </div>
+1032:             <h3 className="text-xl font-black text-[#2f3432]">{option.nameKo}</h3>
+1033:           </div>
+1034:           <Button variant="ghost" size="icon-sm" onClick={onClose}>
+1035:             <X className="h-4 w-4" />
+1036:           </Button>
+1037:         </div>
+1038:         <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-lg bg-[#eee8dc]">
+1039:           <Image
+1040:             src={imagePath}
+1041:             alt={option.nameKo}
+1042:             fill
+1043:             unoptimized
+1044:             sizes="(max-width: 768px) calc(100vw - 48px), 560px"
+1045:             className="object-cover"
+1046:             onError={(e) => { e.currentTarget.style.display = 'none'; }}
+1047:           />
+1048:         </div>
+1049:         {specs.length > 0 && (
+1050:           <div className="mb-3 flex flex-wrap gap-2">
 ```
 
-## Detail template excerpt
+### components/layout/Header.tsx
 
-```tsx
-"use client";
+Header excerpt omitted in slim packet; full packet includes CTA/nav structure.
 
-import Image from "next/image";
-import Link from "next/link";
-import {
-  ArrowLeft,
-  ArrowRight,
-  CheckCircle2,
-  ClipboardCheck,
-  Gauge,
-  MapPin,
-  ShieldCheck,
-} from "lucide-react";
-import { useLanguage } from "@/contexts/LanguageContext";
-import { cn } from "@/lib/utils";
+### app/solution/page.tsx
 
-type Lang = "KO" | "EN";
+Solution excerpt omitted in slim packet; full packet includes package definitions for Security Core, Network Fabric, Control Layer, Energy Stack.
 
-type LocalizedSolution = {
-  eyebrow: string;
-  title: string;
-  lead: string;
-  imageAlt: string;
-  problemTitle: string;
-  problem: string;
-  fitTitle: string;
-  fit: string[];
-  includedTitle: string;
-  included: string[];
-  decisionsTitle: string;
-  decisions: string[];
-  outcomesTitle: string;
-  outcomes: string[];
-  ctaPrimary: string;
-  ctaSecondary: string;
-};
+### lib/customize/priceCalculator.ts
 
-export type SolutionPackageData = {
-  id: "security" | "network" | "control" | "brand";
-  href: string;
-  image: string;
-  copy: Record<Lang, LocalizedSolution>;
-};
-
-const PACKAGE_NAV: Record<
-  Lang,
-  Array<{ id: SolutionPackageData["id"]; href: string; name: string; desc: string }>
-> = {
-  KO: [
-    { id: "security", href: "/solution/cctv", name: "안심 출입", desc: "CCTV · 도어락 · 센서등" },
-    { id: "network", href: "/solution/network", name: "끊김 없는 연결", desc: "POS · 예약 · 게스트 Wi-Fi" },
-    { id: "control", href: "/solution/iot", name: "원격 준비", desc: "조명 · 냉난방 · 환기" },
-    { id: "brand", href: "/solution/design", name: "현장 완성", desc: "외장 · 간판 · 동선" },
-  ],
-  EN: [
-    { id: "security", href: "/solution/cctv", name: "Secure Access", desc: "CCTV · lock · sensor light" },
-    { id: "network", href: "/solution/network", name: "Stable Connection", desc: "POS · booking · guest Wi-Fi" },
-    { id: "control", href: "/solution/iot", name: "Remote Ready", desc: "lighting · HVAC · ventilation" },
-    { id: "brand", href: "/solution/design", name: "Site Finish", desc: "facade · signage · flow" },
-  ],
-};
-
-export default function SolutionTemplate({ data }: { data: SolutionPackageData }) {
-  const { language } = useLanguage();
-  const copy = data.copy[language];
-  const nav = PACKAGE_NAV[language];
-
-  return (
-    <main className="min-h-screen bg-[#f7f6f1] text-[#151515]">
-      <section className="mx-auto max-w-[1440px] px-4 pb-14 pt-24 md:px-8 lg:pb-20 lg:pt-32">
-        <Link
-          href="/solution"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-neutral-500 transition-colors hover:text-neutral-950"
-        >
-          <ArrowLeft className="h-4 w-4" />
-          {language === "KO" ? "운영 옵션 전체" : "All operation options"}
-        </Link>
-
-        <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(520px,1.1fr)] lg:items-end">
-          <div className="max-w-2xl">
-            <p className="text-xs font-black uppercase tracking-[0.22em] text-neutral-500">{copy.eyebrow}</p>
-            <h1 className="mt-4 text-4xl font-black leading-[1.05] text-neutral-950 md:text-6xl lg:text-[72px]">
-              {copy.title}
-            </h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-neutral-600 md:text-xl break-keep">
-              {copy.lead}
-            </p>
-          </div>
-
-          <div className="relative aspect-[16/9] overflow-hidden rounded-md bg-neutral-200 shadow-[0_24px_70px_rgba(20,20,20,0.16)]">
-            <Image
-              src={data.image}
-              alt={copy.imageAlt}
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 58vw"
-              className="object-cover"
-            />
-          </div>
-        </div>
-      </section>
-
-      <section className="border-y border-neutral-200 bg-white">
-        <div className="mx-auto flex max-w-[1440px] gap-2 overflow-x-auto px-4 py-3 md:px-8">
-          {nav.map((item) => {
-            const isActive = item.id === data.id;
-            return (
-              <Link
-                key={item.id}
-                href={item.href}
-                className={cn(
-                  "min-w-[220px] rounded-md border px-4 py-3 transition-colors",
-                  isActive
-                    ? "border-neutral-950 bg-neutral-950 text-white"
-                    : "border-neutral-200 bg-white text-neutral-600 hover:border-neutral-950 hover:text-neutral-950",
-                )}
-              >
-                <span className="block text-sm font-black">{item.name}</span>
-                <span className={cn("mt-1 block text-xs", isActive ? "text-neutral-300" : "text-neutral-500")}>
-                  {item.desc}
-                </span>
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="mx-auto grid max-w-[1440px] gap-8 px-4 py-14 md:px-8 lg:grid-cols-[minmax(260px,0.42fr)_1fr] lg:py-20">
-        <aside className="lg:sticky lg:top-28 lg:h-fit">
-          <div className="border-l-2 border-neutral-950 pl-5">
-            <p className="text-sm font-black text-neutral-950">{copy.problemTitle}</p>
-            <p className="mt-3 text-base leading-relaxed text-neutral-600 break-keep">{copy.problem}</p>
-          </div>
-        </aside>
-
-        <div className="grid gap-10">
-          <section className="grid gap-5 border-b border-neutral-200 pb-10 md:grid-cols-[220px_1fr]">
-            <div className="flex items-center gap-3">
-              <MapPin className="h-5 w-5 text-[#C69200]" />
-              <h2 className="text-sm font-black uppercase tracking-[0.16em] text-neutral-500">{copy.fitTitle}</h2>
-            </div>
-            <ul className="grid gap-3 md:grid-cols-2">
-              {copy.fit.map((item) => (
-                <li key={item} className="flex gap-3 text-base font-semibold leading-relaxed text-neutral-800 break-keep">
-                  <CheckCircle2 className="mt-1 h-4 w-4 flex-shrink-0 text-[#C69200]" />
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </section>
-
-          <section className="grid gap-5 border-b border-neutral-200 pb-10 md:grid-cols-[220px_1fr]">
-            <div className="flex items-center gap-3">
-              <Gauge className="h-5 w-5 text-[#C69200]" />
-              <h2 className="text-sm font-black uppercase tracking-[0.16em] text-neutral-500">{copy.includedTitle}</h2>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-2">
-              {copy.included.map((item) => (
-                <div key={item} className="rounded-md border border-neutral-200 bg-white px-4 py-4 text-sm font-semibold leading-relaxed text-neutral-800 break-keep">
-                  {item}
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section className="grid gap-5 border-b border-neutral-200 pb-10 md:grid-cols-[220px_1fr]">
-            <div className="flex items-center gap-3">
-              <ClipboardCheck className="h-5 w-5 text-[#C69200]" />
-              <h2 className="text-sm font-black uppercase tracking-[0.16em] text-neutral-500">{copy.decisionsTitle}</h2>
-            </div>
-            <ol className="grid gap-3">
-              {copy.decisions.map((item, index) => (
-                <li key={item} className="grid grid-cols-[40px_1fr] items-start gap-3 border-b border-neutral-100 pb-3 last:border-b-0">
-                  <span className="text-sm font-black text-neutral-400">{String(index + 1).padStart(2, "0")}</span>
-                  <span className="text-base font-semibold leading-relaxed text-neutral-800 break-keep">{item}</span>
-                </li>
-              ))}
-            </ol>
-          </section>
-
-          <section className="grid gap-5 md:grid-cols-[220px_1fr]">
-            <div className="flex items-center gap-3">
-              <ShieldCheck className="h-5 w-5 text-[#C69200]" />
-              <h2 className="text-sm font-black uppercase tracking-[0.16em] text-neutral-500">{copy.outcomesTitle}</h2>
-            </div>
-            <div className="grid gap-4 md:grid-cols-2">
-              {copy.outcomes.map((item) => (
-                <p key={item} className="rounded-md bg-neutral-950 px-5 py-5 text-sm font-semibold leading-relaxed text-white break-keep">
-                  {item}
-                </p>
-              ))}
-            </div>
-          </section>
-
-          <div className="flex flex-col gap-3 pt-4 sm:flex-row">
-            <Link
-              href="/customize"
-              className="inline-flex h-12 items-center justify-center gap-2 rounded-sm bg-[#FEBD16] px-6 text-sm font-black text-neutral-950 transition-colors hover:bg-[#E2A80F]"
-            >
-              {copy.ctaPrimary}
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/support"
-              className="inline-flex h-12 items-center justify-center rounded-sm border border-neutral-300 px-6 text-sm font-black text-neutral-800 transition-colors hover:border-neutral-950 hover:text-neutral-950"
-            >
-              {copy.ctaSecondary}
-            </Link>
-          </div>
-        </div>
-      </section>
-    </main>
-  );
-}
-
+```ts
+   1: import type {
+   2:   ConfigShareState,
+   3:   CustomizeCatalog,
+   4:   CustomizeCategory,
+   5:   CustomizeModel,
+   6:   CustomizeOption,
+   7:   EstimateBreakdown,
+   8:   SelectedOptions,
+   9: } from './types';
+  10:
+  11: export function formatWon(value: number) {
+  12:   return `₩${Math.max(0, value).toLocaleString('ko-KR')}`;
+  13: }
+  14:
+  15: export function formatModelStartPrice(value: number) {
+  16:   return `${formatWon(value)}부터`;
+  17: }
+  18:
+  19: export function formatOptionPrice(option: Pick<CustomizeOption, 'priceType' | 'price'>) {
+  20:   if (option.priceType === 'included') return '포함';
+  21:   if (option.priceType === 'consult') return '협의';
+  22:   return formatWon(option.price);
+  23: }
+  24:
+  25: export function optionPriceValue(option: Pick<CustomizeOption, 'priceType' | 'price'>) {
+  26:   return option.priceType === 'fixed' ? option.price : 0;
+  27: }
+  28:
+  29: export function optionsForModel(options: CustomizeOption[], modelId: string) {
+  30:   return options.filter((option) => option.availableModelIds.length === 0 || option.availableModelIds.includes(modelId));
+  31: }
+  32:
+  33: export function getDefaultSelections(catalog: CustomizeCatalog, modelId: string): SelectedOptions {
+  34:   const selections: SelectedOptions = {};
+  35:   const availableOptions = optionsForModel(catalog.options.filter((option) => option.isActive), modelId);
+  36:
+  37:   for (const category of catalog.categories.filter((item) => item.isActive)) {
+  38:     const defaults = availableOptions
+  39:       .filter((option) => option.categoryId === category.id && option.isDefault)
+  40:       .map((option) => option.id);
+  41:
+  42:     if (defaults.length > 0) {
+  43:       selections[category.id] = category.selectionType === 'single' ? [defaults[0]] : defaults;
+  44:     }
+  45:   }
+  46:
+  47:   return selections;
+  48: }
+  49:
+  50: export function selectedOptionIds(selectedOptions: SelectedOptions) {
+  51:   return Object.values(selectedOptions).flat().filter(Boolean);
+  52: }
+  53:
+  54: export function selectedOptionList(catalog: CustomizeCatalog, selectedOptions: SelectedOptions, modelId: string) {
+  55:   const selected = new Set(selectedOptionIds(selectedOptions));
+  56:   return optionsForModel(catalog.options, modelId).filter((option) => selected.has(option.id));
+  57: }
+  58:
+  59: export function getConflictingOptionIds(catalog: CustomizeCatalog, optionId: string) {
+  60:   return catalog.conflicts
+  61:     .filter((conflict) => conflict.optionId === optionId)
+  62:     .map((conflict) => conflict.conflictsWithOptionId);
+  63: }
+  64:
+  65: export function hasConflict(catalog: CustomizeCatalog, optionIds: string[]) {
+  66:   const selected = new Set(optionIds);
+  67:   return catalog.conflicts.some(
+  68:     (conflict) => selected.has(conflict.optionId) && selected.has(conflict.conflictsWithOptionId)
+  69:   );
+  70: }
+  71:
+  72: export function toggleOptionSelection(params: {
+  73:   catalog: CustomizeCatalog;
+  74:   selectedOptions: SelectedOptions;
+  75:   category: CustomizeCategory;
+  76:   option: CustomizeOption;
+  77: }) {
+  78:   const { catalog, selectedOptions, category, option } = params;
+  79:   const next: SelectedOptions = { ...selectedOptions };
+  80:   const current = next[category.id] ?? [];
+  81:
+  82:   if (category.selectionType === 'single') {
+  83:     next[category.id] = [option.id];
+  84:   } else {
+  85:     next[category.id] = current.includes(option.id)
+  86:       ? current.filter((id) => id !== option.id)
+  87:       : [...current, option.id];
+  88:   }
+  89:
+  90:   const conflicts = new Set(getConflictingOptionIds(catalog, option.id));
+  91:   if (conflicts.size > 0) {
+  92:     for (const [categoryId, ids] of Object.entries(next)) {
+  93:       next[categoryId] = ids.filter((id) => !conflicts.has(id));
+  94:     }
+  95:   }
+  96:
+  97:   return next;
+  98: }
+  99:
+ 100: export function calculateEstimate(catalog: CustomizeCatalog, modelId: string, selectedOptions: SelectedOptions): EstimateBreakdown | null {
+ 101:   const model = catalog.models.find((item) => item.id === modelId && item.isActive);
+ 102:   if (!model) return null;
+ 103:
+ 104:   const options = selectedOptionList(catalog, selectedOptions, modelId);
+ 105:   const optionTotal = options.reduce((sum, option) => sum + optionPriceValue(option), 0);
+ 106:
+ 107:   return {
+ 108:     model,
+ 109:     selectedOptions: options,
+ 110:     optionTotal,
+ 111:     estimatedTotal: model.basePrice + optionTotal,
+ 112:     consultOptionCount: options.filter((option) => option.priceType === 'consult').length,
+ 113:   };
+ 114: }
+ 115:
+ 116: export function floorplanSize(model: CustomizeModel) {
+ 117:   const width = model.id === 'standard-3x9' || model.lengthM >= 9 ? 900 : 600;
+ 118:   return { x: 500 - width / 2, y: 60, width, height: 300 };
+ 119: }
+ 120:
+ 121: function encodeBase64Url(value: string) {
+ 122:   const base64 = typeof Buffer !== 'undefined' && typeof window === 'undefined'
+ 123:     ? Buffer.from(value, 'utf8').toString('base64')
+ 124:     : btoa(unescape(encodeURIComponent(value)));
+ 125:
+ 126:   return base64
+ 127:     .replace(/\+/g, '-')
+ 128:     .replace(/\//g, '_')
+ 129:     .replace(/=+$/g, '');
+ 130: }
 ```
 
-## Validation
+## Commands Run / Output Summary
 
 ```text
-npx tsc --noEmit: passed
-npm run lint: passed
-npm test: passed, 3 files and 20 tests
-npm run build: passed; existing warning: Next middleware convention is deprecated in favor of proxy
-npx playwright test e2e/public-pages.spec.ts --project=chromium: passed, 14 tests
-git diff --check: passed
+git diff --check: PASS
+npm run lint: PASS
+npm test: PASS (3 files, 20 tests)
+npm run build: PASS (Next middleware-to-proxy deprecation warning persists)
+npx playwright test e2e/customize-configurator.spec.ts e2e/public-pages.spec.ts --project=chromium: PASS (22/22; NO_COLOR/FORCE_COLOR warnings, existing LCP warning for Supabase product image)
 ```
 
-## Visual QA summary
-
-Local Playwright/visual QA ran desktop 1440x1100, tablet 834x1112, mobile 390x844 for `/solution`, `/solution/cctv`, `/solution/network`, `/solution/iot`, `/solution/design`. Manual screenshot review found no text overlap or clipped CTAs. Full summary:
+## Browser / Playwright / Visual Findings
 
 ```json
-[
-  {
-    "route": "/solution",
-    "viewport": "desktop",
-    "title": "운영 솔루션 | 위트(weet)",
-    "h1": "운영까지 준비된 모듈러 공간",
-    "overflowX": false,
-    "scrollWidth": 1440,
-    "clientWidth": 1440,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "badImgs": [],
-    "generatedCount": 4,
-    "oldRefs": [],
-    "literalEscapes": false
-  },
-  {
-    "route": "/solution/cctv",
-    "viewport": "desktop",
-    "title": "안심 출입 옵션",
-    "h1": "무인 운영도 안심되게",
-    "overflowX": false,
-    "scrollWidth": 1440,
-    "clientWidth": 1440,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "badImgs": [],
-    "generatedCount": 1,
-    "oldRefs": [],
-    "literalEscapes": false
-  },
-  {
-    "route": "/solution/network",
-    "viewport": "desktop",
-    "title": "끊김 없는 연결 옵션",
-    "h1": "결제와 예약이 끊기지 않게",
-    "overflowX": false,
-    "scrollWidth": 1440,
-    "clientWidth": 1440,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "badImgs": [],
-    "generatedCount": 1,
-    "oldRefs": [],
-    "literalEscapes": false
-  },
-  {
-    "route": "/solution/iot",
-    "viewport": "desktop",
-    "title": "원격 준비 옵션",
-    "h1": "현장에 가지 않아도 준비되게",
-    "overflowX": false,
-    "scrollWidth": 1440,
-    "clientWidth": 1440,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "badImgs": [],
-    "generatedCount": 1,
-    "oldRefs": [],
-    "literalEscapes": false
-  },
-  {
-    "route": "/solution/design",
-    "viewport": "desktop",
-    "title": "현장 완성 옵션",
-    "h1": "상권과 브랜드에 어긋나지 않게",
-    "overflowX": false,
-    "scrollWidth": 1440,
-    "clientWidth": 1440,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "badImgs": [],
-    "generatedCount": 1,
-    "oldRefs": [],
-    "literalEscapes": false
-  },
-  {
-    "route": "/solution",
-    "viewport": "tablet",
-    "title": "운영 솔루션 | 위트(weet)",
-    "h1": "운영까지 준비된 모듈러 공간",
-    "overflowX": false,
-    "scrollWidth": 834,
-    "clientWidth": 834,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "badImgs": [
-      {
-        "src": "http://localhost:3000/_next/image?url=%2Fimages%2Fcompany%2Fweet-logo.webp&w=3840&q=75",
-        "alt": "위트(weet) 로고",
-        "complete": false,
-        "w": 0,
-        "h": 0,
-        "visible": true
-      }
+{
+  "generatedAt": "2026-06-09T16:53:54.567Z",
+  "pageCount": 9,
+  "modalCount": 23,
+  "modalProblems": [],
+  "pageProblems": [],
+  "stepKeys": {
+    "included": [
+      "basic-window",
+      "extra-window",
+      "standard-lock",
+      "smart-lock",
+      "basic-sink",
+      "basic-bathroom",
+      "bidet",
+      "built-in-storage",
+      "folding-table"
     ],
-    "generatedCount": 4,
-    "oldRefs": [],
-    "literalEscapes": false
-  },
-  {
-    "route": "/solution/cctv",
-    "viewport": "tablet",
-    "title": "안심 출입 옵션",
-    "h1": "무인 운영도 안심되게",
-    "overflowX": false,
-    "scrollWidth": 834,
-    "clientWidth": 834,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "badImgs": [],
-    "generatedCount": 1,
-    "oldRefs": [],
-    "literalEscapes": false
-  },
-  {
-    "route": "/solution/network",
-    "viewport": "tablet",
-    "title": "끊김 없는 연결 옵션",
-    "h1": "결제와 예약이 끊기지 않게",
-    "overflowX": false,
-    "scrollWidth": 834,
-    "clientWidth": 834,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "badImgs": [],
-    "generatedCount": 1,
-    "oldRefs": [],
-    "literalEscapes": false
-  },
-  {
-    "route": "/solution/iot",
-    "viewport": "tablet",
-    "title": "원격 준비 옵션",
-    "h1": "현장에 가지 않아도 준비되게",
-    "overflowX": false,
-    "scrollWidth": 834,
-    "clientWidth": 834,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "badImgs": [],
-    "generatedCount": 1,
-    "oldRefs": [],
-    "literalEscapes": false
-  },
-  {
-    "route": "/solution/design",
-    "viewport": "tablet",
-    "title": "현장 완성 옵션",
-    "h1": "상권과 브랜드에 어긋나지 않게",
-    "overflowX": false,
-    "scrollWidth": 834,
-    "clientWidth": 834,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "badImgs": [],
-    "generatedCount": 1,
-    "oldRefs": [],
-    "literalEscapes": false
-  },
-  {
-    "route": "/solution",
-    "viewport": "mobile",
-    "title": "운영 솔루션 | 위트(weet)",
-    "h1": "운영까지 준비된 모듈러 공간",
-    "overflowX": false,
-    "scrollWidth": 390,
-    "clientWidth": 390,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "badImgs": [
-      {
-        "src": "http://localhost:3000/_next/image?url=%2Fimages%2Fcompany%2Fweet-logo.webp&w=3840&q=75",
-        "alt": "위트(weet) 로고",
-        "complete": false,
-        "w": 0,
-        "h": 0,
-        "visible": true
-      }
+    "mood": [
+      "ribbed-steel-white",
+      "cedar-point",
+      "zinc-gray",
+      "paper-wall",
+      "birch-panel",
+      "silk-wallpaper",
+      "spc-white-oak",
+      "spc-natural-oak"
     ],
-    "generatedCount": 4,
-    "oldRefs": [],
-    "literalEscapes": false
+    "smart": [
+      "ev-charger",
+      "solar-panel",
+      "cellular-router",
+      "iot-package",
+      "satellite-internet",
+      "security-package"
+    ]
   },
-  {
-    "route": "/solution/cctv",
-    "viewport": "mobile",
-    "title": "안심 출입 옵션",
-    "h1": "무인 운영도 안심되게",
-    "overflowX": false,
-    "scrollWidth": 390,
-    "clientWidth": 390,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "badImgs": [],
-    "generatedCount": 1,
-    "oldRefs": [],
-    "literalEscapes": false
+  "expansion": {
+    "modelTexts": [
+      "Compact 3x6소형 주말주택3m x 6m · 18m²₩27,900,000부터",
+      "Standard 3x9프리미엄 거주3m x 9m · 27m²₩34,900,000부터"
+    ],
+    "beforeExpansion": {
+      "imgHref": "/images/customize/compact-3x6-base.svg",
+      "preserveAspectRatio": "xMidYMid meet",
+      "shellWidth": "600px",
+      "shellX": null
+    },
+    "standardButtonText": "Standard 3x9프리미엄 거주3m x 9m · 27m²₩34,900,000부터",
+    "stdCount": 1,
+    "afterExpansion": {
+      "canvas": {
+        "height": 349,
+        "width": 830,
+        "x": 41,
+        "y": 463
+      },
+      "imgHref": "/images/customize/standard-3x9-base.svg",
+      "preserveAspectRatio": "xMidYMid meet",
+      "shellWidth": "900px",
+      "shellX": null
+    }
   },
-  {
-    "route": "/solution/network",
-    "viewport": "mobile",
-    "title": "끊김 없는 연결 옵션",
-    "h1": "결제와 예약이 끊기지 않게",
-    "overflowX": false,
-    "scrollWidth": 390,
-    "clientWidth": 390,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "badImgs": [],
-    "generatedCount": 1,
-    "oldRefs": [],
-    "literalEscapes": false
-  },
-  {
-    "route": "/solution/iot",
-    "viewport": "mobile",
-    "title": "원격 준비 옵션",
-    "h1": "현장에 가지 않아도 준비되게",
-    "overflowX": false,
-    "scrollWidth": 390,
-    "clientWidth": 390,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "badImgs": [],
-    "generatedCount": 1,
-    "oldRefs": [],
-    "literalEscapes": false
-  },
-  {
-    "route": "/solution/design",
-    "viewport": "mobile",
-    "title": "현장 완성 옵션",
-    "h1": "상권과 브랜드에 어긋나지 않게",
-    "overflowX": false,
-    "scrollWidth": 390,
-    "clientWidth": 390,
-    "consoleErrors": [],
-    "pageErrors": [],
-    "badImgs": [],
-    "generatedCount": 1,
-    "oldRefs": [],
-    "literalEscapes": false
+  "representativeScreenshots": [
+    ".codex/qa/current/desktop-solution-after-cachefix.png",
+    ".codex/qa/current/desktop-customize-3x9-expansion-final-after-cachefix.png",
+    ".codex/qa/current/desktop-modal-iot-package-fixed.png",
+    ".codex/qa/current/desktop-modal-cellular-router.png",
+    ".codex/qa/current/desktop-modal-solar-panel.png",
+    ".codex/qa/current/mobile-customize-after-cachefix.png",
+    ".codex/qa/current/mobile-home-header-after-cachefix.png"
+  ],
+  "optionFileStats": {
+    "count": 30,
+    "minBytes": 30834,
+    "maxBytes": 261176
   }
-]
+}
 ```
 
-Known QA note: script intermittently reports the existing header logo with naturalWidth 0 on tablet/mobile `/solution`, but screenshots show the logo visible; likely measurement/timing artifact.
+Manual visual checks performed on the actual screenshots:
+- desktop-modal-iot-package-fixed.png shows the IoT image rendered after the unoptimized fix.
+- desktop-modal-cellular-router.png and desktop-modal-solar-panel.png show option-specific real-photo images.
+- desktop-customize-3x9-expansion-final-after-cachefix.png shows centered 3x9 floorplan and full-width stepper.
+- desktop-solution-after-cachefix.png shows a light technical option concept, not the previous black/card-heavy field concept.
+- mobile-customize-after-cachefix.png shows no horizontal overflow and the bottom 주문하기 bar is reachable.
 
-## Review questions
+## Current Failures Or Risks
 
-Review strictly for concrete pre-deploy defects only.
+- The 30 option image files exist. Current public catalog only exposes 23 option-info buttons in the visible default catalog state; mini-washer, bed-frame, and ess are asset-ready but not currently visible options.
+- Next middleware-to-proxy deprecation warning persists.
+- Production deployment and real-domain QA are still pending until after closure review, commit, and push.
 
-1. Any MUST_FIX issues that would harm Korean buyer trust, mobile readability, accessibility, responsiveness, or runtime/build reliability?
-2. Do any image placements violate the user's latest instruction that option images must emphasize the option instead of the house/building?
-3. Is the operations-first framing concrete enough, or is there a specific copy/IA problem to fix before deploy?
-4. Any code-level issue visible in the excerpts: broken links, metadata mismatch, missing test assertion, Tailwind/Next issue, poor accessible naming?
+## Key Git Diff
 
-Return exactly:
+Key diff is summarized through excerpts and diff stat above. Full local packet contains the detailed diff subset.
 
-```text
-MARKER: WEET_REVIEW_20260609_SOLUTION_RENEWAL_06
-VERDICT: PASS | MUST_FIX
+## Exact Review Questions
 
+Return a marker-matched review using this structure:
+
+MARKER: WEET_REVIEW_20260610_CUSTOMIZE_SOLUTION_CLOSURE_02
+VERDICT: PASS or REVISE
 MUST_FIX:
-- ...
-
+- Concrete blocker(s) only. Include file/path and exact reason.
 OPTIONAL:
-- ...
+- Non-blocking improvements only.
 
-RATIONALE:
-- ...
-```
+Please focus on:
+1. Whether the previous MUST_FIX (9 temporary option images) is truly closed.
+2. Whether the /customize modal image fix using `unoptimized` is correct and safe for public local assets with cache-bust query strings.
+3. Whether the renamed steps, removed 상담 신청/확인사항/상담 요청, centered floorplan, and expansion behavior match the user request.
+4. Whether /solution now fits the requested technical-option concept and avoids the old site/field/black-heavy approach.
+5. Any concrete blockers before commit/push/deploy.

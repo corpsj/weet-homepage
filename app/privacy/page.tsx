@@ -65,7 +65,7 @@ export default function PrivacyPage() {
           <section>
             <h2 className="mb-4 text-xl font-bold text-gray-900 md:text-2xl">3. 이용 목적</h2>
             <ul className="mt-2 list-disc space-y-2 pl-5">
-              <li>선택한 모델과 옵션을 바탕으로 상담 요청을 접수하고 구성 내용을 확인합니다.</li>
+              <li>선택한 모델과 옵션을 바탕으로 주문 요청을 접수하고 구성 내용을 확인합니다.</li>
               <li>현장 조건, 설치 가능성, 예상 일정, 견적 범위를 안내합니다.</li>
               <li>기존 문의와 A/S 관련 요청을 확인하고 답변합니다.</li>
               <li>관리자 화면에서 상담, 문의, 프로젝트, 제품 정보를 운영합니다.</li>

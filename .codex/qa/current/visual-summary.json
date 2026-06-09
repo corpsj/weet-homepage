@@ -1,0 +1,1910 @@
+{
+  "generatedAt": "2026-06-09T16:53:54.567Z",
+  "base": "http://localhost:3100",
+  "screenshots": [
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-home-header-after-cachefix.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-solution-after-cachefix.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-customize-initial-after-cachefix.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-basic-window.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-extra-window.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-standard-lock.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-smart-lock.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-basic-sink.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-basic-bathroom.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-bidet.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-built-in-storage.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-folding-table.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-ribbed-steel-white.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-cedar-point.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-zinc-gray.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-paper-wall.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-birch-panel.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-silk-wallpaper.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-spc-white-oak.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-spc-natural-oak.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-ev-charger.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-solar-panel.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-cellular-router.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-iot-package.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-satellite-internet.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-security-package.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-customize-3x9-expansion-mid-after-cachefix.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-customize-3x9-expansion-final-after-cachefix.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/tablet-home-header-after-cachefix.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/tablet-solution-after-cachefix.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/tablet-customize-after-cachefix.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/mobile-home-header-after-cachefix.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/mobile-solution-after-cachefix.png",
+    "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/mobile-customize-after-cachefix.png"
+  ],
+  "pageSummaries": [
+    {
+      "label": "desktop-home",
+      "bannedText": {
+        "confirmNotice": false,
+        "consultationStep": false,
+        "fieldFinish": false,
+        "oldRequest": false
+      },
+      "bodyHeight": 3503,
+      "brokenImages": 0,
+      "clientWidth": 1425,
+      "horizontalOverflow": false,
+      "optionImagesSeen": [],
+      "scrollWidth": 1425,
+      "title": "홈",
+      "url": "http://localhost:3100/",
+      "visibleLinks": [
+        {
+          "height": 60,
+          "href": "/",
+          "text": "",
+          "width": 60,
+          "x": 64,
+          "y": 10
+        },
+        {
+          "height": 23,
+          "href": "/modular",
+          "text": "모듈러건축 소개",
+          "width": 95,
+          "x": 311,
+          "y": 29
+        },
+        {
+          "height": 23,
+          "href": "/products",
+          "text": "제품 소개",
+          "width": 56,
+          "x": 451,
+          "y": 29
+        },
+        {
+          "height": 23,
+          "href": "/bespoke",
+          "text": "BESPOKE",
+          "width": 64,
+          "x": 551,
+          "y": 29
+        },
+        {
+          "height": 23,
+          "href": "/solution",
+          "text": "SOLUTION",
+          "width": 71,
+          "x": 660,
+          "y": 29
+        },
+        {
+          "height": 23,
+          "href": "/company",
+          "text": "회사소개",
+          "width": 52,
+          "x": 775,
+          "y": 29
+        },
+        {
+          "height": 23,
+          "href": "/support",
+          "text": "고객지원",
+          "width": 52,
+          "x": 872,
+          "y": 29
+        },
+        {
+          "height": 14,
+          "href": "https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/",
+          "text": "",
+          "width": 14,
+          "x": 1186,
+          "y": 24
+        },
+        {
+          "height": 14,
+          "href": "https://blog.naver.com/we-et",
+          "text": "N",
+          "width": 10,
+          "x": 1212,
+          "y": 24
+        },
+        {
+          "height": 14,
+          "href": "https://www.instagram.com/weet_kr/",
+          "text": "",
+          "width": 14,
+          "x": 1234,
+          "y": 24
+        },
+        {
+          "height": 40,
+          "href": "/customize",
+          "text": "주문하기",
+          "width": 93,
+          "x": 1268,
+          "y": 20
+        },
+        {
+          "height": 48,
+          "href": "/customize",
+          "text": "모델 구성하기",
+          "width": 168,
+          "x": 96,
+          "y": 712
+        },
+        {
+          "height": 48,
+          "href": "/support",
+          "text": "진행 과정 보기",
+          "width": 144,
+          "x": 276,
+          "y": 712
+        },
+        {
+          "height": 56,
+          "href": "/customize",
+          "text": "나만의 위트 만들기",
+          "width": 212,
+          "x": 606,
+          "y": 3140
+        },
+        {
+          "height": 34,
+          "href": "/admin",
+          "text": "True",
+          "width": 57,
+          "x": 613,
+          "y": 3416
+        },
+        {
+          "height": 22,
+          "href": "https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/",
+          "text": "당근",
+          "width": 48,
+          "x": 1068,
+          "y": 3407
+        },
+        {
+          "height": 22,
+          "href": "https://blog.naver.com/we-et",
+          "text": "Nblog",
+          "width": 45,
+          "x": 1137,
+          "y": 3407
+        },
+        {
+          "height": 22,
+          "href": "https://www.instagram.com/weet_kr/",
+          "text": "instagram",
+          "width": 83,
+          "x": 1202,
+          "y": 3407
+        },
+        {
+          "height": 17,
+          "href": "/privacy",
+          "text": "개인정보 처리방침",
+          "width": 79,
+          "x": 1092,
+          "y": 3462
+        },
+        {
+          "height": 17,
+          "href": "/terms",
+          "text": "이용약관",
+          "width": 38,
+          "x": 1190,
+          "y": 3462
+        },
+        {
+          "height": 17,
+          "href": "/company",
+          "text": "회사소개",
+          "width": 38,
+          "x": 1247,
+          "y": 3462
+        }
+      ],
+      "wantedText": {
+        "mood": false,
+        "order": true,
+        "smart": false
+      },
+      "consoleErrors": []
+    },
+    {
+      "label": "desktop-solution",
+      "bannedText": {
+        "confirmNotice": false,
+        "consultationStep": false,
+        "fieldFinish": false,
+        "oldRequest": false
+      },
+      "bodyHeight": 2489,
+      "brokenImages": 0,
+      "clientWidth": 1425,
+      "horizontalOverflow": false,
+      "optionImagesSeen": [
+        "http://localhost:3100/_next/image?url=%2Fimages%2Fcustomize%2Foptions%2Fsolar-panel.webp&w=640&q=75"
+      ],
+      "scrollWidth": 1425,
+      "title": "운영 솔루션 | 위트(weet)",
+      "url": "http://localhost:3100/solution",
+      "visibleLinks": [
+        {
+          "height": 60,
+          "href": "/",
+          "text": "",
+          "width": 60,
+          "x": 64,
+          "y": 10
+        },
+        {
+          "height": 23,
+          "href": "/modular",
+          "text": "모듈러건축 소개",
+          "width": 95,
+          "x": 311,
+          "y": 29
+        },
+        {
+          "height": 23,
+          "href": "/products",
+          "text": "제품 소개",
+          "width": 56,
+          "x": 451,
+          "y": 29
+        },
+        {
+          "height": 23,
+          "href": "/bespoke",
+          "text": "BESPOKE",
+          "width": 64,
+          "x": 551,
+          "y": 29
+        },
+        {
+          "height": 23,
+          "href": "/solution",
+          "text": "SOLUTION",
+          "width": 71,
+          "x": 660,
+          "y": 29
+        },
+        {
+          "height": 23,
+          "href": "/company",
+          "text": "회사소개",
+          "width": 52,
+          "x": 775,
+          "y": 29
+        },
+        {
+          "height": 23,
+          "href": "/support",
+          "text": "고객지원",
+          "width": 52,
+          "x": 872,
+          "y": 29
+        },
+        {
+          "height": 14,
+          "href": "https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/",
+          "text": "",
+          "width": 14,
+          "x": 1186,
+          "y": 24
+        },
+        {
+          "height": 14,
+          "href": "https://blog.naver.com/we-et",
+          "text": "N",
+          "width": 10,
+          "x": 1212,
+          "y": 24
+        },
+        {
+          "height": 14,
+          "href": "https://www.instagram.com/weet_kr/",
+          "text": "",
+          "width": 14,
+          "x": 1234,
+          "y": 24
+        },
+        {
+          "height": 40,
+          "href": "/customize",
+          "text": "주문하기",
+          "width": 93,
+          "x": 1268,
+          "y": 20
+        },
+        {
+          "height": 36,
+          "href": "/solution/cctv",
+          "text": "포함 스펙",
+          "width": 256,
+          "x": 984,
+          "y": 800
+        },
+        {
+          "height": 36,
+          "href": "/solution/network",
+          "text": "포함 스펙",
+          "width": 256,
+          "x": 984,
+          "y": 1119
+        },
+        {
+          "height": 36,
+          "href": "/solution/iot",
+          "text": "포함 스펙",
+          "width": 256,
+          "x": 984,
+          "y": 1439
+        },
+        {
+          "height": 36,
+          "href": "/solution/energy",
+          "text": "포함 스펙",
+          "width": 256,
+          "x": 984,
+          "y": 1758
+        },
+        {
+          "height": 44,
+          "href": "/customize",
+          "text": "주문 옵션 확인",
+          "width": 152,
+          "x": 153,
+          "y": 2218
+        },
+        {
+          "height": 44,
+          "href": "/support",
+          "text": "테크 옵션 문의",
+          "width": 130,
+          "x": 321,
+          "y": 2218
+        },
+        {
+          "height": 34,
+          "href": "/admin",
+          "text": "True",
+          "width": 57,
+          "x": 613,
+          "y": 2403
+        },
+        {
+          "height": 22,
+          "href": "https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/",
+          "text": "당근",
+          "width": 48,
+          "x": 1068,
+          "y": 2393
+        },
+        {
+          "height": 22,
+          "href": "https://blog.naver.com/we-et",
+          "text": "Nblog",
+          "width": 45,
+          "x": 1137,
+          "y": 2393
+        },
+        {
+          "height": 22,
+          "href": "https://www.instagram.com/weet_kr/",
+          "text": "instagram",
+          "width": 83,
+          "x": 1202,
+          "y": 2393
+        },
+        {
+          "height": 17,
+          "href": "/privacy",
+          "text": "개인정보 처리방침",
+          "width": 79,
+          "x": 1092,
+          "y": 2449
+        },
+        {
+          "height": 17,
+          "href": "/terms",
+          "text": "이용약관",
+          "width": 38,
+          "x": 1190,
+          "y": 2449
+        },
+        {
+          "height": 17,
+          "href": "/company",
+          "text": "회사소개",
+          "width": 38,
+          "x": 1247,
+          "y": 2449
+        }
+      ],
+      "wantedText": {
+        "mood": false,
+        "order": true,
+        "smart": false
+      },
+      "consoleErrors": []
+    },
+    {
+      "label": "desktop-customize-initial",
+      "bannedText": {
+        "confirmNotice": false,
+        "consultationStep": false,
+        "fieldFinish": false,
+        "oldRequest": false
+      },
+      "bodyHeight": 1069,
+      "brokenImages": 0,
+      "clientWidth": 1425,
+      "horizontalOverflow": false,
+      "optionImagesSeen": [],
+      "scrollWidth": 1425,
+      "title": "주문하기 | 위트(weet)",
+      "url": "http://localhost:3100/customize",
+      "visibleLinks": [
+        {
+          "height": 20,
+          "href": "/",
+          "text": "WEET",
+          "width": 61,
+          "x": 24,
+          "y": 22
+        }
+      ],
+      "wantedText": {
+        "mood": true,
+        "order": true,
+        "smart": true
+      },
+      "consoleErrors": []
+    },
+    {
+      "label": "tablet-home",
+      "bannedText": {
+        "confirmNotice": false,
+        "consultationStep": false,
+        "fieldFinish": false,
+        "oldRequest": false
+      },
+      "bodyHeight": 4108,
+      "brokenImages": 0,
+      "clientWidth": 805,
+      "horizontalOverflow": false,
+      "optionImagesSeen": [],
+      "scrollWidth": 805,
+      "title": "홈",
+      "url": "http://localhost:3100/",
+      "visibleLinks": [
+        {
+          "height": 60,
+          "href": "/",
+          "text": "",
+          "width": 60,
+          "x": 32,
+          "y": 10
+        },
+        {
+          "height": 36,
+          "href": "/customize",
+          "text": "주문하기",
+          "width": 77,
+          "x": 652,
+          "y": 22
+        },
+        {
+          "height": 48,
+          "href": "/customize",
+          "text": "모델 구성하기",
+          "width": 168,
+          "x": 48,
+          "y": 812
+        },
+        {
+          "height": 48,
+          "href": "/support",
+          "text": "진행 과정 보기",
+          "width": 144,
+          "x": 228,
+          "y": 812
+        },
+        {
+          "height": 56,
+          "href": "/customize",
+          "text": "나만의 위트 만들기",
+          "width": 212,
+          "x": 296,
+          "y": 3777
+        },
+        {
+          "height": 34,
+          "href": "/admin",
+          "text": "True",
+          "width": 57,
+          "x": 200,
+          "y": 4002
+        },
+        {
+          "height": 22,
+          "href": "https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/",
+          "text": "당근",
+          "width": 48,
+          "x": 556,
+          "y": 4012
+        },
+        {
+          "height": 22,
+          "href": "https://blog.naver.com/we-et",
+          "text": "Nblog",
+          "width": 45,
+          "x": 625,
+          "y": 4012
+        },
+        {
+          "height": 22,
+          "href": "https://www.instagram.com/weet_kr/",
+          "text": "instagram",
+          "width": 83,
+          "x": 690,
+          "y": 4012
+        },
+        {
+          "height": 17,
+          "href": "/privacy",
+          "text": "개인정보 처리방침",
+          "width": 79,
+          "x": 580,
+          "y": 4067
+        },
+        {
+          "height": 17,
+          "href": "/terms",
+          "text": "이용약관",
+          "width": 38,
+          "x": 678,
+          "y": 4067
+        },
+        {
+          "height": 17,
+          "href": "/company",
+          "text": "회사소개",
+          "width": 38,
+          "x": 735,
+          "y": 4067
+        }
+      ],
+      "wantedText": {
+        "mood": false,
+        "order": true,
+        "smart": false
+      },
+      "consoleErrors": []
+    },
+    {
+      "label": "tablet-solution",
+      "bannedText": {
+        "confirmNotice": false,
+        "consultationStep": false,
+        "fieldFinish": false,
+        "oldRequest": false
+      },
+      "bodyHeight": 5532,
+      "brokenImages": 0,
+      "clientWidth": 805,
+      "horizontalOverflow": false,
+      "optionImagesSeen": [
+        "http://localhost:3100/_next/image?url=%2Fimages%2Fcustomize%2Foptions%2Fsolar-panel.webp&w=3840&q=75"
+      ],
+      "scrollWidth": 805,
+      "title": "운영 솔루션 | 위트(weet)",
+      "url": "http://localhost:3100/solution",
+      "visibleLinks": [
+        {
+          "height": 60,
+          "href": "/",
+          "text": "",
+          "width": 60,
+          "x": 32,
+          "y": 10
+        },
+        {
+          "height": 36,
+          "href": "/customize",
+          "text": "주문하기",
+          "width": 77,
+          "x": 652,
+          "y": 22
+        },
+        {
+          "height": 36,
+          "href": "/solution/cctv",
+          "text": "포함 스펙",
+          "width": 675,
+          "x": 65,
+          "y": 1581
+        },
+        {
+          "height": 36,
+          "href": "/solution/network",
+          "text": "포함 스펙",
+          "width": 675,
+          "x": 65,
+          "y": 2637
+        },
+        {
+          "height": 36,
+          "href": "/solution/iot",
+          "text": "포함 스펙",
+          "width": 675,
+          "x": 65,
+          "y": 3693
+        },
+        {
+          "height": 36,
+          "href": "/solution/energy",
+          "text": "포함 스펙",
+          "width": 675,
+          "x": 65,
+          "y": 4749
+        },
+        {
+          "height": 44,
+          "href": "/customize",
+          "text": "주문 옵션 확인",
+          "width": 152,
+          "x": 40,
+          "y": 5261
+        },
+        {
+          "height": 44,
+          "href": "/support",
+          "text": "테크 옵션 문의",
+          "width": 130,
+          "x": 208,
+          "y": 5261
+        },
+        {
+          "height": 34,
+          "href": "/admin",
+          "text": "True",
+          "width": 57,
+          "x": 200,
+          "y": 5426
+        },
+        {
+          "height": 22,
+          "href": "https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/",
+          "text": "당근",
+          "width": 48,
+          "x": 556,
+          "y": 5436
+        },
+        {
+          "height": 22,
+          "href": "https://blog.naver.com/we-et",
+          "text": "Nblog",
+          "width": 45,
+          "x": 625,
+          "y": 5436
+        },
+        {
+          "height": 22,
+          "href": "https://www.instagram.com/weet_kr/",
+          "text": "instagram",
+          "width": 83,
+          "x": 690,
+          "y": 5436
+        },
+        {
+          "height": 17,
+          "href": "/privacy",
+          "text": "개인정보 처리방침",
+          "width": 79,
+          "x": 580,
+          "y": 5492
+        },
+        {
+          "height": 17,
+          "href": "/terms",
+          "text": "이용약관",
+          "width": 38,
+          "x": 678,
+          "y": 5492
+        },
+        {
+          "height": 17,
+          "href": "/company",
+          "text": "회사소개",
+          "width": 38,
+          "x": 735,
+          "y": 5492
+        }
+      ],
+      "wantedText": {
+        "mood": false,
+        "order": true,
+        "smart": false
+      },
+      "consoleErrors": []
+    },
+    {
+      "label": "tablet-customize",
+      "bannedText": {
+        "confirmNotice": false,
+        "consultationStep": false,
+        "fieldFinish": false,
+        "oldRequest": false
+      },
+      "bodyHeight": 1169,
+      "brokenImages": 0,
+      "clientWidth": 805,
+      "horizontalOverflow": false,
+      "optionImagesSeen": [],
+      "scrollWidth": 805,
+      "title": "주문하기 | 위트(weet)",
+      "url": "http://localhost:3100/customize",
+      "visibleLinks": [
+        {
+          "height": 20,
+          "href": "/",
+          "text": "WEET",
+          "width": 61,
+          "x": 24,
+          "y": 22
+        }
+      ],
+      "wantedText": {
+        "mood": true,
+        "order": true,
+        "smart": true
+      },
+      "consoleErrors": []
+    },
+    {
+      "label": "mobile-home",
+      "bannedText": {
+        "confirmNotice": false,
+        "consultationStep": false,
+        "fieldFinish": false,
+        "oldRequest": false
+      },
+      "bodyHeight": 5051,
+      "brokenImages": 0,
+      "clientWidth": 375,
+      "horizontalOverflow": false,
+      "optionImagesSeen": [],
+      "scrollWidth": 375,
+      "title": "홈",
+      "url": "http://localhost:3100/",
+      "visibleLinks": [
+        {
+          "height": 60,
+          "href": "/",
+          "text": "",
+          "width": 60,
+          "x": 16,
+          "y": 5
+        },
+        {
+          "height": 30,
+          "href": "/customize",
+          "text": "주문하기",
+          "width": 66,
+          "x": 249,
+          "y": 20
+        },
+        {
+          "height": 48,
+          "href": "/customize",
+          "text": "모델 구성하기",
+          "width": 327,
+          "x": 24,
+          "y": 502
+        },
+        {
+          "height": 48,
+          "href": "/support",
+          "text": "진행 과정 보기",
+          "width": 327,
+          "x": 24,
+          "y": 562
+        },
+        {
+          "height": 56,
+          "href": "/customize",
+          "text": "나만의 위트 만들기",
+          "width": 212,
+          "x": 81,
+          "y": 4572
+        },
+        {
+          "height": 24,
+          "href": "/admin",
+          "text": "True",
+          "width": 41,
+          "x": 234,
+          "y": 4873
+        },
+        {
+          "height": 22,
+          "href": "https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/",
+          "text": "당근",
+          "width": 48,
+          "x": 16,
+          "y": 4966
+        },
+        {
+          "height": 22,
+          "href": "https://blog.naver.com/we-et",
+          "text": "Nblog",
+          "width": 45,
+          "x": 84,
+          "y": 4966
+        },
+        {
+          "height": 22,
+          "href": "https://www.instagram.com/weet_kr/",
+          "text": "instagram",
+          "width": 83,
+          "x": 150,
+          "y": 4966
+        },
+        {
+          "height": 15,
+          "href": "/privacy",
+          "text": "개인정보 처리방침",
+          "width": 72,
+          "x": 16,
+          "y": 5020
+        },
+        {
+          "height": 15,
+          "href": "/terms",
+          "text": "이용약관",
+          "width": 35,
+          "x": 107,
+          "y": 5020
+        },
+        {
+          "height": 15,
+          "href": "/company",
+          "text": "회사소개",
+          "width": 35,
+          "x": 160,
+          "y": 5020
+        }
+      ],
+      "wantedText": {
+        "mood": false,
+        "order": true,
+        "smart": false
+      },
+      "consoleErrors": []
+    },
+    {
+      "label": "mobile-solution",
+      "bannedText": {
+        "confirmNotice": false,
+        "consultationStep": false,
+        "fieldFinish": false,
+        "oldRequest": false
+      },
+      "bodyHeight": 5452,
+      "brokenImages": 0,
+      "clientWidth": 375,
+      "horizontalOverflow": false,
+      "optionImagesSeen": [
+        "http://localhost:3100/_next/image?url=%2Fimages%2Fcustomize%2Foptions%2Fsolar-panel.webp&w=3840&q=75"
+      ],
+      "scrollWidth": 375,
+      "title": "운영 솔루션 | 위트(weet)",
+      "url": "http://localhost:3100/solution",
+      "visibleLinks": [
+        {
+          "height": 60,
+          "href": "/",
+          "text": "",
+          "width": 60,
+          "x": 16,
+          "y": 5
+        },
+        {
+          "height": 30,
+          "href": "/customize",
+          "text": "주문하기",
+          "width": 66,
+          "x": 249,
+          "y": 20
+        },
+        {
+          "height": 36,
+          "href": "/solution/cctv",
+          "text": "포함 스펙",
+          "width": 277,
+          "x": 49,
+          "y": 1502
+        },
+        {
+          "height": 36,
+          "href": "/solution/network",
+          "text": "포함 스펙",
+          "width": 277,
+          "x": 49,
+          "y": 2421
+        },
+        {
+          "height": 36,
+          "href": "/solution/iot",
+          "text": "포함 스펙",
+          "width": 277,
+          "x": 49,
+          "y": 3308
+        },
+        {
+          "height": 36,
+          "href": "/solution/energy",
+          "text": "포함 스펙",
+          "width": 277,
+          "x": 49,
+          "y": 4195
+        },
+        {
+          "height": 44,
+          "href": "/customize",
+          "text": "주문 옵션 확인",
+          "width": 327,
+          "x": 24,
+          "y": 4972
+        },
+        {
+          "height": 44,
+          "href": "/support",
+          "text": "테크 옵션 문의",
+          "width": 327,
+          "x": 24,
+          "y": 5032
+        },
+        {
+          "height": 24,
+          "href": "/admin",
+          "text": "True",
+          "width": 41,
+          "x": 234,
+          "y": 5273
+        },
+        {
+          "height": 22,
+          "href": "https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/",
+          "text": "당근",
+          "width": 48,
+          "x": 16,
+          "y": 5367
+        },
+        {
+          "height": 22,
+          "href": "https://blog.naver.com/we-et",
+          "text": "Nblog",
+          "width": 45,
+          "x": 84,
+          "y": 5367
+        },
+        {
+          "height": 22,
+          "href": "https://www.instagram.com/weet_kr/",
+          "text": "instagram",
+          "width": 83,
+          "x": 150,
+          "y": 5367
+        },
+        {
+          "height": 15,
+          "href": "/privacy",
+          "text": "개인정보 처리방침",
+          "width": 72,
+          "x": 16,
+          "y": 5421
+        },
+        {
+          "height": 15,
+          "href": "/terms",
+          "text": "이용약관",
+          "width": 35,
+          "x": 107,
+          "y": 5421
+        },
+        {
+          "height": 15,
+          "href": "/company",
+          "text": "회사소개",
+          "width": 35,
+          "x": 160,
+          "y": 5421
+        }
+      ],
+      "wantedText": {
+        "mood": false,
+        "order": true,
+        "smart": false
+      },
+      "consoleErrors": []
+    },
+    {
+      "label": "mobile-customize",
+      "bannedText": {
+        "confirmNotice": false,
+        "consultationStep": false,
+        "fieldFinish": false,
+        "oldRequest": false
+      },
+      "bodyHeight": 905,
+      "brokenImages": 0,
+      "clientWidth": 375,
+      "horizontalOverflow": false,
+      "optionImagesSeen": [],
+      "scrollWidth": 375,
+      "title": "주문하기 | 위트(weet)",
+      "url": "http://localhost:3100/customize",
+      "visibleLinks": [
+        {
+          "height": 20,
+          "href": "/",
+          "text": "WEET",
+          "width": 61,
+          "x": 16,
+          "y": 18
+        }
+      ],
+      "wantedText": {
+        "mood": true,
+        "order": true,
+        "smart": true
+      },
+      "consoleErrors": []
+    }
+  ],
+  "stepKeys": {
+    "included": [
+      "basic-window",
+      "extra-window",
+      "standard-lock",
+      "smart-lock",
+      "basic-sink",
+      "basic-bathroom",
+      "bidet",
+      "built-in-storage",
+      "folding-table"
+    ],
+    "mood": [
+      "ribbed-steel-white",
+      "cedar-point",
+      "zinc-gray",
+      "paper-wall",
+      "birch-panel",
+      "silk-wallpaper",
+      "spc-white-oak",
+      "spc-natural-oak"
+    ],
+    "smart": [
+      "ev-charger",
+      "solar-panel",
+      "cellular-router",
+      "iot-package",
+      "satellite-internet",
+      "security-package"
+    ]
+  },
+  "modalSummaries": [
+    {
+      "key": "basic-window",
+      "step": "included",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-basic-window.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "basic-window",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "기본 포함기본창표준 창호채광/환기단열 검토생활에 필요한 기본 채광과 환기를 제공합니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "기본창",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/basic-window.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 343
+        }
+      ]
+    },
+    {
+      "key": "extra-window",
+      "step": "included",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-extra-window.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "extra-window",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "₩800,000추가창추가 채광환기 강화가구 간섭 검토설치 방향에 맞춰 창을 더합니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "추가창",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/extra-window.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 340
+        }
+      ]
+    },
+    {
+      "key": "standard-lock",
+      "step": "included",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-standard-lock.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "standard-lock",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "기본 포함기본 도어락비밀번호카드키기본 출입현관도어와 기본 잠금 장치를 포함합니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "기본 도어락",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/standard-lock.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 343
+        }
+      ]
+    },
+    {
+      "key": "smart-lock",
+      "step": "included",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-smart-lock.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "smart-lock",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "₩450,000스마트 도어락앱 권한출입 로그운영형 출입단기 체류와 임대 운영에 편한 스마트 잠금입니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "스마트 도어락",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/smart-lock.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 340
+        }
+      ]
+    },
+    {
+      "key": "basic-sink",
+      "step": "included",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-basic-sink.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "basic-sink",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "기본 포함기본 싱크대상판/수전하부 수납표준 주방작은 주방에 필요한 싱크대와 기본 동선을 포함합니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "기본 싱크대",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/basic-sink.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 343
+        }
+      ]
+    },
+    {
+      "key": "basic-bathroom",
+      "step": "included",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-basic-bathroom.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "basic-bathroom",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "기본 포함기본 욕실습식 욕실환기/배수방수 마감샤워, 세면, 양변기 중심의 기본 욕실입니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "기본 욕실",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/basic-bathroom.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 343
+        }
+      ]
+    },
+    {
+      "key": "bidet",
+      "step": "included",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-bidet.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "bidet",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "₩350,000비데전원 위치위생 설비욕실 연동사용감을 높이는 비데 옵션입니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "비데",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/bidet.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 340
+        }
+      ]
+    },
+    {
+      "key": "built-in-storage",
+      "step": "included",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-built-in-storage.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "built-in-storage",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "₩900,000붙박이 수납맞춤 수납동선 확보댐퍼 힌지작은 집에 맞춘 벽면 수납입니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "붙박이 수납",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/built-in-storage.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 340
+        }
+      ]
+    },
+    {
+      "key": "folding-table",
+      "step": "included",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-folding-table.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "folding-table",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "₩450,000접이식 테이블접이식 구조벽 보강작업/식사 겸용필요할 때만 펼쳐 쓰는 테이블입니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "접이식 테이블",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/folding-table.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 340
+        }
+      ]
+    },
+    {
+      "key": "ribbed-steel-white",
+      "step": "mood",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-ribbed-steel-white.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "ribbed-steel-white",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "기본 포함골강판 화이트세로 리브 패턴밝은 외장 톤기본 외피밝고 관리가 쉬운 기본 외장입니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "골강판 화이트",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 900,
+          "naturalWidth": 1600,
+          "src": "http://localhost:3100/images/customize/options/ribbed-steel-white.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 343
+        }
+      ]
+    },
+    {
+      "key": "cedar-point",
+      "step": "mood",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-cedar-point.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "cedar-point",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "₩2,200,000적삼목 포인트목재 포인트입면 대비부분 적용작은 모듈에도 깊이를 주는 포인트 마감입니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "적삼목 포인트",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 900,
+          "naturalWidth": 1600,
+          "src": "http://localhost:3100/images/customize/options/cedar-point.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 340
+        }
+      ]
+    },
+    {
+      "key": "zinc-gray",
+      "step": "mood",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-zinc-gray.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "zinc-gray",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "₩1,500,000징크 그레이메탈 패널저채도 그레이프리미엄 외피차분한 회색 계열의 프리미엄 외장입니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "징크 그레이",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 900,
+          "naturalWidth": 1600,
+          "src": "http://localhost:3100/images/customize/options/zinc-gray.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 340
+        }
+      ]
+    },
+    {
+      "key": "paper-wall",
+      "step": "mood",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-paper-wall.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "paper-wall",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "기본 포함합지벽지기본 내장밝은 톤비용 효율깨끗하고 부담 없는 기본 실내 마감입니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "합지벽지",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/paper-wall.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 343
+        }
+      ]
+    },
+    {
+      "key": "birch-panel",
+      "step": "mood",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-birch-panel.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "birch-panel",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "₩1,800,000자작합판 마감자작나무 톤포인트 월내장 패널소형 공간에 온기를 주는 목재 마감입니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "자작합판 마감",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/birch-panel.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 340
+        }
+      ]
+    },
+    {
+      "key": "silk-wallpaper",
+      "step": "mood",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-silk-wallpaper.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "silk-wallpaper",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "₩900,000실크벽지표면 내구오염 관리고급 질감관리성과 질감을 높인 벽지 마감입니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "실크벽지",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/silk-wallpaper.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 340
+        }
+      ]
+    },
+    {
+      "key": "spc-white-oak",
+      "step": "mood",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-spc-white-oak.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "spc-white-oak",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "기본 포함SPC 화이트오크SPC 바닥화이트 오크생활 방수밝고 넓어 보이는 기본 바닥 마감입니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "SPC 화이트오크",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/spc-white-oak.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 343
+        }
+      ]
+    },
+    {
+      "key": "spc-natural-oak",
+      "step": "mood",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-spc-natural-oak.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "spc-natural-oak",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "₩300,000SPC 내추럴오크내추럴 오크스크래치 대응따뜻한 톤생활감이 부드러운 내추럴 오크 톤입니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "SPC 내추럴오크",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/spc-natural-oak.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 340
+        }
+      ]
+    },
+    {
+      "key": "ev-charger",
+      "step": "smart",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-ev-charger.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "ev-charger",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "스펙 협의전기차 충전기완속 충전부하 설계주차 동선전기 인입 조건을 확인한 뒤 제안합니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "전기차 충전기",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/ev-charger.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 343
+        }
+      ]
+    },
+    {
+      "key": "solar-panel",
+      "step": "smart",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-solar-panel.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "solar-panel",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "스펙 협의태양광 패널지붕 통합인버터 연동음영 검토일조량과 사용량 검토 후 제안합니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "태양광 패널",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/solar-panel.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 343
+        }
+      ]
+    },
+    {
+      "key": "cellular-router",
+      "step": "smart",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-cellular-router.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "cellular-router",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "스펙 협의LTE/5G 라우터LTE/5G외부 안테나장비망 분리통신사 커버리지 확인 후 구성합니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "LTE/5G 라우터",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/cellular-router.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 343
+        }
+      ]
+    },
+    {
+      "key": "iot-package",
+      "step": "smart",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-iot-package.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "iot-package",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "₩900,000IoT 패키지원격 제어상태 알림스케줄링문, 조명, 냉난방을 앱으로 관리합니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "IoT 패키지",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/iot-package.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 340
+        }
+      ]
+    },
+    {
+      "key": "satellite-internet",
+      "step": "smart",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-satellite-internet.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "satellite-internet",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "스펙 협의위성 인터넷외곽 통신안테나 시야백업망유선망이 어려운 부지의 연결 방식을 검토합니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "위성 인터넷",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/satellite-internet.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 343
+        }
+      ]
+    },
+    {
+      "key": "security-package",
+      "step": "smart",
+      "opened": true,
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/current/desktop-modal-security-package.png",
+      "bodyHasPreparedPlaceholder": false,
+      "expectedKey": "security-package",
+      "horizontalOverflow": false,
+      "matchingImgs": [
+        "[Circular]"
+      ],
+      "modalPanel": {
+        "height": 1000,
+        "text": "₩700,000보안 패키지CCTV/센서야간 알림출입 감지무인 사용과 세컨하우스 관리를 돕습니다.",
+        "width": 1425,
+        "x": 0,
+        "y": 0
+      },
+      "optionImgs": [
+        {
+          "alt": "보안 패키지",
+          "complete": true,
+          "display": "block",
+          "height": 302,
+          "naturalHeight": 941,
+          "naturalWidth": 1672,
+          "src": "http://localhost:3100/images/customize/options/security-package.webp?v=20260610-0137",
+          "width": 536,
+          "x": 445,
+          "y": 340
+        }
+      ]
+    }
+  ],
+  "expansion": {
+    "modelTexts": [
+      "Compact 3x6소형 주말주택3m x 6m · 18m²₩27,900,000부터",
+      "Standard 3x9프리미엄 거주3m x 9m · 27m²₩34,900,000부터"
+    ],
+    "beforeExpansion": {
+      "imgHref": "/images/customize/compact-3x6-base.svg",
+      "preserveAspectRatio": "xMidYMid meet",
+      "shellWidth": "600px",
+      "shellX": null
+    },
+    "standardButtonText": "Standard 3x9프리미엄 거주3m x 9m · 27m²₩34,900,000부터",
+    "stdCount": 1,
+    "afterExpansion": {
+      "canvas": {
+        "height": 349,
+        "width": 830,
+        "x": 41,
+        "y": 463
+      },
+      "imgHref": "/images/customize/standard-3x9-base.svg",
+      "preserveAspectRatio": "xMidYMid meet",
+      "shellWidth": "900px",
+      "shellX": null
+    }
+  },
+  "imageFileStats": [],
+  "modalRefreshNote": "Refreshed after adding unoptimized to option modal images so cache-busted public images bypass Next image optimizer 400s.",
+  "modalProblems": []
+}

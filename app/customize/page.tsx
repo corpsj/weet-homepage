@@ -6,14 +6,14 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: '주문하기',
-  description: '위트 이동식주택을 모델과 옵션별로 구성하고 상담을 요청하세요.',
+  description: '위트 이동식주택을 모델, 공간, 소재, 스마트 옵션별로 구성하고 주문 요청을 남겨보세요.',
   alternates: {
     canonical: '/customize',
   },
   openGraph: {
     url: '/customize',
     title: '주문하기',
-    description: '위트 이동식주택을 모델과 옵션별로 구성하고 상담을 요청하세요.',
+    description: '위트 이동식주택을 모델, 공간, 소재, 스마트 옵션별로 구성하고 주문 요청을 남겨보세요.',
   },
 };
 

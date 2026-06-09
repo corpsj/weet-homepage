@@ -134,3 +134,55 @@ Live recovery:
 - Current visible note says to check `agent-inbox`, deeply analyze and fix why Antigravity IDE could not be used through Computer Use, remember that research is in progress, and never stop research mid-generation.
 - A Codex heartbeat automation named `Stickies steering monitor` was created with id `stickies-steering-monitor` to re-check Stickies every 5 minutes in this thread.
 - 2026-06-07 final resume: `computer-use:list_apps` succeeded and showed Stickies running, but both `get_app_state("com.apple.Stickies")` and `get_app_state("Stickies")` returned `cgWindowNotFound`. Treat this as "no visible Stickies window found" rather than a Computer Use transport failure; retry after the Stickies note window is visible.
+- 2026-06-10 00:34 KST current resume: `computer-use:list_apps` succeeded and showed Stickies running, but both `get_app_state("com.apple.Stickies")` and `get_app_state("Stickies")` returned `cgWindowNotFound`. Treat as no visible Stickies window found and continue by reading `agent-inbox/`.
+
+## 2026-06-10: Chrome/ChatGPT image generation control degradation
+
+Observed evidence:
+
+- Chrome browser-client setup succeeded and `browser.user.openTabs()` returned open tabs including `https://chatgpt.com/`.
+- Claiming or screenshotting the existing ChatGPT tab timed out at 45-60 seconds and reset the Node browser-control session.
+- After reading Chrome troubleshooting, a lightweight `openTabs()` retry still succeeded, so the native host/extension was not fully disconnected.
+- A second attempt to claim the existing ChatGPT tab without navigation also timed out and reset the session.
+
+Decision:
+
+- Do not send duplicate ChatGPT image prompts while tab claim/screenshot cannot be proven safe.
+- For the `/customize` option modal slice, keep the UI non-broken by using existing GPT-generated/project visual assets as temporary image fallbacks and record the 9 assets that must be regenerated later.
+- Next recovery should start with a fresh Chrome tab or a visible user-confirmed ChatGPT state, then prove composer/model/action/send safety before any image prompt.
+
+## 2026-06-10: Chrome/ChatGPT image generation recovery notes
+
+Observed recovery:
+
+- Stickies became visible again and said `크롬 고쳤어. 다시 테스트 시작해`.
+- Chrome extension tab claiming and pageAssets export worked again for ChatGPT.
+- For image generation, the safe evidence pattern was:
+  - `Thinking • 확장` menu item has `aria-checked="true"`.
+  - `Pro • 확장` has `aria-checked="false"`.
+  - Composer has `이미지` chip and no `심층 리서치` chip.
+  - Composer text is exactly the intended option prompt.
+  - Send button exposes `aria-label="프롬프트 보내기"` and is enabled.
+- ChatGPT repeatedly restored a stale draft text `스티커 좀 봐줘` in fresh chats. Clear the composer with select-all/delete immediately after every `새 채팅`, and clear again after enabling `이미지 만들기` before pasting the intended prompt.
+- Some abstract technical prompts (`ess`, `iot-package`, first `cellular-router`) stalled at `더욱 자세한 이미지를 생성하고 있습니다` without emitting a new image asset. If no `답변 중지` remains and pageAssets has no new ChatGPT `backend-api/estuary/content` image, record the failed attempt and retry with a simpler physical-scene prompt rather than resending the same prompt.
+
+## 2026-06-10: updated Stickies image-generation steering
+
+Visible Stickies note changed to:
+
+> 탭을 병렬로 실행해서 이미지 생성을 병렬로 진행해.
+> 그 중에서 5분이상 이미지 생성이 되지 않는 것들은 새로고침을 시도해보거나 그래도 이미지가 나타나지 않으면 실패한것으로 간주하고 재시도해.
+
+Operational interpretation for Weet image work:
+
+- Keep the user's option-by-option prompt discipline: one option image per prompt/chat.
+- When many option images remain, multiple Chrome tabs may run separate one-option prompts in parallel so the user can see progress.
+- If any run is stuck for 5+ minutes, first verify whether `답변 중지`/generation is still active. If safe, refresh or record that attempt as failed, then retry with a simpler physical-scene prompt.
+- Do not duplicate-send a prompt unless the latest visible turn proves no send occurred.
+
+## 2026-06-10: ChatGPT review packet paste size workaround
+
+- Chrome/ChatGPT normal review chat was configured as `최신 • 5.5`, `Pro • 확장`, with no `심층 리서치` or image chip.
+- A single 29KB review-packet paste was silently rejected by the visible `#prompt-textarea`, even though `chromeTab.clipboard.readText()` confirmed the full marker-matched packet was on the clipboard.
+- Small/medium pastes worked after focusing the visible contenteditable textbox with CUA coordinates.
+- Workaround: clear the composer, split the packet into ~3.5KB chunks, write each chunk to the Chrome tab clipboard, and paste each chunk with `CMD+V`. Verify final composer text length and marker before clicking `프롬프트 보내기`.

@@ -18,7 +18,7 @@ export function formatModelStartPrice(value: number) {
 
 export function formatOptionPrice(option: Pick<CustomizeOption, 'priceType' | 'price'>) {
   if (option.priceType === 'included') return '포함';
-  if (option.priceType === 'consult') return '상담';
+  if (option.priceType === 'consult') return '협의';
   return formatWon(option.price);
 }
 
@@ -115,7 +115,7 @@ export function calculateEstimate(catalog: CustomizeCatalog, modelId: string, se
 
 export function floorplanSize(model: CustomizeModel) {
   const width = model.id === 'standard-3x9' || model.lengthM >= 9 ? 900 : 600;
-  return { x: 1000 - width, y: 60, width, height: 300 };
+  return { x: 500 - width / 2, y: 60, width, height: 300 };
 }
 
 function encodeBase64Url(value: string) {

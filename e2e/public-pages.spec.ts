@@ -131,13 +131,14 @@ test.describe('Public page transition', () => {
   test('solution public page shows operational packages', async ({ page }) => {
     await page.goto('/solution');
 
-    await expect(page.getByRole('heading', { name: '운영까지 준비된 모듈러 공간' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: '안심 출입' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: '끊김 없는 연결' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: '원격 준비' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: '현장 완성' })).toBeVisible();
-    await expect(page.getByText('옵션은 장식이 아니라 운영 리스크 관리입니다')).toBeVisible();
+    await expect(page.getByRole('heading', { name: '테크 옵션으로 완성하는 모듈러 공간' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '보안 코어 (Security Core)' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '네트워크 패브릭 (Network Fabric)' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '제어 계층 (Control Layer)' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '에너지 스택 (Energy Stack)' })).toBeVisible();
+    await expect(page.getByText('옵션은 장식이 아니라 운영 시스템입니다')).toBeVisible();
     await expect(page.locator('img[src*="kr-security-realphoto.webp"]')).toBeAttached();
+    await expect(page.locator('a[href="/solution/energy"]').first()).toBeVisible();
   });
 
   test('footer contains hidden admin link on True', async ({ page }) => {

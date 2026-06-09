@@ -1,42 +1,48 @@
-# Current Task: Weet Public Modular, Bespoke, And Solution Renewal
+# Current Task: Weet Solution, Header CTA, And 주문하기 Configurator Renewal
 
 ## Active request
 
-Renew the public Weet site section so it feels like a category-leading Korean movable/modular-home company with a younger, premium, trustworthy tone.
+Renew the Weet solution page, global header order CTA, and `/customize` order configurator so the site feels like a category-leading Korean movable-home brand with a younger, premium, technical buying experience.
 
 ## Required execution style
 
 - Do not ask the user questions; make reasonable autonomous decisions.
 - Check macOS Stickies during every work turn and apply current steering.
-- Treat `agent-inbox/` as direct trusted user instruction.
-- Use Chrome/ChatGPT visible web control for project image generation and GPT review.
-- For image generation in this slice, use `최신 • 5.5` with Thinking `확장`; do not use Pro for images.
-- Generate images one by one, not as a batch/contact sheet.
-- Use Antigravity IDE through Computer Use for frontend/UI implementation when reachable; Codex remains responsible for file inspection, validation, review packets, GPT-5.5 Pro review, fixes, git, deployment, and production-domain QA.
-- Every validation pass must include visual analysis, not only terminal or DOM output.
-- Do not use Codex loop/goal features.
+- Treat `agent-inbox/` as trusted direct user instruction.
+- Use Antigravity IDE through Computer Use for frontend/UI implementation when reachable; Codex remains responsible for inspection, validation, review, fixes, git, deployment, and production-domain QA.
+- Use Chrome/ChatGPT visible web control for image generation and GPT review so the user can see the work.
+- For image generation, use `최신 • 5.5` with Thinking/Pro `확장` as directed, and generate one option image per chat/prompt rather than batch images.
+- Do not use local image generation for project UI/reference images in this slice.
+- Every rendered verification pass must include visual analysis, screenshots or visible evidence, console/page-error checks, overflow checks, and PC/tablet/mobile coverage.
+- Do not use Codex loop or goal features.
 
 ## Required implementation scope
 
-1. Completely renew `/modular`.
-   - Discard the current modular page image system and use newly generated GPT images.
-   - Replace the long textbook-like explanation with a premium, customer-facing narrative: factory precision, predictable schedule, transport/install proof, living comfort, and future flexibility.
-   - Avoid card-heavy marketing composition; prioritize strong image sections, proof, scannable process, and clear CTAs.
-2. Reposition `/bespoke` as a commercial-space custom solution service.
-   - Focus on cafes, pop-up/showroom, accommodation, workspaces, smart farm/lab, and brand operations.
-   - Make the page feel like a tailored business solution, not a generic private-home bespoke page.
-3. Apply current Stickies steering to `/solution`.
-   - Evaluate the current solution page from a customer perspective and renew it so services feel like installable operational packages for real modular spaces.
-   - Make solution offerings understandable by problem/use case, not only by technology category.
-4. Update navigation anchors/metadata/tests as needed so the new information architecture stays coherent.
-5. Record image generation prompts, assets, usage decisions, bugs, UX findings, and next candidates in `agent-inbox/`.
-6. Apply latest Stickies steering: `주문하기` should not sit as a normal middle menu item; promote `/customize` to a clear header CTA on desktop and mobile.
+1. `/solution`
+   - Base the page on existing usable solution categories, but remove currently-unused/site-focused items.
+   - Avoid black wherever practical and use technical terminology.
+   - Treat solutions as technical options: security, network, IoT/control, energy/operations. Remove “현장” as a page concept.
+   - Show a different design concept from the current card-heavy black/white operations page.
+2. Global header
+   - Visually inspect the current `주문하기` placement and move/restyle it so it does not shove adjacent navigation or utilities.
+   - Avoid black CTA styling.
+3. `/customize`
+   - Fill option-info modals with option-appropriate real descriptions and image slots.
+   - Generate option images one by one through Chrome/ChatGPT and save them as real public assets.
+   - Make the stepper span the full configurator header width.
+   - Remove the `상담 신청` step.
+   - Use four steps: model, space composition, a softer “마감재” step, and a softer “설비” step.
+   - Remove top-right `확인사항`.
+   - Change buyer-facing `상담 요청` copy to `주문하기`.
+   - Center both 3x6 and 3x9 floorplans and add an interactive wall/footprint expansion effect when switching 3x6 to 3x9.
+   - Use Tesla order and Porsche configurator patterns as product-reference inspiration.
+4. Update tests, metadata, and records in `agent-inbox/`.
+5. Complete lint/test/build, visual QA, GPT-5.5 Pro review or explicit failure record, push, production deployment/promote if needed, and production-domain verification.
 
-## Current implementation plan
+## Current completion plan
 
-1. Generate required modular/public-section images one by one in Chrome/ChatGPT with `최신 • 5.5` Thinking `확장` and `이미지 만들기`; save them under `public/images/modular/`.
-2. Send a focused frontend implementation handoff to Antigravity IDE with exact routes, copy direction, asset paths, and acceptance criteria.
-3. Inspect Antigravity changes, apply Codex fixes where required, and update tests.
-4. Run lint/unit/build/E2E plus PC/tablet/mobile visual QA with screenshots and overflow/console checks.
-5. Create a complete `.codex/review-packet.md`, request GPT-5.5 Pro review in Chrome with `Pro 확장` and without `심층 리서치`, save `.codex/pro-review.md`, and apply concrete `MUST_FIX`.
-6. Push the branch, promote/deploy if needed, and verify `we-et.com` or `www.we-et.com` on desktop/tablet/mobile.
+1. Refresh `.codex/review-packet.md` and `.codex/review-packet-slim.md` with the final diff, validation, visual QA, and the fixed option-image modal evidence.
+2. Request GPT-5.5 Pro closure review through Chrome normal ChatGPT chat, not Deep Research, with `최신 • 5.5` and `Pro • 확장`.
+3. Apply only concrete `MUST_FIX` items from the closure review.
+4. Stage, commit, push the branch, then wait for or promote Vercel deployment.
+5. Verify the real production domain `www.we-et.com` / `we-et.com` on PC, tablet, and mobile for header CTA, `/solution`, and `/customize` option modals/floorplan behavior.
