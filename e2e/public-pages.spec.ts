@@ -102,13 +102,41 @@ test.describe('Public page transition', () => {
     await expect(page.getByRole('button', { name: /문의/ })).toHaveCount(0);
   });
 
-  test('bespoke public page is restored as BESPOKE showcase', async ({ page }) => {
+  test('bespoke public page is repositioned as commercial custom solution', async ({ page }) => {
     await page.goto('/bespoke');
 
     await expect(page.getByRole('heading', { name: 'BESPOKE' })).toBeVisible();
     await expect(page.getByText('SMALL CAFE')).toBeVisible();
     await expect(page.getByText('POP-UP STORE / BRAND SHOWROOM')).toBeVisible();
+    await expect(page.getByText('ACCOMMODATION / SITE OFFICE')).toBeVisible();
     await expect(page.getByText('SMART FARM')).toBeVisible();
+  });
+
+  test('modular public page shows premium narrative and process', async ({ page }) => {
+    await page.goto('/modular');
+
+    await expect(page.getByRole('heading', { name: '불확실성을 지운 프리미엄 공간' })).toBeVisible();
+
+    // Assert scannable process steps
+    await expect(page.getByText('01 / 공장 제작')).toBeVisible();
+    await expect(page.getByText('02 / 운송 및 크레인 조립')).toBeVisible();
+    await expect(page.getByText('03 / 생활과 운영')).toBeVisible();
+    await expect(page.getByText('04 / 미래 확장과 이동')).toBeVisible();
+
+    // Assert images are used
+    await expect(page.locator('img[src*="modular-hero.webp"]')).toBeAttached();
+    await expect(page.locator('img[src*="factory-precision.webp"]')).toBeAttached();
+  });
+
+  test('solution public page shows operational packages', async ({ page }) => {
+    await page.goto('/solution');
+
+    await expect(page.getByRole('heading', { name: '공간 운영까지 설계합니다' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '안전하게 지키기' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '끊김 없이 연결하기' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '원격으로 제어하기' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '브랜드와 현장에 맞게 완성하기' })).toBeVisible();
+    await expect(page.getByText('해결하는 문제').first()).toBeVisible();
   });
 
   test('footer contains hidden admin link on True', async ({ page }) => {

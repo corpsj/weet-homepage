@@ -198,3 +198,25 @@ The first 10 personas did not produce 100 unique hard bugs. Following the user i
 127. Visual QA desktop: `.codex/qa/production-home-admin-cb04ae9/desktop-home.png` shows the full-bleed dark product/home hero, clear primary CTA, and a visible hint of the next `TRANSPARENCY` section.
 128. Visual QA mobile/tablet: production screenshots in `.codex/qa/production-home-admin-cb04ae9/` show the hero and CTA stack without text clipping or horizontal overflow.
 129. Remaining opportunity: the homepage is now premium-first, but future proof content should add real/generated transport, installation, interior, warranty, and site-readiness visuals near conversion CTAs.
+
+## 2026-06-09 modular/bespoke/solution renewal QA
+
+130. Fix verified: `/modular` was fully rebuilt around newly generated GPT image assets rather than the previous long textbook-like modular explanation.
+131. Fix verified: `/modular` now leads with a full-bleed generated modular-home hero and customer-facing promise around reduced uncertainty.
+132. Fix verified: `/modular` now explains factory precision, transport/crane installation, living comfort, and expansion/relocation through generated proof visuals.
+133. Fix verified: `/modular` CTA area now links to `/customize`, `/products`, and `/support` without low-contrast white-on-yellow text.
+134. Fix verified: `/bespoke` now presents commercial-space custom solutions instead of private-home bespoke copy.
+135. Fix verified: `/bespoke` covers cafe/store, pop-up/showroom, accommodation/workspace, and smart farm/lab use cases.
+136. Fix verified: `/bespoke` mobile order now shows text before image even in alternating desktop sections, reducing context loss on small screens.
+137. Fix verified: `/bespoke` section text no longer depends on hidden `whileInView` side-slide animation, which had made below-the-fold text disappear in full-page visual QA.
+138. Fix verified: `/solution` was rebuilt from a generic solution card grid into operational packages organized by problem, deployment environment, package composition, and timing.
+139. Fix verified: `/solution` no longer uses nested card layout for the main package surface; it now uses divided operational rows with clear action links.
+140. Visual QA desktop: `/modular`, `/bespoke`, and `/solution` screenshots in `.codex/qa/public-renewal-20260609/` show no text overlap or horizontal overflow.
+141. Visual QA tablet: `/modular`, `/bespoke`, and `/solution` reported horizontal overflow `false`, visible offscreen text issues `0`, console errors `0`, page errors `0`.
+142. Visual QA mobile: `/modular`, `/bespoke`, and `/solution` reported horizontal overflow `false`, visible offscreen text issues `0`, console errors `0`, page errors `0`.
+143. Visual QA note: full-page `/bespoke` screenshot can show lower lazy-loaded Next images as gray placeholders if the capture never scrolls to them; direct navigation to `/bespoke#smart-farm` confirmed the Smart Farm image loads with `complete: true`.
+144. Strength: generated modular assets provide better trust proof for production precision, install feasibility, interior comfort, and future expansion than the previous static page image system.
+145. Strength: `/solution` now speaks to the operator's actual risk, such as unmanned security, payment/network downtime, remote comfort control, and brand/site fit.
+146. Remaining opportunity: `/bespoke` still uses older existing cafe/popup/smart-farm images; future image generation could unify it with the new modular visual system.
+147. Remaining opportunity: `/solution` detail pages `/solution/cctv`, `/solution/network`, `/solution/iot`, and `/solution/design` should inherit the new operations-first framing.
+148. Remaining opportunity: `/modular` could add concrete lead-time ranges, factory QC checkpoints, transport access constraints, and install-day proof metrics.

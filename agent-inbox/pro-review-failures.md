@@ -2,6 +2,24 @@
 
 This file records Chrome/ChatGPT review failures so future agents can avoid repeating unsafe or ineffective sends.
 
+## 2026-06-09 public renewal attempt 1
+
+- Marker: `WEET_REVIEW_20260609_PUBLIC_RENEWAL_01`
+- Chrome evidence before send:
+  - Direct `https://chatgpt.com/deep-research` surface was used.
+  - DOM showed `최신 • 5.5`, `Thinking • 확장`, `Pro • 확장`, and the `심층 리서치` chip.
+  - Long packet paste was converted into `붙여넣은 마크다운(1).md`.
+  - A short inline prompt contained marker `WEET_REVIEW_20260609_PUBLIC_RENEWAL_01`, the expected markdown attachment remained, and `프롬프트 보내기` was enabled.
+- Failure:
+  - Deep Research completed, but the report only extracted the two marker/template occurrences from the attachment instead of reviewing the code, UX, visual QA, or risks.
+  - The visible report began: "요청한 마커는 문서에서 2회 확인되었습니다..." and did not provide a valid `VERDICT`, `MUST_FIX`, `OPTIONAL`, or `RATIONALE`.
+  - `.codex/pro-review.md` was not updated.
+- Retry guidance:
+  - Per updated Stickies steering, retry in a fresh normal ChatGPT chat with `최신 • 5.5` and `Pro 확장`; do not enable `심층 리서치`.
+  - Use a much shorter inline packet.
+  - Put the instruction before the packet: "Do not extract or summarize the packet; act as a product/UX/code reviewer and produce a verdict."
+  - Avoid a file attachment if possible; if ChatGPT creates a pasted markdown tile, click `텍스트 필드에 표시` before sending or reduce the prompt further.
+
 ## 2026-06-07 current slice attempt 1
 
 - Marker: `WEET_AUDIT_REVIEW_20260607_ADMIN_CUSTOMIZE_SLICE_01`

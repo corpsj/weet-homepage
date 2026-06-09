@@ -75,6 +75,12 @@ Direct recovery attempt results:
 
 ## 2026-06-07: ChatGPT Deep Research report extraction
 
+2026-06-09 steering update:
+
+- New GPT-5.5 Pro code/product reviews should not use `심층 리서치`.
+- Use a normal ChatGPT `새 채팅` with `최신 • 5.5` and `Pro 확장`, and verify the composer does not show the `심층 리서치` chip before sending.
+- The Deep Research extraction procedure below is retained only for recovering or auditing already-created Deep Research reports.
+
 Observed root cause:
 
 - Completed Deep Research reports may be visually present while normal page text and `[data-message-author-role="assistant"]` show an empty `ChatGPT의 말:` turn.

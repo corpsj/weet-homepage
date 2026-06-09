@@ -1,171 +1,140 @@
 'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { ArrowDown, ArrowRight } from 'lucide-react';
 
 type Lang = 'KO' | 'EN';
 
 const COPY: Record<Lang, {
-  hero: { title: string; lead: string; paragraphs: string[]; checklist: string[]; signature: string };
-  sections: Array<{
+  hero: { title: string; lead: string; scrollHint: string };
+  intro: { title: string; paragraphs: string[] };
+  processes: Array<{
     id: string;
+    step: string;
     title: string;
-    subtitle: string;
-    paragraphs: string[];
-    coreValue: string;
+    description: string;
     image: string;
     bg: 'light' | 'dark';
   }>;
+  cta: {
+    title: string;
+    description: string;
+    customize: string;
+    products: string;
+    support: string;
+  };
 }> = {
   KO: {
     hero: {
-      title: '모듈러(Module)건축이란?',
-      lead: "'모듈러 건축'은 빠른 속도, 정확한 품질, 유연한 공간을 모두 제공하는 가장 진보된 건축 솔루션입니다.",
-      paragraphs: [
-        '우리의 건축 철학: 더 나은 삶을 위한 합리적 기술',
-        '우리는 집이 더 합리적이고 효율적인 방식으로 지어져야 한다고 믿습니다.',
-        '기존의 현장 중심 건축은 날씨, 환경, 작업자의 숙련도 같은 수많은 변수에 의존해왔습니다. 우리는 기술을 통해 이러한 불확실성을 제거하는 것에서부터 시작합니다.',
-        "우리의 해답은 '탈현장건설(Off-Site Construction)'입니다. 우리는 현장이 아닌, 모든 조건이 통제된 공장에서 집의 핵심 구성요소 90%를 '사전제작'합니다.",
-        '이는 단순히 속도를 위한 것이 아닙니다. 계절과 날씨에 관계없이 언제나 정밀하고 균일한 최고 품질을 확보하기 위한 원칙입니다.',
-        '또한, 현장의 소음, 분진, 폐기물을 최소화하여 환경과 이웃에 미치는 영향을 줄이는 것이 우리가 지향하는 방식입니다.',
-        "공장에서 완성된 모듈은 고객의 대지에서 약속된 일정에 맞춰 '조립'됩니다. 수개월이 소요되던 현장 공정을 획기적으로 단축함으로써, 고객은 정확한 예산과 예측 가능한 일정 안에서 완벽한 공간을 만나게 됩니다.",
-        "우리는 이것을 '시간과 자원의 효율적 사용'이라 부릅니다.",
-        "마지막으로, 우리가 제공하는 집의 '형태'는 고정되어 있지 않습니다. 모듈러 건축의 본질은 '유연성'입니다.",
-        "표준화된 모듈의 조합을 통해 고객의 개성을 반영한 다양한 설계가 가능하며, 삶의 주기에 따라 공간을 '확장'하거나 '축소'할 수 있습니다.",
-        "심지어 필요시 집을 '이동'시켜 자산으로서의 가치를 이어갈 수도 있습니다.",
-        '우리의 철학은 명확합니다.',
-        '기술을 통해 건축의 불확실성을 제거하고, 고객에게는 더 빠르고, 더 견고하며, 더 유연한 삶의 기반을 제공하는 것.',
-        '이것이 우리가 모듈러 건축을 통해 구현하려는 가치입니다.',
-      ],
-      checklist: [
-        '하이브리드 모듈러 형태 ( Hybrid Modular Unit )',
-        '사전제작 ( Prefabrication )',
-        '탈현장 건설 OSC ( Off-Site Construction )',
-        '조립방식의 건축 ( Prefabricated Building )',
-      ],
-      signature: '- 주식회사 위트 -'
+      title: '불확실성을 지운 프리미엄 공간',
+      lead: 'WEET의 모듈러 건축은 예측 가능합니다. 완벽하게 통제된 공장에서 완성되어, 약속된 일정에 당신의 대지 위로 배송됩니다.',
+      scrollHint: '제작부터 설치까지의 여정'
     },
-    sections: [
+    intro: {
+      title: '건축의 새로운 기준',
+      paragraphs: [
+        '기존의 현장 건축은 날씨와 작업자의 숙련도, 그리고 수많은 변수에 의존해야 했습니다. WEET는 이 모든 불확실성을 기술로 통제합니다.',
+        '모든 공간은 오차 없는 공장 환경에서 정밀하게 사전 제작됩니다. 우리는 현장의 소음과 분진을 최소화하고, 가장 진보된 방식으로 당신의 공간을 현실로 만듭니다.'
+      ]
+    },
+    processes: [
       {
-        id: 'modular-types',
-        title: '하이브리드 모듈러 형태 ( Hybrid Modular Unit )',
-        subtitle: '구조적 안전과 쾌적함의 결합 (하이브리드 구조)',
-        paragraphs: [
-          "우리는 단일 소재의 한계를 넘어선 '하이브리드 구조(Hybrid Structure)'를 채택했습니다.",
-          '건물의 뼈대는 변형 없는 고강도 구조용 강철을 사용하여 내진 성능과 내구성을 극대화하고, 사람이 머무는 내부는 목재로 구성하여 철이 줄 수 없는 뛰어난 단열과 습도 조절 능력을 담았습니다.',
-        ],
-        coreValue: '어떤 재해에도 흔들리지 않는 강철의 안전성과 사계절 쾌적한 목재의 거주성을 동시에 제공합니다.',
-        image: '/images/modular/hybrid-modular.webp',
+        id: 'factory-precision',
+        step: '01 / 공장 제작',
+        title: 'mm 단위의 정밀한 엔지니어링',
+        description: '날씨의 영향을 받지 않는 실내 공장에서 골조부터 마감까지 전체 공정의 80% 이상을 완성합니다. 일관된 품질 관리와 엄격한 검수를 통해 도면의 수치를 정확하게 실제 공간으로 구현합니다.',
+        image: '/images/modular/generated/factory-precision.webp',
         bg: 'light',
       },
       {
-        id: 'prefabrication',
-        title: '사전제작 ( Pre-fabrication )',
-        subtitle: '"비바람을 맞지 않는 환경에서 정성껏 만듭니다." (정밀 제조 모듈러)',
-        paragraphs: [
-          '비바람과 습기는 건축물의 수명을 단축시키는 주원인입니다.',
-          '위트는 기후와 환경이 완벽히 제어된 위트 팩토리 내에서 전체 공정의 80% 이상을 제작합니다.',
-          '정밀한 용접이 필요한 철골과 습도 관리가 필수인 목재 모두 최적의 환경에서 가공되며, 숙련된 엔지니어의 엄격한 QC(품질관리)를 거쳐 출하됩니다.',
-        ],
-        coreValue: '현장 숙련도에 의존하지 않는, 설계 도면의 수치를 mm 단위까지 정확하게 구현하는 엔지니어링 기반의 제조 품질입니다.',
-        image: '/images/modular/prefabrication.webp',
-        bg: 'light',
-      },
-      {
-        id: 'osc',
-        title: '탈현장 건설 OSC ( Off-Site Construction )',
-        subtitle: '시간을 설계하는 병렬 프로세스 (병렬 공정 모듈러)',
-        paragraphs: [
-          '기존 건축의 고질적인 문제인 공사 지연을 모듈러으로 해결했습니다.',
-          '현장에서 기초 토목 공사가 진행되는 동안, 공장에서는 동시에 건물을 제작하는 "병렬 공정(Parallel Process)"을 도입했습니다.',
-          '순차적으로 기다릴 필요 없이 두 과정이 동시에 진행되어, 전체 공사 기간을 획기적으로 단축합니다.',
-        ],
-        coreValue: '날씨와 민원 등 현장 변수로 인한 지연이 없습니다. 약속된 일정에 정확히 입주하고, 비즈니스 기회를 앞당기는 합리적인 솔루션입니다.',
-        image: '/images/modular/osc.webp',
+        id: 'transport-install',
+        step: '02 / 운송 및 크레인 조립',
+        title: '하루 만에 완성되는 적층의 미학',
+        description: '완성된 모듈을 당신의 대지로 안전하게 운송합니다. 현장에서는 복잡한 공사 없이 크레인을 이용해 모듈을 결합하기만 하면 됩니다. 수개월의 기다림이 단 하루의 감동으로 바뀝니다.',
+        image: '/images/modular/generated/transport-install.webp',
         bg: 'dark',
       },
       {
-        id: 'assembly',
-        title: '조립방식의 건축 ( Prefabricated Building )',
-        subtitle: '소음 없이 완성되는 적층의 미학 (모듈 적층 공법)',
-        paragraphs: [
-          '복잡하고 시끄러운 공사 현장은 없습니다.',
-          '공장에서 완성된 모듈 유닛을 현장으로 운송하여, 크레인을 이용해 레고 블록처럼 "적층(Stacking)"하고 체결합니다.',
-          '현장에서는 단순 조립과 마감 작업만 이루어지기에 소음, 분진, 건축 폐기물 발생을 최소화하여 주변 환경과 이웃을 배려합니다.',
-        ],
-        coreValue: '시공 과정의 스트레스를 없앤 깨끗한 현장, 그리고 훗날 건물의 확장이나 이동(Relocation)까지 가능한 지속 가능한 건축 방식입니다.',
-        image: '/images/modular/prefabricated-building.webp',
+        id: 'interior-comfort',
+        step: '03 / 생활과 운영',
+        title: '타협 없는 거주의 쾌적함',
+        description: '강철의 견고함과 목재의 따뜻함을 결합한 하이브리드 구조는 뛰어난 단열과 방음 성능을 제공합니다. 첫날부터 완벽하게 준비된 쾌적한 실내 환경에서 새로운 일상을 시작하세요.',
+        image: '/images/modular/generated/interior-comfort.webp',
+        bg: 'light',
+      },
+      {
+        id: 'flexible-commercial',
+        step: '04 / 미래 확장과 이동',
+        title: '변화하는 삶에 맞추는 유연성',
+        description: '비즈니스가 성장하거나 삶의 터전이 바뀌더라도 걱정 없습니다. WEET의 모듈은 필요에 따라 공간을 덧붙여 확장하거나, 통째로 분리하여 새로운 장소로 이동할 수 있는 진정한 자산입니다.',
+        image: '/images/modular/generated/flexible-commercial.webp',
         bg: 'dark',
       },
     ],
+    cta: {
+      title: '공간의 미래를 경험하세요',
+      description: 'WEET의 모듈러 기술로 완성된 다양한 제품을 확인하고 나만의 공간을 구성해보세요.',
+      products: '제품 전체 보기',
+      customize: '나만의 위트 만들기',
+      support: '구매 과정 알아보기'
+    }
   },
   EN: {
     hero: {
-      title: 'What is Modular Construction?',
-      lead: 'Over 90% is finished in the factory; on site we simply stack and connect.',
-      paragraphs: [
-        'Traditional on-site builds are vulnerable to weather, noise, and safety risks. Modular reduces uncertainty with standardized processes and quality control.',
-        'Each module leaves the factory with interiors, MEP, and windows installed. On site we only assemble, so schedules are faster and more predictable.',
-        'The core value: shorter schedules, consistent quality, and less waste and noise in one approach.',
-      ],
-      checklist: [
-        'Hybrid Modular Unit',
-        'Prefabrication',
-        'Off-Site Construction (OSC)',
-        'Prefabricated Building',
-      ],
-      signature: '- weet -'
+      title: 'Premium Spaces Without Uncertainty',
+      lead: 'WEET modular architecture is predictable. Completed in perfectly controlled factories and delivered to your site right on schedule.',
+      scrollHint: 'The journey from factory to site'
     },
-    sections: [
+    intro: {
+      title: 'The New Standard of Building',
+      paragraphs: [
+        'Traditional construction relies on weather, worker skill, and endless site variables. WEET controls these uncertainties through technology.',
+        'Every space is precision-built in a factory environment with zero tolerance. We eliminate site noise and dust, bringing your vision to life through the most advanced methods.'
+      ]
+    },
+    processes: [
       {
-        id: 'modular-types',
-        title: 'Hybrid Modular Unit',
-        subtitle: 'Steel for strength, wood for comfort—combined for balanced performance.',
-        paragraphs: [
-          'We blend durable steel frames with warm timber to reduce vibration and deflection while keeping insulation and acoustic comfort.',
-          'Structural reviews and QC loops are done before shipping so modules arrive ready to install.',
-        ],
-        coreValue: 'Hybrid engineering that delivers both robustness and comfort.',
-        image: '/images/modular/hybrid-modular.webp',
+        id: 'factory-precision',
+        step: '01 / Factory Precision',
+        title: 'Engineering down to the millimeter',
+        description: 'Unconstrained by weather, over 80% of the build is finished indoors. From structural frames to final touches, rigorous QC ensures blueprints are matched perfectly into reality.',
+        image: '/images/modular/generated/factory-precision.webp',
         bg: 'light',
       },
       {
-        id: 'prefabrication',
-        title: 'Prefabrication',
-        subtitle: 'Produce in the factory, assemble quickly on site.',
-        paragraphs: [
-          'From materials to MEP and finishes, we run standardized lines that cut field work by over 80%.',
-          'Multi-stage QC checks dimensions, finishes, and functions to minimize on-site rework and surprises.',
-        ],
-        coreValue: 'Tightly controlled standard processes keep quality consistent.',
-        image: '/images/modular/prefabrication.webp',
-        bg: 'light',
-      },
-      {
-        id: 'osc',
-        title: 'OSC (Off-Site Construction)',
-        subtitle: 'Factory production and site work run in parallel to shorten the schedule.',
-        paragraphs: [
-          'Foundations and module production happen at the same time, slashing the overall timeline.',
-          'We reduce weather, noise, and safety risks and deliver predictable schedules with structured quality control.',
-        ],
-        coreValue: 'Parallel workflows minimize schedule risk and keep delivery dates reliable.',
-        image: '/images/modular/osc.webp',
+        id: 'transport-install',
+        step: '02 / Transport & Installation',
+        title: 'Standing up in a single day',
+        description: 'Finished modules are safely transported to your site. With minimal site work, modules are lifted and connected via crane. Months of waiting become a single day of installation.',
+        image: '/images/modular/generated/transport-install.webp',
         bg: 'dark',
       },
       {
-        id: 'assembly',
-        title: 'Prefabricated Building',
-        subtitle: 'Stack, connect, and finish—spaces can stand up in a single day.',
-        paragraphs: [
-          'Modules arrive complete, are lifted into place, connected, and finalized with minimal on-site finishing.',
-          'Need to expand or relocate later? Modules can be separated, moved, and reassembled for higher asset flexibility.',
-        ],
-        coreValue: 'Fast delivery now with flexibility for future moves or expansions.',
-        image: '/images/modular/prefabricated-building.webp',
+        id: 'interior-comfort',
+        step: '03 / Living Comfort',
+        title: 'Uncompromised interior quality',
+        description: 'Our hybrid structure combines steel durability with warm timber insulation for superior thermal and acoustic performance. Experience a perfectly conditioned environment from day one.',
+        image: '/images/modular/generated/interior-comfort.webp',
+        bg: 'light',
+      },
+      {
+        id: 'flexible-commercial',
+        step: '04 / Future Expansion',
+        title: 'Flexibility for changing needs',
+        description: 'If your business grows or you need to relocate, your WEET module adapts. Expand by adding modules or detach and move them to a new site—true flexibility as a lasting asset.',
+        image: '/images/modular/generated/flexible-commercial.webp',
         bg: 'dark',
       },
     ],
+    cta: {
+      title: 'Experience the future of space',
+      description: 'Explore products built with WEET\'s advanced modular technology and customize your own.',
+      products: 'View all products',
+      customize: 'Customize your weet',
+      support: 'View purchase process'
+    }
   },
 };
 
@@ -175,116 +144,123 @@ export default function ModularPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Hero */}
-      <section id="what-is-modular" className="bg-gray-50 py-16 lg:py-24 scroll-mt-[180px]">
+      {/* Full-bleed Hero */}
+      <section className="relative h-[90vh] md:h-screen w-full flex flex-col justify-end">
+        <div className="absolute inset-0 w-full h-full">
+          <Image
+            src="/images/modular/generated/modular-hero.webp"
+            alt={copy.hero.title}
+            fill
+            sizes="100vw"
+            className="object-cover"
+            priority
+          />
+          <div className="absolute inset-0 bg-black/40" />
+        </div>
+
+        <div className="relative z-10 max-w-[1600px] w-full mx-auto px-4 md:px-8 lg:px-[140px] pb-24 md:pb-32">
+          <h1 className="text-4xl md:text-6xl lg:text-[80px] font-black text-white mb-6 leading-tight max-w-4xl break-keep">
+            {copy.hero.title}
+          </h1>
+          <p className="text-lg md:text-2xl text-white/90 font-medium max-w-2xl leading-relaxed break-keep">
+            {copy.hero.lead}
+          </p>
+        </div>
+
+        {/* Scroll Hint */}
+        <div className="absolute bottom-8 left-0 right-0 flex justify-center z-10">
+          <div className="flex flex-col items-center text-white/70">
+            <span className="text-sm font-semibold uppercase mb-2">
+              {copy.hero.scrollHint}
+            </span>
+            <ArrowDown className="w-5 h-5" />
+          </div>
+        </div>
+      </section>
+
+      {/* Intro Section */}
+      <section id="what-is-modular" className="py-24 md:py-32 bg-white scroll-mt-[80px]">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
-            <div>
-              <div className="relative w-full max-w-[563px] aspect-[1024/817] mx-auto lg:mx-0 mb-8">
-                <Image
-                  src="/images/modular/main-image.webp"
-                  alt={copy.hero.title}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 42vw"
-                  className="object-contain"
-                  priority
-                />
-              </div>
-
-              <div className="space-y-3">
-                {copy.hero.checklist.map((item, index) => (
-                  <div key={index} className="flex items-center gap-3">
-                    <svg className="w-6 h-6 flex-shrink-0" viewBox="0 0 24 24" fill="none">
-                      <rect x="3" y="3" width="18" height="18" stroke="currentColor" strokeWidth="2" fill="none" />
-                      <path d="M7 12l3 3 7-7" stroke="currentColor" strokeWidth="2" fill="none" />
-                    </svg>
-                    <span className="text-[16px] lg:text-[18px]">{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <h1 className="text-[32px] lg:text-[40px] font-bold mb-4">
-                {copy.hero.title}
-              </h1>
-
-              <p className="text-[18px] lg:text-[20px] font-bold text-black mb-6">
-                {copy.hero.lead}
-              </p>
-
-              <div className="text-[14px] lg:text-[15px] leading-[1.8] space-y-4 text-gray-700 mb-8">
-                {copy.hero.paragraphs.map((p, idx) => (
-                  <p key={idx}>{p}</p>
-                ))}
-              </div>
-
-              <div className="text-right">
-                <p className="text-[14px] font-medium">{copy.hero.signature}</p>
-              </div>
+          <div className="max-w-3xl">
+            <h2 className="text-3xl md:text-5xl font-black text-gray-900 mb-10">
+              {copy.intro.title}
+            </h2>
+            <div className="space-y-6">
+              {copy.intro.paragraphs.map((p, idx) => (
+                <p key={idx} className="text-lg md:text-xl text-gray-600 leading-relaxed break-keep">
+                  {p}
+                </p>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Sections */}
-      {copy.sections.map((section) => (
-        <section
-          key={section.id}
-          id={section.id}
-          className={`${section.bg === 'light' ? 'bg-white' : 'bg-gray-50'} py-16 lg:py-24 scroll-mt-[180px]`}
-        >
-          <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16 items-start">
-              <div className="relative w-full aspect-[2816/1536] overflow-hidden rounded-lg order-2 lg:order-1">
-                <Image
-                  src={section.image}
-                  alt={section.title}
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 44vw"
-                  className="object-cover"
-                />
-              </div>
-
-              <div className="order-1 lg:order-2">
-                <h2 className="text-[28px] lg:text-[36px] font-bold mb-4">
-                  {section.title}
-                </h2>
-                <h3 className="text-[18px] lg:text-[22px] font-bold mb-4 text-gray-900">
-                  {section.subtitle}
-                </h3>
-
-                <div className="text-[14px] lg:text-[15px] leading-[1.8] space-y-4 text-gray-700 mb-6">
-                  {section.paragraphs.map((p, idx) => (
-                    <p key={idx}>{p}</p>
-                  ))}
+      {/* Process Sections */}
+      <div className="flex flex-col">
+        {copy.processes.map((process, idx) => (
+          <section
+            key={process.id}
+            id={process.id}
+            className={`py-24 md:py-32 scroll-mt-[80px] ${process.bg === 'light' ? 'bg-white' : 'bg-gray-50'}`}
+          >
+            <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
+              <div className={`grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center ${idx % 2 !== 0 ? 'lg:grid-flow-col-dense' : ''}`}>
+                <div className={`w-full aspect-[16/10] relative ${idx % 2 !== 0 ? 'lg:col-start-2' : ''}`}>
+                  <Image
+                    src={process.image}
+                    alt={process.title}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover rounded-sm"
+                  />
                 </div>
 
-                <p className="text-sm font-semibold text-black">Core Value: {section.coreValue}</p>
+                <div className={`${idx % 2 !== 0 ? 'lg:col-start-1' : ''}`}>
+                  <span className="block text-sm font-bold text-gray-400 mb-4 uppercase">
+                    {process.step}
+                  </span>
+                  <h3 className="text-3xl md:text-4xl lg:text-[40px] font-black text-gray-900 mb-6 leading-tight break-keep">
+                    {process.title}
+                  </h3>
+                  <p className="text-lg text-gray-600 leading-relaxed break-keep">
+                    {process.description}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
-        </section>
-      ))}
+          </section>
+        ))}
+      </div>
 
       {/* CTA Section */}
-      <section className="bg-gray-900 py-20 lg:py-32 text-center px-4">
+      <section className="bg-gray-900 py-24 md:py-32 px-4 text-center">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl lg:text-4xl font-black text-white mb-6">
-            {language === 'KO' ? '나에게 맞는 위트 찾기' : 'Find your weet'}
+          <h2 className="text-3xl md:text-5xl font-black text-white mb-6">
+            {copy.cta.title}
           </h2>
-          <p className="text-gray-300 text-lg mb-10 leading-relaxed">
-            {language === 'KO'
-              ? '위트의 모듈러 기술로 완성된 다양한 제품 라인업을 확인하고, 내게 필요한 공간을 직접 구성해보세요.'
-              : 'Explore our product lineup built with advanced modular technology, and customize your own space.'}
+          <p className="text-gray-300 text-lg md:text-xl mb-12 leading-relaxed break-keep">
+            {copy.cta.description}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="/products" className="inline-flex h-14 items-center justify-center rounded-lg bg-white px-8 text-sm font-bold text-gray-900 transition-colors hover:bg-gray-100">
-              {language === 'KO' ? '제품 전체 보기' : 'View all products'}
-            </a>
-            <a href="/customize" className="inline-flex h-14 items-center justify-center rounded-lg border border-gray-600 bg-transparent px-8 text-sm font-bold text-white transition-colors hover:bg-gray-800">
-              {language === 'KO' ? '나만의 위트 만들기' : 'Customize your weet'}
-            </a>
+            <Link
+              href="/customize"
+              className="inline-flex h-14 items-center justify-center gap-2 rounded-sm bg-[#FEBD16] px-8 text-sm font-bold text-gray-950 transition-colors hover:bg-[#E5A410]"
+            >
+              {copy.cta.customize} <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              href="/products"
+              className="inline-flex h-14 items-center justify-center rounded-sm bg-white px-8 text-sm font-bold text-gray-900 transition-colors hover:bg-gray-100"
+            >
+              {copy.cta.products}
+            </Link>
+            <Link
+              href="/support"
+              className="inline-flex h-14 items-center justify-center rounded-sm border border-gray-600 bg-transparent px-8 text-sm font-bold text-white transition-colors hover:bg-gray-800"
+            >
+              {copy.cta.support}
+            </Link>
           </div>
         </div>
       </section>

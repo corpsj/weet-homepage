@@ -15,11 +15,11 @@ const navigationKo = [
     href: '/modular',
     width: 145,
     submenu: [
-      { name: '모듈러건축이란?', href: '/modular#what-is-modular' },
-      { name: '모듈러 형태', href: '/modular#modular-types' },
-      { name: '사전제작 탈현장 건설', href: '/modular#prefabrication' },
-      { name: 'OSC', href: '/modular#osc' },
-      { name: '조립방식의 건축', href: '/modular#assembly' },
+      { name: '모듈러 건축이란?', href: '/modular#what-is-modular' },
+      { name: '공장 제작', href: '/modular#factory-precision' },
+      { name: '운송 및 조립', href: '/modular#transport-install' },
+      { name: '생활과 운영', href: '/modular#interior-comfort' },
+      { name: '미래 확장/이동', href: '/modular#flexible-commercial' },
     ],
   },
   {
@@ -39,8 +39,11 @@ const navigationKo = [
     href: '/bespoke',
     width: 100,
     submenu: [
-      { name: 'BESPOKE 란?', href: '/bespoke#what-is-bespoke' },
-      { name: '제안 예시', href: '/bespoke#examples' },
+      { name: '상업 공간 맞춤 솔루션', href: '/bespoke#what-is-bespoke' },
+      { name: '카페/매장', href: '/bespoke#small-cafe' },
+      { name: '팝업/쇼룸', href: '/bespoke#popup-store' },
+      { name: '숙박/워크스페이스', href: '/bespoke#accommodation' },
+      { name: '스마트팜/랩', href: '/bespoke#smart-farm' },
     ],
   },
   {
@@ -54,10 +57,11 @@ const navigationKo = [
     href: '/solution',
     width: 155,
     submenu: [
-      { name: '시큐리티', href: '/solution/cctv' },
-      { name: '네트워크', href: '/solution/network' },
-      { name: 'IoT', href: '/solution/iot' },
-      { name: '디자인', href: '/solution/design' },
+      { name: '운영 솔루션', href: '/solution' },
+      { name: '보안', href: '/solution/cctv' },
+      { name: '통신망', href: '/solution/network' },
+      { name: '원격 제어', href: '/solution/iot' },
+      { name: '브랜드/현장 디자인', href: '/solution/design' },
     ],
   },
   {
@@ -92,10 +96,10 @@ const navigationEn = [
     width: 145,
     submenu: [
       { name: 'What is Modular?', href: '/modular#what-is-modular' },
-      { name: 'Modular Types', href: '/modular#modular-types' },
-      { name: 'Prefabrication', href: '/modular#prefabrication' },
-      { name: 'OSC', href: '/modular#osc' },
-      { name: 'Assembly', href: '/modular#assembly' },
+      { name: 'Factory Precision', href: '/modular#factory-precision' },
+      { name: 'Transport & Install', href: '/modular#transport-install' },
+      { name: 'Living Comfort', href: '/modular#interior-comfort' },
+      { name: 'Future Expansion', href: '/modular#flexible-commercial' },
     ],
   },
   {
@@ -115,8 +119,11 @@ const navigationEn = [
     href: '/bespoke',
     width: 100,
     submenu: [
-      { name: 'What is BESPOKE?', href: '/bespoke#what-is-bespoke' },
-      { name: 'Examples', href: '/bespoke#examples' },
+      { name: 'Commercial Custom Solution', href: '/bespoke#what-is-bespoke' },
+      { name: 'Cafe & Store', href: '/bespoke#small-cafe' },
+      { name: 'Pop-up & Showroom', href: '/bespoke#popup-store' },
+      { name: 'Stay & Workspace', href: '/bespoke#accommodation' },
+      { name: 'Smart Farm & Lab', href: '/bespoke#smart-farm' },
     ],
   },
   {
@@ -130,10 +137,11 @@ const navigationEn = [
     href: '/solution',
     width: 155,
     submenu: [
+      { name: 'Operational Packages', href: '/solution' },
       { name: 'Security', href: '/solution/cctv' },
-      { name: 'Network Solution', href: '/solution/network' },
-      { name: 'Smart Home (IoT)', href: '/solution/iot' },
-      { name: 'Design Consulting', href: '/solution/design' },
+      { name: 'Network', href: '/solution/network' },
+      { name: 'Remote Control', href: '/solution/iot' },
+      { name: 'Brand & Site Fit', href: '/solution/design' },
     ],
   },
   {
@@ -339,7 +347,7 @@ export default function Header() {
             >
               <div className="flex justify-center w-full">
                 <div
-                  className="flex py-6 gap-[60px] pl-[60px] pr-[180px] rounded-b-2xl shadow-sm pointer-events-auto bg-gray-50 border-t border-gray-100"
+                  className="flex py-6 gap-[60px] pl-[60px] pr-[180px] rounded-b-md shadow-sm pointer-events-auto bg-gray-50 border-t border-gray-100"
                   onMouseEnter={() => setShowMegaMenu(true)}
                 >
                   {navigation.map((item) => (

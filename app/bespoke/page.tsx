@@ -27,21 +27,21 @@ const COPY: Record<Lang, {
 }> = {
   KO: {
     headline: 'BESPOKE',
-    lead: "weet의 모듈러 기술력은 '시그니처 라인'의 검증된 품질로 이미 증명되었습니다.",
-    highlight: "'비스포크 서비스'는 세상에 단 하나뿐인 당신의 공간을 짓는 프리미엄 맞춤 솔루션입니다.",
+    lead: "WEET의 상업 공간 맞춤 솔루션은 비즈니스의 시작과 확장을 가속화합니다.",
+    highlight: "빠른 런칭, 유연한 운영, 압도적인 공간 경험을 제공하는 B2B 모듈러 솔루션입니다.",
     features: [
-      { title: '검증된 기술, 특별한 비전', body: '시그니처 라인에서 검증된 모듈러 기술력과 당신의 특별한 비전의 만남.' },
-      { title: '1:1 맞춤 전문가', body: '아이디어 구상부터 완공까지, 전문가가 당신과 함께하며 모든 디테일을 구현합니다.' },
-      { title: '무한한 디자인', body: '부지의 형태, 용도, 스타일에 구애받지 않는 완전한 설계의 자유.' },
-      { title: '최상급 디테일', body: '기본을 넘어, 당신의 기준에 맞는 최상급 자재와 마감 공법을 선택할 수 있습니다.' },
+      { title: '빠른 비즈니스 런칭', body: '사전 제작을 통해 오프라인 공간 구축 기간을 획기적으로 단축하여 비즈니스의 빠른 시작을 돕습니다.' },
+      { title: '유연한 확장과 이동', body: '비즈니스의 성장이나 타겟 지역의 변화에 맞춰 모듈을 추가하거나 통째로 새로운 부지로 이동할 수 있습니다.' },
+      { title: '효율적인 운영 플로우', body: '고객의 동선, 설비의 배치, 공간의 목적 등 상업/업무 시설에 최적화된 설계를 1:1로 제안합니다.' },
+      { title: '인프라 완벽 통합', body: '실무에 필요한 유틸리티, 네트워크, 보안, 그리고 브랜드 디자인을 기획 단계부터 설계에 반영합니다.' },
     ],
     sections: [
       {
         id: 'small-cafe',
         badge: 'COMMERCIAL',
         title: 'SMALL CAFE',
-        quote: '"카페는 커피 맛 이전에,\n\'공간의 경험\'으로 먼저 기억됩니다."',
-        body: "문을 여는 순간 느껴지는 독특한 분위기, 공간을 채우는 빛과 소재의 질감. 위트의 '작업자들'은 당신의 브랜드 스토리를 고객이 오감으로 경험하는 감각적인 공간 언어로 풀어냅니다. 운영 효율과 심미성이 완벽히 공존하는 1:1 맞춤형 상업 공간을 제안합니다.",
+        quote: '"운영의 효율성과 고객의 경험을\n동시에 만족하는 공간"',
+        body: "한정된 대지에서도 회전율을 높이는 바(Bar) 동선 설계, 브랜드 스토리를 담아내는 감각적인 외관 디자인. F&B 비즈니스를 위한 최적화된 설비와 인테리어를 모두 갖춘 채 현장으로 배송됩니다.",
         cta: 'View Portfolio',
         image: { src: '/images/bespoke/small-cafe-v2.webp', alt: 'Small Cafe' },
         imageOnRight: true,
@@ -50,42 +50,52 @@ const COPY: Record<Lang, {
         id: 'popup-store',
         badge: 'RETAIL & EVENT',
         title: 'POP-UP STORE / BRAND SHOWROOM',
-        quote: "'브랜드 경험'을 원하는 곳,\n어디로든 옮기다",
-        body: '단 며칠 만에 고객을 사로잡는 강력한 브랜드 경험. 정해진 장소와 시간에 얽매이지 않고, 원하는 곳 어디든 당신의 브랜드를 펼쳐보세요. 빠른 설치와 철거, 완벽한 브랜딩 구현, 이동성을 충족하는 스마트한 비즈니스 솔루션입니다.',
+        quote: "'브랜드 경험'이 필요한 곳,\n그곳이 어디든 즉시 전개합니다.",
+        body: '단 며칠의 이벤트를 위해 버려지는 가설 건축물이 아닙니다. 정해진 기간 동안 완벽한 브랜딩을 구현하고, 이벤트 종료 후에는 다른 지역으로 신속하게 이동하여 브랜드를 반복적으로 노출하는 스마트한 솔루션입니다.',
         cta: 'View Portfolio',
         image: { src: '/images/bespoke/popup-store-v2.webp', alt: 'Pop-up Store' },
         imageOnRight: false,
       },
       {
+        id: 'accommodation',
+        badge: 'HOSPITALITY & WORKSPACE',
+        title: 'ACCOMMODATION / SITE OFFICE',
+        quote: "어디서든 최고급 객실과\n쾌적한 업무 공간을 누리다",
+        body: '스테이(Stay) 비즈니스를 위한 고급 숙박 시설이나 현장 인력을 위한 프리미엄 워크스페이스가 필요하신가요? 완벽한 단열, 고급스러운 마감, 유틸리티 인프라가 통합된 모듈은 여러 채를 연결하여 대규모 시설로도 빠르게 확장할 수 있습니다.',
+        cta: 'View Portfolio',
+        image: { src: '/images/modular/generated/flexible-commercial.webp', alt: 'Accommodation / Workspace' },
+        imageOnRight: true,
+      },
+      {
         id: 'smart-farm',
-        badge: 'AGRITECH',
+        badge: 'AGRITECH & LAB',
         title: 'SMART FARM',
-        quote: "'데이터'가 '수확'이 되는,\n농업의 미래를 짓다",
-        body: '스마트팜은 단순한 온실이 아닌, 데이터로 농사를 짓는 정밀한 연구소입니다. 완벽한 단열과 기밀성을 갖춘 모듈 구조를 기반으로, 최적화된 환경 제어 모듈러과 데이터 인프라를 통합합니다. 기술이 농업의 한계를 넘어서는 혁신적인 공간을 경험하세요.',
+        quote: "정밀하게 통제되는\n미래형 연구/생산 공간",
+        body: '스마트팜은 외부 환경을 차단하고 내부를 완벽히 통제해야 하는 정밀한 연구소입니다. 최고의 기밀성과 단열성을 가진 모듈 구조 내부에 복잡한 환경 제어 시스템과 네트워크를 통합하여, 가장 안정적인 스마트팜 인프라를 제공합니다.',
         cta: 'View Portfolio',
         image: { src: '/images/bespoke/smart-farm-v2.webp', alt: 'Smart Farm' },
-        imageOnRight: true,
+        imageOnRight: false,
       },
     ],
     overlayClose: '닫기',
   },
   EN: {
     headline: 'BESPOKE',
-    lead: 'Our modular know-how starts from a simple confidence: we can make any space real.',
-    highlight: 'From brand showrooms and pop-up stores to smart farms, we deliver custom solutions for your ideas.',
+    lead: 'WEET\'s commercial custom solutions accelerate the launch and expansion of your business.',
+    highlight: 'A B2B modular solution providing fast launches, flexible operations, and overwhelming spatial experiences.',
     features: [
-      { title: 'Proven tech, tailored design', body: 'We combine modular engineering with spatial expertise to match your purpose.' },
-      { title: '1:1 coordination', body: 'Budget, schedule, and operation scenarios are planned together—every detail is co-created.' },
-      { title: 'Unlimited scalability', body: 'Modules can expand or relocate to adapt as your business evolves.' },
-      { title: 'Premium quality', body: 'Standardized processes and premium finishes ensure a refined final result.' },
+      { title: 'Fast Business Launch', body: 'Prefabrication drastically reduces offline space construction time, helping your business start faster.' },
+      { title: 'Flexible Expansion & Relocation', body: 'Add modules as your brand grows, or relocate the entire structure to a new site as target areas change.' },
+      { title: 'Efficient Operational Flow', body: 'We offer 1:1 designs optimized for commercial/business facilities, focusing on customer circulation and equipment layout.' },
+      { title: 'Perfect Infrastructure Integration', body: 'Utilities, networks, security, and brand design required for operations are integrated into the design from the planning stage.' },
     ],
     sections: [
       {
         id: 'small-cafe',
         badge: 'COMMERCIAL',
         title: 'SMALL CAFE',
-        quote: 'A cozy café with efficient flow, built and ready in a day.',
-        body: 'We design interiors and customer circulation that reflect your brand, creating a rich experience even in compact spaces.',
+        quote: 'A space that satisfies both operational efficiency and customer experience.',
+        body: 'Bar circulation designed to increase turnover even on limited land, and sensory exterior design that contains your brand story. It is delivered to the site fully equipped with optimized facilities and interiors for F&B businesses.',
         cta: 'View portfolio',
         image: { src: '/images/bespoke/small-cafe-v2.webp', alt: 'Small Cafe' },
         imageOnRight: true,
@@ -94,21 +104,31 @@ const COPY: Record<Lang, {
         id: 'popup-store',
         badge: 'RETAIL & EVENT',
         title: 'POP-UP STORE / BRAND SHOWROOM',
-        quote: 'Impactful brand experiences, even on short timelines.',
-        body: 'Designed for fast install, teardown, and relocation. We plan experiential flows with digital content so events launch on time.',
+        quote: 'Wherever a "brand experience" is needed, we deploy it immediately.',
+        body: 'These are not temporary structures discarded after a few days. It is a smart solution that implements perfect branding for a set period and quickly moves to another area after the event to repeatedly expose the brand.',
         cta: 'View portfolio',
         image: { src: '/images/bespoke/popup-store-v2.webp', alt: 'Pop-up Store' },
         imageOnRight: false,
       },
       {
+        id: 'accommodation',
+        badge: 'HOSPITALITY & WORKSPACE',
+        title: 'ACCOMMODATION / SITE OFFICE',
+        quote: "Enjoy luxury rooms and comfortable workspaces anywhere.",
+        body: 'Do you need a luxury accommodation facility for a stay business or a premium workspace for field personnel? Modules with perfect insulation, luxurious finishes, and integrated utility infrastructure can be quickly expanded into large-scale facilities by connecting multiple units.',
+        cta: 'View portfolio',
+        image: { src: '/images/modular/generated/flexible-commercial.webp', alt: 'Accommodation / Workspace' },
+        imageOnRight: true,
+      },
+      {
         id: 'smart-farm',
-        badge: 'AGRITECH',
+        badge: 'AGRITECH & LAB',
         title: 'SMART FARM',
-        quote: 'Build agricultural facilities quickly with intelligent control and modular structure.',
-        body: 'Optimized insulation and MEP layout within modular envelopes, paired with sensors and control systems for stable growing environments.',
+        quote: 'A precisely controlled futuristic research/production space.',
+        body: 'A smart farm is a precise laboratory that must block external environments and perfectly control the interior. By integrating complex environmental control systems and networks within a modular structure with the highest airtightness and insulation, we provide the most stable smart farm infrastructure.',
         cta: 'View portfolio',
         image: { src: '/images/bespoke/smart-farm-v2.webp', alt: 'Smart Farm' },
-        imageOnRight: true,
+        imageOnRight: false,
       },
     ],
     overlayClose: 'Close',
@@ -118,6 +138,7 @@ const COPY: Record<Lang, {
 const IMAGES = [
   { id: 'small-cafe', src: '/images/bespoke/small-cafe-v2.webp', alt: 'Small Cafe' },
   { id: 'popup-store', src: '/images/bespoke/popup-store-v2.webp', alt: 'Pop-up Store' },
+  { id: 'accommodation', src: '/images/modular/generated/flexible-commercial.webp', alt: 'Accommodation' },
   { id: 'smart-farm', src: '/images/bespoke/smart-farm-v2.webp', alt: 'Smart Farm' },
 ];
 
@@ -135,7 +156,7 @@ export default function BespokePage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <h1 className="text-[40px] md:text-[60px] lg:text-[80px] font-black mb-8 md:mb-12 leading-tight tracking-tight text-gray-900">
+            <h1 className="text-[40px] md:text-[60px] lg:text-[80px] font-black mb-8 md:mb-12 leading-tight text-gray-900">
               {copy.headline}
             </h1>
 
@@ -156,7 +177,7 @@ export default function BespokePage() {
                     initial={{ opacity: 0, x: 20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.15 * idx, duration: 0.6 }}
-                    className="border-l-2 border-gray-300 pl-6 hover:border-primary transition-colors"
+                    className="border-l-2 border-gray-300 pl-6 hover:border-[#FEBD16] transition-colors"
                   >
                     <strong className="block text-black text-lg mb-1">{feature.title}</strong>
                     {feature.body}
@@ -172,7 +193,7 @@ export default function BespokePage() {
         const imageBlock = (
           <motion.div
             key={`${section.id}-image`}
-            className="relative h-[400px] md:h-[600px] w-full cursor-pointer"
+            className="relative h-[400px] md:h-[600px] w-full cursor-pointer overflow-hidden rounded-md border border-gray-100 bg-gray-100"
             onClick={() => setSelectedId(section.id)}
           >
             <Image
@@ -180,35 +201,31 @@ export default function BespokePage() {
               alt={section.image.alt}
               fill
               sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover rounded-lg shadow-2xl hover:scale-105 transition-transform duration-500"
+              className="object-cover transition-transform duration-500 hover:scale-[1.02]"
             />
           </motion.div>
         );
 
         const textBlock = (
-          <motion.div
+          <div
             key={`${section.id}-text`}
-            className="w-full lg:w-1/2"
-            initial={{ opacity: 0, x: section.imageOnRight ? -50 : 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            className={`w-full lg:w-1/2 ${section.imageOnRight ? '' : 'order-1 lg:order-2'}`}
           >
-            <span className="text-gray-500 font-bold tracking-widest text-sm mb-4 block">{section.badge}</span>
+            <span className="text-gray-500 font-bold text-sm mb-4 block">{section.badge}</span>
             <h2 className="text-[32px] md:text-[50px] lg:text-[60px] font-black mb-6 leading-tight text-gray-900">{section.title}</h2>
-            <p className="text-[18px] md:text-[24px] font-bold mb-6 text-gray-800 break-keep">
+            <p className="text-[18px] md:text-[24px] font-bold mb-6 text-gray-800 break-keep whitespace-pre-line">
               {section.quote}
             </p>
             <p className="text-gray-600 leading-relaxed text-base md:text-lg break-keep">
               {section.body}
             </p>
-          </motion.div>
+          </div>
         );
 
         return (
           <section
             key={section.id}
-            id={section.id === 'popup-store' ? 'examples' : undefined}
+            id={section.id}
             className={`${section.imageOnRight ? 'bg-white' : 'bg-gray-50'} py-20 md:py-32 overflow-hidden scroll-mt-[180px]`}
           >
             <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
@@ -222,7 +239,7 @@ export default function BespokePage() {
                   </>
                 ) : (
                   <>
-                    <div className="w-full lg:w-1/2">
+                    <div className="order-2 w-full lg:order-1 lg:w-1/2">
                       {imageBlock}
                     </div>
                     {textBlock}
@@ -259,7 +276,7 @@ export default function BespokePage() {
                 />
               )}
               <button
-                className="absolute -top-12 right-0 text-white hover:text-primary transition-colors"
+                className="absolute -top-12 right-0 text-white hover:text-[#FEBD16] transition-colors"
                 onClick={() => setSelectedId(null)}
               >
                 <X className="w-8 h-8" />

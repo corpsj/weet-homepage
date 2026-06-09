@@ -43,6 +43,17 @@ This file tracks bugs and improvements discovered during the recursive improveme
 - [ ] 공개 홈페이지: `/support`에도 부지 가능성 자가진단을 독립 콘텐츠 또는 다운로드 체크리스트로 확장해야 함.
 - [ ] 공개 홈페이지: B2B/다량 구매/기관 상담 경로와 상담 폼 필드(수량, 납기, 목적, 부지 상태)를 추가해야 함.
 - [ ] 공개 홈페이지: ChatGPT 이미지 생성 또는 실제 촬영 기반으로 hero/product/interior/transport/install proof visual을 업그레이드해야 함.
+- [x] 공개 홈페이지: `/modular`를 새 GPT 생성 이미지 기반으로 완전 리뉴얼하고 공장 제작, 운송/설치, 실내 쾌적성, 확장/이동성을 고객 관점으로 재구성함.
+  - *Fix Details*: Chrome/ChatGPT `최신 • 5.5` Thinking `확장` 이미지 모드로 `modular-hero`, `factory-precision`, `transport-install`, `interior-comfort`, `flexible-commercial`을 각각 생성하고 `/modular`에 적용함.
+- [x] 공개 홈페이지: `/bespoke`를 상업 공간 맞춤 솔루션으로 재포지셔닝함.
+  - *Fix Details*: 카페/매장, 팝업/쇼룸, 숙박/워크스페이스, 스마트팜/랩 케이스로 구성하고, 모바일에서는 설명이 이미지보다 먼저 읽히도록 순서를 조정함.
+- [x] 공개 홈페이지: `/solution`을 고객 관점의 운영 패키지 페이지로 재구성함.
+  - *Fix Details*: 기존 기술 카드식 구성을 없애고 `해결하는 문제`, `도입 환경`, `패키지 구성`, `추천 시점` 기반의 행형 운영 솔루션 UI로 변경함.
+- [x] 공개 홈페이지: `/bespoke` full-page visual QA에서 below-the-fold 텍스트가 hidden animation 때문에 사라지는 문제를 수정함.
+  - *Fix Details*: 섹션 텍스트의 `whileInView` opacity/side-slide 초기 상태를 제거하고 직접 렌더링되도록 변경함.
+- [ ] 공개 홈페이지: `/bespoke`의 기존 cafe/popup/smart-farm 이미지를 새 GPT 5.5 Thinking 확장 이미지 생성으로 재통일하는 후속 작업이 필요함.
+- [ ] 공개 홈페이지: `/solution/cctv`, `/solution/network`, `/solution/iot`, `/solution/design` 상세 페이지를 새 `/solution` 운영 패키지 프레이밍과 같은 정보 구조로 리뉴얼해야 함.
+- [ ] 공개 홈페이지: `/modular`에 공장 QC 체크포인트, 예상 제작/설치 리드타임, 운송 가능 조건, 크레인/도로 조건을 더 구체적인 수치로 추가하면 구매 신뢰가 더 올라감.
 - [x] 관리자 페이지: 현재 리디자인은 shell/dashboard 중심이며, `products`, `projects`, `inquiries`, `insights`, `gallery`, `UTM`, `CMS` 하위 화면에는 기존 `rounded-xl/2xl/3xl`, `tracking-tight`, old SaaS card tone이 남아 있음.
   - *Fix Details*: 2026-06-07 두 번째 Antigravity handoff와 Codex 보정으로 `UTM`, `CMS`, `gallery`, `inquiries`, project/gallery/product edit-new forms, support editor, product modal, insights cleanup을 같은 console system으로 전환함.
 - [x] 관리자 페이지: `products`, `projects`, `consultations`, `insights`는 1차 console tone으로 전환됐으나 `UTM`, `CMS`, `gallery`, `inquiries`, edit/new forms, modal 계층에는 기존 `rounded-xl/2xl/3xl`, old SaaS card tone이 여전히 남아 있음.

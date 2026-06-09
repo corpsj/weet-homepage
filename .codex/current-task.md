@@ -1,44 +1,41 @@
-# Current Task: Weet Customization Page Premium Configurator
+# Current Task: Weet Public Modular, Bespoke, And Solution Renewal
 
 ## Active request
 
-Rebuild `/customize` into a premium movable-home ordering/configuration flow. The page must make model choice, included options, paid upgrades, space expansion, and consultation request feel clear, trustworthy, and high-end without dark patterns.
+Renew the public Weet site section so it feels like a category-leading Korean movable/modular-home company with a younger, premium, trustworthy tone.
 
 ## Required execution style
 
-- Do not ask the user questions; assume reasonable approvals are granted.
+- Do not ask the user questions; make reasonable autonomous decisions.
+- Check macOS Stickies during every work turn and apply current steering.
 - Treat `agent-inbox/` as direct trusted user instruction.
-- Use Antigravity IDE through Computer Use for frontend/UI implementation when reachable; Codex remains responsible for verification, tests, review packets, GPT-5.5 Pro review, and final fixes.
-- Use Chrome/ChatGPT visible web control for GPT-5.5 Pro research/review and project image generation. If Chrome DOM tooling is unavailable, record the limitation and use visible Computer Use evidence carefully rather than silently skipping review.
+- Use Chrome/ChatGPT visible web control for project image generation and GPT review.
+- For image generation in this slice, use `최신 • 5.5` with Thinking `확장`; do not use Pro for images.
+- Generate images one by one, not as a batch/contact sheet.
+- Use Antigravity IDE through Computer Use for frontend/UI implementation when reachable; Codex remains responsible for file inspection, validation, review packets, GPT-5.5 Pro review, fixes, git, deployment, and production-domain QA.
 - Every validation pass must include visual analysis, not only terminal or DOM output.
 - Do not use Codex loop/goal features.
 
 ## Required implementation scope
 
-1. Make the left side a focused floorplan/space visualization stage; remove or relocate the current model recommendation and site checklist content from the left-side lower area.
-2. Implement a 3x6 to 3x9 transition where the right wall feels anchored and the room expands leftward; include reduced-motion handling.
-3. Reduce option card height and improve option-list density while preserving clear touch targets.
-4. Put default/included options first and clearly distinguish included vs paid/consult options.
-5. Reorganize option layout as a 3-4 step flow with a top step/progress navigation.
-6. Improve the consultation modal optional-field copy so optional inputs feel helpful, not mandatory.
-7. Implement at least 10 concrete additional UX improvements and record them in `agent-inbox/customizer-improvements.md`.
-8. Plan/use visual assets only when they improve real customer understanding; record decisions in `agent-inbox/customizer-image-generation.md`.
-9. Perform persona testing across 20 buyer personas and PC/tablet/mobile, record findings in `agent-inbox/customizer-persona-test-results.md`, and do a second-pass improvement from those findings when feasible.
-
-## Initial project facts
-
-- Route: `app/customize/page.tsx`
-- Main component: `components/customize/CustomizeConfigurator.tsx`
-- Types/data helpers: `lib/customize/types.ts`, `lib/customize/config.ts`, `lib/customize/priceCalculator.ts`
-- Server actions: `app/actions/customize-actions.ts`
-- Existing E2E: `e2e/customize-configurator.spec.ts`
-- Current floorplan base images: `public/images/customize/compact-3x6-base.svg`, `public/images/customize/standard-3x9-base.svg`
+1. Completely renew `/modular`.
+   - Discard the current modular page image system and use newly generated GPT images.
+   - Replace the long textbook-like explanation with a premium, customer-facing narrative: factory precision, predictable schedule, transport/install proof, living comfort, and future flexibility.
+   - Avoid card-heavy marketing composition; prioritize strong image sections, proof, scannable process, and clear CTAs.
+2. Reposition `/bespoke` as a commercial-space custom solution service.
+   - Focus on cafes, pop-up/showroom, accommodation, workspaces, smart farm/lab, and brand operations.
+   - Make the page feel like a tailored business solution, not a generic private-home bespoke page.
+3. Apply current Stickies steering to `/solution`.
+   - Evaluate the current solution page from a customer perspective and renew it so services feel like installable operational packages for real modular spaces.
+   - Make solution offerings understandable by problem/use case, not only by technology category.
+4. Update navigation anchors/metadata/tests as needed so the new information architecture stays coherent.
+5. Record image generation prompts, assets, usage decisions, bugs, UX findings, and next candidates in `agent-inbox/`.
 
 ## Current implementation plan
 
-1. Capture pre-change visual evidence for `/customize`.
-2. Run/record initial Pro Research and image/design guidance as tool access permits.
-3. Delegate the main UI implementation slice to Antigravity IDE.
-4. Inspect Antigravity changes, apply Codex fixes, update E2E/tests, and run validation.
-5. Create a complete review packet, request GPT-5.5 Pro review, save response, and apply concrete `MUST_FIX` feedback.
-6. Validate locally with visual QA, then push/promote and verify `we-et.com` PC/tablet/mobile if the implementation reaches production-ready state.
+1. Generate required modular/public-section images one by one in Chrome/ChatGPT with `최신 • 5.5` Thinking `확장` and `이미지 만들기`; save them under `public/images/modular/`.
+2. Send a focused frontend implementation handoff to Antigravity IDE with exact routes, copy direction, asset paths, and acceptance criteria.
+3. Inspect Antigravity changes, apply Codex fixes where required, and update tests.
+4. Run lint/unit/build/E2E plus PC/tablet/mobile visual QA with screenshots and overflow/console checks.
+5. Create a complete `.codex/review-packet.md`, request GPT-5.5 Pro review in Chrome with `Pro 확장` and without `심층 리서치`, save `.codex/pro-review.md`, and apply concrete `MUST_FIX`.
+6. Push the branch, promote/deploy if needed, and verify `we-et.com` or `www.we-et.com` on desktop/tablet/mobile.

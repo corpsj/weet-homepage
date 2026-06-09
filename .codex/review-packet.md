@@ -1,624 +1,406 @@
-# Review Packet: Weet /customize implementation review
-Marker: WEET_CUSTOMIZER_REVIEW_02_IMPLEMENTATION_RETRY_20260607
+# GPT-5.5 Pro Review Packet
 
-## Active task brief
-Rebuild /customize into a premium step-based movable-home configurator: focused floorplan stage, right-wall anchored 3x6→3x9 expansion, compact/default-first options, clear included/paid/consult pricing, helpful consultation request copy, visual QA, and GPT Pro review loop.
+Marker: `WEET_REVIEW_20260609_PUBLIC_RENEWAL_01`
 
-## Current progress/state
-- Antigravity implemented first UI slice; Codex refined and validated.
-- GPT-5.5 Pro Research 01 saved; concrete MUST_FIX feedback applied where in scope.
-- Required audit docs created in agent-inbox/.
-- Review 02 first send produced an empty assistant turn; retrying inline with a smaller packet.
+## Active Task Brief
 
-## Project snapshot
-Route: app/customize/page.tsx. Main component: components/customize/CustomizeConfigurator.tsx. Helpers: lib/customize/priceCalculator.ts/types.ts/config.ts. E2E: e2e/customize-configurator.spec.ts. Assets: public/images/customize/*base.svg.
+Renew Weet public `/modular`, `/bespoke`, and `/solution` so the site feels like a category-leading Korean movable/modular-home company with a younger, premium, trustworthy tone.
 
-## Git status
+Latest user steering:
+
+- `/bespoke` should become a commercial-space custom solution service.
+- `/modular` should be completely renewed; old modular images should be discarded and new images generated through ChatGPT image creation.
+- Image generation for this slice used non-Pro `최신 • 5.5` with Thinking `확장`, visible in Chrome/ChatGPT, one image per run.
+- Stickies must be checked every work turn. Current Stickies note says: "현재의 솔루션페이지에 대해서 냉정하게 평가하고 고객의 입장에서 다시 리뉴얼해."
+
+## Current Progress / State
+
+- Images were generated through Chrome/ChatGPT visible web control and logged in `agent-inbox/modular-public-renewal-assets.md`.
+- Antigravity IDE was controlled through Computer Use for the frontend implementation slice, then Codex accepted intended changes and performed fixes/validation.
+- Codex fixed follow-up visual/design issues discovered during local QA:
+  - Removed `tracking-*`, bounce scroll hint, low-contrast white-on-yellow CTA text, and over-decorated Bespoke image styling.
+  - Rebuilt `/solution` away from nested cards into operation rows.
+  - Removed `/bespoke` below-the-fold hidden side-slide animation after full-page visual QA showed missing/shifted text.
+  - Set reversed `/bespoke` sections to show text first on mobile.
+- Local validation is complete. GPT-5.5 Pro review is pending.
+
+## Project Snapshot
+
+- Framework: Next.js App Router, React 19, Tailwind, TypeScript.
+- Public routes touched:
+  - `app/modular/page.tsx`
+  - `app/bespoke/page.tsx`
+  - `app/solution/page.tsx`
+- Shared public nav touched:
+  - `components/layout/Header.tsx`
+- Tests touched:
+  - `e2e/public-pages.spec.ts`
+- New generated modular assets:
+  - `public/images/modular/generated/modular-hero.webp`
+  - `public/images/modular/generated/factory-precision.webp`
+  - `public/images/modular/generated/transport-install.webp`
+  - `public/images/modular/generated/interior-comfort.webp`
+  - `public/images/modular/generated/flexible-commercial.webp`
+- Visual QA evidence:
+  - `.codex/qa/public-renewal-20260609/summary.json`
+  - `.codex/qa/public-renewal-20260609/*.png`
+
+## Git Status
+
 ```text
-M .codex/current-task.md
- M .codex/pro-review.md
- M .codex/review-packet.md
+## zoo/customize-configurator...origin/zoo/customize-configurator
+ M .codex/current-task.md
  M .codex/state.md
- M components/customize/CustomizeConfigurator.tsx
- M e2e/customize-configurator.spec.ts
- M public/images/customize/compact-3x6-base.svg
-?? .codex/pro-review-customizer-01-structure.md
-?? .codex/qa/chatgpt-research-01-report-view.png
-?? .codex/qa/chatgpt-research-01-status.png
-?? .codex/qa/chatgpt-review-02-status.png
-?? .codex/qa/customizer-baseline-20260607/
-?? .codex/qa/customizer-implementation-20260607-anchored/
-?? .codex/qa/customizer-implementation-20260607-profix/
-?? .codex/qa/customizer-implementation-20260607/
-?? agent-inbox/customizer-image-generation.md
-?? agent-inbox/customizer-improvements.md
-?? agent-inbox/customizer-persona-test-results.md
-?? agent-inbox/customizer-reference-research.md
+ M agent-inbox/findings-public-simulation.md
+ M agent-inbox/implementation-backlog.md
+ M app/bespoke/layout.tsx
+ M app/bespoke/page.tsx
+ M app/modular/layout.tsx
+ M app/modular/page.tsx
+ M app/solution/layout.tsx
+ M app/solution/page.tsx
+ M components/layout/Header.tsx
+ M e2e/public-pages.spec.ts
+?? .codex/qa/public-renewal-20260609/
+?? agent-inbox/generated-ui-reference-public-modular-renewal.png
+?? agent-inbox/modular-public-renewal-assets.md
+?? public/images/modular/generated/
 ```
 
-## Changed files
+## Diff Stat
+
 ```text
-.codex/current-task.md                         |   61 +-
- .codex/pro-review.md                           |   87 +-
- .codex/review-packet.md                        | 4407 +++++-------------------
- .codex/state.md                                |  311 +-
- components/customize/CustomizeConfigurator.tsx |  535 ++-
- e2e/customize-configurator.spec.ts             |   88 +-
- public/images/customize/compact-3x6-base.svg   |   96 +-
- 7 files changed, 1581 insertions(+), 4004 deletions(-)
+ .codex/current-task.md                    |  55 ++--
+ .codex/state.md                           | 125 ++++-----
+ agent-inbox/findings-public-simulation.md |  22 ++
+ agent-inbox/implementation-backlog.md     |  11 +
+ app/bespoke/layout.tsx                    |   8 +-
+ app/bespoke/page.tsx                      | 105 ++++----
+ app/modular/layout.tsx                    |   8 +-
+ app/modular/page.tsx                      | 406 ++++++++++++++----------------
+ app/solution/layout.tsx                   |   8 +-
+ app/solution/page.tsx                     | 279 +++++++++++++-------
+ components/layout/Header.tsx              |  50 ++--
+ e2e/public-pages.spec.ts                  |  30 ++-
 ```
 
-## Git diff (focused implementation excerpt)
-```diff
-diff --git a/components/customize/CustomizeConfigurator.tsx b/components/customize/CustomizeConfigurator.tsx
-index a1de580..93aea29 100644
---- a/components/customize/CustomizeConfigurator.tsx
-+++ b/components/customize/CustomizeConfigurator.tsx
-@@ -9 +8,0 @@ import {
--  Bath,
-@@ -12 +10,0 @@ import {
--  DoorOpen,
-@@ -18 +15,0 @@ import {
--  PanelTop,
-@@ -21 +17,0 @@ import {
--  Waves,
-@@ -24,0 +21 @@ import {
-+  ShieldCheck,
-@@ -86,0 +84,19 @@ type FloorplanImageStatus = 'missing' | 'loading' | 'loaded' | 'failed';
-+type ConfigStep = 'space' | 'included' | 'living' | 'summary';
-+const STEPS: { id: ConfigStep; label: string; categories?: string[] }[] = [
-+  { id: 'space', label: '모델 선택', categories: ['model'] },
-+  { id: 'included', label: '공간 구성', categories: ['windows', 'door', 'sink', 'bathroom', 'furniture'] },
-+  { id: 'living', label: '마감·설비 선택', categories: ['exterior', 'interior', 'flooring', 'energy', 'connectivity'] },
-+  { id: 'summary', label: '상담 신청' },
-+];
-+
-+type ConsultationDraft = {
-+  customerName: string;
-+  phone: string;
-+  region: string;
-+  purchaseTimeline: string;
-+  landType: string;
-+  installAddress: string;
-+  budgetRange: string;
-+  memo: string;
-+};
-+
-@@ -98,0 +115,47 @@ function floorplanImagePathForModel(model: CustomizeModel) {
-+function buildSelectionsForModelChange(
-+  catalog: CustomizeCatalog,
-+  currentSelections: SelectedOptions,
-+  nextModelId: string
-+) {
-+  const nextSelections = getDefaultSelections(catalog, nextModelId);
-+  const activeOptions = catalog.options.filter((option) => option.isActive);
-+  const availableOptions = new Map(optionsForModel(activeOptions, nextModelId).map((option) => [option.id, option]));
-+  const allOptions = new Map(activeOptions.map((option) => [option.id, option]));
-+  const categories = new Map(catalog.categories.filter((category) => category.isActive).map((category) => [category.id, category]));
-+  const removedOptions: CustomizeOption[] = [];
-+
-+  for (const [categoryId, optionIds] of Object.entries(currentSelections)) {
-+    const category = categories.get(categoryId);
-+    if (!category) continue;
-+
-+    const preservedIds: string[] = [];
-+    for (const optionId of optionIds) {
-+      const option = availableOptions.get(optionId);
-+      if (option?.categoryId === categoryId) {
-+        preservedIds.push(optionId);
-+      } else {
-+        const removedOption = allOptions.get(optionId);
-+        if (removedOption && !removedOptions.some((item) => item.id === removedOption.id)) {
-+          removedOptions.push(removedOption);
-+        }
-+      }
-+    }
-+
-+    if (preservedIds.length === 0) continue;
-+
-+    if (category.selectionType === 'single') {
-+      nextSelections[categoryId] = [preservedIds[0]];
-+    } else {
-+      nextSelections[categoryId] = Array.from(new Set([...(nextSelections[categoryId] ?? []), ...preservedIds]));
-+    }
-+  }
-+
-+  return { selections: nextSelections, removedOptions };
-+}
-+
-+function estimateExclusionText(consultOptionCount: number) {
-+  return consultOptionCount > 0
-+    ? `상담 후 확정 ${consultOptionCount}개 · 운반/설치 별도`
-+    : '운반/설치 별도';
-+}
-+
-@@ -134,0 +198 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
-+  const [currentStep, setCurrentStep] = useState<ConfigStep>('space');
-@@ -140 +204 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
--  const [form, setForm] = useState({
-+  const [form, setForm] = useState<ConsultationDraft>({
-@@ -175 +239,5 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
--    setSelectedOptions(getDefaultSelections(catalog, nextModelId));
-+    const { selections, removedOptions } = buildSelectionsForModelChange(catalog, selectedOptions, nextModelId);
-+    setSelectedOptions(selections);
-+    if (removedOptions.length > 0) {
-+      toast.info(`새 모델에 맞지 않는 옵션 ${removedOptions.length}개를 제외했습니다.`);
-+    }
-@@ -264,3 +332 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
--          <div className="border-t border-[#d8d0c3] bg-[#fbfaf7] px-4 py-12 md:px-8 lg:px-10">
--            <ConversionConfidenceSection catalog={catalog} />
--          </div>
-+
-@@ -277,0 +344,2 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
-+            currentStep={currentStep}
-+            setCurrentStep={setCurrentStep}
-@@ -287 +355,3 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
--            <p className="text-xs text-[#8b8172]">운반·설치 별도</p>
-+            <p className="text-xs text-[#8b8172]">
-+              {estimate ? estimateExclusionText(estimate.consultOptionCount) : '운반/설치 별도'}
-+            </p>
-@@ -290 +360 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
--            주문하기
-+            상담 요청
-@@ -308,0 +379,2 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
-+              currentStep={currentStep}
-+              setCurrentStep={setCurrentStep}
-@@ -353 +425 @@ function ConfiguratorAppBar() {
--        <p className="text-sm font-black text-[#2f3432]">주문하기</p>
-+        <p className="text-sm font-black text-[#2f3432]">위트 맞춤제작</p>
-@@ -370,0 +443,2 @@ function OptionsPanel({
-+  currentStep,
-+  setCurrentStep,
-@@ -379,0 +454,2 @@ function OptionsPanel({
-+  currentStep: ConfigStep;
-+  setCurrentStep: (step: ConfigStep) => void;
-@@ -381,0 +458,18 @@ function OptionsPanel({
-+  const currentStepData = STEPS.find((s) => s.id === currentStep)!;
-+  const stepIndex = STEPS.findIndex((s) => s.id === currentStep);
-+  const stepCounts: Record<ConfigStep, number> = {
-+    space: 1,
-+    included: 0,
-+    living: 0,
-+    summary: 0,
-+  };
-+
-+  const optionsList = Object.values(selectedOptions).flat();
-+  visibleOptions.forEach((opt) => {
-+    if (optionsList.includes(opt.id)) {
-+      const catKey = catalog.categories.find((category) => category.id === opt.categoryId)?.key;
-+      if (STEPS[1].categories?.includes(catKey || '')) stepCounts.included++;
-+      if (STEPS[2].categories?.includes(catKey || '')) stepCounts.living++;
-+    }
-+  });
-+
-@@ -383,4 +477,36 @@ function OptionsPanel({
--    <div className={cn('pb-28', compact ? 'px-4 py-4' : 'h-[calc(100dvh-64px)] overflow-y-auto px-8 py-8')}>
--      <div className="mb-8">
--        <h2 className="text-xl font-black text-[#2f3432]">이동식주택 구성</h2>
--        <p className="mt-1 text-sm text-[#756d61]">선택한 구성은 상담 요청 시 그대로 저장됩니다.</p>
-+    <div className={cn('flex h-full flex-col pb-28', compact ? '' : 'h-[calc(100dvh-64px)] overflow-hidden')}>
-+      <div className="sticky top-0 z-10 border-b border-[#d8d0c3] bg-[#fbfaf7]/95 px-4 pb-2 pt-4 backdrop-blur md:px-8">
-+        <div className="mb-2 flex items-center justify-between">
-+          <h2 className="text-xl font-black text-[#2f3432]">이동식주택 구성</h2>
-+          <span className="text-xs font-bold text-[#8a806f]">{stepIndex + 1} / {STEPS.length} 단계</span>
-+        </div>
-+        <div className="flex w-full gap-1 rounded-lg bg-[#efe6d4] p-1">
-+          {STEPS.map((step, index) => {
-+            const isCurrent = currentStep === step.id;
-+            const isComplete = index < stepIndex;
-+
-+            return (
-+              <button
-+                key={step.id}
-+                type="button"
-+                data-testid={`customize-step-${step.id}`}
-+                aria-current={isCurrent ? 'step' : undefined}
-+                data-state={isCurrent ? 'current' : isComplete ? 'complete' : 'upcoming'}
-+                onClick={() => setCurrentStep(step.id)}
-+                className={cn(
-+                  'relative flex min-h-9 flex-1 items-center justify-center rounded-md px-1 py-2 text-xs font-bold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26]',
-+                  isCurrent && 'bg-[#fbfaf7] text-[#2f3432] shadow-sm',
-+                  !isCurrent && isComplete && 'bg-[#e6dcc9] text-[#4f473d]',
-+                  !isCurrent && !isComplete && 'text-[#8a806f] hover:text-[#2f3432]'
-+                )}
-+              >
-+                {step.label}
-+                {stepCounts[step.id] > 0 && step.id !== 'space' && step.id !== 'summary' && (
-+                  <span aria-hidden="true" className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#b88b26] px-1 text-[9px] text-white">
-+                    {stepCounts[step.id]}
-+                  </span>
-+                )}
-+              </button>
-+            );
-+          })}
-+        </div>
-@@ -389,19 +515,44 @@ function OptionsPanel({
--      <section className="mb-8">
--        <CategoryHeading title="모델" amount={0} icon={<Layers className="h-4 w-4" />} />
--        <div className="mt-3 grid gap-3">
--          {catalog.models.map((model) => (
--            <button
--              key={model.id}
--              type="button"
--              onClick={() => onModelChange(model.id)}
--              className={cn(
--                'min-h-[96px] rounded-lg border p-4
-... [truncated; command noted]
-```
+## Relevant File Excerpts
 
-## Key excerpts
+### `app/modular/page.tsx`
 
-### Step constants + selection preservation
+Purpose: fully renewed modular architecture page using generated images and customer-facing process narrative.
+
 ```tsx
-'standard-3x9': '/images/customize/standard-3x9-base.svg',
-};
-type FloorplanImageStatus = 'missing' | 'loading' | 'loaded' | 'failed';
-
-type ConfigStep = 'space' | 'included' | 'living' | 'summary';
-const STEPS: { id: ConfigStep; label: string; categories?: string[] }[] = [
-  { id: 'space', label: '모델 선택', categories: ['model'] },
-  { id: 'included', label: '공간 구성', categories: ['windows', 'door', 'sink', 'bathroom', 'furniture'] },
-  { id: 'living', label: '마감·설비 선택', categories: ['exterior', 'interior', 'flooring', 'energy', 'connectivity'] },
-  { id: 'summary', label: '상담 신청' },
-];
-
-type ConsultationDraft = {
-  customerName: string;
-  phone: string;
-  region: string;
-  purchaseTimeline: string;
-  landType: string;
-  installAddress: string;
-  budgetRange: string;
-  memo: string;
+const COPY = {
+  KO: {
+    hero: {
+      title: '불확실성을 지운 프리미엄 공간',
+      lead: 'WEET의 모듈러 건축은 예측 가능합니다. 완벽하게 통제된 공장에서 완성되어, 약속된 일정에 당신의 대지 위로 배송됩니다.',
+      scrollHint: '제작부터 설치까지의 여정'
+    },
+    intro: {
+      title: '건축의 새로운 기준',
+      paragraphs: [
+        '기존의 현장 건축은 날씨와 작업자의 숙련도, 그리고 수많은 변수에 의존해야 했습니다. WEET는 이 모든 불확실성을 기술로 통제합니다.',
+        '모든 공간은 오차 없는 공장 환경에서 정밀하게 사전 제작됩니다. 우리는 현장의 소음과 분진을 최소화하고, 가장 진보된 방식으로 당신의 공간을 현실로 만듭니다.'
+      ]
+    },
+    processes: [
+      {
+        id: 'factory-precision',
+        step: '01 / 공장 제작',
+        title: 'mm 단위의 정밀한 엔지니어링',
+        image: '/images/modular/generated/factory-precision.webp',
+      },
+      {
+        id: 'transport-install',
+        step: '02 / 운송 및 크레인 조립',
+        title: '하루 만에 완성되는 적층의 미학',
+        image: '/images/modular/generated/transport-install.webp',
+      },
+      {
+        id: 'interior-comfort',
+        step: '03 / 생활과 운영',
+        title: '타협 없는 거주의 쾌적함',
+        image: '/images/modular/generated/interior-comfort.webp',
+      },
+      {
+        id: 'flexible-commercial',
+        step: '04 / 미래 확장과 이동',
+        title: '변화하는 삶에 맞추는 유연성',
+        image: '/images/modular/generated/flexible-commercial.webp',
+      },
+    ],
+  },
 };
 
-const inputClass = 'h-11 rounded-lg border-gray-300 bg-[#fbfaf7] text-sm focus-visible:ring-[#b88b26]';
-const selectClass = 'h-11 w-full rounded-lg border border-gray-300 bg-[#fbfaf7] px-3 text-sm outline-none focus:ring-2 focus:ring-[#b88b26]/30';
-
-function floorplanImagePathForModel(model: CustomizeModel) {
-  const configuredPath = model.floorplanImagePath?.trim();
-  const fallbackPath = MODEL_FALLBACK_FLOORPLANS[model.id];
-
-  if (!configuredPath) return fallbackPath ?? null;
-  if (configuredPath === PLACEHOLDER_FLOORPLAN_PATH) return fallbackPath ?? configuredPath;
-  return configuredPath;
-}
-
-function buildSelectionsForModelChange(
-  catalog: CustomizeCatalog,
-  currentSelections: SelectedOptions,
-  nextModelId: string
-) {
-  const nextSelections = getDefaultSelections(catalog, nextModelId);
-  const activeOptions = catalog.options.filter((option) => option.isActive);
-  const availableOptions = new Map(optionsForModel(activeOptions, nextModelId).map((option) => [option.id, option]));
-  const allOptions = new Map(activeOptions.map((option) => [option.id, option]));
-  const categories = new Map(catalog.categories.filter((category) => category.isActive).map((category) => [category.id, category]));
-  const removedOptions: CustomizeOption[] = [];
-
-  for (const [categoryId, optionIds] of Object.entries(currentSelections)) {
-    const category = categories.get(categoryId);
-    if (!category) continue;
-
-    const preservedIds: string[] = [];
-    for (const optionId of optionIds) {
-      const option = availableOptions.get(optionId);
-      if (option?.categoryId === categoryId) {
-        preservedIds.push(optionId);
-      } else {
-        const removedOption = allOptions.get(optionId);
-        if (removedOption && !removedOptions.some((item) => item.id === removedOption.id)) {
-          removedOptions.push(removedOption);
-        }
-      }
-    }
-
-    if (preservedIds.length === 0) continue;
-
-    if (category.selectionType === 'single') {
-      nextSelections[categoryId] = [preservedIds[0]];
-    } else {
-      nextSelections[categoryId] = Array.from(new Set([...(nextSelections[categoryId] ?? []), ...preservedIds]));
-    }
+<section className="relative h-[90vh] md:h-screen w-full flex flex-col justify-end">
+  <Image
+    src="/images/modular/generated/modular-hero.webp"
+    alt={copy.hero.title}
+    fill
+    sizes="100vw"
+    className="object-cover"
+    priority
+  />
+  <div className="absolute inset-0 bg-black/40" />
+  <h1 className="text-4xl md:text-6xl lg:text-[80px] font-black text-white mb-6 leading-tight max-w-4xl break-keep">
+    {copy.hero.title}
+  </h1>
+</section>
 ```
 
-### Step nav / compact option rows
+### `app/bespoke/page.tsx`
+
+Purpose: reposition Bespoke as a commercial-space solution. Important Codex fix: no hidden side-slide animation on section text; text first on mobile even for alternating desktop sections.
+
 ```tsx
-</Link>
-    </header>
-  );
-}
+const COPY = {
+  KO: {
+    headline: 'BESPOKE',
+    lead: 'WEET의 상업 공간 맞춤 솔루션은 비즈니스의 시작과 확장을 가속화합니다.',
+    highlight: '빠른 런칭, 유연한 운영, 압도적인 공간 경험을 제공하는 B2B 모듈러 솔루션입니다.',
+    features: [
+      { title: '빠른 비즈니스 런칭', body: '사전 제작을 통해 오프라인 공간 구축 기간을 획기적으로 단축하여 비즈니스의 빠른 시작을 돕습니다.' },
+      { title: '유연한 확장과 이동', body: '비즈니스의 성장이나 타겟 지역의 변화에 맞춰 모듈을 추가하거나 통째로 새로운 부지로 이동할 수 있습니다.' },
+      { title: '효율적인 운영 플로우', body: '고객의 동선, 설비의 배치, 공간의 목적 등 상업/업무 시설에 최적화된 설계를 1:1로 제안합니다.' },
+      { title: '인프라 완벽 통합', body: '실무에 필요한 유틸리티, 네트워크, 보안, 그리고 브랜드 디자인을 기획 단계부터 설계에 반영합니다.' },
+    ],
+    sections: [
+      { id: 'small-cafe', title: 'SMALL CAFE', badge: 'COMMERCIAL', image: { src: '/images/bespoke/small-cafe-v2.webp', alt: 'Small Cafe' }, imageOnRight: true },
+      { id: 'popup-store', title: 'POP-UP STORE / BRAND SHOWROOM', badge: 'RETAIL & EVENT', image: { src: '/images/bespoke/popup-store-v2.webp', alt: 'Pop-up Store' }, imageOnRight: false },
+      { id: 'accommodation', title: 'ACCOMMODATION / SITE OFFICE', badge: 'HOSPITALITY & WORKSPACE', image: { src: '/images/modular/generated/flexible-commercial.webp', alt: 'Accommodation / Workspace' }, imageOnRight: true },
+      { id: 'smart-farm', title: 'SMART FARM', badge: 'AGRITECH & LAB', image: { src: '/images/bespoke/smart-farm-v2.webp', alt: 'Smart Farm' }, imageOnRight: false },
+    ],
+  },
+};
 
-function OptionsPanel({
-  catalog,
-  modelId,
-  selectedOptions,
-  visibleOptions,
-  onModelChange,
-  onOptionToggle,
-  onInfo,
-  currentStep,
-  setCurrentStep,
-  compact = false,
-}: {
-  catalog: CustomizeCatalog;
-  modelId: string;
-  selectedOptions: SelectedOptions;
-  visibleOptions: CustomizeOption[];
-  onModelChange: (modelId: string) => void;
-  onOptionToggle: (category: CustomizeCategory, option: CustomizeOption) => void;
-  onInfo: (option: CustomizeOption) => void;
-  currentStep: ConfigStep;
-  setCurrentStep: (step: ConfigStep) => void;
-  compact?: boolean;
-}) {
-  const currentStepData = STEPS.find((s) => s.id === currentStep)!;
-  const stepIndex = STEPS.findIndex((s) => s.id === currentStep);
-  const stepCounts: Record<ConfigStep, number> = {
-    space: 1,
-    included: 0,
-    living: 0,
-    summary: 0,
-  };
-
-  const optionsList = Object.values(selectedOptions).flat();
-  visibleOptions.forEach((opt) => {
-    if (optionsList.includes(opt.id)) {
-      const catKey = catalog.categories.find((category) => category.id === opt.categoryId)?.key;
-      if (STEPS[1].categories?.includes(catKey || '')) stepCounts.included++;
-      if (STEPS[2].categories?.includes(catKey || '')) stepCounts.living++;
-    }
-  });
-
-  return (
-    <div className={cn('flex h-full flex-col pb-28', compact ? '' : 'h-[calc(100dvh-64px)] overflow-hidden')}>
-      <div className="sticky top-0 z-10 border-b border-[#d8d0c3] bg-[#fbfaf7]/95 px-4 pb-2 pt-4 backdrop-blur md:px-8">
-        <div className="mb-2 flex items-center justify-between">
-          <h2 className="text-xl font-black text-[#2f3432]">이동식주택 구성</h2>
-          <span className="text-xs font-bold text-[#8a806f]">{stepIndex + 1} / {STEPS.length} 단계</span>
-        </div>
-        <div className="flex w-full gap-1 rounded-lg bg-[#efe6d4] p-1">
-          {STEPS.map((step, index) => {
-            const isCurrent = currentStep === step.id;
-            const isComplete = index < stepIndex;
-
-            return (
-              <button
-                key={step.id}
-                type="button"
-                data-testid={`customize-step-${step.id}`}
-                aria-current={isCurrent ? 'step' : undefined}
-                data-state={isCurrent ? 'current' : isComplete ? 'complete' : 'upcoming'}
-                onClick={() => setCurrentStep(step.id)}
-                className={cn(
-                  'relative flex min-h-9 flex-1 items-center justify-center rounded-md px-1 py-2 text-xs font-bold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26]',
-                  isCurrent && 'bg-[#fbfaf7] text-[#2f3432] shadow-sm',
-                  !isCurrent && isComplete && 'bg-[#e6dcc9] text-[#4f473d]',
-                  !isCurrent && !isComplete && 'text-[#8a806f] hover:text-[#2f3432]'
-                )}
-              >
-                {step.label}
-                {stepCounts[step.id] > 0 && step.id !== 'space' && step.id !== 'summary' && (
-                  <span aria-hidden="true" className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#b88b26] px-1 text-[9px] text-white">
-                    {stepCounts[step.id]}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      <div className={cn('flex-1 overflow-y-auto', compact ? 'px-4 py-4' : 'px-8 py-6')}>
-        {currentStep === 'space' && (
-          <section className="mb-8">
-            <CategoryHeading title="공간 모델" amount={0} icon={<Layers className="h-4 w-4" />} />
-            <p className="mb-4 mt-1 text-sm text-[#756d61]">설치할 공간의 크기와 목적에 맞는 모델을 선택하세요.</p>
-            <div className="grid gap-3">
-              {catalog.models.map((model) => (
-                <button
-                  key={model.id}
-                  type="button"
-                  onClick={() => onModelChange(model.id)}
-                  className={cn(
-                    'min-h-[96px] rounded-lg border p-4 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26]',
-                    model.id === modelId
-                      ? 'border-[#2f3432] bg-[#efe6d4] shadow-sm'
-                      : 'border-[#ded5c8] bg-[#fbfaf7] hover:border-[#b9aa94]'
-                  )}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <p className="text-base font-black text-[#2f3432]">{model.nameKo}</p>
-                        <span className="rounded-full bg-[#e2dacd] px-2 py-0.5 text-[10px] font-bold text-[#6b5a2b]">
-                          {model.id === 'compact-3x6' ? '소형 주말주택' : '프리미엄 거주'}
-                        </span>
-                      </div>
-                      <p className="mt-1 text-sm text-[#756d61]">{model.widthM}m x {model.lengthM}m · {model.areaSqm}m²</p>
-                    </div>
-
-... [truncated; command noted]
+const textBlock = (
+  <div
+    key={`${section.id}-text`}
+    className={`w-full lg:w-1/2 ${section.imageOnRight ? '' : 'order-1 lg:order-2'}`}
+  >
+    <span className="text-gray-500 font-bold text-sm mb-4 block">{section.badge}</span>
+    <h2 className="text-[32px] md:text-[50px] lg:text-[60px] font-black mb-6 leading-tight text-gray-900">{section.title}</h2>
+    <p className="text-[18px] md:text-[24px] font-bold mb-6 text-gray-800 break-keep whitespace-pre-line">
+      {section.quote}
+    </p>
+    <p className="text-gray-600 leading-relaxed text-base md:text-lg break-keep">
+      {section.body}
+    </p>
+  </div>
+);
 ```
 
-### Floorplan rail / consultation modal
+### `app/solution/page.tsx`
+
+Purpose: rebuild solution page from customer problem/use-case perspective. Avoid nested cards; use divided operational rows.
+
 ```tsx
-onOpenViewer?: () => void;
-}) {
-  return (
-    <div className="w-full max-w-[1100px]">
-      <div className="mb-4 flex items-end justify-between gap-4">
-        <div>
-          <p className="text-sm font-bold text-[#8a806f]">선택 모델</p>
-          <h1 className="text-2xl font-black text-[#2f3432] md:text-3xl">{model.nameKo}</h1>
-        </div>
-        <div className="text-right">
-          <p className="text-sm font-bold text-[#8a806f]">기본가</p>
-          <p className="text-lg font-black text-[#6b5a2b]">{formatModelStartPrice(model.basePrice)}</p>
-        </div>
-      </div>
+const COPY = {
+  KO: {
+    eyebrow: 'OPERATIONAL PACKAGES',
+    title: '공간 운영까지 설계합니다',
+    description: '모듈러 공간은 건물만으로 완성되지 않습니다. 보안, 네트워크, 원격 제어, 브랜드 디테일까지 실제 운영자가 매일 마주치는 문제를 처음부터 함께 설계합니다.',
+    labels: {
+      problem: '해결하는 문제',
+      where: '도입 환경',
+      included: '패키지 구성',
+      when: '추천 시점',
+    },
+    packages: [
+      { id: 'cctv', title: '안전하게 지키기', subtitle: 'Security', href: '/solution/cctv' },
+      { id: 'network', title: '끊김 없이 연결하기', subtitle: 'Network', href: '/solution/network' },
+      { id: 'iot', title: '원격으로 제어하기', subtitle: 'Smart Control', href: '/solution/iot' },
+      { id: 'design', title: '브랜드와 현장에 맞게 완성하기', subtitle: 'Brand Fit', href: '/solution/design' },
+    ],
+  },
+};
 
-      <div className="relative overflow-hidden rounded-lg border border-[#d8d0c3] bg-[#fbfaf7] shadow-sm">
-        {onOpenViewer && (
-          <button
-            type="button"
-            data-testid="floorplan-zoom-open"
-            aria-label="도면 크게 보기"
-            onClick={onOpenViewer}
-            className="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-md border border-[#d8d0c3] bg-[#fbfaf7]/95 text-[#2f3432] shadow-sm backdrop-blur transition-colors hover:border-[#b9aa94] hover:bg-white focus:outline-none focus:ring-2 focus:ring-[#b88b26]/40"
-          >
-            <Maximize2 className="h-4 w-4" />
-          </button>
-        )}
-        <FloorplanCanvas
-          model={model}
-          selectedOptions={selectedOptions}
-          floorplanImagePath={floorplanImagePath}
-          floorplanImageStatus={floorplanImageStatus}
-          testId="floorplan-canvas"
-        />
-      </div>
-    </div>
-  );
-}
-
-function FloorplanCanvas({
-  model,
-  selectedOptions,
-  floorplanImagePath,
-  floorplanImageStatus,
-  testId,
-  className,
-}: {
-  model: CustomizeModel;
-  selectedOptions: CustomizeOption[];
-  floorplanImagePath?: string | null;
-  floorplanImageStatus?: FloorplanImageStatus;
-  testId: string;
-  className?: string;
-}) {
-  const box = floorplanSize(model);
-  const selectedLabels = selectedOptions.filter((option) => option.overlayLabelKo);
-  const resolvedFloorplanImagePath = floorplanImagePath ?? floorplanImagePathForModel(model);
-  const localImageStatus = useFloorplanImageStatus(resolvedFloorplanImagePath);
-  const imageStatus = floorplanImageStatus ?? localImageStatus;
-  const hasBaseImage = imageStatus === 'loaded';
-  const gridId = `${testId}-grid`;
-
-  return (
-    <svg viewBox="0 0 1000 420" className={cn('aspect-[1000/420] w-full', className)} data-testid={testId}>
-      <defs>
-        <pattern id={gridId} width="24" height="24" patternUnits="userSpaceOnUse">
-          <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#e4ddd1" strokeWidth="1" />
-        </pattern>
-      </defs>
-      <rect width="1000" height="420" fill="#f5f1ea" />
-
-      {hasBaseImage ? (
-        <g className="transition-all duration-[600ms] motion-reduce:transition-none">
-          <image
-            data-testid="base-floorplan-image"
-            href={resolvedFloorplanImagePath ?? undefined}
-            x="0"
-            y="0"
-            width="1000"
-            height="420"
-            preserveAspectRatio="xMaxYMid meet"
-          />
-        </g>
-      ) : (
-        <>
-          <rect x={box.x} y={box.y} width={box.width} height={box.height} fill="#f8f4ec" stroke="#2f3432" strokeWidth="12" className="transition-all duration-[600ms] motion-reduce:transition-none" />
-}) {
-  const updateField = (name: keyof typeof form, value: string) => setForm((current) => ({ ...current, [name]: value }));
-
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-black/45 p-4" onClick={onClose}>
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="consultation-title"
-        className="mx-auto my-6 grid w-full max-w-6xl gap-0 overflow-hidden rounded-lg bg-[#fbfaf7] shadow-2xl lg:grid-cols-[1fr_0.9fr]"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className="bg-[#f4f0e8] p-5 md:p-8">
-          <div className="mb-4 flex items-start justify-between gap-4">
-            <div>
-              <p className="text-sm font-bold text-[#8a806f]">선택 평면</p>
-              <h2 className="text-2xl font-black text-[#2f3432]">{estimate.model.nameKo}</h2>
-            </div>
-            <Maximize2 className="h-5 w-5 text-[#8a806f]" />
-          </div>
-          <FloorplanPreview
-            model={estimate.model}
-            selectedOptions={selectedOptions}
-            floorplanImagePath={floorplanImagePath}
-            floorplanImageStatus={floorplanImageStatus}
-          />
-        </div>
-
-        <div className="max-h-[90dvh] overflow-y-auto p-5 md:p-8">
-          <div className="mb-5 flex items-start justify-between gap-4">
-            <div>
-              <h2 id="consultation-title" className="text-2xl font-black text-[#2f3432]">상담 요청</h2>
-              <p className="mt-1 text-sm text-[#756d61]">{estimateExclusionText(estimate.consultOptionCount)}</p>
-            </div>
-            <Button variant="ghost" size="icon-sm" onClick={onClose}>
-              <X className="h-4 w-4" />
-
-... [truncated; command noted]
+<div className="divide-y divide-gray-200">
+  {copy.packages.map((pkg, index) => (
+    <article
+      key={pkg.id}
+      id={`solution-${pkg.id}`}
+      className="group grid gap-8 py-10 scroll-mt-[120px] lg:grid-cols-[240px_1fr_180px] lg:gap-12 lg:py-14"
+    >
+      <h2 className="mt-2 text-2xl font-black leading-tight text-gray-950 md:text-3xl break-keep">
+        {pkg.title}
+      </h2>
+      <h3 className="text-sm font-bold text-gray-500">{copy.labels.problem}</h3>
+      <p className="mt-2 text-lg font-semibold leading-relaxed text-gray-900 break-keep">
+        {pkg.problem}
+      </p>
+      <Link href={pkg.href} className="inline-flex h-12 items-center gap-2 rounded-sm border border-gray-950 px-5 text-sm font-bold text-gray-950 transition-colors hover:bg-gray-950 hover:text-white">
+        {copy.cta}
+      </Link>
+    </article>
+  ))}
+</div>
 ```
 
-## Validation output
-- git diff --check: passed
-- npx tsc --noEmit: passed
-- npm run lint: passed
-- npm test: 3 files / 20 tests passed
-- npx playwright test e2e/customize-configurator.spec.ts: 10 passed
-- npm run build: passed with existing Next.js middleware deprecation warning
+### `components/layout/Header.tsx`
 
-## Visual QA findings
-Latest directory: .codex/qa/customizer-implementation-20260607-profix/
+Purpose: update submenu information architecture.
+
+```tsx
+{
+  name: 'BESPOKE',
+  href: '/bespoke',
+  submenu: [
+    { name: '상업 공간 맞춤 솔루션', href: '/bespoke#what-is-bespoke' },
+    { name: '카페/매장', href: '/bespoke#small-cafe' },
+    { name: '팝업/쇼룸', href: '/bespoke#popup-store' },
+    { name: '숙박/워크스페이스', href: '/bespoke#accommodation' },
+    { name: '스마트팜/랩', href: '/bespoke#smart-farm' },
+  ],
+},
+{
+  name: 'SOLUTION',
+  href: '/solution',
+  submenu: [
+    { name: '운영 솔루션', href: '/solution' },
+    { name: '보안', href: '/solution/cctv' },
+    { name: '통신망', href: '/solution/network' },
+    { name: '원격 제어', href: '/solution/iot' },
+    { name: '브랜드/현장 디자인', href: '/solution/design' },
+  ],
+},
+```
+
+### `e2e/public-pages.spec.ts`
+
+```ts
+test('bespoke public page is repositioned as commercial custom solution', async ({ page }) => {
+  await page.goto('/bespoke');
+  await expect(page.getByRole('heading', { name: 'BESPOKE' })).toBeVisible();
+  await expect(page.getByText('SMALL CAFE')).toBeVisible();
+  await expect(page.getByText('POP-UP STORE / BRAND SHOWROOM')).toBeVisible();
+  await expect(page.getByText('ACCOMMODATION / SITE OFFICE')).toBeVisible();
+  await expect(page.getByText('SMART FARM')).toBeVisible();
+});
+
+test('modular public page shows premium narrative and process', async ({ page }) => {
+  await page.goto('/modular');
+  await expect(page.getByRole('heading', { name: '불확실성을 지운 프리미엄 공간' })).toBeVisible();
+  await expect(page.getByText('01 / 공장 제작')).toBeVisible();
+  await expect(page.getByText('02 / 운송 및 크레인 조립')).toBeVisible();
+  await expect(page.locator('img[src*="modular-hero.webp"]')).toBeAttached();
+});
+
+test('solution public page shows operational packages', async ({ page }) => {
+  await page.goto('/solution');
+  await expect(page.getByRole('heading', { name: '공간 운영까지 설계합니다' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: '안전하게 지키기' })).toBeVisible();
+  await expect(page.getByText('해결하는 문제').first()).toBeVisible();
+});
+```
+
+## Commands Run / Outputs
+
+```text
+git diff --check
+=> passed
+
+npx tsc --noEmit
+=> passed
+
+npm run lint
+=> eslint . --max-warnings=0 passed
+
+npm test
+=> Test Files 3 passed (3), Tests 20 passed (20)
+
+npm run build
+=> Next.js production build passed
+=> Existing warning: "middleware" file convention is deprecated. Please use "proxy" instead.
+
+npx playwright test e2e/public-pages.spec.ts --project=chromium
+=> 14 passed
+```
+
+## Browser / Playwright / Visual Findings
+
+Local dev server: `http://localhost:3000`.
+
+Chrome browser-control evidence:
+
 ```json
 {
-  "desktop": {
-    "h1": "Compact 3x6",
-    "overflowX": false,
-    "stepText": "모델 선택 | 공간 구성4 | 마감·설비 선택3 | 상담 신청",
-    "rail": "6m",
-    "baseImages": 1,
-    "footprints": 0
-  },
-  "tablet": {
-    "h1": "Compact 3x6",
-    "overflowX": false,
-    "stepText": "모델 선택 | 공간 구성4 | 마감·설비 선택3 | 상담 신청",
-    "rail": "6m",
-    "baseImages": 1,
-    "footprints": 0
-  },
-  "mobile": {
-    "h1": "Compact 3x6",
-    "overflowX": false,
-    "stepText": "모델 선택 | 공간 구성4 | 마감·설비 선택3 | 상담 신청",
-    "rail": "6m",
-    "baseImages": 1,
-    "footprints": 0
-  },
-  "errors": []
+  "title": "프리미엄 모듈러 건축 | 위트(weet)",
+  "url": "http://localhost:3000/modular",
+  "headingVisible": true
 }
 ```
-Manual visual inspection: no horizontal overflow; left stage is floorplan-focused; compact and standard share right-wall anchor; length rail visible; step labels fit including 마감·설비 선택 on mobile; option rows compact/touch-safe; consultation modal helper copy readable. Dev-only Next.js indicator overlaps lower-left mobile screenshots but is not production UI.
 
-## Current failures / risks
-No local validation failures. Production-domain validation pending. Full focus trap/keyboard-only modal audit remains follow-up. priceCalculator still returns simple estimate, not structured included/paid/consult arrays. Step grouping is component-level constants. No new AI-generated raster imagery; existing floorplan SVG correction better served customer understanding.
+Playwright visual QA summary:
 
-## Exact review questions
-1. Any concrete MUST_FIX blockers in the implementation diff before release?
-2. Does left-stage focus plus fixed right-wall floorplan alignment satisfy the first-slice requirement?
-3. Is the 4-step grouping acceptable, or must categories change now?
-4. Does included/paid/consult presentation avoid misleading price or dark-pattern concerns despite the simple estimate model?
-5. Does the consultation modal make optional fields feel helpful rather than mandatory?
-6. Any visible/accessibility/mobile defects from QA summary that should be fixed now?
-7. Label feedback only as MUST_FIX or OPTIONAL, then give VERDICT.
+```json
+{
+  "routes": ["/modular", "/bespoke", "/solution"],
+  "viewports": ["desktop 1440x1100", "tablet 834x1112", "mobile 390x844"],
+  "allOverflowX": false,
+  "visibleTextIssues": 0,
+  "consoleErrors": 0,
+  "pageErrors": 0,
+  "smartFarmDirectCheck": {
+    "url": "/bespoke#smart-farm",
+    "imageFound": true,
+    "imageComplete": true,
+    "naturalWidth": 390,
+    "overflowX": false,
+    "consoleErrors": 0
+  }
+}
+```
+
+Visual evidence files:
+
+- `.codex/qa/public-renewal-20260609/desktop-modular.png`
+- `.codex/qa/public-renewal-20260609/tablet-modular.png`
+- `.codex/qa/public-renewal-20260609/mobile-modular.png`
+- `.codex/qa/public-renewal-20260609/desktop-bespoke.png`
+- `.codex/qa/public-renewal-20260609/tablet-bespoke.png`
+- `.codex/qa/public-renewal-20260609/mobile-bespoke.png`
+- `.codex/qa/public-renewal-20260609/desktop-solution.png`
+- `.codex/qa/public-renewal-20260609/tablet-solution.png`
+- `.codex/qa/public-renewal-20260609/mobile-solution.png`
+- `.codex/qa/public-renewal-20260609/mobile-bespoke-smart-farm-viewport.png`
+
+## Current Failures Or Risks
+
+- GPT Pro review has not happened yet.
+- Production deployment and real-domain QA have not happened yet.
+- `/solution` detail pages exist but were not renewed in this slice; the new top-level `/solution` links to them.
+- `/bespoke` still uses older existing cafe/popup/smart-farm images except for accommodation/workspace, which reuses the newly generated modular `flexible-commercial.webp`.
+- Generated images are AI-created, not real project photography. They improve page narrative but should not be misrepresented as completed WEET projects.
+- Next build still emits the existing middleware-to-proxy deprecation warning.
+
+## Exact Review Questions
+
+Please review as GPT-5.5 Pro with a strict product/UX/code lens.
+
+Return exactly this structure:
+
+```text
+MARKER: WEET_REVIEW_20260609_PUBLIC_RENEWAL_01
+VERDICT: PASS | MUST_FIX
+
+MUST_FIX:
+- ...
+
+OPTIONAL:
+- ...
+
+RATIONALE:
+- ...
+```
+
+Focus on concrete blockers only for `MUST_FIX`:
+
+1. Does any changed code create a likely runtime, hydration, accessibility, routing, or responsive-layout bug?
+2. Does `/solution` now satisfy the Stickies direction: cold customer-perspective renewal, not decorative technology cards?
+3. Does `/bespoke` successfully read as commercial-space custom solution rather than generic private-home bespoke?
+4. Does `/modular` avoid unsupported claims or misleading AI-image usage while still presenting a premium modular proof narrative?
+5. Are any labels, anchors, metadata, CTAs, or tests inconsistent with the renewed information architecture?
+6. Are there any concrete mobile/tablet risks that local visual QA may have missed?

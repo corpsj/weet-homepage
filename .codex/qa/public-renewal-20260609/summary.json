@@ -1,0 +1,158 @@
+{
+  "generatedAt": "2026-06-09T08:27:25.899Z",
+  "summary": [
+    {
+      "route": "/modular",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 1100
+      },
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/public-renewal-20260609/desktop-modular.png",
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "hero": "불확실성을 지운 프리미엄 공간",
+      "visibleTextIssues": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/bespoke",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 1100
+      },
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/public-renewal-20260609/desktop-bespoke.png",
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "hero": "BESPOKE",
+      "visibleTextIssues": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/solution",
+      "viewport": {
+        "name": "desktop",
+        "width": 1440,
+        "height": 1100
+      },
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/public-renewal-20260609/desktop-solution.png",
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "hero": "공간 운영까지 설계합니다",
+      "visibleTextIssues": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/modular",
+      "viewport": {
+        "name": "tablet",
+        "width": 834,
+        "height": 1112
+      },
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/public-renewal-20260609/tablet-modular.png",
+      "overflowX": false,
+      "scrollWidth": 834,
+      "clientWidth": 834,
+      "hero": "불확실성을 지운 프리미엄 공간",
+      "visibleTextIssues": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/bespoke",
+      "viewport": {
+        "name": "tablet",
+        "width": 834,
+        "height": 1112
+      },
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/public-renewal-20260609/tablet-bespoke.png",
+      "overflowX": false,
+      "scrollWidth": 834,
+      "clientWidth": 834,
+      "hero": "BESPOKE",
+      "visibleTextIssues": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/solution",
+      "viewport": {
+        "name": "tablet",
+        "width": 834,
+        "height": 1112
+      },
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/public-renewal-20260609/tablet-solution.png",
+      "overflowX": false,
+      "scrollWidth": 834,
+      "clientWidth": 834,
+      "hero": "공간 운영까지 설계합니다",
+      "visibleTextIssues": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/modular",
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/public-renewal-20260609/mobile-modular.png",
+      "overflowX": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "hero": "불확실성을 지운 프리미엄 공간",
+      "visibleTextIssues": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/bespoke",
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/public-renewal-20260609/mobile-bespoke.png",
+      "overflowX": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "hero": "BESPOKE",
+      "visibleTextIssues": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    },
+    {
+      "route": "/solution",
+      "viewport": {
+        "name": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/public-renewal-20260609/mobile-solution.png",
+      "overflowX": false,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "hero": "공간 운영까지 설계합니다",
+      "visibleTextIssues": [],
+      "consoleErrors": [],
+      "pageErrors": []
+    }
+  ],
+  "smartFarm": {
+    "found": true,
+    "complete": true,
+    "naturalWidth": 390,
+    "currentSrc": "http://localhost:3000/_next/image?url=%2Fimages%2Fbespoke%2Fsmart-farm-v2.webp&w=640&q=75",
+    "overflowX": false,
+    "consoleErrors": [],
+    "screenshot": "/Users/zoopark-studio/Documents/dev/weet-homepage/.codex/qa/public-renewal-20260609/mobile-bespoke-smart-farm-viewport.png"
+  }
+}
