@@ -233,3 +233,7 @@ The first 10 personas did not produce 100 unique hard bugs. Following the user i
 159. GPT-5.5 Pro marker `WEET_REVIEW_20260609_HEADER_CTA_03` found one concrete header CTA accessibility issue: desktop Korean CTA visible text was `주문하기` but `aria-label` was `모델 구성하기`, causing a label-in-name mismatch.
 160. Fix applied: desktop Korean `/customize` CTA `aria-label` now matches visible text as `주문하기`; English remains `Configure`.
 161. Post-fix local visual/accessibility QA verified desktop `1440x900`, desktop `1280x900`, tablet `834x1112`, and mobile `390x844` all have `/customize` CTA visible, horizontal overflow `false`, page errors `0`, and `ctaLabelInName: true`.
+162. Production deployment after commit `5d64823` was promoted through the Vercel web UI to `https://www.we-et.com`.
+163. Production header CTA QA on `https://www.we-et.com/?v=5d64823` verified desktop `1440x900`, desktop `1280x900`, tablet `834x1112`, and mobile `390x844` all show visible `/customize` CTA, `ctaLabelInName: true`, horizontal overflow `false`, console events `0`, and page errors `0`.
+164. Production click QA verified the visible header `주문하기` CTA navigates to `https://www.we-et.com/customize` on desktop, tablet, and mobile.
+165. Production mobile menu QA verified the full-width `모델 구성하기` CTA is visible above ordinary menu groups without text clipping.

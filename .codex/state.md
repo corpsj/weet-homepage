@@ -6,7 +6,7 @@ Renew Weet public `/modular`, `/bespoke`, and `/solution` surfaces; reposition `
 
 ## Current phase
 
-GPT-5.5 Pro closure review passed; preparing commit, push, Vercel promotion, and production-domain QA
+complete
 
 ## Changes made
 
@@ -20,6 +20,9 @@ GPT-5.5 Pro closure review passed; preparing commit, push, Vercel promotion, and
 - Applied latest Stickies header steering through Antigravity IDE: removed `주문하기` / `Order` from normal navigation arrays and promoted `/customize` to a separate desktop, mobile-header, and mobile-menu CTA.
 - Codex adjusted Antigravity's header layout for safer `1280px` desktop spacing and removed a trailing whitespace issue.
 - Applied GPT-5.5 Pro header CTA `MUST_FIX`: desktop Korean CTA `aria-label` now matches visible text `주문하기`.
+- Pushed commit `5d64823` to `origin/zoo/customize-configurator`.
+- Promoted commit `5d64823` to production through the Vercel web UI.
+- Verified the real production domain `https://www.we-et.com/?v=5d64823` across desktop, tablet, and mobile.
 - Logged new findings and backlog closure in `agent-inbox/findings-public-simulation.md` and `agent-inbox/implementation-backlog.md`.
 
 ## Commands run
@@ -37,6 +40,8 @@ GPT-5.5 Pro closure review passed; preparing commit, push, Vercel promotion, and
 - `npx playwright test e2e/public-pages.spec.ts --project=chromium`
 - Playwright visual QA script for header CTA at desktop `1440x900`, desktop `1280x900`, tablet `834x1112`, and mobile `390x844`
 - Chrome/ChatGPT normal Pro review with `최신 • 5.5`, checked `Pro • 확장`, and no `심층 리서치`
+- Vercel web UI promotion for commit `5d64823`
+- Production-domain Playwright visual/click QA on `https://www.we-et.com/?v=5d64823`
 - `lsof -i :3000`
 
 ## Validation results
@@ -55,6 +60,11 @@ GPT-5.5 Pro closure review passed; preparing commit, push, Vercel promotion, and
 - Production QA before the latest header CTA slice:
   - Commit `acef171` promoted to production and checked on `https://www.we-et.com`.
   - `/modular`, `/bespoke`, `/solution` desktop/tablet/mobile reported H1 visible, probes present, horizontal overflow `false`, console/page errors `0`, and no bad visible images.
+- Production QA after the latest header CTA slice:
+  - Evidence saved in `.codex/qa/production-header-cta-5d64823/`.
+  - `https://www.we-et.com/?v=5d64823` desktop `1440x900`, desktop `1280x900`, tablet `834x1112`, and mobile `390x844`: visible `/customize` CTA, `ctaLabelInName: true`, horizontal overflow `false`, console events `0`, page errors `0`.
+  - Visible header CTA click navigated to `https://www.we-et.com/customize` on all checked viewports.
+  - Manual screenshot review confirmed no overlap in the 1280 desktop header, 390 mobile header, 390 mobile menu, or desktop `/customize` landing after CTA click.
 
 ## Current failures
 
@@ -90,4 +100,4 @@ PASS (`WEET_REVIEW_20260609_HEADER_CTA_04`)
 
 ## Next step
 
-Commit and push the latest header CTA/state/QA evidence, promote the new Vercel deployment, then verify `https://www.we-et.com` production header CTA on desktop/tablet/mobile.
+No required local step remains for the header CTA slice after the production QA evidence commit is pushed.
