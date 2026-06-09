@@ -141,4 +141,5 @@
 - UI/UX 변경: Standard 3x9 선택 시 좌우 벽선이 바깥으로 이동하고 수평 벽선이 6m 기준선에서 9m 폭으로 늘어나는 장면이 보인다.
 - 검증 방법: Playwright visual QA에서 compact/final/intermediate 전환 스크린샷, E2E floorplan assertions, console/error/overflow checks.
 - 결과: local visual QA summary `problems: []`; wall-line geometry changed from `x1 212→62`, `x2 788→938` with a midframe at `x1 182.86`, `x2 817.14`. Option info modal image rendered with nonzero natural dimensions after adding dialog semantics.
+- Production Evidence: commit `9fedfed` was pushed and promoted to `www.we-et.com`; `.codex/qa/production-expansion-9fedfed-rerun/summary.json` reports `problems: []`, wall-line geometry `x1 212→176.40→62` and `x2 788→823.60→938`, and the `태양광 패널` modal image rendered at `1672x941`.
 - 남은 리스크: 실제 생산 도면 정밀도와는 별개로 구매 이해용 guide overlay이므로, 향후 CAD 기반 도면 전환으로 고도화 가능.
