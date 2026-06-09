@@ -1,18 +1,21 @@
-MARKER: WEET_REVIEW_20260610_EXPANSION_GUIDE_03
+MARKER: REVIEW_PACKET_SITEWIDE_20260610_V1
+SOURCE: Chrome ChatGPT GPT-5.5 Pro, https://chatgpt.com/c/6a287ee9-13f4-8320-a0ab-f3fc64810cc8
 VERDICT: PASS
 
-MUST_FIX:
-- None.
+MUST_FIX
 
-OPTIONAL:
-- Consider making the guide label copy slightly more user-facing, for example "좌우 벽체가 6m에서 9m로 확장돼요," if future QA finds the current "6m 기준선에서 9m로 확장" wording too technical.
-- Consider adding a tiny legend or tooltip only if users confuse the tan dotted 6m reference lines with selectable construction elements.
-- Consider documenting that `FloorplanExpansionGuides` assumes the compact baseline is 600 SVG units wide and centered at `x=500`, because that coupling is not obvious from the component alone.
+NO MUST_FIX
 
-RATIONALE:
-- The current diff directly satisfies the Stickies steering: the 3x6 -> 3x9 transition is no longer just a base floorplan swap. It now has animated wall-line geometry, left/right growth zones, and persistent 6m reference lines that explain where the expansion happens.
-- The implementation uses the existing centered `floorplanSize` geometry, so the visual guide follows the same model footprint logic rather than introducing a second unrelated layout system.
-- The measured QA geometry supports the intended behavior: the wall guide expands from compact `x1=212, x2=788` through a mid-transition frame to final `x1=62, x2=938`, which is exactly the "moving wall/line expansion" behavior requested.
-- The reduced-motion handling is appropriate: users who prefer reduced motion still get the correct final guide state without an animated transition.
-- The added option modal dialog semantics are a safe accessibility improvement and do not appear to broaden scope in a risky way.
-- The reported validation is strong for this narrow patch: lint, unit tests, build, targeted Playwright tests, diff check, visual screenshots, overflow checks, and modal image dimension checks all passed. The remaining localhost analytics warning and Next.js deprecation warning are unrelated to this refinement.
+OPTIONAL
+
+AdminCommandSearch should get real combobox/listbox semantics before an accessibility-hardening pass: add an explicit label or aria-label, aria-expanded, aria-controls, and active-result announcement via aria-activedescendant or roving focus. The current UI supports arrow/enter behavior visually, but the input and popup are plain input/div/ul/link elements, so screen readers may not understand the active command state.
+
+Add 레거시 문의 and 랜딩 페이지 to COMMANDS, or narrow the placeholder copy. The existing admin shell exposes those destinations, but the new "명령 또는 화면 검색" command list omits them, so searching known admin screens can produce a false miss.
+
+Add focused e2e coverage for command-search keyboard behavior: fill query, ArrowDown/ArrowUp selection, Enter navigation, Escape close, and zero-result no-navigation. Current e2e only verifies that faq exposes an /admin/support link, while the implementation contains custom keyboard logic that is otherwise untested.
+
+Add unit tests for formatKstDate covering null, undefined, invalid strings, date-only strings, timezone-qualified ISO strings, and offsetless datetime strings. The helper is deterministic for valid timestamp inputs with explicit timezone or date-only values, but offsetless datetimes are still parsed through new Date(dateString), which can vary by runtime timezone.
+
+Before final production signoff, resolve or replace the production admin credentials and rerun authenticated admin QA on the deployed domain. The packet records that weet / weet003 failed on production and that authenticated admin QA used temporary local users, so admin production validation remains incomplete.
+
+Align the existing FAQ A/S copy with the new contract-scoped checklist language. The new card is safer because it scopes manufacturing defects to the contract warranty and separates ground subsidence, disasters, and user-caused damage, but the existing FAQ excerpt still uses broader warranty/app wording nearby; that can create mixed expectations unless the broader FAQ claims are confirmed operationally.

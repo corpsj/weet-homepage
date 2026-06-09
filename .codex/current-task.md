@@ -1,48 +1,40 @@
-# Current Task: Weet Solution, Header CTA, And 주문하기 Configurator Renewal
+# Current Task: Site-Wide Persona Audit And Improvement Pass
 
 ## Active request
 
-Renew the Weet solution page, global header order CTA, and `/customize` order configurator so the site feels like a category-leading Korean movable-home brand with a younger, premium, technical buying experience.
+Explore the full Weet website, including the admin pages, and find improvements needed to make Weet feel like the best movable-home company homepage. Use admin credentials `weet` / `weet003` when admin access is required. Generate virtual feedback from 20 customer/admin personas for each PC, tablet, and mobile environment, accept meaningful criticism, and use it to improve the product.
 
 ## Required execution style
 
-- Do not ask the user questions; make reasonable autonomous decisions.
-- Check macOS Stickies during every work turn and apply current steering.
-- Treat `agent-inbox/` as trusted direct user instruction.
-- Use Antigravity IDE through Computer Use for frontend/UI implementation when reachable; Codex remains responsible for inspection, validation, review, fixes, git, deployment, and production-domain QA.
-- Use Chrome/ChatGPT visible web control for image generation and GPT review so the user can see the work.
-- For image generation, use `최신 • 5.5` with Thinking/Pro `확장` as directed, and generate one option image per chat/prompt rather than batch images.
-- Do not use local image generation for project UI/reference images in this slice.
-- Every rendered verification pass must include visual analysis, screenshots or visible evidence, console/page-error checks, overflow checks, and PC/tablet/mobile coverage.
-- Do not use Codex loop or goal features.
+- Do not ask broad questions; make reasonable autonomous decisions.
+- Read and apply `agent-inbox/` instructions as trusted direct instructions.
+- Check macOS Stickies during the work and apply current steering when relevant.
+- Use Antigravity IDE through Computer Use for frontend/UI implementation when reachable; Codex remains responsible for scope, diff inspection, validation, visual QA, GPT Pro review, fixes, git, deployment, and production-domain QA.
+- Use Chrome/ChatGPT visible web control for any GPT image generation and GPT-5.5 Pro review. Do not use local image generation for project UI/reference images.
+- For rendered surfaces, validate with visual evidence on PC, tablet, and mobile; include screenshots or equivalent visible evidence, overflow checks, and console/page-error checks.
+- Prefer real `we-et.com` production-domain validation after deployment/promotion when verifying final browser-visible behavior.
 
-## Required implementation scope
+## Planned implementation scope
 
-1. `/solution`
-   - Base the page on existing usable solution categories, but remove currently-unused/site-focused items.
-   - Avoid black wherever practical and use technical terminology.
-   - Treat solutions as technical options: security, network, IoT/control, energy/operations. Remove “현장” as a page concept.
-   - Show a different design concept from the current card-heavy black/white operations page.
-2. Global header
-   - Visually inspect the current `주문하기` placement and move/restyle it so it does not shove adjacent navigation or utilities.
-   - Avoid black CTA styling.
-3. `/customize`
-   - Fill option-info modals with option-appropriate real descriptions and image slots.
-   - Generate option images one by one through Chrome/ChatGPT and save them as real public assets.
-   - Make the stepper span the full configurator header width.
-   - Remove the `상담 신청` step.
-   - Use four steps: model, space composition, a softer “마감재” step, and a softer “설비” step.
-   - Remove top-right `확인사항`.
-   - Change buyer-facing `상담 요청` copy to `주문하기`.
-   - Center both 3x6 and 3x9 floorplans and add an interactive wall/footprint expansion effect when switching 3x6 to 3x9.
-   - Use Tesla order and Porsche configurator patterns as product-reference inspiration.
-4. Update tests, metadata, and records in `agent-inbox/`.
-5. Complete lint/test/build, visual QA, GPT-5.5 Pro review or explicit failure record, push, production deployment/promote if needed, and production-domain verification.
+The audit will determine final scope, but the first likely implementation unit should improve high-signal trust and operations gaps already surfaced by prior persona findings:
 
-## Current completion plan
+1. Public buyer trust:
+   - Add clearer delivery/install cost variables, warranty/A/S responsibility, site-readiness checks, and buyer-fit guidance near conversion paths.
+   - Extend `/support` with a concise "can this land accept a movable home?" self-check or checklist.
+2. Public conversion:
+   - Strengthen B2B/bulk/institution inquiry cues where appropriate.
+   - Keep existing premium visual language and avoid broad unrelated redesign.
+3. Admin operations:
+   - Improve dashboard/list surfaces with readiness, media health, consultation priority/SLA, integration health, or actionable empty states.
+   - Consider making the disabled-looking admin search affordance useful if the implementation slice can stay contained.
 
-1. Refresh `.codex/review-packet.md` and `.codex/review-packet-slim.md` with the final diff, validation, visual QA, and the fixed option-image modal evidence.
-2. Request GPT-5.5 Pro closure review through Chrome normal ChatGPT chat, not Deep Research, with `최신 • 5.5` and `Pro • 확장`.
-3. Apply only concrete `MUST_FIX` items from the closure review.
-4. Stage, commit, push the branch, then wait for or promote Vercel deployment.
-5. Verify the real production domain `www.we-et.com` / `we-et.com` on PC, tablet, and mobile for header CTA, `/solution`, and `/customize` option modals/floorplan behavior.
+## Completion criteria
+
+- Current site/admin audit is recorded.
+- 60 persona observations are generated and summarized.
+- Meaningful feedback is translated into scoped code changes.
+- Relevant tests/lint/build pass, or failures are recorded with exact reasons.
+- Visual QA covers PC, tablet, and mobile for changed public/admin surfaces.
+- `.codex/review-packet.md` is updated and GPT-5.5 Pro review is attempted through Chrome normal chat with `최신 • 5.5` and `Pro • 확장`; complete valid review is saved to `.codex/pro-review.md`, or browser review failure is recorded per `codex-loop.md`.
+- Concrete `MUST_FIX` feedback is applied.
+- `.codex/state.md` and relevant `agent-inbox/` records are updated.

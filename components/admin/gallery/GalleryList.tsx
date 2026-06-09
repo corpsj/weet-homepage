@@ -7,6 +7,7 @@ import { Loader2, Pencil, Plus, Trash2, ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { deleteGalleryItem } from '@/app/actions/gallery-actions';
 import { GalleryItem } from '@/types/supabase';
+import { formatKstDate } from '@/lib/date-format';
 import {
   ConsolePageHeader,
   ConsolePanel,
@@ -94,7 +95,7 @@ export default function GalleryList({ initialItems }: { initialItems: GalleryIte
               )}
               <div className="mt-3 flex items-center justify-between">
                 <span className="text-[11px] font-bold text-gray-400">
-                  {new Date(item.created_at).toLocaleDateString()}
+                  {formatKstDate(item.created_at)}
                 </span>
                 <ConsoleStatusPill tone={item.is_active ? 'success' : 'neutral'}>
                   {item.is_active ? '공개' : '비공개'}

@@ -7,7 +7,6 @@ import {
   Package,
   ShieldCheck,
   SlidersHorizontal,
-  Search,
   Monitor,
   Link2,
 } from 'lucide-react';
@@ -18,9 +17,9 @@ import {
   ConsolePanel,
   ConsoleSectionTitle,
   ConsoleStatusPill,
-  consoleInputClass,
   consoleSecondaryButtonClass,
 } from '@/components/admin/ConsolePrimitives';
+import AdminCommandSearch from '@/components/admin/AdminCommandSearch';
 
 export const dynamic = 'force-dynamic';
 
@@ -96,15 +95,7 @@ export default async function AdminPage() {
         title="작업실"
         description="운영 업무, 고객 상담, 콘텐츠 상태를 통합 관리하는 워크벤치입니다."
         actions={
-          <div className="relative w-full md:w-64">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
-            <input
-              type="text"
-              placeholder="명령 및 검색 (준비 중)"
-              className={`${consoleInputClass} w-full pl-9 bg-white`}
-              disabled
-            />
-          </div>
+          <AdminCommandSearch />
         }
       />
 

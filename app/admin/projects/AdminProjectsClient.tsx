@@ -8,6 +8,7 @@ import { toast } from 'sonner';
 import { Project } from '@/types/supabase';
 import { getProjects, deleteProject } from '@/app/actions/project-actions';
 import { getProjectHeroImage, getProjectPublicIssues } from '@/lib/projects/publicProjects';
+import { formatKstDate } from '@/lib/date-format';
 import {
     ConsoleMetricCard,
     ConsolePageHeader,
@@ -261,7 +262,7 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
 
                             <div className="flex items-center gap-1.5 text-sm text-gray-600">
                                 <Calendar className="h-3.5 w-3.5" />
-                                {project.completed_at ? new Date(project.completed_at).toLocaleDateString() : '미지정'}
+                                {formatKstDate(project.completed_at)}
                             </div>
 
                             <div className="flex justify-start gap-2 lg:justify-end">

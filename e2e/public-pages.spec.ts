@@ -97,6 +97,10 @@ test.describe('Public page transition', () => {
     await page.goto('/support');
 
     await expect(page.getByRole('heading', { name: '진행 과정과 확인사항' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '시작하기 전에' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '현장 설치 조건' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '운반 및 설치 비용' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '품질 보증 및 A/S' })).toBeVisible();
     await expect(page.getByText('구매 과정')).toBeVisible();
     await expect(page.getByText('A/S', { exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: /문의/ })).toHaveCount(0);
@@ -258,6 +262,11 @@ test.describe('Admin responsive shell', () => {
     try {
       await page.setViewportSize({ width: 390, height: 844 });
       await loginAsAdmin(page, credentials);
+
+      const commandSearch = page.getByPlaceholder('명령 또는 화면 검색');
+      await expect(commandSearch).toBeVisible();
+      await commandSearch.fill('faq');
+      await expect(page.getByRole('link', { name: 'FAQ 관리' })).toHaveAttribute('href', '/admin/support');
 
       await page.getByLabel('관리자 메뉴 열기').click();
       await expect(page.getByRole('link', { name: '설정' })).toBeVisible();

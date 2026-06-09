@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import type { ComponentProps } from 'react';
-import { ArrowRight, Bath, ClipboardCheck, Factory, Home, MapPinned, PhoneCall, Ruler, Truck, Wrench } from 'lucide-react';
+import { ArrowRight, Bath, ClipboardCheck, Factory, Home, MapPinned, PhoneCall, Ruler, Truck, Wrench, ShieldCheck, Calculator } from 'lucide-react';
 import { getFaqs } from '@/app/actions/faq-actions';
 
 export const dynamic = 'force-dynamic';
@@ -80,6 +80,54 @@ export default async function SupportPage() {
                 />
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-t border-gray-100 bg-white px-4 py-14 md:px-8 lg:px-16">
+        <div className="mx-auto max-w-[1400px]">
+          <div className="mb-8">
+            <p className="text-sm font-black text-gray-500">CHECKLIST</p>
+            <h2 className="mt-2 text-2xl font-black text-gray-900 md:text-3xl">시작하기 전에</h2>
+            <p className="mt-4 text-base leading-7 text-gray-600">
+              이동식주택을 준비하며 가장 많이 고민하시는 세 가지 핵심 사항을 먼저 확인해 보세요.
+            </p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="border border-gray-200 rounded-lg p-6">
+              <MapPinned className="h-6 w-6 text-gray-400 mb-4" />
+              <h3 className="text-lg font-bold text-gray-900">현장 설치 조건</h3>
+              <ul className="mt-4 space-y-2 text-sm text-gray-600">
+                <li className="flex items-start gap-2">
+                  <span className="text-[#0d6e66]">•</span>
+                  5톤 이상 대형 화물차 진입 가능 여부
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#0d6e66]">•</span>
+                  해당 부지의 건축 및 가설건축물 설치 가능 여부
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-[#0d6e66]">•</span>
+                  전기, 상하수도, 정화조 인입 상태
+                </li>
+              </ul>
+            </div>
+
+            <div className="border border-gray-200 rounded-lg p-6">
+              <Calculator className="h-6 w-6 text-gray-400 mb-4" />
+              <h3 className="text-lg font-bold text-gray-900">운반 및 설치 비용</h3>
+              <p className="mt-4 text-sm leading-6 text-gray-600">
+                제품 가격 외의 비용은 현장 상황에 따라 크게 달라집니다. 배송 거리, 도로폭에 따른 하차 장비(크레인, 지게차 등), 지반을 다지는 기초 토목 공사 필요 여부가 전체 예산의 핵심 변수가 됩니다.
+              </p>
+            </div>
+
+            <div className="border border-gray-200 rounded-lg p-6">
+              <ShieldCheck className="h-6 w-6 text-gray-400 mb-4" />
+              <h3 className="text-lg font-bold text-gray-900">품질 보증 및 A/S</h3>
+              <p className="mt-4 text-sm leading-6 text-gray-600">
+                계약서에 명시된 보증 범위 안의 제조상 결함은 우선 점검해 조치합니다. 지반 침하, 천재지변, 사용자 부주의로 인한 파손은 원인과 범위를 확인한 뒤 실비 기준으로 안내합니다.
+              </p>
+            </div>
           </div>
         </div>
       </section>
