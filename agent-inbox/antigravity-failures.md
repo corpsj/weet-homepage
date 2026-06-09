@@ -44,3 +44,11 @@ Antigravity is required for frontend/design implementation when available. Recor
 - Computer Use itself also had stale `SkyComputerUseClient mcp` processes; when `list_apps` times out, the bridge is unhealthy and app-name retries are wasted.
 - After `pkill -f 'SkyComputerUseClient mcp'`, the current tool session returned `Transport closed`, which means Computer Use must be retried from a fresh session/turn.
 - Future recovery procedure is documented in `agent-inbox/tool-control-runbook.md`.
+
+## 2026-06-09 solution renewal slice
+
+- Intended handoff: renew `/solution`, `/solution/cctv`, `/solution/network`, `/solution/iot`, and `/solution/design` with newly generated Korean photorealistic option images and operations-first UX.
+- Computer Use was healthy and Antigravity IDE (`com.google.antigravity-ide`) was reachable.
+- Antigravity accepted the implementation prompt, explored files, and ran `npm run lint`, but produced no code diff after repeated polling.
+- Antigravity was already in `User cancelled agent execution` state when rechecked; no pending edit/accept controls remained.
+- Decision: record the no-diff handoff failure and continue directly in Codex so the user-requested solution renewal could complete.

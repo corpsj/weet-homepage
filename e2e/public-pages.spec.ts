@@ -131,12 +131,13 @@ test.describe('Public page transition', () => {
   test('solution public page shows operational packages', async ({ page }) => {
     await page.goto('/solution');
 
-    await expect(page.getByRole('heading', { name: '공간 운영까지 설계합니다' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: '안전하게 지키기' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: '끊김 없이 연결하기' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: '원격으로 제어하기' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: '브랜드와 현장에 맞게 완성하기' })).toBeVisible();
-    await expect(page.getByText('해결하는 문제').first()).toBeVisible();
+    await expect(page.getByRole('heading', { name: '운영까지 준비된 모듈러 공간' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '안심 출입' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '끊김 없는 연결' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '원격 준비' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '현장 완성' })).toBeVisible();
+    await expect(page.getByText('옵션은 장식이 아니라 운영 리스크 관리입니다')).toBeVisible();
+    await expect(page.locator('img[src*="kr-security-realphoto.webp"]')).toBeAttached();
   });
 
   test('footer contains hidden admin link on True', async ({ page }) => {

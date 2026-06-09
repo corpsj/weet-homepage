@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "네트워크 솔루션",
+  title: "끊김 없는 연결 옵션",
   description:
-    "위트(WEET) 네트워크 솔루션으로 안정적인 인터넷 환경을 구축하세요. 공간 특성에 맞춘 라우팅·배선·장비 구성을 제안합니다.",
+    "위트(WEET) 연결 옵션. POS, 예약, 게스트 Wi-Fi, 원격 장비망을 현장 조건에 맞춰 안정적으로 분리합니다.",
   alternates: {
     canonical: "/solution/network",
   },
   openGraph: {
     url: "/solution/network",
-    title: "네트워크 솔루션",
+    title: "끊김 없는 연결 옵션",
     description:
-      "위트(WEET) 네트워크 솔루션으로 안정적인 인터넷 환경을 구축하세요. 공간 특성에 맞춘 라우팅·배선·장비 구성을 제안합니다.",
+      "위트(WEET) 연결 옵션. POS, 예약, 게스트 Wi-Fi, 원격 장비망을 현장 조건에 맞춰 안정적으로 분리합니다.",
   },
   twitter: {
     card: "summary_large_image",

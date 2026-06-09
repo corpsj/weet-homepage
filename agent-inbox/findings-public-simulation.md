@@ -237,3 +237,21 @@ The first 10 personas did not produce 100 unique hard bugs. Following the user i
 163. Production header CTA QA on `https://www.we-et.com/?v=5d64823` verified desktop `1440x900`, desktop `1280x900`, tablet `834x1112`, and mobile `390x844` all show visible `/customize` CTA, `ctaLabelInName: true`, horizontal overflow `false`, console events `0`, and page errors `0`.
 164. Production click QA verified the visible header `주문하기` CTA navigates to `https://www.we-et.com/customize` on desktop, tablet, and mobile.
 165. Production mobile menu QA verified the full-width `모델 구성하기` CTA is visible above ordinary menu groups without text clipping.
+
+## 2026-06-09 solution detail renewal QA
+
+166. Stickies steering changed during image generation: option images must explain the option itself, not show a large 이동식주택 as the subject.
+167. Fix verified: the security image that showed the house too prominently was discarded and regenerated as an option-focused close-up of CCTV, sensor light, smart lock, and conduit details.
+168. Fix verified: `/solution` now uses four Korean photorealistic generated option images: security, network, remote control, and brand/site finish.
+169. Fix verified: `/solution` H1 is now `운영까지 준비된 모듈러 공간`, removing the earlier literal `\00a0` escape risk and moving the page toward buyer-facing operational trust.
+170. Fix verified: `/solution` package rows now frame each option by selection criterion, included details, and operator outcome instead of generic technical feature cards.
+171. Fix verified: `/solution/cctv` was rebuilt as `안심 출입` with customer decisions for access rights, recording/privacy zones, night alerts, and connectivity backup.
+172. Fix verified: `/solution/network` was rebuilt as `끊김 없는 연결` with POS/work/guest/device network separation and backup-line consultation decisions.
+173. Fix verified: `/solution/iot` was rebuilt as `원격 준비` with HVAC, lighting, ventilation, door-state, booking-time, and alert-scope decisions.
+174. Fix verified: `/solution/design` was rebuilt as `현장 완성` with facade, sign-frame, deck-flow, planting, drainage, and local-market fit decisions.
+175. Visual QA desktop: `.codex/qa/solution-renewal-20260609/desktop-_solution.png` shows four option rows with real-photo images, clear CTAs, and no text overlap.
+176. Visual QA mobile: `.codex/qa/solution-renewal-20260609/mobile-_solution.png` shows all four option blocks stacked safely without horizontal overflow or clipped CTA text.
+177. Visual QA details: mobile and desktop `/solution/cctv` and `/solution/design` screenshots show hero images, package tabs, consultation decisions, and outcome blocks without overlap.
+178. Automated visual QA summary reports `/solution` and four detail routes have horizontal overflow `false`, generated image count present, old image references `0`, literal escape `false`, console errors `0`, and page errors `0` across desktop, tablet, and mobile.
+179. QA note: the visual script intermittently reports the existing header logo with `naturalWidth: 0` on tablet/mobile `/solution`, but screenshots show the logo visible; this appears to be a measurement/timing artifact outside the solution image system.
+180. Strength: the solution section now answers buyer anxiety around unmanned operation, payment downtime, pre-arrival readiness, and first impression instead of asking customers to interpret device names.

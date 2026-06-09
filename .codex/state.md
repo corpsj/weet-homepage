@@ -2,102 +2,80 @@
 
 ## Active task
 
-Renew Weet public `/modular`, `/bespoke`, and `/solution` surfaces; reposition `/bespoke` as a commercial-space custom solution; improve `/solution` as operations packages; apply latest Stickies steering that `주문하기` must be promoted out of the middle header menu.
+Renew the Weet `/solution` section and all solution detail pages with Korean photorealistic option-focused images and customer-facing operations UX.
 
 ## Current phase
 
-complete
+local validation complete; GPT-5.5 Pro review unavailable after two Chrome attempts; commit, push, deployment, and production QA remain.
 
 ## Changes made
 
-- Re-read `AGENTS.md`, `codex-loop.md`, `.codex/current-task.md`, `.codex/state.md`, `agent-inbox/README.md`, and non-binary `agent-inbox/` instructions.
-- Checked Stickies through Computer Use multiple times. Latest visible steering still says `주문하기` in the header feels under-emphasized because it sits in the middle of the menu.
-- Generated modular renewal images earlier through Chrome/ChatGPT visible web control using non-Pro `최신 • 5.5` Thinking `확장`, one image per run.
-- Delegated the public page implementation slice to Antigravity IDE through Computer Use and accepted intended changes after visual confirmation.
-- Rebuilt `/modular` around generated proof imagery: hero, factory precision, transport/install, interior comfort, expansion/relocation, and conversion CTAs.
-- Repositioned `/bespoke` as a commercial-space custom solution page and later fixed the production H1 to `상업 공간 맞춤 솔루션`.
-- Reworked `/solution` into customer-facing operational packages and later fixed mobile Korean H1 wrapping by rendering intentional two-line mobile text with an `aria-label`.
-- Applied latest Stickies header steering through Antigravity IDE: removed `주문하기` / `Order` from normal navigation arrays and promoted `/customize` to a separate desktop, mobile-header, and mobile-menu CTA.
-- Codex adjusted Antigravity's header layout for safer `1280px` desktop spacing and removed a trailing whitespace issue.
-- Applied GPT-5.5 Pro header CTA `MUST_FIX`: desktop Korean CTA `aria-label` now matches visible text `주문하기`.
-- Pushed commit `5d64823` to `origin/zoo/customize-configurator`.
-- Promoted commit `5d64823` to production through the Vercel web UI.
-- Verified the real production domain `https://www.we-et.com/?v=5d64823` across desktop, tablet, and mobile.
-- Logged new findings and backlog closure in `agent-inbox/findings-public-simulation.md` and `agent-inbox/implementation-backlog.md`.
+- Checked Stickies through Computer Use. New steering said generated option images must emphasize each option, not show the 이동식주택 too large.
+- Reconfirmed Antigravity IDE state. The earlier frontend handoff was already in `User cancelled agent execution` state after producing no repository diff, so Codex continued directly and recorded the failure.
+- Generated/re-generated four final solution assets in Chrome/ChatGPT visible web control, one image per new chat, using `최신 • 5.5`, `Thinking • 확장`, `이미지 만들기`, and 16:9.
+- Corrected one ChatGPT new-chat state that briefly showed `Pro 확장 모드` back to `Thinking • 확장` before sending any prompt.
+- Replaced all final generated solution images under `public/images/solution/generated/`.
+- Rebuilt `/solution` into an option-selection page around `안심 출입`, `끊김 없는 연결`, `원격 준비`, and `현장 완성`.
+- Rebuilt `/solution/cctv`, `/solution/network`, `/solution/iot`, and `/solution/design` from feature-card/modal pages into operations-first detail pages.
+- Updated solution metadata and the public-pages E2E assertion for the new page structure.
+- Logged image generation, Stickies steering, and QA findings in `agent-inbox/`.
+- Created the full `.codex/review-packet.md` with marker `WEET_REVIEW_20260609_SOLUTION_RENEWAL_05` and a smaller retry packet `.codex/review-packet-slim.md` with marker `WEET_REVIEW_20260609_SOLUTION_RENEWAL_06`.
+- Attempted GPT-5.5 Pro review twice through Chrome/ChatGPT visible web control. Both attempts failed to produce a complete marker-matched verdict, so no new `.codex/pro-review.md` was saved for this solution slice.
+- Rechecked Stickies after resume; Computer Use bridge was healthy, but both `com.apple.Stickies` and `Stickies` window reads returned `cgWindowNotFound`.
 
 ## Commands run
 
 - `computer-use:list_apps`
 - `computer-use:get_app_state("com.apple.Stickies")`
 - `computer-use:get_app_state("com.google.antigravity-ide")`
-- `git status --short --branch`
-- `git diff -- components/layout/Header.tsx`
-- `git diff --check`
+- Chrome/ChatGPT visible web-control image generation via `browser-client` and page asset export
+- `node -e` with `sharp` conversion for final WebP assets
 - `npx tsc --noEmit`
 - `npm run lint`
 - `npm test`
 - `npm run build`
+- `node .codex/qa/solution-renewal-20260609/capture.mjs`
 - `npx playwright test e2e/public-pages.spec.ts --project=chromium`
-- Playwright visual QA script for header CTA at desktop `1440x900`, desktop `1280x900`, tablet `834x1112`, and mobile `390x844`
-- Chrome/ChatGPT normal Pro review with `최신 • 5.5`, checked `Pro • 확장`, and no `심층 리서치`
-- Vercel web UI promotion for commit `5d64823`
-- Production-domain Playwright visual/click QA on `https://www.we-et.com/?v=5d64823`
-- `lsof -i :3000`
+- Chrome/ChatGPT normal Pro review attempt `WEET_REVIEW_20260609_SOLUTION_RENEWAL_05`
+- Chrome/ChatGPT normal Pro review retry `WEET_REVIEW_20260609_SOLUTION_RENEWAL_06`
 
 ## Validation results
 
-- `git diff --check`: passed after cleaning review-packet trailing whitespace.
 - `npx tsc --noEmit`: passed.
 - `npm run lint`: passed.
-- `npm test`: 3 files passed, 20 tests passed.
-- `npm run build`: passed. Existing warning remains: Next `middleware` file convention is deprecated in favor of `proxy`.
-- `npx playwright test e2e/public-pages.spec.ts --project=chromium`: 14 passed.
-- Header CTA post-fix visual/accessibility QA:
-  - Evidence saved in `.codex/qa/header-cta-20260609-local/`.
-  - Desktop `1440x900` and `1280x900`: normal nav excludes `주문하기`; right-side `/customize` CTA is visible; horizontal overflow `false`; `ctaLabelInName: true`; page errors `0`.
-  - Tablet `834x1112` and mobile `390x844`: compact header `/customize` CTA visible; full-screen mobile menu has prominent `모델 구성하기`; horizontal overflow `false`; `ctaLabelInName: true`; page errors `0`.
-  - Local `next start` reports expected `_vercel/insights/script.js` 404/MIME console noise; this is not a page/runtime error and will be checked on production after promote.
-- Production QA before the latest header CTA slice:
-  - Commit `acef171` promoted to production and checked on `https://www.we-et.com`.
-  - `/modular`, `/bespoke`, `/solution` desktop/tablet/mobile reported H1 visible, probes present, horizontal overflow `false`, console/page errors `0`, and no bad visible images.
-- Production QA after the latest header CTA slice:
-  - Evidence saved in `.codex/qa/production-header-cta-5d64823/`.
-  - `https://www.we-et.com/?v=5d64823` desktop `1440x900`, desktop `1280x900`, tablet `834x1112`, and mobile `390x844`: visible `/customize` CTA, `ctaLabelInName: true`, horizontal overflow `false`, console events `0`, page errors `0`.
-  - Visible header CTA click navigated to `https://www.we-et.com/customize` on all checked viewports.
-  - Manual screenshot review confirmed no overlap in the 1280 desktop header, 390 mobile header, 390 mobile menu, or desktop `/customize` landing after CTA click.
+- `npm test`: passed, 3 files and 20 tests.
+- `npm run build`: passed. Existing Next warning remains: `middleware` convention is deprecated in favor of `proxy`.
+- `npx playwright test e2e/public-pages.spec.ts --project=chromium`: passed, 14 tests.
+- Local visual QA across desktop `1440x1100`, tablet `834x1112`, and mobile `390x844`:
+  - `/solution`, `/solution/cctv`, `/solution/network`, `/solution/iot`, `/solution/design` all report horizontal overflow `false`.
+  - Generated image references are present on all routes.
+  - Old solution image references are `0`.
+  - Literal `00a0` escape is `false`.
+  - Console errors and page errors are `0`.
+  - Manual screenshot review confirmed no text overlap or clipped CTAs on mobile/desktop.
 
 ## Current failures
 
 - None blocking.
-- One visual QA script attempt failed because the local Playwright `page.accessibility` helper was unavailable; reran successfully using DOM `aria-label` and visible-text comparison.
-- Existing non-blocking warning: Next `middleware` file convention is deprecated in favor of `proxy`.
-- Earlier invalid GPT-5.5 Deep Research attempt extracted marker occurrences instead of reviewing; recorded in `agent-inbox/pro-review-failures.md` and superseded by valid normal `Pro 확장` reviews.
+- QA script intermittently reports the existing header logo image with `naturalWidth: 0` on tablet/mobile `/solution`, while screenshots show it visibly rendered. Treat as a measurement/timing artifact unless reproduced visually.
+- Antigravity produced no diff for this slice; recorded in `agent-inbox/antigravity-failures.md`.
+- GPT-5.5 Pro review for this solution slice is unavailable after two Chrome/ChatGPT attempts:
+  - `WEET_REVIEW_20260609_SOLUTION_RENEWAL_05`: large markdown attachment made the tab too heavy to recover a marker-matched verdict.
+  - `WEET_REVIEW_20260609_SOLUTION_RENEWAL_06`: slim packet attached as pasted text, initial response asked to review file/content, and the follow-up remained stuck at `Pro 생각 중` / `답변 중지` without extractable assistant text.
+- `.codex/pro-review.md` still contains an older valid header CTA review (`WEET_REVIEW_20260609_HEADER_CTA_04`) and is not treated as a solution-renewal review.
+- Latest resumed Stickies read failed with `cgWindowNotFound` even though `computer-use:list_apps` showed Stickies running.
 
-## Pro review cycles
+## Pro review status
 
-2 valid normal Chrome/ChatGPT `Pro 확장` cycles for the header CTA slice; 1 earlier valid public-renewal pass; 1 invalid old Chrome/Deep Research attempt.
-
-## Last Pro verdict
-
-PASS (`WEET_REVIEW_20260609_HEADER_CTA_04`)
-
-## Applied Pro feedback
-
-- `WEET_REVIEW_20260609_HEADER_CTA_03` `MUST_FIX`: changed desktop Korean `/customize` CTA `aria-label` from `모델 구성하기` to `주문하기` so the accessible name matches the visible label.
-
-## Skipped Pro feedback
-
-- Optional: remove redundant CTA `aria-label` values; skipped because current names are correct and explicit.
-- Optional: add `rel="noopener noreferrer"` to external social links; skipped as unrelated/non-blocking.
-- Optional: add a focused E2E assertion for nav/CTA separation; skipped for this slice because DOM/visual QA already verifies the separation and the task is moving to deployment.
+Unavailable for this solution-detail renewal slice after two Chrome/ChatGPT normal Pro attempts. Failure details are recorded in `agent-inbox/pro-review-failures.md`; no concrete `MUST_FIX` feedback exists to apply.
 
 ## Remaining risks
 
-- Latest header CTA commit still needs branch push, Vercel production promotion, and real-domain QA on `www.we-et.com`.
-- `/bespoke` still uses older cafe/popup/smart-farm images; future work should regenerate them via Chrome/ChatGPT `최신 • 5.5` Thinking `확장`.
-- `/solution/cctv`, `/solution/network`, `/solution/iot`, and `/solution/design` detail pages still need the new operations-first framing.
-- Public pricing/transport/install constraints need more concrete numeric ranges to further raise buyer trust.
+- GPT-5.5 Pro review may identify concrete product/UX/code `MUST_FIX` items.
+- Production deployment and real-domain QA on `we-et.com` / `www.we-et.com` remain after commit and push.
+- `/bespoke` still uses older existing cafe/popup/smart-farm images; future image generation should unify that page with the current visual standard.
+- Public pricing, delivery, install, warranty, and support terms still need more concrete numeric ranges and conditions.
 
 ## Next step
 
-No required local step remains for the header CTA slice after the production QA evidence commit is pushed.
+Run final local validation/diff checks, commit and push the branch, then promote or wait for Vercel and verify `we-et.com` / `www.we-et.com` production pages visually across desktop, tablet, and mobile.

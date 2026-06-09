@@ -1,198 +1,214 @@
-'use client';
+"use client";
 
-import { useState, useRef } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { ChevronRight, Image as ImageIcon } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import FeatureModal from './FeatureModal';
-import { useLanguage } from '@/contexts/LanguageContext';
+import Image from "next/image";
+import Link from "next/link";
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle2,
+  ClipboardCheck,
+  Gauge,
+  MapPin,
+  ShieldCheck,
+} from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { cn } from "@/lib/utils";
 
-interface Feature {
-    id: string;
-    title: string;
-    image: string;
-    description: string;
-    detailContent?: string;
-}
+type Lang = "KO" | "EN";
 
-interface SolutionTemplateProps {
-    title: string;
-    subtitle: string;
-    heroImage: string;
-    description: string;
-    features: Feature[];
-}
-
-const NAV = {
-    KO: [
-        { name: '시큐리티', href: '/solution/cctv' },
-        { name: '네트워크', href: '/solution/network' },
-        { name: 'IoT', href: '/solution/iot' },
-        { name: '디자인', href: '/solution/design' },
-    ],
-    EN: [
-        { name: 'Security', href: '/solution/cctv' },
-        { name: 'Network', href: '/solution/network' },
-        { name: 'IoT', href: '/solution/iot' },
-        { name: 'Design', href: '/solution/design' },
-    ],
+type LocalizedSolution = {
+  eyebrow: string;
+  title: string;
+  lead: string;
+  imageAlt: string;
+  problemTitle: string;
+  problem: string;
+  fitTitle: string;
+  fit: string[];
+  includedTitle: string;
+  included: string[];
+  decisionsTitle: string;
+  decisions: string[];
+  outcomesTitle: string;
+  outcomes: string[];
+  ctaPrimary: string;
+  ctaSecondary: string;
 };
 
-export default function SolutionTemplate({
-    title,
-    subtitle,
-    heroImage,
-    description,
-    features,
-}: SolutionTemplateProps) {
-    const { language } = useLanguage();
-    const navLinks = language === 'KO' ? NAV.KO : NAV.EN;
-    const viewMoreLabel = language === 'KO' ? '자세히 보기' : 'View more';
-    const imagePendingLabel = language === 'KO' ? '이미지 준비 중' : 'Image pending';
-    const containerRef = useRef<HTMLDivElement>(null);
-    const { scrollYProgress } = useScroll({
-        target: containerRef,
-        offset: ["start start", "end start"]
-    });
+export type SolutionPackageData = {
+  id: "security" | "network" | "control" | "brand";
+  href: string;
+  image: string;
+  copy: Record<Lang, LocalizedSolution>;
+};
 
-    const [selectedFeature, setSelectedFeature] = useState<Feature | null>(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
+const PACKAGE_NAV: Record<
+  Lang,
+  Array<{ id: SolutionPackageData["id"]; href: string; name: string; desc: string }>
+> = {
+  KO: [
+    { id: "security", href: "/solution/cctv", name: "안심 출입", desc: "CCTV · 도어락 · 센서등" },
+    { id: "network", href: "/solution/network", name: "끊김 없는 연결", desc: "POS · 예약 · 게스트 Wi-Fi" },
+    { id: "control", href: "/solution/iot", name: "원격 준비", desc: "조명 · 냉난방 · 환기" },
+    { id: "brand", href: "/solution/design", name: "현장 완성", desc: "외장 · 간판 · 동선" },
+  ],
+  EN: [
+    { id: "security", href: "/solution/cctv", name: "Secure Access", desc: "CCTV · lock · sensor light" },
+    { id: "network", href: "/solution/network", name: "Stable Connection", desc: "POS · booking · guest Wi-Fi" },
+    { id: "control", href: "/solution/iot", name: "Remote Ready", desc: "lighting · HVAC · ventilation" },
+    { id: "brand", href: "/solution/design", name: "Site Finish", desc: "facade · signage · flow" },
+  ],
+};
 
-    const openModal = (feature: Feature) => {
-        setSelectedFeature(feature);
-        setIsModalOpen(true);
-    };
+export default function SolutionTemplate({ data }: { data: SolutionPackageData }) {
+  const { language } = useLanguage();
+  const copy = data.copy[language];
+  const nav = PACKAGE_NAV[language];
 
-    const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
-    const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  return (
+    <main className="min-h-screen bg-[#f7f6f1] text-[#151515]">
+      <section className="mx-auto max-w-[1440px] px-4 pb-14 pt-24 md:px-8 lg:pb-20 lg:pt-32">
+        <Link
+          href="/solution"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-neutral-500 transition-colors hover:text-neutral-950"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          {language === "KO" ? "운영 옵션 전체" : "All operation options"}
+        </Link>
 
-    return (
-        <div className="min-h-screen bg-white" ref={containerRef}>
-            {/* Hero Section with Parallax */}
-            <div className="relative h-[35vh] min-h-[300px] w-full overflow-hidden flex items-center justify-center">
-                <motion.div
-                    style={{ y, opacity }}
-                    className="absolute inset-0 z-0"
-                >
-                    <Image
-                        src={heroImage}
-                        alt={title}
-                        fill
-                        sizes="100vw"
-                        className="object-cover"
-                        priority
-                    />
-                    <div className="absolute inset-0 bg-black/50" />
-                </motion.div>
+        <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(520px,1.1fr)] lg:items-end">
+          <div className="max-w-2xl">
+            <p className="text-xs font-black uppercase tracking-[0.22em] text-neutral-500">{copy.eyebrow}</p>
+            <h1 className="mt-4 text-4xl font-black leading-[1.05] text-neutral-950 md:text-6xl lg:text-[72px]">
+              {copy.title}
+            </h1>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-neutral-600 md:text-xl break-keep">
+              {copy.lead}
+            </p>
+          </div>
 
-                <div className="relative z-10 container mx-auto px-6 md:px-12 lg:px-20 text-center text-white">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, ease: "easeOut" }}
-                        className="space-y-3"
-                    >
-                        <span className="inline-block py-1 px-3 rounded-full border border-white/30 bg-white/10 backdrop-blur-md text-xs font-medium tracking-wider uppercase text-primary">
-                            {subtitle}
-                        </span>
-                        <h1 className="text-3xl md:text-5xl font-bold tracking-tight leading-tight">
-                            {title}
-                        </h1>
-                        <p className="text-base md:text-lg text-gray-200 max-w-2xl mx-auto leading-relaxed font-light">
-                            {description}
-                        </p>
-                    </motion.div>
-                </div>
-            </div>
-
-            {/* Floating Segmented Control Navigation */}
-            <div className="sticky top-[70px] md:top-[90px] lg:top-[110px] z-40 flex justify-center py-4 pointer-events-none">
-                <div className="bg-gray-100/80 backdrop-blur-md p-1.5 rounded-full pointer-events-auto shadow-sm border border-gray-200/50 inline-flex overflow-x-auto max-w-[90vw] no-scrollbar">
-                    <div className="flex items-center relative">
-                        {navLinks.map((link) => {
-                            const isActive = title === link.name;
-                            return (
-                                <Link
-                                    key={link.href}
-                                    href={link.href}
-                                    className={cn(
-                                        "relative px-4 md:px-6 py-2 md:py-2.5 text-xs md:text-sm font-medium transition-colors rounded-full z-10 whitespace-nowrap",
-                                        isActive ? "text-gray-900" : "text-gray-500 hover:text-gray-900"
-                                    )}
-                                >
-                                    {link.name}
-                                    {isActive && (
-                                        <motion.div
-                                            layoutId="activeSegment"
-                                            className="absolute inset-0 bg-white rounded-full shadow-sm border border-gray-200/50 -z-10"
-                                            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                                        />
-                                    )}
-                                </Link>
-                            );
-                        })}
-                    </div>
-                </div>
-            </div>
-
-            {/* Main Content */}
-            <section className="py-24 bg-gray-50">
-                <div className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
-                        {features.map((feature, index) => (
-                            <motion.div
-                                key={feature.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 0.5, delay: index * 0.1 }}
-                                className="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-500 border border-gray-100 flex flex-col"
-                            >
-                                <div className="relative h-64 overflow-hidden cursor-pointer" onClick={() => openModal(feature)}>
-                                    {feature.image ? (
-                                        <Image
-                                            src={feature.image}
-                                            alt={feature.title}
-                                            fill
-                                            sizes="(max-width: 768px) 100vw, 50vw"
-                                            priority={index < 2}
-                                            className="object-cover group-hover:scale-105 transition-transform duration-700"
-                                        />
-                                    ) : (
-                                        <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-gray-100 text-gray-500">
-                                            <ImageIcon className="h-7 w-7" />
-                                            <span className="text-sm font-semibold">{imagePendingLabel}</span>
-                                        </div>
-                                    )}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
-                                    <div className="absolute bottom-6 left-6 text-white">
-                                        <h3 className="text-2xl font-bold mb-1">{feature.title}</h3>
-                                    </div>
-                                </div>
-
-                                <div className="p-8 flex-1 flex flex-col justify-between">
-                                    <p className="text-gray-600 leading-relaxed mb-6 line-clamp-3">
-                                        {feature.description}
-                                    </p>
-                                    <button
-                                        onClick={() => openModal(feature)}
-                                        className="flex items-center text-primary font-semibold text-sm group-hover:translate-x-1 transition-transform cursor-pointer w-fit"
-                                    >
-                                        {viewMoreLabel} <ChevronRight className="w-4 h-4 ml-1" />
-                                    </button>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            <FeatureModal
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                feature={selectedFeature}
+          <div className="relative aspect-[16/9] overflow-hidden rounded-md bg-neutral-200 shadow-[0_24px_70px_rgba(20,20,20,0.16)]">
+            <Image
+              src={data.image}
+              alt={copy.imageAlt}
+              fill
+              priority
+              sizes="(max-width: 1024px) 100vw, 58vw"
+              className="object-cover"
             />
+          </div>
         </div>
-    );
+      </section>
+
+      <section className="border-y border-neutral-200 bg-white">
+        <div className="mx-auto flex max-w-[1440px] gap-2 overflow-x-auto px-4 py-3 md:px-8">
+          {nav.map((item) => {
+            const isActive = item.id === data.id;
+            return (
+              <Link
+                key={item.id}
+                href={item.href}
+                className={cn(
+                  "min-w-[220px] rounded-md border px-4 py-3 transition-colors",
+                  isActive
+                    ? "border-neutral-950 bg-neutral-950 text-white"
+                    : "border-neutral-200 bg-white text-neutral-600 hover:border-neutral-950 hover:text-neutral-950",
+                )}
+              >
+                <span className="block text-sm font-black">{item.name}</span>
+                <span className={cn("mt-1 block text-xs", isActive ? "text-neutral-300" : "text-neutral-500")}>
+                  {item.desc}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      <section className="mx-auto grid max-w-[1440px] gap-8 px-4 py-14 md:px-8 lg:grid-cols-[minmax(260px,0.42fr)_1fr] lg:py-20">
+        <aside className="lg:sticky lg:top-28 lg:h-fit">
+          <div className="border-l-2 border-neutral-950 pl-5">
+            <p className="text-sm font-black text-neutral-950">{copy.problemTitle}</p>
+            <p className="mt-3 text-base leading-relaxed text-neutral-600 break-keep">{copy.problem}</p>
+          </div>
+        </aside>
+
+        <div className="grid gap-10">
+          <section className="grid gap-5 border-b border-neutral-200 pb-10 md:grid-cols-[220px_1fr]">
+            <div className="flex items-center gap-3">
+              <MapPin className="h-5 w-5 text-[#C69200]" />
+              <h2 className="text-sm font-black uppercase tracking-[0.16em] text-neutral-500">{copy.fitTitle}</h2>
+            </div>
+            <ul className="grid gap-3 md:grid-cols-2">
+              {copy.fit.map((item) => (
+                <li key={item} className="flex gap-3 text-base font-semibold leading-relaxed text-neutral-800 break-keep">
+                  <CheckCircle2 className="mt-1 h-4 w-4 flex-shrink-0 text-[#C69200]" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section className="grid gap-5 border-b border-neutral-200 pb-10 md:grid-cols-[220px_1fr]">
+            <div className="flex items-center gap-3">
+              <Gauge className="h-5 w-5 text-[#C69200]" />
+              <h2 className="text-sm font-black uppercase tracking-[0.16em] text-neutral-500">{copy.includedTitle}</h2>
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {copy.included.map((item) => (
+                <div key={item} className="rounded-md border border-neutral-200 bg-white px-4 py-4 text-sm font-semibold leading-relaxed text-neutral-800 break-keep">
+                  {item}
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="grid gap-5 border-b border-neutral-200 pb-10 md:grid-cols-[220px_1fr]">
+            <div className="flex items-center gap-3">
+              <ClipboardCheck className="h-5 w-5 text-[#C69200]" />
+              <h2 className="text-sm font-black uppercase tracking-[0.16em] text-neutral-500">{copy.decisionsTitle}</h2>
+            </div>
+            <ol className="grid gap-3">
+              {copy.decisions.map((item, index) => (
+                <li key={item} className="grid grid-cols-[40px_1fr] items-start gap-3 border-b border-neutral-100 pb-3 last:border-b-0">
+                  <span className="text-sm font-black text-neutral-400">{String(index + 1).padStart(2, "0")}</span>
+                  <span className="text-base font-semibold leading-relaxed text-neutral-800 break-keep">{item}</span>
+                </li>
+              ))}
+            </ol>
+          </section>
+
+          <section className="grid gap-5 md:grid-cols-[220px_1fr]">
+            <div className="flex items-center gap-3">
+              <ShieldCheck className="h-5 w-5 text-[#C69200]" />
+              <h2 className="text-sm font-black uppercase tracking-[0.16em] text-neutral-500">{copy.outcomesTitle}</h2>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              {copy.outcomes.map((item) => (
+                <p key={item} className="rounded-md bg-neutral-950 px-5 py-5 text-sm font-semibold leading-relaxed text-white break-keep">
+                  {item}
+                </p>
+              ))}
+            </div>
+          </section>
+
+          <div className="flex flex-col gap-3 pt-4 sm:flex-row">
+            <Link
+              href="/customize"
+              className="inline-flex h-12 items-center justify-center gap-2 rounded-sm bg-[#FEBD16] px-6 text-sm font-black text-neutral-950 transition-colors hover:bg-[#E2A80F]"
+            >
+              {copy.ctaPrimary}
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+            <Link
+              href="/support"
+              className="inline-flex h-12 items-center justify-center rounded-sm border border-neutral-300 px-6 text-sm font-black text-neutral-800 transition-colors hover:border-neutral-950 hover:text-neutral-950"
+            >
+              {copy.ctaSecondary}
+            </Link>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
 }

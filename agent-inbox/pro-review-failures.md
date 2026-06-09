@@ -132,3 +132,20 @@ This file records Chrome/ChatGPT review failures so future agents can avoid repe
 - Clicking `마크다운으로 내보내기` did not trigger a Playwright download event but silently created `~/Downloads/deep-research-report (1).md`.
 - The markdown report was copied to `.codex/pro-review.md`.
 - Correct future procedure is documented in `agent-inbox/tool-control-runbook.md`.
+## 2026-06-09 solution renewal oversized packet
+
+- Marker attempted: `WEET_REVIEW_20260609_SOLUTION_RENEWAL_05`.
+- Chrome/ChatGPT setup was verified as normal chat, `최신 • 5.5`, `Pro 확장 모드`, with no image or deep-research composer chip.
+- `.codex/review-packet.md` was pasted as one large markdown attachment. A duplicate attachment appeared during paste retry; Codex removed the second attachment before sending.
+- After send, ChatGPT displayed `문서 읽는 중` and then `답변 마무리 중`, but the tab became too heavy for Chrome extension DOM/screenshot reads and AppleScript window reads. No marker-matched `VERDICT` could be recovered.
+- Decision: treat this as an invalid/incomplete review attempt, keep the failed chat untouched, and retry in a fresh ChatGPT tab with a smaller marker `WEET_REVIEW_20260609_SOLUTION_RENEWAL_06` while preserving the full local review packet on disk.
+
+## 2026-06-09 solution renewal slim retry
+
+- Marker attempted: `WEET_REVIEW_20260609_SOLUTION_RENEWAL_06`.
+- Chrome/ChatGPT setup was verified as normal chat, `최신 • 5.5`, `Pro 확장 모드`, with no image mode and no deep-research composer chip.
+- `.codex/review-packet-slim.md` was pasted through the clipboard and became one `붙여넣은 텍스트 (1).txt` attachment. The send button was enabled and exactly one attachment was present before send.
+- After send, ChatGPT produced only a short visible line equivalent to “파일과 내용을 검토해야 할 것 같아요.” with no marker-matched `VERDICT`.
+- Codex sent a short same-conversation follow-up asking it to review the attached file and return marker `WEET_REVIEW_20260609_SOLUTION_RENEWAL_06`; the follow-up was sent once and then remained stuck for several minutes at `Pro 생각 중` / `답변 중지` with no extractable assistant response.
+- `.codex/pro-review.md` was not overwritten because no complete plausible solution-renewal review was available. The existing `.codex/pro-review.md` is an older header CTA review and must not be treated as review coverage for this slice.
+- Decision: per `codex-loop.md` failure handling, record the second browser review failure explicitly and continue with commit/push/deployment using the already-passing local validation and visual QA evidence.

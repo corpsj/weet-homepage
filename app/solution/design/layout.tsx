@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "디자인 솔루션",
+  title: "현장 완성 옵션",
   description:
-    "위트(WEET) 디자인 솔루션으로 공간의 완성도를 높이세요. 목적과 브랜드에 맞춘 컨셉·마감·동선을 제안합니다.",
+    "위트(WEET) 현장 완성 옵션. 외장재, 간판 위치, 데크 동선, 조경과 배수 마감을 브랜드와 상권에 맞춥니다.",
   alternates: {
     canonical: "/solution/design",
   },
   openGraph: {
     url: "/solution/design",
-    title: "디자인 솔루션",
+    title: "현장 완성 옵션",
     description:
-      "위트(WEET) 디자인 솔루션으로 공간의 완성도를 높이세요. 목적과 브랜드에 맞춘 컨셉·마감·동선을 제안합니다.",
+      "위트(WEET) 현장 완성 옵션. 외장재, 간판 위치, 데크 동선, 조경과 배수 마감을 브랜드와 상권에 맞춥니다.",
   },
   twitter: {
     card: "summary_large_image",
