@@ -30,6 +30,7 @@ Renew the public Weet site section so it feels like a category-leading Korean mo
    - Make solution offerings understandable by problem/use case, not only by technology category.
 4. Update navigation anchors/metadata/tests as needed so the new information architecture stays coherent.
 5. Record image generation prompts, assets, usage decisions, bugs, UX findings, and next candidates in `agent-inbox/`.
+6. Apply latest Stickies steering: `주문하기` should not sit as a normal middle menu item; promote `/customize` to a clear header CTA on desktop and mobile.
 
 ## Current implementation plan
 

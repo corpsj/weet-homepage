@@ -1,22 +1,23 @@
-MARKER: WEET_REVIEW_20260609_PUBLIC_RENEWAL_02
+# GPT-5.5 Pro Review Result
+
+Source: Chrome/ChatGPT normal chat with `최신 • 5.5`, `Pro • 확장`, no `심층 리서치`.
+Conversation: `https://chatgpt.com/c/6a27df71-1be8-8324-b8a4-bc45b03ff391`
+
+MARKER: WEET_REVIEW_20260609_HEADER_CTA_04
 VERDICT: PASS
 
 MUST_FIX:
 
-* None.
+- None.
 
 OPTIONAL:
 
-* Add concrete proof points to /solution packages: monitoring response model, supported device/network scope, maintenance ownership, handoff process, and sample deployment scenarios.
-* Add one or two trust-building modular details: approximate production/install sequence, crane/transport constraints, QC checkpoints, and consultation disclaimers.
-* Regenerate /bespoke imagery later so commercial-space visuals match the newer /modular image system.
-* Extend responsive QA later to intermediate desktop widths, landscape mobile, iOS Safari, reduced-motion behavior, keyboard focus states, and mega-menu interaction states.
-* Add focused E2E coverage for Header submenu anchors and renewed /solution package section visibility.
+- Consider removing the redundant `aria-label` from CTAs whose accessible name should simply be their visible text. This would reduce the chance of future label/name drift, but it is not deploy-blocking.
+- A follow-up E2E assertion that `/customize` is absent from ordinary nav and present only as the primary CTA would be useful regression coverage, but current DOM/visual QA evidence is sufficient for this closure review.
 
 RATIONALE:
 
-* Based on the packet, there is no concrete blocking defect in /modular, /bespoke, /solution, Header, or the updated E2E tests. The reported validation covers typecheck, lint, unit tests, build, Playwright route checks, screenshot QA across three major viewports, overflow checks, console/page errors, generated modular image rendering, and the specific /bespoke smart-farm lazy-image concern.
-* The renewed /solution framing does not show a blocking purchasing-trust flaw. Reframing from generic technology cards into customer-facing operation packages directly addresses the likely buyer question: “What operational problem does this solve, where is it deployed, what is included, and when should I decide?” That is a deployable direction.
-* The remaining customer-trust gaps are content-depth gaps, not release blockers. Buyers may still want harder operational specifics, maintenance responsibility, and implementation constraints, but the current surface is directionally valid and not misleading based on the supplied summary.
-* Responsive risk appears controlled for the changed pages at the validated breakpoints. The remaining risks are untested interaction/browser edge cases rather than concrete evidence of a UI regression.
-* No must-fix code or maintainability regression is evident from the packet. The known caveats are already correctly categorized as backlog/future content work, and the validation evidence is sufficient to continue deployment.
+- The previous deploy-blocking issue is resolved: the Korean desktop CTA visible label is `주문하기`, and its `aria-label` is now also `주문하기`, so the accessible name includes and matches the visible label.
+- The provided post-fix QA confirms `ctaLabelInName: true` across desktop `1440`, desktop `1280`, tablet `834`, and mobile `390`, with no horizontal overflow and no page errors.
+- The validation set is clean for this change: TypeScript, lint, tests, build, and Chromium public-page E2E all passed.
+- The remaining items listed in the packet are either expected local analytics noise, unrelated existing framework warning, pending production-domain QA after promotion, or previously non-blocking hardening items. None is a concrete deploy-blocking issue tied to the final CTA fix.

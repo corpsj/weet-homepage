@@ -51,6 +51,10 @@ This file tracks bugs and improvements discovered during the recursive improveme
   - *Fix Details*: 기존 기술 카드식 구성을 없애고 `해결하는 문제`, `도입 환경`, `패키지 구성`, `추천 시점` 기반의 행형 운영 솔루션 UI로 변경함.
 - [x] 공개 홈페이지: `/bespoke` full-page visual QA에서 below-the-fold 텍스트가 hidden animation 때문에 사라지는 문제를 수정함.
   - *Fix Details*: 섹션 텍스트의 `whileInView` opacity/side-slide 초기 상태를 제거하고 직접 렌더링되도록 변경함.
+- [x] 공개 홈페이지: 헤더에서 `주문하기`가 일반 메뉴 중간에 묻혀 구매 CTA로 충분히 강조되지 않는 문제를 수정함.
+  - *Fix Details*: Antigravity IDE에 프론트엔드 구현을 위임한 뒤 Codex가 보정/검수했다. `Header.tsx`에서 `주문하기/Order`를 일반 navigation 배열에서 제거하고, 데스크톱 우측 독립 CTA와 모바일 헤더/전체 메뉴 CTA로 승격했다.
+  - *Pro Fix*: GPT-5.5 Pro marker `WEET_REVIEW_20260609_HEADER_CTA_03`가 데스크톱 한국어 CTA `aria-label`과 보이는 텍스트 불일치를 `MUST_FIX`로 지적했고, `aria-label`을 `주문하기`로 맞췄다.
+  - *QA Evidence*: `.codex/qa/header-cta-20260609-local/summary.json`에서 desktop `1440x900`, desktop `1280x900`, tablet `834x1112`, mobile `390x844` 모두 horizontal overflow `false`, page error `0`, `ctaLabelInName: true`를 확인했다. 1280/390 screenshot을 수동 확인해 텍스트 겹침이 없음을 확인했다.
 - [ ] 공개 홈페이지: `/bespoke`의 기존 cafe/popup/smart-farm 이미지를 새 GPT 5.5 Thinking 확장 이미지 생성으로 재통일하는 후속 작업이 필요함.
 - [ ] 공개 홈페이지: `/solution/cctv`, `/solution/network`, `/solution/iot`, `/solution/design` 상세 페이지를 새 `/solution` 운영 패키지 프레이밍과 같은 정보 구조로 리뉴얼해야 함.
 - [ ] 공개 홈페이지: `/modular`에 공장 QC 체크포인트, 예상 제작/설치 리드타임, 운송 가능 조건, 크레인/도로 조건을 더 구체적인 수치로 추가하면 구매 신뢰가 더 올라감.

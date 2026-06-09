@@ -46,12 +46,7 @@ const navigationKo = [
       { name: '스마트팜/랩', href: '/bespoke#smart-farm' },
     ],
   },
-  {
-    name: '주문하기',
-    href: '/customize',
-    width: 85,
-    submenu: [],
-  },
+
   {
     name: 'SOLUTION',
     href: '/solution',
@@ -126,12 +121,7 @@ const navigationEn = [
       { name: 'Smart Farm & Lab', href: '/bespoke#smart-farm' },
     ],
   },
-  {
-    name: 'Order',
-    href: '/customize',
-    width: 85,
-    submenu: [],
-  },
+
   {
     name: 'SOLUTION',
     href: '/solution',
@@ -250,19 +240,28 @@ export default function Header() {
               </div>
             </Link>
 
-            {/* Mobile Menu Button - Right Side */}
-            <button
-              onClick={handleMobileMenuToggle}
-              className="xl:hidden absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-[60] p-2 hover:bg-gray-100 rounded-md transition-colors active:bg-gray-200"
-              aria-label="Toggle mobile menu"
-              type="button"
-            >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
+            {/* Mobile Right Side */}
+            <div className="xl:hidden absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-[60] flex items-center gap-2">
+              <Link
+                href="/customize"
+                className="flex items-center justify-center px-3 md:px-4 py-1.5 md:py-2 bg-gray-900 text-white rounded text-[12px] md:text-[13px] font-bold hover:bg-gray-800 transition-colors whitespace-nowrap"
+                aria-label={language === 'KO' ? '주문하기' : 'Order'}
+              >
+                {language === 'KO' ? '주문하기' : 'Order'}
+              </Link>
+              <button
+                onClick={handleMobileMenuToggle}
+                className="p-1.5 hover:bg-gray-100 rounded-md transition-colors active:bg-gray-200"
+                aria-label="Toggle mobile menu"
+                type="button"
+              >
+                {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              </button>
+            </div>
 
             {/* Desktop Navigation */}
             <nav
-              className="hidden xl:flex absolute left-0 right-0 top-0 bottom-0 items-center justify-center pointer-events-none pr-[120px]"
+              className="hidden xl:flex absolute left-[140px] right-[280px] top-0 bottom-0 items-center justify-center pointer-events-none"
               onMouseEnter={handleMegaMenuEnter}
             >
               <div className="flex pointer-events-auto gap-[60px] pb-[70px] -mb-[70px]">
@@ -286,56 +285,48 @@ export default function Header() {
               </div>
             </nav>
 
-            {/* Social Icons - Desktop only */}
-            <div className="hidden xl:flex absolute right-[64px] top-1/2 -translate-y-1/2 items-center space-x-4">
+            {/* Desktop Right Side Content */}
+            <div className="hidden xl:flex absolute right-[64px] top-1/2 -translate-y-1/2 items-center gap-6">
+              {/* Primary CTA */}
               <Link
-                href="https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/"
-                target="_blank"
-                className="text-sm font-bold hover:text-gray-700 transition-colors flex items-center gap-1"
+                href="/customize"
+                className="flex items-center justify-center px-6 py-2 bg-gray-900 text-white border border-gray-900 rounded-sm text-[13px] font-bold hover:bg-white hover:text-gray-900 transition-colors whitespace-nowrap"
+                aria-label={language === 'KO' ? '주문하기' : 'Configure'}
               >
-                <Carrot className="w-[16px] h-[16px]" />
-                <span className="text-[12px]">당근</span>
-              </Link>
-              <Link
-                href="https://blog.naver.com/we-et"
-                target="_blank"
-                className="text-sm font-bold hover:text-gray-700 transition-colors flex items-center gap-1"
-              >
-                <span className="text-[16px] font-bold">N</span>
-                <span className="text-[12px]">blog</span>
-              </Link>
-              <Link
-                href="https://www.instagram.com/weet_kr/"
-                target="_blank"
-                className="text-sm font-bold hover:text-gray-700 transition-colors flex items-center gap-1"
-              >
-                <Instagram className="w-[16px] h-[16px]" />
-                <span className="text-[12px]">instagram</span>
+                {language === 'KO' ? '주문하기' : 'Configure'}
               </Link>
 
+              {/* Social Icons & Language Switcher Block */}
+              <div className="flex flex-col items-end gap-1">
+                <div className="flex items-center space-x-3 text-gray-400">
+                  <Link href="https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/" target="_blank" className="hover:text-gray-800 transition-colors" aria-label="Daangn">
+                    <Carrot className="w-[14px] h-[14px]" />
+                  </Link>
+                  <Link href="https://blog.naver.com/we-et" target="_blank" className="hover:text-gray-800 transition-colors font-bold text-[14px] leading-none" aria-label="Naver Blog">
+                    N
+                  </Link>
+                  <Link href="https://www.instagram.com/weet_kr/" target="_blank" className="hover:text-gray-800 transition-colors" aria-label="Instagram">
+                    <Instagram className="w-[14px] h-[14px]" />
+                  </Link>
+                </div>
+
+                <div className="flex items-center gap-1.5 text-[10px] font-medium">
+                  <button
+                    onClick={() => setLanguage('KO')}
+                    className={cn("transition-colors", language === 'KO' ? "text-gray-800 font-bold" : "text-gray-300 hover:text-gray-500")}
+                  >
+                    KO
+                  </button>
+                  <span className="text-gray-200">|</span>
+                  <button
+                    onClick={() => setLanguage('EN')}
+                    className={cn("transition-colors", language === 'EN' ? "text-gray-800 font-bold" : "text-gray-300 hover:text-gray-500")}
+                  >
+                    EN
+                  </button>
+                </div>
+              </div>
             </div>
-
-            {/* Desktop Language Switcher - Bottom aligned */}
-            <div className="hidden xl:flex absolute right-[64px] bottom-3 flex items-center gap-2 text-[10px] font-medium">
-              <button
-                onClick={() => setLanguage('KO')}
-                className={cn("transition-colors", language === 'KO' ? "text-gray-600 font-bold" : "text-gray-300 hover:text-gray-500")}
-              >
-                KO
-              </button>
-              <span className="text-gray-200">|</span>
-              <button
-                onClick={() => setLanguage('EN')}
-                className={cn("transition-colors", language === 'EN' ? "text-gray-600 font-bold" : "text-gray-300 hover:text-gray-500")}
-              >
-                EN
-              </button>
-            </div>
-
-            {/* Language Selector - Top Right (Desktop) - Moved below SNS */}
-
-
-            {/* Language Selector - Mobile/Tablet - Moved below hamburger */}
 
           </div>
 
@@ -410,6 +401,13 @@ export default function Header() {
 
           {/* Menu Content */}
           <nav className="px-6 py-8">
+            <Link
+              href="/customize"
+              onClick={handleMobileMenuClose}
+              className="flex items-center justify-center w-full py-4 mb-8 bg-gray-900 text-white rounded-md font-bold text-lg hover:bg-gray-800 transition-colors shadow-sm"
+            >
+              {language === 'KO' ? '모델 구성하기' : 'Configure Model'}
+            </Link>
             {navigation.map((item, index) => {
               const hasSubmenu = item.submenu && item.submenu.length > 0;
               const isExpanded = expandedMenu === item.name;

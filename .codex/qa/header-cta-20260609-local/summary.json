@@ -1,0 +1,560 @@
+[
+  {
+    "name": "desktop-1440",
+    "width": 1440,
+    "height": 900,
+    "menu": false,
+    "headerData": {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "overflowX": false,
+      "documentWidth": 1440,
+      "clientWidth": 1440,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 1440,
+        "height": 81,
+        "right": 1440,
+        "bottom": 81,
+        "text": "주문하기모듈러건축 소개제품 소개BESPOKESOLUTION회사소개고객지원주문하기NKO|EN",
+        "ariaLabel": null,
+        "tag": "HEADER",
+        "href": null
+      },
+      "visibleHeaderCustomizeLinks": [
+        {
+          "x": 1195.265625,
+          "y": 21.25,
+          "width": 94.984375,
+          "height": 37.5,
+          "right": 1290.25,
+          "bottom": 58.75,
+          "text": "주문하기",
+          "ariaLabel": "주문하기",
+          "tag": "A",
+          "href": "/customize"
+        }
+      ],
+      "ctaLabelInName": true,
+      "visibleHeaderNavLinks": [
+        {
+          "x": 64,
+          "y": 10,
+          "width": 60,
+          "height": 60,
+          "right": 124,
+          "bottom": 70,
+          "text": "",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/"
+        },
+        {
+          "x": 305.484375,
+          "y": 29,
+          "width": 94.78125,
+          "height": 22.5,
+          "right": 400.265625,
+          "bottom": 51.5,
+          "text": "모듈러건축 소개",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/modular"
+        },
+        {
+          "x": 460.265625,
+          "y": 29,
+          "width": 55.859375,
+          "height": 22.5,
+          "right": 516.125,
+          "bottom": 51.5,
+          "text": "제품 소개",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/products"
+        },
+        {
+          "x": 576.125,
+          "y": 29,
+          "width": 63.65625,
+          "height": 22.5,
+          "right": 639.78125,
+          "bottom": 51.5,
+          "text": "BESPOKE",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/bespoke"
+        },
+        {
+          "x": 699.78125,
+          "y": 29,
+          "width": 70.90625,
+          "height": 22.5,
+          "right": 770.6875,
+          "bottom": 51.5,
+          "text": "SOLUTION",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/solution"
+        },
+        {
+          "x": 830.6875,
+          "y": 29,
+          "width": 51.90625,
+          "height": 22.5,
+          "right": 882.59375,
+          "bottom": 51.5,
+          "text": "회사소개",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/company"
+        },
+        {
+          "x": 942.59375,
+          "y": 29,
+          "width": 51.90625,
+          "height": 22.5,
+          "right": 994.5,
+          "bottom": 51.5,
+          "text": "고객지원",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/support"
+        }
+      ],
+      "visibleHeaderButtons": [
+        {
+          "x": 1335.703125,
+          "y": 41.5,
+          "width": 13.46875,
+          "height": 15,
+          "right": 1349.171875,
+          "bottom": 56.5,
+          "text": "KO",
+          "ariaLabel": null,
+          "tag": "BUTTON",
+          "href": null
+        },
+        {
+          "x": 1363.984375,
+          "y": 41.5,
+          "width": 12.015625,
+          "height": 15,
+          "right": 1376,
+          "bottom": 56.5,
+          "text": "EN",
+          "ariaLabel": null,
+          "tag": "BUTTON",
+          "href": null
+        }
+      ],
+      "visibleOffscreen": []
+    },
+    "menuData": null,
+    "consoleEvents": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Refused to execute script from 'http://localhost:3000/_vercel/insights/script.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled."
+    ],
+    "pageErrors": []
+  },
+  {
+    "name": "desktop-xl-1280",
+    "width": 1280,
+    "height": 900,
+    "menu": false,
+    "headerData": {
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "overflowX": false,
+      "documentWidth": 1280,
+      "clientWidth": 1280,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 1280,
+        "height": 81,
+        "right": 1280,
+        "bottom": 81,
+        "text": "주문하기모듈러건축 소개제품 소개BESPOKESOLUTION회사소개고객지원주문하기NKO|EN",
+        "ariaLabel": null,
+        "tag": "HEADER",
+        "href": null
+      },
+      "visibleHeaderCustomizeLinks": [
+        {
+          "x": 1035.265625,
+          "y": 21.25,
+          "width": 94.984375,
+          "height": 37.5,
+          "right": 1130.25,
+          "bottom": 58.75,
+          "text": "주문하기",
+          "ariaLabel": "주문하기",
+          "tag": "A",
+          "href": "/customize"
+        }
+      ],
+      "ctaLabelInName": true,
+      "visibleHeaderNavLinks": [
+        {
+          "x": 64,
+          "y": 10,
+          "width": 60,
+          "height": 60,
+          "right": 124,
+          "bottom": 70,
+          "text": "",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/"
+        },
+        {
+          "x": 225.484375,
+          "y": 29,
+          "width": 94.78125,
+          "height": 22.5,
+          "right": 320.265625,
+          "bottom": 51.5,
+          "text": "모듈러건축 소개",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/modular"
+        },
+        {
+          "x": 380.265625,
+          "y": 29,
+          "width": 55.859375,
+          "height": 22.5,
+          "right": 436.125,
+          "bottom": 51.5,
+          "text": "제품 소개",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/products"
+        },
+        {
+          "x": 496.125,
+          "y": 29,
+          "width": 63.65625,
+          "height": 22.5,
+          "right": 559.78125,
+          "bottom": 51.5,
+          "text": "BESPOKE",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/bespoke"
+        },
+        {
+          "x": 619.78125,
+          "y": 29,
+          "width": 70.90625,
+          "height": 22.5,
+          "right": 690.6875,
+          "bottom": 51.5,
+          "text": "SOLUTION",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/solution"
+        },
+        {
+          "x": 750.6875,
+          "y": 29,
+          "width": 51.90625,
+          "height": 22.5,
+          "right": 802.59375,
+          "bottom": 51.5,
+          "text": "회사소개",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/company"
+        },
+        {
+          "x": 862.59375,
+          "y": 29,
+          "width": 51.90625,
+          "height": 22.5,
+          "right": 914.5,
+          "bottom": 51.5,
+          "text": "고객지원",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/support"
+        }
+      ],
+      "visibleHeaderButtons": [
+        {
+          "x": 1175.703125,
+          "y": 41.5,
+          "width": 13.46875,
+          "height": 15,
+          "right": 1189.171875,
+          "bottom": 56.5,
+          "text": "KO",
+          "ariaLabel": null,
+          "tag": "BUTTON",
+          "href": null
+        },
+        {
+          "x": 1203.984375,
+          "y": 41.5,
+          "width": 12.015625,
+          "height": 15,
+          "right": 1216,
+          "bottom": 56.5,
+          "text": "EN",
+          "ariaLabel": null,
+          "tag": "BUTTON",
+          "href": null
+        }
+      ],
+      "visibleOffscreen": []
+    },
+    "menuData": null,
+    "consoleEvents": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Refused to execute script from 'http://localhost:3000/_vercel/insights/script.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled."
+    ],
+    "pageErrors": []
+  },
+  {
+    "name": "tablet-834",
+    "width": 834,
+    "height": 1112,
+    "menu": true,
+    "headerData": {
+      "viewport": {
+        "width": 834,
+        "height": 1112
+      },
+      "overflowX": false,
+      "documentWidth": 834,
+      "clientWidth": 834,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 834,
+        "height": 81,
+        "right": 834,
+        "bottom": 81,
+        "text": "주문하기모듈러건축 소개제품 소개BESPOKESOLUTION회사소개고객지원주문하기NKO|EN",
+        "ariaLabel": null,
+        "tag": "HEADER",
+        "href": null
+      },
+      "visibleHeaderCustomizeLinks": [
+        {
+          "x": 681.015625,
+          "y": 22.25,
+          "width": 76.984375,
+          "height": 35.5,
+          "right": 758,
+          "bottom": 57.75,
+          "text": "주문하기",
+          "ariaLabel": "주문하기",
+          "tag": "A",
+          "href": "/customize"
+        }
+      ],
+      "ctaLabelInName": true,
+      "visibleHeaderNavLinks": [
+        {
+          "x": 32,
+          "y": 10,
+          "width": 60,
+          "height": 60,
+          "right": 92,
+          "bottom": 70,
+          "text": "",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/"
+        }
+      ],
+      "visibleHeaderButtons": [
+        {
+          "x": 766,
+          "y": 22,
+          "width": 36,
+          "height": 36,
+          "right": 802,
+          "bottom": 58,
+          "text": "",
+          "ariaLabel": "Toggle mobile menu",
+          "tag": "BUTTON",
+          "href": null
+        }
+      ],
+      "visibleOffscreen": []
+    },
+    "menuData": {
+      "overflowX": false,
+      "visibleCustomizeLinks": [
+        {
+          "x": 681.015625,
+          "y": 22.25,
+          "width": 76.984375,
+          "height": 35.5,
+          "right": 758,
+          "bottom": 57.75,
+          "text": "주문하기",
+          "ariaLabel": "주문하기",
+          "tag": "A",
+          "href": "/customize"
+        },
+        {
+          "x": 48,
+          "y": 824,
+          "width": 168.34375,
+          "height": 48,
+          "right": 216.34375,
+          "bottom": 872,
+          "text": "모델 구성하기",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/customize"
+        },
+        {
+          "x": 24,
+          "y": 125,
+          "width": 786,
+          "height": 60,
+          "right": 810,
+          "bottom": 185,
+          "text": "모델 구성하기",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/customize"
+        }
+      ],
+      "visibleOffscreen": []
+    },
+    "consoleEvents": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Refused to execute script from 'http://localhost:3000/_vercel/insights/script.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled."
+    ],
+    "pageErrors": []
+  },
+  {
+    "name": "mobile-390",
+    "width": 390,
+    "height": 844,
+    "menu": true,
+    "headerData": {
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "overflowX": false,
+      "documentWidth": 390,
+      "clientWidth": 390,
+      "header": {
+        "x": 0,
+        "y": 0,
+        "width": 390,
+        "height": 71,
+        "right": 390,
+        "bottom": 71,
+        "text": "주문하기모듈러건축 소개제품 소개BESPOKESOLUTION회사소개고객지원주문하기NKO|EN",
+        "ariaLabel": null,
+        "tag": "HEADER",
+        "href": null
+      },
+      "visibleHeaderCustomizeLinks": [
+        {
+          "x": 264.46875,
+          "y": 20,
+          "width": 65.53125,
+          "height": 30,
+          "right": 330,
+          "bottom": 50,
+          "text": "주문하기",
+          "ariaLabel": "주문하기",
+          "tag": "A",
+          "href": "/customize"
+        }
+      ],
+      "ctaLabelInName": true,
+      "visibleHeaderNavLinks": [
+        {
+          "x": 16,
+          "y": 5,
+          "width": 60,
+          "height": 60,
+          "right": 76,
+          "bottom": 65,
+          "text": "",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/"
+        }
+      ],
+      "visibleHeaderButtons": [
+        {
+          "x": 338,
+          "y": 17,
+          "width": 36,
+          "height": 36,
+          "right": 374,
+          "bottom": 53,
+          "text": "",
+          "ariaLabel": "Toggle mobile menu",
+          "tag": "BUTTON",
+          "href": null
+        }
+      ],
+      "visibleOffscreen": []
+    },
+    "menuData": {
+      "overflowX": false,
+      "visibleCustomizeLinks": [
+        {
+          "x": 264.46875,
+          "y": 20,
+          "width": 65.53125,
+          "height": 30,
+          "right": 330,
+          "bottom": 50,
+          "text": "주문하기",
+          "ariaLabel": "주문하기",
+          "tag": "A",
+          "href": "/customize"
+        },
+        {
+          "x": 24,
+          "y": 502,
+          "width": 342,
+          "height": 48,
+          "right": 366,
+          "bottom": 550,
+          "text": "모델 구성하기",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/customize"
+        },
+        {
+          "x": 24,
+          "y": 125,
+          "width": 342,
+          "height": 60,
+          "right": 366,
+          "bottom": 185,
+          "text": "모델 구성하기",
+          "ariaLabel": null,
+          "tag": "A",
+          "href": "/customize"
+        }
+      ],
+      "visibleOffscreen": []
+    },
+    "consoleEvents": [
+      "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "Refused to execute script from 'http://localhost:3000/_vercel/insights/script.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled."
+    ],
+    "pageErrors": []
+  }
+]

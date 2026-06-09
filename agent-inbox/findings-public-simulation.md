@@ -224,3 +224,12 @@ The first 10 personas did not produce 100 unique hard bugs. Following the user i
 150. Fix applied after production QA: `/bespoke` H1 changed to `상업 공간 맞춤 솔루션` in Korean and `Commercial Space Custom Solutions` in English; E2E heading expectation was updated.
 151. Production visual QA after commit `02ab2e1` found mobile `/solution` H1 wrapping as `설계합니 / 다`, which looked unpolished even though there was no horizontal overflow.
 152. Fix applied after production QA: Korean `/solution` H1 now renders as intentional mobile lines `공간 운영까지` and `설계합니다`, while tablet/desktop keep an inline heading.
+153. Stickies steering on 2026-06-09 found `주문하기` felt under-emphasized because it sat as an ordinary header menu item between BESPOKE and SOLUTION.
+154. Fix applied: `주문하기` / `Order` was removed from the normal header navigation arrays and promoted to an independent `/customize` CTA.
+155. Desktop visual QA at `1280x900` and `1440x900` verified the centered nav contains only `모듈러건축 소개`, `제품 소개`, `BESPOKE`, `SOLUTION`, `회사소개`, `고객지원`, while the right-side primary CTA remains visible as `주문하기`.
+156. Mobile visual QA at `390x844` verified logo, compact `주문하기` CTA, and hamburger button fit in the header without overlap.
+157. Mobile menu visual QA verified a full-width `모델 구성하기` CTA appears above ordinary menu groups, giving `/customize` a stronger conversion path than standard navigation links.
+158. Header CTA local QA evidence saved in `.codex/qa/header-cta-20260609-local/`; desktop/tablet/mobile checks reported horizontal overflow `false`, console events `0`, and page errors `0`.
+159. GPT-5.5 Pro marker `WEET_REVIEW_20260609_HEADER_CTA_03` found one concrete header CTA accessibility issue: desktop Korean CTA visible text was `주문하기` but `aria-label` was `모델 구성하기`, causing a label-in-name mismatch.
+160. Fix applied: desktop Korean `/customize` CTA `aria-label` now matches visible text as `주문하기`; English remains `Configure`.
+161. Post-fix local visual/accessibility QA verified desktop `1440x900`, desktop `1280x900`, tablet `834x1112`, and mobile `390x844` all have `/customize` CTA visible, horizontal overflow `false`, page errors `0`, and `ctaLabelInName: true`.

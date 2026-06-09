@@ -2,94 +2,92 @@
 
 ## Active task
 
-Renew Weet public `/modular`, `/bespoke`, and `/solution` surfaces: completely rebuild modular architecture with newly generated GPT images, reposition Bespoke as a commercial-space custom solution service, and renew the Solution page from a customer/use-case perspective per Stickies steering.
+Renew Weet public `/modular`, `/bespoke`, and `/solution` surfaces; reposition `/bespoke` as a commercial-space custom solution; improve `/solution` as operations packages; apply latest Stickies steering that `주문하기` must be promoted out of the middle header menu.
 
 ## Current phase
 
-branch pushed; GPT-5.5 Pro review passed; preparing deployment verification
+GPT-5.5 Pro closure review passed; preparing commit, push, Vercel promotion, and production-domain QA
 
 ## Changes made
 
-- Re-read required workflow files and all non-binary `agent-inbox/` instructions.
-- Checked Stickies through Computer Use at the start and again before validation. Current visible steering: "현재의 솔루션페이지에 대해서 냉정하게 평가하고 고객의 입장에서 다시 리뉴얼해."
-- Checked Stickies again after Chrome showed new user steering. Current visible steering says to push the current branch first, let the user explore the homepage, and update instructions so future Pro review uses `Pro 확장` without `심층 리서치`.
-- Generated all modular page images through Chrome/ChatGPT visible web control using non-Pro `최신 • 5.5` Thinking `확장` image mode, one image per run.
-- Logged generated image conversations, files, hashes, and usage decisions in `agent-inbox/modular-public-renewal-assets.md`.
-- Delegated the frontend implementation slice to Antigravity IDE through Computer Use, verified the Antigravity prompt and send state visually, accepted intended route/header/test edits, then continued verification in Codex.
+- Re-read `AGENTS.md`, `codex-loop.md`, `.codex/current-task.md`, `.codex/state.md`, `agent-inbox/README.md`, and non-binary `agent-inbox/` instructions.
+- Checked Stickies through Computer Use multiple times. Latest visible steering still says `주문하기` in the header feels under-emphasized because it sits in the middle of the menu.
+- Generated modular renewal images earlier through Chrome/ChatGPT visible web control using non-Pro `최신 • 5.5` Thinking `확장`, one image per run.
+- Delegated the public page implementation slice to Antigravity IDE through Computer Use and accepted intended changes after visual confirmation.
 - Rebuilt `/modular` around generated proof imagery: hero, factory precision, transport/install, interior comfort, expansion/relocation, and conversion CTAs.
-- Repositioned `/bespoke` as a commercial-space custom solution page for cafes, pop-ups/showrooms, accommodation/workspaces, and smart farm/lab use cases.
-- Reworked `/solution` from a generic technology card grid into customer-facing operational packages: problem, deployment environment, package composition, and recommended timing.
-- Updated metadata for `/modular`, `/bespoke`, `/solution`.
-- Updated public header submenu labels/anchors for the new information architecture.
-- Updated `e2e/public-pages.spec.ts` expectations for the renewed public pages and mobile overflow checks.
-- Fixed Codex visual QA findings:
-  - Removed `tracking-*`, bounce scroll hint, low-contrast yellow CTA text, and over-decorated Bespoke image treatment.
-  - Removed Bespoke section text `whileInView` hidden/side-slide animation after full-page visual QA showed below-the-fold text could disappear or shift in screenshots.
-  - Set reversed Bespoke sections to show text before image on mobile while preserving desktop alternation.
-- Verified Smart Farm image lazy-loading by navigating directly to `/bespoke#smart-farm`; the image loads with `complete: true`, `naturalWidth: 390`, no console errors, and no horizontal overflow.
-- Committed and pushed current branch per Stickies steering: commit `745020a` on `origin/zoo/customize-configurator`.
-- Requested GPT-5.5 Pro review in normal Chrome/ChatGPT with `Pro 확장` and no `심층 리서치`, marker `WEET_REVIEW_20260609_PUBLIC_RENEWAL_02`.
-- Saved the valid marker-matched review to `.codex/pro-review.md`; verdict is `PASS`, `MUST_FIX: None`.
+- Repositioned `/bespoke` as a commercial-space custom solution page and later fixed the production H1 to `상업 공간 맞춤 솔루션`.
+- Reworked `/solution` into customer-facing operational packages and later fixed mobile Korean H1 wrapping by rendering intentional two-line mobile text with an `aria-label`.
+- Applied latest Stickies header steering through Antigravity IDE: removed `주문하기` / `Order` from normal navigation arrays and promoted `/customize` to a separate desktop, mobile-header, and mobile-menu CTA.
+- Codex adjusted Antigravity's header layout for safer `1280px` desktop spacing and removed a trailing whitespace issue.
+- Applied GPT-5.5 Pro header CTA `MUST_FIX`: desktop Korean CTA `aria-label` now matches visible text `주문하기`.
+- Logged new findings and backlog closure in `agent-inbox/findings-public-simulation.md` and `agent-inbox/implementation-backlog.md`.
 
 ## Commands run
 
+- `computer-use:list_apps`
+- `computer-use:get_app_state("com.apple.Stickies")`
+- `computer-use:get_app_state("com.google.antigravity-ide")`
 - `git status --short --branch`
-- `git diff --stat`
+- `git diff -- components/layout/Header.tsx`
 - `git diff --check`
-- `rg` / `sed` inspections for route files, layouts, header, tests, and style tokens
-- `file` / `sharp` metadata checks for image assets
 - `npx tsc --noEmit`
 - `npm run lint`
 - `npm test`
 - `npm run build`
 - `npx playwright test e2e/public-pages.spec.ts --project=chromium`
-- Playwright visual QA scripts for `/modular`, `/bespoke`, `/solution` at desktop `1440x1100`, tablet `834x1112`, and mobile `390x844`
-- Chrome browser-control open of `http://localhost:3000/modular`, verifying the renewed modular H1 is visible in the user's Chrome
-- Chrome/ChatGPT normal Pro review with `Pro 확장` and no `심층 리서치`
-- `git commit -m "Renew public modular and solution pages"`
-- `git push origin zoo/customize-configurator`
+- Playwright visual QA script for header CTA at desktop `1440x900`, desktop `1280x900`, tablet `834x1112`, and mobile `390x844`
+- Chrome/ChatGPT normal Pro review with `최신 • 5.5`, checked `Pro • 확장`, and no `심층 리서치`
+- `lsof -i :3000`
 
 ## Validation results
 
-- `git diff --check`: passed after removing trailing whitespace.
+- `git diff --check`: passed after cleaning review-packet trailing whitespace.
 - `npx tsc --noEmit`: passed.
 - `npm run lint`: passed.
 - `npm test`: 3 files passed, 20 tests passed.
-- `npm run build`: passed. Existing Next warning remains: `middleware` file convention is deprecated in favor of `proxy`.
+- `npm run build`: passed. Existing warning remains: Next `middleware` file convention is deprecated in favor of `proxy`.
 - `npx playwright test e2e/public-pages.spec.ts --project=chromium`: 14 passed.
-- Visual QA:
-  - Screenshots and `summary.json` saved in `.codex/qa/public-renewal-20260609/`.
-  - `/modular`, `/bespoke`, `/solution` desktop/tablet/mobile: horizontal overflow `false`, visible text outside viewport `0`, console errors `0`, page errors `0`.
-  - Manual screenshot review confirmed `/modular` generated images render, `/solution` reads as a denser operations surface, and `/bespoke` no longer shows missing text after removing hidden entrance animation.
+- Header CTA post-fix visual/accessibility QA:
+  - Evidence saved in `.codex/qa/header-cta-20260609-local/`.
+  - Desktop `1440x900` and `1280x900`: normal nav excludes `주문하기`; right-side `/customize` CTA is visible; horizontal overflow `false`; `ctaLabelInName: true`; page errors `0`.
+  - Tablet `834x1112` and mobile `390x844`: compact header `/customize` CTA visible; full-screen mobile menu has prominent `모델 구성하기`; horizontal overflow `false`; `ctaLabelInName: true`; page errors `0`.
+  - Local `next start` reports expected `_vercel/insights/script.js` 404/MIME console noise; this is not a page/runtime error and will be checked on production after promote.
+- Production QA before the latest header CTA slice:
+  - Commit `acef171` promoted to production and checked on `https://www.we-et.com`.
+  - `/modular`, `/bespoke`, `/solution` desktop/tablet/mobile reported H1 visible, probes present, horizontal overflow `false`, console/page errors `0`, and no bad visible images.
 
 ## Current failures
 
-- The first ad-hoc Node screenshot script failed because it mixed `require()` with top-level `await`; reran successfully with `node --input-type=module`.
-- Full-page `/bespoke` screenshot initially showed Smart Farm image as a gray lazy-loading placeholder. Direct navigation to `/bespoke#smart-farm` confirmed the actual user scroll position loads the image successfully.
-- GPT-5.5 Pro review attempt 1 in Chrome/ChatGPT Deep Research completed, but it only extracted marker/template occurrences from the pasted markdown attachment and did not review the implementation. Failure details were recorded in `agent-inbox/pro-review-failures.md`; `.codex/pro-review.md` was not updated.
-- Project review instructions were updated to avoid `심층 리서치` for future GPT-5.5 Pro code/product review and use normal Chrome/ChatGPT `Pro 확장` instead.
+- None blocking.
+- One visual QA script attempt failed because the local Playwright `page.accessibility` helper was unavailable; reran successfully using DOM `aria-label` and visible-text comparison.
+- Existing non-blocking warning: Next `middleware` file convention is deprecated in favor of `proxy`.
+- Earlier invalid GPT-5.5 Deep Research attempt extracted marker occurrences instead of reviewing; recorded in `agent-inbox/pro-review-failures.md` and superseded by valid normal `Pro 확장` reviews.
 
 ## Pro review cycles
 
-1 valid normal Chrome/ChatGPT Pro 확장 cycle; 1 invalid Chrome/Deep Research attempt
+2 valid normal Chrome/ChatGPT `Pro 확장` cycles for the header CTA slice; 1 earlier valid public-renewal pass; 1 invalid old Chrome/Deep Research attempt.
 
 ## Last Pro verdict
 
-PASS (`WEET_REVIEW_20260609_PUBLIC_RENEWAL_02`)
+PASS (`WEET_REVIEW_20260609_HEADER_CTA_04`)
 
 ## Applied Pro feedback
 
-- None yet.
+- `WEET_REVIEW_20260609_HEADER_CTA_03` `MUST_FIX`: changed desktop Korean `/customize` CTA `aria-label` from `모델 구성하기` to `주문하기` so the accessible name matches the visible label.
 
 ## Skipped Pro feedback
 
-- None yet.
+- Optional: remove redundant CTA `aria-label` values; skipped because current names are correct and explicit.
+- Optional: add `rel="noopener noreferrer"` to external social links; skipped as unrelated/non-blocking.
+- Optional: add a focused E2E assertion for nav/CTA separation; skipped for this slice because DOM/visual QA already verifies the separation and the task is moving to deployment.
 
 ## Remaining risks
 
-- Production deployment and real-domain QA on `we-et.com` / `www.we-et.com` remain pending after the pushed branch is deployed or promoted.
-- `test-results/` contains only transient Playwright metadata and should be excluded/removed before commit; durable visual evidence is in `.codex/qa/public-renewal-20260609/`.
+- Latest header CTA commit still needs branch push, Vercel production promotion, and real-domain QA on `www.we-et.com`.
+- `/bespoke` still uses older cafe/popup/smart-farm images; future work should regenerate them via Chrome/ChatGPT `최신 • 5.5` Thinking `확장`.
+- `/solution/cctv`, `/solution/network`, `/solution/iot`, and `/solution/design` detail pages still need the new operations-first framing.
+- Public pricing/transport/install constraints need more concrete numeric ranges to further raise buyer trust.
 
 ## Next step
 
-Commit/push the review-result state update, then verify deployment on the production domain or promote the pushed Vercel deployment if needed.
+Commit and push the latest header CTA/state/QA evidence, promote the new Vercel deployment, then verify `https://www.we-et.com` production header CTA on desktop/tablet/mobile.
