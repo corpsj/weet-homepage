@@ -54,6 +54,9 @@ This file tracks bugs and improvements discovered during the recursive improveme
 - [ ] 공개 홈페이지: `/bespoke`의 기존 cafe/popup/smart-farm 이미지를 새 GPT 5.5 Thinking 확장 이미지 생성으로 재통일하는 후속 작업이 필요함.
 - [ ] 공개 홈페이지: `/solution/cctv`, `/solution/network`, `/solution/iot`, `/solution/design` 상세 페이지를 새 `/solution` 운영 패키지 프레이밍과 같은 정보 구조로 리뉴얼해야 함.
 - [ ] 공개 홈페이지: `/modular`에 공장 QC 체크포인트, 예상 제작/설치 리드타임, 운송 가능 조건, 크레인/도로 조건을 더 구체적인 수치로 추가하면 구매 신뢰가 더 올라감.
+- [ ] 공개 홈페이지: GPT-5.5 Pro `WEET_REVIEW_20260609_PUBLIC_RENEWAL_02` OPTIONAL - `/solution` 운영 패키지에 모니터링 대응 방식, 지원 장비/네트워크 범위, 유지보수 책임, 인수인계 절차, 예시 도입 시나리오를 추가하면 구매 신뢰가 더 올라감.
+- [ ] 공개 홈페이지: GPT-5.5 Pro `WEET_REVIEW_20260609_PUBLIC_RENEWAL_02` OPTIONAL - responsive QA 범위를 중간 desktop width, mobile landscape, iOS Safari, reduced-motion, keyboard focus, mega-menu interaction까지 확장해야 함.
+- [ ] 공개 홈페이지: GPT-5.5 Pro `WEET_REVIEW_20260609_PUBLIC_RENEWAL_02` OPTIONAL - Header submenu anchors와 `/solution` 패키지 섹션 visibility를 검증하는 focused E2E를 추가하면 회귀 방어가 더 강해짐.
 - [x] 관리자 페이지: 현재 리디자인은 shell/dashboard 중심이며, `products`, `projects`, `inquiries`, `insights`, `gallery`, `UTM`, `CMS` 하위 화면에는 기존 `rounded-xl/2xl/3xl`, `tracking-tight`, old SaaS card tone이 남아 있음.
   - *Fix Details*: 2026-06-07 두 번째 Antigravity handoff와 Codex 보정으로 `UTM`, `CMS`, `gallery`, `inquiries`, project/gallery/product edit-new forms, support editor, product modal, insights cleanup을 같은 console system으로 전환함.
 - [x] 관리자 페이지: `products`, `projects`, `consultations`, `insights`는 1차 console tone으로 전환됐으나 `UTM`, `CMS`, `gallery`, `inquiries`, edit/new forms, modal 계층에는 기존 `rounded-xl/2xl/3xl`, old SaaS card tone이 여전히 남아 있음.

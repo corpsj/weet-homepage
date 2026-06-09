@@ -6,7 +6,7 @@ Renew Weet public `/modular`, `/bespoke`, and `/solution` surfaces: completely r
 
 ## Current phase
 
-local validation complete; updating Pro review instructions and pushing current branch per Stickies steering
+branch pushed; GPT-5.5 Pro review passed; preparing deployment verification
 
 ## Changes made
 
@@ -27,6 +27,9 @@ local validation complete; updating Pro review instructions and pushing current 
   - Removed Bespoke section text `whileInView` hidden/side-slide animation after full-page visual QA showed below-the-fold text could disappear or shift in screenshots.
   - Set reversed Bespoke sections to show text before image on mobile while preserving desktop alternation.
 - Verified Smart Farm image lazy-loading by navigating directly to `/bespoke#smart-farm`; the image loads with `complete: true`, `naturalWidth: 390`, no console errors, and no horizontal overflow.
+- Committed and pushed current branch per Stickies steering: commit `745020a` on `origin/zoo/customize-configurator`.
+- Requested GPT-5.5 Pro review in normal Chrome/ChatGPT with `Pro 확장` and no `심층 리서치`, marker `WEET_REVIEW_20260609_PUBLIC_RENEWAL_02`.
+- Saved the valid marker-matched review to `.codex/pro-review.md`; verdict is `PASS`, `MUST_FIX: None`.
 
 ## Commands run
 
@@ -42,6 +45,9 @@ local validation complete; updating Pro review instructions and pushing current 
 - `npx playwright test e2e/public-pages.spec.ts --project=chromium`
 - Playwright visual QA scripts for `/modular`, `/bespoke`, `/solution` at desktop `1440x1100`, tablet `834x1112`, and mobile `390x844`
 - Chrome browser-control open of `http://localhost:3000/modular`, verifying the renewed modular H1 is visible in the user's Chrome
+- Chrome/ChatGPT normal Pro review with `Pro 확장` and no `심층 리서치`
+- `git commit -m "Renew public modular and solution pages"`
+- `git push origin zoo/customize-configurator`
 
 ## Validation results
 
@@ -65,11 +71,11 @@ local validation complete; updating Pro review instructions and pushing current 
 
 ## Pro review cycles
 
-0 valid cycles; 1 invalid Chrome/Deep Research attempt
+1 valid normal Chrome/ChatGPT Pro 확장 cycle; 1 invalid Chrome/Deep Research attempt
 
 ## Last Pro verdict
 
-unavailable
+PASS (`WEET_REVIEW_20260609_PUBLIC_RENEWAL_02`)
 
 ## Applied Pro feedback
 
@@ -81,11 +87,9 @@ unavailable
 
 ## Remaining risks
 
-- GPT-5.5 Pro review still needs to be requested again through normal Chrome/ChatGPT with `Pro 확장` and no `심층 리서치`, using a shorter inline packet if needed.
-- Concrete GPT Pro `MUST_FIX` feedback, if any, must be applied and revalidated.
-- Production deployment and real-domain QA on `we-et.com` / `www.we-et.com` remain pending after commit and push.
+- Production deployment and real-domain QA on `we-et.com` / `www.we-et.com` remain pending after the pushed branch is deployed or promoted.
 - `test-results/` contains only transient Playwright metadata and should be excluded/removed before commit; durable visual evidence is in `.codex/qa/public-renewal-20260609/`.
 
 ## Next step
 
-Commit and push the current branch first per Stickies steering. Then request GPT-5.5 Pro review in a fresh normal Chrome/ChatGPT chat with `Pro 확장` and no `심층 리서치`, save a valid marker-matched `.codex/pro-review.md`, apply concrete `MUST_FIX`, deploy/promote, and verify production.
+Commit/push the review-result state update, then verify deployment on the production domain or promote the pushed Vercel deployment if needed.

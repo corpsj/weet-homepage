@@ -1,6 +1,6 @@
 # GPT-5.5 Pro Review Packet
 
-Marker: `WEET_REVIEW_20260609_PUBLIC_RENEWAL_01`
+Marker: `WEET_REVIEW_20260609_PUBLIC_RENEWAL_02`
 
 ## Active Task Brief
 
@@ -23,6 +23,7 @@ Latest user steering:
   - Removed `/bespoke` below-the-fold hidden side-slide animation after full-page visual QA showed missing/shifted text.
   - Set reversed `/bespoke` sections to show text first on mobile.
 - Local validation is complete. GPT-5.5 Pro review is pending.
+- Previous Chrome/ChatGPT attempt with marker `WEET_REVIEW_20260609_PUBLIC_RENEWAL_01` used Deep Research and produced an invalid marker-extraction report instead of a review. Per current Stickies steering, this retry must use normal ChatGPT with `Pro 확장` and no `심층 리서치`.
 
 ## Project Snapshot
 
@@ -383,7 +384,7 @@ Please review as GPT-5.5 Pro with a strict product/UX/code lens.
 Return exactly this structure:
 
 ```text
-MARKER: WEET_REVIEW_20260609_PUBLIC_RENEWAL_01
+MARKER: WEET_REVIEW_20260609_PUBLIC_RENEWAL_02
 VERDICT: PASS | MUST_FIX
 
 MUST_FIX:
