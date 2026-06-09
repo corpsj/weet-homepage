@@ -61,12 +61,14 @@ This file tracks bugs and improvements discovered during the recursive improveme
   - *Fix Details*: 기존 기능 카드/모달형 상세 페이지를 폐기하고, 각 옵션별 `추천 현장`, `구성 범위`, `상담 때 확정할 것`, `도입 후 달라지는 점` 구조의 operations-first 상세 페이지로 교체함.
   - *Image Details*: Chrome/ChatGPT visible web control에서 `최신 • 5.5` + `Thinking • 확장` + `이미지 만들기`로 옵션마다 한 장씩 한국 실사 이미지를 생성하고 `public/images/solution/generated/`에 적용함. Stickies 지시에 따라 보안 이미지는 큰 집 전경을 폐기하고 옵션 장비 중심으로 재생성함.
   - *QA Evidence*: `.codex/qa/solution-renewal-20260609/summary.json`에서 `/solution` 및 4개 상세 경로의 desktop/tablet/mobile horizontal overflow `false`, console/page error `0`, old image refs `0`, generated image present를 확인함.
+  - *Production Evidence*: commit `fb62d34`을 Vercel 웹 UI에서 production deployment `FYGbRPkso`로 promote했고, `https://www.we-et.com?v=fb62d34`에서 `/solution` 및 4개 상세 경로의 desktop/tablet/mobile horizontal overflow `false`, console/page error `0`, old image refs `0`, generated image present를 확인함.
 - [ ] 공개 홈페이지: `/modular`에 공장 QC 체크포인트, 예상 제작/설치 리드타임, 운송 가능 조건, 크레인/도로 조건을 더 구체적인 수치로 추가하면 구매 신뢰가 더 올라감.
 - [ ] 공개 홈페이지: GPT-5.5 Pro `WEET_REVIEW_20260609_PUBLIC_RENEWAL_02` OPTIONAL - `/solution` 운영 패키지에 모니터링 대응 방식, 지원 장비/네트워크 범위, 유지보수 책임, 인수인계 절차, 예시 도입 시나리오를 추가하면 구매 신뢰가 더 올라감.
 - [ ] 공개 홈페이지: GPT-5.5 Pro `WEET_REVIEW_20260609_PUBLIC_RENEWAL_02` OPTIONAL - responsive QA 범위를 중간 desktop width, mobile landscape, iOS Safari, reduced-motion, keyboard focus, mega-menu interaction까지 확장해야 함.
 - [ ] 공개 홈페이지: GPT-5.5 Pro `WEET_REVIEW_20260609_PUBLIC_RENEWAL_02` OPTIONAL - Header submenu anchors와 `/solution` 패키지 섹션 visibility를 검증하는 focused E2E를 추가하면 회귀 방어가 더 강해짐.
 - [ ] 공개 홈페이지: `/solution` 옵션 상세에 실제 상담 사례 2~3개(무인 카페, 독채 스테이, 현장 사무실)를 추가하면 구매자가 자기 상황에 더 빨리 대입할 수 있음.
 - [ ] 공개 홈페이지: `/solution` 옵션별 유지보수 책임, 모니터링 대응 시간, 장비 보증 범위를 숫자와 조건으로 명시하면 신뢰도가 더 올라감.
+- [ ] 공개 홈페이지: production QA에서 자동 이미지 메트릭이 tablet/mobile `/solution` header logo를 `naturalWidth: 0`으로 간헐 보고하지만 스크린샷은 정상임. 다음 QA 스크립트에서 로고 lazy-load 안정화 대기 또는 visible-pixel 체크로 측정 방식을 보강해야 함.
 - [x] 관리자 페이지: 현재 리디자인은 shell/dashboard 중심이며, `products`, `projects`, `inquiries`, `insights`, `gallery`, `UTM`, `CMS` 하위 화면에는 기존 `rounded-xl/2xl/3xl`, `tracking-tight`, old SaaS card tone이 남아 있음.
   - *Fix Details*: 2026-06-07 두 번째 Antigravity handoff와 Codex 보정으로 `UTM`, `CMS`, `gallery`, `inquiries`, project/gallery/product edit-new forms, support editor, product modal, insights cleanup을 같은 console system으로 전환함.
 - [x] 관리자 페이지: `products`, `projects`, `consultations`, `insights`는 1차 console tone으로 전환됐으나 `UTM`, `CMS`, `gallery`, `inquiries`, edit/new forms, modal 계층에는 기존 `rounded-xl/2xl/3xl`, old SaaS card tone이 여전히 남아 있음.

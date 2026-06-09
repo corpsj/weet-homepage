@@ -6,7 +6,7 @@ Renew the Weet `/solution` section and all solution detail pages with Korean pho
 
 ## Current phase
 
-local validation complete; GPT-5.5 Pro review unavailable after two Chrome attempts; commit, push, deployment, and production QA remain.
+complete.
 
 ## Changes made
 
@@ -22,6 +22,9 @@ local validation complete; GPT-5.5 Pro review unavailable after two Chrome attem
 - Created the full `.codex/review-packet.md` with marker `WEET_REVIEW_20260609_SOLUTION_RENEWAL_05` and a smaller retry packet `.codex/review-packet-slim.md` with marker `WEET_REVIEW_20260609_SOLUTION_RENEWAL_06`.
 - Attempted GPT-5.5 Pro review twice through Chrome/ChatGPT visible web control. Both attempts failed to produce a complete marker-matched verdict, so no new `.codex/pro-review.md` was saved for this solution slice.
 - Rechecked Stickies after resume; Computer Use bridge was healthy, but both `com.apple.Stickies` and `Stickies` window reads returned `cgWindowNotFound`.
+- Committed solution renewal as `fb62d34` (`Renew solution operations pages`) and pushed `zoo/customize-configurator` to origin.
+- Used Chrome/Vercel web UI to promote commit `fb62d34` to Production. Production deployment `FYGbRPkso` became Ready and current for `www.we-et.com`.
+- Verified the production domain `https://www.we-et.com` with cache marker `?v=fb62d34` across desktop, tablet, and mobile for `/solution` and all four detail routes.
 
 ## Commands run
 
@@ -38,6 +41,16 @@ local validation complete; GPT-5.5 Pro review unavailable after two Chrome attem
 - `npx playwright test e2e/public-pages.spec.ts --project=chromium`
 - Chrome/ChatGPT normal Pro review attempt `WEET_REVIEW_20260609_SOLUTION_RENEWAL_05`
 - Chrome/ChatGPT normal Pro review retry `WEET_REVIEW_20260609_SOLUTION_RENEWAL_06`
+- `git diff --check`
+- `npx tsc --noEmit`
+- `npm run lint`
+- `npm test`
+- `npm run build`
+- `npx playwright test e2e/public-pages.spec.ts --project=chromium`
+- `git commit -m "Renew solution operations pages"`
+- `git push origin zoo/customize-configurator`
+- Chrome/Vercel promote for production deployment `FYGbRPkso`
+- `node .codex/qa/production-solution-fb62d34/capture.mjs`
 
 ## Validation results
 
@@ -53,6 +66,12 @@ local validation complete; GPT-5.5 Pro review unavailable after two Chrome attem
   - Literal `00a0` escape is `false`.
   - Console errors and page errors are `0`.
   - Manual screenshot review confirmed no text overlap or clipped CTAs on mobile/desktop.
+- Production visual QA on `https://www.we-et.com?v=fb62d34` across desktop `1440x1100`, tablet `834x1112`, and mobile `390x844`:
+  - `/solution`, `/solution/cctv`, `/solution/network`, `/solution/iot`, and `/solution/design` all report horizontal overflow `false`.
+  - Generated solution images are present: 4 on `/solution`, 1 on each detail route.
+  - Old solution image references are `0`, literal escape is `false`, console errors are `0`, and page errors are `0`.
+  - Visible `/customize` CTAs are present on all checked routes.
+  - Manual screenshot review confirmed the production solution page and mobile detail pages render without text overlap, clipped CTA text, or broken generated images.
 
 ## Current failures
 
@@ -71,11 +90,11 @@ Unavailable for this solution-detail renewal slice after two Chrome/ChatGPT norm
 
 ## Remaining risks
 
-- GPT-5.5 Pro review may identify concrete product/UX/code `MUST_FIX` items.
-- Production deployment and real-domain QA on `we-et.com` / `www.we-et.com` remain after commit and push.
+- GPT-5.5 Pro review could not be recovered for this exact solution slice after two attempts, so no external `MUST_FIX` feedback was available to apply.
 - `/bespoke` still uses older existing cafe/popup/smart-farm images; future image generation should unify that page with the current visual standard.
 - Public pricing, delivery, install, warranty, and support terms still need more concrete numeric ranges and conditions.
+- Production QA script reports the existing header logo image with `naturalWidth: 0` on tablet/mobile `/solution`, but production screenshots show the logo visibly rendered; this remains a measurement/timing artifact to monitor.
 
 ## Next step
 
-Run final local validation/diff checks, commit and push the branch, then promote or wait for Vercel and verify `we-et.com` / `www.we-et.com` production pages visually across desktop, tablet, and mobile.
+Next candidate: regenerate `/bespoke` commercial-space images through Chrome/ChatGPT `최신 • 5.5` Thinking `확장`, then add concrete support/maintenance terms and example operating scenarios for `/solution`.
