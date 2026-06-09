@@ -105,7 +105,7 @@ test.describe('Public page transition', () => {
   test('bespoke public page is repositioned as commercial custom solution', async ({ page }) => {
     await page.goto('/bespoke');
 
-    await expect(page.getByRole('heading', { name: 'BESPOKE' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '상업 공간 맞춤 솔루션' })).toBeVisible();
     await expect(page.getByText('SMALL CAFE')).toBeVisible();
     await expect(page.getByText('POP-UP STORE / BRAND SHOWROOM')).toBeVisible();
     await expect(page.getByText('ACCOMMODATION / SITE OFFICE')).toBeVisible();

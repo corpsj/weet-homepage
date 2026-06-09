@@ -26,7 +26,7 @@ const COPY: Record<Lang, {
   overlayClose: string;
 }> = {
   KO: {
-    headline: 'BESPOKE',
+    headline: '상업 공간 맞춤 솔루션',
     lead: "WEET의 상업 공간 맞춤 솔루션은 비즈니스의 시작과 확장을 가속화합니다.",
     highlight: "빠른 런칭, 유연한 운영, 압도적인 공간 경험을 제공하는 B2B 모듈러 솔루션입니다.",
     features: [
@@ -80,7 +80,7 @@ const COPY: Record<Lang, {
     overlayClose: '닫기',
   },
   EN: {
-    headline: 'BESPOKE',
+    headline: 'Commercial Space Custom Solutions',
     lead: 'WEET\'s commercial custom solutions accelerate the launch and expansion of your business.',
     highlight: 'A B2B modular solution providing fast launches, flexible operations, and overwhelming spatial experiences.',
     features: [

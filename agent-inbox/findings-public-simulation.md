@@ -220,3 +220,5 @@ The first 10 personas did not produce 100 unique hard bugs. Following the user i
 146. Remaining opportunity: `/bespoke` still uses older existing cafe/popup/smart-farm images; future image generation could unify it with the new modular visual system.
 147. Remaining opportunity: `/solution` detail pages `/solution/cctv`, `/solution/network`, `/solution/iot`, and `/solution/design` should inherit the new operations-first framing.
 148. Remaining opportunity: `/modular` could add concrete lead-time ranges, factory QC checkpoints, transport access constraints, and install-day proof metrics.
+149. Production QA after commit `1631e9f` found `/bespoke` H1 still read only `BESPOKE`, which weakened the requested commercial-space positioning in the first viewport.
+150. Fix applied after production QA: `/bespoke` H1 changed to `상업 공간 맞춤 솔루션` in Korean and `Commercial Space Custom Solutions` in English; E2E heading expectation was updated.
