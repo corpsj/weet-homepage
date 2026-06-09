@@ -52,3 +52,11 @@ Antigravity is required for frontend/design implementation when available. Recor
 - Antigravity accepted the implementation prompt, explored files, and ran `npm run lint`, but produced no code diff after repeated polling.
 - Antigravity was already in `User cancelled agent execution` state when rechecked; no pending edit/accept controls remained.
 - Decision: record the no-diff handoff failure and continue directly in Codex so the user-requested solution renewal could complete.
+
+## 2026-06-10 floorplan expansion guide slice
+
+- Intended handoff: refine `/customize` 3x6 to 3x9 transition so the user visibly sees wall/line expansion rather than only a base floorplan image swap.
+- Computer Use was healthy, Stickies was visible, and Antigravity IDE (`com.google.antigravity-ide`) was reachable with the Agent composer available.
+- The prompt was pasted and sent to Antigravity; Antigravity showed `Worked for 1m` and `User cancelled agent execution`.
+- Repeated `git status -- components/customize/CustomizeConfigurator.tsx` checks showed no file changes from Antigravity.
+- Decision: record the no-diff/cancelled handoff and continue directly in Codex for this narrow Stickies-driven refinement. Codex added an animated SVG guide overlay for growth zones, moving wall lines, and 6m reference lines.

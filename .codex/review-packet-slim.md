@@ -1,658 +1,350 @@
 # GPT-5.5 Pro Review Packet
 
-Marker: WEET_REVIEW_20260610_CUSTOMIZE_SOLUTION_CLOSURE_02
+Marker: `WEET_REVIEW_20260610_EXPANSION_GUIDE_03`
 
 ## Active Task Brief
 
-Review the final closure state for Weet's solution/header/customize renewal. The previous GPT-5.5 Pro review (marker WEET_REVIEW_20260610_CUSTOMIZE_SOLUTION_FINAL_01) returned REVISE with one concrete MUST_FIX: replace 9 temporary option-modal images. That MUST_FIX has been applied, plus a visual QA-discovered modal rendering bug was fixed.
-
-User goals:
-- Make Weet feel like a leading, young, premium Korean movable-home brand.
-- Rebuild /solution as technical option systems, not field/site concepts, and avoid black-heavy styling.
-- Reposition/restyle header 주문하기 without nav crowding or black CTA styling.
-- Rework /customize around Tesla/Porsche-style ordering: full-width stepper, remove 상담 신청, steps 모델 / 공간 구성 / 무드 & 소재 / 스마트 테크, remove 확인사항, replace 상담 요청 with 주문하기.
-- Fill option info modals with real descriptions and photorealistic Korean-context images generated via Chrome/ChatGPT visible web control.
-- Center floorplans and add 3x6 -> 3x9 interactive expansion.
+Weet homepage/admin/public project. The broader requested renewal already has a GPT-5.5 Pro PASS in `.codex/pro-review.md`. After that PASS, a Stickies steering note required one additional current-scope refinement: the /customize 3x6 -> 3x9 model transition must clearly show wall/line expansion, not only a base floorplan image swap.
 
 ## Current Progress / State
 
-Implementation is complete locally. Validation and visual QA passed. This packet asks for closure review before commit/push/deploy.
-
-Important latest fix: option modal images use cache-busted public paths such as /images/customize/options/iot-package.webp?v=20260610-0137. Next Image optimizer returned HTTP 400 when proxying those query-bearing public URLs, so modal images appeared as blank beige boxes. The modal Image now uses `unoptimized`, and visual QA confirms nonzero natural dimensions and visible rendering.
-
-## Project Snapshot
-
-- Next.js app router project.
-- Branch: zoo/customize-configurator.
-- Key changed surfaces: /solution, /solution/* detail pages, /customize configurator, header, customize actions/tests, floorplan SVGs, public option image assets.
-- New route: /solution/energy.
+- Antigravity IDE was used for the frontend implementation handoff, but it returned `User cancelled agent execution` and produced no diff. This was recorded in `agent-inbox/antigravity-failures.md`.
+- Codex applied the narrow fallback patch directly.
+- Current changed scope: `components/customize/CustomizeConfigurator.tsx`, `agent-inbox/antigravity-failures.md`, `agent-inbox/customizer-improvements.md`, plus local QA screenshots/summary.
+- Branch: `zoo/customize-configurator`.
 
 ## Git Status
 
 ```text
 ## zoo/customize-configurator...origin/zoo/customize-configurator
- M .codex/current-task.md
- M .codex/pro-review.md
- M .codex/review-packet-slim.md
- M .codex/review-packet.md
- M .codex/state.md
- M agent-inbox/customizer-image-generation.md
- M agent-inbox/implementation-backlog.md
- M agent-inbox/tool-control-runbook.md
- M app/actions/customize-actions.ts
- M app/customize/layout.tsx
- M app/customize/page.tsx
- M app/privacy/page.tsx
- M app/solution/cctv/layout.tsx
- M app/solution/cctv/page.tsx
- M app/solution/design/layout.tsx
- M app/solution/design/page.tsx
- M app/solution/iot/page.tsx
- M app/solution/layout.tsx
- M app/solution/network/layout.tsx
- M app/solution/network/page.tsx
- M app/solution/page.tsx
- M app/support/page.tsx
- M app/terms/page.tsx
+ M agent-inbox/antigravity-failures.md
+ M agent-inbox/customizer-improvements.md
  M components/customize/CustomizeConfigurator.tsx
- M components/layout/Header.tsx
- M components/solution/FeatureModal.tsx
- M components/solution/SolutionTemplate.tsx
- M e2e/customize-configurator.spec.ts
- M e2e/public-pages.spec.ts
- M lib/customize/__tests__/priceCalculator.test.ts
- M lib/customize/priceCalculator.ts
- M public/images/customize/compact-3x6-base.svg
- M public/images/customize/standard-3x9-base.svg
-?? .codex/qa/current/
+?? .codex/qa/expansion-guide-20260610/
 ?? .codex/qa/production-solution-fb62d34/
 ?? .codex/qa/solution-renewal-20260609/
 ?? .codex/qa/solution-renewal-before-20260609/
-?? app/solution/energy/
-?? public/images/customize/options/
 ?? test-results/
 
 ```
 
-## Changed Files / Diff Stat
+## Changed Files
 
 ```text
- .codex/current-task.md                          |   68 +-
- .codex/pro-review.md                            |   22 +-
- .codex/review-packet-slim.md                    | 1808 +++++----
- .codex/review-packet.md                         | 4501 ++++++++++++-----------
- .codex/state.md                                 |  160 +-
- agent-inbox/customizer-image-generation.md      |   76 +
- agent-inbox/implementation-backlog.md           |    8 +
- agent-inbox/tool-control-runbook.md             |   45 +
- app/actions/customize-actions.ts                |    4 +-
- app/customize/layout.tsx                        |    2 +-
- app/customize/page.tsx                          |    4 +-
- app/privacy/page.tsx                            |    2 +-
- app/solution/cctv/layout.tsx                    |    4 +-
- app/solution/cctv/page.tsx                      |   16 +-
- app/solution/design/layout.tsx                  |   12 +-
- app/solution/design/page.tsx                    |   56 +-
- app/solution/iot/page.tsx                       |   16 +-
- app/solution/layout.tsx                         |    4 +-
- app/solution/network/layout.tsx                 |    4 +-
- app/solution/network/page.tsx                   |   22 +-
- app/solution/page.tsx                           |  297 +-
- app/support/page.tsx                            |    4 +-
- app/terms/page.tsx                              |    8 +-
- components/customize/CustomizeConfigurator.tsx  |  393 +-
- components/layout/Header.tsx                    |   77 +-
- components/solution/FeatureModal.tsx            |    8 +-
- components/solution/SolutionTemplate.tsx        |   78 +-
- e2e/customize-configurator.spec.ts              |   87 +-
- e2e/public-pages.spec.ts                        |   13 +-
- lib/customize/__tests__/priceCalculator.test.ts |    2 +-
- lib/customize/priceCalculator.ts                |    4 +-
- public/images/customize/compact-3x6-base.svg    |   96 +-
- public/images/customize/standard-3x9-base.svg   |  124 +-
- 33 files changed, 4002 insertions(+), 4023 deletions(-)
+agent-inbox/antigravity-failures.md
+agent-inbox/customizer-improvements.md
+components/customize/CustomizeConfigurator.tsx
 
 ```
 
-Untracked generated assets / QA evidence:
+## Git Diff
 
-```text
-.codex/qa/current/chrome-chatgpt-recovery.png
-.codex/qa/current/customize-options-contact.webp
-.codex/qa/current/desktop-customize-3x9-expansion-final-after-cachefix.png
-.codex/qa/current/desktop-customize-3x9-expansion-mid-after-cachefix.png
-.codex/qa/current/desktop-customize-expansion-mid.png
-.codex/qa/current/desktop-customize-initial-after-cachefix.png
-.codex/qa/current/desktop-customize-initial.png
-.codex/qa/current/desktop-customize-standard-expanding.png
-.codex/qa/current/desktop-customize-standard-final.png
-.codex/qa/current/desktop-home-header-after-cachefix.png
-.codex/qa/current/desktop-home-header.png
-.codex/qa/current/desktop-modal-basic-bathroom.png
-.codex/qa/current/desktop-modal-basic-sink.png
-.codex/qa/current/desktop-modal-basic-window.png
-.codex/qa/current/desktop-modal-bidet.png
-.codex/qa/current/desktop-modal-birch-panel.png
-.codex/qa/current/desktop-modal-built-in-storage.png
-.codex/qa/current/desktop-modal-cedar-point.png
-.codex/qa/current/desktop-modal-cellular-router.png
-.codex/qa/current/desktop-modal-ev-charger.png
-.codex/qa/current/desktop-modal-extra-window.png
-.codex/qa/current/desktop-modal-folding-table.png
-.codex/qa/current/desktop-modal-iot-package-fixed.png
-.codex/qa/current/desktop-modal-iot-package-longwait.png
-.codex/qa/current/desktop-modal-iot-package.png
-.codex/qa/current/desktop-modal-paper-wall.png
-.codex/qa/current/desktop-modal-ribbed-steel-white.png
-.codex/qa/current/desktop-modal-satellite-internet.png
-.codex/qa/current/desktop-modal-security-package.png
-.codex/qa/current/desktop-modal-silk-wallpaper.png
-.codex/qa/current/desktop-modal-smart-lock.png
-.codex/qa/current/desktop-modal-solar-panel.png
-.codex/qa/current/desktop-modal-spc-natural-oak.png
-.codex/qa/current/desktop-modal-spc-white-oak.png
-.codex/qa/current/desktop-modal-standard-lock.png
-.codex/qa/current/desktop-modal-zinc-gray.png
-.codex/qa/current/desktop-option-modal-basic-window.png
-.codex/qa/current/desktop-option-modal-iot-package.png
-.codex/qa/current/desktop-option-modal-mini-washer.png
-.codex/qa/current/desktop-option-modal-solar-panel.png
-.codex/qa/current/desktop-option-modal-zinc-gray.png
-.codex/qa/current/desktop-solution-after-cachefix.png
-.codex/qa/current/desktop-solution.png
-.codex/qa/current/mobile-customize-after-cachefix.png
-.codex/qa/current/mobile-customize-initial.png
-.codex/qa/current/mobile-home-header-after-cachefix.png
-.codex/qa/current/mobile-home-header.png
-.codex/qa/current/mobile-solution-after-cachefix.png
-.codex/qa/current/mobile-solution.png
-.codex/qa/current/option-file-stats.json
-.codex/qa/current/tablet-customize-after-cachefix.png
-.codex/qa/current/tablet-customize-initial.png
-.codex/qa/current/tablet-home-header-after-cachefix.png
-.codex/qa/current/tablet-home-header.png
-.codex/qa/current/tablet-solution-after-cachefix.png
-.codex/qa/current/tablet-solution.png
-.codex/qa/current/visual-summary.json
-app/solution/energy/layout.tsx
-app/solution/energy/page.tsx
-public/images/customize/options/basic-bathroom.webp
-public/images/customize/options/basic-sink.webp
-public/images/customize/options/basic-window.webp
-public/images/customize/options/bed-frame.webp
-public/images/customize/options/bidet.webp
-public/images/customize/options/birch-panel.webp
-public/images/customize/options/built-in-fridge.webp
-public/images/customize/options/built-in-storage.webp
-public/images/customize/options/cedar-point.webp
-public/images/customize/options/cellular-router.webp
-public/images/customize/options/dry-vanity.webp
-public/images/customize/options/ess.webp
-public/images/customize/options/ev-charger.webp
-public/images/customize/options/extra-window.webp
-public/images/customize/options/folding-table.webp
-public/images/customize/options/iot-package.webp
-public/images/customize/options/mini-washer.webp
-public/images/customize/options/paper-wall.webp
-public/images/customize/options/porcelain-tile.webp
-public/images/customize/options/ribbed-steel-white.webp
-public/images/customize/options/satellite-internet.webp
-public/images/customize/options/security-package.webp
-public/images/customize/options/silk-wallpaper.webp
-public/images/customize/options/smart-lock.webp
-public/images/customize/options/solar-panel.webp
-public/images/customize/options/spc-natural-oak.webp
-public/images/customize/options/spc-white-oak.webp
-public/images/customize/options/standard-lock.webp
-public/images/customize/options/wide-window.webp
-public/images/customize/options/zinc-gray.webp
+```diff
+diff --git a/agent-inbox/antigravity-failures.md b/agent-inbox/antigravity-failures.md
+index f0bae54..79c49ea 100644
+--- a/agent-inbox/antigravity-failures.md
++++ b/agent-inbox/antigravity-failures.md
+@@ -52,3 +52,11 @@ Antigravity is required for frontend/design implementation when available. Recor
+ - Antigravity accepted the implementation prompt, explored files, and ran `npm run lint`, but produced no code diff after repeated polling.
+ - Antigravity was already in `User cancelled agent execution` state when rechecked; no pending edit/accept controls remained.
+ - Decision: record the no-diff handoff failure and continue directly in Codex so the user-requested solution renewal could complete.
++
++## 2026-06-10 floorplan expansion guide slice
++
++- Intended handoff: refine `/customize` 3x6 to 3x9 transition so the user visibly sees wall/line expansion rather than only a base floorplan image swap.
++- Computer Use was healthy, Stickies was visible, and Antigravity IDE (`com.google.antigravity-ide`) was reachable with the Agent composer available.
++- The prompt was pasted and sent to Antigravity; Antigravity showed `Worked for 1m` and `User cancelled agent execution`.
++- Repeated `git status -- components/customize/CustomizeConfigurator.tsx` checks showed no file changes from Antigravity.
++- Decision: record the no-diff/cancelled handoff and continue directly in Codex for this narrow Stickies-driven refinement. Codex added an animated SVG guide overlay for growth zones, moving wall lines, and 6m reference lines.
+diff --git a/agent-inbox/customizer-improvements.md b/agent-inbox/customizer-improvements.md
+index 3e05937..640d1df 100644
+--- a/agent-inbox/customizer-improvements.md
++++ b/agent-inbox/customizer-improvements.md
+@@ -131,3 +131,14 @@
+ - 검증 방법: Playwright screenshot and DOM summary, manual visual inspection.
+ - 결과: no overflow, base image 1개, footprint 0개, step label fit, modal helper copy readable.
+ - 남은 리스크: dev-only Next indicator가 mobile screenshot 좌하단에 겹치지만 production UI 요소는 아님.
++
++## Improvement 13: 3x6→3x9 wall-line expansion guide
++
++- 문제: 3x6에서 3x9로 바뀔 때 base SVG가 교체되는 인상이 남아, 실제로 어느 벽과 선이 길어지는지 즉시 이해하기 어려웠다.
++- 고객 영향: 모델 전환이 같은 집의 확장이라기보다 다른 도면으로 바뀌는 느낌을 줄 수 있었다.
++- 수정 방향: centered footprint geometry 위에 좌우 growth zone, 6m 기준 점선, 상·하 벽선, 좌·우 사이드 월을 별도 SVG overlay로 애니메이션했다.
++- 실제 변경 파일: `components/customize/CustomizeConfigurator.tsx`
++- UI/UX 변경: Standard 3x9 선택 시 좌우 벽선이 바깥으로 이동하고 수평 벽선이 6m 기준선에서 9m 폭으로 늘어나는 장면이 보인다.
++- 검증 방법: Playwright visual QA에서 compact/final/intermediate 전환 스크린샷, E2E floorplan assertions, console/error/overflow checks.
++- 결과: local visual QA summary `problems: []`; wall-line geometry changed from `x1 212→62`, `x2 788→938` with a midframe at `x1 182.86`, `x2 817.14`. Option info modal image rendered with nonzero natural dimensions after adding dialog semantics.
++- 남은 리스크: 실제 생산 도면 정밀도와는 별개로 구매 이해용 guide overlay이므로, 향후 CAD 기반 도면 전환으로 고도화 가능.
+diff --git a/components/customize/CustomizeConfigurator.tsx b/components/customize/CustomizeConfigurator.tsx
+index bf6ccaa..a39284c 100644
+--- a/components/customize/CustomizeConfigurator.tsx
++++ b/components/customize/CustomizeConfigurator.tsx
+@@ -1,7 +1,7 @@
+ 'use client';
+
+ import { useEffect, useMemo, useState, useTransition, type Dispatch, type ReactNode, type SetStateAction } from 'react';
+-import { motion } from 'framer-motion';
++import { motion, useReducedMotion } from 'framer-motion';
+ import Link from 'next/link';
+ import Image from 'next/image';
+ import { toast } from 'sonner';
+@@ -837,6 +837,7 @@ function FloorplanCanvas({
+         opacity="0.9"
+       />
+
++      <FloorplanExpansionGuides box={box} />
+       <FloorplanLengthRail box={box} lengthM={model.lengthM} />
+
+       {selectedOptions.map((option) => option.overlayImagePath ? (
+@@ -869,6 +870,134 @@ function FloorplanCanvas({
+   );
+ }
+
++function FloorplanExpansionGuides({ box }: { box: ReturnType<typeof floorplanSize> }) {
++  const shouldReduceMotion = useReducedMotion();
++  const transition = shouldReduceMotion ? { duration: 0 } : { duration: 0.72, ease: 'easeInOut' };
++  const compactX = 500 - 600 / 2;
++  const compactRightX = compactX + 600;
++  const extensionWidth = Math.max(0, (box.width - 600) / 2);
++  const hasExpansion = extensionWidth > 0;
++  const inset = 12;
++  const leftX = box.x + inset;
++  const rightX = box.x + box.width - inset;
++  const topY = box.y + inset;
++  const bottomY = box.y + box.height - inset;
++  const guideOpacity = hasExpansion ? 0.95 : 0.72;
++
++  return (
++    <g data-testid="floorplan-expansion-guides" pointerEvents="none">
++      <motion.rect
++        data-testid="floorplan-left-growth-zone"
++        initial={false}
++        animate={{ x: box.x + inset, width: Math.max(0, extensionWidth - inset), opacity: hasExpansion ? 0.28 : 0 }}
++        transition={transition}
++        y={box.y + inset}
++        height={box.height - inset * 2}
++        rx="4"
++        fill="#d7efe9"
++      />
++      <motion.rect
++        data-testid="floorplan-right-growth-zone"
++        initial={false}
++        animate={{ x: box.x + box.width - extensionWidth, width: Math.max(0, extensionWidth - inset), opacity: hasExpansion ? 0.28 : 0 }}
++        transition={transition}
++        y={box.y + inset}
++        height={box.height - inset * 2}
++        rx="4"
++        fill="#d7efe9"
++      />
++
++      <motion.line
++        data-testid="floorplan-compact-left-reference"
++        initial={false}
++        animate={{ opacity: hasExpansion ? 0.58 : 0 }}
++        transition={transition}
++        x1={compactX}
++        y1={box.y + 18}
++        x2={compactX}
++        y2={box.y + box.height - 18}
++        stroke="#b88b26"
++        strokeWidth="3"
++        strokeDasharray="7 7"
++        strokeLinecap="round"
++      />
++      <motion.line
++        data-testid="floorplan-compact-right-reference"
++        initial={false}
++        animate={{ opacity: hasExpansion ? 0.58 : 0 }}
++        transition={transition}
++        x1={compactRightX}
++        y1={box.y + 18}
++        x2={compactRightX}
++        y2={box.y + box.height - 18}
++        stroke="#b88b26"
++        strokeWidth="3"
++        strokeDasharray="7 7"
++        strokeLinecap="round"
++      />
++
++      <motion.line
++        data-testid="floorplan-expansion-top-wall"
++        initial={false}
++        animate={{ x1: leftX, x2: rightX, opacity: guideOpacity }}
++        transition={transition}
++        y1={topY}
++        y2={topY}
++        stroke="#0d6e66"
++        strokeWidth="5"
++        strokeLinecap="round"
++      />
++      <motion.line
++        data-testid="floorplan-expansion-bottom-wall"
++        initial={false}
++        animate={{ x1: leftX, x2: rightX, opacity: guideOpacity }}
++        transition={transition}
++        y1={bottomY}
++        y2={bottomY}
++        stroke="#0d6e66"
++        strokeWidth="5"
++        strokeLinecap="round"
++      />
++      <motion.line
++        data-testid="floorplan-expansion-left-wall"
++        initial={false}
++        animate={{ x1: leftX, x2: leftX, opacity: guideOpacity }}
++        transition={transition}
++        y1={topY}
++        y2={bottomY}
++        stroke="#0d6e66"
++        strokeWidth="5"
++        strokeLinecap="round"
++      />
++      <motion.line
++        data-testid="floorplan-expansion-right-wall"
++        initial={false}
++        animate={{ x1: rightX, x2: rightX, opacity: guideOpacity }}
++        transition={transition}
++        y1={topY}
++        y2={bottomY}
++        stroke="#0d6e66"
++        strokeWidth="5"
++        strokeLinecap="round"
++      />
++
++      <motion.text
++        data-testid="floorplan-expansion-label"
++        initial={false}
++        animate={{ x: box.x + box.width / 2, opacity: hasExpansion ? 1 : 0 }}
++        transition={transition}
++        y={box.y + 32}
++        fill="#0d6e66"
++        fontSize="13"
++        fontWeight="900"
++        textAnchor="middle"
++      >
++        6m 기준선에서 9m로 확장
++      </motion.text>
++    </g>
++  );
++}
++
+ function FloorplanLengthRail({ box, lengthM }: { box: ReturnType<typeof floorplanSize>; lengthM: number }) {
+   const railY = box.y + box.height + 34;
+   const labelX = box.x + box.width / 2;
+@@ -1014,6 +1143,7 @@ function hasOptionInfo(option: CustomizeOption) {
+ function OptionInfoModal({ option, onClose }: { option: CustomizeOption; onClose: () => void }) {
+   const optionKey = option.key || option.id;
+   const fallback = FALLBACK_CATALOG[optionKey] || FALLBACK_CATALOG[option.id];
++  const titleId = `option-info-title-${optionKey}`;
+
+   const imagePath = `/images/customize/options/${optionKey}.webp?v=${OPTION_IMAGE_VERSION}`;
+   const desc = option.detailDescriptionKo || option.shortDescriptionKo || fallback?.desc || '상세 정보가 준비 중입니다.';
+@@ -1021,7 +1151,13 @@ function OptionInfoModal({ option, onClose }: { option: CustomizeOption; onClose
+
+   return (
+     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#4b4033]/35 p-4" onClick={onClose}>
+-      <div className="w-full max-w-xl rounded-lg bg-[#fbfaf7] p-5 shadow-2xl" onClick={(event) => event.stopPropagation()}>
++      <div
++        role="dialog"
++        aria-modal="true"
++        aria-labelledby={titleId}
++        className="w-full max-w-xl rounded-lg bg-[#fbfaf7] p-5 shadow-2xl"
++        onClick={(event) => event.stopPropagation()}
++      >
+         <div className="mb-4 flex items-start justify-between gap-4">
+           <div>
+             <div className="mb-1 flex items-center gap-2">
+@@ -1029,7 +1165,7 @@ function OptionInfoModal({ option, onClose }: { option: CustomizeOption; onClose
+               {option.priceType === 'consult' && <span className="rounded bg-[#f4f0e8] px-2 py-0.5 text-[11px] font-black text-[#a56f16]">스펙 협의</span>}
+               {option.priceType === 'fixed' && <p className="text-xs font-bold text-[#8a806f]">{formatOptionPrice(option)}</p>}
+             </div>
+-            <h3 className="text-xl font-black text-[#2f3432]">{option.nameKo}</h3>
++            <h3 id={titleId} className="text-xl font-black text-[#2f3432]">{option.nameKo}</h3>
+           </div>
+           <Button variant="ghost" size="icon-sm" onClick={onClose}>
+             <X className="h-4 w-4" />
 
 ```
 
-## Relevant File Excerpts
+## Relevant Implementation Notes
 
-### components/customize/CustomizeConfigurator.tsx (steps, modal image, floorplan)
+- Added `FloorplanExpansionGuides` inside `components/customize/CustomizeConfigurator.tsx`.
+- It renders pale teal growth zones, tan 6m reference lines, and teal top/bottom/left/right wall lines over the base floorplan.
+- It uses existing centered `floorplanSize(model)` geometry, so Compact 3x6 and Standard 3x9 stay centered.
+- Framer Motion animates SVG line attributes from compact to standard geometry; `useReducedMotion` sets transition duration to 0 when motion reduction is requested.
+- Added `role=dialog`, `aria-modal`, and `aria-labelledby` to option info modal so option detail modals are accessible and testable as real dialogs.
 
-```tsx
-  70:   bathroom: (box) => ({ x: box.x + box.width - 148, y: box.y + 78 }),
-  71:   furniture: (box, index) => ({ x: box.x + box.width * 0.36, y: box.y + 82 + index * 34 }),
-  72:   energy: (box, index) => ({ x: box.x + 70 + index * 108, y: box.y - 42 }),
-  73:   connectivity: (box, index) => ({ x: box.x + box.width - 208 + index * 96, y: box.y - 42 }),
-  74: };
-  75:
-  76: const PLACEHOLDER_FLOORPLAN_PATH = '/images/customize/dummy-base.svg';
-  77: const MODEL_FALLBACK_FLOORPLANS: Record<string, string> = {
-  78:   'compact-3x6': '/images/customize/compact-3x6-base.svg',
-  79:   'standard-3x9': '/images/customize/standard-3x9-base.svg',
-  80: };
-  81: const OPTION_IMAGE_VERSION = '20260610-0137';
-  82: type FloorplanImageStatus = 'missing' | 'loading' | 'loaded' | 'failed';
-  83:
-  84: type ConfigStep = 'space' | 'included' | 'mood' | 'smart';
-  85: const STEPS: { id: ConfigStep; label: string; categories?: string[] }[] = [
-  86:   { id: 'space', label: '모델', categories: ['model'] },
-  87:   { id: 'included', label: '공간 구성', categories: ['windows', 'door', 'sink', 'bathroom', 'furniture'] },
-  88:   { id: 'mood', label: '무드 & 소재', categories: ['exterior', 'interior', 'flooring'] },
-  89:   { id: 'smart', label: '스마트 테크', categories: ['energy', 'connectivity'] },
-  90: ];
-  91:
-  92: type ConsultationDraft = {
-  93:   customerName: string;
-  94:   phone: string;
-  95:   region: string;
-  96:   purchaseTimeline: string;
-  97:   landType: string;
-  98:   installAddress: string;
-  99:   budgetRange: string;
- 100:   memo: string;
- 101: };
- 102:
- 103: const inputClass = 'h-11 rounded-lg border-gray-300 bg-[#fbfaf7] text-sm focus-visible:ring-[#b88b26]';
- 104: const selectClass = 'h-11 w-full rounded-lg border border-gray-300 bg-[#fbfaf7] px-3 text-sm outline-none focus:ring-2 focus:ring-[#b88b26]/30';
- 105:
- 106: function floorplanImagePathForModel(model: CustomizeModel) {
- 107:   const configuredPath = model.floorplanImagePath?.trim();
- 108:   const fallbackPath = MODEL_FALLBACK_FLOORPLANS[model.id];
- 109:
- 110:   if (!configuredPath) return fallbackPath ?? null;
- 111:   if (configuredPath === PLACEHOLDER_FLOORPLAN_PATH) return fallbackPath ?? configuredPath;
- 112:   return configuredPath;
- 113: }
- 114:
- 115: function buildSelectionsForModelChange(
+## Commands Run
 
- 189: function StepperBar({ currentStep, setCurrentStep, stepCounts }: { currentStep: ConfigStep; setCurrentStep: (step: ConfigStep) => void; stepCounts: Record<ConfigStep, number> }) {
- 190:   const stepIndex = STEPS.findIndex((s) => s.id === currentStep);
- 191:   return (
- 192:     <div className="border-b border-[#d8d0c3] bg-[#fbfaf7]/95 px-4 py-3 backdrop-blur lg:px-10">
- 193:       <div className="mx-auto flex max-w-[1800px] w-full gap-1 rounded-lg bg-[#efe6d4] p-1">
- 194:         {STEPS.map((step, index) => {
- 195:           const isCurrent = currentStep === step.id;
- 196:           const isComplete = index < stepIndex;
- 197:
- 198:           return (
- 199:             <button
- 200:               key={step.id}
- 201:               type="button"
- 202:               data-testid={`customize-step-${step.id}`}
- 203:               aria-current={isCurrent ? 'step' : undefined}
- 204:               data-state={isCurrent ? 'current' : isComplete ? 'complete' : 'upcoming'}
- 205:               onClick={() => setCurrentStep(step.id)}
- 206:               className={cn(
- 207:                 'relative flex min-h-9 flex-1 items-center justify-center rounded-md px-1 py-2 text-xs font-bold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26]',
- 208:                 isCurrent && 'bg-[#fbfaf7] text-[#2f3432] shadow-sm',
- 209:                 !isCurrent && isComplete && 'bg-[#e6dcc9] text-[#4f473d]',
- 210:                 !isCurrent && !isComplete && 'text-[#8a806f] hover:text-[#2f3432]'
- 211:               )}
- 212:             >
- 213:               {step.label}
- 214:               {stepCounts[step.id] > 0 && step.id !== 'space' && (
- 215:                 <span aria-hidden="true" className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#b88b26] px-1 text-[9px] text-white">
- 216:                   {stepCounts[step.id]}
- 217:                 </span>
- 218:               )}
- 219:             </button>
- 220:           );
- 221:         })}
- 222:       </div>
+- `npm run lint`: pass.
+- `npm test`: pass, 3 files / 20 tests.
+- `npm run build`: pass; existing Next.js middleware-to-proxy deprecation warning remains.
+- `npx playwright test e2e/customize-configurator.spec.ts e2e/public-pages.spec.ts --project=chromium`: pass, 22/22 before the final modal role patch.
+- `npx playwright test e2e/customize-configurator.spec.ts --project=chromium`: pass, 8/8 after the final modal role patch.
+- `git diff --check`: pass.
 
- 783:     <svg viewBox="0 0 1000 420" className={cn('aspect-[1000/420] w-full', className)} data-testid={testId}>
- 784:       <defs>
- 785:         <pattern id={gridId} width="24" height="24" patternUnits="userSpaceOnUse">
- 786:           <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#e4ddd1" strokeWidth="1" />
- 787:         </pattern>
- 788:       </defs>
- 789:       <rect width="1000" height="420" fill="#f5f1ea" />
- 790:
- 791:       {hasBaseImage ? (
- 792:         <g className="transition-all duration-[600ms] motion-reduce:transition-none">
- 793:           <image
- 794:             data-testid="base-floorplan-image"
- 795:             href={resolvedFloorplanImagePath ?? undefined}
- 796:             x="0"
- 797:             y="0"
- 798:             width="1000"
- 799:             height="420"
- 800:             preserveAspectRatio="xMidYMid meet"
- 801:           />
- 802:         </g>
- 803:       ) : (
- 804:         <>
- 805:           <rect x={box.x} y={box.y} width={box.width} height={box.height} fill="#f8f4ec" stroke="#2f3432" strokeWidth="12" className="transition-all duration-[600ms] motion-reduce:transition-none" />
- 806:           <rect x={box.x + 12} y={box.y + 12} width={box.width - 24} height={box.height - 24} fill={`url(#${gridId})`} stroke="#bfb4a2" strokeWidth="2" className="transition-all duration-[600ms] motion-reduce:transition-none" />
- 807:           <BasePlanObjects box={box} />
- 808:         </>
- 809:       )}
- 810:
- 811:       {!hasBaseImage && (
- 812:         <rect
- 813:           data-testid="model-footprint"
- 814:           x={box.x}
- 815:           y={box.y}
- 816:           width={box.width}
- 817:           height={box.height}
- 818:           fill="transparent"
- 819:           stroke="#2f3432"
- 820:           strokeWidth="6"
- 821:           className="transition-all duration-[600ms] motion-reduce:transition-none"
- 822:         />
- 823:       )}
- 824:
- 825:       <motion.rect
- 826:         data-testid="floorplan-expansion-shell"
- 827:         initial={false}
- 828:         animate={{ x: box.x, width: box.width }}
- 829:         transition={{ duration: 0.6, ease: "easeInOut" }}
- 830:         y={box.y}
- 831:         height={box.height}
- 832:         rx="6"
- 833:         fill="transparent"
+## Browser / Visual QA Findings
 
-1015:   const optionKey = option.key || option.id;
-1016:   const fallback = FALLBACK_CATALOG[optionKey] || FALLBACK_CATALOG[option.id];
-1017:
-1018:   const imagePath = `/images/customize/options/${optionKey}.webp?v=${OPTION_IMAGE_VERSION}`;
-1019:   const desc = option.detailDescriptionKo || option.shortDescriptionKo || fallback?.desc || '상세 정보가 준비 중입니다.';
-1020:   const specs = fallback?.specs || [];
-1021:
-1022:   return (
-1023:     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#4b4033]/35 p-4" onClick={onClose}>
-1024:       <div className="w-full max-w-xl rounded-lg bg-[#fbfaf7] p-5 shadow-2xl" onClick={(event) => event.stopPropagation()}>
-1025:         <div className="mb-4 flex items-start justify-between gap-4">
-1026:           <div>
-1027:             <div className="mb-1 flex items-center gap-2">
-1028:               {option.priceType === 'included' && <span className="rounded bg-[#efe6d4] px-2 py-0.5 text-[11px] font-black text-[#8a806f]">기본 포함</span>}
-1029:               {option.priceType === 'consult' && <span className="rounded bg-[#f4f0e8] px-2 py-0.5 text-[11px] font-black text-[#a56f16]">스펙 협의</span>}
-1030:               {option.priceType === 'fixed' && <p className="text-xs font-bold text-[#8a806f]">{formatOptionPrice(option)}</p>}
-1031:             </div>
-1032:             <h3 className="text-xl font-black text-[#2f3432]">{option.nameKo}</h3>
-1033:           </div>
-1034:           <Button variant="ghost" size="icon-sm" onClick={onClose}>
-1035:             <X className="h-4 w-4" />
-1036:           </Button>
-1037:         </div>
-1038:         <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-lg bg-[#eee8dc]">
-1039:           <Image
-1040:             src={imagePath}
-1041:             alt={option.nameKo}
-1042:             fill
-1043:             unoptimized
-1044:             sizes="(max-width: 768px) calc(100vw - 48px), 560px"
-1045:             className="object-cover"
-1046:             onError={(e) => { e.currentTarget.style.display = 'none'; }}
-1047:           />
-1048:         </div>
-1049:         {specs.length > 0 && (
-1050:           <div className="mb-3 flex flex-wrap gap-2">
-```
+Local production server: `http://localhost:3100`.
 
-### components/layout/Header.tsx
+QA artifacts: `.codex/qa/expansion-guide-20260610/`.
 
-Header excerpt omitted in slim packet; full packet includes CTA/nav structure.
-
-### app/solution/page.tsx
-
-Solution excerpt omitted in slim packet; full packet includes package definitions for Security Core, Network Fabric, Control Layer, Energy Stack.
-
-### lib/customize/priceCalculator.ts
-
-```ts
-   1: import type {
-   2:   ConfigShareState,
-   3:   CustomizeCatalog,
-   4:   CustomizeCategory,
-   5:   CustomizeModel,
-   6:   CustomizeOption,
-   7:   EstimateBreakdown,
-   8:   SelectedOptions,
-   9: } from './types';
-  10:
-  11: export function formatWon(value: number) {
-  12:   return `₩${Math.max(0, value).toLocaleString('ko-KR')}`;
-  13: }
-  14:
-  15: export function formatModelStartPrice(value: number) {
-  16:   return `${formatWon(value)}부터`;
-  17: }
-  18:
-  19: export function formatOptionPrice(option: Pick<CustomizeOption, 'priceType' | 'price'>) {
-  20:   if (option.priceType === 'included') return '포함';
-  21:   if (option.priceType === 'consult') return '협의';
-  22:   return formatWon(option.price);
-  23: }
-  24:
-  25: export function optionPriceValue(option: Pick<CustomizeOption, 'priceType' | 'price'>) {
-  26:   return option.priceType === 'fixed' ? option.price : 0;
-  27: }
-  28:
-  29: export function optionsForModel(options: CustomizeOption[], modelId: string) {
-  30:   return options.filter((option) => option.availableModelIds.length === 0 || option.availableModelIds.includes(modelId));
-  31: }
-  32:
-  33: export function getDefaultSelections(catalog: CustomizeCatalog, modelId: string): SelectedOptions {
-  34:   const selections: SelectedOptions = {};
-  35:   const availableOptions = optionsForModel(catalog.options.filter((option) => option.isActive), modelId);
-  36:
-  37:   for (const category of catalog.categories.filter((item) => item.isActive)) {
-  38:     const defaults = availableOptions
-  39:       .filter((option) => option.categoryId === category.id && option.isDefault)
-  40:       .map((option) => option.id);
-  41:
-  42:     if (defaults.length > 0) {
-  43:       selections[category.id] = category.selectionType === 'single' ? [defaults[0]] : defaults;
-  44:     }
-  45:   }
-  46:
-  47:   return selections;
-  48: }
-  49:
-  50: export function selectedOptionIds(selectedOptions: SelectedOptions) {
-  51:   return Object.values(selectedOptions).flat().filter(Boolean);
-  52: }
-  53:
-  54: export function selectedOptionList(catalog: CustomizeCatalog, selectedOptions: SelectedOptions, modelId: string) {
-  55:   const selected = new Set(selectedOptionIds(selectedOptions));
-  56:   return optionsForModel(catalog.options, modelId).filter((option) => selected.has(option.id));
-  57: }
-  58:
-  59: export function getConflictingOptionIds(catalog: CustomizeCatalog, optionId: string) {
-  60:   return catalog.conflicts
-  61:     .filter((conflict) => conflict.optionId === optionId)
-  62:     .map((conflict) => conflict.conflictsWithOptionId);
-  63: }
-  64:
-  65: export function hasConflict(catalog: CustomizeCatalog, optionIds: string[]) {
-  66:   const selected = new Set(optionIds);
-  67:   return catalog.conflicts.some(
-  68:     (conflict) => selected.has(conflict.optionId) && selected.has(conflict.conflictsWithOptionId)
-  69:   );
-  70: }
-  71:
-  72: export function toggleOptionSelection(params: {
-  73:   catalog: CustomizeCatalog;
-  74:   selectedOptions: SelectedOptions;
-  75:   category: CustomizeCategory;
-  76:   option: CustomizeOption;
-  77: }) {
-  78:   const { catalog, selectedOptions, category, option } = params;
-  79:   const next: SelectedOptions = { ...selectedOptions };
-  80:   const current = next[category.id] ?? [];
-  81:
-  82:   if (category.selectionType === 'single') {
-  83:     next[category.id] = [option.id];
-  84:   } else {
-  85:     next[category.id] = current.includes(option.id)
-  86:       ? current.filter((id) => id !== option.id)
-  87:       : [...current, option.id];
-  88:   }
-  89:
-  90:   const conflicts = new Set(getConflictingOptionIds(catalog, option.id));
-  91:   if (conflicts.size > 0) {
-  92:     for (const [categoryId, ids] of Object.entries(next)) {
-  93:       next[categoryId] = ids.filter((id) => !conflicts.has(id));
-  94:     }
-  95:   }
-  96:
-  97:   return next;
-  98: }
-  99:
- 100: export function calculateEstimate(catalog: CustomizeCatalog, modelId: string, selectedOptions: SelectedOptions): EstimateBreakdown | null {
- 101:   const model = catalog.models.find((item) => item.id === modelId && item.isActive);
- 102:   if (!model) return null;
- 103:
- 104:   const options = selectedOptionList(catalog, selectedOptions, modelId);
- 105:   const optionTotal = options.reduce((sum, option) => sum + optionPriceValue(option), 0);
- 106:
- 107:   return {
- 108:     model,
- 109:     selectedOptions: options,
- 110:     optionTotal,
- 111:     estimatedTotal: model.basePrice + optionTotal,
- 112:     consultOptionCount: options.filter((option) => option.priceType === 'consult').length,
- 113:   };
- 114: }
- 115:
- 116: export function floorplanSize(model: CustomizeModel) {
- 117:   const width = model.id === 'standard-3x9' || model.lengthM >= 9 ? 900 : 600;
- 118:   return { x: 500 - width / 2, y: 60, width, height: 300 };
- 119: }
- 120:
- 121: function encodeBase64Url(value: string) {
- 122:   const base64 = typeof Buffer !== 'undefined' && typeof window === 'undefined'
- 123:     ? Buffer.from(value, 'utf8').toString('base64')
- 124:     : btoa(unescape(encodeURIComponent(value)));
- 125:
- 126:   return base64
- 127:     .replace(/\+/g, '-')
- 128:     .replace(/\//g, '_')
- 129:     .replace(/=+$/g, '');
- 130: }
-```
-
-## Commands Run / Output Summary
-
-```text
-git diff --check: PASS
-npm run lint: PASS
-npm test: PASS (3 files, 20 tests)
-npm run build: PASS (Next middleware-to-proxy deprecation warning persists)
-npx playwright test e2e/customize-configurator.spec.ts e2e/public-pages.spec.ts --project=chromium: PASS (22/22; NO_COLOR/FORCE_COLOR warnings, existing LCP warning for Supabase product image)
-```
-
-## Browser / Playwright / Visual Findings
+Visual QA summary:
 
 ```json
 {
-  "generatedAt": "2026-06-09T16:53:54.567Z",
-  "pageCount": 9,
-  "modalCount": 23,
-  "modalProblems": [],
-  "pageProblems": [],
-  "stepKeys": {
-    "included": [
-      "basic-window",
-      "extra-window",
-      "standard-lock",
-      "smart-lock",
-      "basic-sink",
-      "basic-bathroom",
-      "bidet",
-      "built-in-storage",
-      "folding-table"
-    ],
-    "mood": [
-      "ribbed-steel-white",
-      "cedar-point",
-      "zinc-gray",
-      "paper-wall",
-      "birch-panel",
-      "silk-wallpaper",
-      "spc-white-oak",
-      "spc-natural-oak"
-    ],
-    "smart": [
-      "ev-charger",
-      "solar-panel",
-      "cellular-router",
-      "iot-package",
-      "satellite-internet",
-      "security-package"
-    ]
-  },
-  "expansion": {
-    "modelTexts": [
-      "Compact 3x6소형 주말주택3m x 6m · 18m²₩27,900,000부터",
-      "Standard 3x9프리미엄 거주3m x 9m · 27m²₩34,900,000부터"
-    ],
-    "beforeExpansion": {
-      "imgHref": "/images/customize/compact-3x6-base.svg",
-      "preserveAspectRatio": "xMidYMid meet",
-      "shellWidth": "600px",
-      "shellX": null
-    },
-    "standardButtonText": "Standard 3x9프리미엄 거주3m x 9m · 27m²₩34,900,000부터",
-    "stdCount": 1,
-    "afterExpansion": {
-      "canvas": {
-        "height": 349,
-        "width": 830,
-        "x": 41,
-        "y": 463
-      },
-      "imgHref": "/images/customize/standard-3x9-base.svg",
-      "preserveAspectRatio": "xMidYMid meet",
-      "shellWidth": "900px",
-      "shellX": null
-    }
-  },
-  "representativeScreenshots": [
-    ".codex/qa/current/desktop-solution-after-cachefix.png",
-    ".codex/qa/current/desktop-customize-3x9-expansion-final-after-cachefix.png",
-    ".codex/qa/current/desktop-modal-iot-package-fixed.png",
-    ".codex/qa/current/desktop-modal-cellular-router.png",
-    ".codex/qa/current/desktop-modal-solar-panel.png",
-    ".codex/qa/current/mobile-customize-after-cachefix.png",
-    ".codex/qa/current/mobile-home-header-after-cachefix.png"
+  "problems": [],
+  "localOnlyIgnoredConsole": [
+    "Vercel Web Analytics script returns 404/MIME warnings on localhost only; production-domain QA will re-check real domain."
   ],
-  "optionFileStats": {
-    "count": 30,
-    "minBytes": 30834,
-    "maxBytes": 261176
+  "desktopExpansion": {
+    "compactX1": 212,
+    "midX1": 182.8561114835902,
+    "finalX1": 62,
+    "compactX2": 788,
+    "midX2": 817.1438885164098,
+    "finalX2": 938
+  },
+  "modal": {
+    "visible": true,
+    "label": "option-info-title-solar-panel",
+    "imageSrc": "http://localhost:3100/images/customize/options/solar-panel.webp?v=20260610-0137",
+    "naturalWidth": 1672,
+    "naturalHeight": 941,
+    "hasPlaceholder": false
   }
 }
 ```
 
-Manual visual checks performed on the actual screenshots:
-- desktop-modal-iot-package-fixed.png shows the IoT image rendered after the unoptimized fix.
-- desktop-modal-cellular-router.png and desktop-modal-solar-panel.png show option-specific real-photo images.
-- desktop-customize-3x9-expansion-final-after-cachefix.png shows centered 3x9 floorplan and full-width stepper.
-- desktop-solution-after-cachefix.png shows a light technical option concept, not the previous black/card-heavy field concept.
-- mobile-customize-after-cachefix.png shows no horizontal overflow and the bottom 주문하기 bar is reachable.
+Manual screenshot review:
 
-## Current Failures Or Risks
+- `desktop-floorplan-expanding-midframe.png`: teal wall line is visibly moving outward during transition.
+- `desktop-floorplan-standard-final.png`: 6m tan reference lines remain visible, pale teal growth zones mark the added footprint, and the 9m plan is centered.
+- `desktop-solar-panel-modal.png`: option info modal image renders with nonzero natural dimensions and no placeholder copy.
+- `mobile-customize.png`: mobile stepper and bottom `주문하기` CTA fit without horizontal overflow.
 
-- The 30 option image files exist. Current public catalog only exposes 23 option-info buttons in the visible default catalog state; mini-washer, bed-frame, and ess are asset-ready but not currently visible options.
-- Next middleware-to-proxy deprecation warning persists.
-- Production deployment and real-domain QA are still pending until after closure review, commit, and push.
+## Current Failures / Risks
 
-## Key Git Diff
-
-Key diff is summarized through excerpts and diff stat above. Full local packet contains the detailed diff subset.
+- Localhost shows Vercel Analytics `/_vercel/insights/script.js` 404/MIME console noise; this is ignored locally and will be rechecked on production domain after push/promote.
+- Existing Next.js middleware-to-proxy deprecation warning remains unrelated.
+- The expansion guide is a buyer-facing explanatory overlay, not a CAD-grade construction drawing.
 
 ## Exact Review Questions
 
-Return a marker-matched review using this structure:
+Please review as GPT-5.5 Pro with a strict product/UX/code lens. Focus only on the current post-PASS diff and whether it safely satisfies the Stickies steering.
 
-MARKER: WEET_REVIEW_20260610_CUSTOMIZE_SOLUTION_CLOSURE_02
-VERDICT: PASS or REVISE
+Return exactly this structure:
+
+```text
+MARKER: WEET_REVIEW_20260610_EXPANSION_GUIDE_03
+VERDICT: PASS | MUST_FIX
+
 MUST_FIX:
-- Concrete blocker(s) only. Include file/path and exact reason.
-OPTIONAL:
-- Non-blocking improvements only.
+- ...
 
-Please focus on:
-1. Whether the previous MUST_FIX (9 temporary option images) is truly closed.
-2. Whether the /customize modal image fix using `unoptimized` is correct and safe for public local assets with cache-bust query strings.
-3. Whether the renamed steps, removed 상담 신청/확인사항/상담 요청, centered floorplan, and expansion behavior match the user request.
-4. Whether /solution now fits the requested technical-option concept and avoids the old site/field/black-heavy approach.
-5. Any concrete blockers before commit/push/deploy.
+OPTIONAL:
+- ...
+
+RATIONALE:
+- ...
+```

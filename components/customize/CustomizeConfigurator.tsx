@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState, useTransition, type Dispatch, type ReactNode, type SetStateAction } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { toast } from 'sonner';
@@ -837,6 +837,7 @@ function FloorplanCanvas({
         opacity="0.9"
       />
 
+      <FloorplanExpansionGuides box={box} />
       <FloorplanLengthRail box={box} lengthM={model.lengthM} />
 
       {selectedOptions.map((option) => option.overlayImagePath ? (
@@ -866,6 +867,134 @@ function FloorplanCanvas({
         );
       })}
     </svg>
+  );
+}
+
+function FloorplanExpansionGuides({ box }: { box: ReturnType<typeof floorplanSize> }) {
+  const shouldReduceMotion = useReducedMotion();
+  const transition = shouldReduceMotion ? { duration: 0 } : { duration: 0.72, ease: 'easeInOut' };
+  const compactX = 500 - 600 / 2;
+  const compactRightX = compactX + 600;
+  const extensionWidth = Math.max(0, (box.width - 600) / 2);
+  const hasExpansion = extensionWidth > 0;
+  const inset = 12;
+  const leftX = box.x + inset;
+  const rightX = box.x + box.width - inset;
+  const topY = box.y + inset;
+  const bottomY = box.y + box.height - inset;
+  const guideOpacity = hasExpansion ? 0.95 : 0.72;
+
+  return (
+    <g data-testid="floorplan-expansion-guides" pointerEvents="none">
+      <motion.rect
+        data-testid="floorplan-left-growth-zone"
+        initial={false}
+        animate={{ x: box.x + inset, width: Math.max(0, extensionWidth - inset), opacity: hasExpansion ? 0.28 : 0 }}
+        transition={transition}
+        y={box.y + inset}
+        height={box.height - inset * 2}
+        rx="4"
+        fill="#d7efe9"
+      />
+      <motion.rect
+        data-testid="floorplan-right-growth-zone"
+        initial={false}
+        animate={{ x: box.x + box.width - extensionWidth, width: Math.max(0, extensionWidth - inset), opacity: hasExpansion ? 0.28 : 0 }}
+        transition={transition}
+        y={box.y + inset}
+        height={box.height - inset * 2}
+        rx="4"
+        fill="#d7efe9"
+      />
+
+      <motion.line
+        data-testid="floorplan-compact-left-reference"
+        initial={false}
+        animate={{ opacity: hasExpansion ? 0.58 : 0 }}
+        transition={transition}
+        x1={compactX}
+        y1={box.y + 18}
+        x2={compactX}
+        y2={box.y + box.height - 18}
+        stroke="#b88b26"
+        strokeWidth="3"
+        strokeDasharray="7 7"
+        strokeLinecap="round"
+      />
+      <motion.line
+        data-testid="floorplan-compact-right-reference"
+        initial={false}
+        animate={{ opacity: hasExpansion ? 0.58 : 0 }}
+        transition={transition}
+        x1={compactRightX}
+        y1={box.y + 18}
+        x2={compactRightX}
+        y2={box.y + box.height - 18}
+        stroke="#b88b26"
+        strokeWidth="3"
+        strokeDasharray="7 7"
+        strokeLinecap="round"
+      />
+
+      <motion.line
+        data-testid="floorplan-expansion-top-wall"
+        initial={false}
+        animate={{ x1: leftX, x2: rightX, opacity: guideOpacity }}
+        transition={transition}
+        y1={topY}
+        y2={topY}
+        stroke="#0d6e66"
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
+      <motion.line
+        data-testid="floorplan-expansion-bottom-wall"
+        initial={false}
+        animate={{ x1: leftX, x2: rightX, opacity: guideOpacity }}
+        transition={transition}
+        y1={bottomY}
+        y2={bottomY}
+        stroke="#0d6e66"
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
+      <motion.line
+        data-testid="floorplan-expansion-left-wall"
+        initial={false}
+        animate={{ x1: leftX, x2: leftX, opacity: guideOpacity }}
+        transition={transition}
+        y1={topY}
+        y2={bottomY}
+        stroke="#0d6e66"
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
+      <motion.line
+        data-testid="floorplan-expansion-right-wall"
+        initial={false}
+        animate={{ x1: rightX, x2: rightX, opacity: guideOpacity }}
+        transition={transition}
+        y1={topY}
+        y2={bottomY}
+        stroke="#0d6e66"
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
+
+      <motion.text
+        data-testid="floorplan-expansion-label"
+        initial={false}
+        animate={{ x: box.x + box.width / 2, opacity: hasExpansion ? 1 : 0 }}
+        transition={transition}
+        y={box.y + 32}
+        fill="#0d6e66"
+        fontSize="13"
+        fontWeight="900"
+        textAnchor="middle"
+      >
+        6m 기준선에서 9m로 확장
+      </motion.text>
+    </g>
   );
 }
 
@@ -1014,6 +1143,7 @@ function hasOptionInfo(option: CustomizeOption) {
 function OptionInfoModal({ option, onClose }: { option: CustomizeOption; onClose: () => void }) {
   const optionKey = option.key || option.id;
   const fallback = FALLBACK_CATALOG[optionKey] || FALLBACK_CATALOG[option.id];
+  const titleId = `option-info-title-${optionKey}`;
 
   const imagePath = `/images/customize/options/${optionKey}.webp?v=${OPTION_IMAGE_VERSION}`;
   const desc = option.detailDescriptionKo || option.shortDescriptionKo || fallback?.desc || '상세 정보가 준비 중입니다.';
@@ -1021,7 +1151,13 @@ function OptionInfoModal({ option, onClose }: { option: CustomizeOption; onClose
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#4b4033]/35 p-4" onClick={onClose}>
-      <div className="w-full max-w-xl rounded-lg bg-[#fbfaf7] p-5 shadow-2xl" onClick={(event) => event.stopPropagation()}>
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        className="w-full max-w-xl rounded-lg bg-[#fbfaf7] p-5 shadow-2xl"
+        onClick={(event) => event.stopPropagation()}
+      >
         <div className="mb-4 flex items-start justify-between gap-4">
           <div>
             <div className="mb-1 flex items-center gap-2">
@@ -1029,7 +1165,7 @@ function OptionInfoModal({ option, onClose }: { option: CustomizeOption; onClose
               {option.priceType === 'consult' && <span className="rounded bg-[#f4f0e8] px-2 py-0.5 text-[11px] font-black text-[#a56f16]">스펙 협의</span>}
               {option.priceType === 'fixed' && <p className="text-xs font-bold text-[#8a806f]">{formatOptionPrice(option)}</p>}
             </div>
-            <h3 className="text-xl font-black text-[#2f3432]">{option.nameKo}</h3>
+            <h3 id={titleId} className="text-xl font-black text-[#2f3432]">{option.nameKo}</h3>
           </div>
           <Button variant="ghost" size="icon-sm" onClick={onClose}>
             <X className="h-4 w-4" />

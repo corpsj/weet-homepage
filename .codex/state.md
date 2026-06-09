@@ -1,73 +1,67 @@
 # Codex State
 
-## Active Task
+## Active task
 
-Renew Weet `/solution`, header `주문하기`, and `/customize` ordering configurator, then complete validation, GPT-5.5 Pro closure review, push, deployment, and production-domain QA.
+Renew Weet `/solution`, header `주문하기`, and `/customize` ordering configurator; then finish validation, GPT-5.5 Pro review, branch push, Vercel production deployment, and real-domain QA. Latest Stickies steering required a clearer 3x6 -> 3x9 wall/line expansion effect.
 
-## Current Phase
+## Current phase
 
-GPT-5.5 Pro closure review passed; preparing commit, push, deployment, and production-domain QA.
+validation
 
-## Current Stickies Steering
+## Changes made
 
-- Computer Use is healthy.
-- Visible Stickies note now says to run image generation in parallel tabs when multiple images remain, and to refresh or mark failed any image run stalled for 5+ minutes before retrying.
-- This is recorded in `agent-inbox/tool-control-runbook.md`. The project-specific rule still requires Chrome/ChatGPT visible web control and one option image per prompt.
+- `/solution` renewal, header CTA renewal, `/customize` option modal images/descriptions, four-step order flow, and centered floorplan work are already implemented and pushed in commit `bf25b31`.
+- After the previous PASS, Stickies required a stronger floorplan transition: `components/customize/CustomizeConfigurator.tsx` now adds `FloorplanExpansionGuides` with pale teal growth zones, tan 6m reference lines, and animated teal wall lines for the 3x6 -> 3x9 transition.
+- Option info modals now expose `role="dialog"`, `aria-modal`, and `aria-labelledby` so the option detail UI is accessible and reliably testable.
+- `agent-inbox/antigravity-failures.md` records that Antigravity IDE received the narrow floorplan prompt but returned `User cancelled agent execution` with no code diff.
+- `agent-inbox/customizer-improvements.md` records the expansion guide improvement and visual QA evidence.
 
-## Implemented Changes
+## Commands run
 
-- `/solution` is now a light technical-options page with `Security Core`, `Network Fabric`, `Control Layer`, and `Energy Stack`; site/field-oriented solution language was removed from the main solution concept.
-- Added `/solution/energy`; `/solution/design` redirects to `/solution/energy`.
-- Header `주문하기` is separated from the main nav as an amber CTA on desktop and mobile, with matching Korean `aria-label`.
-- `/customize` steps are now `모델`, `공간 구성`, `무드 & 소재`, `스마트 테크`; `상담 신청`, `확인사항`, and buyer-facing `상담 요청` copy were removed/replaced.
-- `/customize` stepper spans the full configurator header width instead of only the right sidebar.
-- Floorplans are centered with `xMidYMid meet`, 3x6/3x9 dimensions use centered geometry, and the teal animated expansion shell grows from 6m to 9m on model switch.
-- Option-info modals now use real Korean option descriptions and image assets under `public/images/customize/options/`.
-- 30 option `.webp` assets exist; the final 9 formerly temporary assets were regenerated through Chrome/ChatGPT visible web control with `최신 • 5.5`, `Thinking • 확장`, `이미지 만들기`, one option prompt per run.
-- Fixed option modal blank-image bug by setting the modal `Image` to `unoptimized`; the previous `/_next/image` optimizer path returned 400 for cache-busted public image URLs.
-
-## Validation Results
-
-- `git diff --check`: pass.
-- `npm run lint`: pass.
-- `npm test`: pass, 3 files / 20 tests.
-- `npm run build`: pass; existing Next `middleware` to `proxy` deprecation warning remains.
-- `npx playwright test e2e/customize-configurator.spec.ts e2e/public-pages.spec.ts --project=chromium`: pass, 22/22.
+- `git status --short --branch`
+- `npm run lint` (pass)
+- `npm test` (pass, 3 files / 20 tests)
+- `npm run build` (pass; existing Next middleware-to-proxy deprecation warning remains)
+- `npx playwright test e2e/customize-configurator.spec.ts e2e/public-pages.spec.ts --project=chromium` (pass, 22/22 before final modal role patch)
+- `npx playwright test e2e/customize-configurator.spec.ts --project=chromium` (pass, 8/8 after final modal role patch)
+- Local visual QA script against `http://localhost:3100/customize` and `/solution`
 
 ## Visual QA
 
-- Local production server: `http://localhost:3100`.
-- Browser QA screenshots and summary are under `.codex/qa/current/`.
-- `.codex/qa/current/visual-summary.json` records:
-  - 9 page probes across desktop/tablet/mobile for home, solution, customize.
-  - 23 currently visible option-info modals opened on desktop.
-  - `modalProblems: []`.
-  - No horizontal overflow, no console/page errors, no banned copy (`상담 신청`, `확인사항`, old `상담 요청`, `현장 완성`).
-  - Option modal images match `/images/customize/options/<key>.webp?v=20260610-0137`, have nonzero natural dimensions, and show no placeholder text.
-- Manual visual checks:
-  - `desktop-modal-iot-package-fixed.png`: IoT image renders correctly after the `unoptimized` fix.
-  - `desktop-modal-cellular-router.png` and `desktop-modal-solar-panel.png`: option-specific images render correctly.
-  - `desktop-customize-3x9-expansion-final-after-cachefix.png`: 3x9 floorplan is centered and expanded.
-  - `desktop-solution-after-cachefix.png`: solution page uses the new light technical option layout.
-  - `mobile-customize-after-cachefix.png`: mobile stepper, floorplan, and bottom `주문하기` bar fit without horizontal overflow.
+- Local production QA artifacts: `.codex/qa/expansion-guide-20260610/`.
+- Summary reports `problems: []` after filtering localhost-only Vercel Analytics script noise.
+- Expansion evidence: top wall line changed from `x1=212, x2=788` to midframe `x1=182.86, x2=817.14`, then final `x1=62, x2=938`.
+- Manual screenshot review confirmed the 9m floorplan is centered, the teal wall line visibly moves outward, tan 6m reference lines remain visible, pale teal growth zones mark the added footprint, and the solar-panel option modal image renders without placeholder copy.
 
-## GPT-5.5 Pro Review Status
+## Current failures
 
-- Previous review marker `WEET_REVIEW_20260610_CUSTOMIZE_SOLUTION_FINAL_01` returned `VERDICT: REVISE` with one concrete `MUST_FIX`: replace the 9 temporary option images.
-- The 9 images have been regenerated and the resulting modal render bug has also been fixed.
-- Closure review marker `WEET_REVIEW_20260610_CUSTOMIZE_SOLUTION_CLOSURE_02` was sent through Chrome normal ChatGPT (`최신 • 5.5`, `Pro • 확장`, no Deep Research, no image mode).
-- `.codex/pro-review.md` now contains the marker-matched closure review.
-- Pro result: `VERDICT: PASS`, `MUST_FIX: None`.
-- Pro optional guidance: ensure required untracked route/assets are committed; keep generated QA/test artifacts selective.
+- Antigravity produced no diff for the final narrow floorplan handoff and was already cancelled; Codex continued after recording the failure.
+- Chrome extension browser API opened a logged-out ChatGPT surface, but Computer Use visual control of the real logged-in Chrome tab succeeded.
+- Chrome response-copy did not update the system clipboard, so `.codex/pro-review.md` was saved from the visible marker-matched response text.
 
-## Chrome / ChatGPT Notes
+## Pro review cycles
 
-- Chrome composer would not accept a single 29KB paste, though the clipboard contained the full packet.
-- Chunked paste in 3.5KB slices succeeded and the marker/send state was verified before submitting.
-- ChatGPT took roughly 4m29s thinking time and eventually returned a plausible marker-matched review; no duplicate send was made and `답변 중지` was never clicked.
+2
 
-## Current Risks / Follow-Up Candidates
+## Last Pro verdict
 
-- `mini-washer`, `bed-frame`, and `ess` assets exist because they were part of the earlier complete fallback list, but they are not currently visible selectable options in the public catalog state.
-- Next `middleware` deprecation warning remains as technical debt.
+PASS
+
+## Applied Pro feedback
+
+- Previous concrete MUST_FIX: replaced the 9 temporary option images through visible Chrome/ChatGPT image generation.
+- Current review marker `WEET_REVIEW_20260610_EXPANSION_GUIDE_03`: `VERDICT: PASS`, `MUST_FIX: None`.
+
+## Skipped Pro feedback
+
+- OPTIONAL copy/legend/documentation suggestions for `FloorplanExpansionGuides` are advisory and were not applied to avoid changing code after the PASS.
+
+## Remaining risks
+
+- Existing Next.js middleware-to-proxy deprecation warning remains unrelated technical debt.
+- The floorplan expansion overlay is a buyer-facing guide, not a CAD-grade construction drawing.
 - Production deployment and real-domain QA are still pending for the final commit.
+
+## Next step
+
+Stage, commit, push the final floorplan expansion guide patch, promote/wait for Vercel production, and verify `www.we-et.com` / `we-et.com` across desktop, tablet, and mobile.

@@ -131,3 +131,14 @@
 - 검증 방법: Playwright screenshot and DOM summary, manual visual inspection.
 - 결과: no overflow, base image 1개, footprint 0개, step label fit, modal helper copy readable.
 - 남은 리스크: dev-only Next indicator가 mobile screenshot 좌하단에 겹치지만 production UI 요소는 아님.
+
+## Improvement 13: 3x6→3x9 wall-line expansion guide
+
+- 문제: 3x6에서 3x9로 바뀔 때 base SVG가 교체되는 인상이 남아, 실제로 어느 벽과 선이 길어지는지 즉시 이해하기 어려웠다.
+- 고객 영향: 모델 전환이 같은 집의 확장이라기보다 다른 도면으로 바뀌는 느낌을 줄 수 있었다.
+- 수정 방향: centered footprint geometry 위에 좌우 growth zone, 6m 기준 점선, 상·하 벽선, 좌·우 사이드 월을 별도 SVG overlay로 애니메이션했다.
+- 실제 변경 파일: `components/customize/CustomizeConfigurator.tsx`
+- UI/UX 변경: Standard 3x9 선택 시 좌우 벽선이 바깥으로 이동하고 수평 벽선이 6m 기준선에서 9m 폭으로 늘어나는 장면이 보인다.
+- 검증 방법: Playwright visual QA에서 compact/final/intermediate 전환 스크린샷, E2E floorplan assertions, console/error/overflow checks.
+- 결과: local visual QA summary `problems: []`; wall-line geometry changed from `x1 212→62`, `x2 788→938` with a midframe at `x1 182.86`, `x2 817.14`. Option info modal image rendered with nonzero natural dimensions after adding dialog semantics.
+- 남은 리스크: 실제 생산 도면 정밀도와는 별개로 구매 이해용 guide overlay이므로, 향후 CAD 기반 도면 전환으로 고도화 가능.

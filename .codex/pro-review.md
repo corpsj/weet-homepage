@@ -1,37 +1,18 @@
-MARKER: WEET_REVIEW_20260610_CUSTOMIZE_SOLUTION_CLOSURE_02
-
+MARKER: WEET_REVIEW_20260610_EXPANSION_GUIDE_03
 VERDICT: PASS
 
 MUST_FIX:
-
-None.
+- None.
 
 OPTIONAL:
+- Consider making the guide label copy slightly more user-facing, for example "좌우 벽체가 6m에서 9m로 확장돼요," if future QA finds the current "6m 기준선에서 9m로 확장" wording too technical.
+- Consider adding a tiny legend or tooltip only if users confuse the tan dotted 6m reference lines with selectable construction elements.
+- Consider documenting that `FloorplanExpansionGuides` assumes the compact baseline is 600 SVG units wide and centered at `x=500`, because that coupling is not obvious from the component alone.
 
-Before commit, include the new untracked production assets and route files that are required for the shipped experience, especially public/images/customize/options/ and app/solution/energy/. The packet shows these are still untracked in git status, so this is a commit hygiene item, not a code blocker.
-
-Consider cleaning or excluding generated QA/test artifacts such as .codex/qa/current/ and test-results/ unless the project convention is to commit review evidence.
-
-The unoptimized modal image fix in components/customize/CustomizeConfigurator.tsx is acceptable for local /public WebP assets with explicit cache-busting query strings. It avoids the observed Next Image optimizer 400 path while still serving same-origin static assets, so I do not consider it a blocker.
-
-The remaining Next middleware-to-proxy deprecation warning is non-blocking because lint, unit tests, build, and Chromium Playwright coverage all passed, and it is not introduced as a functional failure in this renewal packet.
-
-The fact that 30 option images exist while only 23 option-info buttons are visible in the default public catalog is non-blocking. The visible modal set has no reported modal problems, and the extra assets appear prepared for inactive or future options rather than missing required imagery.
-
-Review notes:
-
-The prior MUST_FIX is closed based on the reported replacement of option-modal imagery, the presence of 30 option WebP assets, the modal QA count of 23 visible modals with modalProblems: [], and manual confirmation that representative option-specific images render after the cache fix.
-
-붙여넣은 마크다운(1)
-
-The /customize requirements appear satisfied: the step labels are 모델 / 공간 구성 / 무드 & 소재 / 스마트 테크, the stepper is full-width, the floorplan fallback paths are centered through the 1000-wide SVG coordinate system, and the 3x6 → 3x9 expansion behavior is validated with the expected floorplan image swap and shell width change.
-
-붙여넣은 마크다운(1)
-
-The modal image implementation is reasonable: src points to /images/customize/options/${optionKey}.webp?v=..., and unoptimized prevents the optimizer proxy failure that created blank beige boxes. The visual QA result confirms the fix on actual screenshots, including IoT, cellular router, and solar panel modals.
-
-붙여넣은 마크다운(1)
-
-The /solution renewal is acceptable for closure based on the packet’s stated package direction—Security Core, Network Fabric, Control Layer, Energy Stack—and the manual visual finding that the page now reads as a light technical-option concept rather than the old black/card-heavy field concept.
-
-붙여넣은 마크다운(1)
+RATIONALE:
+- The current diff directly satisfies the Stickies steering: the 3x6 -> 3x9 transition is no longer just a base floorplan swap. It now has animated wall-line geometry, left/right growth zones, and persistent 6m reference lines that explain where the expansion happens.
+- The implementation uses the existing centered `floorplanSize` geometry, so the visual guide follows the same model footprint logic rather than introducing a second unrelated layout system.
+- The measured QA geometry supports the intended behavior: the wall guide expands from compact `x1=212, x2=788` through a mid-transition frame to final `x1=62, x2=938`, which is exactly the "moving wall/line expansion" behavior requested.
+- The reduced-motion handling is appropriate: users who prefer reduced motion still get the correct final guide state without an animated transition.
+- The added option modal dialog semantics are a safe accessibility improvement and do not appear to broaden scope in a risky way.
+- The reported validation is strong for this narrow patch: lint, unit tests, build, targeted Playwright tests, diff check, visual screenshots, overflow checks, and modal image dimension checks all passed. The remaining localhost analytics warning and Next.js deprecation warning are unrelated to this refinement.

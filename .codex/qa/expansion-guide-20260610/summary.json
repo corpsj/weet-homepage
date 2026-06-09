@@ -1,0 +1,339 @@
+{
+  "target": "http://localhost:3100",
+  "generatedAt": "2026-06-09T17:23:00.084Z",
+  "pages": [
+    {
+      "name": "desktop customize",
+      "compact": {
+        "label": "desktop compact 3x6 before click",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "overflow": false,
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "floorplanBox": {
+          "x": 41,
+          "y": 461,
+          "width": 840,
+          "height": 353
+        },
+        "href": "/images/customize/compact-3x6-base.svg",
+        "shell": {
+          "x": null,
+          "y": "60",
+          "width": "600px",
+          "height": "300",
+          "x1": null,
+          "x2": null,
+          "y1": null,
+          "y2": null,
+          "opacity": "0.9"
+        },
+        "leftZone": {
+          "x": null,
+          "y": "72",
+          "width": "0px",
+          "height": "276",
+          "x1": null,
+          "x2": null,
+          "y1": null,
+          "y2": null,
+          "opacity": "0"
+        },
+        "rightZone": {
+          "x": null,
+          "y": "72",
+          "width": "0px",
+          "height": "276",
+          "x1": null,
+          "x2": null,
+          "y1": null,
+          "y2": null,
+          "opacity": "0"
+        },
+        "compactLeftReference": {
+          "x": null,
+          "y": null,
+          "width": null,
+          "height": null,
+          "x1": "200",
+          "x2": "200",
+          "y1": "78",
+          "y2": "342",
+          "opacity": "0"
+        },
+        "topWall": {
+          "x": null,
+          "y": null,
+          "width": null,
+          "height": null,
+          "x1": "212",
+          "x2": "788",
+          "y1": "72",
+          "y2": "72",
+          "opacity": "0.72"
+        },
+        "rightWall": {
+          "x": null,
+          "y": null,
+          "width": null,
+          "height": null,
+          "x1": "788",
+          "x2": "788",
+          "y1": "72",
+          "y2": "348",
+          "opacity": "0.72"
+        },
+        "labelText": "6m 기준선에서 9m로 확장"
+      },
+      "mid": {
+        "label": "desktop mid-transition after Standard click",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "overflow": false,
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "floorplanBox": {
+          "x": 41,
+          "y": 461,
+          "width": 840,
+          "height": 353
+        },
+        "href": "/images/customize/standard-3x9-base.svg",
+        "shell": {
+          "x": null,
+          "y": "60",
+          "width": "684.0654536877992px",
+          "height": "300",
+          "x1": null,
+          "x2": null,
+          "y1": null,
+          "y2": null,
+          "opacity": "0.9"
+        },
+        "leftZone": {
+          "x": null,
+          "y": "72",
+          "width": "26.812377435097005px",
+          "height": "276",
+          "x1": null,
+          "x2": null,
+          "y1": null,
+          "y2": null,
+          "opacity": "0.05440192523063161"
+        },
+        "rightZone": {
+          "x": null,
+          "y": "72",
+          "width": "26.812377435097005px",
+          "height": "276",
+          "x1": null,
+          "x2": null,
+          "y1": null,
+          "y2": null,
+          "opacity": "0.05440192523063161"
+        },
+        "compactLeftReference": {
+          "x": null,
+          "y": null,
+          "width": null,
+          "height": null,
+          "x1": "200",
+          "x2": "200",
+          "y1": "78",
+          "y2": "342",
+          "opacity": "0.11268970226345118"
+        },
+        "topWall": {
+          "x": null,
+          "y": null,
+          "width": null,
+          "height": null,
+          "x1": "182.8561114835902",
+          "x2": "817.1438885164098",
+          "y1": "72",
+          "y2": "72",
+          "opacity": "0.7646872957251616"
+        },
+        "rightWall": {
+          "x": null,
+          "y": null,
+          "width": null,
+          "height": null,
+          "x1": "817.1438885164098",
+          "x2": "817.1438885164098",
+          "y1": "72",
+          "y2": "348",
+          "opacity": "0.7646872957251616"
+        },
+        "labelText": "6m 기준선에서 9m로 확장"
+      },
+      "standard": {
+        "label": "desktop standard 3x9 final",
+        "viewport": {
+          "width": 1440,
+          "height": 1000
+        },
+        "overflow": false,
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "floorplanBox": {
+          "x": 41,
+          "y": 461,
+          "width": 840,
+          "height": 353
+        },
+        "href": "/images/customize/standard-3x9-base.svg",
+        "shell": {
+          "x": null,
+          "y": "60",
+          "width": "900px",
+          "height": "300",
+          "x1": null,
+          "x2": null,
+          "y1": null,
+          "y2": null,
+          "opacity": "0.9"
+        },
+        "leftZone": {
+          "x": null,
+          "y": "72",
+          "width": "138px",
+          "height": "276",
+          "x1": null,
+          "x2": null,
+          "y1": null,
+          "y2": null,
+          "opacity": "0.28"
+        },
+        "rightZone": {
+          "x": null,
+          "y": "72",
+          "width": "138px",
+          "height": "276",
+          "x1": null,
+          "x2": null,
+          "y1": null,
+          "y2": null,
+          "opacity": "0.28"
+        },
+        "compactLeftReference": {
+          "x": null,
+          "y": null,
+          "width": null,
+          "height": null,
+          "x1": "200",
+          "x2": "200",
+          "y1": "78",
+          "y2": "342",
+          "opacity": "0.58"
+        },
+        "topWall": {
+          "x": null,
+          "y": null,
+          "width": null,
+          "height": null,
+          "x1": "62",
+          "x2": "938",
+          "y1": "72",
+          "y2": "72",
+          "opacity": "0.95"
+        },
+        "rightWall": {
+          "x": null,
+          "y": null,
+          "width": null,
+          "height": null,
+          "x1": "938",
+          "x2": "938",
+          "y1": "72",
+          "y2": "348",
+          "opacity": "0.95"
+        },
+        "labelText": "6m 기준선에서 9m로 확장"
+      },
+      "modal": {
+        "visible": true,
+        "label": "option-info-title-solar-panel",
+        "imageSrc": "http://localhost:3100/images/customize/options/solar-panel.webp?v=20260610-0137",
+        "naturalWidth": 1672,
+        "naturalHeight": 941,
+        "hasPlaceholder": false
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Refused to execute script from 'http://localhost:3100/_vercel/insights/script.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled."
+      ],
+      "pageErrors": [],
+      "expansionEvidence": {
+        "compactX1": 212,
+        "midX1": 182.8561114835902,
+        "finalX1": 62,
+        "compactX2": 788,
+        "midX2": 817.1438885164098,
+        "finalX2": 938
+      },
+      "visualInspection": "Manual screenshot review: midframe shows the teal wall line moving outward; final frame shows tan 6m reference lines, pale teal growth zones, centered 9m floorplan, and no text overlap."
+    },
+    {
+      "name": "tablet customize",
+      "url": "http://localhost:3100/customize",
+      "pageState": {
+        "overflow": false,
+        "scrollWidth": 834,
+        "innerWidth": 834,
+        "bodyTextIncludesOldConsult": false,
+        "bodyTextIncludesConfirm": false,
+        "orderCtaCount": 1
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Refused to execute script from 'http://localhost:3100/_vercel/insights/script.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled."
+      ],
+      "pageErrors": []
+    },
+    {
+      "name": "mobile customize",
+      "url": "http://localhost:3100/customize",
+      "pageState": {
+        "overflow": false,
+        "scrollWidth": 390,
+        "innerWidth": 390,
+        "bodyTextIncludesOldConsult": false,
+        "bodyTextIncludesConfirm": false,
+        "orderCtaCount": 1
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Refused to execute script from 'http://localhost:3100/_vercel/insights/script.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled."
+      ],
+      "pageErrors": []
+    },
+    {
+      "name": "desktop solution",
+      "url": "http://localhost:3100/solution",
+      "pageState": {
+        "overflow": false,
+        "scrollWidth": 1440,
+        "innerWidth": 1440,
+        "bodyTextIncludesOldConsult": false,
+        "bodyTextIncludesConfirm": false,
+        "orderCtaCount": 2
+      },
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Refused to execute script from 'http://localhost:3100/_vercel/insights/script.js' because its MIME type ('text/html') is not executable, and strict MIME type checking is enabled."
+      ],
+      "pageErrors": []
+    }
+  ],
+  "errors": [],
+  "problems": [],
+  "localOnlyIgnoredConsole": [
+    "Vercel Web Analytics script returns 404/MIME warnings on localhost only; production-domain QA will re-check real domain."
+  ]
+}
