@@ -30,34 +30,67 @@ test.describe('Customize configurator', () => {
     await expect(page.getByRole('heading', { level: 1, name: 'Compact 3x6' })).toBeVisible();
     await expect(page.getByText('₩27,900,000', { exact: true })).toBeVisible();
     await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('href', /compact-3x6-base\.svg/);
+    await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('preserveAspectRatio', 'xMaxYMid meet');
+    await expect(page.getByTestId('floorplan-length-rail')).toContainText('6m');
     await expect(page.getByTestId('model-footprint')).toHaveCount(0);
+    await expect(page.getByTestId('customize-step-space')).toHaveAttribute('aria-current', 'step');
+    await expect(page.getByTestId('customize-step-space')).toContainText('모델 선택');
+    await expect(page.getByTestId('customize-step-included')).toContainText('공간 구성');
+    await expect(page.getByTestId('customize-step-living')).toContainText('마감·설비 선택');
+    await expect(page.getByTestId('customize-step-summary')).toContainText('상담 신청');
+    await expect(page.getByTestId('customize-step-included')).toBeVisible();
+    await expect(page.getByTestId('customize-step-living')).toBeVisible();
+    await expect(page.getByTestId('customize-step-summary')).toBeVisible();
+    await expect(page.getByRole('heading', { name: '어떤 모델이 적합할까요?' })).toHaveCount(0);
 
     await page.getByRole('button', { name: /Standard 3x9/ }).click();
     await expect(page.getByRole('heading', { level: 1, name: 'Standard 3x9' })).toBeVisible();
     await expect(page.getByText('₩34,900,000', { exact: true })).toBeVisible();
     await expect(page.getByTestId('base-floorplan-image')).toHaveCount(1);
     await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('href', /standard-3x9-base\.svg/);
+    await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('preserveAspectRatio', 'xMaxYMid meet');
+    await expect(page.getByTestId('floorplan-length-rail')).toContainText('9m');
     await expect(page.getByTestId('model-footprint')).toHaveCount(0);
 
+    const floorplanSvgGeometry = await page.evaluate(async () => {
+      const [compactSvg, standardSvg] = await Promise.all([
+        fetch('/images/customize/compact-3x6-base.svg').then((response) => response.text()),
+        fetch('/images/customize/standard-3x9-base.svg').then((response) => response.text()),
+      ]);
+      return { compactSvg, standardSvg };
+    });
+    expect(floorplanSvgGeometry.compactSvg).toContain('<rect x="400" y="60" width="600" height="300"');
+    expect(floorplanSvgGeometry.standardSvg).toContain('<rect x="100" y="60" width="900" height="300"');
+
+    await page.getByTestId('customize-step-living').click();
+    await expect(page.getByTestId('customize-step-living')).toHaveAttribute('aria-current', 'step');
     await page.getByRole('button', { name: /적삼목 포인트/ }).click();
     await expect(page.getByText('₩37,100,000')).toBeVisible();
 
     await page.getByRole('button', { name: /태양광 패널/ }).click();
     await expect(page.getByText('상담').first()).toBeVisible();
     await expect(page).toHaveURL(/\/customize\?c=/);
+
+    await page.getByTestId('customize-step-space').click();
+    await page.getByRole('button', { name: /Compact 3x6/ }).click();
+    await expect(page.getByRole('heading', { level: 1, name: 'Compact 3x6' })).toBeVisible();
+    await expect(page.getByText('₩30,100,000', { exact: true })).toBeVisible();
   });
 
   test('order modal opens without submitting consultation', async ({ page }) => {
     await page.goto('/customize');
     await page.waitForLoadState('networkidle');
 
-    await page.getByRole('button', { name: '주문하기' }).last().click();
+    await page.getByRole('button', { name: '상담 요청' }).last().click();
 
-    await expect(page.getByRole('heading', { name: '상담 요청' })).toBeVisible();
-    await expect(page.getByText('상담 후 최종 확정')).toBeVisible();
-    await expect(page.getByText('이름')).toBeVisible();
-    await expect(page.getByText('연락처')).toBeVisible();
-    await expect(page.locator('label').filter({ hasText: '지역' })).toBeVisible();
+    const dialog = page.getByRole('dialog', { name: '상담 요청' });
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByText('운반/설치 별도')).toBeVisible();
+    await expect(dialog.getByText('이름')).toBeVisible();
+    await expect(dialog.getByText('연락처')).toBeVisible();
+    await expect(dialog.locator('label').filter({ hasText: '지역' })).toBeVisible();
+    await expect(dialog.getByText('선택 입력이지만 알려주시면 더 정확한 상담에 도움이 됩니다. 아직 정해지지 않았다면 비워두셔도 됩니다.')).toBeVisible();
+    await expect(dialog.getByText('생산·설치 일정 제안에만 참고합니다.')).toBeVisible();
   });
 
   test('consultation submission succeeds with insert-only RLS and stores snapshot', async ({ page }) => {
@@ -70,7 +103,7 @@ test.describe('Customize configurator', () => {
       await page.goto('/customize');
       await page.waitForLoadState('networkidle');
 
-      await page.getByRole('button', { name: '주문하기' }).last().click();
+      await page.getByRole('button', { name: '상담 요청' }).last().click();
       await page.getByTestId('consultation-name').fill(uniqueName);
       await page.getByTestId('consultation-phone').fill(uniquePhone);
       await page.getByTestId('consultation-region').fill('테스트 지역');
@@ -111,11 +144,15 @@ test.describe('Customize configurator', () => {
 
     await page.getByRole('button', { name: '옵션 구성' }).click();
 
-    const drawer = page.getByRole('dialog').filter({ hasText: '옵션 구성' });
+    const drawer = page.getByRole('dialog').filter({ hasText: '이동식주택 구성' });
     await expect(drawer).toBeVisible();
+
+    await drawer.getByTestId('customize-step-living').click();
+    await expect(drawer.getByTestId('customize-step-living')).toHaveAttribute('aria-current', 'step');
     await expect(drawer.getByRole('heading', { name: '외장' })).toBeVisible();
     await drawer.getByRole('button', { name: /적삼목 포인트/ }).click();
     await expect(page.getByText('₩30,100,000', { exact: true })).toBeVisible();
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
 
   test('mobile floorplan zoom opens with the selected floorplan and closes safely', async ({ page }) => {
@@ -170,9 +207,13 @@ test.describe('Customize configurator', () => {
     await expect(page.getByTestId('model-footprint')).toHaveAttribute('width', '600');
   });
 
-  test('conversion confidence section is visible and toggling checks does not break floorplan', async ({ page }) => {
+  test('conversion confidence section is visible in summary step and toggling checks does not break floorplan', async ({ page }) => {
     await page.goto('/customize');
     await page.waitForLoadState('networkidle');
+
+    await expect(page.getByRole('heading', { name: '어떤 모델이 적합할까요?' })).toHaveCount(0);
+    await page.getByTestId('customize-step-summary').click();
+    await expect(page.getByTestId('customize-step-summary')).toHaveAttribute('aria-current', 'step');
 
     await expect(page.getByRole('heading', { name: '어떤 모델이 적합할까요?' })).toBeVisible();
     await expect(page.getByRole('heading', { name: '포함 사항 및 별도 준비' })).toBeVisible();
@@ -191,34 +232,27 @@ test.describe('Customize configurator', () => {
     await expect(page.getByTestId('model-footprint')).toHaveCount(0);
   });
 
-  test('conversion confidence section appears on mobile and toggles work safely', async ({ page }) => {
+  test('conversion confidence section appears on mobile inside summary step and toggles work safely', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/customize');
     await page.waitForLoadState('networkidle');
 
     await expect(page.getByRole('button', { name: '옵션 구성' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: '어떤 모델이 적합할까요?' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '어떤 모델이 적합할까요?' })).toHaveCount(0);
+    await page.getByRole('button', { name: '옵션 구성' }).click();
 
-    const checkItem = page.getByTestId('site-check-item').first();
+    const drawer = page.getByRole('dialog').filter({ hasText: '이동식주택 구성' });
+    await drawer.getByTestId('customize-step-summary').click();
+    await expect(drawer.getByTestId('customize-step-summary')).toHaveAttribute('aria-current', 'step');
+
+    await expect(drawer.getByRole('heading', { name: '어떤 모델이 적합할까요?' })).toBeVisible();
+
+    const checkItem = drawer.getByTestId('site-check-item').first();
     await checkItem.click();
     await expect(checkItem).toHaveAttribute('aria-pressed', 'true');
 
     await expect(page.getByTestId('base-floorplan-image')).toHaveCount(1);
     await expect(page.getByTestId('model-footprint')).toHaveCount(0);
-
-    await page.evaluate(() => {
-      document.documentElement.style.scrollBehavior = 'auto';
-      window.scrollTo(0, document.documentElement.scrollHeight);
-    });
-    await page.waitForFunction(
-      () => window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2
-    );
-    const lastCheck = page.getByTestId('site-check-item').last();
-    const orderButton = page.getByRole('button', { name: '주문하기' });
-    const [lastBox, orderBox] = await Promise.all([lastCheck.boundingBox(), orderButton.boundingBox()]);
-
-    expect(lastBox).not.toBeNull();
-    expect(orderBox).not.toBeNull();
-    expect(lastBox!.y + lastBox!.height).toBeLessThanOrEqual(orderBox!.y - 8);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
 });

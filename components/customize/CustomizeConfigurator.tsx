@@ -6,22 +6,19 @@ import Image from 'next/image';
 import { toast } from 'sonner';
 import {
   ArrowLeft,
-  Bath,
   Check,
   ChevronDown,
-  DoorOpen,
   Download,
   Info,
   Layers,
   Loader2,
   Maximize2,
-  PanelTop,
   Send,
   SlidersHorizontal,
-  Waves,
   X,
   CheckCircle2,
   AlertCircle,
+  ShieldCheck,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -84,6 +81,25 @@ const MODEL_FALLBACK_FLOORPLANS: Record<string, string> = {
 };
 type FloorplanImageStatus = 'missing' | 'loading' | 'loaded' | 'failed';
 
+type ConfigStep = 'space' | 'included' | 'living' | 'summary';
+const STEPS: { id: ConfigStep; label: string; categories?: string[] }[] = [
+  { id: 'space', label: '모델 선택', categories: ['model'] },
+  { id: 'included', label: '공간 구성', categories: ['windows', 'door', 'sink', 'bathroom', 'furniture'] },
+  { id: 'living', label: '마감·설비 선택', categories: ['exterior', 'interior', 'flooring', 'energy', 'connectivity'] },
+  { id: 'summary', label: '상담 신청' },
+];
+
+type ConsultationDraft = {
+  customerName: string;
+  phone: string;
+  region: string;
+  purchaseTimeline: string;
+  landType: string;
+  installAddress: string;
+  budgetRange: string;
+  memo: string;
+};
+
 const inputClass = 'h-11 rounded-lg border-gray-300 bg-[#fbfaf7] text-sm focus-visible:ring-[#b88b26]';
 const selectClass = 'h-11 w-full rounded-lg border border-gray-300 bg-[#fbfaf7] px-3 text-sm outline-none focus:ring-2 focus:ring-[#b88b26]/30';
 
@@ -94,6 +110,53 @@ function floorplanImagePathForModel(model: CustomizeModel) {
   if (!configuredPath) return fallbackPath ?? null;
   if (configuredPath === PLACEHOLDER_FLOORPLAN_PATH) return fallbackPath ?? configuredPath;
   return configuredPath;
+}
+
+function buildSelectionsForModelChange(
+  catalog: CustomizeCatalog,
+  currentSelections: SelectedOptions,
+  nextModelId: string
+) {
+  const nextSelections = getDefaultSelections(catalog, nextModelId);
+  const activeOptions = catalog.options.filter((option) => option.isActive);
+  const availableOptions = new Map(optionsForModel(activeOptions, nextModelId).map((option) => [option.id, option]));
+  const allOptions = new Map(activeOptions.map((option) => [option.id, option]));
+  const categories = new Map(catalog.categories.filter((category) => category.isActive).map((category) => [category.id, category]));
+  const removedOptions: CustomizeOption[] = [];
+
+  for (const [categoryId, optionIds] of Object.entries(currentSelections)) {
+    const category = categories.get(categoryId);
+    if (!category) continue;
+
+    const preservedIds: string[] = [];
+    for (const optionId of optionIds) {
+      const option = availableOptions.get(optionId);
+      if (option?.categoryId === categoryId) {
+        preservedIds.push(optionId);
+      } else {
+        const removedOption = allOptions.get(optionId);
+        if (removedOption && !removedOptions.some((item) => item.id === removedOption.id)) {
+          removedOptions.push(removedOption);
+        }
+      }
+    }
+
+    if (preservedIds.length === 0) continue;
+
+    if (category.selectionType === 'single') {
+      nextSelections[categoryId] = [preservedIds[0]];
+    } else {
+      nextSelections[categoryId] = Array.from(new Set([...(nextSelections[categoryId] ?? []), ...preservedIds]));
+    }
+  }
+
+  return { selections: nextSelections, removedOptions };
+}
+
+function estimateExclusionText(consultOptionCount: number) {
+  return consultOptionCount > 0
+    ? `상담 후 확정 ${consultOptionCount}개 · 운반/설치 별도`
+    : '운반/설치 별도';
 }
 
 function useFloorplanImageStatus(path: string | null): FloorplanImageStatus {
@@ -132,12 +195,13 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
     return getDefaultSelections(catalog, decoded?.modelId ?? firstModelId);
   });
   const [activeInfo, setActiveInfo] = useState<CustomizeOption | null>(null);
+  const [currentStep, setCurrentStep] = useState<ConfigStep>('space');
   const [orderOpen, setOrderOpen] = useState(false);
   const [optionDrawerOpen, setOptionDrawerOpen] = useState(false);
   const [planViewerOpen, setPlanViewerOpen] = useState(false);
   const [shouldSyncConfigUrl, setShouldSyncConfigUrl] = useState(Boolean(decoded));
   const [isPending, startTransition] = useTransition();
-  const [form, setForm] = useState({
+  const [form, setForm] = useState<ConsultationDraft>({
     customerName: '',
     phone: '',
     region: '',
@@ -172,7 +236,11 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
   const handleModelChange = (nextModelId: string) => {
     setShouldSyncConfigUrl(true);
     setModelId(nextModelId);
-    setSelectedOptions(getDefaultSelections(catalog, nextModelId));
+    const { selections, removedOptions } = buildSelectionsForModelChange(catalog, selectedOptions, nextModelId);
+    setSelectedOptions(selections);
+    if (removedOptions.length > 0) {
+      toast.info(`새 모델에 맞지 않는 옵션 ${removedOptions.length}개를 제외했습니다.`);
+    }
   };
 
   const handleOptionToggle = (category: CustomizeCategory, option: CustomizeOption) => {
@@ -261,9 +329,7 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
             </Button>
           </div>
 
-          <div className="border-t border-[#d8d0c3] bg-[#fbfaf7] px-4 py-12 md:px-8 lg:px-10">
-            <ConversionConfidenceSection catalog={catalog} />
-          </div>
+
         </section>
 
         <aside className="hidden border-l border-[#d8d0c3] bg-[#fbfaf7] lg:block lg:w-[36%]">
@@ -275,6 +341,8 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
             onModelChange={handleModelChange}
             onOptionToggle={handleOptionToggle}
             onInfo={setActiveInfo}
+            currentStep={currentStep}
+            setCurrentStep={setCurrentStep}
           />
         </aside>
       </div>
@@ -284,10 +352,12 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
           <div>
             <p className="text-xs font-semibold text-[#7b7468]">예상 총액</p>
             <p className="text-xl font-black text-[#2f3432]">{estimate ? formatWon(estimate.estimatedTotal) : '-'}</p>
-            <p className="text-xs text-[#8b8172]">운반·설치 별도</p>
+            <p className="text-xs text-[#8b8172]">
+              {estimate ? estimateExclusionText(estimate.consultOptionCount) : '운반/설치 별도'}
+            </p>
           </div>
           <Button className="h-12 min-w-[132px] bg-[#2f3432] text-white hover:bg-[#1f2422]" onClick={() => setOrderOpen(true)}>
-            주문하기
+            상담 요청
           </Button>
         </div>
       </div>
@@ -306,6 +376,8 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
               onModelChange={handleModelChange}
               onOptionToggle={handleOptionToggle}
               onInfo={setActiveInfo}
+              currentStep={currentStep}
+              setCurrentStep={setCurrentStep}
               compact
             />
           </div>
@@ -350,7 +422,7 @@ function ConfiguratorAppBar() {
         WEET
       </Link>
       <div className="text-center">
-        <p className="text-sm font-black text-[#2f3432]">주문하기</p>
+        <p className="text-sm font-black text-[#2f3432]">위트 맞춤제작</p>
         <p className="text-xs text-[#83796a]">나만의 위트 만들기</p>
       </div>
       <Link href="/support" className="text-sm font-semibold text-[#6f6658] hover:text-[#2f3432]">
@@ -368,6 +440,8 @@ function OptionsPanel({
   onModelChange,
   onOptionToggle,
   onInfo,
+  currentStep,
+  setCurrentStep,
   compact = false,
 }: {
   catalog: CustomizeCatalog;
@@ -377,73 +451,174 @@ function OptionsPanel({
   onModelChange: (modelId: string) => void;
   onOptionToggle: (category: CustomizeCategory, option: CustomizeOption) => void;
   onInfo: (option: CustomizeOption) => void;
+  currentStep: ConfigStep;
+  setCurrentStep: (step: ConfigStep) => void;
   compact?: boolean;
 }) {
+  const currentStepData = STEPS.find((s) => s.id === currentStep)!;
+  const stepIndex = STEPS.findIndex((s) => s.id === currentStep);
+  const stepCounts: Record<ConfigStep, number> = {
+    space: 1,
+    included: 0,
+    living: 0,
+    summary: 0,
+  };
+
+  const optionsList = Object.values(selectedOptions).flat();
+  visibleOptions.forEach((opt) => {
+    if (optionsList.includes(opt.id)) {
+      const catKey = catalog.categories.find((category) => category.id === opt.categoryId)?.key;
+      if (STEPS[1].categories?.includes(catKey || '')) stepCounts.included++;
+      if (STEPS[2].categories?.includes(catKey || '')) stepCounts.living++;
+    }
+  });
+
   return (
-    <div className={cn('pb-28', compact ? 'px-4 py-4' : 'h-[calc(100dvh-64px)] overflow-y-auto px-8 py-8')}>
-      <div className="mb-8">
-        <h2 className="text-xl font-black text-[#2f3432]">이동식주택 구성</h2>
-        <p className="mt-1 text-sm text-[#756d61]">선택한 구성은 상담 요청 시 그대로 저장됩니다.</p>
+    <div className={cn('flex h-full flex-col pb-28', compact ? '' : 'h-[calc(100dvh-64px)] overflow-hidden')}>
+      <div className="sticky top-0 z-10 border-b border-[#d8d0c3] bg-[#fbfaf7]/95 px-4 pb-2 pt-4 backdrop-blur md:px-8">
+        <div className="mb-2 flex items-center justify-between">
+          <h2 className="text-xl font-black text-[#2f3432]">이동식주택 구성</h2>
+          <span className="text-xs font-bold text-[#8a806f]">{stepIndex + 1} / {STEPS.length} 단계</span>
+        </div>
+        <div className="flex w-full gap-1 rounded-lg bg-[#efe6d4] p-1">
+          {STEPS.map((step, index) => {
+            const isCurrent = currentStep === step.id;
+            const isComplete = index < stepIndex;
+
+            return (
+              <button
+                key={step.id}
+                type="button"
+                data-testid={`customize-step-${step.id}`}
+                aria-current={isCurrent ? 'step' : undefined}
+                data-state={isCurrent ? 'current' : isComplete ? 'complete' : 'upcoming'}
+                onClick={() => setCurrentStep(step.id)}
+                className={cn(
+                  'relative flex min-h-9 flex-1 items-center justify-center rounded-md px-1 py-2 text-xs font-bold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26]',
+                  isCurrent && 'bg-[#fbfaf7] text-[#2f3432] shadow-sm',
+                  !isCurrent && isComplete && 'bg-[#e6dcc9] text-[#4f473d]',
+                  !isCurrent && !isComplete && 'text-[#8a806f] hover:text-[#2f3432]'
+                )}
+              >
+                {step.label}
+                {stepCounts[step.id] > 0 && step.id !== 'space' && step.id !== 'summary' && (
+                  <span aria-hidden="true" className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#b88b26] px-1 text-[9px] text-white">
+                    {stepCounts[step.id]}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      <section className="mb-8">
-        <CategoryHeading title="모델" amount={0} icon={<Layers className="h-4 w-4" />} />
-        <div className="mt-3 grid gap-3">
-          {catalog.models.map((model) => (
-            <button
-              key={model.id}
-              type="button"
-              onClick={() => onModelChange(model.id)}
-              className={cn(
-                'min-h-[96px] rounded-lg border p-4 text-left transition-colors',
-                model.id === modelId
-                  ? 'border-[#2f3432] bg-[#efe6d4] shadow-sm'
-                  : 'border-[#ded5c8] bg-[#fbfaf7] hover:border-[#b9aa94]'
-              )}
-            >
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-base font-black text-[#2f3432]">{model.nameKo}</p>
-                  <p className="mt-1 text-sm text-[#756d61]">{model.widthM}m x {model.lengthM}m · {model.areaSqm}m²</p>
+      <div className={cn('flex-1 overflow-y-auto', compact ? 'px-4 py-4' : 'px-8 py-6')}>
+        {currentStep === 'space' && (
+          <section className="mb-8">
+            <CategoryHeading title="공간 모델" amount={0} icon={<Layers className="h-4 w-4" />} />
+            <p className="mb-4 mt-1 text-sm text-[#756d61]">설치할 공간의 크기와 목적에 맞는 모델을 선택하세요.</p>
+            <div className="grid gap-3">
+              {catalog.models.map((model) => (
+                <button
+                  key={model.id}
+                  type="button"
+                  onClick={() => onModelChange(model.id)}
+                  className={cn(
+                    'min-h-[96px] rounded-lg border p-4 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26]',
+                    model.id === modelId
+                      ? 'border-[#2f3432] bg-[#efe6d4] shadow-sm'
+                      : 'border-[#ded5c8] bg-[#fbfaf7] hover:border-[#b9aa94]'
+                  )}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <p className="text-base font-black text-[#2f3432]">{model.nameKo}</p>
+                        <span className="rounded-full bg-[#e2dacd] px-2 py-0.5 text-[10px] font-bold text-[#6b5a2b]">
+                          {model.id === 'compact-3x6' ? '소형 주말주택' : '프리미엄 거주'}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-sm text-[#756d61]">{model.widthM}m x {model.lengthM}m · {model.areaSqm}m²</p>
+                    </div>
+                    {model.id === modelId && <Check className="h-5 w-5 text-[#2f3432]" />}
+                  </div>
+                  <p className="mt-4 text-sm font-bold text-[#6b5a2b]">{formatModelStartPrice(model.basePrice)}</p>
+                </button>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {(currentStep === 'included' || currentStep === 'living') && (
+          <>
+            {currentStep === 'included' && (
+              <div className="mb-6 rounded-lg bg-[#efe6d4]/50 p-4">
+                <div className="mb-2 flex items-center gap-2">
+                  <ShieldCheck className="h-4 w-4 text-[#8a806f]" />
+                  <p className="text-sm font-bold text-[#2f3432]">위트 기본 포함 내역</p>
                 </div>
-                {model.id === modelId && <Check className="h-5 w-5 text-[#2f3432]" />}
+                <p className="text-xs leading-relaxed text-[#756d61]">
+                  골조, 단열, 내/외장재, 바닥재, 도어, 창호, 싱크대 등 생활에 필요한 필수 구성요소가 기본 가격에 포함되어 있습니다.
+                </p>
               </div>
-              <p className="mt-4 text-sm font-bold text-[#6b5a2b]">{formatModelStartPrice(model.basePrice)}</p>
-            </button>
-          ))}
-        </div>
-      </section>
+            )}
 
-      {catalog.categories
-        .filter((category) => category.key !== 'model')
-        .map((category) => {
-          const options = visibleOptions.filter((option) => option.categoryId === category.id);
-          if (options.length === 0) return null;
+            {catalog.categories
+              .filter((category) => currentStepData.categories?.includes(category.key))
+              .map((category) => {
+                const options = visibleOptions.filter((option) => option.categoryId === category.id);
+                if (options.length === 0) {
+                  return (
+                    <section key={category.id} className="mb-8">
+                      <CategoryHeading title={category.nameKo} amount={0} icon={<Layers className="h-4 w-4" />} />
+                      <div className="mt-3 flex items-center justify-center rounded-lg border border-dashed border-[#ded5c8] bg-[#fbfaf7] py-8">
+                        <p className="text-sm text-[#8a806f]">현재 선택 가능한 옵션이 없습니다.</p>
+                      </div>
+                    </section>
+                  );
+                }
 
-          const amount = options
-            .filter((option) => selectedOptions[category.id]?.includes(option.id))
-            .reduce((sum, option) => sum + (option.priceType === 'fixed' ? option.price : 0), 0);
-          const meta = CATEGORY_META[category.key as keyof typeof CATEGORY_META];
-          const Icon = meta?.icon ?? Layers;
+                const amount = options
+                  .filter((option) => selectedOptions[category.id]?.includes(option.id))
+                  .reduce((sum, option) => sum + (option.priceType === 'fixed' ? option.price : 0), 0);
+                const meta = CATEGORY_META[category.key as keyof typeof CATEGORY_META];
+                const Icon = meta?.icon ?? Layers;
 
-          return (
-            <section key={category.id} className="mb-8 scroll-mt-20">
-              <CategoryHeading title={category.nameKo} amount={amount} icon={<Icon className={cn('h-4 w-4', meta?.tone)} />} />
-              {category.descriptionKo && <p className="mt-1 text-sm leading-6 text-[#756d61]">{category.descriptionKo}</p>}
-              <div className="mt-3 grid gap-3">
-                {options.map((option) => (
-                  <OptionCard
-                    key={option.id}
-                    option={option}
-                    selected={selectedOptions[category.id]?.includes(option.id) ?? false}
-                    onToggle={() => onOptionToggle(category, option)}
-                    onInfo={() => onInfo(option)}
-                  />
-                ))}
-              </div>
-            </section>
-          );
-        })}
+                const sortedOptions = [...options].sort((a, b) => {
+                  if (a.priceType === 'included' && b.priceType !== 'included') return -1;
+                  if (a.priceType !== 'included' && b.priceType === 'included') return 1;
+                  if (a.isDefault && !b.isDefault) return -1;
+                  if (!a.isDefault && b.isDefault) return 1;
+                  return 0;
+                });
+
+                return (
+                  <section key={category.id} className="mb-8 scroll-mt-20">
+                    <CategoryHeading title={category.nameKo} amount={amount} icon={<Icon className={cn('h-4 w-4', meta?.tone)} />} />
+                    {category.descriptionKo && <p className="mt-1 text-sm leading-6 text-[#756d61]">{category.descriptionKo}</p>}
+                    <div className="mt-3 grid gap-2">
+                      {sortedOptions.map((option) => (
+                        <OptionCard
+                          key={option.id}
+                          option={option}
+                          selected={selectedOptions[category.id]?.includes(option.id) ?? false}
+                          onToggle={() => onOptionToggle(category, option)}
+                          onInfo={() => onInfo(option)}
+                        />
+                      ))}
+                    </div>
+                  </section>
+                );
+              })}
+          </>
+        )}
+
+        {currentStep === 'summary' && (
+          <div className="animate-in fade-in slide-in-from-bottom-2">
+            <ConversionConfidenceSection catalog={catalog} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -474,39 +649,59 @@ function OptionCard({
   return (
     <div
       className={cn(
-        'rounded-lg border bg-[#fbfaf7] transition-colors',
-        selected ? 'border-[#2f3432] shadow-sm' : 'border-[#ded5c8] hover:border-[#b9aa94]'
+        'group relative rounded-lg border bg-[#fbfaf7] transition-all hover:shadow-sm',
+        selected ? 'border-[#2f3432] shadow-sm ring-1 ring-[#2f3432]' : 'border-[#ded5c8] hover:border-[#b9aa94]'
       )}
     >
-      <button type="button" onClick={onToggle} className="flex w-full items-start gap-3 p-4 text-left">
+      <button
+        type="button"
+        onClick={onToggle}
+        className="flex min-h-[52px] w-full items-center gap-3 rounded-lg p-3 pr-11 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26]"
+        aria-pressed={selected}
+      >
         <span
           className={cn(
-            'mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border',
-            selected ? 'border-[#2f3432] bg-[#2f3432] text-white' : 'border-[#bcb2a3] bg-[#fbfaf7]'
+            'flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors',
+            selected ? 'border-[#2f3432] bg-[#2f3432] text-white' : 'border-[#bcb2a3] bg-[#fbfaf7] group-hover:border-[#8a806f]'
           )}
         >
           {selected && <Check className="h-3.5 w-3.5" />}
         </span>
-        <span className="min-w-0 flex-1">
-          <span className="flex items-start justify-between gap-3">
-            <span className="font-bold text-[#2f3432]">{option.nameKo}</span>
-            <span className="shrink-0 rounded-md bg-[#efe6d4] px-2 py-1 text-xs font-black text-[#6d5b2b]">
-              {formatOptionPrice(option)}
-            </span>
-          </span>
-          <span className="mt-1 block text-sm leading-6 text-[#756d61]">{option.shortDescriptionKo}</span>
-        </span>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center justify-between gap-2">
+            <span className="truncate font-bold text-[#2f3432]">{option.nameKo}</span>
+            <div className="flex shrink-0 items-center gap-2">
+              {option.priceType === 'included' ? (
+                <span className="rounded bg-[#efe6d4]/50 px-1.5 py-0.5 text-[11px] font-black text-[#8a806f]">
+                  기본 포함
+                </span>
+              ) : option.priceType === 'consult' ? (
+                <span className="rounded bg-[#f4f0e8] px-1.5 py-0.5 text-[11px] font-black text-[#a56f16]">상담</span>
+              ) : (
+                <span className="text-xs font-bold text-[#6d5b2b]">
+                  +{formatOptionPrice(option)}
+                </span>
+              )}
+            </div>
+          </div>
+          {option.shortDescriptionKo && (
+            <span className="mt-0.5 block truncate text-xs text-[#8a806f]">{option.shortDescriptionKo}</span>
+          )}
+        </div>
       </button>
-      <div className="flex justify-end border-t border-[#eee6da] px-4 py-2">
+      {(option.detailDescriptionKo || option.imagePath) && (
         <button
           type="button"
-          onClick={onInfo}
-          className="inline-flex h-8 items-center gap-1 rounded-md px-2 text-xs font-semibold text-[#6f6658] hover:bg-[#efe6d4] hover:text-[#2f3432]"
+          onClick={(event) => {
+            event.stopPropagation();
+            onInfo();
+          }}
+          className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-[#8a806f] opacity-100 transition-opacity hover:text-[#2f3432] focus:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26] md:opacity-0 md:group-hover:opacity-100"
+          aria-label="옵션 상세 보기"
         >
-          <Info className="h-3.5 w-3.5" />
-          상세
+          <Info className="h-4 w-4" />
         </button>
-      </div>
+      )}
     </div>
   );
 }
@@ -592,20 +787,23 @@ function FloorplanCanvas({
         </pattern>
       </defs>
       <rect width="1000" height="420" fill="#f5f1ea" />
+
       {hasBaseImage ? (
-        <image
-          data-testid="base-floorplan-image"
-          href={resolvedFloorplanImagePath ?? undefined}
-          x="0"
-          y="0"
-          width="1000"
-          height="420"
-          preserveAspectRatio="xMidYMid meet"
-        />
+        <g className="transition-all duration-[600ms] motion-reduce:transition-none">
+          <image
+            data-testid="base-floorplan-image"
+            href={resolvedFloorplanImagePath ?? undefined}
+            x="0"
+            y="0"
+            width="1000"
+            height="420"
+            preserveAspectRatio="xMaxYMid meet"
+          />
+        </g>
       ) : (
         <>
-          <rect x={box.x} y={box.y} width={box.width} height={box.height} fill="#f8f4ec" stroke="#2f3432" strokeWidth="12" className="transition-all duration-[600ms]" />
-          <rect x={box.x + 12} y={box.y + 12} width={box.width - 24} height={box.height - 24} fill={`url(#${gridId})`} stroke="#bfb4a2" strokeWidth="2" className="transition-all duration-[600ms]" />
+          <rect x={box.x} y={box.y} width={box.width} height={box.height} fill="#f8f4ec" stroke="#2f3432" strokeWidth="12" className="transition-all duration-[600ms] motion-reduce:transition-none" />
+          <rect x={box.x + 12} y={box.y + 12} width={box.width - 24} height={box.height - 24} fill={`url(#${gridId})`} stroke="#bfb4a2" strokeWidth="2" className="transition-all duration-[600ms] motion-reduce:transition-none" />
           <BasePlanObjects box={box} />
         </>
       )}
@@ -620,21 +818,25 @@ function FloorplanCanvas({
           fill="transparent"
           stroke="#2f3432"
           strokeWidth="6"
-          className="transition-all duration-[600ms]"
+          className="transition-all duration-[600ms] motion-reduce:transition-none"
         />
       )}
 
+      <FloorplanLengthRail box={box} lengthM={model.lengthM} />
+
       {selectedOptions.map((option) => option.overlayImagePath ? (
-        <image
-          key={option.id}
-          href={option.overlayImagePath}
-          x="0"
-          y="0"
-          width="1000"
-          height="420"
-          opacity="0.88"
-          className="transition-opacity duration-[250ms]"
-        />
+        <g key={option.id} className="transition-all duration-[600ms] motion-reduce:transition-none">
+          <image
+            href={option.overlayImagePath}
+            x="0"
+            y="0"
+            width="1000"
+            height="420"
+            preserveAspectRatio="xMaxYMid meet"
+            opacity="0.88"
+            className="transition-opacity duration-[250ms]"
+          />
+        </g>
       ) : null)}
 
       {selectedLabels.map((option, index) => {
@@ -649,6 +851,20 @@ function FloorplanCanvas({
         );
       })}
     </svg>
+  );
+}
+
+function FloorplanLengthRail({ box, lengthM }: { box: ReturnType<typeof floorplanSize>; lengthM: number }) {
+  const railX = box.x - 24;
+
+  return (
+    <g data-testid="floorplan-length-rail" className="transition-all duration-[600ms] motion-reduce:transition-none">
+      <line x1={railX} y1={box.y} x2={railX} y2={box.y + box.height} stroke="#b9aa94" strokeWidth="2" strokeDasharray="4 4" opacity="0.8" />
+      <rect x={railX - 22} y={box.y + box.height / 2 - 14} width="44" height="28" rx="4" fill="#f5f1ea" stroke="#d8d0c3" />
+      <text x={railX} y={box.y + box.height / 2 + 5} fill="#6f6658" fontSize="12" fontWeight="800" textAnchor="middle">
+        {lengthM}m
+      </text>
+    </g>
   );
 }
 
@@ -745,8 +961,12 @@ function OptionInfoModal({ option, onClose }: { option: CustomizeOption; onClose
       <div className="w-full max-w-xl rounded-lg bg-[#fbfaf7] p-5 shadow-2xl" onClick={(event) => event.stopPropagation()}>
         <div className="mb-4 flex items-start justify-between gap-4">
           <div>
-            <p className="text-xs font-bold text-[#8a806f]">{formatOptionPrice(option)}</p>
-            <h3 className="mt-1 text-xl font-black text-[#2f3432]">{option.nameKo}</h3>
+            <div className="mb-1 flex items-center gap-2">
+              {option.priceType === 'included' && <span className="rounded bg-[#efe6d4] px-2 py-0.5 text-[11px] font-black text-[#8a806f]">기본 포함</span>}
+              {option.priceType === 'consult' && <span className="rounded bg-[#f4f0e8] px-2 py-0.5 text-[11px] font-black text-[#a56f16]">상담 후 결정</span>}
+              {option.priceType === 'fixed' && <p className="text-xs font-bold text-[#8a806f]">{formatOptionPrice(option)}</p>}
+            </div>
+            <h3 className="text-xl font-black text-[#2f3432]">{option.nameKo}</h3>
           </div>
           <Button variant="ghost" size="icon-sm" onClick={onClose}>
             <X className="h-4 w-4" />
@@ -785,26 +1005,8 @@ function OrderModal({
   selectedOptions: CustomizeOption[];
   floorplanImagePath?: string | null;
   floorplanImageStatus?: FloorplanImageStatus;
-  form: {
-    customerName: string;
-    phone: string;
-    region: string;
-    purchaseTimeline: string;
-    landType: string;
-    installAddress: string;
-    budgetRange: string;
-    memo: string;
-  };
-  setForm: Dispatch<SetStateAction<{
-    customerName: string;
-    phone: string;
-    region: string;
-    purchaseTimeline: string;
-    landType: string;
-    installAddress: string;
-    budgetRange: string;
-    memo: string;
-  }>>;
+  form: ConsultationDraft;
+  setForm: Dispatch<SetStateAction<ConsultationDraft>>;
   isPending: boolean;
   onClose: () => void;
   onSubmit: () => void;
@@ -814,7 +1016,13 @@ function OrderModal({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-black/45 p-4" onClick={onClose}>
-      <div className="mx-auto my-6 grid w-full max-w-6xl gap-0 overflow-hidden rounded-lg bg-[#fbfaf7] shadow-2xl lg:grid-cols-[1fr_0.9fr]" onClick={(event) => event.stopPropagation()}>
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="consultation-title"
+        className="mx-auto my-6 grid w-full max-w-6xl gap-0 overflow-hidden rounded-lg bg-[#fbfaf7] shadow-2xl lg:grid-cols-[1fr_0.9fr]"
+        onClick={(event) => event.stopPropagation()}
+      >
         <div className="bg-[#f4f0e8] p-5 md:p-8">
           <div className="mb-4 flex items-start justify-between gap-4">
             <div>
@@ -834,8 +1042,8 @@ function OrderModal({
         <div className="max-h-[90dvh] overflow-y-auto p-5 md:p-8">
           <div className="mb-5 flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-2xl font-black text-[#2f3432]">상담 요청</h2>
-              <p className="mt-1 text-sm text-[#756d61]">상담 후 최종 확정 · 운반·설치 별도</p>
+              <h2 id="consultation-title" className="text-2xl font-black text-[#2f3432]">상담 요청</h2>
+              <p className="mt-1 text-sm text-[#756d61]">{estimateExclusionText(estimate.consultOptionCount)}</p>
             </div>
             <Button variant="ghost" size="icon-sm" onClick={onClose}>
               <X className="h-4 w-4" />
@@ -858,6 +1066,14 @@ function OrderModal({
             </div>
           </div>
 
+          <div className="mb-4 rounded bg-[#efe6d4]/50 p-3 text-xs leading-relaxed text-[#756d61]">
+            <Info className="mr-1 inline-block h-3.5 w-3.5 align-[-2px] text-[#8a806f]" />
+            선택 입력이지만 알려주시면 더 정확한 상담에 도움이 됩니다. 아직 정해지지 않았다면 비워두셔도 됩니다.
+          </div>
+          <div className="mb-3">
+            <p className="text-sm font-black text-[#2f3432]">필수 정보</p>
+            <p className="mt-1 text-xs text-[#8a806f]">상담 접수와 연락을 위해 필요한 최소 정보입니다.</p>
+          </div>
           <div className="grid gap-4 md:grid-cols-2">
             <Field label="이름" required>
               <Input data-testid="consultation-name" className={inputClass} value={form.customerName} onChange={(event) => updateField('customerName', event.target.value)} />
@@ -868,19 +1084,26 @@ function OrderModal({
             <Field label="지역" required>
               <Input data-testid="consultation-region" className={inputClass} placeholder="경기도 양평군" value={form.region} onChange={(event) => updateField('region', event.target.value)} />
             </Field>
-            <Field label="예상 구매 시기">
+          </div>
+
+          <div className="mb-3 mt-6">
+            <p className="text-sm font-black text-[#2f3432]">추가 정보</p>
+            <p className="mt-1 text-xs text-[#8a806f]">일정, 현장 조건, 예산에 맞춘 제안에만 참고합니다.</p>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            <Field label="예상 구매 시기" helper="생산·설치 일정 제안에만 참고합니다.">
               <Select value={form.purchaseTimeline} onChange={(value) => updateField('purchaseTimeline', value)} options={PURCHASE_TIMELINES} />
             </Field>
-            <Field label="설치할 장소 지목">
+            <Field label="설치할 장소 지목" helper="대지, 전·답, 임야 등 현장 조건 검토에 참고합니다.">
               <Select value={form.landType} onChange={(value) => updateField('landType', value)} options={LAND_TYPES} />
             </Field>
-            <Field label="구매 예산">
+            <Field label="구매 예산" helper="가능한 사양 조합을 빠르게 제안하기 위한 참고값입니다.">
               <Select value={form.budgetRange} onChange={(value) => updateField('budgetRange', value)} options={BUDGET_RANGES} />
             </Field>
-            <Field label="설치 주소" className="md:col-span-2">
+            <Field label="설치 주소" className="md:col-span-2" helper="정확한 번지 전이라도 읍·면·동 수준이면 괜찮습니다.">
               <Input className={inputClass} value={form.installAddress} onChange={(event) => updateField('installAddress', event.target.value)} />
             </Field>
-            <Field label="추가 메모" className="md:col-span-2">
+            <Field label="추가 메모" className="md:col-span-2" helper="사용 목적, 예상 인원, 필요한 옵션을 자유롭게 적어주세요.">
               <Textarea className="min-h-24 rounded-lg border-gray-300 bg-[#fbfaf7] text-sm focus-visible:ring-[#b88b26]" value={form.memo} onChange={(event) => updateField('memo', event.target.value)} />
             </Field>
           </div>
@@ -901,14 +1124,32 @@ function OrderModal({
   );
 }
 
-function Field({ label, required, className, children }: { label: string; required?: boolean; className?: string; children: ReactNode }) {
+function Field({
+  label,
+  required,
+  helper,
+  className,
+  children,
+}: {
+  label: string;
+  required?: boolean;
+  helper?: string;
+  className?: string;
+  children: ReactNode;
+}) {
   return (
     <div className={className}>
-      <Label className="mb-2 block text-sm font-bold text-[#4f473d]">
-        {label}
-        {required && <span className="ml-1 text-[#a56f16]">*</span>}
+      <Label className="mb-2 flex items-center gap-2 text-sm font-bold text-[#4f473d]">
+        <span>{label}</span>
+        <span className={cn(
+          'rounded px-1.5 py-0.5 text-[10px] font-black',
+          required ? 'bg-[#2f3432] text-white' : 'bg-[#efe6d4] text-[#7a6a3a]'
+        )}>
+          {required ? '필수' : '선택'}
+        </span>
       </Label>
       {children}
+      {helper && <p className="mt-1.5 text-xs leading-relaxed text-[#8a806f]">{helper}</p>}
     </div>
   );
 }

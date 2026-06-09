@@ -1,0 +1,71 @@
+[
+  {
+    "name": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "initial": {
+      "h1": "Compact 3x6",
+      "overflowX": false,
+      "helperVisible": false,
+      "baseImages": 1,
+      "footprints": 0,
+      "preserveAspectRatio": "xMaxYMid meet",
+      "currentStep": "공간 선택"
+    },
+    "finalState": {
+      "overflowX": false,
+      "baseImages": 1,
+      "footprints": 0,
+      "helperVisible": true
+    },
+    "errors": []
+  },
+  {
+    "name": "tablet",
+    "viewport": {
+      "width": 834,
+      "height": 1112
+    },
+    "initial": {
+      "h1": "Compact 3x6",
+      "overflowX": false,
+      "helperVisible": false,
+      "baseImages": 1,
+      "footprints": 0,
+      "preserveAspectRatio": "xMaxYMid meet",
+      "currentStep": "공간 선택"
+    },
+    "finalState": {
+      "overflowX": false,
+      "baseImages": 1,
+      "footprints": 0,
+      "helperVisible": false
+    },
+    "errors": []
+  },
+  {
+    "name": "mobile",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "initial": {
+      "h1": "Compact 3x6",
+      "overflowX": false,
+      "helperVisible": false,
+      "baseImages": 1,
+      "footprints": 0,
+      "preserveAspectRatio": "xMaxYMid meet",
+      "currentStep": "공간 선택"
+    },
+    "finalState": {
+      "overflowX": false,
+      "baseImages": 2,
+      "footprints": 0,
+      "helperVisible": true
+    },
+    "errors": []
+  }
+]

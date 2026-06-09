@@ -1,0 +1,27 @@
+{
+  "compact": {
+    "h1": "Compact 3x6",
+    "overflowX": false,
+    "rail": "6m",
+    "baseImages": 1,
+    "footprints": 0,
+    "preserveAspectRatio": "xMaxYMid meet"
+  },
+  "standard": {
+    "h1": "Standard 3x9",
+    "overflowX": false,
+    "rail": "9m",
+    "baseImages": 1,
+    "footprints": 0,
+    "preserveAspectRatio": "xMaxYMid meet"
+  },
+  "mobileSummary": {
+    "h1": "Standard 3x9",
+    "overflowX": false,
+    "rail": "9m",
+    "baseImages": 1,
+    "footprints": 0,
+    "preserveAspectRatio": "xMaxYMid meet"
+  },
+  "errors": []
+}

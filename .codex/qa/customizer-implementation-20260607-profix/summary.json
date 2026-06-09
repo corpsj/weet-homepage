@@ -1,0 +1,27 @@
+{
+  "desktop": {
+    "h1": "Compact 3x6",
+    "overflowX": false,
+    "stepText": "모델 선택 | 공간 구성4 | 마감·설비 선택3 | 상담 신청",
+    "rail": "6m",
+    "baseImages": 1,
+    "footprints": 0
+  },
+  "tablet": {
+    "h1": "Compact 3x6",
+    "overflowX": false,
+    "stepText": "모델 선택 | 공간 구성4 | 마감·설비 선택3 | 상담 신청",
+    "rail": "6m",
+    "baseImages": 1,
+    "footprints": 0
+  },
+  "mobile": {
+    "h1": "Compact 3x6",
+    "overflowX": false,
+    "stepText": "모델 선택 | 공간 구성4 | 마감·설비 선택3 | 상담 신청",
+    "rail": "6m",
+    "baseImages": 1,
+    "footprints": 0
+  },
+  "errors": []
+}

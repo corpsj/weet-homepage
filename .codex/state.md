@@ -2,278 +2,116 @@
 
 ## Active task
 
-Weet 홈페이지와 관리자 페이지 전면 재귀 개선 작업의 첫 구현 슬라이스를 진행한다. 핵심 범위는 `/customize` 도면 중복 렌더링 버그 수정, 관리자 shell/sidebar/dashboard 프리미엄 테크 콘솔 리디자인, public/admin 페르소나 시뮬레이션 기록, PC/tablet/mobile 실제 검증, GPT-5.5 Pro 검수 요청이다.
+Rebuild Weet `/customize` into a premium, step-based movable-home configurator with a focused floorplan stage, right-wall anchored 3x6→3x9 expansion interaction, compact default-first options, better consultation modal copy, documented autonomous improvements, visual QA, and GPT-5.5 Pro review loop.
 
 ## Current phase
 
-complete
+blocked
 
 ## Changes made
 
-- 2026-06-07 current slice resumed after the user clarified that the work must cover both the whole public homepage experience and the complete admin redesign, not only a small admin dashboard pass.
-- Updated durable instructions so project image generation must use Chrome/ChatGPT visible web control with `최신 • 5.5` and Thinking/Pro `확장`, then `이미지 만들기`; this was recorded in `AGENTS.md`, `codex-loop.md`, `.codex/chatgpt-procedure.md`, `.codex/current-task.md`, `agent-inbox/UI-design.md`, and `agent-inbox/컴퓨터유즈,웹제어.md`.
-- Regenerated the admin/home UI guide image through Chrome/ChatGPT web control and saved it as `agent-inbox/generated-ui-reference-admin-console-v2.png` (PNG 1672x941, SHA-256 `8a9d48f42b6537c73ff55da398edefe58c2f0abf3863f409e0843fb0c31a12ab`).
-- Computer Use was healthy; Stickies was checked and visible but blank.
-- Antigravity IDE was controlled through Computer Use and completed two implementation handoffs: homepage/admin shell/main slice and remaining admin child surfaces slice. Codex accepted intended changes after final Antigravity completion.
-- Public homepage `app/page.tsx` now uses a full-bleed dark hero image, premium short headline, clear model-configuration CTA, process link, and a visible transparency section hint in the first viewport.
-- Admin shell/main route, sidebar/header, UTM, CMS main/support editor, customize manager, settings, products/product form/modal, projects, gallery, inquiries, insights, analytics, and related new/edit pages now share the premium console system.
-- Codex corrected Antigravity output by removing unused imports, removing prohibited tracking classes from changed homepage headings, fixing local image optimizer 400s from unsafe homepage asset paths, tightening hero viewport height, cleaning trailing whitespace, and bringing product new/edit route wrappers into `ConsolePageHeader`.
-- Targeted grep under `app/admin` and `components/admin` now finds 0 `tracking-tight`, `tracking-tighter`, `rounded-xl`, `rounded-2xl`, `rounded-3xl`, `shadow-xl`, `shadow-2xl`, or visible `대시보드` matches.
-- Local validation passed after all patches: `git diff --check`, `npm run lint`, `npm test` (3 files, 20 tests), `npm run build`, and `npx playwright test e2e/public-pages.spec.ts` (12 tests).
-- Visual QA against `http://localhost:3001` captured homepage and admin screens across PC `1440x960`, tablet `834x1112`, mobile `390x844`; evidence saved under `.codex/qa/visual-home-admin-20260607-final/`.
-- Visual QA covered `/`, `/admin`, `/admin/products`, product modal, product new/edit, `/admin/projects`, project new/edit, `/admin/gallery`, gallery new/edit, `/admin/inquiries`, `/admin/support`, `/admin/insights`, `/admin/utm`, and `/admin/settings`.
-- Visual QA recheck confirmed viewport-visible image failures `0`, product modal form loaded successfully after dynamic import, product modal overflow `false`, and no old `대시보드` label in audited admin body text.
-- `agent-inbox/findings-public-simulation.md`, `agent-inbox/findings-admin-simulation.md`, and `agent-inbox/implementation-backlog.md` were updated with current slice findings, fixed items, and remaining backlog.
+- Read `AGENTS.md`, `codex-loop.md`, `.codex/current-task.md`, prior `.codex/state.md`, `.codex/pro-review.md`, `.codex/review-packet.md`, `agent-inbox/README.md`, all `agent-inbox/` files, and the attached pasted task text.
+- Confirmed starting branch `zoo/customize-configurator` and initial clean status.
+- Checked Stickies through Computer Use; visible note was blank.
+- Delegated the first frontend implementation slice to Antigravity IDE/Gemini 3.1 Pro (High), then inspected and refined the resulting local changes.
+- Removed the old left-side helper/recommendation/checklist content from the floorplan stage and moved trust/checklist content into the right-side summary flow.
+- Reworked the option panel into a 4-step flow: `모델 선택 · 공간 구성 · 마감·설비 선택 · 상담 신청`.
+- Reallocated categories so space-impacting options live in `공간 구성` and finish/equipment options live in `마감·설비 선택`.
+- Compacted option cards into touch-safe rows with visible included/fixed/consult price badges and mobile-visible detail icons.
+- Sorted default/included options before paid/consult options.
+- Aligned `public/images/customize/compact-3x6-base.svg` so Compact and Standard share the right wall; added a visible `6m/9m` floorplan length rail above loaded base images.
+- Preserved compatible selected options when switching models; incompatible options are removed with a toast count.
+- Improved sticky and modal estimate copy so consult-dependent items and transport/install costs are not implied as included.
+- Improved consultation modal copy with required/additional groups, required/optional badges, field-level helper text, and `role="dialog"` semantics.
+- Saved GPT-5.5 Pro Deep Research 01 as `.codex/pro-review-customizer-01-structure.md` and `.codex/pro-review.md`; exported report marker matched `WEET_CUSTOMIZER_RESEARCH_01_STRUCTURE_20260607`.
+- Applied concrete Pro `MUST_FIX` feedback from Research 01 where in-scope for this slice.
+- Created required audit files:
+  - `agent-inbox/customizer-improvements.md`
+  - `agent-inbox/customizer-image-generation.md`
+  - `agent-inbox/customizer-reference-research.md`
+  - `agent-inbox/customizer-persona-test-results.md`
 
-- `AGENTS.md`, `codex-loop.md`, `.codex/current-task.md`, `.codex/state.md`, `agent-inbox/README.md`, `agent-inbox/instructions.md`, 기존 `agent-inbox/*.md`를 읽었다.
-- Antigravity IDE에 frontend/design 구현을 위임했고, 의도한 변경 범위를 확인한 뒤 수락했다.
-- `/customize` 도면 미리보기에서 base floorplan image가 존재할 때 generated `model-footprint` rect를 렌더링하지 않도록 수정했다.
-- `Standard 3x9`도 base floorplan image를 쓰는 실제 동작에 맞춰 desktop E2E 기대값을 수정했다.
-- tablet/mobile에서 `옵션 구성` 드로어를 열고 `Standard 3x9`를 선택한 뒤 닫았을 때 H1, 가격, base image 1개, footprint 0개가 유지되는 회귀 테스트를 추가했다.
-- 관리자 shell/sidebar/dashboard를 black/off-white/yellow 기반 프리미엄 technical console 방향으로 리디자인했다.
-- 관리자 dashboard에 metric cards, 오늘의 운영 레일, 품질 상태 rail, 빠른 작업을 추가했다.
-- 25개 디자인/UX 레퍼런스를 조사해 `agent-inbox/design-reference-research.md`에 저장했다.
-- 20개 public buyer persona × PC/tablet/mobile 기반 100개 관찰을 `agent-inbox/findings-public-simulation.md`에 저장했다.
-- 20개 admin persona × PC/tablet/mobile 기반 100개 관찰을 `agent-inbox/findings-admin-simulation.md`에 저장했다.
-- fixed issue와 다음 구현 후보를 `agent-inbox/implementation-backlog.md`에 저장했다.
-- `.codex/review-packet.md`를 현재 구현 슬라이스 전용 검수 패킷으로 작성했다.
-- 다음 public UX 슬라이스(`/customize` 도면 확대/전체화면 보기)를 Antigravity에 위임하려 했으나 IDE 창 접근 실패로 직접 구현으로 전환했다.
-- `/customize` FloorplanPreview에 `도면 크게 보기` 버튼과 mobile-safe zoom dialog를 추가했고, `FloorplanCanvas`를 분리해 기본 화면과 확대 화면이 같은 모델/옵션 데이터를 공유하도록 했다.
-- 모바일 실제 브라우저 감사에서 확대 모달이 열리고, dialog 내부 base image 1개/footprint 0개/overflow 없음/console error 없음/닫힘 동작 정상임을 확인했다.
-- Antigravity IDE/Gemini에 `/customize` conversion-confidence slice를 위임했고, 수락 전/후 diff와 의도 범위를 Codex에서 검수했다.
-- `/customize` 도면 아래에 모델 비교/추천 용도, 위트 포함 사항, 현장 별도 준비 항목, 5개 현장 체크리스트를 추가했다.
-- 현장 체크리스트 토글은 `aria-pressed` 상태를 노출하고, 체크 후에도 floorplan base image 1개와 `model-footprint` 0개가 유지되도록 검증했다.
-- 모바일 최하단에서 마지막 현장 체크리스트 항목이 하단 고정 `주문하기` 바 뒤로 일부 가려지는 실제 UX 버그를 발견했고, conversion confidence 영역 모바일 하단 여백과 E2E 회귀 테스트로 수정했다.
-- PC/tablet/mobile Playwright 조작 QA 스크린샷과 좌표 요약을 `.codex/qa/customize-confidence/`에 저장했다.
-- 새로 생성된 `agent-inbox/UI-design.md`와 `agent-inbox/안티그래비티의 작업범위.md`를 읽고 현재 워크플로우 지시로 반영했다.
-- 공개 DB 카탈로그에서 `compact-3x6`와 `standard-3x9`가 모두 `/images/customize/dummy-base.svg`를 참조하는 실제 원인을 확인했다.
-- placeholder `dummy-base.svg`가 내려올 때 모델별 기본 도면 SVG(`/images/customize/compact-3x6-base.svg`, `/images/customize/standard-3x9-base.svg`)로 대체하도록 수정했다.
-- base floorplan 이미지가 로드 실패하면 생성형 `model-footprint` fallback을 다시 표시하도록 `window.Image()` preloader 기반 상태 판별을 추가했다.
-- E2E에 compact/standard base image href 차이 검증과 base image 요청 실패 시 `model-footprint` width `600` fallback 검증을 추가했다.
-- `agent-inbox/gpt프로 심층리서치 대기.md`와 `agent-inbox/웹 접속 방법.md`를 읽었다. 이후 웹 검증은 브랜치 푸시/Vercel 배포 후 실제 `we-et.com` 화면에서 수행해야 한다.
-- 커밋 `1f4c37a`를 `zoo/customize-configurator`에 push했고, Vercel Deployments에서 해당 Ready preview를 `Promote to Production`으로 승격했다.
-- Vercel production build detail에서 커밋 `1f4c37a`, `Production`, `Ready`, 도메인 `www.we-et.com` 연결을 확인했다.
-- `https://we-et.com/customize`가 `https://www.we-et.com/customize`로 307 redirect되고, `https://www.we-et.com/customize`가 200으로 응답함을 확인했다.
-- 공개 도메인 PC/tablet/mobile Playwright QA에서 기본 화면의 compact/standard href 분리, generated footprint 0개, sticky CTA clearance, console/page error 없음, horizontal overflow 없음을 확인했다.
-- 공개 도메인 모바일 DOM 직접 검사에서 확대 모달이 열리는 순간 `Standard 3x9` base SVG 대신 generated `model-footprint` fallback을 표시하는 실제 UX 문제를 발견했다.
-- 확대 모달/상담 모달 도면이 기본 화면과 같은 floorplan image load status를 공유하도록 `CustomizeConfigurator` 상위에서 경로와 상태를 계산해 전달하게 수정했다.
-- 수정 후 `npx playwright test e2e/customize-configurator.spec.ts`, `npm run lint`, `npm test`, `npm run build`, `git diff --check`가 통과했다.
-- 커밋 `5fff2fc`를 `zoo/customize-configurator`에 push했고, Vercel Deployments에서 해당 Ready preview를 `Promote to Production`으로 승격했다.
-- Vercel production build detail에서 커밋 `5fff2fc`, `Production`, `Ready`, 도메인 `www.we-et.com` 연결을 확인했다.
-- 최종 공개 도메인 QA를 `https://we-et.com/customize?v=5fff2fc`에서 PC/tablet/mobile로 재실행했고, compact/standard main SVG href 분리, zoom modal 즉시 standard SVG 표시, dialog footprint 0개, sticky CTA clearance, horizontal overflow 없음, console/page error 없음을 확인했다.
-- `.codex/qa/production-customize-postfix/mobile-zoom-immediate.png`와 `desktop-zoom-immediate.png`를 시각 확인했고, 확대 모달이 실제 `Standard 3x9` 도면을 표시함을 확인했다.
-- `agent-inbox/UI-design.md` 지시에 따라 관리자 하위 페이지 리디자인 전 UI 가이드 이미지를 생성해 `agent-inbox/generated-ui-reference-admin-console.png`에 저장했다.
-- 관리자 하위 페이지 구현을 Antigravity IDE에 위임하려 했으나 Computer Use가 `list_apps`와 `get_app_state("Antigravity IDE")` 모두 120초 타임아웃되어 실패를 `agent-inbox/antigravity-failures.md`에 기록했다.
-- 안티그래비티 복구를 위해 `open -a "Antigravity IDE"`와 프로세스 확인을 수행했고, IDE/워크스페이스 language server는 실행 중이지만 Computer Use `get_app_state("Antigravity IDE")`가 다시 120초 타임아웃됨을 확인했다.
-- 관리자 하위 핵심 화면 1차 콘솔화를 직접 구현했다: `components/admin/ConsolePrimitives.tsx`를 추가하고 `/admin/products`, `/admin/projects`, `/admin/consultations`, `/admin/insights`에 console header, metric cards, status pills, readiness rings, panel styling을 적용했다.
-- 제품 관리에서 잘못된 제품 이미지 URL이 있을 때 Next `<Image>`에 넘기지 않고 placeholder로 처리하도록 방어 로직을 추가했다.
-- 프로젝트 관리에서 검색, readiness ring, public issue chip, safer image placeholder를 추가하고 기존 `getProjectHeroImage`/`getProjectPublicIssues` 흐름을 유지했다.
-- 상담 관리에 신규/진행/SLA 위험/완료 metric과 120분 이상 미처리 row-level SLA 표시를 추가했다.
-- `e2e/public-pages.spec.ts`에 PC/tablet/mobile 관리자 콘솔 핵심 probe와 overflow 회귀 테스트를 추가했다.
-- `.codex/qa/admin-console-slice/`에 authenticated admin QA screenshots 12장과 `summary.json`을 저장했다.
-- `.codex/review-packet.md`를 marker `WEET_REVIEW_20260607_ADMIN_CONSOLE_SLICE_04`로 작성했다.
-- Chrome에서 사용자가 열어둔 Deep Research 결과 탭을 분석했고, 보고서가 일반 assistant DOM이 아니라 visible DOM report card로 렌더링되는 것을 확인했다.
-- `dom_cua.get_visible_dom()`에서 `내보내기`, `마크다운으로 내보내기`, 보고서 텍스트 노드를 확인했고, `마크다운으로 내보내기`가 Playwright download event 없이 `~/Downloads/deep-research-report (1).md`를 생성함을 확인했다.
-- `~/Downloads/deep-research-report (1).md`를 `.codex/pro-review.md`로 저장했고, verdict가 `PASS`임을 확인했다.
-- Pro의 조건부 MUST_FIX인 service role 노출 여부를 확인했다. `SUPABASE_SERVICE_ROLE_KEY`는 Playwright Node runner와 서버 전용 `lib/supabase.ts`/server actions/server components에서만 발견됐고, browser `storageState`/localStorage/window 주입은 발견되지 않았다.
-- Antigravity IDE Computer Use 실패 원인을 재분석했다. 현재 Weet workspace는 `/Applications/Antigravity IDE.app`에 붙어 있고, 해당 앱은 bundle id `com.google.antigravity-ide`지만 executable/visible process name은 `Electron`이다.
-- Computer Use 전역 timeout 원인으로 stale `SkyComputerUseClient mcp` 프로세스들이 발견됐고, 이를 정리한 뒤 현재 tool session은 `Transport closed`가 되어 fresh session/turn에서 재시도해야 하는 상태가 됐다.
-- Stickies 앱은 실행 중이지만 Computer Use transport가 닫혀 같은 턴에서 `get_app_state("Stickies")` 재검증은 불가능했다.
-- `agent-inbox/tool-control-runbook.md`를 추가해 Antigravity/Computer Use 복구 절차, Deep Research report extraction 절차, Stickies monitoring 절차를 기록했다.
-- 모든 검증/실행/수정/브라우저 리뷰/QA 과정에서 DOM·터미널 증거만 보지 말고 screenshots, visible DOM/accessibility, Playwright screenshot, canvas/image pixel checks, Computer Use visual state 등 사람 눈 기준의 시각 분석을 병행하라는 지시를 `AGENTS.md`, `codex-loop.md`, `.codex/chatgpt-procedure.md`에 추가했다.
-- Resumed from a healthy Codex/Computer Use session: `computer-use:list_apps` succeeded, Antigravity IDE was visible as `/Applications/Antigravity IDE.app` with bundle id `com.google.antigravity-ide`, and Stickies was read successfully through `get_app_state("com.apple.Stickies")`.
-- Current Stickies steering still says to read `agent-inbox`, deeply analyze/fix Antigravity Computer Use access, remember research may be in progress, and never stop active research mid-generation.
-- Re-ran admin console slice validation before deployment: `git diff --check`, `npm run lint`, `npm test`, `npm run build`, and `npx playwright test e2e/public-pages.spec.ts --grep "Admin responsive shell|admin console operations"` all passed.
-- Visually inspected `.codex/qa/admin-console-slice/pc-products.png`, `mobile-projects.png`, `mobile-consultations.png`, and `tablet-insights.png`; PC/tablet/mobile layouts showed readable console hierarchy, no obvious text overlap, and no horizontal squeeze in the checked screenshots.
-- Added a follow-up backlog note that the floating assistant badge can visually overlap lower empty/chart panel edges on mobile admin screens, while not blocking core controls in the inspected screenshots.
-- Committed admin console slice as `fdc1a31` and pushed `zoo/customize-configurator`; Vercel preview became Ready and was promoted to Production.
-- Production QA against `https://www.we-et.com` for `fdc1a31` found no console/page errors and no document horizontal overflow, but the closed tablet/mobile admin sidebar still exposed off-canvas nav links as horizontally offscreen interactive elements.
-- Fixed the closed mobile/tablet admin sidebar by adding `max-lg:invisible max-lg:pointer-events-none` to the hidden `AdminShell` sidebar wrapper while preserving desktop visibility.
-- Re-ran post-fix validation: `git diff --check`, `npm run lint`, `npm test`, `npx playwright test e2e/public-pages.spec.ts --grep "Admin responsive shell|admin console operations"`, and `npm run build` all passed.
-- Committed sidebar fix as `0b795e5`, pushed `zoo/customize-configurator`, waited for Vercel preview Ready, promoted the exact preview deployment to Production, and confirmed production deployment `dpl_4NVnsYLPqb4XPZadMg4cpDuypA2t` was Ready with aliases `https://www.we-et.com` and `https://we-et.com`.
-- Final authenticated production QA against `https://www.we-et.com` for commit `0b795e5` covered `/admin/products`, `/admin/projects`, `/admin/consultations`, and `/admin/insights` on PC `1440x960`, tablet `834x1112`, and mobile `390x844`.
-- Final production QA result: 12/12 route-viewport checks had all probes visible, `consoleMessages: 0`, `pageErrors: 0`, `overflowX: false`, and `horizontallyOffscreenInteractive: 0`.
-- Final production QA evidence saved to `.codex/qa/production-admin-console-0b795e5/summary.json` plus 12 screenshots. Visual spot-checks of `mobile-products.png`, `tablet-projects.png`, and `mobile-consultations.png` showed stable hierarchy, no drawer bleed, no text overlap, and no horizontal squeeze.
+## Visual QA
+
+- Baseline screenshots saved under `.codex/qa/customizer-baseline-20260607/`.
+- Initial implementation screenshots saved under `.codex/qa/customizer-implementation-20260607/`.
+- Anchoring fix screenshots saved under `.codex/qa/customizer-implementation-20260607-anchored/`.
+- Pro feedback fix screenshots saved under `.codex/qa/customizer-implementation-20260607-profix/`.
+- Latest visual summary: desktop/tablet/mobile show no horizontal overflow, one `base-floorplan-image`, zero `model-footprint`, visible `6m` rail, and readable step labels.
+- Manual visual inspection: floorplan stage remains focused; `마감·설비 선택` label fits across desktop/tablet/mobile; consultation modal helper copy is readable. The black Next.js dev indicator overlaps lower-left mobile screenshots but is dev-only.
 
 ## Commands run
 
-- Current slice:
-  - `computer-use:list_apps`
-  - `computer-use:get_app_state("Antigravity IDE")`
-  - `computer-use:get_app_state("Stickies")`
-  - Chrome/ChatGPT web-control image generation with visible `5.5`, `Thinking`, `확장`, `이미지 만들기`
-  - `git status --short`
-  - `git diff --stat`
-  - `rg -n "tracking-tight|tracking-tighter|rounded-(xl|2xl|3xl)|shadow-xl|shadow-2xl|대시보드" app/admin components/admin -g '*.tsx'`
-  - `git diff --check`
-  - `npm run lint`
-  - `npm test`
-  - `npm run build`
-  - `npx playwright test e2e/public-pages.spec.ts`
-  - Local production visual QA against `http://localhost:3001`; screenshots and `report.json` saved under `.codex/qa/visual-home-admin-20260607-final/`
-  - Targeted visible-image/product-modal recheck against `http://localhost:3001`; saved `.codex/qa/visual-home-admin-20260607-final/recheck.json`
-  - Visual inspection of `pc-home.png`, `mobile-home.png`, `pc-admin.png`, `mobile-admin-gallery.png`, `mobile-admin-products-modal-new-loaded-recheck.png`, `pc-admin-projects-new.png`, `tablet-admin-gallery-new.png`, `mobile-admin-support.png`, and `mobile-admin-inquiries.png`
+- `git status --short --branch`
+- `rg`/`sed` file discovery and instruction reads
+- `npm run dev`
+- Playwright visual audit scripts for baseline, implementation, anchoring fix, and Pro feedback fix
+- Antigravity Computer Use prompt send and completion inspection
+- Chrome/ChatGPT Deep Research setup, send, poll, export, and report save
+- `git diff --check`
+- `npx tsc --noEmit`
+- `npm run lint`
+- `npm test`
+- `npx playwright test e2e/customize-configurator.spec.ts`
+- `npm run build`
 
-- `git status --short`
-- `git diff --stat`
-- `git diff --check`
-- `npm run lint`
-- `npm test`
-- `npx playwright test e2e/customize-configurator.spec.ts`
-- `npx playwright test e2e/customize-configurator.spec.ts e2e/public-pages.spec.ts`
-- `npx playwright test e2e/customize-configurator.spec.ts`
-- `npm run build`
-- `curl -I http://localhost:3000/customize`
-- `curl -s http://localhost:3000/customize | rg -n '주문하기|페이지를 찾을 수 없습니다|__next_error__|404|WEET|위트' -m 10`
-- `lsof -nP -iTCP:3000 -sTCP:LISTEN`
-- Node/Playwright PC/tablet/mobile `/customize` conversion-confidence audit, screenshots, floorplan/dialog/checklist/sticky CTA coordinate checks
-- Node/Supabase public query for `customize_models` floorplan paths
-- Node/Playwright local browser audit against `http://localhost:3000`
-- Node/Playwright tablet/mobile customize drawer proof
-- Chrome/ChatGPT DOM checks for `최신 • 5.5`, checked `Pro • 확장`, `심층 리서치` chip, empty composer, one expected review packet attachment, safe send button
-- Computer Use Antigravity checks: `get_app_state("Antigravity IDE")`, `get_app_state("com.google.antigravity-ide")`, `open -a "Antigravity IDE"`, `get_app_state("/Applications/Antigravity IDE.app")`
-- Node/Playwright mobile floorplan zoom visual audit and screenshot `.codex/visual-audit/mobile-customize-zoom.png`
-- `.codex/qa/customize-confidence/summary.json` browser audit: PC/tablet/mobile all had `floorplans: 1`, `footprints: 0`, no console errors, no page errors, no horizontal offscreen controls, and the final checklist item above the order button.
-- `.codex/qa/customize-confidence/summary.json` now also confirms compact uses `/images/customize/compact-3x6-base.svg`, standard uses `/images/customize/standard-3x9-base.svg`, and `hrefsDiffer: true` on PC/tablet/mobile.
-- `git push origin zoo/customize-configurator`
-- Chrome/Vercel: opened Deployment Actions for latest `1f4c37a`, selected `Promote to Production`, confirmed modal for commit `1f4c37a Fix customize floorplans and confidence checks`, waited until production build was `Ready`.
-- `curl -I https://we-et.com/customize`
-- `curl -I https://www.we-et.com/customize`
-- Node/Playwright production QA against `https://we-et.com/customize` for desktop/tablet/mobile, screenshots and `summary.json` saved under `.codex/qa/production-customize/`.
-- Node/Playwright production DOM inspection for zoom modal: reproduced modal fallback `model-footprint` while main page used `/images/customize/standard-3x9-base.svg`.
-- `npx playwright test e2e/customize-configurator.spec.ts`
-- `npm run lint`
-- `npm test`
-- `npm run build`
-- `git commit -m "Share customize floorplan image status"`
-- `git push origin zoo/customize-configurator`
-- Chrome/Vercel: opened Deployment Actions for latest `5fff2fc`, selected `Promote to Production`, confirmed modal for commit `5fff2fc Share customize floorplan image status`, waited until production build was `Ready`.
-- Node/Playwright production QA against `https://we-et.com/customize?v=5fff2fc` for desktop/tablet/mobile, screenshots and `summary.json` saved under `.codex/qa/production-customize-postfix/`.
-- Visual inspection of `.codex/qa/production-customize-postfix/mobile-zoom-immediate.png` and `.codex/qa/production-customize-postfix/desktop-zoom-immediate.png`.
-- Image generation: admin console UI guide saved to `agent-inbox/generated-ui-reference-admin-console.png`.
-- Computer Use Antigravity retry: `list_apps` timed out after 120s; `get_app_state("Antigravity IDE")` timed out after 120s.
-- Antigravity recovery retry: `open -a "Antigravity IDE"`, `ps aux | rg -i "Antigravity|antigravity"`, `get_app_state("Antigravity IDE")` timed out after 120s despite running IDE processes.
-- `npm run lint`
-- `npm test`
-- `npx playwright test e2e/public-pages.spec.ts --grep "Admin responsive shell|admin console operations"`
-- `npx playwright test e2e/public-pages.spec.ts e2e/customize-configurator.spec.ts`
-- `git diff --check`
-- `npm run build`
-- Node/Playwright authenticated admin QA over `/admin/products`, `/admin/projects`, `/admin/consultations`, `/admin/insights` on PC/tablet/mobile; output `.codex/qa/admin-console-slice/summary.json`.
-- Chrome Deep Research visible DOM analysis for `https://chatgpt.com/c/6a24f737-4018-83a7-b9a7-b6ca18f83440`.
-- Chrome `dom_cua.get_visible_dom()` inspection of report card controls: `내보내기`, `마크다운으로 내보내기`, `Word로 내보내기`, `PDF로 내보내기`.
-- Download folder inspection found `~/Downloads/deep-research-report (1).md`; copied it to `.codex/pro-review.md`.
-- `rg -n "SUPABASE_SERVICE_ROLE_KEY|serviceRoleKey|service_role|localStorage|storageState" e2e app components lib`
-- Antigravity/Computer Use diagnostics: `ls -la /Applications | rg -i 'Antigravity'`, PlistBuddy bundle id/name/executable checks, `ps aux | rg -i 'Antigravity|Stickies|SkyComputerUseClient'`, stale `SkyComputerUseClient mcp` cleanup.
-- Updated `AGENTS.md`, `codex-loop.md`, `.codex/chatgpt-procedure.md` with mandatory visual-analysis guidance.
-- Retested Computer Use after the visual-analysis instruction update; `computer-use/list_apps` immediately returned `Transport closed`, so Antigravity IDE operation is still not verified in the current tool session.
-- User requested a direct Antigravity smoke test: type `안녕` into Antigravity but do not send. `computer-use/list_apps` still returned `Transport closed`; reopening `~/.codex/computer-use/Codex Computer Use.app` did not restore the connection, so no text was typed.
-- Updated the local Antigravity skill at `/Users/zoopark-studio/.codex/skills/antigravity-frontend/SKILL.md` so future agents must run a Computer Use bridge preflight, target Antigravity IDE as `Electron`/`com.google.antigravity-ide`/path before name fallback, and perform a prompt input smoke test by pasting `안녕` without sending.
-- Updated `/Users/zoopark-studio/.codex/skills/antigravity-frontend/agents/openai.yaml` to reflect the improved Computer Use/Antigravity handoff workflow.
-- Validated the updated skill with `python3 /Users/zoopark-studio/.codex/skills/.system/skill-creator/scripts/quick_validate.py /Users/zoopark-studio/.codex/skills/antigravity-frontend`, which returned `Skill is valid!`.
-- Retested Computer Use after the skill update; `computer-use:list_apps` still returned `Transport closed`, so prompt input cannot be live-verified until a fresh healthy Computer Use session is available.
-- Analyzed the user's Cockpit Tools hypothesis. `launchctl list` showed `application.com.jlcodes.cockpit-tools...` and `ai.hermes.gateway-codex`; `SkyComputerUseClient ... turn-ended` processes were orphaned under parent pid `1`; reopening the Computer Use helper did not restore the closed transport. This supports the hypothesis that launching/mediating Codex through Cockpit Tools or a gateway may leave the Computer Use MCP transport attached to a stale wrapper-managed session.
-- Fresh resumed validation: `computer-use:list_apps`, `computer-use:get_app_state("com.apple.Stickies")`, `git diff --check`, `npm run lint`, `npm test`, `npm run build`, `npx playwright test e2e/public-pages.spec.ts --grep "Admin responsive shell|admin console operations"`.
-- Visual inspection via local screenshot viewer: `.codex/qa/admin-console-slice/pc-products.png`, `.codex/qa/admin-console-slice/mobile-projects.png`, `.codex/qa/admin-console-slice/mobile-consultations.png`, `.codex/qa/admin-console-slice/tablet-insights.png`.
-- `git commit -m "Unify admin console operations pages"`
-- `git push origin zoo/customize-configurator`
-- `vercel ls weet-homepage --scope weets-projects-6c7745e8`
-- `vercel inspect https://weet-homepage-ysbks9mqd-weets-projects-6c7745e8.vercel.app --scope weets-projects-6c7745e8`
-- `vercel promote https://weet-homepage-ysbks9mqd-weets-projects-6c7745e8.vercel.app --scope weets-projects-6c7745e8 --yes`
-- `vercel inspect https://weet-homepage-n62bnqu1q-weets-projects-6c7745e8.vercel.app --scope weets-projects-6c7745e8`
-- Production authenticated Playwright QA against `https://www.we-et.com` for admin products/projects/consultations/insights on PC/tablet/mobile.
-- Post-sidebar-fix validation: `git diff --check`, `npm run lint`, `npm test`, `npx playwright test e2e/public-pages.spec.ts --grep "Admin responsive shell|admin console operations"`, `npm run build`.
-- `git commit -m "Hide closed admin drawer controls"`
-- `git push origin zoo/customize-configurator`
-- `vercel inspect https://weet-homepage-el4alcjaq-weets-projects-6c7745e8.vercel.app --scope weets-projects-6c7745e8`
-- `vercel promote https://weet-homepage-el4alcjaq-weets-projects-6c7745e8.vercel.app --scope weets-projects-6c7745e8 --yes`
-- `vercel inspect https://weet-homepage-pm3y4xkqa-weets-projects-6c7745e8.vercel.app --scope weets-projects-6c7745e8`
-- Final production authenticated Playwright QA against `https://www.we-et.com` for admin products/projects/consultations/insights on PC/tablet/mobile; evidence saved under `.codex/qa/production-admin-console-0b795e5/`.
-- Visual inspection via local screenshot viewer: `.codex/qa/production-admin-console-0b795e5/mobile-products.png`, `.codex/qa/production-admin-console-0b795e5/tablet-projects.png`, `.codex/qa/production-admin-console-0b795e5/mobile-consultations.png`.
+## Latest validation output
+
+- `git diff --check`: passed
+- `npx tsc --noEmit`: passed
+- `npm run lint`: passed
+- `npm test`: 3 files / 20 tests passed
+- `npx playwright test e2e/customize-configurator.spec.ts`: 10 passed
+- `npm run build`: passed; existing Next.js middleware deprecation warning remains
+
+## Browser / Pro review notes
+
+- GPT-5.5 Pro Research 01 initially showed `리서치 중지`; no duplicate send was made.
+- After completion, ChatGPT showed a collapsed report card. Direct response copy returned empty, and expand opened a dark report shell, so Codex used the report-level `내보내기` menu.
+- `마크다운으로 내보내기` silently created `~/Downloads/deep-research-report (3).md` without a Playwright download event, matching the known runbook behavior.
+- Exported markdown was marker-matched and saved to repo files.
+- Review 02 marker `WEET_CUSTOMIZER_REVIEW_02_IMPLEMENTATION_20260607` was sent in a fresh ChatGPT conversation `https://chatgpt.com/c/6a253d69-57f8-8321-be73-6de25aa8c96a`.
+- Review 02 send evidence: composer contained the marker prompt, the large `.codex/review-packet.md` content was attached as a ChatGPT pasted-text markdown attachment, `심층 리서치` was selected, `Pro` mode was visible, and `답변 중지` appeared after send.
+- Review 02 first send became incomplete: after 60 seconds the assistant turn remained exactly `ChatGPT의 말:` with no `MUST_FIX`, no report body, and no stop/generation control. Screenshot saved at `.codex/qa/chatgpt-review-02-status.png`. Codex will retry in a fresh chat with a smaller inline packet rather than resending the same pasted attachment.
+- Review 02 retry marker `WEET_CUSTOMIZER_REVIEW_02_IMPLEMENTATION_RETRY_20260607` was sent in a fresh chat after trimming `.codex/review-packet.md` to a smaller command-grounded packet. ChatGPT still converted the packet into a pasted markdown attachment, so Codex added a short visible marker prompt and sent only after confirming send was enabled. `답변 중지` appeared after send.
+- Review 02 retry conversation `https://chatgpt.com/c/6a253e98-9714-8322-a22c-0c509fbfa38c` also became incomplete: after 90 seconds the assistant turn remained exactly `ChatGPT의 말:` with no `MUST_FIX`, no `OPTIONAL`, no `VERDICT`, and no stop/generation control. The latest user turn contained the marker `WEET_CUSTOMIZER_REVIEW_02_IMPLEMENTATION_RETRY_20260607`, so this was not an unconfirmed send. Per `codex-loop.md`, the second Chrome/GPT review failure is a stop condition.
 
 ## Current failures
 
-- Current slice:
-  - In-app Browser control was searched for but not exposed in the available follow-up tools, so local browser UI validation used Playwright screenshots/interactions plus Computer Use visual checks instead.
-  - Initial visual QA counted offscreen lazy images as `badImages` on mobile gallery/product modal; targeted recheck limited to viewport-visible images and found 0 visible image failures.
-  - Initial product modal screenshot captured the dynamic import loading state; targeted recheck waited for `기본 정보` and confirmed the form loads correctly.
-  - Local analytics requests (`/_vercel/insights/script.js`, GA/Clarity, and route-change RSC aborts) appear as request aborts during local Playwright navigation; no page errors or visible UI breakage were observed.
-
-- 2026-06-07 GPT-5.5 Pro Deep Research review attempt marker `WEET_AUDIT_REVIEW_20260607_ADMIN_CUSTOMIZE_SLICE_01` was sent in Chrome with evidence for `최신 • 5.5`, checked `Pro • 확장`, and `심층 리서치`; the long packet was converted by ChatGPT into one `붙여넣은 마크다운(1).md` attachment plus a short marker prompt. After several read-only polls and screenshots, the conversation remained on a static empty loading bar with no assistant response, no `답변 중지` button, and no marker-matched output. No `.codex/pro-review.md` was saved for this attempt.
-- During the same Chrome attempt, direct clipboard paste and Playwright fill did not put the long packet into the contenteditable composer; ChatGPT converted the long markdown into file tiles. Duplicate file tile was removed before sending, leaving one attachment.
-- A broad page-body read produced noisy internal ChatGPT page text; future polling should use visible DOM or screenshots only.
-- 2026-06-07 GPT-5.5 Pro Deep Research retry marker `WEET_AUDIT_REVIEW_20260607_ADMIN_CUSTOMIZE_SLICE_01` was sent in a fresh `새 채팅` with inline 3,205-character condensed packet, no attachments, DOM evidence for `최신 • 5.5`, checked `Pro • 확장`, and `심층 리서치`. The retry initially showed `답변 중지`, then settled into the same static empty loading bar; after several read-only polls and screenshots, no assistant response, `MUST_FIX`, `OPTIONAL`, `VERDICT`, or marker-matched output appeared. No `.codex/pro-review.md` was saved.
-- 2026-06-07 Antigravity floorplan zoom handoff failed: `Antigravity IDE` and bundle id both returned `cgWindowNotFound`; reopening the app did not expose a window; `/Applications/Antigravity IDE.app` lookup timed out after 120s. Failure recorded in `agent-inbox/antigravity-failures.md`; direct Codex implementation is continuing.
-- 2026-06-07 initial rerun of `npx playwright test e2e/customize-configurator.spec.ts` briefly failed with `/customize` rendered as 404 in test artifacts, but direct dev-server verification immediately after returned `HTTP/1.1 200 OK`; rerunning against the live dev server passed. The failure was not reproduced after server verification.
-- 2026-06-07 new mobile sticky-bar regression test initially failed because smooth scrolling caused coordinate reads before scroll completion; the test now disables smooth scroll and waits for the bottom scroll position before measuring.
-- 2026-06-07 delayed ChatGPT Deep Research report cards for marker `WEET_AUDIT_REVIEW_20260607_ADMIN_CUSTOMIZE_SLICE_01` appeared in the Deep Research home, but opening the conversation still showed a collapsed/empty assistant iframe/loading bar. `응답 복사` returned empty text, so no complete `.codex/pro-review.md` was saved. A visible snippet about broken floorplan image fallback was locally verified and fixed.
-- 2026-06-07 GPT-5.5 Pro Deep Research attempt marker `WEET_REVIEW_20260607_CUSTOMIZE_FLOORPLAN_CONFIDENCE_03` was sent with DOM proof for `심층 리서치`, `최신 • 5.5`, and checked `Pro • 확장`; after generation stopped, the assistant response remained an iframe/empty loading bar. Refresh per `agent-inbox/gpt프로 심층리서치 대기.md` did not recover it, so the tab was closed/reopened and no `.codex/pro-review.md` was saved.
-- 2026-06-07 first production QA script failed with a Node-side `window is not defined` reference while calculating visible order button boxes; the script was corrected to use the viewport height and rerun successfully.
-- 2026-06-07 production QA found a real zoom-modal transient fallback: main `Standard 3x9` used `/images/customize/standard-3x9-base.svg`, but the newly opened zoom dialog initially rendered generated `model-footprint` because image load status was not shared across canvases. Fixed locally by sharing floorplan path/status from `CustomizeConfigurator`.
-- 2026-06-07 admin child console Antigravity handoff failed because Computer Use timed out on both app listing and `Antigravity IDE` state retrieval. Failure recorded in `agent-inbox/antigravity-failures.md`; direct Codex implementation is continuing for this slice.
-- 2026-06-07 admin child console Antigravity recovery retry found Antigravity IDE running with the Weet workspace language server, but Computer Use still timed out on `get_app_state("Antigravity IDE")`; the blocker is Computer Use app-window retrieval, not a missing Antigravity process.
-- 2026-06-07 first ad-hoc Node QA script failed because Node 25 could not infer CommonJS module format with top-level await and `require`; reran the same QA script wrapped in an async IIFE successfully.
-- 2026-06-07 GPT-5.5 Pro Deep Research attempt marker `WEET_REVIEW_20260607_ADMIN_CONSOLE_SLICE_04` was sent with DOM proof for `최신 • 5.5`, checked `Pro • 확장`, and `심층 리서치`. The long packet became one `붙여넣은 텍스트 (1).txt` tile plus a short marker prompt. After `답변 중지` disappeared, the assistant response remained an iframe/empty loading state; refresh did not recover it, so the tab was closed and no `.codex/pro-review.md` was saved.
-- 2026-06-07 GPT-5.5 Pro Deep Research retry marker `WEET_REVIEW_20260607_ADMIN_CONSOLE_SLICE_04` was sent on the direct `/deep-research` surface after clearing an unrelated saved draft from the composer. DOM evidence confirmed `최신 • 5.5`, checked `Pro • 확장`, marker in the composer, no attachment tiles, and enabled `프롬프트 보내기`. After send, `답변 중지` appeared briefly, then disappeared; the conversation contained only the user message and an empty `ChatGPT의 말:` section. Refresh and reopening the same conversation in a new tab did not reveal any assistant response or downloadable research result. No `.codex/pro-review.md` was saved.
-- 2026-06-07 new inbox instruction `agent-inbox/작업도중스티어링.md` required checking the macOS Stickies app. `open -a Stickies` succeeded, but Computer Use `get_app_state("Stickies")` timed out twice after 120 seconds, so Stickies contents could not be read.
-- 2026-06-07 correction: the Deep Research report was actually present visually, but ordinary assistant DOM extraction missed it. The report was recovered through visible DOM export controls and saved to `.codex/pro-review.md`; see `agent-inbox/tool-control-runbook.md`.
-- 2026-06-07 Computer Use remains unavailable in this turn after stale `SkyComputerUseClient mcp` cleanup because the tool transport is now closed. Retry from a fresh session/turn before any Antigravity or Stickies UI work.
-- 2026-06-07 follow-up Antigravity capability check: `computer-use/list_apps` still returns `Transport closed`. The app identity issue is diagnosed, but live Antigravity IDE control cannot be called complete until a fresh Computer Use bridge succeeds.
-- 2026-06-07 Antigravity smoke test blocked: could not type `안녕` because Computer Use remained `Transport closed` even after reopening the local Codex Computer Use app.
-- 2026-06-07 Antigravity skill improvement completed, but live prompt input remains blocked by the current Computer Use `Transport closed` state.
-- 2026-06-07 Cockpit Tools launch path may be contributing to the Computer Use failure. Recommended next test is quitting Codex and Cockpit Tools, clearing stale `SkyComputerUseClient` turn clients, launching `/Applications/Codex.app` directly, then checking `computer-use:list_apps` before any Antigravity action.
-- 2026-06-07 final resume: `computer-use:list_apps` succeeded and confirmed Antigravity IDE is running, but `get_app_state("com.apple.Stickies")` and `get_app_state("Stickies")` both returned `cgWindowNotFound`; no visible Stickies note could be read in this closing pass.
+- GPT-5.5 Pro implementation review failed twice in Chrome/ChatGPT Deep Research after marker-confirmed sends. Both runs produced an empty assistant turn and no usable `MUST_FIX`/`VERDICT` output, so `.codex/pro-review.md` was not overwritten with Review 02 content.
 
 ## Pro review cycles
 
-1 completed for this implementation slice. Earlier ordinary DOM polling missed the completed report; the markdown export was recovered from Downloads.
+1
 
 ## Last Pro verdict
 
-PASS
+Research 01 verdict: first implementation direction is sufficient if the slice includes left-stage focus, fixed-right-wall expansion, compact step flow, included/paid/consult separation, and consultation modal copy improvements. Review 02 verdict is unavailable because Chrome/ChatGPT returned empty assistant turns twice.
 
 ## Applied Pro feedback
 
-- No concrete MUST_FIX was required by the recovered GPT-5.5 Pro report. The conditional service-role warning was checked and no browser-side service-role/localStorage/storageState exposure was found.
+- Exact 4-step names from Pro review applied.
+- Left stage kept to floorplan/stage content.
+- Fixed-right-wall expansion made true for loaded compact SVG and fallback coordinate rail.
+- Compact option rows and step-limited category rendering retained.
+- Included/paid/consult presentation improved.
+- Compatible options are preserved across model changes.
+- Modal optional fields now have field-level helper text.
+- Estimate copy now marks consult-dependent/transport-install exclusions.
 
 ## Skipped Pro feedback
 
-- None for this implementation slice yet.
+- Full reducer extraction, dedicated `CustomizeStage.tsx`, DB/config metadata expansion, structured `priceCalculator` breakdown, complete accordion architecture, and full focus-trap analytics were treated as larger follow-up architecture because the current slice already satisfies the concrete first-pass UI requirements and tests.
 
 ## Remaining risks
 
-- Required homepage/admin full-surface slice is complete: GPT-5.5 Pro closure passed, concrete MUST_FIX feedback was applied, branch commits were pushed, Vercel production was promoted, and final `www.we-et.com` PC/tablet/mobile QA passed.
-- Admin child pages are visually unified under the premium console system, but deeper operational features remain: global search/command palette, readiness/media health scoring, unsaved-change guards, role-aware actions, audit log, and custom destructive confirmations.
-- Public homepage/product/customize flow still needs larger conversion upgrades: warranty/A/S proof, B2B/bulk inquiry, stronger generated or real product/install imagery, and more numeric transport/install cost guidance.
-- Existing Next middleware-to-proxy deprecation remains.
-- ChatGPT Deep Research reports can render as visible report cards while ordinary assistant DOM appears empty; future review extraction should use visible DOM export controls and Downloads inspection as recorded in `agent-inbox/tool-control-runbook.md`.
-- No known outstanding `/customize` floorplan rendering defect remains after final `we-et.com` PC/tablet/mobile production validation for commit `5fff2fc`.
-- Admin UTM/CMS/gallery/inquiries/edit forms/product modal now use the console system; the next risk is functional depth rather than old surface styling.
-- Computer Use was healthy in the resumed session, but Antigravity live input still needs a real implementation handoff or smoke test through the documented `Electron`/bundle-id/path target sequence before claiming a new successful frontend delegation.
-- Final production `we-et.com` validation for admin products/projects/consultations/insights passed on PC/tablet/mobile after the sidebar fix.
+- Production-domain validation is still pending.
+- The pasted task asks for more Pro review files than the normal loop; only Research 01 has completed with a usable GPT-5.5 Pro response.
+- Image generation through Chrome/ChatGPT has not been performed because the current slice did not need a new raster image to improve customer understanding.
+- Full focus trap/keyboard audit for the consultation modal remains a worthwhile follow-up.
+- If option/category data grows, step grouping should move from component constants into structured customize metadata.
+- Review 02 could not be completed because two marker-confirmed Chrome/ChatGPT Deep Research attempts returned empty assistant output.
 
 ## Next step
 
-No required completion step remains for this slice. Optional next slice: deepen public proof content and admin operational depth (command palette, readiness/media health, audit log, unsaved-change guards, role-aware actions).
-
-## 2026-06-07 GPT Pro file upload failure
-- Chrome/ChatGPT file chooser upload for `.codex/review-packet.md` failed with `Not allowed` from the Chrome extension file chooser.
-- Recovery path: paste the review-packet content directly into the ChatGPT Deep Research composer after confirming `최신 • 5.5`, `Pro • 확장`, and `심층 리서치`.
-
-## 2026-06-07 homepage/admin full-surface slice completion update
-
-- GPT-5.5 Pro Deep Research marker `WEET_REVIEW_20260607_HOME_ADMIN_FULL_SURFACE_05` returned `VERDICT: MUST_FIX` with five concrete blockers: notice body editing missing, FAQ/notice keypress autosave, admin count failures displayed as 0, inquiry optimistic updates without rollback, and homepage dark-section contrast.
-- Codex applied all five MUST_FIX items:
-  - `components/admin/cms/SupportEditor.tsx` now uses FAQ/notice draft state with explicit save/reset buttons and editable notice body content.
-  - `app/admin/page.tsx` now represents count failures as `{ count: null, error }` and displays `연결 오류` instead of fake zero values.
-  - `components/admin/inquiries/InquiryList.tsx` now checks action results, prevents duplicate pending mutations, shows failure toasts, and rolls back failed optimistic status/delete changes.
-  - `app/page.tsx` dark transparency text was raised from `text-gray-500` to `text-gray-400`.
-  - Mobile notice management was further improved from a table-only horizontal-scroll surface into a card editor with title/status/body/save/delete controls.
-- Post-MUST_FIX validation passed: `git diff --check`, `npm run lint`, `npm test`, `npm run build`, and `npx playwright test e2e/public-pages.spec.ts`.
-- Post-MUST_FIX visual QA passed on local production server `http://localhost:3001`; evidence saved under `.codex/qa/post-pro-mustfix-20260607-v2/`.
-- GPT-5.5 Pro Deep Research closure marker `WEET_REVIEW_20260607_HOME_ADMIN_MUSTFIX_CLOSURE_06` returned `VERDICT: PASS` and `MUST_FIX: None`; latest result saved to `.codex/pro-review.md`.
-- Commit `088555f` was pushed and promoted to production, but the first real `www.we-et.com` production QA found React hydration error #418 in admin pages.
-- Hydration fix applied after production QA: admin support/inquiry date display now uses deterministic KST formatting instead of locale/timezone-dependent render output.
-- Hydration fix completion: commit `cb04ae9` was pushed, Vercel preview `https://weet-homepage-7dgft4oaw-weets-projects-6c7745e8.vercel.app` was promoted, production `https://weet-homepage-nzd7juci5-weets-projects-6c7745e8.vercel.app` became Ready with aliases `https://www.we-et.com` and `https://we-et.com`.
-- Final production QA after commit `cb04ae9` ran against `https://www.we-et.com?v=cb04ae9` on desktop, tablet, and mobile. It verified homepage horizontal overflow `false`, support admin horizontal overflow `false`, dark-section contrast class `text-gray-400`, and no meaningful console/page errors on all three viewports.
-- Final visual evidence was inspected from `.codex/qa/production-home-admin-cb04ae9/`: desktop homepage shows a premium full-bleed dark hero with the next `TRANSPARENCY` section visible; mobile support admin shows notice title/status/body/save/delete controls without clipping; desktop inquiry admin shows the premium console list/detail layout after an intentional failed-status rollback test.
+Stop the autonomous review loop under the `codex-loop.md` second browser-review-failure rule; hand the current implementation, validation results, and failure state back to the user.

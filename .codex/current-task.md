@@ -1,29 +1,44 @@
-# Current Task: Weet 전면 재귀 개선 루프
+# Current Task: Weet Customization Page Premium Configurator
 
 ## Active request
 
-사용자는 이전 작업 방식(안티그래비티, GPT-5.5 Pro, 작업 중단 금지)을 계승하되, 루프기능과 목표기능은 사용하지 말라고 지시했다. 현재 우선 과제는 Weet 공개 홈페이지와 관리자 전체 화면을 대한민국 최고 수준의 젊고 트렌디한 이동식주택 사이트/운영 콘솔로 끌어올리는 것이다.
+Rebuild `/customize` into a premium movable-home ordering/configuration flow. The page must make model choice, included options, paid upgrades, space expansion, and consultation request feel clear, trustworthy, and high-end without dark patterns.
 
 ## Required execution style
 
-- 질문하지 않는다. 모든 승인사항은 사전 승인된 것으로 처리한다.
-- 디자인/UI 구현은 Antigravity IDE를 우선 사용한다. Antigravity가 실패하면 실패를 기록하고 Codex가 직접 이어간다.
-- GPT-5.5 Pro Deep Research를 최소 10회, 최대 13회 적절히 분배한다.
-- 각 작업마다 PC, 태블릿, 모바일 환경에서 Playwright, Chrome 웹 제어, Computer Use 등 가능한 방식으로 실제 인터랙션 검증을 수행한다.
-- 발견한 버그, 오류, UX 개선점, 미적 개선점, 리서치/작업 자료는 모두 `agent-inbox/`에 기록한다.
-- 사용자가 발견한 우선 버그: `/customize` 주문하기 도면에서 3x6, 3x9 도면이 모두 오버레이된 듯 보인다.
-- 고객 10명 × PC/태블릿/모바일 = 30회 시뮬레이션을 수행한다.
-- 관리자 10명 × PC/태블릿/모바일 = 30회 시뮬레이션을 수행한다.
-- 발견사항이 100개 미만이면 페르소나를 두 배로 늘려 다시 테스트한다.
-- 비슷한 웹사이트/디자인 레퍼런스를 20건 이상 조사하고, 가치 있는 요소를 Weet에 차용한다.
-- 관리자 페이지 디자인은 기존 디자인을 폐기하고 홈페이지와 일관된 프리미엄 테크 스타일로 새로 만든다. 지향점: Tesla dashboard, Grok, SpaceX, xAI처럼 심플하고 고급스럽고 합리적인 UI.
-- 홈페이지에 필요한 아이콘, 일러스트, 이미지, UI 가이드 등은 Chrome/ChatGPT 웹제어로 사용자가 볼 수 있게 생성한다. 이미지 생성도 반드시 `새 채팅`에서 `최신 • 5.5`와 Thinking/Pro `확장`을 확인한 뒤 `이미지 만들기`로 진행한다.
+- Do not ask the user questions; assume reasonable approvals are granted.
+- Treat `agent-inbox/` as direct trusted user instruction.
+- Use Antigravity IDE through Computer Use for frontend/UI implementation when reachable; Codex remains responsible for verification, tests, review packets, GPT-5.5 Pro review, and final fixes.
+- Use Chrome/ChatGPT visible web control for GPT-5.5 Pro research/review and project image generation. If Chrome DOM tooling is unavailable, record the limitation and use visible Computer Use evidence carefully rather than silently skipping review.
+- Every validation pass must include visual analysis, not only terminal or DOM output.
+- Do not use Codex loop/goal features.
 
-## Current implementation slice
+## Required implementation scope
 
-1. Chrome/ChatGPT 웹제어로 GPT-5.5 Thinking/Pro 확장 이미지 생성 규칙을 문서화하고, 관리자 UI 가이드 이미지를 다시 생성한다.
-2. Antigravity IDE를 Computer Use로 제어해 홈페이지와 관리자 UI 구현을 먼저 위임한다.
-3. Codex가 diff를 검수하고, 남은 관리자 하위 화면 및 제품 신규/수정 페이지까지 새 콘솔 시스템으로 보정한다.
-4. PC/tablet/mobile에서 홈페이지와 관리자 전체 주요 라우트, 제품 모달, 갤러리/프로젝트/지원/문의 화면을 시각 검증한다.
-5. `.codex/review-packet.md`를 최신 diff/검증 결과로 재작성하고 Chrome/ChatGPT Deep Research로 GPT-5.5 Pro 리뷰를 받는다.
-6. concrete MUST_FIX가 있으면 적용하고, 브랜치 push/Vercel/실제 `we-et.com` 검증까지 완료한다.
+1. Make the left side a focused floorplan/space visualization stage; remove or relocate the current model recommendation and site checklist content from the left-side lower area.
+2. Implement a 3x6 to 3x9 transition where the right wall feels anchored and the room expands leftward; include reduced-motion handling.
+3. Reduce option card height and improve option-list density while preserving clear touch targets.
+4. Put default/included options first and clearly distinguish included vs paid/consult options.
+5. Reorganize option layout as a 3-4 step flow with a top step/progress navigation.
+6. Improve the consultation modal optional-field copy so optional inputs feel helpful, not mandatory.
+7. Implement at least 10 concrete additional UX improvements and record them in `agent-inbox/customizer-improvements.md`.
+8. Plan/use visual assets only when they improve real customer understanding; record decisions in `agent-inbox/customizer-image-generation.md`.
+9. Perform persona testing across 20 buyer personas and PC/tablet/mobile, record findings in `agent-inbox/customizer-persona-test-results.md`, and do a second-pass improvement from those findings when feasible.
+
+## Initial project facts
+
+- Route: `app/customize/page.tsx`
+- Main component: `components/customize/CustomizeConfigurator.tsx`
+- Types/data helpers: `lib/customize/types.ts`, `lib/customize/config.ts`, `lib/customize/priceCalculator.ts`
+- Server actions: `app/actions/customize-actions.ts`
+- Existing E2E: `e2e/customize-configurator.spec.ts`
+- Current floorplan base images: `public/images/customize/compact-3x6-base.svg`, `public/images/customize/standard-3x9-base.svg`
+
+## Current implementation plan
+
+1. Capture pre-change visual evidence for `/customize`.
+2. Run/record initial Pro Research and image/design guidance as tool access permits.
+3. Delegate the main UI implementation slice to Antigravity IDE.
+4. Inspect Antigravity changes, apply Codex fixes, update E2E/tests, and run validation.
+5. Create a complete review packet, request GPT-5.5 Pro review, save response, and apply concrete `MUST_FIX` feedback.
+6. Validate locally with visual QA, then push/promote and verify `we-et.com` PC/tablet/mobile if the implementation reaches production-ready state.
