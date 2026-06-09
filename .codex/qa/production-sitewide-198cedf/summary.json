@@ -1,0 +1,138 @@
+{
+  "generatedAt": "2026-06-09T21:10:36.639Z",
+  "commit": "198cedf",
+  "base": "https://www.we-et.com",
+  "counts": {
+    "total": 5,
+    "supportChecklistMissing": 0,
+    "overflow": 0,
+    "adminAuthenticated": 0,
+    "adminLoginFailures": 2,
+    "consoleIssues": 0
+  },
+  "results": [
+    {
+      "kind": "support",
+      "viewport": "pc",
+      "url": "https://www.we-et.com/support?v=198cedf-1781039410169-pc",
+      "consoleIssues": [],
+      "title": "진행 과정과 확인사항 | 위트(weet)",
+      "h1": [
+        "진행 과정과 확인사항"
+      ],
+      "checklist": [
+        {
+          "label": "시작하기 전에",
+          "found": true
+        },
+        {
+          "label": "현장 설치 조건",
+          "found": true
+        },
+        {
+          "label": "운반 및 설치 비용",
+          "found": true
+        },
+        {
+          "label": "품질 보증 및 A/S",
+          "found": true
+        }
+      ],
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "innerWidth": 1440
+    },
+    {
+      "kind": "support",
+      "viewport": "tablet",
+      "url": "https://www.we-et.com/support?v=198cedf-1781039419589-tablet",
+      "consoleIssues": [],
+      "title": "진행 과정과 확인사항 | 위트(weet)",
+      "h1": [
+        "진행 과정과 확인사항"
+      ],
+      "checklist": [
+        {
+          "label": "시작하기 전에",
+          "found": true
+        },
+        {
+          "label": "현장 설치 조건",
+          "found": true
+        },
+        {
+          "label": "운반 및 설치 비용",
+          "found": true
+        },
+        {
+          "label": "품질 보증 및 A/S",
+          "found": true
+        }
+      ],
+      "overflowX": false,
+      "scrollWidth": 834,
+      "innerWidth": 834
+    },
+    {
+      "kind": "support",
+      "viewport": "mobile",
+      "url": "https://www.we-et.com/support?v=198cedf-1781039422737-mobile",
+      "consoleIssues": [],
+      "title": "진행 과정과 확인사항 | 위트(weet)",
+      "h1": [
+        "진행 과정과 확인사항"
+      ],
+      "checklist": [
+        {
+          "label": "시작하기 전에",
+          "found": true
+        },
+        {
+          "label": "현장 설치 조건",
+          "found": true
+        },
+        {
+          "label": "운반 및 설치 비용",
+          "found": true
+        },
+        {
+          "label": "품질 보증 및 A/S",
+          "found": true
+        }
+      ],
+      "overflowX": false,
+      "scrollWidth": 390,
+      "innerWidth": 390
+    },
+    {
+      "kind": "admin-login",
+      "viewport": "pc",
+      "beforeUrl": "https://www.we-et.com/login?v=198cedf-1781039426967-pc",
+      "afterUrl": "https://www.we-et.com/login?v=198cedf-1781039426967-pc",
+      "loginFields": true,
+      "consoleIssues": [],
+      "title": "관리자 로그인 | 위트(weet)",
+      "textSample": "모듈러건축 소개\n제품 소개\nBESPOKE\nSOLUTION\n회사소개\n고객지원\nN\nKO\n|\nEN\n주문하기\n\nWEET OPERATIONS\n\n제품, 상담, 프로젝트를 한 곳에서 관리합니다\n\n공개 사이트의 제품 경험과 내부 운영 콘솔이 같은 기준으로 이어지도록 정돈했습니다.\n\nADMIN ACCESS\n\n관리자 로그인\n\n위트 운영 계정으로 접속해 제품 구성과 상담 흐름을 관리합니다.\n\n아이디\n비밀번호\n로그인\n'WE make dreams comE True'\n\n주식회사 위트(weet)  |  함평군 대동면 금산길 205-27  |  사업자 등록번호 660-86-01862  |  010 9645 2348\n\n당근\nN\nblog\ninstagram\n\nCopyright © weet All right reserved\n\n개인정보 처리방침\n|\n이용약관\n|\n회사소개",
+      "hasCommandSearch": false,
+      "authError": true,
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "innerWidth": 1440
+    },
+    {
+      "kind": "admin-login",
+      "viewport": "mobile",
+      "beforeUrl": "https://www.we-et.com/login?v=198cedf-1781039433040-mobile",
+      "afterUrl": "https://www.we-et.com/login?error=Could%20not%20authenticate%20user",
+      "loginFields": true,
+      "consoleIssues": [],
+      "title": "관리자 로그인 | 위트(weet)",
+      "textSample": "주문하기\n\nADMIN ACCESS\n\n관리자 로그인\n\n위트 운영 계정으로 접속해 제품 구성과 상담 흐름을 관리합니다.\n\n아이디\n비밀번호\n로그인\n'WE make dreams comE True'\n\n주식회사 위트(weet)  |  함평군 대동면 금산길 205-27  |  사업자 등록번호 660-86-01862  |  010 9645 2348\n\n당근\nN\nblog\ninstagram\n\nCopyright © weet All right reserved\n\n개인정보 처리방침\n|\n이용약관\n|\n회사소개",
+      "hasCommandSearch": false,
+      "authError": true,
+      "overflowX": false,
+      "scrollWidth": 390,
+      "innerWidth": 390
+    }
+  ]
+}

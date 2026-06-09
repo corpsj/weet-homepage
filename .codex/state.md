@@ -6,7 +6,7 @@ Explore the whole Weet website and admin experience, generate PC/tablet/mobile p
 
 ## Current phase
 
-pro-reviewed-no-must-fix-awaiting-production-deploy
+complete-with-production-admin-credential-risk
 
 ## Changes made
 
@@ -22,6 +22,10 @@ pro-reviewed-no-must-fix-awaiting-production-deploy
 - Added Playwright assertions for the new `/support` checklist and admin command search route.
 - Created `.codex/review-packet.md` with marker `REVIEW_PACKET_SITEWIDE_20260610_V1`.
 - Completed GPT-5.5 Pro review in Chrome normal ChatGPT chat (`최신 • 5.5`, `Pro • 확장`) and saved `.codex/pro-review.md`.
+- Committed and pushed implementation commit `198cedf`.
+- Vercel built preview deployment `https://weet-homepage-97dgqb5li-weets-projects-6c7745e8.vercel.app`.
+- Promoted to production deployment `https://weet-homepage-4i6flmoeq-weets-projects-6c7745e8.vercel.app`.
+- Verified `https://www.we-et.com/support` after promotion on PC/tablet/mobile with cache-busting query strings.
 
 ## Commands run
 
@@ -38,12 +42,20 @@ pro-reviewed-no-must-fix-awaiting-production-deploy
 - `npx playwright test e2e/public-pages.spec.ts --project=chromium` (14 passed)
 - Local visual screenshot QA script for `/support`, `/admin`, `/admin/projects`, `/admin/gallery` on PC/tablet/mobile (12 screenshots, 0 overflow, 0 console/page issues)
 - Chrome/ChatGPT GPT-5.5 Pro review for `REVIEW_PACKET_SITEWIDE_20260610_V1` (pass; no `MUST_FIX`)
+- `git commit -m "Improve support trust and admin search"` -> `198cedf`
+- `git push origin zoo/customize-configurator` (pass)
+- `vercel inspect https://weet-homepage-97dgqb5li-weets-projects-6c7745e8.vercel.app --scope weets-projects-6c7745e8 --wait` (preview Ready)
+- `vercel promote https://weet-homepage-97dgqb5li-weets-projects-6c7745e8.vercel.app --scope weets-projects-6c7745e8 -y --timeout 8m` (pass)
+- `vercel inspect https://weet-homepage-4i6flmoeq-weets-projects-6c7745e8.vercel.app --scope weets-projects-6c7745e8 --wait` (production Ready)
+- Production-domain Playwright QA for `https://www.we-et.com/support` and `/admin` login on PC/tablet/mobile.
 
 ## Visual QA
 
 - `.codex/qa/sitewide-improvements-20260610/summary.json`: 12 captured local screens, 0 horizontal overflow, 0 console/page errors.
 - Reviewed `pc-support.png`, `mobile-support.png`, `pc-support-checklist.png`, `mobile-support-checklist.png`, `pc-admin-command.png`, `mobile-admin-command.png`, `pc-admin-projects.png`, and `mobile-admin-gallery.png`.
 - Findings: new support checklist is legible in 3 columns on PC and stacks cleanly on mobile; admin command search appears under the input without covering core dashboard content; project/gallery date formats render as `YYYY.MM.DD` with no new hydration errors in fresh Playwright run.
+- `.codex/qa/production-sitewide-198cedf/summary.json`: 5 production-domain screens, 0 support checklist misses, 0 horizontal overflow, 0 console/page issues.
+- Production visual review: `/support` checklist renders clearly in 3 columns on PC and stacked cards on mobile; mobile admin login page remains visually stable but does not authenticate with the supplied credentials.
 
 ## Current failures
 
@@ -68,10 +80,9 @@ PASS: `NO MUST_FIX`
 
 ## Remaining risks
 
-- Production-domain verification of the new implementation still requires push/deploy/promotion.
-- Production authenticated admin verification still requires working production admin credentials; `weet` / `weet003` failed on the current production login.
+- Production authenticated admin verification still requires working production admin credentials; `weet` / `weet003` failed on the current production login both before and after deployment.
 - Existing floating bottom-left circular widget can overlap the lower edge of mobile content during scroll, but this predates the current slice and did not create overflow.
 
 ## Next step
 
-Inspect final git diff, stage the intended files, commit and push the branch so Vercel can build, then perform production-domain QA when deployment is available.
+No code blocker remains for the implemented slice. Resolve or rotate production admin credentials before any claim of authenticated production-admin QA.
