@@ -10,6 +10,7 @@ import {
   updateCustomizeConsultationMemo,
   updateCustomizeConsultationStatus,
 } from '@/app/actions/customize-actions';
+import { formatKstDateTime } from '@/lib/date-format';
 import { formatWon } from '@/lib/customize/priceCalculator';
 import type { ConsultationStatus, CustomizeConsultation } from '@/lib/customize/types';
 import {
@@ -72,6 +73,10 @@ export default function ConsultationManager({ consultations, count }: Consultati
         toast.error(error instanceof Error ? error.message : `${label} 실패`);
       }
     });
+  };
+  const deleteConsultation = (id: string, name: string) => {
+    if (!confirm(`${name}님의 상담 요청을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.`)) return;
+    runAction('상담 삭제', () => deleteCustomizeConsultation(id));
   };
   const summary = consultations.reduce(
     (current, item) => {
@@ -158,7 +163,7 @@ export default function ConsultationManager({ consultations, count }: Consultati
                 </div>
                 <div>
                   <span className="mb-1 block text-xs font-bold uppercase text-gray-400 lg:hidden">생성일</span>
-                  <span className="text-gray-500">{new Date(item.createdAt).toLocaleString('ko-KR')}</span>
+                  <span className="text-gray-500">{formatKstDateTime(item.createdAt)}</span>
                 </div>
               </div>
 
@@ -197,7 +202,7 @@ export default function ConsultationManager({ consultations, count }: Consultati
                           <Save className="h-4 w-4" />
                           메모 저장
                         </Button>
-                        <Button variant="danger" onClick={() => runAction('상담 삭제', () => deleteCustomizeConsultation(item.id))}>
+                        <Button variant="danger" onClick={() => deleteConsultation(item.id, item.customerName)}>
                           <Trash2 className="h-4 w-4" />
                           삭제
                         </Button>

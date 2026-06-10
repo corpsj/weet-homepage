@@ -3,7 +3,7 @@
 import { getSupabaseAdmin, supabase } from '@/lib/supabase';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { requireAdmin } from '@/lib/admin-auth';
-import { SITE_SETTING_LABELS, type SiteSettings } from '@/lib/site-settings';
+import { SITE_SETTING_LABELS, sanitizeSiteSetting, type SiteSettings } from '@/lib/site-settings';
 
 export async function getSiteSettingRows() {
   const { data, error } = await (supabase as any)
@@ -28,12 +28,22 @@ export async function updateSiteSettings(entries: Partial<SiteSettings>) {
   for (const [key, value] of Object.entries(entries)) {
     if (!validKeys.includes(key)) continue;
 
+    let sanitizedValue: string;
+    try {
+      sanitizedValue = sanitizeSiteSetting(key as keyof SiteSettings, value ?? '');
+    } catch (error) {
+      return {
+        success: false,
+        message: error instanceof Error ? error.message : `'${key}' 값이 올바르지 않습니다.`,
+      };
+    }
+
     const { error } = await (admin as any)
       .from('site_settings')
       .upsert(
         {
           key,
-          value: (value ?? '').trim(),
+          value: sanitizedValue,
           label: SITE_SETTING_LABELS[key as keyof SiteSettings],
           updated_at: new Date().toISOString(),
         },

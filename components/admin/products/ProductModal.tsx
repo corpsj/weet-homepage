@@ -54,6 +54,7 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
                     <button
                         onClick={onClose}
                         className="p-2 text-gray-400 hover:text-gray-900 hover:bg-[#e5e5df] rounded transition-colors"
+                        aria-label="제품 모달 닫기"
                     >
                         <X className="w-5 h-5" />
                     </button>

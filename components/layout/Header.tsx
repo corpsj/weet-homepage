@@ -288,13 +288,13 @@ export default function Header() {
             <div className="hidden xl:flex absolute right-[64px] top-1/2 -translate-y-1/2 items-center gap-4">
               {/* Secondary utilities: social + language in one compact row */}
               <div className="flex items-center gap-3 text-gray-400">
-                <Link href="https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/" target="_blank" className="hover:text-[#0d6e66] transition-colors" aria-label="Daangn">
+                <Link href="https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/" target="_blank" rel="noopener noreferrer" className="hover:text-[#0d6e66] transition-colors" aria-label="Daangn">
                   <Carrot className="w-[14px] h-[14px]" />
                 </Link>
-                <Link href="https://blog.naver.com/we-et" target="_blank" className="hover:text-[#0d6e66] transition-colors font-bold text-[13px] leading-none" aria-label="Naver Blog">
+                <Link href="https://blog.naver.com/we-et" target="_blank" rel="noopener noreferrer" className="hover:text-[#0d6e66] transition-colors font-bold text-[13px] leading-none" aria-label="Naver Blog">
                   N
                 </Link>
-                <Link href="https://www.instagram.com/weet_kr/" target="_blank" className="hover:text-[#0d6e66] transition-colors" aria-label="Instagram">
+                <Link href="https://www.instagram.com/weet_kr/" target="_blank" rel="noopener noreferrer" className="hover:text-[#0d6e66] transition-colors" aria-label="Instagram">
                   <Instagram className="w-[14px] h-[14px]" />
                 </Link>
                 <span aria-hidden="true" className="h-3.5 w-px bg-gray-200" />
@@ -495,6 +495,7 @@ export default function Header() {
               <Link
                 href="https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-2 text-gray-700 hover:text-[#0d6e66] transition-colors"
                 onClick={handleMobileMenuClose}
               >
@@ -504,6 +505,7 @@ export default function Header() {
               <Link
                 href="https://blog.naver.com/we-et"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-2 text-gray-700 hover:text-[#0d6e66] transition-colors"
                 onClick={handleMobileMenuClose}
               >
@@ -513,6 +515,7 @@ export default function Header() {
               <Link
                 href="https://www.instagram.com/weet_kr/"
                 target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-2 text-gray-700 hover:text-[#0d6e66] transition-colors"
                 onClick={handleMobileMenuClose}
               >

@@ -6,6 +6,7 @@ async function getHeroSlides() {
   const { data, error } = await supabase
     .from('hero_slides')
     .select('*')
+    .eq('is_active', true)
     .order('sort_order', { ascending: true });
 
   if (error) {
@@ -17,7 +18,8 @@ async function getHeroSlides() {
     id: slide.id,
     image_url: slide.image_url,
     title: slide.title,
-    subtitle: slide.subtitle || ''
+    subtitle: slide.subtitle || '',
+    link_url: slide.link_url || undefined,
   }));
 }
 

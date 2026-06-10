@@ -1,6 +1,7 @@
 'use server';
 
-import { createClient } from '@/utils/supabase/server';
+import { getSupabaseAdmin } from '@/lib/supabase';
+import { assertPublicSubmissionAllowed } from '@/lib/public-submission-guard';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 
@@ -29,8 +30,6 @@ const inquirySchema = z.object({
 });
 
 export async function submitInquiry(prevState: any, formData: FormData) {
-    const supabase = await createClient();
-
     if (formData.get('website')) {
         return { success: true, message: '문의가 성공적으로 등록되었습니다.' };
     }
@@ -48,8 +47,15 @@ export async function submitInquiry(prevState: any, formData: FormData) {
     }
 
     const { name, phone, email, message, category } = parsed.data;
+    try {
+        await assertPublicSubmissionAllowed('inquiry');
+    } catch (error) {
+        return { success: false, message: error instanceof Error ? error.message : '잠시 후 다시 시도해주세요.' };
+    }
 
-    const { error } = await (supabase as any)
+    const admin = getSupabaseAdmin();
+
+    const { error } = await (admin as any)
         .from('inquiries')
         .insert({
             name,
@@ -83,8 +89,6 @@ const consultationSchema = z.object({
 });
 
 export async function submitConsultation(prevState: any, formData: FormData) {
-    const supabase = await createClient();
-
     if (formData.get('website')) {
         return { success: true, message: '상담 신청이 접수되었습니다.' };
     }
@@ -109,8 +113,15 @@ export async function submitConsultation(prevState: any, formData: FormData) {
     ]
         .filter(Boolean)
         .join('\n');
+    try {
+        await assertPublicSubmissionAllowed('consultation');
+    } catch (error) {
+        return { success: false, message: error instanceof Error ? error.message : '잠시 후 다시 시도해주세요.' };
+    }
 
-    const { error } = await (supabase as any)
+    const admin = getSupabaseAdmin();
+
+    const { error } = await (admin as any)
         .from('inquiries')
         .insert({
             name,

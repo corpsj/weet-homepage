@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { supabaseAdmin } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, CheckCircle2, ClipboardCheck, Factory, MapPinned, ShieldCheck, Truck } from "lucide-react";
 import type { Project } from "@/types/supabase";
 import { getProjectHeroImage, isPublicReadyProject } from "@/lib/projects/publicProjects";
 import { getPublicGalleryItems } from "@/app/actions/gallery-actions";
-import { getSiteSettings } from "@/lib/site-settings";
+import { getSiteSettings } from "@/lib/site-settings.server";
 
 export const dynamic = 'force-dynamic';
 
@@ -70,9 +70,10 @@ function cleanGalleryTitle(title: string) {
 
 export default async function ProjectsPage() {
   const [{ data: projects }, galleryItems, settings] = await Promise.all([
-    supabaseAdmin
+    supabase
       .from("projects")
       .select("*")
+      .eq("status", "completed")
       .order("completed_at", { ascending: false }),
     getPublicGalleryItems(12),
     getSiteSettings(),
@@ -204,11 +205,11 @@ export default async function ProjectsPage() {
                 </p>
               </div>
               <div className="flex items-center gap-4 text-sm font-bold">
-                <a href={settings.naver_blog_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-gray-700 hover:text-gray-900">
+                <a href={settings.naver_blog_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-gray-700 hover:text-gray-900">
                   네이버 블로그
                   <ArrowRight className="h-3.5 w-3.5" />
                 </a>
-                <a href={settings.instagram_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-gray-700 hover:text-gray-900">
+                <a href={settings.instagram_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-gray-700 hover:text-gray-900">
                   인스타그램
                   <ArrowRight className="h-3.5 w-3.5" />
                 </a>

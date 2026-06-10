@@ -7,6 +7,13 @@ function getAllowedAdminEmails() {
     .filter(Boolean);
 }
 
+function canUseLocalDomainFallback() {
+  return (
+    process.env.NODE_ENV !== 'production' &&
+    process.env.ADMIN_ALLOW_WEET_DOMAIN_FALLBACK !== 'false'
+  );
+}
+
 export async function requireAdmin() {
   const supabase = await createClient();
   const {
@@ -20,7 +27,9 @@ export async function requireAdmin() {
 
   const email = user.email.toLowerCase();
   const allowlist = getAllowedAdminEmails();
-  const isAllowed = allowlist.length > 0 ? allowlist.includes(email) : email.endsWith('@weet.com');
+  const isAllowed = allowlist.length > 0
+    ? allowlist.includes(email)
+    : canUseLocalDomainFallback() && email.endsWith('@weet.com');
 
   if (!isAllowed) {
     throw new Error('관리자 권한이 없습니다.');

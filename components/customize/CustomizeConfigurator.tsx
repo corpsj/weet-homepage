@@ -15,6 +15,7 @@ import {
   Layers,
   Loader2,
   Maximize2,
+  Pencil,
   PhoneCall,
   Send,
   X,
@@ -38,7 +39,6 @@ import {
   encodeConfig,
   floorplanSize,
   formatModelStartPrice,
-  formatOptionPrice,
   formatWon,
   getDefaultSelections,
   optionsForModel,
@@ -51,6 +51,7 @@ import type {
   CustomizeCategory,
   CustomizeModel,
   CustomizeOption,
+  EstimateBreakdown,
   SelectedOptions,
 } from '@/lib/customize/types';
 import { cn } from '@/lib/utils';
@@ -82,13 +83,44 @@ const MODEL_FALLBACK_FLOORPLANS: Record<string, string> = {
 const OPTION_IMAGE_VERSION = '20260610-0137';
 type FloorplanImageStatus = 'missing' | 'loading' | 'loaded' | 'failed';
 
-type ConfigStep = 'space' | 'included' | 'mood' | 'smart';
+type ConfigStep = 'space' | 'included' | 'mood' | 'smart' | 'review';
+type OptionStep = Exclude<ConfigStep, 'review'>;
 const STEPS: { id: ConfigStep; label: string; categories?: string[] }[] = [
   { id: 'space', label: '모델', categories: ['model'] },
   { id: 'included', label: '공간 구성', categories: ['windows', 'door', 'sink', 'bathroom', 'furniture'] },
   { id: 'mood', label: '무드 & 소재', categories: ['exterior', 'interior', 'flooring'] },
   { id: 'smart', label: '스마트 테크', categories: ['energy', 'connectivity'] },
+  { id: 'review', label: '검토·요청' },
 ];
+const SWATCH_CATEGORY_KEYS = new Set(['exterior', 'interior', 'flooring']);
+
+// 가격/신뢰 문구는 한 곳에서 관리한다. 보수적 표현만 사용한다(결제·할인·보증 약속 금지).
+const COPY = {
+  basePrice: '기본 제품가',
+  optionSubtotal: '옵션 합계',
+  estimatedAmount: '예상 제품 금액',
+  consultNeeded: '상담 필요',
+  transportNote: '운반/설치 별도 · 현장 조건에 따라 최종 견적 확정',
+  notPayment: '상담 요청이며 결제는 진행되지 않습니다.',
+  finalQuote: '최종 견적은 상담 후 확정됩니다.',
+  privacyUse: '입력하신 정보는 견적 안내와 상담 연락을 위해 사용됩니다.',
+  consultExplain: '상담 필요 항목은 담당자가 설치 가능 여부와 금액을 확인해 안내드립니다.',
+} as const;
+
+function nextStepCta(step: ConfigStep) {
+  if (step === 'space') return '다음: 공간 구성';
+  if (step === 'included') return '다음: 무드 & 소재';
+  if (step === 'mood') return '다음: 스마트 테크';
+  if (step === 'smart') return '구성 검토하기';
+  return '상담·견적 요청하기';
+}
+
+// 옵션 카드/요약에 노출하는 가격 라벨은 '기본 포함 / +₩x / 상담 필요' 세 가지로 통일한다.
+function optionPriceDisplay(option: Pick<CustomizeOption, 'priceType' | 'price'>) {
+  if (option.priceType === 'included') return '기본 포함';
+  if (option.priceType === 'consult') return '상담 필요';
+  return `+${formatWon(option.price)}`;
+}
 
 type ConsultationDraft = {
   customerName: string;
@@ -154,10 +186,20 @@ function buildSelectionsForModelChange(
   return { selections: nextSelections, removedOptions };
 }
 
-function estimateExclusionText(consultOptionCount: number) {
-  return consultOptionCount > 0
-    ? `스펙 협의 ${consultOptionCount}개 · 운반/설치 별도`
-    : '운반/설치 별도';
+// 모달 공통 동작: ESC로 닫기 + 열려 있는 동안 본문 스크롤 잠금.
+function useModalDismiss(onClose: () => void) {
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') onClose();
+    };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [onClose]);
 }
 
 function useFloorplanImageStatus(path: string | null): FloorplanImageStatus {
@@ -187,39 +229,83 @@ function useFloorplanImageStatus(path: string | null): FloorplanImageStatus {
   return result.status;
 }
 
-function StepperBar({ currentStep, setCurrentStep, stepCounts }: { currentStep: ConfigStep; setCurrentStep: (step: ConfigStep) => void; stepCounts: Record<ConfigStep, number> }) {
-  const stepIndex = STEPS.findIndex((s) => s.id === currentStep);
-  return (
-    <div className="sticky top-14 z-30 border-b border-[#d8d0c3] bg-[#fbfaf7]/95 px-4 py-2.5 backdrop-blur md:top-16 lg:static lg:py-3 lg:px-10">
-      <div className="mx-auto flex max-w-[1800px] w-full gap-1 rounded-lg bg-[#efe6d4] p-1">
-        {STEPS.map((step, index) => {
-          const isCurrent = currentStep === step.id;
-          const isComplete = index < stepIndex;
+function stepStatusText(step: ConfigStep, count: number) {
+  if (step === 'space') return '선택 완료';
+  if (step === 'review') return '최종 확인';
+  return `${count}개 선택`;
+}
 
-          return (
-            <button
-              key={step.id}
-              type="button"
-              data-testid={`customize-step-${step.id}`}
-              aria-current={isCurrent ? 'step' : undefined}
-              data-state={isCurrent ? 'current' : isComplete ? 'complete' : 'upcoming'}
-              onClick={() => setCurrentStep(step.id)}
-              className={cn(
-                'relative flex min-h-9 flex-1 items-center justify-center rounded-md px-1 py-2 text-xs font-bold transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26]',
-                isCurrent && 'bg-[#fbfaf7] text-[#2f3432] shadow-sm',
-                !isCurrent && isComplete && 'bg-[#e6dcc9] text-[#4f473d]',
-                !isCurrent && !isComplete && 'text-[#8a806f] hover:text-[#2f3432]'
-              )}
-            >
-              {step.label}
-              {stepCounts[step.id] > 0 && step.id !== 'space' && (
-                <span aria-hidden="true" className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-[#b88b26] px-1 text-[9px] text-white">
-                  {stepCounts[step.id]}
-                </span>
-              )}
-            </button>
-          );
-        })}
+function StepperBar({
+  currentStep,
+  furthestStepIndex,
+  setCurrentStep,
+  stepCounts,
+}: {
+  currentStep: ConfigStep;
+  furthestStepIndex: number;
+  setCurrentStep: (step: ConfigStep) => void;
+  stepCounts: Record<ConfigStep, number>;
+}) {
+  const stepIndex = STEPS.findIndex((s) => s.id === currentStep);
+
+  return (
+    <div className="sticky top-14 z-30 border-b border-[#d8d0c3] bg-[#fbfaf7]/95 backdrop-blur md:top-16 lg:h-[72px]">
+      <div className="mx-auto max-w-[1800px] px-4 py-2 lg:flex lg:h-full lg:items-center lg:px-10 lg:py-0">
+        <p className="mb-1.5 text-[11px] font-bold text-[#8a806f] lg:hidden">
+          {stepIndex + 1}/{STEPS.length} 단계 · {STEPS[stepIndex].label}
+        </p>
+        <ol className="flex w-full items-stretch gap-1 overflow-x-auto pb-0.5 lg:gap-2 lg:overflow-visible" aria-label="구성 진행 단계">
+          {STEPS.map((step, index) => {
+            const isCurrent = currentStep === step.id;
+            const isComplete = !isCurrent && index < furthestStepIndex;
+            const state = isCurrent ? 'current' : isComplete ? 'complete' : 'upcoming';
+
+            return (
+              <li key={step.id} className="flex min-w-0 shrink-0 items-center gap-1 lg:flex-1 lg:gap-2">
+                <button
+                  type="button"
+                  data-testid={`customize-step-${step.id}`}
+                  aria-current={isCurrent ? 'step' : undefined}
+                  aria-label={`${index + 1}단계 ${step.label} · ${isComplete ? '완료' : isCurrent ? '진행 중' : '대기'}`}
+                  data-state={state}
+                  onClick={() => setCurrentStep(step.id)}
+                  className={cn(
+                    'flex min-h-10 w-full items-center justify-center gap-1.5 rounded-md border px-2 py-1.5 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26] lg:justify-start lg:px-3',
+                    isCurrent && 'border-[#2f3432] bg-[#2f3432] text-[#fbfaf7]',
+                    isComplete && 'border-[#cfc4b3] bg-[#efe6d4] text-[#4f473d] hover:border-[#b9aa94]',
+                    state === 'upcoming' && 'border-[#e2dacd] bg-[#fbfaf7] text-[#8a806f] hover:border-[#b9aa94] hover:text-[#2f3432]'
+                  )}
+                >
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      'flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-black',
+                      isCurrent && 'border-[#fbfaf7]/60 bg-[#fbfaf7] text-[#2f3432]',
+                      isComplete && 'border-[#0d6e66] bg-[#0d6e66] text-white',
+                      state === 'upcoming' && 'border-[#cfc4b3] bg-transparent text-[#8a806f]'
+                    )}
+                  >
+                    {isComplete ? <Check className="h-3 w-3" /> : index + 1}
+                  </span>
+                  <span className="min-w-0">
+                    <span className="block truncate text-xs font-bold">{step.label}</span>
+                    <span
+                      className={cn(
+                        'hidden truncate text-[10px] font-semibold lg:block',
+                        isCurrent ? 'text-[#d8d0c3]' : 'text-[#9a8f7d]'
+                      )}
+                    >
+                      {stepStatusText(step.id, stepCounts[step.id])}
+                    </span>
+                  </span>
+                </button>
+                {index < STEPS.length - 1 && (
+                  <span aria-hidden="true" className="hidden h-px w-3 shrink-0 bg-[#cfc4b3] lg:block" />
+                )}
+              </li>
+            );
+          })}
+        </ol>
       </div>
     </div>
   );
@@ -235,7 +321,9 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
   });
   const [activeInfo, setActiveInfo] = useState<CustomizeOption | null>(null);
   const [currentStep, setCurrentStep] = useState<ConfigStep>('space');
-  const [orderOpen, setOrderOpen] = useState(false);
+  // 진행 시스템: 사용자가 도달한 가장 먼 단계 이전의 단계는 '완료'로 표시한다.
+  const [furthestStepIndex, setFurthestStepIndex] = useState(0);
+  const [submitted, setSubmitted] = useState(false);
   const [planViewerOpen, setPlanViewerOpen] = useState(false);
   const [shouldSyncConfigUrl, setShouldSyncConfigUrl] = useState(Boolean(decoded));
   const [isPending, startTransition] = useTransition();
@@ -271,7 +359,7 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
   const currentFloorplanImageStatus = useFloorplanImageStatus(currentFloorplanImagePath);
   const visibleOptions = useMemo(() => optionsForModel(catalog.options.filter((option) => option.isActive), modelId), [catalog.options, modelId]);
   const stepCounts = useMemo(() => {
-    const counts: Record<ConfigStep, number> = { space: 1, included: 0, mood: 0, smart: 0 };
+    const counts: Record<ConfigStep, number> = { space: 1, included: 0, mood: 0, smart: 0, review: 0 };
     const optionsList = Object.values(selectedOptions).flat();
     visibleOptions.forEach((opt) => {
       if (optionsList.includes(opt.id)) {
@@ -301,13 +389,27 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
 
   const handleStepSelect = (step: ConfigStep) => {
     setCurrentStep(step);
+    setFurthestStepIndex((current) => Math.max(current, STEPS.findIndex((s) => s.id === step)));
+    if (typeof window === 'undefined') return;
+    if (step === 'review') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
     // 모바일/태블릿 인라인 구성에서는 단계 전환 시 도면 아래 옵션 영역으로 바로 이동한다.
-    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
-      document.getElementById('customize-options')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    // (검토 단계에서 돌아오는 경우 영역이 다시 마운트된 뒤 스크롤되도록 rAF로 미룬다.)
+    if (window.innerWidth < 1024) {
+      requestAnimationFrame(() => {
+        document.getElementById('customize-options')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
     }
   };
 
   const handleSubmit = () => {
+    if (!form.customerName.trim() || !form.phone.trim() || !form.region.trim()) {
+      toast.error('이름, 연락처, 지역을 입력해주세요.');
+      return;
+    }
+
     const payload: ConsultationFormInput = {
       modelId,
       selectedOptions,
@@ -319,7 +421,7 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
       const result = await submitCustomizeConsultation(payload);
       if (result.success) {
         toast.success(result.message);
-        setOrderOpen(false);
+        setSubmitted(true);
         setForm({
           customerName: '',
           phone: '',
@@ -339,7 +441,7 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
   const handleSaveQuote = () => {
     if (!estimate) return;
 
-    const html = buildQuoteHtml(estimate.model, selectedOptionsList, estimate.estimatedTotal);
+    const html = buildQuoteHtml(estimate, selectedOptionsList);
     const popup = window.open('', '_blank', 'width=1120,height=794');
     if (!popup) {
       toast.error('견적 창을 열 수 없습니다. 팝업 설정을 확인해주세요.');
@@ -361,73 +463,112 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
     );
   }
 
+  const currentStepIndex = STEPS.findIndex((s) => s.id === currentStep);
+  const nextStep = currentStepIndex < STEPS.length - 1 ? STEPS[currentStepIndex + 1] : null;
+
   return (
     <div className="min-h-dvh bg-[#f4f0e8] text-[#2f3432]">
       <ConfiguratorAppBar contactPhone={contactPhone} />
-      <StepperBar currentStep={currentStep} setCurrentStep={handleStepSelect} stepCounts={stepCounts} />
+      <StepperBar
+        currentStep={currentStep}
+        furthestStepIndex={furthestStepIndex}
+        setCurrentStep={handleStepSelect}
+        stepCounts={stepCounts}
+      />
 
-      <div className="mx-auto flex max-w-[1800px] flex-col lg:min-h-[calc(100dvh-64px)] lg:flex-row">
-        <section className="flex flex-col lg:min-h-[calc(100dvh-64px)] lg:flex-1 lg:overflow-y-auto">
-          <div className="flex items-center justify-center px-4 py-5 md:px-8 md:py-8 lg:flex-1 lg:px-10">
-            <FloorplanPreview
-              model={currentModel}
-              selectedOptions={selectedOptionsList}
-              floorplanImagePath={currentFloorplanImagePath}
-              floorplanImageStatus={currentFloorplanImageStatus}
-              onOpenViewer={() => setPlanViewerOpen(true)}
+      {currentStep === 'review' && estimate ? (
+        <ReviewStep
+          estimate={estimate}
+          selectedOptions={selectedOptionsList}
+          floorplanImagePath={currentFloorplanImagePath}
+          floorplanImageStatus={currentFloorplanImageStatus}
+          goToStep={handleStepSelect}
+          form={form}
+          setForm={setForm}
+          isPending={isPending}
+          submitted={submitted}
+          onEditAfterSubmit={() => setSubmitted(false)}
+          onSubmit={handleSubmit}
+          onSaveQuote={handleSaveQuote}
+        />
+      ) : (
+        <div className="mx-auto flex max-w-[1800px] flex-col lg:h-[calc(100dvh-136px)] lg:flex-row">
+          {/* 데스크톱: 앱바(64px)+스테퍼(72px)를 제외한 높이에 도면/레일을 고정해 CTA가 항상 보이게 한다. */}
+          <section className="flex flex-col lg:h-full lg:flex-1 lg:overflow-y-auto">
+            <div className="flex flex-col items-center justify-center gap-5 px-4 py-5 md:px-8 md:py-8 lg:flex-1 lg:px-10 lg:py-6">
+              <FloorplanPreview
+                model={currentModel}
+                selectedOptions={selectedOptionsList}
+                floorplanImagePath={currentFloorplanImagePath}
+                floorplanImageStatus={currentFloorplanImageStatus}
+                onOpenViewer={() => setPlanViewerOpen(true)}
+              />
+              {estimate && <ConfigSummaryBoard estimate={estimate} selectedOptions={selectedOptionsList} />}
+            </div>
+          </section>
+
+          {/* 모바일/태블릿: 드로어 없이 도면 아래에서 바로 이어지는 인라인 단계 구성 (Tesla 주문 흐름 참고) */}
+          <div id="customize-options" className="scroll-mt-[150px] border-t border-[#d8d0c3] bg-[#fbfaf7] md:scroll-mt-[162px] lg:hidden">
+            <OptionsPanel
+              catalog={catalog}
+              modelId={modelId}
+              selectedOptions={selectedOptions}
+              visibleOptions={visibleOptions}
+              onModelChange={handleModelChange}
+              onOptionToggle={handleOptionToggle}
+              onInfo={setActiveInfo}
+              currentStep={currentStep}
+              setCurrentStep={handleStepSelect}
+              estimate={estimate}
+              inline
             />
           </div>
-        </section>
 
-        {/* 모바일/태블릿: 드로어 없이 도면 아래에서 바로 이어지는 인라인 단계 구성 (Tesla 주문 흐름 참고) */}
-        <div id="customize-options" className="scroll-mt-[120px] border-t border-[#d8d0c3] bg-[#fbfaf7] md:scroll-mt-[132px] lg:hidden">
-          <OptionsPanel
-            catalog={catalog}
-            modelId={modelId}
-            selectedOptions={selectedOptions}
-            visibleOptions={visibleOptions}
-            onModelChange={handleModelChange}
-            onOptionToggle={handleOptionToggle}
-            onInfo={setActiveInfo}
-            currentStep={currentStep}
-            setCurrentStep={setCurrentStep}
-            inline
-          />
+          <aside
+            data-testid="customize-desktop-rail"
+            className="hidden shrink-0 border-l border-[#d8d0c3] bg-[#fbfaf7] lg:block lg:w-[400px] xl:w-[460px]"
+          >
+            <OptionsPanel
+              catalog={catalog}
+              modelId={modelId}
+              selectedOptions={selectedOptions}
+              visibleOptions={visibleOptions}
+              onModelChange={handleModelChange}
+              onOptionToggle={handleOptionToggle}
+              onInfo={setActiveInfo}
+              currentStep={currentStep}
+              setCurrentStep={handleStepSelect}
+              estimate={estimate}
+            />
+          </aside>
         </div>
+      )}
 
-        <aside className="hidden shrink-0 border-l border-[#d8d0c3] bg-[#fbfaf7] lg:block lg:w-[400px] xl:w-[460px]">
-          <OptionsPanel
-            catalog={catalog}
-            modelId={modelId}
-            selectedOptions={selectedOptions}
-            visibleOptions={visibleOptions}
-            onModelChange={handleModelChange}
-            onOptionToggle={handleOptionToggle}
-            onInfo={setActiveInfo}
-            currentStep={currentStep}
-            setCurrentStep={setCurrentStep}
-          />
-        </aside>
-      </div>
-
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[#d8d0c3] bg-[#fbfaf7]/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_30px_rgba(55,48,39,0.12)] backdrop-blur">
-        <div className="mx-auto flex max-w-[1800px] items-center justify-between gap-4 lg:px-6">
-          <div>
-            <p className="text-xs font-semibold text-[#7b7468]">예상 총액</p>
-            <p className="text-xl font-black text-[#2f3432]">{estimate ? formatWon(estimate.estimatedTotal) : '-'}</p>
-            <p className="text-xs text-[#8b8172]">
-              {estimate ? estimateExclusionText(estimate.consultOptionCount) : '운반/설치 별도'}
-              {' · '}
-              <a href="/support#cost" target="_blank" rel="noreferrer" className="font-bold text-[#0d6e66] underline-offset-2 hover:underline">
-                별도 비용 안내
-              </a>
-            </p>
+      {/* 모바일/태블릿 고정 바: 구성 단계에서만 노출. 검토 단계는 본문에 자체 제출 CTA를 가진다. */}
+      {currentStep !== 'review' && nextStep && (
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[#d8d0c3] bg-[#fbfaf7]/95 px-4 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] shadow-[0_-8px_30px_rgba(55,48,39,0.12)] backdrop-blur lg:hidden">
+          <div className="mx-auto flex max-w-[1800px] items-center justify-between gap-3">
+            <div className="min-w-0">
+              <p className="text-[11px] font-semibold text-[#7b7468]">{COPY.estimatedAmount}</p>
+              <p className="truncate text-lg font-black text-[#2f3432]">
+                <span data-testid="mobile-estimated-total">{estimate ? formatWon(estimate.estimatedTotal) : '-'}</span>
+                {estimate && estimate.consultOptionCount > 0 && (
+                  <span className="ml-1 text-xs font-bold text-[#a56f16]">+ 상담 {estimate.consultOptionCount}건</span>
+                )}
+              </p>
+              <p className="truncate text-[11px] text-[#8b8172]">운반/설치 별도 · {COPY.finalQuote}</p>
+            </div>
+            <Button
+              data-testid="mobile-next-cta"
+              className="h-12 shrink-0 bg-[#2f3432] px-4 text-[#fbfaf7] hover:bg-[#1f2422]"
+              onClick={() => handleStepSelect(nextStep.id)}
+            >
+              {nextStepCta(currentStep)}
+              <ArrowRight className="h-4 w-4" />
+            </Button>
           </div>
-          <Button className="h-12 min-w-[132px] bg-[#0d6e66] text-white hover:bg-[#095a54]" onClick={() => setOrderOpen(true)}>
-            상담·견적 요청
-          </Button>
         </div>
-      </div>
+      )}
 
       {activeInfo && <OptionInfoModal option={activeInfo} onClose={() => setActiveInfo(null)} />}
 
@@ -438,21 +579,6 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
           floorplanImagePath={currentFloorplanImagePath}
           floorplanImageStatus={currentFloorplanImageStatus}
           onClose={() => setPlanViewerOpen(false)}
-        />
-      )}
-
-      {orderOpen && estimate && (
-        <OrderModal
-          estimate={estimate}
-          selectedOptions={selectedOptionsList}
-          floorplanImagePath={currentFloorplanImagePath}
-          floorplanImageStatus={currentFloorplanImageStatus}
-          form={form}
-          setForm={setForm}
-          isPending={isPending}
-          onClose={() => setOrderOpen(false)}
-          onSubmit={handleSubmit}
-          onSaveQuote={handleSaveQuote}
         />
       )}
     </div>
@@ -495,6 +621,7 @@ function OptionsPanel({
   onInfo,
   currentStep,
   setCurrentStep,
+  estimate,
   inline = false,
 }: {
   catalog: CustomizeCatalog;
@@ -506,6 +633,7 @@ function OptionsPanel({
   onInfo: (option: CustomizeOption) => void;
   currentStep: ConfigStep;
   setCurrentStep: (step: ConfigStep) => void;
+  estimate: EstimateBreakdown | null;
   inline?: boolean;
 }) {
   const currentStepData = STEPS.find((s) => s.id === currentStep)!;
@@ -513,11 +641,9 @@ function OptionsPanel({
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const goToStep = (step: ConfigStep) => {
+    // 모바일 인라인 스크롤 복귀는 부모 handleStepSelect가 처리하므로 데스크톱 레일만 직접 올린다.
     setCurrentStep(step);
-    if (inline) {
-      // 인라인 모드는 문서 스크롤을 사용하므로 sticky 앱바/스테퍼 높이만큼 띄워 패널 상단으로 복귀한다.
-      scrollRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    } else {
+    if (!inline) {
       scrollRef.current?.scrollTo({ top: 0 });
     }
   };
@@ -526,7 +652,7 @@ function OptionsPanel({
     <>
       {currentStep === 'space' && (
         <section className="mb-6">
-          <CategoryHeading title="공간 모델" amount={0} icon={<Layers className="h-4 w-4" />} />
+          <CategoryHeading title="공간 모델" status="" icon={<Layers className="h-4 w-4" />} />
           <p className="mb-3 mt-1 text-xs leading-5 text-[#756d61]">설치할 공간의 크기와 목적에 맞는 모델을 선택하세요.</p>
           <div className="grid gap-2">
             {catalog.models.map((model) => (
@@ -553,7 +679,10 @@ function OptionsPanel({
                   </div>
                   {model.id === modelId && <Check className="h-4 w-4 shrink-0 text-[#2f3432]" />}
                 </div>
-                <p className="mt-2 text-sm font-bold text-[#6b5a2b]">{formatModelStartPrice(model.basePrice)}</p>
+                <p className="mt-2 text-sm font-bold text-[#6b5a2b]">
+                  <span className="mr-1.5 text-[11px] font-semibold text-[#8a806f]">{COPY.basePrice}</span>
+                  {formatModelStartPrice(model.basePrice)}
+                </p>
               </button>
             ))}
           </div>
@@ -581,7 +710,7 @@ function OptionsPanel({
               if (options.length === 0) {
                 return (
                   <section key={category.id} className="mb-6">
-                    <CategoryHeading title={category.nameKo} amount={0} icon={<Layers className="h-4 w-4" />} />
+                    <CategoryHeading title={category.nameKo} status="" icon={<Layers className="h-4 w-4" />} />
                     <div className="mt-2 flex items-center justify-center rounded-lg border border-dashed border-[#ded5c8] bg-[#fbfaf7] py-6">
                       <p className="text-sm text-[#8a806f]">현재 선택 가능한 옵션이 없습니다.</p>
                     </div>
@@ -589,9 +718,17 @@ function OptionsPanel({
                 );
               }
 
-              const amount = options
-                .filter((option) => selectedOptions[category.id]?.includes(option.id))
-                .reduce((sum, option) => sum + (option.priceType === 'fixed' ? option.price : 0), 0);
+              const categorySelected = options.filter((option) => selectedOptions[category.id]?.includes(option.id));
+              const amount = categorySelected.reduce((sum, option) => sum + (option.priceType === 'fixed' ? option.price : 0), 0);
+              const consultSelected = categorySelected.filter((option) => option.priceType === 'consult').length;
+              const categoryStatus =
+                amount > 0
+                  ? `${categorySelected.length}개 선택 · +${formatWon(amount)}`
+                  : consultSelected > 0
+                    ? `${COPY.consultNeeded} ${consultSelected}개`
+                    : categorySelected.length > 0
+                      ? '기본 포함'
+                      : '선택 안 함';
               const meta = CATEGORY_META[category.key as keyof typeof CATEGORY_META];
               const Icon = meta?.icon ?? Layers;
 
@@ -605,7 +742,7 @@ function OptionsPanel({
 
               return (
                 <section key={category.id} className="mb-6 scroll-mt-20">
-                  <CategoryHeading title={category.nameKo} amount={amount} icon={<Icon className={cn('h-4 w-4', meta?.tone)} />} />
+                  <CategoryHeading title={category.nameKo} status={categoryStatus} icon={<Icon className={cn('h-4 w-4', meta?.tone)} />} />
                   {category.descriptionKo && <p className="mt-1 text-xs leading-5 text-[#756d61]">{category.descriptionKo}</p>}
                   <div className="mt-2 grid gap-1.5">
                     {sortedOptions.map((option) => (
@@ -624,14 +761,14 @@ function OptionsPanel({
         </>
       )}
 
-      <StepFooterNav stepIndex={stepIndex} goToStep={goToStep} />
+      {inline && <InlineStepFooter stepIndex={stepIndex} goToStep={goToStep} />}
     </>
   );
 
   if (inline) {
     return (
-      <div ref={scrollRef} className="scroll-mt-[120px] md:scroll-mt-[132px]">
-        <div className="mx-auto w-full max-w-xl px-4 pb-44 pt-5 md:px-6">
+      <div ref={scrollRef} className="scroll-mt-[150px] md:scroll-mt-[162px]">
+        <div className="mx-auto w-full max-w-xl px-4 pb-40 pt-5 md:px-6">
           {stepBody}
         </div>
       </div>
@@ -639,7 +776,7 @@ function OptionsPanel({
   }
 
   return (
-    <div className="flex h-[calc(100dvh-64px)] flex-col overflow-hidden">
+    <div className="flex h-[calc(100dvh-136px)] flex-col overflow-hidden">
       <div className="border-b border-[#d8d0c3] bg-[#fbfaf7]/95 px-5 py-3 backdrop-blur">
         <div className="flex items-center justify-between">
           <h2 className="text-lg font-black text-[#2f3432]">이동식주택 구성</h2>
@@ -647,56 +784,144 @@ function OptionsPanel({
         </div>
       </div>
 
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-5 pb-32">
+      <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-5">
         {stepBody}
       </div>
+
+      <RailSummaryFooter estimate={estimate} stepIndex={stepIndex} goToStep={goToStep} />
     </div>
   );
 }
 
-function StepFooterNav({ stepIndex, goToStep }: { stepIndex: number; goToStep: (step: ConfigStep) => void }) {
+// 모바일 인라인 패널 하단: '다음'은 하단 고정 바가 담당하므로 이전 이동과 검토 바로가기만 둔다.
+function InlineStepFooter({ stepIndex, goToStep }: { stepIndex: number; goToStep: (step: ConfigStep) => void }) {
   const prevStep = stepIndex > 0 ? STEPS[stepIndex - 1] : null;
-  const nextStep = stepIndex < STEPS.length - 1 ? STEPS[stepIndex + 1] : null;
 
   return (
-    <div className="mt-3 flex items-center gap-2">
-      {prevStep && (
-        <Button
-          variant="outline"
-          data-testid="customize-step-prev"
-          className="h-11 flex-1 border-[#cfc4b3] bg-[#fbfaf7] text-[#2f3432]"
-          onClick={() => goToStep(prevStep.id)}
+    <div className="mt-4 border-t border-[#e2dacd] pt-3">
+      <div className="flex items-center justify-between gap-2">
+        {prevStep ? (
+          <Button
+            variant="outline"
+            data-testid="customize-step-prev"
+            className="h-11 border-[#cfc4b3] bg-[#fbfaf7] px-4 text-[#2f3432]"
+            onClick={() => goToStep(prevStep.id)}
+          >
+            <ArrowLeft className="h-4 w-4" />
+            {prevStep.label}
+          </Button>
+        ) : (
+          <span />
+        )}
+        <button
+          type="button"
+          data-testid="customize-skip-to-review"
+          onClick={() => goToStep('review')}
+          className="rounded-md px-2 py-2 text-xs font-bold text-[#0d6e66] underline-offset-2 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26]"
         >
-          <ArrowLeft className="h-4 w-4" />
-          {prevStep.label}
-        </Button>
-      )}
-      {nextStep ? (
-        <Button
-          data-testid="customize-step-next"
-          className="h-11 flex-[1.4] bg-[#2f3432] text-[#fbfaf7] hover:bg-[#1f2422]"
-          onClick={() => goToStep(nextStep.id)}
-        >
-          다음: {nextStep.label}
-          <ArrowRight className="h-4 w-4" />
-        </Button>
-      ) : (
-        <p className="flex-1 text-center text-xs leading-5 text-[#8a806f]">
-          구성이 끝났다면 아래의 상담·견적 요청으로 이어가세요.
-        </p>
-      )}
+          구성 검토·상담 요청으로 이동
+        </button>
+      </div>
+      <p className="mt-2 text-[11px] leading-relaxed text-[#8a806f]">
+        {COPY.notPayment} 운반/설치 및 현장 조건에 따라 최종 견적이 달라질 수 있습니다.
+      </p>
     </div>
   );
 }
 
-function CategoryHeading({ title, amount, icon }: { title: string; amount: number; icon: ReactNode }) {
+// 데스크톱 우측 레일 하단 고정 요약: 가격 분해 + 단계 이동 CTA.
+function RailSummaryFooter({
+  estimate,
+  stepIndex,
+  goToStep,
+}: {
+  estimate: EstimateBreakdown | null;
+  stepIndex: number;
+  goToStep: (step: ConfigStep) => void;
+}) {
+  const prevStep = stepIndex > 0 ? STEPS[stepIndex - 1] : null;
+  const nextStep = stepIndex < STEPS.length - 1 ? STEPS[stepIndex + 1] : null;
+  const currentStep = STEPS[stepIndex];
+
+  return (
+    <div className="border-t border-[#d8d0c3] bg-[#fbfaf7] px-5 pb-4 pt-3">
+      {estimate && (
+        <dl className="mb-3 space-y-1 text-xs">
+          <div className="flex items-center justify-between gap-3">
+            <dt className="font-semibold text-[#7b7468]">{COPY.basePrice}</dt>
+            <dd className="font-bold text-[#2f3432]">{formatWon(estimate.model.basePrice)}</dd>
+          </div>
+          <div className="flex items-center justify-between gap-3">
+            <dt className="font-semibold text-[#7b7468]">{COPY.optionSubtotal}</dt>
+            <dd className="font-bold text-[#2f3432]">{estimate.optionTotal > 0 ? `+${formatWon(estimate.optionTotal)}` : formatWon(0)}</dd>
+          </div>
+          <div className="flex items-center justify-between gap-3 border-t border-[#e2dacd] pt-1.5">
+            <dt className="text-sm font-black text-[#2f3432]">{COPY.estimatedAmount}</dt>
+            <dd className="text-base font-black text-[#2f3432]" data-testid="desktop-estimated-total">
+              {formatWon(estimate.estimatedTotal)}
+            </dd>
+          </div>
+          {estimate.consultOptionCount > 0 && (
+            <div className="flex items-center justify-between gap-3">
+              <dt className="font-semibold text-[#a56f16]">{COPY.consultNeeded} 항목</dt>
+              <dd className="font-bold text-[#a56f16]">{estimate.consultOptionCount}개 · 견적 별도</dd>
+            </div>
+          )}
+        </dl>
+      )}
+      <p className="mb-3 text-[11px] leading-relaxed text-[#8a806f]">
+        {COPY.transportNote} ·{' '}
+        <a href="/support#cost" target="_blank" rel="noopener noreferrer" className="font-bold text-[#0d6e66] underline-offset-2 hover:underline">
+          별도 비용 안내
+        </a>
+      </p>
+      <div className="flex items-center gap-2">
+        {prevStep && (
+          <Button
+            variant="outline"
+            data-testid="customize-rail-prev"
+            aria-label={`이전 단계: ${prevStep.label}`}
+            className="h-11 shrink-0 border-[#cfc4b3] bg-[#fbfaf7] px-3 text-[#2f3432]"
+            onClick={() => goToStep(prevStep.id)}
+          >
+            <ArrowLeft className="h-4 w-4" />
+            이전
+          </Button>
+        )}
+        {nextStep && (
+          <Button
+            data-testid="customize-step-next"
+            className="h-11 flex-1 bg-[#2f3432] text-[#fbfaf7] hover:bg-[#1f2422]"
+            onClick={() => goToStep(nextStep.id)}
+          >
+            {nextStepCta(currentStep.id)}
+            <ArrowRight className="h-4 w-4" />
+          </Button>
+        )}
+      </div>
+      {nextStep && nextStep.id !== 'review' && (
+        <button
+          type="button"
+          data-testid="customize-rail-skip-to-review"
+          onClick={() => goToStep('review')}
+          className="mt-2 w-full rounded-md px-2 py-1.5 text-center text-xs font-bold text-[#0d6e66] underline-offset-2 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26]"
+        >
+          구성 검토·상담 요청으로 이동
+        </button>
+      )}
+      <p className="mt-2 text-center text-[11px] text-[#8a806f]">{COPY.notPayment}</p>
+    </div>
+  );
+}
+
+function CategoryHeading({ title, status, icon }: { title: string; status: string; icon: ReactNode }) {
   return (
     <div className="flex items-center justify-between gap-3">
       <div className="flex items-center gap-2">
         <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[#efe6d4] text-[#2f3432]">{icon}</span>
         <h3 className="text-sm font-black text-[#2f3432]">{title}</h3>
       </div>
-      <p className="text-xs font-bold text-[#7a6a3a]">{amount > 0 ? formatWon(amount) : '포함'}</p>
+      {status && <p className="text-xs font-bold text-[#7a6a3a]">{status}</p>}
     </div>
   );
 }
@@ -733,6 +958,19 @@ function OptionCard({
         >
           {selected && <Check className="h-3 w-3" />}
         </span>
+        {SWATCH_CATEGORY_KEYS.has(option.categoryKey) && (
+          <span aria-hidden="true" className="relative h-9 w-9 shrink-0 overflow-hidden rounded-md border border-[#e2dacd] bg-[#efe6d4]">
+            <Image
+              src={`/images/customize/options/${option.key || option.id}.webp?v=${OPTION_IMAGE_VERSION}`}
+              alt=""
+              fill
+              unoptimized
+              sizes="36px"
+              className="object-cover"
+              onError={(event) => { event.currentTarget.style.display = 'none'; }}
+            />
+          </span>
+        )}
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between gap-2">
             <span className="truncate text-sm font-bold text-[#2f3432]">{option.nameKo}</span>
@@ -742,10 +980,10 @@ function OptionCard({
                   기본 포함
                 </span>
               ) : option.priceType === 'consult' ? (
-                <span className="rounded bg-[#f4f0e8] px-1.5 py-0.5 text-[10px] font-black text-[#a56f16]">협의</span>
+                <span className="rounded bg-[#f4f0e8] px-1.5 py-0.5 text-[10px] font-black text-[#a56f16]">{COPY.consultNeeded}</span>
               ) : (
                 <span className="text-xs font-bold text-[#6d5b2b]">
-                  +{formatOptionPrice(option)}
+                  {optionPriceDisplay(option)}
                 </span>
               )}
             </div>
@@ -794,7 +1032,7 @@ function FloorplanPreview({
           <h1 className="text-2xl font-black text-[#2f3432] md:text-3xl">{model.nameKo}</h1>
         </div>
         <div className="text-right">
-          <p className="text-sm font-bold text-[#8a806f]">기본가</p>
+          <p className="text-sm font-bold text-[#8a806f]">{COPY.basePrice}</p>
           <p className="text-lg font-black text-[#6b5a2b]">{formatModelStartPrice(model.basePrice)}</p>
         </div>
       </div>
@@ -818,6 +1056,66 @@ function FloorplanPreview({
           floorplanImageStatus={floorplanImageStatus}
           testId="floorplan-canvas"
         />
+      </div>
+    </div>
+  );
+}
+
+// 데스크톱 도면 아래 상시 구성 요약: 모델·선택 옵션·금액을 주문서처럼 한눈에 보여준다.
+function ConfigSummaryBoard({ estimate, selectedOptions }: { estimate: EstimateBreakdown; selectedOptions: CustomizeOption[] }) {
+  const decisionOptions = selectedOptions.filter((option) => option.priceType !== 'included');
+
+  return (
+    <div className="hidden w-full max-w-[1100px] lg:block" data-testid="config-summary-board">
+      <div className="rounded-lg border border-[#d8d0c3] bg-[#fbfaf7] shadow-sm">
+        <div className="grid grid-cols-[0.9fr_1.5fr_0.9fr] divide-x divide-[#e2dacd]">
+          <div className="p-4">
+            <p className="text-[11px] font-bold text-[#8a806f]">선택 모델</p>
+            <p className="mt-1 text-sm font-black text-[#2f3432]">{estimate.model.nameKo}</p>
+            <p className="text-xs text-[#756d61]">
+              {estimate.model.widthM}m × {estimate.model.lengthM}m · {estimate.model.areaSqm}m²
+            </p>
+            <p className="mt-1.5 text-xs font-bold text-[#6b5a2b]">
+              {COPY.basePrice} {formatModelStartPrice(estimate.model.basePrice)}
+            </p>
+          </div>
+          <div className="min-w-0 p-4">
+            <p className="text-[11px] font-bold text-[#8a806f]">선택 옵션</p>
+            {decisionOptions.length > 0 ? (
+              <ul className="mt-1.5 flex flex-wrap gap-1.5">
+                {decisionOptions.map((option) => (
+                  <li
+                    key={option.id}
+                    className={cn(
+                      'inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-bold',
+                      option.priceType === 'consult'
+                        ? 'border-[#e3cf9f] bg-[#f8f1e0] text-[#a56f16]'
+                        : 'border-[#d8d0c3] bg-[#f5f1ea] text-[#4f473d]'
+                    )}
+                  >
+                    {option.nameKo}
+                    <span className="font-semibold text-[#8a806f]">{optionPriceDisplay(option)}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-1.5 text-xs text-[#8a806f]">추가 선택 옵션 없음 · 기본 구성</p>
+            )}
+          </div>
+          <div className="p-4">
+            <p className="text-[11px] font-bold text-[#8a806f]">{COPY.estimatedAmount}</p>
+            <p className="mt-1 text-lg font-black text-[#2f3432]" data-testid="summary-estimated-total">
+              {formatWon(estimate.estimatedTotal)}
+            </p>
+            {estimate.consultOptionCount > 0 && (
+              <p className="text-xs font-bold text-[#a56f16]">+ {COPY.consultNeeded} {estimate.consultOptionCount}개 · 견적 별도</p>
+            )}
+            <p className="mt-1.5 text-[11px] text-[#8a806f]">{COPY.transportNote}</p>
+          </div>
+        </div>
+        <p className="border-t border-[#e2dacd] px-4 py-2 text-[11px] text-[#8a806f]">
+          상담 요청용 예상 금액입니다. 결제 단계가 아니며, 운반/설치 및 현장 조건에 따라 최종 견적이 달라질 수 있습니다.
+        </p>
       </div>
     </div>
   );
@@ -1164,13 +1462,7 @@ function FloorplanZoomModal({
   floorplanImageStatus?: FloorplanImageStatus;
   onClose: () => void;
 }) {
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') onClose();
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [onClose]);
+  useModalDismiss(onClose);
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto bg-[#4b4033]/55 p-3 backdrop-blur-sm md:p-6" onClick={onClose}>
@@ -1277,6 +1569,7 @@ function hasOptionInfo(option: CustomizeOption) {
 }
 
 function OptionInfoModal({ option, onClose }: { option: CustomizeOption; onClose: () => void }) {
+  useModalDismiss(onClose);
   const optionKey = option.key || option.id;
   const fallback = FALLBACK_CATALOG[optionKey] || FALLBACK_CATALOG[option.id];
   const titleId = `option-info-title-${optionKey}`;
@@ -1298,8 +1591,8 @@ function OptionInfoModal({ option, onClose }: { option: CustomizeOption; onClose
           <div>
             <div className="mb-1 flex items-center gap-2">
               {option.priceType === 'included' && <span className="rounded bg-[#efe6d4] px-2 py-0.5 text-[11px] font-black text-[#8a806f]">기본 포함</span>}
-              {option.priceType === 'consult' && <span className="rounded bg-[#f4f0e8] px-2 py-0.5 text-[11px] font-black text-[#a56f16]">스펙 협의</span>}
-              {option.priceType === 'fixed' && <p className="text-xs font-bold text-[#8a806f]">{formatOptionPrice(option)}</p>}
+              {option.priceType === 'consult' && <span className="rounded bg-[#f4f0e8] px-2 py-0.5 text-[11px] font-black text-[#a56f16]">{COPY.consultNeeded}</span>}
+              {option.priceType === 'fixed' && <p className="text-xs font-bold text-[#8a806f]">{optionPriceDisplay(option)}</p>}
             </div>
             <h3 id={titleId} className="text-xl font-black text-[#2f3432]">{option.nameKo}</h3>
           </div>
@@ -1335,138 +1628,272 @@ function OptionInfoModal({ option, onClose }: { option: CustomizeOption; onClose
   );
 }
 
-function OrderModal({
+// 마지막 단계: 구성 검토 + 상담 요청. 모달 대신 전용 화면으로 'Configure → Review → Request' 흐름을 만든다.
+function ReviewStep({
   estimate,
   selectedOptions,
   floorplanImagePath,
   floorplanImageStatus,
+  goToStep,
   form,
   setForm,
   isPending,
-  onClose,
+  submitted,
+  onEditAfterSubmit,
   onSubmit,
   onSaveQuote,
 }: {
-  estimate: NonNullable<ReturnType<typeof calculateEstimate>>;
+  estimate: EstimateBreakdown;
   selectedOptions: CustomizeOption[];
   floorplanImagePath?: string | null;
   floorplanImageStatus?: FloorplanImageStatus;
+  goToStep: (step: ConfigStep) => void;
   form: ConsultationDraft;
   setForm: Dispatch<SetStateAction<ConsultationDraft>>;
   isPending: boolean;
-  onClose: () => void;
+  submitted: boolean;
+  onEditAfterSubmit: () => void;
   onSubmit: () => void;
   onSaveQuote: () => void;
 }) {
-  const updateField = (name: keyof typeof form, value: string) => setForm((current) => ({ ...current, [name]: value }));
+  const consultOptions = selectedOptions.filter((option) => option.priceType === 'consult');
+  const optionSteps = STEPS.filter((step): step is (typeof STEPS)[number] & { id: OptionStep } => step.id !== 'space' && step.id !== 'review');
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-[#4b4033]/45 p-4" onClick={onClose}>
-      <div
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="consultation-title"
-        className="mx-auto my-6 grid w-full max-w-6xl gap-0 overflow-hidden rounded-lg bg-[#fbfaf7] shadow-2xl lg:grid-cols-[1fr_0.9fr]"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className="bg-[#f4f0e8] p-5 md:p-8">
-          <div className="mb-4 flex items-start justify-between gap-4">
-            <div>
-              <p className="text-sm font-bold text-[#8a806f]">선택 평면</p>
-              <h2 className="text-2xl font-black text-[#2f3432]">{estimate.model.nameKo}</h2>
-            </div>
-            <Maximize2 className="h-5 w-5 text-[#8a806f]" />
-          </div>
-          <FloorplanPreview
-            model={estimate.model}
-            selectedOptions={selectedOptions}
-            floorplanImagePath={floorplanImagePath}
-            floorplanImageStatus={floorplanImageStatus}
-          />
-        </div>
+    <div className="mx-auto w-full max-w-[1240px] px-4 pb-[max(4rem,env(safe-area-inset-bottom))] pt-6 md:px-8" data-testid="customize-review">
+      <header className="mb-5">
+        <h1 className="text-2xl font-black text-[#2f3432] md:text-3xl">구성 검토 및 상담 요청</h1>
+        <p className="mt-1 text-sm leading-relaxed text-[#756d61]">
+          선택하신 구성을 확인한 뒤 상담을 요청하세요. {COPY.notPayment} {COPY.finalQuote}
+        </p>
+      </header>
 
-        <div className="max-h-[90dvh] overflow-y-auto p-5 md:p-8">
-          <div className="mb-5 flex items-start justify-between gap-4">
-            <div>
-              <h2 id="consultation-title" className="text-2xl font-black text-[#2f3432]">구성 상담·견적 요청</h2>
-              <p className="mt-1 text-sm text-[#756d61]">{estimateExclusionText(estimate.consultOptionCount)}</p>
+      <div className="grid gap-5 lg:grid-cols-[1.15fr_1fr] lg:items-start">
+        <section aria-label="선택 구성 요약" className="space-y-4">
+          <div className="rounded-lg border border-[#d8d0c3] bg-[#fbfaf7] p-4 md:p-5">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-[11px] font-bold text-[#8a806f]">선택 모델</p>
+                <h2 className="text-lg font-black text-[#2f3432]">{estimate.model.nameKo}</h2>
+                <p className="text-xs text-[#756d61]">
+                  {estimate.model.widthM}m × {estimate.model.lengthM}m · {estimate.model.areaSqm}m²
+                </p>
+                <p className="mt-1 text-xs font-bold text-[#6b5a2b]">
+                  {COPY.basePrice} {formatModelStartPrice(estimate.model.basePrice)}
+                </p>
+              </div>
+              <ReviewEditButton label="모델 수정" onClick={() => goToStep('space')} />
             </div>
-            <Button variant="ghost" size="icon-sm" onClick={onClose}>
-              <X className="h-4 w-4" />
-            </Button>
+            <details className="group mt-3 rounded-lg border border-[#e2dacd] bg-[#f5f1ea] open:bg-[#fbfaf7]">
+              <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-2 px-3 py-2 text-xs font-bold text-[#4f473d] [&::-webkit-details-marker]:hidden">
+                평면 구성 보기
+                <ChevronDown className="h-4 w-4 text-[#8a806f] transition-transform group-open:rotate-180" />
+              </summary>
+              <div className="border-t border-[#e2dacd] p-2">
+                <FloorplanCanvas
+                  model={estimate.model}
+                  selectedOptions={selectedOptions}
+                  floorplanImagePath={floorplanImagePath}
+                  floorplanImageStatus={floorplanImageStatus}
+                  testId="review-floorplan-canvas"
+                />
+              </div>
+            </details>
           </div>
 
-          <div className="mb-6 rounded-lg border border-[#ded5c8] bg-[#f4f0e8] p-4">
-            <div className="flex items-center justify-between gap-4">
-              <span className="text-sm font-bold text-[#756d61]">예상 총액</span>
-              <span className="text-2xl font-black text-[#2f3432]">{formatWon(estimate.estimatedTotal)}</span>
-            </div>
-            <div className="mt-3 max-h-40 overflow-y-auto border-t border-[#ded5c8] pt-3">
-              <p className="text-sm font-bold text-[#2f3432]">{estimate.model.nameKo}</p>
-              {selectedOptions.map((option) => (
-                <div key={option.id} className="mt-2 flex justify-between gap-3 text-sm text-[#61594f]">
-                  <span>{option.nameKo}</span>
-                  <span className="font-semibold">{formatOptionPrice(option)}</span>
+          {optionSteps.map((step) => {
+            const stepOptions = selectedOptions.filter((option) => step.categories?.includes(option.categoryKey));
+            return (
+              <div key={step.id} className="rounded-lg border border-[#d8d0c3] bg-[#fbfaf7] p-4 md:p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="text-sm font-black text-[#2f3432]">{step.label}</h3>
+                  <ReviewEditButton label={`${step.label} 수정`} onClick={() => goToStep(step.id)} />
                 </div>
-              ))}
+                {stepOptions.length > 0 ? (
+                  <ul className="mt-2 divide-y divide-[#efe9dd]">
+                    {stepOptions.map((option) => (
+                      <li key={option.id} className="flex items-center justify-between gap-3 py-2 text-sm">
+                        <span className="min-w-0 truncate font-semibold text-[#4f473d]">{option.nameKo}</span>
+                        <span
+                          className={cn(
+                            'shrink-0 text-xs font-bold',
+                            option.priceType === 'consult' ? 'text-[#a56f16]' : option.priceType === 'fixed' ? 'text-[#6d5b2b]' : 'text-[#8a806f]'
+                          )}
+                        >
+                          {optionPriceDisplay(option)}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="mt-2 text-xs text-[#8a806f]">선택한 옵션이 없습니다. 비워두셔도 상담에서 함께 정할 수 있습니다.</p>
+                )}
+              </div>
+            );
+          })}
+
+          {consultOptions.length > 0 && (
+            <div className="rounded-lg border border-[#e3cf9f] bg-[#f8f1e0]/60 p-4">
+              <p className="text-sm font-black text-[#7a5a12]">{COPY.consultNeeded} 항목 {consultOptions.length}개</p>
+              <p className="mt-1 text-xs leading-relaxed text-[#8a6c2a]">{COPY.consultExplain} 선택한 구성은 상담 요청서에 함께 전달됩니다.</p>
             </div>
-          </div>
+          )}
+        </section>
 
-          <div className="mb-4 rounded bg-[#efe6d4]/50 p-3 text-xs leading-relaxed text-[#756d61]">
-            <Info className="mr-1 inline-block h-3.5 w-3.5 align-[-2px] text-[#8a806f]" />
-            선택 입력이지만 알려주시면 더 정확한 견적 안내에 도움이 됩니다. 아직 정해지지 않았다면 비워두셔도 됩니다.
-          </div>
-          <div className="mb-3">
-            <p className="text-sm font-black text-[#2f3432]">필수 정보</p>
-            <p className="mt-1 text-xs text-[#8a806f]">구성 확인과 연락을 위해 필요한 최소 정보입니다. 결제 단계가 아니며, 상담 후 최종 견적이 확정됩니다.</p>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            <Field label="이름" required>
-              <Input data-testid="consultation-name" className={inputClass} value={form.customerName} onChange={(event) => updateField('customerName', event.target.value)} />
-            </Field>
-            <Field label="연락처" required>
-              <Input data-testid="consultation-phone" className={inputClass} value={form.phone} onChange={(event) => updateField('phone', event.target.value)} />
-            </Field>
-            <Field label="지역" required>
-              <Input data-testid="consultation-region" className={inputClass} placeholder="경기도 양평군" value={form.region} onChange={(event) => updateField('region', event.target.value)} />
-            </Field>
-          </div>
-
-          <div className="mb-3 mt-6">
-            <p className="text-sm font-black text-[#2f3432]">추가 정보</p>
-            <p className="mt-1 text-xs text-[#8a806f]">일정, 설치 조건, 예산에 맞춘 제안에만 참고합니다.</p>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            <Field label="예상 구매 시기" helper="생산·설치 일정 제안에만 참고합니다.">
-              <Select value={form.purchaseTimeline} onChange={(value) => updateField('purchaseTimeline', value)} options={PURCHASE_TIMELINES} />
-            </Field>
-            <Field label="설치할 장소 지목" helper="대지, 전·답, 임야 등 설치 조건 검토에 참고합니다.">
-              <Select value={form.landType} onChange={(value) => updateField('landType', value)} options={LAND_TYPES} />
-            </Field>
-            <Field label="구매 예산" helper="가능한 사양 조합을 빠르게 제안하기 위한 참고값입니다.">
-              <Select value={form.budgetRange} onChange={(value) => updateField('budgetRange', value)} options={BUDGET_RANGES} />
-            </Field>
-            <Field label="설치 주소" className="md:col-span-2" helper="정확한 번지 전이라도 읍·면·동 수준이면 괜찮습니다.">
-              <Input className={inputClass} value={form.installAddress} onChange={(event) => updateField('installAddress', event.target.value)} />
-            </Field>
-            <Field label="추가 메모" className="md:col-span-2" helper="사용 목적, 예상 인원, 필요한 옵션을 자유롭게 적어주세요.">
-              <Textarea className="min-h-24 rounded-lg border-gray-300 bg-[#fbfaf7] text-sm focus-visible:ring-[#b88b26]" value={form.memo} onChange={(event) => updateField('memo', event.target.value)} />
-            </Field>
-          </div>
-
-          <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-            <Button data-testid="consultation-submit" className="h-12 flex-1 bg-[#0d6e66] text-white hover:bg-[#095a54]" disabled={isPending} onClick={onSubmit}>
-              {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-              상담 신청하기
-            </Button>
-            <Button variant="outline" className="h-12 flex-1 border-[#cfc4b3] bg-[#fbfaf7]" onClick={onSaveQuote}>
+        <section aria-label="가격 요약 및 상담 요청" className="space-y-4">
+          <div className="rounded-lg border border-[#d8d0c3] bg-[#fbfaf7] p-4 md:p-5">
+            <h2 className="text-sm font-black text-[#2f3432]">가격 요약</h2>
+            <dl className="mt-3 space-y-1.5 text-sm">
+              <div className="flex items-center justify-between gap-3">
+                <dt className="font-semibold text-[#7b7468]">{COPY.basePrice}</dt>
+                <dd className="font-bold text-[#2f3432]">{formatWon(estimate.model.basePrice)}</dd>
+              </div>
+              <div className="flex items-center justify-between gap-3">
+                <dt className="font-semibold text-[#7b7468]">{COPY.optionSubtotal}</dt>
+                <dd className="font-bold text-[#2f3432]">{estimate.optionTotal > 0 ? `+${formatWon(estimate.optionTotal)}` : formatWon(0)}</dd>
+              </div>
+              <div className="flex items-center justify-between gap-3 border-t border-[#e2dacd] pt-2">
+                <dt className="text-base font-black text-[#2f3432]">{COPY.estimatedAmount}</dt>
+                <dd className="text-xl font-black text-[#2f3432]" data-testid="review-estimated-total">{formatWon(estimate.estimatedTotal)}</dd>
+              </div>
+              {estimate.consultOptionCount > 0 && (
+                <div className="flex items-center justify-between gap-3">
+                  <dt className="font-semibold text-[#a56f16]">{COPY.consultNeeded} 항목</dt>
+                  <dd className="font-bold text-[#a56f16]">{estimate.consultOptionCount}개 · 견적 별도</dd>
+                </div>
+              )}
+            </dl>
+            <p className="mt-3 text-[11px] leading-relaxed text-[#8a806f]">
+              {COPY.transportNote} ·{' '}
+              <a href="/support#cost" target="_blank" rel="noopener noreferrer" className="font-bold text-[#0d6e66] underline-offset-2 hover:underline">
+                별도 비용 안내
+              </a>
+            </p>
+            <Button variant="outline" className="mt-3 h-11 w-full border-[#cfc4b3] bg-[#fbfaf7] text-[#2f3432]" onClick={onSaveQuote}>
               <Download className="h-4 w-4" />
-              견적 저장
+              견적 요약 저장
             </Button>
           </div>
-        </div>
+
+          {submitted ? (
+            <div className="rounded-lg border border-[#bcd8cd] bg-[#eef5f1] p-5" role="status">
+              <p className="text-lg font-black text-[#0d6e66]">상담 요청이 접수되었습니다</p>
+              <p className="mt-1.5 text-sm leading-relaxed text-[#4f6258]">
+                담당자가 확인 후 입력하신 연락처로 연락드립니다. {COPY.finalQuote}
+              </p>
+              <Button
+                variant="outline"
+                className="mt-4 h-11 w-full border-[#cfc4b3] bg-[#fbfaf7] text-[#2f3432]"
+                onClick={onEditAfterSubmit}
+              >
+                새 상담 요청 작성
+              </Button>
+            </div>
+          ) : (
+            <ConsultationForm form={form} setForm={setForm} isPending={isPending} onSubmit={onSubmit} />
+          )}
+        </section>
       </div>
     </div>
+  );
+}
+
+function ReviewEditButton({ label, onClick }: { label: string; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      onClick={onClick}
+      className="inline-flex min-h-[36px] shrink-0 items-center gap-1 rounded-md border border-[#d8d0c3] bg-[#fbfaf7] px-2.5 py-1 text-xs font-bold text-[#4f473d] transition-colors hover:border-[#b9aa94] hover:text-[#2f3432] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26]"
+    >
+      <Pencil className="h-3 w-3" />
+      수정
+    </button>
+  );
+}
+
+function ConsultationForm({
+  form,
+  setForm,
+  isPending,
+  onSubmit,
+}: {
+  form: ConsultationDraft;
+  setForm: Dispatch<SetStateAction<ConsultationDraft>>;
+  isPending: boolean;
+  onSubmit: () => void;
+}) {
+  const [showOptional, setShowOptional] = useState(false);
+  const updateField = (name: keyof ConsultationDraft, value: string) => setForm((current) => ({ ...current, [name]: value }));
+
+  return (
+    <form
+      className="rounded-lg border border-[#d8d0c3] bg-[#fbfaf7] p-4 md:p-5"
+      onSubmit={(event) => {
+        event.preventDefault();
+        onSubmit();
+      }}
+    >
+      <h2 className="text-lg font-black text-[#2f3432]">상담 요청 정보</h2>
+      <p className="mt-1 text-xs leading-relaxed text-[#8a806f]">
+        구성 확인과 연락을 위한 최소 정보만 받습니다. {COPY.privacyUse}
+      </p>
+
+      <div className="mt-4 grid gap-4">
+        <Field label="이름" required>
+          <Input data-testid="consultation-name" className={inputClass} autoComplete="name" value={form.customerName} onChange={(event) => updateField('customerName', event.target.value)} />
+        </Field>
+        <Field label="연락처" required>
+          <Input data-testid="consultation-phone" className={inputClass} type="tel" autoComplete="tel" value={form.phone} onChange={(event) => updateField('phone', event.target.value)} />
+        </Field>
+        <Field label="지역" required>
+          <Input data-testid="consultation-region" className={inputClass} placeholder="경기도 양평군" value={form.region} onChange={(event) => updateField('region', event.target.value)} />
+        </Field>
+      </div>
+
+      <button
+        type="button"
+        aria-expanded={showOptional}
+        onClick={() => setShowOptional((current) => !current)}
+        className="mt-5 flex min-h-[44px] w-full items-center justify-between gap-2 rounded-lg border border-[#e2dacd] bg-[#f5f1ea] px-3 py-2 text-left text-sm font-bold text-[#4f473d] transition-colors hover:border-[#b9aa94] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26]"
+      >
+        <span>
+          더 정확한 견적을 위한 선택 정보
+          <span className="mt-0.5 block text-[11px] font-semibold text-[#8a806f]">아직 정하지 못한 항목은 비워두셔도 됩니다.</span>
+        </span>
+        <ChevronDown className={cn('h-4 w-4 shrink-0 text-[#8a806f] transition-transform', showOptional && 'rotate-180')} />
+      </button>
+
+      {showOptional && (
+        <div className="mt-4 grid gap-4">
+          <Field label="예상 구매 시기" helper="생산·설치 일정 제안에만 참고합니다.">
+            <Select value={form.purchaseTimeline} onChange={(value) => updateField('purchaseTimeline', value)} options={PURCHASE_TIMELINES} />
+          </Field>
+          <Field label="설치할 장소 지목" helper="대지, 전·답, 임야 등 설치 조건 검토에 참고합니다.">
+            <Select value={form.landType} onChange={(value) => updateField('landType', value)} options={LAND_TYPES} />
+          </Field>
+          <Field label="구매 예산" helper="가능한 사양 조합을 빠르게 제안하기 위한 참고값입니다.">
+            <Select value={form.budgetRange} onChange={(value) => updateField('budgetRange', value)} options={BUDGET_RANGES} />
+          </Field>
+          <Field label="설치 주소" helper="정확한 번지 전이라도 읍·면·동 수준이면 괜찮습니다.">
+            <Input className={inputClass} value={form.installAddress} onChange={(event) => updateField('installAddress', event.target.value)} />
+          </Field>
+          <Field label="추가 메모" helper="사용 목적, 예상 인원, 필요한 옵션을 자유롭게 적어주세요.">
+            <Textarea className="min-h-24 rounded-lg border-gray-300 bg-[#fbfaf7] text-sm focus-visible:ring-[#b88b26]" value={form.memo} onChange={(event) => updateField('memo', event.target.value)} />
+          </Field>
+        </div>
+      )}
+
+      <div className="mt-5 rounded bg-[#efe6d4]/50 p-3 text-xs leading-relaxed text-[#756d61]">
+        <Info className="mr-1 inline-block h-3.5 w-3.5 align-[-2px] text-[#8a806f]" />
+        {COPY.notPayment} {COPY.finalQuote} 운반/설치는 별도이며 현장 조건에 따라 달라질 수 있습니다.
+      </div>
+
+      <Button type="submit" data-testid="consultation-submit" className="mt-4 h-12 w-full bg-[#0d6e66] text-white hover:bg-[#095a54]" disabled={isPending}>
+        {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+        상담·견적 요청하기
+      </Button>
+    </form>
   );
 }
 
@@ -1516,10 +1943,13 @@ function Select({ value, onChange, options }: { value: string; onChange: (value:
   );
 }
 
-function buildQuoteHtml(model: CustomizeModel, selectedOptions: CustomizeOption[], total: number) {
+function buildQuoteHtml(estimate: EstimateBreakdown, selectedOptions: CustomizeOption[]) {
   const optionRows = selectedOptions
-    .map((option) => `<tr><td>${escapeHtml(option.nameKo)}</td><td>${escapeHtml(formatOptionPrice(option))}</td></tr>`)
+    .map((option) => `<tr><td>${escapeHtml(option.nameKo)}</td><td>${escapeHtml(optionPriceDisplay(option))}</td></tr>`)
     .join('');
+  const consultRow = estimate.consultOptionCount > 0
+    ? `<tr><td>${escapeHtml(COPY.consultNeeded)} 항목</td><td>${estimate.consultOptionCount}개 · 견적 별도</td></tr>`
+    : '';
 
   return `<!doctype html>
 <html lang="ko">
@@ -1534,17 +1964,21 @@ function buildQuoteHtml(model: CustomizeModel, selectedOptions: CustomizeOption[
     table { width: 100%; margin-top: 24px; border-collapse: collapse; background: #fffaf2; }
     th, td { border-bottom: 1px solid #ded5c8; padding: 12px; text-align: left; }
     .total { margin-top: 24px; font-size: 30px; font-weight: 900; }
+    .note { margin-top: 10px; font-size: 13px; color: #6f6658; }
   </style>
 </head>
 <body>
   <h1>위트 이동식주택 견적 요약</h1>
-  <p>주문 후 최종 확정 · 운반·설치 별도</p>
+  <p>상담 요청용 예상 금액 · ${escapeHtml(COPY.transportNote)}</p>
   <table>
     <tr><th>항목</th><th>가격</th></tr>
-    <tr><td>${escapeHtml(model.nameKo)}</td><td>${escapeHtml(formatWon(model.basePrice))}</td></tr>
+    <tr><td>${escapeHtml(estimate.model.nameKo)} (${escapeHtml(COPY.basePrice)})</td><td>${escapeHtml(formatWon(estimate.model.basePrice))}</td></tr>
     ${optionRows}
+    <tr><td>${escapeHtml(COPY.optionSubtotal)}</td><td>${escapeHtml(estimate.optionTotal > 0 ? `+${formatWon(estimate.optionTotal)}` : formatWon(0))}</td></tr>
+    ${consultRow}
   </table>
-  <div class="total">예상 총액 ${escapeHtml(formatWon(total))}</div>
+  <div class="total">${escapeHtml(COPY.estimatedAmount)} ${escapeHtml(formatWon(estimate.estimatedTotal))}</div>
+  <p class="note">${escapeHtml(COPY.notPayment)} ${escapeHtml(COPY.finalQuote)}</p>
 </body>
 </html>`;
 }

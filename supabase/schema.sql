@@ -189,7 +189,7 @@ CREATE TABLE IF NOT EXISTS "public"."customize_consultations" (
 ALTER TABLE "public"."customize_consultations" OWNER TO "postgres";
 
 
-COMMENT ON TABLE "public"."customize_consultations" IS 'Public users can insert new consultation requests only. Reads, updates, and deletes are performed through requireAdmin-protected server actions using the service role.';
+COMMENT ON TABLE "public"."customize_consultations" IS 'Public submissions are accepted only through validated server actions using the service role. Reads, updates, and deletes are performed through requireAdmin-protected server actions using the service role.';
 
 
 
@@ -380,6 +380,9 @@ CREATE TABLE IF NOT EXISTS "public"."inquiries" (
 ALTER TABLE "public"."inquiries" OWNER TO "postgres";
 
 
+COMMENT ON TABLE "public"."inquiries" IS 'Public submissions are accepted only through validated server actions using the service role. Reads, updates, and deletes are performed through requireAdmin-protected server actions using the service role.';
+
+
 CREATE TABLE IF NOT EXISTS "public"."notices" (
     "id" "uuid" DEFAULT "extensions"."uuid_generate_v4"() NOT NULL,
     "title" "text" NOT NULL,
@@ -444,6 +447,9 @@ CREATE TABLE IF NOT EXISTS "public"."products" (
 
 
 ALTER TABLE "public"."products" OWNER TO "postgres";
+
+
+COMMENT ON TABLE "public"."products" IS 'Public users can read active rows only. Admin mutations are performed through requireAdmin-protected server actions using the service role.';
 
 
 CREATE TABLE IF NOT EXISTS "public"."projects" (
@@ -747,42 +753,6 @@ ALTER TABLE ONLY "public"."delivery_logs"
 
 
 
-CREATE POLICY "Admin can delete gallery" ON "public"."gallery" FOR DELETE TO "authenticated" USING (true);
-
-
-
-CREATE POLICY "Admin can insert gallery" ON "public"."gallery" FOR INSERT TO "authenticated" WITH CHECK (true);
-
-
-
-CREATE POLICY "Admin can update gallery" ON "public"."gallery" FOR UPDATE TO "authenticated" USING (true);
-
-
-
-CREATE POLICY "Admins can manage faqs" ON "public"."faqs" USING (("auth"."role"() = 'authenticated'::"text"));
-
-
-
-CREATE POLICY "Admins can manage hero slides" ON "public"."hero_slides" USING (("auth"."role"() = 'authenticated'::"text"));
-
-
-
-CREATE POLICY "Admins can manage notices" ON "public"."notices" USING (("auth"."role"() = 'authenticated'::"text"));
-
-
-
-CREATE POLICY "Admins can manage solutions" ON "public"."solutions" USING (("auth"."role"() = 'authenticated'::"text"));
-
-
-
-CREATE POLICY "Anyone can insert customize consultations" ON "public"."customize_consultations" FOR INSERT TO "authenticated", "anon" WITH CHECK (("status" = '신규'::"text"));
-
-
-
-CREATE POLICY "Anyone can insert inquiries" ON "public"."inquiries" FOR INSERT WITH CHECK (true);
-
-
-
 CREATE POLICY "Anyone can view active customize categories" ON "public"."customize_categories" FOR SELECT TO "authenticated", "anon" USING (("is_active" = true));
 
 
@@ -809,51 +779,31 @@ CREATE POLICY "Anyone can view active customize options" ON "public"."customize_
 
 
 
-CREATE POLICY "Anyone can view products" ON "public"."products" FOR SELECT USING (("is_active" = true));
+CREATE POLICY "Anyone can view active products" ON "public"."products" FOR SELECT TO "authenticated", "anon" USING (("is_active" = true));
 
 
 
-CREATE POLICY "Authenticated users can delete inquiries" ON "public"."inquiries" FOR DELETE TO "authenticated" USING (true);
+CREATE POLICY "Public can view completed projects" ON "public"."projects" FOR SELECT TO "authenticated", "anon" USING (("status" = 'completed'::"text"));
 
 
 
-CREATE POLICY "Authenticated users can update inquiries" ON "public"."inquiries" FOR UPDATE TO "authenticated" USING (true);
+CREATE POLICY "Public can view active faqs" ON "public"."faqs" FOR SELECT TO "authenticated", "anon" USING (("is_active" = true));
 
 
 
-CREATE POLICY "Authenticated users can view inquiries" ON "public"."inquiries" FOR SELECT TO "authenticated" USING (true);
+CREATE POLICY "Public can view active hero slides" ON "public"."hero_slides" FOR SELECT TO "authenticated", "anon" USING (("is_active" = true));
 
 
 
-CREATE POLICY "Enable all access for authenticated users" ON "public"."hero_slides" USING (("auth"."role"() = 'authenticated'::"text"));
+CREATE POLICY "Public can view active notices" ON "public"."notices" FOR SELECT TO "authenticated", "anon" USING (("is_active" = true));
 
 
 
-CREATE POLICY "Enable read access for all users" ON "public"."hero_slides" FOR SELECT USING (true);
+CREATE POLICY "Public can view active solutions" ON "public"."solutions" FOR SELECT TO "authenticated", "anon" USING (("is_active" = true));
 
 
 
-CREATE POLICY "Public Read Access" ON "public"."projects" FOR SELECT TO "anon" USING (true);
-
-
-
-CREATE POLICY "Public can view active faqs" ON "public"."faqs" FOR SELECT USING (("is_active" = true));
-
-
-
-CREATE POLICY "Public can view active hero slides" ON "public"."hero_slides" FOR SELECT USING (("is_active" = true));
-
-
-
-CREATE POLICY "Public can view active notices" ON "public"."notices" FOR SELECT USING (("is_active" = true));
-
-
-
-CREATE POLICY "Public can view active solutions" ON "public"."solutions" FOR SELECT USING (("is_active" = true));
-
-
-
-CREATE POLICY "Public can view gallery" ON "public"."gallery" FOR SELECT USING (true);
+CREATE POLICY "Public can view active gallery" ON "public"."gallery" FOR SELECT TO "authenticated", "anon" USING (("is_active" = true));
 
 
 
@@ -1066,10 +1016,6 @@ ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TAB
 ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES TO "anon";
 ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES TO "authenticated";
 ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES TO "service_role";
-
-
-
-
 
 
 

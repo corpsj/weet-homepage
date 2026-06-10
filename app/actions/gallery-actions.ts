@@ -3,7 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { requireAdmin } from '@/lib/admin-auth';
-import { getSupabaseAdmin } from '@/lib/supabase';
+import { getSupabaseAdmin, supabase } from '@/lib/supabase';
 import { GalleryItem, GalleryInsert, GalleryUpdate } from '@/types/supabase';
 
 const gallerySchema = z.object({
@@ -29,15 +29,14 @@ function revalidateGallery() {
 }
 
 export async function getPublicGalleryItems(limit = 12): Promise<GalleryItem[]> {
-  const admin = getSupabaseAdmin();
-
-  const { data, error } = await admin
+  const safeLimit = Math.max(1, Math.min(24, Number.isFinite(limit) ? Math.floor(limit) : 12));
+  const { data, error } = await supabase
     .from('gallery')
     .select('*')
     .eq('is_active', true)
     .order('display_order', { ascending: true })
     .order('created_at', { ascending: false })
-    .limit(limit);
+    .limit(safeLimit);
 
   if (error) {
     console.error('Error fetching public gallery items:', error);

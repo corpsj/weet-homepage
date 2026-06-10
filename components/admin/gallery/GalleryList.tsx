@@ -72,6 +72,7 @@ export default function GalleryList({ initialItems }: { initialItems: GalleryIte
                 <Link
                   href={`/admin/gallery/${item.id}`}
                   className="p-2 bg-white rounded shadow text-gray-700 hover:text-black transition-colors"
+                  aria-label={`${item.title} 수정`}
                 >
                   <Pencil className="w-4 h-4" />
                 </Link>
@@ -79,6 +80,7 @@ export default function GalleryList({ initialItems }: { initialItems: GalleryIte
                   onClick={() => handleDelete(item.id)}
                   disabled={deleting === item.id || isPending}
                   className="p-2 bg-white rounded shadow text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                  aria-label={`${item.title} 삭제`}
                 >
                   {deleting === item.id ? (
                     <Loader2 className="w-4 h-4 animate-spin" />

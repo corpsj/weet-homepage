@@ -28,7 +28,7 @@ test.describe('Customize configurator', () => {
     await page.waitForLoadState('networkidle');
 
     await expect(page.getByRole('heading', { level: 1, name: 'Compact 3x6' })).toBeVisible();
-    await expect(page.getByText('₩27,900,000', { exact: true })).toBeVisible();
+    await expect(page.getByTestId('desktop-estimated-total')).toHaveText('₩27,900,000');
     await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('href', /compact-3x6-base\.svg/);
     await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('preserveAspectRatio', 'xMidYMid meet');
     await expect(page.getByTestId('floorplan-length-rail')).toContainText('6m');
@@ -38,6 +38,7 @@ test.describe('Customize configurator', () => {
     await expect(page.getByTestId('customize-step-included')).toContainText('공간 구성');
     await expect(page.getByTestId('customize-step-mood')).toContainText('무드 & 소재');
     await expect(page.getByTestId('customize-step-smart')).toContainText('스마트 테크');
+    await expect(page.getByTestId('customize-step-review')).toContainText('검토·요청');
     await expect(page.getByTestId('customize-step-included')).toBeVisible();
     await expect(page.getByTestId('customize-step-mood')).toBeVisible();
     await expect(page.getByTestId('customize-step-smart')).toBeVisible();
@@ -45,7 +46,7 @@ test.describe('Customize configurator', () => {
 
     await page.getByRole('button', { name: /Standard 3x9/ }).click();
     await expect(page.getByRole('heading', { level: 1, name: 'Standard 3x9' })).toBeVisible();
-    await expect(page.getByText('₩34,900,000', { exact: true })).toBeVisible();
+    await expect(page.getByTestId('desktop-estimated-total')).toHaveText('₩34,900,000');
     await expect(page.getByTestId('base-floorplan-image')).toHaveCount(1);
     await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('href', /standard-3x9-base\.svg/);
     await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('preserveAspectRatio', 'xMidYMid meet');
@@ -64,35 +65,49 @@ test.describe('Customize configurator', () => {
 
     await page.getByTestId('customize-step-mood').click();
     await expect(page.getByTestId('customize-step-mood')).toHaveAttribute('aria-current', 'step');
+    // 진행 시스템: 도달한 단계 이전의 단계는 완료 상태로 표시된다.
+    await expect(page.getByTestId('customize-step-space')).toHaveAttribute('data-state', 'complete');
     await page.getByRole('button', { name: /적삼목 포인트/ }).click();
-    await expect(page.getByText('₩37,100,000')).toBeVisible();
+    await expect(page.getByTestId('desktop-estimated-total')).toHaveText('₩37,100,000');
 
     await page.getByTestId('customize-step-smart').click();
     await page.getByRole('button', { name: /태양광 패널/ }).click();
     // 모바일 인라인 패널(lg:hidden)에도 동일 칩이 DOM에 남아 있으므로 데스크톱 aside로 한정한다.
-    await expect(page.locator('aside').getByText('협의').first()).toBeVisible();
+    await expect(page.getByTestId('customize-desktop-rail').getByText('상담 필요').first()).toBeVisible();
     await expect(page).toHaveURL(/\/customize\?c=/);
 
     await page.getByTestId('customize-step-space').click();
     await page.getByRole('button', { name: /Compact 3x6/ }).click();
     await expect(page.getByRole('heading', { level: 1, name: 'Compact 3x6' })).toBeVisible();
-    await expect(page.getByText('₩30,100,000', { exact: true })).toBeVisible();
+    await expect(page.getByTestId('desktop-estimated-total')).toHaveText('₩30,100,000');
   });
 
-  test('order modal opens without submitting consultation', async ({ page }) => {
+  test('review step shows configuration summary, pricing breakdown, and consultation form', async ({ page }) => {
     await page.goto('/customize');
     await page.waitForLoadState('networkidle');
 
-    await page.getByRole('button', { name: '상담·견적 요청' }).last().click();
+    await page.getByTestId('customize-step-review').click();
 
-    const dialog = page.getByRole('dialog', { name: '구성 상담·견적 요청' });
-    await expect(dialog).toBeVisible();
-    await expect(dialog.getByText('운반/설치 별도')).toBeVisible();
-    await expect(dialog.getByText('이름')).toBeVisible();
-    await expect(dialog.getByText('연락처')).toBeVisible();
-    await expect(dialog.locator('label').filter({ hasText: '지역' })).toBeVisible();
-    await expect(dialog.getByText('선택 입력이지만 알려주시면 더 정확한 견적 안내에 도움이 됩니다. 아직 정해지지 않았다면 비워두셔도 됩니다.')).toBeVisible();
-    await expect(dialog.getByText('생산·설치 일정 제안에만 참고합니다.')).toBeVisible();
+    const review = page.getByTestId('customize-review');
+    await expect(review).toBeVisible();
+    await expect(review.getByRole('heading', { name: '구성 검토 및 상담 요청' })).toBeVisible();
+    await expect(review.getByText('기본 제품가').first()).toBeVisible();
+    await expect(review.getByText('옵션 합계')).toBeVisible();
+    await expect(review.getByTestId('review-estimated-total')).toHaveText('₩27,900,000');
+    await expect(review.getByText('운반/설치 별도', { exact: false }).first()).toBeVisible();
+    await expect(review.getByText('상담 요청이며 결제는 진행되지 않습니다.').first()).toBeVisible();
+
+    await expect(review.getByTestId('consultation-name')).toBeVisible();
+    await expect(review.getByTestId('consultation-phone')).toBeVisible();
+    await expect(review.getByTestId('consultation-region')).toBeVisible();
+
+    // 선택 정보는 접힌 상태로 시작하고 토글로 펼친다.
+    await expect(review.getByText('생산·설치 일정 제안에만 참고합니다.')).toHaveCount(0);
+    await review.getByRole('button', { name: /더 정확한 견적을 위한 선택 정보/ }).click();
+    await expect(review.getByText('생산·설치 일정 제안에만 참고합니다.')).toBeVisible();
+
+    // 검토 단계에서는 구성 단계용 하단 고정 바가 사라진다.
+    await expect(page.getByTestId('mobile-next-cta')).toHaveCount(0);
   });
 
   test('consultation submission succeeds with insert-only RLS and stores snapshot', async ({ page }) => {
@@ -105,13 +120,14 @@ test.describe('Customize configurator', () => {
       await page.goto('/customize');
       await page.waitForLoadState('networkidle');
 
-      await page.getByRole('button', { name: '상담·견적 요청' }).last().click();
+      await page.getByTestId('customize-step-review').click();
       await page.getByTestId('consultation-name').fill(uniqueName);
       await page.getByTestId('consultation-phone').fill(uniquePhone);
       await page.getByTestId('consultation-region').fill('테스트 지역');
       await page.getByTestId('consultation-submit').click();
 
       await expect(page.getByText('상담 신청이 접수되었습니다. 입력하신 연락처로 안내드리겠습니다.')).toBeVisible({ timeout: 15000 });
+      await expect(page.getByText('상담 요청이 접수되었습니다')).toBeVisible();
 
       await expect.poll(async () => {
         const { count } = await serviceClient!
@@ -152,8 +168,55 @@ test.describe('Customize configurator', () => {
     await expect(page.getByTestId('customize-step-mood')).toHaveAttribute('aria-current', 'step');
     await expect(page.getByRole('heading', { name: '외장' })).toBeVisible();
     await page.getByRole('button', { name: /적삼목 포인트/ }).click();
-    await expect(page.getByText('₩30,100,000', { exact: true })).toBeVisible();
+    await expect(page.getByTestId('mobile-estimated-total')).toHaveText('₩30,100,000');
+    // 구성 단계에서는 다음 단계 CTA가 하단 고정 바의 기본 동작이다.
+    await expect(page.getByTestId('mobile-next-cta')).toContainText('다음: 스마트 테크');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  });
+
+  test('mobile sticky quote bar is never obscured by the dev indicator or fixed widgets', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto('/customize');
+    await page.waitForLoadState('networkidle');
+
+    const total = page.getByTestId('mobile-estimated-total');
+    const cta = page.getByTestId('mobile-next-cta');
+    await expect(total).toBeVisible();
+    await expect(cta).toBeVisible();
+
+    // 가격/CTA 위 여러 지점을 히트 테스트해 최상단 요소가 고정 바 내부 요소인지 확인한다.
+    // Next 데브 인디케이터(N 위젯) 같은 좌하단 고정 위젯이 덮으면 해당 호스트 요소(<nextjs-portal> 등)가
+    // 반환되어 실패한다. devIndicators는 next.config.ts에서 비활성화되어 있어야 한다.
+    const hitTest = await page.evaluate(() => {
+      const targets = [
+        document.querySelector('[data-testid="mobile-estimated-total"]'),
+        document.querySelector('[data-testid="mobile-next-cta"]'),
+      ];
+      const failures: string[] = [];
+
+      for (const target of targets) {
+        if (!target) {
+          failures.push('target element missing');
+          continue;
+        }
+        const rect = target.getBoundingClientRect();
+        const points: Array<[number, number]> = [
+          [rect.left + 2, rect.top + rect.height / 2],
+          [rect.left + rect.width / 2, rect.top + rect.height / 2],
+          [rect.left + rect.width / 2, rect.bottom - 2],
+        ];
+        for (const [x, y] of points) {
+          const top = document.elementFromPoint(x, y);
+          if (!top) {
+            failures.push(`no element at ${Math.round(x)},${Math.round(y)}`);
+          } else if (!target.contains(top) && !top.contains(target)) {
+            failures.push(`<${top.tagName.toLowerCase()}> covers ${target.getAttribute('data-testid')} at ${Math.round(x)},${Math.round(y)}`);
+          }
+        }
+      }
+      return failures;
+    });
+    expect(hitTest).toEqual([]);
   });
 
   test('mobile floorplan zoom opens with the selected floorplan and closes safely', async ({ page }) => {
@@ -186,7 +249,7 @@ test.describe('Customize configurator', () => {
       await page.getByRole('button', { name: /Standard 3x9/ }).click();
 
       await expect(page.getByRole('heading', { level: 1, name: 'Standard 3x9' })).toBeVisible();
-      await expect(page.getByText('₩34,900,000', { exact: true })).toBeVisible();
+      await expect(page.getByTestId('mobile-estimated-total')).toHaveText('₩34,900,000');
       await expect(page.getByTestId('base-floorplan-image')).toHaveCount(1);
       await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('href', /standard-3x9-base\.svg/);
       await expect(page.getByTestId('model-footprint')).toHaveCount(0);

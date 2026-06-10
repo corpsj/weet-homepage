@@ -290,6 +290,7 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
                             <button
                                 onClick={() => setSelectedInquiry(null)}
                                 className={`${consoleIconButtonClass} md:hidden`}
+                                aria-label="문의 상세 닫기"
                             >
                                 <X className="w-4 h-4 text-gray-500" />
                             </button>
@@ -298,6 +299,7 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
                                 disabled={Boolean(pendingIds[selectedInquiry.id])}
                                 className={`${consoleIconButtonClass} text-red-600 hover:text-red-700 hover:bg-red-50 hover:border-red-200`}
                                 title="삭제"
+                                aria-label={`${selectedInquiry.name} 문의 삭제`}
                             >
                                 <Trash2 className="w-4 h-4" />
                             </button>

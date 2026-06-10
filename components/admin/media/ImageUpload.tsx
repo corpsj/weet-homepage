@@ -152,6 +152,7 @@ export default function ImageUpload({
                         onClick={handleRemove}
                         className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white p-1.5 rounded-full transition-colors opacity-0 group-hover:opacity-100"
                         type="button"
+                        aria-label="이미지 제거"
                     >
                         <X className="w-4 h-4" />
                     </button>
@@ -161,6 +162,7 @@ export default function ImageUpload({
                     onClick={handleClick}
                     disabled={loading}
                     type="button"
+                    aria-label="이미지 업로드"
                     className="w-full h-full min-h-[200px] border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400 hover:bg-gray-50 transition-all flex flex-col items-center justify-center gap-3 text-gray-500 hover:text-gray-600"
                 >
                     {loading ? (

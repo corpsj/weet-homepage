@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { supabaseAdmin } from "@/lib/supabase";
+import { supabase } from "@/lib/supabase";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,10 +10,11 @@ export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
-  const { data: project } = await supabaseAdmin
+  const { data: project } = await supabase
     .from("projects")
     .select("*")
     .eq("id", id)
+    .eq("status", "completed")
     .single();
 
   if (!project || !isPublicReadyProject(project as Project)) {
@@ -33,10 +34,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const { data: project } = await supabaseAdmin
+  const { data: project } = await supabase
     .from("projects")
     .select("*")
     .eq("id", id)
+    .eq("status", "completed")
     .single();
 
   if (!project) {

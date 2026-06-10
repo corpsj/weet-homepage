@@ -30,7 +30,7 @@ If `.codex/current-task.md` does not exist, create it from the user's active req
 
 ## Implementation delegation
 
-For this project, code/frontend implementation is delegated to the user-opened Claude app session. The Claude app modifies repository files only and skips tests, lint, typecheck, build, dev server, Playwright, browser validation, git commit/push, and GPT review. Codex handles everything after implementation: git diff inspection, validation commands, visual QA, review packet creation, the GPT-5.5 Pro review, saving the review output, and applying concrete `MUST_FIX` feedback.
+For this project, code/frontend implementation is delegated to the user-opened Claude app session. Prompt Claude in English and explicitly ask Claude to think/reason in English. The Claude app modifies repository files only and skips tests, lint, typecheck, build, dev server, Playwright, browser validation, git commit/push, and GPT review. Codex handles everything after implementation: git diff inspection, validation commands, visual QA, review packet creation, the GPT-5.5 Pro review, saving the review output, and applying concrete `MUST_FIX` feedback.
 
 ## Main loop
 

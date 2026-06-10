@@ -1,7 +1,3 @@
-import { cache } from 'react';
-import { unstable_cache } from 'next/cache';
-import { supabase } from '@/lib/supabase';
-
 export type SiteSettings = {
   contact_phone: string;
   consult_hours: string;
@@ -42,31 +38,81 @@ export const SITE_SETTING_DEFAULTS: SiteSettings = {
   lead_time_note: '',
 };
 
-const fetchSiteSettings = unstable_cache(
-  async (): Promise<SiteSettings> => {
-    const { data, error } = await (supabase as any)
-      .from('site_settings')
-      .select('key, value');
+const URL_HOST_ALLOWLIST: Partial<Record<keyof SiteSettings, string[]>> = {
+  kakao_channel_url: ['pf.kakao.com', 'center-pf.kakao.com', 'talk.kakao.com', 'open.kakao.com'],
+  naver_blog_url: ['blog.naver.com', 'm.blog.naver.com'],
+  instagram_url: ['instagram.com', 'www.instagram.com'],
+  daangn_url: ['daangn.com', 'www.daangn.com'],
+};
 
-    const settings = { ...SITE_SETTING_DEFAULTS };
-    if (error || !data) {
-      if (error) console.error('Error fetching site settings:', error);
-      return settings;
+const URL_SETTING_KEYS = new Set<keyof SiteSettings>([
+  'kakao_channel_url',
+  'naver_blog_url',
+  'instagram_url',
+  'daangn_url',
+]);
+
+function cleanText(value: string, maxLength: number) {
+  return value
+    .replace(/[\u0000-\u001f\u007f]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .slice(0, maxLength);
+}
+
+function sanitizeExternalUrl(key: keyof SiteSettings, value: string) {
+  const trimmed = value.trim();
+  if (!trimmed) return '';
+
+  let parsed: URL;
+  try {
+    parsed = new URL(trimmed);
+  } catch {
+    throw new Error(`${SITE_SETTING_LABELS[key]}은(는) https URL이어야 합니다.`);
+  }
+
+  if (parsed.protocol !== 'https:') {
+    throw new Error(`${SITE_SETTING_LABELS[key]}은(는) https URL만 허용됩니다.`);
+  }
+
+  const allowedHosts = URL_HOST_ALLOWLIST[key];
+  if (allowedHosts && !allowedHosts.includes(parsed.hostname.toLowerCase())) {
+    throw new Error(`${SITE_SETTING_LABELS[key]}의 도메인이 허용 목록에 없습니다.`);
+  }
+
+  parsed.hash = '';
+  parsed.username = '';
+  parsed.password = '';
+  return parsed.toString();
+}
+
+export function sanitizeSiteSetting(key: keyof SiteSettings, value: string) {
+  if (URL_SETTING_KEYS.has(key)) return sanitizeExternalUrl(key, value);
+
+  if (key === 'contact_phone') {
+    return cleanText(value.replace(/[^0-9+\-().\s]/g, ''), 40);
+  }
+
+  if (key === 'contact_email') {
+    const email = cleanText(value, 120).toLowerCase();
+    if (!email) return '';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      throw new Error('문의 이메일 형식이 올바르지 않습니다.');
     }
+    return email;
+  }
 
-    for (const row of data as { key: string; value: string }[]) {
-      if (row.key in settings && row.value.trim() !== '') {
-        settings[row.key as keyof SiteSettings] = row.value.trim();
-      }
-    }
+  if (key === 'lead_time_note') return cleanText(value, 200);
+  return cleanText(value, 120);
+}
 
-    return settings;
-  },
-  ['site-settings'],
-  { tags: ['site-settings'], revalidate: 300 }
-);
-
-export const getSiteSettings = cache(fetchSiteSettings);
+export function sanitizeSiteSettings(settings: SiteSettings) {
+  const sanitized = { ...SITE_SETTING_DEFAULTS };
+  for (const key of Object.keys(sanitized) as (keyof SiteSettings)[]) {
+    sanitized[key] = sanitizeSiteSetting(key, settings[key] ?? '');
+  }
+  return sanitized;
+}
 
 export function telHref(phone: string) {
   return `tel:${phone.replace(/[^0-9+]/g, '')}`;

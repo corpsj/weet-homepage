@@ -22,6 +22,10 @@ import ImageUpload from '@/components/admin/media/ImageUpload';
 import { cn } from '@/lib/utils';
 import {
   createCustomizeOptionConflict,
+  deleteCustomizeCategory,
+  deleteCustomizeIncludedSpec,
+  deleteCustomizeModel,
+  deleteCustomizeOption,
   deleteCustomizeOptionConflict,
   setCustomizeEntityActive,
   upsertCustomizeCategory,
@@ -198,6 +202,10 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
   const saveCategory = () => runAction('카테고리 저장', () => upsertCustomizeCategory({ id: editingCategoryId, ...categoryForm }));
   const saveOption = () => runAction('옵션 저장', () => upsertCustomizeOption({ id: editingOptionId, ...optionForm }));
   const saveIncluded = () => runAction('포함 사양 저장', () => upsertCustomizeIncludedSpec({ id: editingIncludedId, ...includedForm }));
+  const deleteWithConfirm = (label: string, name: string, action: () => Promise<unknown>) => {
+    if (!confirm(`${name} 항목을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.`)) return;
+    runAction(`${label} 삭제`, action);
+  };
 
   return (
     <div className="space-y-6">
@@ -322,6 +330,8 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
                       <RowActions
                         onEdit={() => setModelForm(modelToForm(model))}
                         onToggle={() => runAction('모델 노출 변경', () => setCustomizeEntityActive('model', model.id, !model.isActive))}
+                        onDelete={() => deleteWithConfirm('모델', model.nameKo, () => deleteCustomizeModel(model.id))}
+                        deleteLabel={`${model.nameKo} 모델 삭제`}
                         active={model.isActive}
                       />
                     </div>
@@ -370,6 +380,8 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
                       <RowActions
                         onEdit={() => { setEditingIncludedId(spec.id); setIncludedForm(includedToForm(spec)); }}
                         onToggle={() => runAction('포함 사양 노출 변경', () => setCustomizeEntityActive('includedSpec', spec.id, !spec.isActive))}
+                        onDelete={() => deleteWithConfirm('포함 사양', spec.nameKo, () => deleteCustomizeIncludedSpec(spec.id))}
+                        deleteLabel={`${spec.nameKo} 포함 사양 삭제`}
                         active={spec.isActive}
                       />
                     </div>
@@ -427,6 +439,8 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
                         <RowActions
                           onEdit={() => { setEditingCategoryId(category.id); setCategoryForm(categoryToForm(category)); }}
                           onToggle={() => runAction('카테고리 노출 변경', () => setCustomizeEntityActive('category', category.id, !category.isActive))}
+                          onDelete={() => deleteWithConfirm('카테고리', category.nameKo, () => deleteCustomizeCategory(category.id))}
+                          deleteLabel={`${category.nameKo} 카테고리 삭제`}
                           active={category.isActive}
                         />
                       </div>
@@ -545,6 +559,8 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
                                 compact
                                 onEdit={() => { setEditingOptionId(option.id); setOptionForm(optionToForm(option)); }}
                                 onToggle={() => runAction('옵션 노출 변경', () => setCustomizeEntityActive('option', option.id, !option.isActive))}
+                                onDelete={() => deleteWithConfirm('옵션', option.nameKo, () => deleteCustomizeOption(option.id))}
+                                deleteLabel={`${option.nameKo} 옵션 삭제`}
                                 active={option.isActive}
                               />
                             </div>
@@ -855,7 +871,21 @@ function TableRow({ children }: { children: ReactNode }) {
   return <div className="flex items-center justify-between gap-4 rounded-md border border-[#e5e5df] bg-white p-3 hover:border-gray-300 transition-colors">{children}</div>;
 }
 
-function RowActions({ onEdit, onToggle, active, compact = false }: { onEdit: () => void; onToggle: () => void; active: boolean; compact?: boolean }) {
+function RowActions({
+  onEdit,
+  onToggle,
+  onDelete,
+  active,
+  compact = false,
+  deleteLabel = '삭제',
+}: {
+  onEdit: () => void;
+  onToggle: () => void;
+  onDelete?: () => void;
+  active: boolean;
+  compact?: boolean;
+  deleteLabel?: string;
+}) {
   return (
     <div className="flex shrink-0 items-center gap-1.5">
       <button className="px-2 py-1 text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors" onClick={onEdit}>수정</button>
@@ -867,6 +897,16 @@ function RowActions({ onEdit, onToggle, active, compact = false }: { onEdit: () 
       >
         {active ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
       </button>
+      {onDelete && (
+        <button
+          className={cn(consoleIconButtonClass, compact && 'h-8 w-8', 'text-red-600 hover:border-red-200 hover:bg-red-50 hover:text-red-700')}
+          onClick={onDelete}
+          aria-label={deleteLabel}
+          title="삭제"
+        >
+          <Trash2 className="h-4 w-4" />
+        </button>
+      )}
     </div>
   );
 }

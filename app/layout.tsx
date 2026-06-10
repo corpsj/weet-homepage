@@ -97,9 +97,11 @@ import { LanguageProvider } from '@/contexts/LanguageContext';
 import { cn } from "@/lib/utils";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const enableVercelAnalytics =
+  process.env.VERCEL === "1" || process.env.NEXT_PUBLIC_ENABLE_VERCEL_ANALYTICS === "true";
 
 
-import { getSiteSettings } from "@/lib/site-settings";
+import { getSiteSettings } from "@/lib/site-settings.server";
 
 export default async function RootLayout({
   children,
@@ -177,7 +179,7 @@ export default async function RootLayout({
         <LanguageProvider>
           <ClientLayout settings={siteSettings}>{children}</ClientLayout>
         </LanguageProvider>
-        <Analytics />
+        {enableVercelAnalytics && <Analytics />}
         {process.env.NEXT_PUBLIC_GA_ID && (
           <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
         )}

@@ -4,8 +4,8 @@ import { randomUUID } from 'crypto';
 import { revalidatePath } from 'next/cache';
 import { z } from 'zod';
 import { requireAdmin } from '@/lib/admin-auth';
-import { getSupabaseAdmin } from '@/lib/supabase';
-import { createClient } from '@/utils/supabase/server';
+import { getSupabaseAdmin, supabase } from '@/lib/supabase';
+import { assertPublicSubmissionAllowed } from '@/lib/public-submission-guard';
 import {
   calculateEstimate,
   encodeConfig,
@@ -274,7 +274,6 @@ async function loadCatalog(client: any, includeInactive = false): Promise<Custom
 
 export async function getPublicCustomizeCatalog() {
   try {
-    const supabase = await createClient();
     return await loadCatalog(supabase, false);
   } catch (error) {
     console.error('Error loading public customize catalog:', error);
@@ -331,8 +330,13 @@ export async function submitCustomizeConsultation(input: ConsultationFormInput) 
   }
 
   try {
-    const admin = getSupabaseAdmin() as any;
-    const catalog = await loadCatalog(admin, false);
+    await assertPublicSubmissionAllowed('customize-consultation');
+  } catch (error) {
+    return { success: false, message: error instanceof Error ? error.message : '잠시 후 다시 시도해주세요.' };
+  }
+
+  try {
+    const catalog = await loadCatalog(supabase, false);
     const estimate = calculateEstimate(catalog, parsed.data.modelId, parsed.data.selectedOptions);
 
     if (!estimate) {
@@ -366,8 +370,8 @@ export async function submitCustomizeConsultation(input: ConsultationFormInput) 
     };
 
     const consultationId = randomUUID();
-    const supabase = await createClient();
-    const { error } = await (supabase as any)
+    const admin = getSupabaseAdmin();
+    const { error } = await (admin as any)
       .from('customize_consultations')
       .insert({
         id: consultationId,
@@ -526,6 +530,98 @@ export async function setCustomizeEntityActive(entity: 'category' | 'option' | '
 
   if (error) throw error;
   revalidateCustomizePaths();
+  return { success: true };
+}
+
+export async function deleteCustomizeModel(id: string) {
+  await requireAdmin();
+  const parsedId = z.string().trim().min(2).max(80).parse(id);
+  const admin = getSupabaseAdmin() as any;
+
+  const { data: scopedOptions, error: scopedOptionsError } = await admin
+    .from('customize_options')
+    .select('id, available_model_ids')
+    .contains('available_model_ids', [parsedId]);
+
+  if (scopedOptionsError) throw scopedOptionsError;
+
+  for (const option of scopedOptions ?? []) {
+    const nextModelIds = ((option.available_model_ids ?? []) as string[]).filter((modelId) => modelId !== parsedId);
+    const { error } = await admin
+      .from('customize_options')
+      .update({ available_model_ids: nextModelIds })
+      .eq('id', option.id);
+    if (error) throw error;
+  }
+
+  const { error } = await admin.from('customize_models').delete().eq('id', parsedId);
+  if (error) throw error;
+
+  revalidateCustomizePaths();
+  revalidatePath('/admin');
+  return { success: true };
+}
+
+export async function deleteCustomizeCategory(id: string) {
+  await requireAdmin();
+  const parsedId = uuidField.parse(id);
+  const admin = getSupabaseAdmin() as any;
+
+  const { count, error: countError } = await admin
+    .from('customize_options')
+    .select('id', { count: 'exact', head: true })
+    .eq('category_id', parsedId);
+
+  if (countError) throw countError;
+  if ((count ?? 0) > 0) {
+    throw new Error('이 카테고리에 연결된 옵션이 있습니다. 옵션을 먼저 삭제하거나 다른 카테고리로 이동해주세요.');
+  }
+
+  const { error } = await admin.from('customize_categories').delete().eq('id', parsedId);
+  if (error) throw error;
+
+  revalidateCustomizePaths();
+  revalidatePath('/admin');
+  return { success: true };
+}
+
+export async function deleteCustomizeOption(id: string) {
+  await requireAdmin();
+  const parsedId = uuidField.parse(id);
+  const admin = getSupabaseAdmin() as any;
+
+  const { error: forwardConflictError } = await admin
+    .from('customize_option_conflicts')
+    .delete()
+    .eq('option_id', parsedId);
+
+  const { error: reverseConflictError } = await admin
+    .from('customize_option_conflicts')
+    .delete()
+    .eq('conflicts_with_option_id', parsedId);
+
+  if (forwardConflictError || reverseConflictError) {
+    throw forwardConflictError || reverseConflictError;
+  }
+
+  const { error } = await admin.from('customize_options').delete().eq('id', parsedId);
+  if (error) throw error;
+
+  revalidateCustomizePaths();
+  revalidatePath('/admin');
+  return { success: true };
+}
+
+export async function deleteCustomizeIncludedSpec(id: string) {
+  await requireAdmin();
+  const parsedId = uuidField.parse(id);
+  const admin = getSupabaseAdmin() as any;
+
+  const { error } = await admin.from('customize_included_specs').delete().eq('id', parsedId);
+  if (error) throw error;
+
+  revalidateCustomizePaths();
+  revalidatePath('/admin');
   return { success: true };
 }
 

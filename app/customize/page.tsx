@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import CustomizeConfigurator from '@/components/customize/CustomizeConfigurator';
 import { getPublicCustomizeCatalog } from '@/app/actions/customize-actions';
-import { getSiteSettings } from '@/lib/site-settings';
+import { getSiteSettings } from '@/lib/site-settings.server';
 
 export const dynamic = 'force-dynamic';
 

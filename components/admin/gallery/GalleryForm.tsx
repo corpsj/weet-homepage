@@ -223,6 +223,7 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
                                                             type="button"
                                                             onClick={() => removeImage(index)}
                                                             className="p-1.5 bg-white rounded shadow text-red-600 hover:bg-red-50"
+                                                            aria-label={`갤러리 이미지 ${index + 1} 제거`}
                                                         >
                                                             <X className="w-4 h-4" />
                                                         </button>

@@ -33,7 +33,7 @@ export default function ConsultBar({ settings }: { settings: SiteSettings }) {
             <a
               href={settings.kakao_channel_url}
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               onClick={() => trackConsultClick('kakao')}
               className="flex items-center justify-center gap-2 active:bg-[#0b5d56]"
             >
@@ -59,7 +59,7 @@ export default function ConsultBar({ settings }: { settings: SiteSettings }) {
           <a
             href={settings.kakao_channel_url}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
             onClick={() => trackConsultClick('kakao')}
             className="flex h-11 items-center gap-2 rounded-full border border-[#e5e5df] bg-white px-5 text-sm font-bold text-gray-900 shadow-lg transition-transform hover:scale-[1.03]"
           >

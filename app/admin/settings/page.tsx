@@ -11,6 +11,11 @@ export default function AdminSettingsPage() {
     const [migrating, setMigrating] = useState(false);
     const [message, setMessage] = useState('');
     const [userEmail, setUserEmail] = useState('');
+    const [passwordOpen, setPasswordOpen] = useState(false);
+    const [newPassword, setNewPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [passwordMessage, setPasswordMessage] = useState('');
+    const [passwordSaving, setPasswordSaving] = useState(false);
     const supabase = createClient();
 
     useEffect(() => {
@@ -24,6 +29,36 @@ export default function AdminSettingsPage() {
     }, [supabase]);
 
     const userId = userEmail.split('@')[0];
+
+    const handlePasswordChange = async () => {
+        setPasswordMessage('');
+
+        if (newPassword.length < 8) {
+            setPasswordMessage('새 비밀번호는 8자 이상이어야 합니다.');
+            return;
+        }
+
+        if (newPassword !== confirmPassword) {
+            setPasswordMessage('새 비밀번호와 확인 입력이 일치하지 않습니다.');
+            return;
+        }
+
+        setPasswordSaving(true);
+        try {
+            const { error } = await supabase.auth.updateUser({ password: newPassword });
+            if (error) {
+                setPasswordMessage(`비밀번호 변경 실패: ${error.message}`);
+                return;
+            }
+
+            setNewPassword('');
+            setConfirmPassword('');
+            setPasswordOpen(false);
+            setPasswordMessage('비밀번호가 변경되었습니다.');
+        } finally {
+            setPasswordSaving(false);
+        }
+    };
 
     const handleMigration = async () => {
         if (!confirm('위험 작업입니다. 기존 제품 데이터를 데이터베이스로 이관하시겠습니까? 이미 데이터가 있으면 중복 데이터가 생성될 수 있습니다.')) {
@@ -70,9 +105,51 @@ export default function AdminSettingsPage() {
                         </div>
                         <div>
                             <label className="block text-xs font-bold text-gray-600 mb-1">비밀번호</label>
-                            <button className="text-sm text-blue-600 hover:underline font-bold">
+                            <button
+                                type="button"
+                                onClick={() => setPasswordOpen((current) => !current)}
+                                className="text-sm text-blue-600 hover:underline font-bold"
+                            >
                                 비밀번호 변경
                             </button>
+                            {passwordOpen && (
+                                <div className="mt-3 space-y-3 rounded-md border border-[#e5e5df] bg-[#fbfbfa] p-4">
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-600 mb-1">새 비밀번호</label>
+                                        <input
+                                            type="password"
+                                            value={newPassword}
+                                            onChange={(event) => setNewPassword(event.target.value)}
+                                            className={`${consoleInputClass} w-full bg-white`}
+                                            autoComplete="new-password"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-600 mb-1">새 비밀번호 확인</label>
+                                        <input
+                                            type="password"
+                                            value={confirmPassword}
+                                            onChange={(event) => setConfirmPassword(event.target.value)}
+                                            className={`${consoleInputClass} w-full bg-white`}
+                                            autoComplete="new-password"
+                                        />
+                                    </div>
+                                    <button
+                                        type="button"
+                                        onClick={handlePasswordChange}
+                                        disabled={passwordSaving}
+                                        className={consolePrimaryButtonClass}
+                                    >
+                                        {passwordSaving && <Loader2 className="h-4 w-4 animate-spin" />}
+                                        새 비밀번호 저장
+                                    </button>
+                                </div>
+                            )}
+                            {passwordMessage && (
+                                <p className={`mt-2 text-xs font-bold ${passwordMessage.includes('실패') || passwordMessage.includes('일치') || passwordMessage.includes('8자') ? 'text-red-600' : 'text-green-600'}`}>
+                                    {passwordMessage}
+                                </p>
+                            )}
                         </div>
                     </div>
                 </ConsolePanel>
@@ -80,14 +157,11 @@ export default function AdminSettingsPage() {
                 {/* Notification Settings */}
                 <ConsolePanel className="p-6">
                     <ConsoleSectionTitle>알림 설정</ConsoleSectionTitle>
-                    <div className="space-y-4 mt-4">
-                        <div className="flex items-center justify-between max-w-xl">
-                            <div>
-                                <p className="text-sm font-bold text-gray-900">이메일 알림</p>
-                                <p className="text-[11px] text-gray-500 mt-1">새로운 문의가 들어오면 이메일로 알림을 받습니다.</p>
-                            </div>
-                            <input type="checkbox" defaultChecked className="w-4 h-4 text-black border-gray-300 rounded focus:ring-black accent-black cursor-pointer" />
-                        </div>
+                    <div className="mt-4 max-w-xl rounded-md border border-[#e5e5df] bg-[#fbfbfa] p-4">
+                        <p className="text-sm font-bold text-gray-900">이메일 알림 연동 전</p>
+                        <p className="mt-1 text-[11px] font-medium leading-5 text-gray-500">
+                            현재 문의 알림 발송 백엔드는 연결되어 있지 않습니다. 조작 가능한 토글을 노출하지 않고, 실제 발송 연동 후 설정 항목을 활성화합니다.
+                        </p>
                     </div>
                 </ConsolePanel>
 

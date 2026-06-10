@@ -10,37 +10,62 @@ export interface Slide {
     image_url: string;
     title?: string;
     subtitle?: string;
+    link_url?: string;
 }
 
 export default function HeroCarouselClient({ initialSlides }: { initialSlides: Slide[] }) {
     const [currentSlide, setCurrentSlide] = useState(0);
     const containerRef = useRef<HTMLDivElement>(null);
     const t = useTranslation();
+    const slideCount = initialSlides.length;
+    const safeSlideIndex = slideCount > 0 && currentSlide < slideCount ? currentSlide : 0;
+    const activeSlide = slideCount > 0 ? initialSlides[safeSlideIndex] : null;
 
     const nextSlide = useCallback(() => {
-        setCurrentSlide((prev) => (prev + 1) % initialSlides.length);
-    }, [initialSlides.length]);
+        if (slideCount === 0) return;
+        setCurrentSlide((prev) => (prev + 1) % slideCount);
+    }, [slideCount]);
 
     const prevSlide = useCallback(() => {
-        setCurrentSlide((prev) => (prev - 1 + initialSlides.length) % initialSlides.length);
-    }, [initialSlides.length]);
+        if (slideCount === 0) return;
+        setCurrentSlide((prev) => (prev - 1 + slideCount) % slideCount);
+    }, [slideCount]);
 
     // Auto-advance slides every 10 seconds
     useEffect(() => {
+        if (slideCount <= 1) return;
         const timer = setInterval(() => {
             nextSlide();
         }, 10000);
         return () => clearInterval(timer);
-    }, [nextSlide]);
+    }, [nextSlide, slideCount]);
 
-    if (initialSlides.length === 0) return null;
+    if (!activeSlide) {
+        return (
+            <section className="relative flex w-full aspect-[2/3] items-center overflow-hidden bg-[#111111] px-8 text-white md:aspect-[16/9] md:px-16 lg:h-[calc(100vh-110px)] lg:aspect-auto lg:px-24">
+                <div className="max-w-3xl">
+                    <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-white/60">WEET</p>
+                    <h1 className="text-4xl font-bold leading-tight md:text-6xl lg:text-7xl">공간의 가능성을 설계합니다</h1>
+                    <p className="mt-6 max-w-2xl text-lg font-light leading-8 text-white/75 md:text-2xl">
+                        관리자에서 공개된 히어로 슬라이드가 준비되면 이 영역에 자동으로 표시됩니다.
+                    </p>
+                    <a
+                        href="/customize"
+                        className="mt-8 inline-flex h-11 items-center justify-center rounded-md bg-white px-5 text-sm font-bold text-black transition-colors hover:bg-primary"
+                    >
+                        상담 구성 시작하기
+                    </a>
+                </div>
+            </section>
+        );
+    }
 
     return (
         <section ref={containerRef} className="relative bg-[#EBEBEB] overflow-hidden w-full aspect-[2/3] md:aspect-[16/9] lg:aspect-auto lg:h-[calc(100vh-110px)]">
             {/* Blurred Background Layer */}
             <AnimatePresence mode="wait">
                 <motion.div
-                    key={`bg-${currentSlide}`}
+                    key={`bg-${safeSlideIndex}`}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
@@ -48,11 +73,11 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                     className="absolute inset-0 z-0"
                 >
                     <Image
-                        src={initialSlides[currentSlide].image_url}
+                        src={activeSlide.image_url}
                         alt="Background"
                         fill
                         className="object-cover blur-2xl opacity-60 scale-110"
-                        loading={currentSlide === 0 ? 'eager' : 'lazy'}
+                        loading={safeSlideIndex === 0 ? 'eager' : 'lazy'}
                         sizes="100vw"
                     />
                     <div className="absolute inset-0 bg-black/10" />
@@ -65,7 +90,7 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                 <div className="absolute inset-0 w-full h-full">
                     <AnimatePresence mode="wait">
                         <motion.div
-                            key={currentSlide}
+                            key={safeSlideIndex}
                             initial={{ opacity: 0, scale: 1.05 }}
                             animate={{ opacity: 1, scale: 1 }}
                             exit={{ opacity: 0 }}
@@ -73,10 +98,10 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                             className="w-full h-full absolute inset-0"
                         >
                             <Image
-                                src={initialSlides[currentSlide].image_url}
-                                alt={initialSlides[currentSlide].title || 'Hero Image'}
+                                src={activeSlide.image_url}
+                                alt={activeSlide.title || 'Hero Image'}
                                 fill
-                                loading={currentSlide === 0 ? 'eager' : 'lazy'}
+                                loading={safeSlideIndex === 0 ? 'eager' : 'lazy'}
                                 className="object-cover"
                                 sizes="(max-width: 1400px) 100vw, 1400px"
                             />
@@ -85,25 +110,36 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
 
                             {/* Text Content */}
                             <div className="absolute inset-0 flex flex-col justify-center items-start text-left text-white px-8 md:px-16 lg:px-24">
-                                {initialSlides[currentSlide].title && (
+                                {activeSlide.title && (
                                     <motion.h1
                                         initial={{ y: 20, opacity: 0 }}
                                         animate={{ y: 0, opacity: 1 }}
                                         transition={{ delay: 0.3, duration: 0.8 }}
                                         className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 drop-shadow-lg"
                                     >
-                                        {initialSlides[currentSlide].title}
+                                        {activeSlide.title}
                                     </motion.h1>
                                 )}
-                                {initialSlides[currentSlide].subtitle && (
+                                {activeSlide.subtitle && (
                                     <motion.p
                                         initial={{ y: 20, opacity: 0 }}
                                         animate={{ y: 0, opacity: 1 }}
                                         transition={{ delay: 0.5, duration: 0.8 }}
                                         className="text-xl md:text-2xl lg:text-3xl font-light tracking-wide drop-shadow-md"
                                     >
-                                        {initialSlides[currentSlide].subtitle}
+                                        {activeSlide.subtitle}
                                     </motion.p>
+                                )}
+                                {activeSlide.link_url && (
+                                    <motion.a
+                                        href={activeSlide.link_url}
+                                        initial={{ y: 20, opacity: 0 }}
+                                        animate={{ y: 0, opacity: 1 }}
+                                        transition={{ delay: 0.65, duration: 0.8 }}
+                                        className="mt-8 inline-flex h-11 items-center justify-center rounded-md bg-white px-5 text-sm font-bold text-black transition-colors hover:bg-primary"
+                                    >
+                                        자세히 보기
+                                    </motion.a>
                                 )}
                             </div>
                         </motion.div>
@@ -138,7 +174,7 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                     <button
                         key={idx}
                         onClick={() => setCurrentSlide(idx)}
-                        className={`h-[3px] md:h-[4px] rounded-full transition-all duration-200 ${idx === currentSlide ? 'bg-white w-[40px] md:w-[50px]' : 'bg-white/40 hover:bg-white w-[20px] md:w-[30px]'
+                        className={`h-[3px] md:h-[4px] rounded-full transition-all duration-200 ${idx === safeSlideIndex ? 'bg-white w-[40px] md:w-[50px]' : 'bg-white/40 hover:bg-white w-[20px] md:w-[30px]'
                             }`}
                         aria-label={`Go to slide ${idx + 1}`}
                     />

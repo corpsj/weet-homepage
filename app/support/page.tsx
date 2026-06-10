@@ -19,7 +19,8 @@ import {
   Wrench,
 } from 'lucide-react';
 import { getFaqs } from '@/app/actions/faq-actions';
-import { getSiteSettings, telHref } from '@/lib/site-settings';
+import { telHref } from '@/lib/site-settings';
+import { getSiteSettings } from '@/lib/site-settings.server';
 import ConsultForm from '@/components/support/ConsultForm';
 
 export const dynamic = 'force-dynamic';
@@ -405,7 +406,7 @@ export default async function SupportPage() {
                 <a
                   href={settings.kakao_channel_url}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-4 transition-colors hover:border-[#0d6e66]"
                 >
                   <ClipboardCheck className="h-5 w-5 text-[#0d6e66]" />

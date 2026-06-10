@@ -1,11 +1,22 @@
 'use client';
 
 import { useMemo, useState, useTransition, useEffect } from 'react';
-import { Save, Plus, Trash2, GripVertical, Image as ImageIcon, Loader2 } from 'lucide-react';
+import {
+    CheckCircle2,
+    Eye,
+    EyeOff,
+    GripVertical,
+    Image as ImageIcon,
+    Link as LinkIcon,
+    Loader2,
+    Plus,
+    Save,
+    Trash2,
+} from 'lucide-react';
 import Image from 'next/image';
 import { Database } from '@/types/supabase';
 import ImageUpload from '@/components/admin/media/ImageUpload';
-import { createHeroSlide, updateHeroSlide, deleteHeroSlide, updateSignatureStatus, reorderHeroSlides } from '@/app/actions/cms-actions';
+import { createHeroSlide, updateHeroSlide, deleteHeroSlide, setHeroSlideActive, updateSignatureStatus, reorderHeroSlides } from '@/app/actions/cms-actions';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import {
@@ -25,10 +36,27 @@ import {
     useSortable
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { ConsolePageHeader, ConsolePanel, ConsoleSectionTitle, consoleInputClass, consolePrimaryButtonClass, consoleSecondaryButtonClass } from '@/components/admin/ConsolePrimitives';
+import {
+    ConsoleMetricCard,
+    ConsolePageHeader,
+    ConsolePanel,
+    ConsoleSectionTitle,
+    ConsoleStatusPill,
+    consoleIconButtonClass,
+    consoleInputClass,
+    consolePrimaryButtonClass,
+    consoleSecondaryButtonClass,
+} from '@/components/admin/ConsolePrimitives';
 
 type HeroSlide = Database['public']['Tables']['hero_slides']['Row'];
 type Product = Database['public']['Tables']['products']['Row'];
+type HeroSlideFormData = {
+    title: string;
+    subtitle: string;
+    image_url: string;
+    link_url: string;
+    is_active: boolean;
+};
 
 interface MainCmsClientProps {
     initialHeroSlides: HeroSlide[];
@@ -37,41 +65,68 @@ interface MainCmsClientProps {
 
 export default function MainCmsClient({ initialHeroSlides, initialProducts }: MainCmsClientProps) {
     const [activeTab, setActiveTab] = useState('hero');
+    const activeSlides = initialHeroSlides.filter((slide) => slide.is_active).length;
+    const signatureProducts = initialProducts.filter((product) => product.is_signature && product.is_active).length;
+    const inactiveSignatureProducts = initialProducts.filter((product) => product.is_signature && !product.is_active).length;
 
     return (
         <div className="space-y-6">
             <ConsolePageHeader
                 eyebrow="CONTENTS"
                 title="랜딩 페이지 관리"
-                description="홈페이지의 주요 섹션 이미지를 관리합니다."
+                description="홈 첫 화면과 시그니처 제품 노출을 실제 공개 상태와 함께 관리합니다."
             />
 
-            {/* Tabs */}
-            <div className="border-b border-gray-200">
-                <nav className="-mb-px flex space-x-8">
+            <div className="grid gap-3 md:grid-cols-3">
+                <ConsoleMetricCard
+                    label="공개 히어로"
+                    value={`${activeSlides}/${initialHeroSlides.length}`}
+                    caption="홈 첫 화면에 노출되는 슬라이드"
+                    tone={activeSlides === 0 ? 'warning' : 'dark'}
+                    icon={<ImageIcon className="h-5 w-5" />}
+                />
+                <ConsoleMetricCard
+                    label="시그니처 제품"
+                    value={signatureProducts}
+                    caption="공개 제품 중 홈 노출 선택"
+                    tone={signatureProducts === 0 ? 'warning' : 'neutral'}
+                    icon={<CheckCircle2 className="h-5 w-5" />}
+                />
+                <ConsoleMetricCard
+                    label="비공개 선택"
+                    value={inactiveSignatureProducts}
+                    caption="공개 전환 전에는 홈에 표시되지 않음"
+                    tone={inactiveSignatureProducts > 0 ? 'warning' : 'neutral'}
+                    icon={<EyeOff className="h-5 w-5" />}
+                />
+            </div>
+
+            <div className="overflow-x-auto">
+                <nav className="inline-flex min-w-max items-center rounded-md border border-[#e5e5df] bg-[#f4f4f1] p-1">
                     <button
                         onClick={() => setActiveTab('hero')}
-                        className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'hero'
-                            ? 'border-black text-black'
-                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        className={`inline-flex items-center gap-2 rounded px-4 py-2 text-sm font-bold transition-colors ${activeTab === 'hero'
+                            ? 'bg-white text-[#111111] shadow-sm'
+                            : 'text-gray-500 hover:text-[#111111]'
                             }`}
                     >
-                        Hero Section
+                        <ImageIcon className="h-4 w-4" />
+                        히어로 슬라이드
                     </button>
                     <button
                         onClick={() => setActiveTab('signature')}
-                        className={`py-4 px-1 border-b-2 font-medium text-sm transition-colors ${activeTab === 'signature'
-                            ? 'border-black text-black'
-                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                        className={`inline-flex items-center gap-2 rounded px-4 py-2 text-sm font-bold transition-colors ${activeTab === 'signature'
+                            ? 'bg-white text-[#111111] shadow-sm'
+                            : 'text-gray-500 hover:text-[#111111]'
                             }`}
                     >
-                        Signature Line
+                        <CheckCircle2 className="h-4 w-4" />
+                        시그니처 제품
                     </button>
                 </nav>
             </div>
 
-            {/* Content */}
-            <ConsolePanel className="p-6 min-h-[500px]">
+            <ConsolePanel className="p-4 md:p-6 min-h-[500px]">
                 {activeTab === 'hero' ? (
                     <HeroSectionEditor slides={initialHeroSlides} />
                 ) : (
@@ -103,19 +158,17 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
         const { active, over } = event;
 
         if (over && active.id !== over.id) {
-            setHeroSlides((items) => {
-                const oldIndex = items.findIndex((item) => item.id === active.id);
-                const newIndex = items.findIndex((item) => item.id === over.id);
-                const newItems = arrayMove(items, oldIndex, newIndex);
+            const oldIndex = heroSlides.findIndex((item) => item.id === active.id);
+            const newIndex = heroSlides.findIndex((item) => item.id === over.id);
+            const newItems = arrayMove(heroSlides, oldIndex, newIndex);
+            const previousItems = heroSlides;
 
-                updateSortOrder(newItems);
-
-                return newItems;
-            });
+            setHeroSlides(newItems);
+            updateSortOrder(newItems, previousItems);
         }
     };
 
-    const updateSortOrder = async (items: HeroSlide[]) => {
+    const updateSortOrder = async (items: HeroSlide[], previousItems: HeroSlide[]) => {
         startTransition(async () => {
             try {
                 const ids = items.map(item => item.id);
@@ -124,17 +177,19 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
                 if (result.success) {
                     toast.success('순서가 저장되었습니다.');
                 } else {
+                    setHeroSlides(previousItems);
                     toast.error(`순서 저장 실패: ${result.error}`);
                 }
                 router.refresh();
             } catch (error: any) {
+                setHeroSlides(previousItems);
                 toast.error(`순서 저장 중 오류 발생: ${error.message || '알 수 없는 오류'}`);
                 router.refresh();
             }
         });
     };
 
-    const handleCreate = async (data: { title: string; subtitle: string; image_url: string }) => {
+    const handleCreate = async (data: HeroSlideFormData) => {
         startTransition(async () => {
             try {
                 const result = await createHeroSlide(data);
@@ -164,6 +219,18 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
         });
     };
 
+    const handleToggleActive = async (slide: HeroSlide) => {
+        startTransition(async () => {
+            const result = await setHeroSlideActive(slide.id, !slide.is_active);
+            if (result.success) {
+                toast.success(!slide.is_active ? '슬라이드가 공개되었습니다.' : '슬라이드가 숨김 처리되었습니다.');
+                router.refresh();
+            } else {
+                toast.error(`공개 상태 변경 실패: ${result.error}`);
+            }
+        });
+    };
+
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
@@ -177,6 +244,7 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
             </div>
 
             <DndContext
+                id="admin-hero-slides"
                 sensors={sensors}
                 collisionDetection={closestCenter}
                 onDragEnd={handleDragEnd}
@@ -187,7 +255,13 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
                 >
                     <div className="space-y-3">
                         {heroSlides.map((slide, index) => (
-                            <SortableHeroSlideItem key={slide.id} slide={slide} onDelete={handleDelete} eager={index === 0} />
+                            <SortableHeroSlideItem
+                                key={slide.id}
+                                slide={slide}
+                                onDelete={handleDelete}
+                                onToggleActive={handleToggleActive}
+                                eager={index === 0}
+                            />
                         ))}
                     </div>
                 </SortableContext>
@@ -210,10 +284,12 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
 function SortableHeroSlideItem({
     slide,
     onDelete,
+    onToggleActive,
     eager = false,
 }: {
     slide: HeroSlide;
     onDelete: (id: string) => void;
+    onToggleActive: (slide: HeroSlide) => void;
     eager?: boolean;
 }) {
     const {
@@ -233,7 +309,7 @@ function SortableHeroSlideItem({
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
 
-    const handleUpdate = async (data: { title: string; subtitle: string; image_url: string }) => {
+    const handleUpdate = async (data: HeroSlideFormData) => {
         startTransition(async () => {
             try {
                 const result = await updateHeroSlide(slide.id, data);
@@ -267,51 +343,79 @@ function SortableHeroSlideItem({
         <div
             ref={setNodeRef}
             style={style}
-            className="flex items-center gap-4 p-3 bg-white rounded-md border border-[#e5e5df] hover:border-gray-300 transition-colors group"
+            className="grid gap-3 p-3 bg-white rounded-md border border-[#e5e5df] hover:border-gray-300 transition-colors group md:grid-cols-[auto_80px_minmax(0,1fr)_auto] md:items-center"
         >
             <div
                 {...attributes}
                 {...listeners}
-                className="cursor-move text-gray-400 hover:text-gray-600 p-1"
+                className="cursor-move text-gray-400 hover:text-gray-600 p-1 hidden md:block"
+                aria-label={`${slide.title} 순서 변경`}
             >
                 <GripVertical className="w-5 h-5" />
             </div>
-            <div className="relative w-20 h-14 bg-gray-100 rounded flex-shrink-0 border border-gray-200 overflow-hidden">
-                {slide.image_url ? (
-                    <Image
-                        src={slide.image_url}
-                        alt={slide.title}
-                        fill
-                        loading={eager ? 'eager' : 'lazy'}
-                        sizes="80px"
-                        className="object-cover"
-                    />
-                ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                        <ImageIcon className="w-5 h-5" />
-                    </div>
-                )}
-            </div>
-            <div className="flex-1 grid grid-cols-2 gap-4">
-                <div>
-                    <p className="text-[11px] font-bold text-gray-500 mb-0.5">메인 타이틀</p>
-                    <p className="text-sm font-bold text-gray-900">{slide.title}</p>
+            <div className="grid grid-cols-[80px_minmax(0,1fr)] gap-3 md:contents">
+                <div className="relative w-20 h-14 bg-gray-100 rounded flex-shrink-0 border border-gray-200 overflow-hidden">
+                    {slide.image_url ? (
+                        <Image
+                            src={slide.image_url}
+                            alt={slide.title}
+                            fill
+                            loading={eager ? 'eager' : 'lazy'}
+                            sizes="80px"
+                            className="object-cover"
+                        />
+                    ) : (
+                        <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                            <ImageIcon className="w-5 h-5" />
+                        </div>
+                    )}
                 </div>
-                <div>
+                <div className="min-w-0 grid gap-2 md:grid-cols-2 md:gap-4">
+                    <div className="min-w-0">
+                    <p className="text-[11px] font-bold text-gray-500 mb-0.5">메인 타이틀</p>
+                    <p className="text-sm font-bold text-gray-900 truncate">{slide.title}</p>
+                    <div className="mt-1 flex flex-wrap gap-1.5">
+                        <ConsoleStatusPill tone={slide.is_active ? 'success' : 'neutral'}>
+                            {slide.is_active ? '공개' : '숨김'}
+                        </ConsoleStatusPill>
+                        {slide.link_url && (
+                            <ConsoleStatusPill tone="dark">링크 있음</ConsoleStatusPill>
+                        )}
+                    </div>
+                    </div>
+                    <div className="min-w-0">
                     <p className="text-[11px] font-bold text-gray-500 mb-0.5">서브 타이틀</p>
                     <p className="text-xs text-gray-600 truncate">{slide.subtitle || '-'}</p>
+                    {slide.link_url && (
+                        <p className="mt-1 flex items-center gap-1 truncate text-[11px] text-gray-400">
+                            <LinkIcon className="h-3 w-3 shrink-0" />
+                            {slide.link_url}
+                        </p>
+                    )}
+                    </div>
                 </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center justify-end gap-2">
+                <button
+                    type="button"
+                    onClick={() => onToggleActive(slide)}
+                    className={consoleIconButtonClass}
+                    aria-label={slide.is_active ? `${slide.title} 숨기기` : `${slide.title} 공개하기`}
+                    title={slide.is_active ? '숨기기' : '공개하기'}
+                >
+                    {slide.is_active ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
                 <button
                     onClick={() => setIsEditing(true)}
                     className="px-2 py-1 text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors"
+                    aria-label={`${slide.title} 수정`}
                 >
                     수정
                 </button>
                 <button
                     onClick={() => onDelete(slide.id)}
                     className="p-1.5 text-gray-400 hover:text-red-600 transition-colors"
+                    aria-label={`${slide.title} 삭제`}
                 >
                     <Trash2 className="w-4 h-4" />
                 </button>
@@ -327,11 +431,12 @@ function HeroSlideForm({
     isPending
 }: {
     initialData?: HeroSlide,
-    onSubmit: (data: { title: string; subtitle: string; image_url: string }) => void,
+    onSubmit: (data: HeroSlideFormData) => void,
     onCancel: () => void,
     isPending: boolean
 }) {
     const [imageUrl, setImageUrl] = useState(initialData?.image_url || '');
+    const [isActive, setIsActive] = useState(initialData?.is_active ?? true);
     const [isUploading, setIsUploading] = useState(false);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -344,14 +449,16 @@ function HeroSlideForm({
         onSubmit({
             title: (formData.get('title') as string) || '',
             subtitle: (formData.get('subtitle') as string) || '',
-            image_url: imageUrl
+            image_url: imageUrl,
+            link_url: (formData.get('link_url') as string) || '',
+            is_active: isActive,
         });
     };
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="flex gap-6">
-                <div className="w-48 flex-shrink-0">
+            <div className="grid gap-6 lg:grid-cols-[192px_minmax(0,1fr)]">
+                <div>
                     <label className="block text-xs font-bold text-gray-600 mb-2">이미지</label>
                     <ImageUpload
                         value={imageUrl}
@@ -362,23 +469,53 @@ function HeroSlideForm({
                         onUploadStart={() => setIsUploading(true)}
                         className="h-32"
                     />
+                    <label className="mt-3 block text-xs font-bold text-gray-600 mb-1">이미지 URL 직접 입력</label>
+                    <input
+                        value={imageUrl}
+                        onChange={(event) => setImageUrl(event.target.value)}
+                        placeholder="/images/hero_main.webp 또는 https://..."
+                        className={`${consoleInputClass} w-full bg-white`}
+                    />
                 </div>
                 <div className="flex-1 space-y-4">
+                    <div className="grid gap-4 md:grid-cols-2">
+                        <div>
+                            <label className="block text-xs font-bold text-gray-600 mb-1">메인 타이틀</label>
+                            <input
+                                name="title"
+                                defaultValue={initialData?.title}
+                                className={`${consoleInputClass} w-full`}
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-xs font-bold text-gray-600 mb-1">서브 타이틀</label>
+                            <input
+                                name="subtitle"
+                                defaultValue={initialData?.subtitle || ''}
+                                className={`${consoleInputClass} w-full`}
+                            />
+                        </div>
+                    </div>
                     <div>
-                        <label className="block text-xs font-bold text-gray-600 mb-1">메인 타이틀</label>
+                        <label className="block text-xs font-bold text-gray-600 mb-1">클릭 링크 URL (선택)</label>
                         <input
-                            name="title"
-                            defaultValue={initialData?.title}
+                            name="link_url"
+                            defaultValue={initialData?.link_url || ''}
+                            placeholder="/customize 또는 https://..."
                             className={`${consoleInputClass} w-full`}
                         />
                     </div>
-                    <div>
-                        <label className="block text-xs font-bold text-gray-600 mb-1">서브 타이틀</label>
+                    <label className="inline-flex items-center gap-2 rounded-md border border-[#e5e5df] bg-[#fbfbfa] px-3 py-2 text-xs font-bold text-gray-700">
                         <input
-                            name="subtitle"
-                            defaultValue={initialData?.subtitle || ''}
-                            className={`${consoleInputClass} w-full`}
+                            type="checkbox"
+                            checked={isActive}
+                            onChange={(event) => setIsActive(event.target.checked)}
+                            className="h-4 w-4 accent-black"
                         />
+                        홈 화면에 공개
+                    </label>
+                    <div className="rounded-md border border-[#e5e5df] bg-[#fbfbfa] px-3 py-2 text-[11px] font-medium leading-5 text-gray-500">
+                        숨김 상태의 슬라이드는 관리자 목록에 남지만 공개 홈 캐러셀에는 표시되지 않습니다.
                     </div>
                 </div>
             </div>
@@ -422,8 +559,14 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
     }, [serverSignatureIds, pendingOverrides]);
 
     const handleToggle = (productId: string) => {
+        const product = products.find((item) => item.id === productId);
         const currentStatus = optimisticIds.has(productId);
         const newStatus = !currentStatus;
+
+        if (newStatus && product && !product.is_active) {
+            toast.error('비공개 제품은 먼저 제품 관리에서 공개 상태로 전환해야 합니다.');
+            return;
+        }
 
         setPendingOverrides(prev => ({ ...prev, [productId]: newStatus }));
 
@@ -449,9 +592,13 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
         <div className="space-y-6">
             <div>
                 <ConsoleSectionTitle>노출 제품 선택 (최대 10개)</ConsoleSectionTitle>
+                <p className="mt-1 text-xs font-medium leading-5 text-gray-500">
+                    공개 상태 제품만 홈 시그니처 라인에 표시됩니다. 비공개 제품은 선택을 해제할 수 있지만 새로 노출할 수 없습니다.
+                </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
                     {products.map((product) => {
                         const isSelected = optimisticIds.has(product.id);
+                        const isInactive = !product.is_active;
                         return (
                             <div
                                 key={product.id}
@@ -459,7 +606,16 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
                                 className={`flex items-center gap-3 p-3 rounded-md border cursor-pointer transition-all ${isSelected
                                     ? 'border-gray-900 bg-[#f4f4f1] shadow-sm'
                                     : 'border-[#e5e5df] hover:border-gray-400 bg-white'
-                                    } ${isPending ? 'opacity-70' : ''}`}
+                                    } ${isPending ? 'opacity-70' : ''} ${isInactive && !isSelected ? 'opacity-60' : ''}`}
+                                role="button"
+                                tabIndex={0}
+                                aria-pressed={isSelected}
+                                onKeyDown={(event) => {
+                                    if (event.key === 'Enter' || event.key === ' ') {
+                                        event.preventDefault();
+                                        if (!isPending) handleToggle(product.id);
+                                    }
+                                }}
                             >
                                 <div className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors ${isSelected ? 'bg-gray-900 border-gray-900' : 'border-gray-300 bg-white'
                                     }`}>
@@ -474,7 +630,12 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
 
                                 <div className="min-w-0">
                                     <p className="text-sm font-bold text-gray-900 truncate">{product.name}</p>
-                                    <p className="text-[11px] text-gray-500">{product.size_category}</p>
+                                    <div className="mt-1 flex flex-wrap gap-1.5">
+                                        <ConsoleStatusPill tone={product.is_active ? 'success' : 'neutral'}>
+                                            {product.is_active ? '공개' : '비공개'}
+                                        </ConsoleStatusPill>
+                                        {isSelected && <ConsoleStatusPill tone="dark">시그니처</ConsoleStatusPill>}
+                                    </div>
                                 </div>
                             </div>
                         )

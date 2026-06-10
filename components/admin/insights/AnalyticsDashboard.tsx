@@ -161,7 +161,7 @@ export default function AnalyticsDashboard({
                     subtext="체류 시간"
                     icon={<Clock className="w-5 h-5 text-black" />}
                 />
-                <Link href="https://clarity.microsoft.com/projects" target="_blank" className="block group">
+                <Link href="https://clarity.microsoft.com/projects" target="_blank" rel="noopener noreferrer" className="block group">
                     <div className="relative flex h-full flex-col justify-between overflow-hidden rounded-md border border-[#111111] bg-[#111111] p-4 text-white shadow-sm transition-colors hover:bg-[#1f1f1f]">
                         <div className="flex justify-between items-start relative z-10">
                             <div>

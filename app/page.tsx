@@ -18,7 +18,8 @@ import {
 import { getPublicCustomizeCatalog } from '@/app/actions/customize-actions';
 import { getPublicGalleryItems } from '@/app/actions/gallery-actions';
 import { getFaqs } from '@/app/actions/faq-actions';
-import { getSiteSettings, telHref } from '@/lib/site-settings';
+import { telHref } from '@/lib/site-settings';
+import { getSiteSettings } from '@/lib/site-settings.server';
 import { formatModelStartPrice } from '@/lib/customize/priceCalculator';
 
 export const revalidate = 300;
@@ -324,11 +325,11 @@ export default async function HomePage() {
 
           <p className="mt-6 px-2 text-xs leading-5 text-gray-500">
             위 사진은 위트 공장과 설치 현장에서 직접 기록한 이미지입니다. 더 많은 현장 소식은{' '}
-            <a href={settings.naver_blog_url} target="_blank" rel="noreferrer" className="font-bold text-gray-300 hover:text-white">
+            <a href={settings.naver_blog_url} target="_blank" rel="noopener noreferrer" className="font-bold text-gray-300 hover:text-white">
               네이버 블로그
             </a>
             와{' '}
-            <a href={settings.instagram_url} target="_blank" rel="noreferrer" className="font-bold text-gray-300 hover:text-white">
+            <a href={settings.instagram_url} target="_blank" rel="noopener noreferrer" className="font-bold text-gray-300 hover:text-white">
               인스타그램
             </a>
             에서 확인할 수 있습니다.

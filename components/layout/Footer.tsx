@@ -51,6 +51,7 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
                 <Link
                   href={settings.kakao_channel_url}
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-1.5 font-bold hover:text-white hover:scale-110 transition-all duration-200"
                   aria-label="카카오톡 채널"
                 >
@@ -61,6 +62,7 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
               <Link
                 href={settings.daangn_url}
                 target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-1.5 font-bold hover:text-white hover:scale-110 transition-all duration-200"
                 aria-label="당근마켓"
               >
@@ -70,6 +72,7 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
               <Link
                 href={settings.naver_blog_url}
                 target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-1.5 font-bold hover:text-white hover:scale-110 transition-all duration-200"
                 aria-label="네이버 블로그"
               >
@@ -79,6 +82,7 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
               <Link
                 href={settings.instagram_url}
                 target="_blank"
+                rel="noopener noreferrer"
                 className="flex items-center gap-1.5 font-bold hover:text-white hover:scale-110 transition-all duration-200"
                 aria-label="인스타그램"
               >
