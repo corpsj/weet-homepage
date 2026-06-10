@@ -6,12 +6,13 @@ Explore the whole Weet website and admin experience, generate PC/tablet/mobile p
 
 ## Current phase
 
-complete-with-production-admin-credential-risk
+complete
 
 ## Changes made
 
 - Audited public production routes across PC/tablet/mobile and saved screenshots/summary in `.codex/qa/sitewide-audit-20260610/`.
-- Rechecked production admin login with `weet` / `weet003`; production returned `Could not authenticate user`, so authenticated admin QA used local temporary `@weet.com` admin users.
+- Rechecked production admin login with the initially supplied password; production returned `Could not authenticate user`, so authenticated admin QA initially used local temporary `@weet.com` admin users.
+- User clarified the production admin password; production admin authentication then succeeded with the corrected credentials.
 - Audited local authenticated admin routes across PC/tablet/mobile and saved screenshots/summary in `.codex/qa/sitewide-admin-local-20260610/`.
 - Generated 60 persona observations in `agent-inbox/sitewide-persona-audit-20260610.md`.
 - Delegated the frontend implementation slice to Antigravity and accepted its intended 5-file change set.
@@ -26,6 +27,7 @@ complete-with-production-admin-credential-risk
 - Vercel built preview deployment `https://weet-homepage-97dgqb5li-weets-projects-6c7745e8.vercel.app`.
 - Promoted to production deployment `https://weet-homepage-4i6flmoeq-weets-projects-6c7745e8.vercel.app`.
 - Verified `https://www.we-et.com/support` after promotion on PC/tablet/mobile with cache-busting query strings.
+- Verified production authenticated admin dashboard, projects, and gallery on PC/tablet/mobile with the corrected credentials.
 
 ## Commands run
 
@@ -48,6 +50,8 @@ complete-with-production-admin-credential-risk
 - `vercel promote https://weet-homepage-97dgqb5li-weets-projects-6c7745e8.vercel.app --scope weets-projects-6c7745e8 -y --timeout 8m` (pass)
 - `vercel inspect https://weet-homepage-4i6flmoeq-weets-projects-6c7745e8.vercel.app --scope weets-projects-6c7745e8 --wait` (production Ready)
 - Production-domain Playwright QA for `https://www.we-et.com/support` and `/admin` login on PC/tablet/mobile.
+- Production-domain Playwright QA for authenticated `/admin`, `/admin/projects`, and `/admin/gallery` using the corrected credentials.
+- Targeted PC recheck confirmed command search query `faq` shows `FAQ 관리` linking to `/admin/support`.
 
 ## Visual QA
 
@@ -55,11 +59,13 @@ complete-with-production-admin-credential-risk
 - Reviewed `pc-support.png`, `mobile-support.png`, `pc-support-checklist.png`, `mobile-support-checklist.png`, `pc-admin-command.png`, `mobile-admin-command.png`, `pc-admin-projects.png`, and `mobile-admin-gallery.png`.
 - Findings: new support checklist is legible in 3 columns on PC and stacks cleanly on mobile; admin command search appears under the input without covering core dashboard content; project/gallery date formats render as `YYYY.MM.DD` with no new hydration errors in fresh Playwright run.
 - `.codex/qa/production-sitewide-198cedf/summary.json`: 5 production-domain screens, 0 support checklist misses, 0 horizontal overflow, 0 console/page issues.
-- Production visual review: `/support` checklist renders clearly in 3 columns on PC and stacked cards on mobile; mobile admin login page remains visually stable but does not authenticate with the supplied credentials.
+- Production visual review: `/support` checklist renders clearly in 3 columns on PC and stacked cards on mobile.
+- `.codex/qa/production-admin-corrected-85dfa01-v2/summary.json`: 9 authenticated admin screens across PC/tablet/mobile, 0 horizontal overflow, 0 console/page issues.
+- Production admin visual review: command search appears in the dashboard on PC/tablet/mobile; query `faq` exposes `FAQ 관리` -> `/admin/support`; projects and gallery render stable `YYYY.MM.DD` dates.
 
 ## Current failures
 
-- Production admin credentials `weet` / `weet003` did not authenticate on `https://www.we-et.com`.
+- None for the implemented slice.
 - Browser plugin tools were not exposed by `tool_search`; local visual QA used Playwright screenshots and `view_image` instead.
 
 ## Pro review cycles
@@ -80,9 +86,8 @@ PASS: `NO MUST_FIX`
 
 ## Remaining risks
 
-- Production authenticated admin verification still requires working production admin credentials; `weet` / `weet003` failed on the current production login both before and after deployment.
 - Existing floating bottom-left circular widget can overlap the lower edge of mobile content during scroll, but this predates the current slice and did not create overflow.
 
 ## Next step
 
-No code blocker remains for the implemented slice. Resolve or rotate production admin credentials before any claim of authenticated production-admin QA.
+No code blocker remains for this slice.

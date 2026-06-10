@@ -1,0 +1,211 @@
+{
+  "generatedAt": "2026-06-10T05:39:54.271Z",
+  "base": "https://www.we-et.com",
+  "commit": "85dfa01",
+  "credentialNote": "Verified with corrected admin password provided by user; password redacted from repository records.",
+  "counts": {
+    "total": 9,
+    "authenticated": 9,
+    "dashboardSearchVisible": 3,
+    "commandSearchOk": 3,
+    "overflow": 0,
+    "consoleIssues": 0
+  },
+  "results": [
+    {
+      "kind": "dashboard",
+      "viewport": "pc",
+      "consoleIssues": [],
+      "searchVisible": true,
+      "faqVisible": true,
+      "faqHref": "/admin/support",
+      "url": "https://www.we-et.com/admin",
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "headings": [
+        "작업실",
+        "운영 상태",
+        "시스템 검증",
+        "우선 처리 큐",
+        "빠른 실행",
+        "분석 및 도구"
+      ],
+      "authenticated": true,
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "innerWidth": 1440,
+      "recheckNote": "Targeted PC recheck with a longer wait confirmed FAQ 관리 -> /admin/support is visible."
+    },
+    {
+      "kind": "route",
+      "viewport": "pc",
+      "consoleIssues": [],
+      "route": "/admin/projects",
+      "url": "https://www.we-et.com/admin/projects",
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "authenticated": true,
+      "headings": [
+        "프로젝트 관리 · 2건"
+      ],
+      "dateMatches": [
+        "2026.02.19",
+        "2025.06.15"
+      ],
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "innerWidth": 1440
+    },
+    {
+      "kind": "route",
+      "viewport": "pc",
+      "consoleIssues": [],
+      "route": "/admin/gallery",
+      "url": "https://www.we-et.com/admin/gallery",
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "authenticated": true,
+      "headings": [
+        "갤러리 관리"
+      ],
+      "dateMatches": [
+        "2025.12.23",
+        "2025.12.19",
+        "2025.12.18",
+        "2025.12.15"
+      ],
+      "overflowX": false,
+      "scrollWidth": 1440,
+      "innerWidth": 1440
+    },
+    {
+      "kind": "dashboard",
+      "viewport": "tablet",
+      "consoleIssues": [],
+      "searchVisible": true,
+      "faqVisible": true,
+      "faqHref": "/admin/support",
+      "url": "https://www.we-et.com/admin",
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "headings": [
+        "작업실",
+        "운영 상태",
+        "시스템 검증",
+        "우선 처리 큐",
+        "빠른 실행",
+        "분석 및 도구"
+      ],
+      "authenticated": true,
+      "overflowX": false,
+      "scrollWidth": 834,
+      "innerWidth": 834
+    },
+    {
+      "kind": "route",
+      "viewport": "tablet",
+      "consoleIssues": [],
+      "route": "/admin/projects",
+      "url": "https://www.we-et.com/admin/projects",
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "authenticated": true,
+      "headings": [
+        "프로젝트 관리 · 2건"
+      ],
+      "dateMatches": [
+        "2026.02.19",
+        "2025.06.15"
+      ],
+      "overflowX": false,
+      "scrollWidth": 834,
+      "innerWidth": 834
+    },
+    {
+      "kind": "route",
+      "viewport": "tablet",
+      "consoleIssues": [],
+      "route": "/admin/gallery",
+      "url": "https://www.we-et.com/admin/gallery",
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "authenticated": true,
+      "headings": [
+        "갤러리 관리"
+      ],
+      "dateMatches": [
+        "2025.12.23",
+        "2025.12.19",
+        "2025.12.18",
+        "2025.12.15"
+      ],
+      "overflowX": false,
+      "scrollWidth": 834,
+      "innerWidth": 834
+    },
+    {
+      "kind": "dashboard",
+      "viewport": "mobile",
+      "consoleIssues": [],
+      "searchVisible": true,
+      "faqVisible": true,
+      "faqHref": "/admin/support",
+      "url": "https://www.we-et.com/admin",
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "headings": [
+        "작업실",
+        "운영 상태",
+        "시스템 검증",
+        "우선 처리 큐",
+        "빠른 실행",
+        "분석 및 도구"
+      ],
+      "authenticated": true,
+      "overflowX": false,
+      "scrollWidth": 390,
+      "innerWidth": 390
+    },
+    {
+      "kind": "route",
+      "viewport": "mobile",
+      "consoleIssues": [],
+      "route": "/admin/projects",
+      "url": "https://www.we-et.com/admin/projects",
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "authenticated": true,
+      "headings": [
+        "프로젝트 관리 · 2건"
+      ],
+      "dateMatches": [
+        "2026.02.19",
+        "2025.06.15"
+      ],
+      "overflowX": false,
+      "scrollWidth": 390,
+      "innerWidth": 390
+    },
+    {
+      "kind": "route",
+      "viewport": "mobile",
+      "consoleIssues": [],
+      "route": "/admin/gallery",
+      "url": "https://www.we-et.com/admin/gallery",
+      "title": "위트(weet) - 시스템 건축 전문 기업",
+      "authenticated": true,
+      "headings": [
+        "갤러리 관리"
+      ],
+      "dateMatches": [
+        "2025.12.23",
+        "2025.12.19",
+        "2025.12.18",
+        "2025.12.15"
+      ],
+      "overflowX": false,
+      "scrollWidth": 390,
+      "innerWidth": 390
+    }
+  ],
+  "pcCommandSearchRecheck": {
+    "viewport": "pc",
+    "query": "faq",
+    "resultText": "FAQ 관리",
+    "href": "/admin/support",
+    "visible": true,
+    "overflowX": false
+  }
+}
