@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState, useTransition, type Dispatch, type ReactNode, type SetStateAction } from 'react';
+import { useEffect, useMemo, useRef, useState, useTransition, type Dispatch, type ReactNode, type SetStateAction } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -14,6 +14,7 @@ import {
   Layers,
   Loader2,
   Maximize2,
+  PhoneCall,
   Send,
   SlidersHorizontal,
   X,
@@ -58,6 +59,7 @@ import { cn } from '@/lib/utils';
 interface CustomizeConfiguratorProps {
   catalog: CustomizeCatalog;
   initialConfig: string | null;
+  contactPhone?: string;
 }
 
 const PLAN_LABEL_POSITIONS: Record<string, (box: ReturnType<typeof floorplanSize>, index: number) => { x: number; y: number }> = {
@@ -224,7 +226,7 @@ function StepperBar({ currentStep, setCurrentStep, stepCounts }: { currentStep: 
   );
 }
 
-export default function CustomizeConfigurator({ catalog, initialConfig }: CustomizeConfiguratorProps) {
+export default function CustomizeConfigurator({ catalog, initialConfig, contactPhone }: CustomizeConfiguratorProps) {
   const decoded = useMemo(() => decodeConfig(initialConfig), [initialConfig]);
   const firstModelId = catalog.models[0]?.id ?? DEFAULT_MODEL_ID;
   const [modelId, setModelId] = useState(decoded?.modelId ?? firstModelId);
@@ -355,7 +357,7 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
 
   return (
     <div className="min-h-dvh bg-[#f4f0e8] text-[#2f3432]">
-      <ConfiguratorAppBar />
+      <ConfiguratorAppBar contactPhone={contactPhone} />
       <StepperBar currentStep={currentStep} setCurrentStep={setCurrentStep} stepCounts={stepCounts} />
 
       <div className="mx-auto flex min-h-[calc(100dvh-64px)] max-w-[1800px] flex-col lg:flex-row">
@@ -406,10 +408,14 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
             <p className="text-xl font-black text-[#2f3432]">{estimate ? formatWon(estimate.estimatedTotal) : '-'}</p>
             <p className="text-xs text-[#8b8172]">
               {estimate ? estimateExclusionText(estimate.consultOptionCount) : '운반/설치 별도'}
+              {' · '}
+              <a href="/support#cost" target="_blank" rel="noreferrer" className="font-bold text-[#0d6e66] underline-offset-2 hover:underline">
+                별도 비용 안내
+              </a>
             </p>
           </div>
           <Button className="h-12 min-w-[132px] bg-[#0d6e66] text-white hover:bg-[#095a54]" onClick={() => setOrderOpen(true)}>
-            주문하기
+            상담·견적 요청
           </Button>
         </div>
       </div>
@@ -467,7 +473,7 @@ export default function CustomizeConfigurator({ catalog, initialConfig }: Custom
   );
 }
 
-function ConfiguratorAppBar() {
+function ConfiguratorAppBar({ contactPhone }: { contactPhone?: string }) {
   return (
     <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-[#d8d0c3] bg-[#fbfaf7]/95 px-4 backdrop-blur md:h-16 md:px-6">
       <Link href="/" className="inline-flex items-center gap-2 text-sm font-bold text-[#2f3432]">
@@ -478,7 +484,17 @@ function ConfiguratorAppBar() {
         <p className="text-sm font-black text-[#2f3432]">위트 맞춤제작</p>
         <p className="text-xs text-[#83796a]">나만의 위트 만들기</p>
       </div>
-      <div className="w-14" />
+      {contactPhone ? (
+        <a
+          href={`tel:${contactPhone.replace(/[^0-9+]/g, '')}`}
+          aria-label="전화 상담"
+          className="inline-flex h-9 w-14 items-center justify-center gap-1 rounded-md text-[#0d6e66] transition-colors hover:bg-[#0d6e66]/10"
+        >
+          <PhoneCall className="h-4 w-4" />
+        </a>
+      ) : (
+        <div className="w-14" />
+      )}
     </header>
   );
 }
@@ -756,6 +772,10 @@ function FloorplanPreview({
   );
 }
 
+type FloorplanBox = ReturnType<typeof floorplanSize>;
+// 도면 외벽 스트로크(12px)가 박스 경계 바깥으로 6px 나가므로 클립에 여유를 둔다.
+const FLOORPLAN_CLIP_PAD = 14;
+
 function FloorplanCanvas({
   model,
   selectedOptions,
@@ -771,13 +791,42 @@ function FloorplanCanvas({
   testId: string;
   className?: string;
 }) {
-  const box = floorplanSize(model);
+  const box = useMemo(() => floorplanSize(model), [model]);
+  const shouldReduceMotion = useReducedMotion();
   const selectedLabels = selectedOptions.filter((option) => option.overlayLabelKo);
   const resolvedFloorplanImagePath = floorplanImagePath ?? floorplanImagePathForModel(model);
   const localImageStatus = useFloorplanImageStatus(resolvedFloorplanImagePath);
   const imageStatus = floorplanImageStatus ?? localImageStatus;
-  const hasBaseImage = imageStatus === 'loaded';
+  const [lastShownImage, setLastShownImage] = useState<{ path: string; box: FloorplanBox } | null>(null);
+  const [imageTransition, setImageTransition] = useState<{ fromPath: string; fromBox: FloorplanBox } | null>(null);
+
+  // 모델이 바뀌어 새 도면이 로드되면 직전 도면 기준의 확장/축소 트랜지션을 시작한다.
+  // (렌더 중 상태 보정 패턴 — https://react.dev/learn/you-might-not-need-an-effect)
+  if (imageStatus === 'loaded' && resolvedFloorplanImagePath && lastShownImage?.path !== resolvedFloorplanImagePath) {
+    if (lastShownImage) {
+      if (!shouldReduceMotion && lastShownImage.box.width !== box.width) {
+        setImageTransition({ fromPath: lastShownImage.path, fromBox: lastShownImage.box });
+      } else {
+        setImageTransition(null);
+      }
+    }
+    setLastShownImage({ path: resolvedFloorplanImagePath, box });
+  }
+
+  // 다음 모델 도면이 로드되는 동안 직전 도면을 유지해 플리커를 없앤다.
+  const displayedImagePath =
+    imageStatus === 'loaded'
+      ? resolvedFloorplanImagePath
+      : imageStatus === 'loading'
+        ? lastShownImage?.path ?? null
+        : null;
+  const hasBaseImage = Boolean(displayedImagePath);
   const gridId = `${testId}-grid`;
+  const clipId = `${testId}-expansion-clip`;
+
+  const isGrowing = imageTransition ? box.width >= imageTransition.fromBox.width : true;
+  const baseLayerPath = imageTransition && isGrowing ? imageTransition.fromPath : displayedImagePath;
+  const animatedLayerPath = imageTransition ? (isGrowing ? displayedImagePath : imageTransition.fromPath) : null;
 
   return (
     <svg viewBox="0 0 1000 420" className={cn('aspect-[1000/420] w-full', className)} data-testid={testId}>
@@ -785,20 +834,56 @@ function FloorplanCanvas({
         <pattern id={gridId} width="24" height="24" patternUnits="userSpaceOnUse">
           <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#e4ddd1" strokeWidth="1" />
         </pattern>
+        {imageTransition && (
+          <clipPath id={clipId}>
+            {/* clipPath 내부에서는 CSS transform이 무시되므로 attrX로 SVG 속성을 직접 애니메이션한다. */}
+            <motion.rect
+              key={`${imageTransition.fromPath}->${displayedImagePath ?? 'none'}`}
+              initial={{
+                attrX: imageTransition.fromBox.x - FLOORPLAN_CLIP_PAD,
+                width: imageTransition.fromBox.width + FLOORPLAN_CLIP_PAD * 2,
+              }}
+              animate={{ attrX: box.x - FLOORPLAN_CLIP_PAD, width: box.width + FLOORPLAN_CLIP_PAD * 2 }}
+              transition={{ duration: 0.72, ease: 'easeInOut' }}
+              onAnimationComplete={() => setImageTransition(null)}
+              y={0}
+              height={420}
+            />
+          </clipPath>
+        )}
       </defs>
       <rect width="1000" height="420" fill="#f5f1ea" />
 
       {hasBaseImage ? (
-        <g className="transition-all duration-[600ms] motion-reduce:transition-none">
+        <g>
           <image
             data-testid="base-floorplan-image"
-            href={resolvedFloorplanImagePath ?? undefined}
+            href={baseLayerPath ?? undefined}
             x="0"
             y="0"
             width="1000"
             height="420"
             preserveAspectRatio="xMidYMid meet"
           />
+          {imageTransition && animatedLayerPath && (
+            <g clipPath={`url(#${clipId})`} data-testid="floorplan-image-transition">
+              <motion.g
+                key={`${imageTransition.fromPath}->${animatedLayerPath}`}
+                initial={{ opacity: 1 }}
+                animate={{ opacity: isGrowing ? 1 : [1, 1, 0] }}
+                transition={{ duration: 0.72, ease: 'easeInOut' }}
+              >
+                <image
+                  href={animatedLayerPath}
+                  x="0"
+                  y="0"
+                  width="1000"
+                  height="420"
+                  preserveAspectRatio="xMidYMid meet"
+                />
+              </motion.g>
+            </g>
+          )}
         </g>
       ) : (
         <>
@@ -1252,7 +1337,7 @@ function OrderModal({
         <div className="max-h-[90dvh] overflow-y-auto p-5 md:p-8">
           <div className="mb-5 flex items-start justify-between gap-4">
             <div>
-              <h2 id="consultation-title" className="text-2xl font-black text-[#2f3432]">주문하기</h2>
+              <h2 id="consultation-title" className="text-2xl font-black text-[#2f3432]">구성 상담·견적 요청</h2>
               <p className="mt-1 text-sm text-[#756d61]">{estimateExclusionText(estimate.consultOptionCount)}</p>
             </div>
             <Button variant="ghost" size="icon-sm" onClick={onClose}>
@@ -1278,11 +1363,11 @@ function OrderModal({
 
           <div className="mb-4 rounded bg-[#efe6d4]/50 p-3 text-xs leading-relaxed text-[#756d61]">
             <Info className="mr-1 inline-block h-3.5 w-3.5 align-[-2px] text-[#8a806f]" />
-            선택 입력이지만 알려주시면 더 정확한 주문 구성에 도움이 됩니다. 아직 정해지지 않았다면 비워두셔도 됩니다.
+            선택 입력이지만 알려주시면 더 정확한 견적 안내에 도움이 됩니다. 아직 정해지지 않았다면 비워두셔도 됩니다.
           </div>
           <div className="mb-3">
             <p className="text-sm font-black text-[#2f3432]">필수 정보</p>
-            <p className="mt-1 text-xs text-[#8a806f]">주문 구성 확인과 연락을 위해 필요한 최소 정보입니다.</p>
+            <p className="mt-1 text-xs text-[#8a806f]">구성 확인과 연락을 위해 필요한 최소 정보입니다. 결제 단계가 아니며, 상담 후 최종 견적이 확정됩니다.</p>
           </div>
           <div className="grid gap-4 md:grid-cols-2">
             <Field label="이름" required>
@@ -1321,7 +1406,7 @@ function OrderModal({
           <div className="mt-6 flex flex-col gap-3 sm:flex-row">
             <Button data-testid="consultation-submit" className="h-12 flex-1 bg-[#0d6e66] text-white hover:bg-[#095a54]" disabled={isPending} onClick={onSubmit}>
               {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-              주문하기
+              상담 신청하기
             </Button>
             <Button variant="outline" className="h-12 flex-1 border-[#cfc4b3] bg-[#fbfaf7]" onClick={onSaveQuote}>
               <Download className="h-4 w-4" />

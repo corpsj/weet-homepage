@@ -24,6 +24,27 @@ const gallerySchema = z.object({
 function revalidateGallery() {
   revalidatePath('/admin/gallery');
   revalidatePath('/company');
+  revalidatePath('/projects');
+  revalidatePath('/');
+}
+
+export async function getPublicGalleryItems(limit = 12): Promise<GalleryItem[]> {
+  const admin = getSupabaseAdmin();
+
+  const { data, error } = await admin
+    .from('gallery')
+    .select('*')
+    .eq('is_active', true)
+    .order('display_order', { ascending: true })
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  if (error) {
+    console.error('Error fetching public gallery items:', error);
+    return [];
+  }
+
+  return (data || []) as GalleryItem[];
 }
 
 export async function getGalleryItemsForAdmin(): Promise<GalleryItem[]> {

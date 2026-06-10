@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Product } from "@/types/supabase";
 import { ChevronDown, Home, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -549,6 +550,29 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                 {isKO ? `대표 모델 ${visibleCount}개부터 확인하고 전체 ${products.length}개 라인업으로 이어집니다.` : `${visibleCount} representative models first, followed by the full ${products.length}-model lineup.`}
                             </p>
                         )}
+                        <p className="mt-4 text-xs leading-5 text-gray-500 md:text-sm md:leading-6">
+                            {isKO ? (
+                                <>
+                                    라인업 제품은 구성과 마감에 따라 가격이 달라져 상담으로 안내드립니다. 기준 모델(3x6·3x9)의 공개 가격은{' '}
+                                    <Link href="/customize" className="font-bold text-[#0d6e66] underline underline-offset-2">
+                                        맞춤 구성
+                                    </Link>
+                                    에서 바로 확인할 수 있고, 운반·설치 등 별도 비용 구성은{' '}
+                                    <Link href="/support#cost" className="font-bold text-[#0d6e66] underline underline-offset-2">
+                                        비용 안내
+                                    </Link>
+                                    에 정리되어 있습니다.
+                                </>
+                            ) : (
+                                <>
+                                    Lineup prices vary by configuration. Check the published base prices in the{' '}
+                                    <Link href="/customize" className="font-bold text-[#0d6e66] underline underline-offset-2">
+                                        configurator
+                                    </Link>
+                                    .
+                                </>
+                            )}
+                        </p>
                     </div>
 
                     <div className="max-w-5xl mx-auto space-y-12 lg:space-y-[20vh]"> {/* Increased spacing for better scroll detection */}

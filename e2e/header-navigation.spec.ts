@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('Header Navigation', () => {
-  test('should have "주문하기" menu item and navigate to /customize', async ({ page }) => {
+  test('should have "맞춤 견적" CTA and navigate to /customize', async ({ page }) => {
     await page.goto('/');
 
-    const customizeMenu = page.getByText('주문하기');
+    const customizeMenu = page.getByText('맞춤 견적').last();
     await expect(customizeMenu).toBeVisible();
 
     await customizeMenu.click();
@@ -14,13 +14,13 @@ test.describe('Header Navigation', () => {
     await expect(page.locator('body')).toBeVisible();
   });
 
-  test('should have "Order" menu item in English mode', async ({ page }) => {
+  test('should have "Get a Quote" CTA in English mode', async ({ page }) => {
     await page.goto('/');
 
     const enButton = page.getByText('EN').first();
     await enButton.click();
 
-    const customizeMenu = page.getByText('Order');
+    const customizeMenu = page.getByText('Get a Quote').last();
     await expect(customizeMenu).toBeVisible();
 
     await customizeMenu.click();
@@ -31,8 +31,8 @@ test.describe('Header Navigation', () => {
   test('should have active highlight bar on menu hover', async ({ page }) => {
     await page.goto('/');
 
-    const customizeMenu = page.getByText('주문하기').first();
-    await customizeMenu.hover();
+    const navItem = page.getByText('제품 소개').first();
+    await navItem.hover();
 
     await page.waitForTimeout(300);
 
@@ -40,7 +40,7 @@ test.describe('Header Navigation', () => {
     await expect(highlightBar).toBeVisible();
   });
 
-  test('mobile menu should have "주문하기" item', async ({ page }) => {
+  test('mobile menu should have "맞춤 견적" item', async ({ page }) => {
     await page.setViewportSize({ width: 375, height: 667 });
 
     await page.goto('/');
@@ -50,7 +50,7 @@ test.describe('Header Navigation', () => {
     await expect(menuButton).toBeVisible();
     await menuButton.click();
 
-    const customizeMenu = page.getByRole('link', { name: '주문하기' });
+    const customizeMenu = page.getByRole('link', { name: '모델 구성하기' }).last();
     await expect(customizeMenu).toBeVisible({ timeout: 10000 });
 
     await customizeMenu.click();
@@ -69,7 +69,7 @@ test.describe('Header Navigation', () => {
     await expect(menuButton).toBeVisible();
     await menuButton.click();
 
-    const customizeMenu = page.getByRole('link', { name: '주문하기' });
+    const customizeMenu = page.getByRole('link', { name: '모델 구성하기' }).last();
     await expect(customizeMenu).toBeVisible({ timeout: 10000 });
 
     await customizeMenu.click();

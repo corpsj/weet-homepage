@@ -245,9 +245,9 @@ export default function Header() {
               <Link
                 href="/customize"
               className="flex items-center justify-center rounded-sm bg-[#FEBD16] px-3 py-1.5 text-[12px] font-bold text-[#2f3432] shadow-[0_8px_18px_rgba(254,189,22,0.22)] transition-colors hover:bg-[#E2A80F] md:px-4 md:py-2 md:text-[13px] whitespace-nowrap"
-                aria-label={language === 'KO' ? '주문하기' : 'Order'}
+                aria-label={language === 'KO' ? '맞춤 견적' : 'Get a Quote'}
               >
-                {language === 'KO' ? '주문하기' : 'Order'}
+                {language === 'KO' ? '맞춤 견적' : 'Quote'}
               </Link>
               <button
                 onClick={handleMobileMenuToggle}
@@ -321,9 +321,9 @@ export default function Header() {
               <Link
                 href="/customize"
                 className="flex h-10 items-center justify-center rounded-sm bg-[#FEBD16] px-6 text-[13px] font-bold text-[#2f3432] shadow-[0_10px_24px_rgba(254,189,22,0.24)] transition-colors hover:bg-[#E2A80F] whitespace-nowrap"
-                aria-label={language === 'KO' ? '주문하기' : 'Configure'}
+                aria-label={language === 'KO' ? '맞춤 견적' : 'Get a Quote'}
               >
-                {language === 'KO' ? '주문하기' : 'Configure'}
+                {language === 'KO' ? '맞춤 견적' : 'Get a Quote'}
               </Link>
             </div>
 

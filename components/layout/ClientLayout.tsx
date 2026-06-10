@@ -3,12 +3,16 @@
 import { usePathname } from 'next/navigation';
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import ConsultBar from "@/components/layout/ConsultBar";
+import type { SiteSettings } from '@/lib/site-settings';
 import { Toaster } from 'sonner';
 
 export default function ClientLayout({
     children,
+    settings,
 }: {
     children: React.ReactNode;
+    settings: SiteSettings;
 }) {
     const pathname = usePathname();
     // Check if current path is admin
@@ -36,8 +40,9 @@ export default function ClientLayout({
     return (
         <>
             <Header />
-            <main className="flex-1 pt-[70px] md:pt-[80px] lg:pt-[80px]">{children}</main>
-            <Footer />
+            <main className="flex-1 pt-[70px] md:pt-[80px] lg:pt-[80px] pb-14 lg:pb-0">{children}</main>
+            <Footer settings={settings} />
+            <ConsultBar settings={settings} />
             <Toaster position="top-right" richColors />
         </>
     );

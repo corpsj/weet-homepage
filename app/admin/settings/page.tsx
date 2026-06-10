@@ -5,6 +5,7 @@ import { migrateProducts } from '@/app/actions/migration-actions';
 import { Loader2 } from 'lucide-react';
 import { createClient } from '@/utils/supabase/client';
 import { ConsolePageHeader, ConsolePanel, ConsoleSectionTitle, consoleInputClass, consolePrimaryButtonClass } from '@/components/admin/ConsolePrimitives';
+import SiteSettingsPanel from '@/components/admin/SiteSettingsPanel';
 
 export default function AdminSettingsPage() {
     const [migrating, setMigrating] = useState(false);
@@ -52,6 +53,8 @@ export default function AdminSettingsPage() {
             />
 
             <div className="space-y-6">
+                <SiteSettingsPanel />
+
                 {/* Account Settings */}
                 <ConsolePanel className="p-6">
                     <ConsoleSectionTitle>계정 설정</ConsoleSectionTitle>

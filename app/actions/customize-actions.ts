@@ -392,10 +392,10 @@ export async function submitCustomizeConsultation(input: ConsultationFormInput) 
     revalidatePath('/admin/consultations');
     revalidatePath('/admin');
 
-    return { success: true, message: '주문 요청이 접수되었습니다.', id: consultationId };
+    return { success: true, message: '상담 신청이 접수되었습니다. 입력하신 연락처로 안내드리겠습니다.', id: consultationId };
   } catch (error) {
     console.error('Error submitting customize consultation:', error);
-    return { success: false, message: '주문 요청 저장 중 오류가 발생했습니다.' };
+    return { success: false, message: '상담 신청 저장 중 오류가 발생했습니다.' };
   }
 }
 

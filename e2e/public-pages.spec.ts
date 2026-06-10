@@ -93,17 +93,19 @@ test.describe('Public page transition', () => {
     await expect(page.getByRole('link', { name: /모델 구성하기|나만의 위트 만들기/ }).first()).toHaveAttribute('href', '/customize');
   });
 
-  test('support is reassurance page without public inquiry form', async ({ page }) => {
+  test('support answers permits and costs, and offers a consultation path', async ({ page }) => {
     await page.goto('/support');
 
-    await expect(page.getByRole('heading', { name: '진행 과정과 확인사항' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /궁금한 것부터 해결하세요/ })).toBeVisible();
     await expect(page.getByRole('heading', { name: '시작하기 전에' })).toBeVisible();
     await expect(page.getByRole('heading', { name: '현장 설치 조건' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: '운반 및 설치 비용' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: '품질 보증 및 A/S' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: /내 땅에 둘 수 있을까/ })).toBeVisible();
+    await expect(page.getByText('농막으로 두는 경우')).toBeVisible();
+    await expect(page.getByText('농촌체류형 쉼터로 두는 경우')).toBeVisible();
+    await expect(page.getByRole('heading', { name: '총비용은 이렇게 구성됩니다' })).toBeVisible();
     await expect(page.getByText('구매 과정')).toBeVisible();
-    await expect(page.getByText('A/S', { exact: true })).toBeVisible();
-    await expect(page.getByRole('button', { name: /문의/ })).toHaveCount(0);
+    await expect(page.getByRole('heading', { name: '상담 신청', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: '상담 신청하기' })).toBeVisible();
   });
 
   test('bespoke public page is repositioned as commercial custom solution', async ({ page }) => {

@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { Instagram, Carrot } from 'lucide-react';
+import { Instagram, Carrot, MessageCircle } from 'lucide-react';
+import { telHref, type SiteSettings } from '@/lib/site-settings';
 
-export default function Footer() {
+export default function Footer({ settings }: { settings: SiteSettings }) {
   const { language } = useLanguage();
   return (
     <footer className="bg-[#1f2422] text-gray-300 pt-[19px] pb-4 md:pt-[27px] md:pb-6 overflow-hidden">
@@ -29,9 +30,16 @@ export default function Footer() {
             </h3>
             <div className="text-[11px] md:text-[12px] text-gray-400 leading-relaxed font-medium">
               {language === 'KO' ? (
-                <p>주식회사 위트(weet) &nbsp;|&nbsp; 함평군 대동면 금산길 205-27 &nbsp;|&nbsp; 사업자 등록번호 660-86-01862 &nbsp;|&nbsp; 010 9645 2348</p>
+                <p>
+                  주식회사 위트(weet) &nbsp;|&nbsp; 전남 함평군 대동면 금산길 205-27 &nbsp;|&nbsp; 사업자 등록번호 660-86-01862 &nbsp;|&nbsp;{' '}
+                  <a href={telHref(settings.contact_phone)} className="hover:text-white transition-colors">{settings.contact_phone}</a>
+                  {settings.consult_hours && <span> &nbsp;|&nbsp; 상담 {settings.consult_hours}</span>}
+                </p>
               ) : (
-                <p>weet Co., Ltd. (weet) &nbsp;|&nbsp; 205-27, Geumsan-gil, Daedong-myeon, Hampyeong-gun, Jeollanam-do, Republic of Korea <br className="hidden md:block" /> Business Reg. 660-86-01862 &nbsp;|&nbsp; +82-10-9645-2348</p>
+                <p>
+                  weet Co., Ltd. (weet) &nbsp;|&nbsp; 205-27, Geumsan-gil, Daedong-myeon, Hampyeong-gun, Jeollanam-do, Republic of Korea <br className="hidden md:block" /> Business Reg. 660-86-01862 &nbsp;|&nbsp;{' '}
+                  <a href={telHref(settings.contact_phone)} className="hover:text-white transition-colors">{settings.contact_phone}</a>
+                </p>
               )}
             </div>
           </div>
@@ -39,8 +47,19 @@ export default function Footer() {
           {/* Right side - Copyright and Links */}
           <div className="text-left md:text-right space-y-3 flex-shrink-0">
             <div className="flex items-center gap-5 md:justify-end text-gray-300">
+              {settings.kakao_channel_url && (
+                <Link
+                  href={settings.kakao_channel_url}
+                  target="_blank"
+                  className="flex items-center gap-1.5 font-bold hover:text-white hover:scale-110 transition-all duration-200"
+                  aria-label="카카오톡 채널"
+                >
+                  <MessageCircle className="w-5 h-5" />
+                  <span className="text-[13px] pt-0.5">카카오톡</span>
+                </Link>
+              )}
               <Link
-                href="https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/"
+                href={settings.daangn_url}
                 target="_blank"
                 className="flex items-center gap-1.5 font-bold hover:text-white hover:scale-110 transition-all duration-200"
                 aria-label="당근마켓"
@@ -49,7 +68,7 @@ export default function Footer() {
                 <span className="text-[13px] pt-0.5">당근</span>
               </Link>
               <Link
-                href="https://blog.naver.com/we-et"
+                href={settings.naver_blog_url}
                 target="_blank"
                 className="flex items-center gap-1.5 font-bold hover:text-white hover:scale-110 transition-all duration-200"
                 aria-label="네이버 블로그"
@@ -58,7 +77,7 @@ export default function Footer() {
                 <span className="text-[13px] pt-0.5">blog</span>
               </Link>
               <Link
-                href="https://www.instagram.com/weet_kr/"
+                href={settings.instagram_url}
                 target="_blank"
                 className="flex items-center gap-1.5 font-bold hover:text-white hover:scale-110 transition-all duration-200"
                 aria-label="인스타그램"

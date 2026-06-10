@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "프리미엄 모듈러 건축",
+  title: "모듈러주택 공장 제작·설치 과정",
   description:
-    "위트(WEET)의 프리미엄 모듈러 건축. 공장 제작의 정밀함, 예측 가능한 일정, 운송과 크레인 조립을 통한 혁신적인 공간 솔루션을 경험하세요.",
+    "이동식주택이 공장에서 제작되어 현장에 설치되기까지 — 위트(weet)의 모듈러 건축 공정을 단계별로 소개합니다. 공장 제작, 운송, 크레인 설치, 입주 후 관리까지 확인하세요.",
   alternates: {
     canonical: "/modular",
   },
   openGraph: {
     url: "/modular",
-    title: "프리미엄 모듈러 건축",
+    title: "모듈러주택 공장 제작·설치 과정 | 위트(weet)",
     description:
-      "위트(WEET)의 프리미엄 모듈러 건축. 공장 제작의 정밀함, 예측 가능한 일정, 운송과 크레인 조립을 통한 혁신적인 공간 솔루션을 경험하세요.",
+      "이동식주택이 공장에서 제작되어 현장에 설치되기까지의 공정을 단계별로 소개합니다.",
   },
   twitter: {
     card: "summary_large_image",

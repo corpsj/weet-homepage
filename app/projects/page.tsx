@@ -2,22 +2,26 @@ import type { Metadata } from "next";
 import { supabaseAdmin } from "@/lib/supabase";
 import Link from "next/link";
 import Image from "next/image";
-import { CheckCircle2, ClipboardCheck, Factory, MapPinned, ShieldCheck, Truck } from "lucide-react";
+import { ArrowRight, CheckCircle2, ClipboardCheck, Factory, MapPinned, ShieldCheck, Truck } from "lucide-react";
 import type { Project } from "@/types/supabase";
 import { getProjectHeroImage, isPublicReadyProject } from "@/lib/projects/publicProjects";
+import { getPublicGalleryItems } from "@/app/actions/gallery-actions";
+import { getSiteSettings } from "@/lib/site-settings";
 
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: "시공 사례",
-  description: "위트(WEET)의 실제 프로젝트 시공 사례를 소개합니다. 다양한 용도와 규모의 모듈러 건축 프로젝트를 확인하세요.",
+  title: "이동식주택 시공 사례·제작 현장 기록",
+  description:
+    "위트(weet) 이동식주택의 시공 사례와 공장 제작·운송·설치 현장 기록입니다. 검증된 사례만 공개하며, 용접·단열·도장부터 현장 설치까지 실제 작업 과정을 확인하세요.",
   alternates: {
     canonical: "/projects",
   },
   openGraph: {
     url: "/projects",
-    title: "시공 사례",
-    description: "위트(WEET)의 실제 프로젝트 시공 사례를 소개합니다. 다양한 용도와 규모의 모듈러 건축 프로젝트를 확인하세요.",
+    title: "이동식주택 시공 사례·제작 현장 기록 | 위트(weet)",
+    description:
+      "위트(weet) 이동식주택의 시공 사례와 공장 제작·운송·설치 현장 기록입니다. 실제 작업 과정을 확인하세요.",
   },
 };
 
@@ -60,11 +64,19 @@ const proofModules = [
   },
 ];
 
+function cleanGalleryTitle(title: string) {
+  return title.replace(/\s*:\)\s*$/u, '').trim();
+}
+
 export default async function ProjectsPage() {
-  const { data: projects } = await supabaseAdmin
-    .from("projects")
-    .select("*")
-    .order("completed_at", { ascending: false });
+  const [{ data: projects }, galleryItems, settings] = await Promise.all([
+    supabaseAdmin
+      .from("projects")
+      .select("*")
+      .order("completed_at", { ascending: false }),
+    getPublicGalleryItems(12),
+    getSiteSettings(),
+  ]);
 
   const publicProjects = ((projects as Project[] | null) ?? []).filter(isPublicReadyProject);
 
@@ -132,7 +144,8 @@ export default async function ProjectsPage() {
                 <p className="text-sm font-black text-gray-500">PUBLIC PROJECTS</p>
                 <h2 className="mt-3 text-2xl font-black text-gray-900">검수 완료 사례만 공개합니다</h2>
                 <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-gray-600">
-                  현재 공개 가능한 프로젝트 사진은 정리 중이지만, 테스트 데이터나 사진이 부족한 사례를 구매 판단 영역에 노출하지 않습니다. 대신 위트가 실제로 확인하는 제작·검수·운반 기준을 먼저 보여드립니다.
+                  사진과 현장 정보가 검증된 사례만 이 영역에 올립니다. 사례 페이지가 채워지기 전에는, 아래에서 위트 공장과 설치
+                  현장에서 직접 기록한 사진과 제작·검수·운반 기준을 먼저 확인하실 수 있습니다.
                 </p>
               </div>
 
@@ -178,6 +191,47 @@ export default async function ProjectsPage() {
             </div>
           )}
         </div>
+
+        {galleryItems.length > 0 && (
+          <section className="mt-16 lg:mt-24">
+            <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+              <div>
+                <p className="text-sm font-black text-gray-500">RECORDS · 현장 기록</p>
+                <h2 className="mt-2 text-2xl font-black text-gray-900 md:text-3xl">제작·설치 현장에서 직접 찍었습니다</h2>
+                <p className="mt-3 max-w-2xl text-sm leading-7 text-gray-600">
+                  렌더링이 아닌 실제 기록입니다. 용접, 단열, 도장, 운송, 설치까지 — 위트 공장과 현장에서 일하는 방식 그대로
+                  보여드립니다.
+                </p>
+              </div>
+              <div className="flex items-center gap-4 text-sm font-bold">
+                <a href={settings.naver_blog_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-gray-700 hover:text-gray-900">
+                  네이버 블로그
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </a>
+                <a href={settings.instagram_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-gray-700 hover:text-gray-900">
+                  인스타그램
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </a>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 lg:gap-4">
+              {galleryItems.map((item) => (
+                <figure key={item.id} className="group relative aspect-square overflow-hidden rounded-lg bg-gray-100">
+                  <Image
+                    src={item.image_url}
+                    alt={cleanGalleryTitle(item.title)}
+                    fill
+                    sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent p-3 pt-8 text-xs font-bold text-white">
+                    {cleanGalleryTitle(item.title)}
+                  </figcaption>
+                </figure>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </main>
   );

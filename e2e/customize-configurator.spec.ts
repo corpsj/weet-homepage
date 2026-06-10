@@ -82,15 +82,15 @@ test.describe('Customize configurator', () => {
     await page.goto('/customize');
     await page.waitForLoadState('networkidle');
 
-    await page.getByRole('button', { name: '주문하기' }).last().click();
+    await page.getByRole('button', { name: '상담·견적 요청' }).last().click();
 
-    const dialog = page.getByRole('dialog', { name: '주문하기' });
+    const dialog = page.getByRole('dialog', { name: '구성 상담·견적 요청' });
     await expect(dialog).toBeVisible();
     await expect(dialog.getByText('운반/설치 별도')).toBeVisible();
     await expect(dialog.getByText('이름')).toBeVisible();
     await expect(dialog.getByText('연락처')).toBeVisible();
     await expect(dialog.locator('label').filter({ hasText: '지역' })).toBeVisible();
-    await expect(dialog.getByText('선택 입력이지만 알려주시면 더 정확한 주문 구성에 도움이 됩니다. 아직 정해지지 않았다면 비워두셔도 됩니다.')).toBeVisible();
+    await expect(dialog.getByText('선택 입력이지만 알려주시면 더 정확한 견적 안내에 도움이 됩니다. 아직 정해지지 않았다면 비워두셔도 됩니다.')).toBeVisible();
     await expect(dialog.getByText('생산·설치 일정 제안에만 참고합니다.')).toBeVisible();
   });
 
@@ -104,13 +104,13 @@ test.describe('Customize configurator', () => {
       await page.goto('/customize');
       await page.waitForLoadState('networkidle');
 
-      await page.getByRole('button', { name: '주문하기' }).last().click();
+      await page.getByRole('button', { name: '상담·견적 요청' }).last().click();
       await page.getByTestId('consultation-name').fill(uniqueName);
       await page.getByTestId('consultation-phone').fill(uniquePhone);
       await page.getByTestId('consultation-region').fill('테스트 지역');
       await page.getByTestId('consultation-submit').click();
 
-      await expect(page.getByText('주문 요청이 접수되었습니다.')).toBeVisible({ timeout: 15000 });
+      await expect(page.getByText('상담 신청이 접수되었습니다. 입력하신 연락처로 안내드리겠습니다.')).toBeVisible({ timeout: 15000 });
 
       await expect.poll(async () => {
         const { count } = await serviceClient!

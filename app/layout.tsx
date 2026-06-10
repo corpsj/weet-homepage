@@ -17,8 +17,9 @@ const metadataBase = (() => {
   }
 })();
 
-const defaultTitle = "위트(weet) - 시스템 건축 전문 기업";
-const defaultDescription = "시스템 건축 전문 기업 위트(weet)";
+const defaultTitle = "위트(weet) — 이동식주택·모듈러주택 제작 전문";
+const defaultDescription =
+  "공장에서 제작해 현장에 설치하는 이동식주택 전문 기업 위트(weet). 3x6·3x9 모듈러주택을 직접 구성하고 기본 가격을 확인한 뒤, 운반·설치 조건까지 투명하게 상담받으세요.";
 const siteOrigin = metadataBase.origin;
 
 export const metadata: Metadata = {
@@ -34,10 +35,16 @@ export const metadata: Metadata = {
   keywords: [
     "위트",
     "weet",
-    "시스템 건축",
-    "시스템주택",
-    "프리패브",
+    "이동식주택",
+    "이동식주택 가격",
+    "이동식주택 제작",
+    "모듈러주택",
+    "농막",
+    "농촌체류형 쉼터",
+    "세컨하우스",
+    "소형주택",
     "유닛하우스",
+    "프리패브",
   ],
   openGraph: {
     type: "website",
@@ -92,11 +99,14 @@ import { cn } from "@/lib/utils";
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 
-export default function RootLayout({
+import { getSiteSettings } from "@/lib/site-settings";
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const siteSettings = await getSiteSettings();
   const organizationId = `${siteOrigin}/#organization`;
   const websiteId = `${siteOrigin}/#website`;
 
@@ -134,6 +144,25 @@ export default function RootLayout({
         "@id": organizationId,
       },
     },
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "@id": `${siteOrigin}/#localbusiness`,
+      name: "위트(weet)",
+      description: "이동식주택·모듈러주택 제작 전문 기업",
+      url: siteOrigin,
+      telephone: "+82-10-9645-2348",
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: "대동면 금산길 205-27",
+        addressLocality: "함평군",
+        addressRegion: "전라남도",
+        addressCountry: "KR",
+      },
+      parentOrganization: {
+        "@id": organizationId,
+      },
+    },
   ];
 
   return (
@@ -146,7 +175,7 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen flex flex-col">
         <LanguageProvider>
-          <ClientLayout>{children}</ClientLayout>
+          <ClientLayout settings={siteSettings}>{children}</ClientLayout>
         </LanguageProvider>
         <Analytics />
         {process.env.NEXT_PUBLIC_GA_ID && (
