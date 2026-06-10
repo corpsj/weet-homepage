@@ -69,7 +69,8 @@ test.describe('Customize configurator', () => {
 
     await page.getByTestId('customize-step-smart').click();
     await page.getByRole('button', { name: /태양광 패널/ }).click();
-    await expect(page.getByText('협의').first()).toBeVisible();
+    // 모바일 인라인 패널(lg:hidden)에도 동일 칩이 DOM에 남아 있으므로 데스크톱 aside로 한정한다.
+    await expect(page.locator('aside').getByText('협의').first()).toBeVisible();
     await expect(page).toHaveURL(/\/customize\?c=/);
 
     await page.getByTestId('customize-step-space').click();
@@ -138,20 +139,19 @@ test.describe('Customize configurator', () => {
     }
   });
 
-  test('mobile option drawer is available before order CTA', async ({ page }) => {
+  test('mobile inline step configurator replaces the option drawer', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/customize');
     await page.waitForLoadState('networkidle');
 
-    await page.getByRole('button', { name: '옵션 구성' }).click();
+    // 옵션 구성은 드로어가 아니라 도면 아래 인라인 패널에서 바로 진행된다.
+    await expect(page.getByRole('button', { name: '옵션 구성' })).toHaveCount(0);
+    await expect(page.getByRole('dialog')).toHaveCount(0);
 
-    const drawer = page.getByRole('dialog').filter({ hasText: '이동식주택 구성' });
-    await expect(drawer).toBeVisible();
-
-    await drawer.getByTestId('customize-step-mood').click();
-    await expect(drawer.getByTestId('customize-step-mood')).toHaveAttribute('aria-current', 'step');
-    await expect(drawer.getByRole('heading', { name: '외장' })).toBeVisible();
-    await drawer.getByRole('button', { name: /적삼목 포인트/ }).click();
+    await page.getByTestId('customize-step-mood').click();
+    await expect(page.getByTestId('customize-step-mood')).toHaveAttribute('aria-current', 'step');
+    await expect(page.getByRole('heading', { name: '외장' })).toBeVisible();
+    await page.getByRole('button', { name: /적삼목 포인트/ }).click();
     await expect(page.getByText('₩30,100,000', { exact: true })).toBeVisible();
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
   });
@@ -183,10 +183,7 @@ test.describe('Customize configurator', () => {
       await page.goto('/customize');
       await page.waitForLoadState('networkidle');
 
-      await page.getByRole('button', { name: '옵션 구성' }).click();
-      const drawer = page.getByRole('dialog').filter({ hasText: '이동식주택 구성' });
-      await drawer.getByRole('button', { name: /Standard 3x9/ }).click();
-      await drawer.getByRole('button', { name: /닫기|Close/ }).click();
+      await page.getByRole('button', { name: /Standard 3x9/ }).click();
 
       await expect(page.getByRole('heading', { level: 1, name: 'Standard 3x9' })).toBeVisible();
       await expect(page.getByText('₩34,900,000', { exact: true })).toBeVisible();

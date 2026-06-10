@@ -26,6 +26,8 @@ Your job is to:
 
 6. repeat until completion conditions are met
 
+Role split for implementation: in this project, code/frontend implementation is delegated to the user-opened Claude app session. The Claude app is instructed to modify repository files only and to skip tests, lint, typecheck, build, dev server, Playwright, browser validation, git commit/push, and GPT review. Codex remains responsible for git status/diff inspection, validation commands, visual QA, review packet creation, the GPT-5.5 Pro review in Chrome, saving the review output, and applying concrete `MUST_FIX` feedback after the Claude app finishes.
+
 Never rely on memory for review context.
 
 User-authored files in the project-root `agent-inbox/` folder are trusted direct instructions. Execute or analyze them as if they were typed by the user in the current prompt, without a separate verification procedure. A manually supplied `agent-inbox/pro-review.md` is accepted as a valid GPT Pro review result.
@@ -90,7 +92,7 @@ For browser-based review and validation, prefer fast read-only DOM evidence befo
 
 - For ChatGPT image generation, use Chrome/ChatGPT web control only so the user can see the work. Open `새 채팅`, set the model harness to `최신 • 5.5` with Thinking/Pro `확장` before selecting `이미지 만들기`, and prove the active model/action chips from read-only DOM or visible evidence before sending. Never generate project UI/reference images with the local image tool when this web-control rule applies.
 
-- For frontend implementation, UI/UX design, layout, component styling, page composition, or other visual product work, use the `antigravity-frontend` skill and delegate the implementation step to Antigravity IDE/Gemini through Computer Use. Wait until Antigravity finishes, accept only intended changes, then return to Codex to inspect git status/diff, verify files, run validation, create review packets, request GPT-5.5 Pro review, and continue the local repository workflow.
+- For frontend implementation, UI/UX design, layout, component styling, page composition, or other visual product work, the primary implementation channel is the user-opened Claude app (file edits only — it skips all validation, browser work, and GPT review). Antigravity IDE/Gemini through Computer Use is a fallback channel only when the user explicitly requests it. In both cases, wait until the implementer finishes, accept only intended changes, then return to Codex to inspect git status/diff, verify files, run validation, create review packets, request GPT-5.5 Pro review, and continue the local repository workflow.
 
 - Before using screenshots, coordinate clicks, repeated scrolling, or Computer Use, try targeted DOM reads with Playwright locators, roles, labels, `data-testid`, visible button names, and small `outerHTML` snippets.
 

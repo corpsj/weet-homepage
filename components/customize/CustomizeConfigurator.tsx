@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { toast } from 'sonner';
 import {
   ArrowLeft,
+  ArrowRight,
   Check,
   ChevronDown,
   Download,
@@ -16,14 +17,12 @@ import {
   Maximize2,
   PhoneCall,
   Send,
-  SlidersHorizontal,
   X,
   ShieldCheck,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Textarea } from '@/components/ui/textarea';
 import { submitCustomizeConsultation } from '@/app/actions/customize-actions';
 import {
@@ -191,7 +190,7 @@ function useFloorplanImageStatus(path: string | null): FloorplanImageStatus {
 function StepperBar({ currentStep, setCurrentStep, stepCounts }: { currentStep: ConfigStep; setCurrentStep: (step: ConfigStep) => void; stepCounts: Record<ConfigStep, number> }) {
   const stepIndex = STEPS.findIndex((s) => s.id === currentStep);
   return (
-    <div className="border-b border-[#d8d0c3] bg-[#fbfaf7]/95 px-4 py-3 backdrop-blur lg:px-10">
+    <div className="sticky top-14 z-30 border-b border-[#d8d0c3] bg-[#fbfaf7]/95 px-4 py-2.5 backdrop-blur md:top-16 lg:static lg:py-3 lg:px-10">
       <div className="mx-auto flex max-w-[1800px] w-full gap-1 rounded-lg bg-[#efe6d4] p-1">
         {STEPS.map((step, index) => {
           const isCurrent = currentStep === step.id;
@@ -237,7 +236,6 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
   const [activeInfo, setActiveInfo] = useState<CustomizeOption | null>(null);
   const [currentStep, setCurrentStep] = useState<ConfigStep>('space');
   const [orderOpen, setOrderOpen] = useState(false);
-  const [optionDrawerOpen, setOptionDrawerOpen] = useState(false);
   const [planViewerOpen, setPlanViewerOpen] = useState(false);
   const [shouldSyncConfigUrl, setShouldSyncConfigUrl] = useState(Boolean(decoded));
   const [isPending, startTransition] = useTransition();
@@ -301,6 +299,14 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
     setSelectedOptions((current) => toggleOptionSelection({ catalog, selectedOptions: current, category, option }));
   };
 
+  const handleStepSelect = (step: ConfigStep) => {
+    setCurrentStep(step);
+    // 모바일/태블릿 인라인 구성에서는 단계 전환 시 도면 아래 옵션 영역으로 바로 이동한다.
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      document.getElementById('customize-options')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   const handleSubmit = () => {
     const payload: ConsultationFormInput = {
       modelId,
@@ -358,11 +364,11 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
   return (
     <div className="min-h-dvh bg-[#f4f0e8] text-[#2f3432]">
       <ConfiguratorAppBar contactPhone={contactPhone} />
-      <StepperBar currentStep={currentStep} setCurrentStep={setCurrentStep} stepCounts={stepCounts} />
+      <StepperBar currentStep={currentStep} setCurrentStep={handleStepSelect} stepCounts={stepCounts} />
 
-      <div className="mx-auto flex min-h-[calc(100dvh-64px)] max-w-[1800px] flex-col lg:flex-row">
-        <section className="flex min-h-[calc(100dvh-190px)] flex-1 flex-col lg:w-[64%] lg:min-h-[calc(100dvh-64px)] lg:overflow-y-auto">
-          <div className="flex flex-1 items-center justify-center px-4 py-8 md:px-8 lg:px-10">
+      <div className="mx-auto flex max-w-[1800px] flex-col lg:min-h-[calc(100dvh-64px)] lg:flex-row">
+        <section className="flex flex-col lg:min-h-[calc(100dvh-64px)] lg:flex-1 lg:overflow-y-auto">
+          <div className="flex items-center justify-center px-4 py-5 md:px-8 md:py-8 lg:flex-1 lg:px-10">
             <FloorplanPreview
               model={currentModel}
               selectedOptions={selectedOptionsList}
@@ -371,22 +377,25 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
               onOpenViewer={() => setPlanViewerOpen(true)}
             />
           </div>
-
-          <div className="border-t border-[#d8d0c3] bg-[#eee8dc]/80 px-4 pb-28 pt-3 lg:hidden">
-            <Button
-              variant="outline"
-              className="h-11 w-full border-[#cfc4b3] bg-[#fbfaf7] text-[#2f3432]"
-              onClick={() => setOptionDrawerOpen(true)}
-            >
-              <SlidersHorizontal className="h-4 w-4" />
-              옵션 구성
-            </Button>
-          </div>
-
-
         </section>
 
-        <aside className="hidden border-l border-[#d8d0c3] bg-[#fbfaf7] lg:block lg:w-[36%]">
+        {/* 모바일/태블릿: 드로어 없이 도면 아래에서 바로 이어지는 인라인 단계 구성 (Tesla 주문 흐름 참고) */}
+        <div id="customize-options" className="scroll-mt-[120px] border-t border-[#d8d0c3] bg-[#fbfaf7] md:scroll-mt-[132px] lg:hidden">
+          <OptionsPanel
+            catalog={catalog}
+            modelId={modelId}
+            selectedOptions={selectedOptions}
+            visibleOptions={visibleOptions}
+            onModelChange={handleModelChange}
+            onOptionToggle={handleOptionToggle}
+            onInfo={setActiveInfo}
+            currentStep={currentStep}
+            setCurrentStep={setCurrentStep}
+            inline
+          />
+        </div>
+
+        <aside className="hidden shrink-0 border-l border-[#d8d0c3] bg-[#fbfaf7] lg:block lg:w-[400px] xl:w-[460px]">
           <OptionsPanel
             catalog={catalog}
             modelId={modelId}
@@ -401,7 +410,7 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
         </aside>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[#d8d0c3] bg-[#fbfaf7]/95 px-4 py-3 shadow-[0_-8px_30px_rgba(55,48,39,0.12)] backdrop-blur">
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-[#d8d0c3] bg-[#fbfaf7]/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-8px_30px_rgba(55,48,39,0.12)] backdrop-blur">
         <div className="mx-auto flex max-w-[1800px] items-center justify-between gap-4 lg:px-6">
           <div>
             <p className="text-xs font-semibold text-[#7b7468]">예상 총액</p>
@@ -419,29 +428,6 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
           </Button>
         </div>
       </div>
-
-      <Sheet open={optionDrawerOpen} onOpenChange={setOptionDrawerOpen}>
-        <SheetContent side="bottom" className="max-h-[86dvh] overflow-hidden rounded-t-lg border-[#d8d0c3] bg-[#fbfaf7] p-0">
-          <SheetHeader className="border-b border-[#e2dacd]">
-            <SheetTitle>옵션 구성</SheetTitle>
-          </SheetHeader>
-          <div className="h-[calc(86dvh-65px)] overflow-y-auto">
-            <StepperBar currentStep={currentStep} setCurrentStep={setCurrentStep} stepCounts={stepCounts} />
-            <OptionsPanel
-              catalog={catalog}
-              modelId={modelId}
-              selectedOptions={selectedOptions}
-              visibleOptions={visibleOptions}
-              onModelChange={handleModelChange}
-              onOptionToggle={handleOptionToggle}
-              onInfo={setActiveInfo}
-              currentStep={currentStep}
-              setCurrentStep={setCurrentStep}
-              compact
-            />
-          </div>
-        </SheetContent>
-      </Sheet>
 
       {activeInfo && <OptionInfoModal option={activeInfo} onClose={() => setActiveInfo(null)} />}
 
@@ -509,7 +495,7 @@ function OptionsPanel({
   onInfo,
   currentStep,
   setCurrentStep,
-  compact = false,
+  inline = false,
 }: {
   catalog: CustomizeCatalog;
   modelId: string;
@@ -520,120 +506,185 @@ function OptionsPanel({
   onInfo: (option: CustomizeOption) => void;
   currentStep: ConfigStep;
   setCurrentStep: (step: ConfigStep) => void;
-  compact?: boolean;
+  inline?: boolean;
 }) {
   const currentStepData = STEPS.find((s) => s.id === currentStep)!;
   const stepIndex = STEPS.findIndex((s) => s.id === currentStep);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const goToStep = (step: ConfigStep) => {
+    setCurrentStep(step);
+    if (inline) {
+      // 인라인 모드는 문서 스크롤을 사용하므로 sticky 앱바/스테퍼 높이만큼 띄워 패널 상단으로 복귀한다.
+      scrollRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      scrollRef.current?.scrollTo({ top: 0 });
+    }
+  };
+
+  const stepBody = (
+    <>
+      {currentStep === 'space' && (
+        <section className="mb-6">
+          <CategoryHeading title="공간 모델" amount={0} icon={<Layers className="h-4 w-4" />} />
+          <p className="mb-3 mt-1 text-xs leading-5 text-[#756d61]">설치할 공간의 크기와 목적에 맞는 모델을 선택하세요.</p>
+          <div className="grid gap-2">
+            {catalog.models.map((model) => (
+              <button
+                key={model.id}
+                type="button"
+                onClick={() => onModelChange(model.id)}
+                className={cn(
+                  'rounded-lg border p-3 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26]',
+                  model.id === modelId
+                    ? 'border-[#2f3432] bg-[#efe6d4] shadow-sm'
+                    : 'border-[#ded5c8] bg-[#fbfaf7] hover:border-[#b9aa94]'
+                )}
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <p className="text-sm font-black text-[#2f3432]">{model.nameKo}</p>
+                      <span className="rounded-full bg-[#e2dacd] px-2 py-0.5 text-[10px] font-bold text-[#6b5a2b]">
+                        {model.id === 'compact-3x6' ? '소형 주말주택' : '프리미엄 거주'}
+                      </span>
+                    </div>
+                    <p className="mt-0.5 text-xs text-[#756d61]">{model.widthM}m x {model.lengthM}m · {model.areaSqm}m²</p>
+                  </div>
+                  {model.id === modelId && <Check className="h-4 w-4 shrink-0 text-[#2f3432]" />}
+                </div>
+                <p className="mt-2 text-sm font-bold text-[#6b5a2b]">{formatModelStartPrice(model.basePrice)}</p>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {(currentStep === 'included' || currentStep === 'mood' || currentStep === 'smart') && (
+        <>
+          {currentStep === 'included' && (
+            <div className="mb-5 rounded-lg bg-[#efe6d4]/50 p-3">
+              <div className="mb-1.5 flex items-center gap-2">
+                <ShieldCheck className="h-4 w-4 text-[#8a806f]" />
+                <p className="text-sm font-bold text-[#2f3432]">위트 기본 포함 내역</p>
+              </div>
+              <p className="text-xs leading-relaxed text-[#756d61]">
+                골조, 단열, 내/외장재, 바닥재, 도어, 창호, 싱크대 등 생활에 필요한 필수 구성요소가 기본 가격에 포함되어 있습니다.
+              </p>
+            </div>
+          )}
+
+          {catalog.categories
+            .filter((category) => currentStepData.categories?.includes(category.key))
+            .map((category) => {
+              const options = visibleOptions.filter((option) => option.categoryId === category.id);
+              if (options.length === 0) {
+                return (
+                  <section key={category.id} className="mb-6">
+                    <CategoryHeading title={category.nameKo} amount={0} icon={<Layers className="h-4 w-4" />} />
+                    <div className="mt-2 flex items-center justify-center rounded-lg border border-dashed border-[#ded5c8] bg-[#fbfaf7] py-6">
+                      <p className="text-sm text-[#8a806f]">현재 선택 가능한 옵션이 없습니다.</p>
+                    </div>
+                  </section>
+                );
+              }
+
+              const amount = options
+                .filter((option) => selectedOptions[category.id]?.includes(option.id))
+                .reduce((sum, option) => sum + (option.priceType === 'fixed' ? option.price : 0), 0);
+              const meta = CATEGORY_META[category.key as keyof typeof CATEGORY_META];
+              const Icon = meta?.icon ?? Layers;
+
+              const sortedOptions = [...options].sort((a, b) => {
+                if (a.priceType === 'included' && b.priceType !== 'included') return -1;
+                if (a.priceType !== 'included' && b.priceType === 'included') return 1;
+                if (a.isDefault && !b.isDefault) return -1;
+                if (!a.isDefault && b.isDefault) return 1;
+                return 0;
+              });
+
+              return (
+                <section key={category.id} className="mb-6 scroll-mt-20">
+                  <CategoryHeading title={category.nameKo} amount={amount} icon={<Icon className={cn('h-4 w-4', meta?.tone)} />} />
+                  {category.descriptionKo && <p className="mt-1 text-xs leading-5 text-[#756d61]">{category.descriptionKo}</p>}
+                  <div className="mt-2 grid gap-1.5">
+                    {sortedOptions.map((option) => (
+                      <OptionCard
+                        key={option.id}
+                        option={option}
+                        selected={selectedOptions[category.id]?.includes(option.id) ?? false}
+                        onToggle={() => onOptionToggle(category, option)}
+                        onInfo={() => onInfo(option)}
+                      />
+                    ))}
+                  </div>
+                </section>
+              );
+            })}
+        </>
+      )}
+
+      <StepFooterNav stepIndex={stepIndex} goToStep={goToStep} />
+    </>
+  );
+
+  if (inline) {
+    return (
+      <div ref={scrollRef} className="scroll-mt-[120px] md:scroll-mt-[132px]">
+        <div className="mx-auto w-full max-w-xl px-4 pb-44 pt-5 md:px-6">
+          {stepBody}
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={cn('flex h-full flex-col pb-28', compact ? '' : 'h-[calc(100dvh-64px)] overflow-hidden')}>
-      <div className="sticky top-0 z-10 border-b border-[#d8d0c3] bg-[#fbfaf7]/95 px-4 py-4 backdrop-blur md:px-8">
+    <div className="flex h-[calc(100dvh-64px)] flex-col overflow-hidden">
+      <div className="border-b border-[#d8d0c3] bg-[#fbfaf7]/95 px-5 py-3 backdrop-blur">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-black text-[#2f3432]">이동식주택 구성</h2>
+          <h2 className="text-lg font-black text-[#2f3432]">이동식주택 구성</h2>
           <span className="text-xs font-bold text-[#8a806f]">{stepIndex + 1} / {STEPS.length} 단계</span>
         </div>
       </div>
 
-      <div className={cn('flex-1 overflow-y-auto', compact ? 'px-4 py-4' : 'px-8 py-6')}>
-        {currentStep === 'space' && (
-          <section className="mb-8">
-            <CategoryHeading title="공간 모델" amount={0} icon={<Layers className="h-4 w-4" />} />
-            <p className="mb-4 mt-1 text-sm text-[#756d61]">설치할 공간의 크기와 목적에 맞는 모델을 선택하세요.</p>
-            <div className="grid gap-3">
-              {catalog.models.map((model) => (
-                <button
-                  key={model.id}
-                  type="button"
-                  onClick={() => onModelChange(model.id)}
-                  className={cn(
-                    'min-h-[96px] rounded-lg border p-4 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26]',
-                    model.id === modelId
-                      ? 'border-[#2f3432] bg-[#efe6d4] shadow-sm'
-                      : 'border-[#ded5c8] bg-[#fbfaf7] hover:border-[#b9aa94]'
-                  )}
-                >
-                  <div className="flex items-start justify-between gap-4">
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <p className="text-base font-black text-[#2f3432]">{model.nameKo}</p>
-                        <span className="rounded-full bg-[#e2dacd] px-2 py-0.5 text-[10px] font-bold text-[#6b5a2b]">
-                          {model.id === 'compact-3x6' ? '소형 주말주택' : '프리미엄 거주'}
-                        </span>
-                      </div>
-                      <p className="mt-1 text-sm text-[#756d61]">{model.widthM}m x {model.lengthM}m · {model.areaSqm}m²</p>
-                    </div>
-                    {model.id === modelId && <Check className="h-5 w-5 text-[#2f3432]" />}
-                  </div>
-                  <p className="mt-4 text-sm font-bold text-[#6b5a2b]">{formatModelStartPrice(model.basePrice)}</p>
-                </button>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {(currentStep === 'included' || currentStep === 'mood' || currentStep === 'smart') && (
-          <>
-            {currentStep === 'included' && (
-              <div className="mb-6 rounded-lg bg-[#efe6d4]/50 p-4">
-                <div className="mb-2 flex items-center gap-2">
-                  <ShieldCheck className="h-4 w-4 text-[#8a806f]" />
-                  <p className="text-sm font-bold text-[#2f3432]">위트 기본 포함 내역</p>
-                </div>
-                <p className="text-xs leading-relaxed text-[#756d61]">
-                  골조, 단열, 내/외장재, 바닥재, 도어, 창호, 싱크대 등 생활에 필요한 필수 구성요소가 기본 가격에 포함되어 있습니다.
-                </p>
-              </div>
-            )}
-
-            {catalog.categories
-              .filter((category) => currentStepData.categories?.includes(category.key))
-              .map((category) => {
-                const options = visibleOptions.filter((option) => option.categoryId === category.id);
-                if (options.length === 0) {
-                  return (
-                    <section key={category.id} className="mb-8">
-                      <CategoryHeading title={category.nameKo} amount={0} icon={<Layers className="h-4 w-4" />} />
-                      <div className="mt-3 flex items-center justify-center rounded-lg border border-dashed border-[#ded5c8] bg-[#fbfaf7] py-8">
-                        <p className="text-sm text-[#8a806f]">현재 선택 가능한 옵션이 없습니다.</p>
-                      </div>
-                    </section>
-                  );
-                }
-
-                const amount = options
-                  .filter((option) => selectedOptions[category.id]?.includes(option.id))
-                  .reduce((sum, option) => sum + (option.priceType === 'fixed' ? option.price : 0), 0);
-                const meta = CATEGORY_META[category.key as keyof typeof CATEGORY_META];
-                const Icon = meta?.icon ?? Layers;
-
-                const sortedOptions = [...options].sort((a, b) => {
-                  if (a.priceType === 'included' && b.priceType !== 'included') return -1;
-                  if (a.priceType !== 'included' && b.priceType === 'included') return 1;
-                  if (a.isDefault && !b.isDefault) return -1;
-                  if (!a.isDefault && b.isDefault) return 1;
-                  return 0;
-                });
-
-                return (
-                  <section key={category.id} className="mb-8 scroll-mt-20">
-                    <CategoryHeading title={category.nameKo} amount={amount} icon={<Icon className={cn('h-4 w-4', meta?.tone)} />} />
-                    {category.descriptionKo && <p className="mt-1 text-sm leading-6 text-[#756d61]">{category.descriptionKo}</p>}
-                    <div className="mt-3 grid gap-2">
-                      {sortedOptions.map((option) => (
-                        <OptionCard
-                          key={option.id}
-                          option={option}
-                          selected={selectedOptions[category.id]?.includes(option.id) ?? false}
-                          onToggle={() => onOptionToggle(category, option)}
-                          onInfo={() => onInfo(option)}
-                        />
-                      ))}
-                    </div>
-                  </section>
-                );
-              })}
-          </>
-        )}
+      <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-5 pb-32">
+        {stepBody}
       </div>
+    </div>
+  );
+}
+
+function StepFooterNav({ stepIndex, goToStep }: { stepIndex: number; goToStep: (step: ConfigStep) => void }) {
+  const prevStep = stepIndex > 0 ? STEPS[stepIndex - 1] : null;
+  const nextStep = stepIndex < STEPS.length - 1 ? STEPS[stepIndex + 1] : null;
+
+  return (
+    <div className="mt-3 flex items-center gap-2">
+      {prevStep && (
+        <Button
+          variant="outline"
+          data-testid="customize-step-prev"
+          className="h-11 flex-1 border-[#cfc4b3] bg-[#fbfaf7] text-[#2f3432]"
+          onClick={() => goToStep(prevStep.id)}
+        >
+          <ArrowLeft className="h-4 w-4" />
+          {prevStep.label}
+        </Button>
+      )}
+      {nextStep ? (
+        <Button
+          data-testid="customize-step-next"
+          className="h-11 flex-[1.4] bg-[#2f3432] text-[#fbfaf7] hover:bg-[#1f2422]"
+          onClick={() => goToStep(nextStep.id)}
+        >
+          다음: {nextStep.label}
+          <ArrowRight className="h-4 w-4" />
+        </Button>
+      ) : (
+        <p className="flex-1 text-center text-xs leading-5 text-[#8a806f]">
+          구성이 끝났다면 아래의 상담·견적 요청으로 이어가세요.
+        </p>
+      )}
     </div>
   );
 }
@@ -642,10 +693,10 @@ function CategoryHeading({ title, amount, icon }: { title: string; amount: numbe
   return (
     <div className="flex items-center justify-between gap-3">
       <div className="flex items-center gap-2">
-        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#efe6d4] text-[#2f3432]">{icon}</span>
-        <h3 className="text-base font-black text-[#2f3432]">{title}</h3>
+        <span className="flex h-7 w-7 items-center justify-center rounded-md bg-[#efe6d4] text-[#2f3432]">{icon}</span>
+        <h3 className="text-sm font-black text-[#2f3432]">{title}</h3>
       </div>
-      <p className="text-sm font-bold text-[#7a6a3a]">{amount > 0 ? formatWon(amount) : '포함'}</p>
+      <p className="text-xs font-bold text-[#7a6a3a]">{amount > 0 ? formatWon(amount) : '포함'}</p>
     </div>
   );
 }
@@ -671,27 +722,27 @@ function OptionCard({
       <button
         type="button"
         onClick={onToggle}
-        className="flex min-h-[52px] w-full items-center gap-3 rounded-lg p-3 pr-11 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26]"
+        className="flex min-h-[44px] w-full items-center gap-2.5 rounded-lg px-2.5 py-2 pr-9 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26]"
         aria-pressed={selected}
       >
         <span
           className={cn(
-            'flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors',
+            'flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition-colors',
             selected ? 'border-[#0d6e66] bg-[#0d6e66] text-white' : 'border-[#bcb2a3] bg-[#fbfaf7] group-hover:border-[#8a806f]'
           )}
         >
-          {selected && <Check className="h-3.5 w-3.5" />}
+          {selected && <Check className="h-3 w-3" />}
         </span>
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between gap-2">
-            <span className="truncate font-bold text-[#2f3432]">{option.nameKo}</span>
+            <span className="truncate text-sm font-bold text-[#2f3432]">{option.nameKo}</span>
             <div className="flex shrink-0 items-center gap-2">
               {option.priceType === 'included' ? (
-                <span className="rounded bg-[#efe6d4]/50 px-1.5 py-0.5 text-[11px] font-black text-[#8a806f]">
+                <span className="rounded bg-[#efe6d4]/50 px-1.5 py-0.5 text-[10px] font-black text-[#8a806f]">
                   기본 포함
                 </span>
               ) : option.priceType === 'consult' ? (
-                <span className="rounded bg-[#f4f0e8] px-1.5 py-0.5 text-[11px] font-black text-[#a56f16]">협의</span>
+                <span className="rounded bg-[#f4f0e8] px-1.5 py-0.5 text-[10px] font-black text-[#a56f16]">협의</span>
               ) : (
                 <span className="text-xs font-bold text-[#6d5b2b]">
                   +{formatOptionPrice(option)}
@@ -700,7 +751,7 @@ function OptionCard({
             </div>
           </div>
           {option.shortDescriptionKo && (
-            <span className="mt-0.5 block truncate text-xs text-[#8a806f]">{option.shortDescriptionKo}</span>
+            <span className="mt-0.5 block truncate text-[11px] text-[#8a806f]">{option.shortDescriptionKo}</span>
           )}
         </div>
       </button>
@@ -712,7 +763,7 @@ function OptionCard({
             event.stopPropagation();
             onInfo();
           }}
-          className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1 text-[#8a806f] opacity-100 transition-opacity hover:text-[#2f3432] focus:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26] md:opacity-0 md:group-hover:opacity-100"
+          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-[#8a806f] opacity-100 transition-opacity hover:text-[#2f3432] focus:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26] md:opacity-0 md:group-hover:opacity-100"
           aria-label="옵션 상세 보기"
         >
           <Info className="h-4 w-4" />

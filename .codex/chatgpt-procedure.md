@@ -1,5 +1,7 @@
 # ChatGPT Pro Review Procedure
 
+Scope note: this procedure is executed by Codex only. The user-opened Claude app handles code implementation as file edits only and must skip Chrome/ChatGPT review, validation commands, and all browser control.
+
 ## Two-Track Chrome/ChatGPT Harness
 
 Use one Chrome ChatGPT tab by default, but start a new chat for every separate run.

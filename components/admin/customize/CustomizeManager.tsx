@@ -3,9 +3,23 @@
 import { useEffect, useMemo, useState, useTransition, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { Eye, EyeOff, Loader2, Plus, Save, Trash2 } from 'lucide-react';
+import {
+  AlertTriangle,
+  Boxes,
+  Eye,
+  EyeOff,
+  FolderTree,
+  Image as ImageIcon,
+  Loader2,
+  PackageCheck,
+  Plus,
+  Save,
+  SlidersHorizontal,
+  Trash2,
+  type LucideIcon,
+} from 'lucide-react';
 import ImageUpload from '@/components/admin/media/ImageUpload';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { cn } from '@/lib/utils';
 import {
   createCustomizeOptionConflict,
   deleteCustomizeOptionConflict,
@@ -23,6 +37,7 @@ import type {
   CustomizeOption,
 } from '@/lib/customize/types';
 import {
+  ConsoleMetricCard,
   ConsolePageHeader,
   ConsolePanel,
   ConsoleSectionTitle,
@@ -37,6 +52,17 @@ import {
 interface CustomizeManagerProps {
   initialCatalog: CustomizeCatalog;
 }
+
+type CustomizeTab = 'models' | 'included' | 'categories' | 'options' | 'assets';
+
+// Base UI Tabs가 이 화면에서 탭 전환(aria-selected)을 반영하지 못해 로컬 제어형 탭으로 대체한다.
+const TAB_ITEMS: { value: CustomizeTab; label: string; Icon: LucideIcon }[] = [
+  { value: 'models', label: '모델', Icon: Boxes },
+  { value: 'included', label: '기본 포함 사양', Icon: PackageCheck },
+  { value: 'categories', label: '카테고리', Icon: FolderTree },
+  { value: 'options', label: '옵션', Icon: SlidersHorizontal },
+  { value: 'assets', label: '이미지 자산', Icon: ImageIcon },
+];
 
 const textareaClass = 'min-h-20 w-full rounded-md border border-[#d8d8d2] bg-[#fbfbfa] px-3 py-2 text-sm text-[#111111] outline-none transition-colors focus:border-[#111111] focus:ring-2 focus:ring-[#111111]/10 disabled:cursor-not-allowed disabled:opacity-60';
 const labelClass = 'mb-1 block text-xs font-bold text-gray-600';
@@ -105,6 +131,7 @@ const emptyIncludedSpec = {
 export default function CustomizeManager({ initialCatalog }: CustomizeManagerProps) {
   const router = useRouter();
   const [catalog, setCatalog] = useState(initialCatalog);
+  const [activeTab, setActiveTab] = useState<CustomizeTab>('models');
   const [isPending, startTransition] = useTransition();
   const [modelForm, setModelForm] = useState(emptyModel);
   const [categoryForm, setCategoryForm] = useState(emptyCategory);
@@ -124,6 +151,36 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
     () => new Map(catalog.options.map((option) => [option.id, option.nameKo])),
     [catalog.options]
   );
+
+  // 운영 개요: 노출 상태와 데이터 공백(빈 카테고리, 이미지 누락)을 한눈에 보여준다.
+  const overview = useMemo(() => {
+    const optionCategories = catalog.categories.filter((category) => category.key !== 'model');
+    const activeOptions = catalog.options.filter((option) => option.isActive);
+    return {
+      modelTotal: catalog.models.length,
+      modelActive: catalog.models.filter((model) => model.isActive).length,
+      optionTotal: catalog.options.length,
+      optionActive: activeOptions.length,
+      categoryTotal: optionCategories.length,
+      categoryActive: optionCategories.filter((category) => category.isActive).length,
+      missingInfoImage: activeOptions.filter((option) => !option.imagePath?.trim()).length,
+      overlayCount: activeOptions.filter((option) => option.overlayImagePath?.trim()).length,
+      emptyActiveCategories: optionCategories.filter(
+        (category) =>
+          category.isActive &&
+          !catalog.options.some((option) => option.categoryId === category.id && option.isActive)
+      ).length,
+      conflictCount: catalog.conflicts.length,
+    };
+  }, [catalog]);
+
+  const tabCounts: Record<CustomizeTab, number | null> = {
+    models: catalog.models.length,
+    included: catalog.includedSpecs.length,
+    categories: catalog.categories.length,
+    options: catalog.options.length,
+    assets: null,
+  };
 
   const runAction = (label: string, action: () => Promise<unknown>) => {
     startTransition(async () => {
@@ -158,18 +215,76 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
         }
       />
 
-      <Tabs defaultValue="models" className="space-y-5">
-        <TabsList className="bg-[#f4f4f1] border border-[#e5e5df]">
-          <TabsTrigger value="models">Models</TabsTrigger>
-          <TabsTrigger value="included">Included Specs</TabsTrigger>
-          <TabsTrigger value="categories">Categories</TabsTrigger>
-          <TabsTrigger value="options">Options</TabsTrigger>
-          <TabsTrigger value="assets">Image Assets</TabsTrigger>
-        </TabsList>
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        <ConsoleMetricCard
+          label="활성 모델"
+          value={`${overview.modelActive}/${overview.modelTotal}`}
+          caption="주문 페이지에 노출되는 모델"
+          icon={<Boxes className="h-5 w-5" />}
+          tone={overview.modelActive === 0 ? 'warning' : 'dark'}
+        />
+        <ConsoleMetricCard
+          label="활성 옵션"
+          value={`${overview.optionActive}/${overview.optionTotal}`}
+          caption={`카테고리 ${overview.categoryActive}/${overview.categoryTotal} 활성${
+            overview.emptyActiveCategories > 0 ? ` · 빈 카테고리 ${overview.emptyActiveCategories}개` : ''
+          }`}
+          icon={<SlidersHorizontal className="h-5 w-5" />}
+          tone={overview.emptyActiveCategories > 0 ? 'warning' : 'neutral'}
+        />
+        <ConsoleMetricCard
+          label="정보 이미지 누락"
+          value={overview.missingInfoImage}
+          caption={`활성 옵션 기준 · 오버레이 ${overview.overlayCount}개 등록`}
+          icon={<ImageIcon className="h-5 w-5" />}
+          tone={overview.missingInfoImage > 0 ? 'warning' : 'neutral'}
+        />
+        <ConsoleMetricCard
+          label="충돌 관계"
+          value={overview.conflictCount}
+          caption="동시 선택이 막히는 옵션 조합"
+          icon={<AlertTriangle className="h-5 w-5" />}
+        />
+      </div>
 
-        <TabsContent value="models">
+      <div className="space-y-5">
+        <div className="overflow-x-auto">
+          <div
+            role="tablist"
+            aria-label="주문 구성 관리 탭"
+            className="inline-flex min-w-max items-center rounded-lg border border-[#e5e5df] bg-[#f4f4f1] p-[3px]"
+          >
+            {TAB_ITEMS.map(({ value, label, Icon }) => {
+              const selected = activeTab === value;
+              const count = tabCounts[value];
+              return (
+                <button
+                  key={value}
+                  type="button"
+                  role="tab"
+                  id={`customize-tab-${value}`}
+                  aria-selected={selected}
+                  aria-controls={`customize-panel-${value}`}
+                  onClick={() => setActiveTab(value)}
+                  className={cn(
+                    'inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-md px-3 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#111111]/20',
+                    selected ? 'bg-white text-[#111111] shadow-sm' : 'text-gray-500 hover:text-[#111111]'
+                  )}
+                >
+                  <Icon className="size-3.5" />
+                  {label}
+                  {count !== null && <TabCount value={count} />}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {activeTab === 'models' && (
+        <div role="tabpanel" id="customize-panel-models" aria-labelledby="customize-tab-models">
           <AdminSection
-            title="Models"
+            title="모델"
+            description="주문 페이지에 노출되는 공간 모델과 기본가를 관리합니다."
             action={
               <button className={consoleSecondaryButtonClass} onClick={() => setModelForm(emptyModel)}>
                 <Plus className="h-4 w-4" /> 새 모델
@@ -178,16 +293,29 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
           >
             <div className="grid gap-6 xl:grid-cols-[420px_1fr]">
               <ConsolePanel className="p-5">
+                <FormStateHeader
+                  editing={Boolean(modelForm.id && catalog.models.some((model) => model.id === modelForm.id))}
+                  editLabel={`모델 수정: ${modelForm.nameKo || modelForm.id}`}
+                  newLabel="새 모델 등록"
+                />
                 <ModelForm form={modelForm} setForm={setModelForm} onSave={saveModel} />
               </ConsolePanel>
               <DataTable>
+                {catalog.models.length === 0 && (
+                  <EmptyListNote>등록된 모델이 없습니다. 왼쪽 폼에서 첫 모델을 추가하세요.</EmptyListNote>
+                )}
                 {catalog.models.map((model) => (
                   <TableRow key={model.id}>
-                    <div>
-                      <p className="font-bold text-sm text-gray-900">{model.nameKo}</p>
-                      <p className="text-[11px] text-gray-500 mt-1">{model.id} · {model.widthM}x{model.lengthM}m · ₩{model.basePrice.toLocaleString('ko-KR')}</p>
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="truncate text-sm font-bold text-gray-900">{model.nameKo}</p>
+                        <span className="text-[10px] font-semibold text-gray-400">{model.id}</span>
+                      </div>
+                      <p className="mt-0.5 text-[11px] text-gray-500">
+                        {model.widthM}×{model.lengthM}m · {model.areaSqm}m² · ₩{model.basePrice.toLocaleString('ko-KR')}
+                      </p>
                     </div>
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3">
                       <ConsoleStatusPill tone={model.isActive ? 'success' : 'neutral'}>
                         {model.isActive ? '활성' : '숨김'}
                       </ConsoleStatusPill>
@@ -202,11 +330,14 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
               </DataTable>
             </div>
           </AdminSection>
-        </TabsContent>
+        </div>
+        )}
 
-        <TabsContent value="included">
+        {activeTab === 'included' && (
+        <div role="tabpanel" id="customize-panel-included" aria-labelledby="customize-tab-included">
           <AdminSection
-            title="Included Specs"
+            title="기본 포함 사양"
+            description="기본가에 포함되어 옵션 선택 없이 제공되는 사양 안내 항목입니다."
             action={
               <button className={consoleSecondaryButtonClass} onClick={() => { setIncludedForm(emptyIncludedSpec); setEditingIncludedId(undefined); }}>
                 <Plus className="h-4 w-4" /> 새 사양
@@ -215,16 +346,24 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
           >
             <div className="grid gap-6 xl:grid-cols-[420px_1fr]">
               <ConsolePanel className="p-5">
+                <FormStateHeader
+                  editing={Boolean(editingIncludedId)}
+                  editLabel={`사양 수정: ${includedForm.nameKo || includedForm.key}`}
+                  newLabel="새 포함 사양 등록"
+                />
                 <IncludedForm form={includedForm} setForm={setIncludedForm} models={catalog.models} onSave={saveIncluded} />
               </ConsolePanel>
               <DataTable>
+                {catalog.includedSpecs.length === 0 && (
+                  <EmptyListNote>등록된 포함 사양이 없습니다. 골조·단열처럼 기본 제공되는 항목을 추가하세요.</EmptyListNote>
+                )}
                 {catalog.includedSpecs.map((spec) => (
                   <TableRow key={spec.id}>
-                    <div>
-                      <p className="font-bold text-sm text-gray-900">{spec.nameKo}</p>
-                      <p className="text-[11px] text-gray-500 mt-1">{spec.modelId || '공통'} · {spec.categoryKey || '-'}</p>
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-bold text-gray-900">{spec.nameKo}</p>
+                      <p className="mt-0.5 text-[11px] text-gray-500">{spec.modelId || '공통'} · {spec.categoryKey || '-'}</p>
                     </div>
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-3">
                       <ConsoleStatusPill tone={spec.isActive ? 'success' : 'neutral'}>
                         {spec.isActive ? '활성' : '숨김'}
                       </ConsoleStatusPill>
@@ -239,11 +378,14 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
               </DataTable>
             </div>
           </AdminSection>
-        </TabsContent>
+        </div>
+        )}
 
-        <TabsContent value="categories">
+        {activeTab === 'categories' && (
+        <div role="tabpanel" id="customize-panel-categories" aria-labelledby="customize-tab-categories">
           <AdminSection
-            title="Categories"
+            title="옵션 카테고리"
+            description="옵션을 묶는 분류와 단일/복수 선택 방식을 관리합니다."
             action={
               <button className={consoleSecondaryButtonClass} onClick={() => { setCategoryForm(emptyCategory); setEditingCategoryId(undefined); }}>
                 <Plus className="h-4 w-4" /> 새 카테고리
@@ -252,37 +394,58 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
           >
             <div className="grid gap-6 xl:grid-cols-[420px_1fr]">
               <ConsolePanel className="p-5">
+                <FormStateHeader
+                  editing={Boolean(editingCategoryId)}
+                  editLabel={`카테고리 수정: ${categoryForm.nameKo || categoryForm.key}`}
+                  newLabel="새 카테고리 등록"
+                />
                 <CategoryForm form={categoryForm} setForm={setCategoryForm} onSave={saveCategory} />
               </ConsolePanel>
               <DataTable>
-                {catalog.categories.map((category) => (
-                  <TableRow key={category.id}>
-                    <div>
-                      <p className="font-bold text-sm text-gray-900">{category.nameKo}</p>
-                      <p className="text-[11px] text-gray-500 mt-1">{category.key} · {category.selectionType}</p>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <ConsoleStatusPill tone={category.isActive ? 'success' : 'neutral'}>
-                        {category.isActive ? '활성' : '숨김'}
-                      </ConsoleStatusPill>
-                      <RowActions
-                        onEdit={() => { setEditingCategoryId(category.id); setCategoryForm(categoryToForm(category)); }}
-                        onToggle={() => runAction('카테고리 노출 변경', () => setCustomizeEntityActive('category', category.id, !category.isActive))}
-                        active={category.isActive}
-                      />
-                    </div>
-                  </TableRow>
-                ))}
+                {catalog.categories.length === 0 && (
+                  <EmptyListNote>등록된 카테고리가 없습니다. 외장·창호처럼 옵션을 묶을 분류를 먼저 추가하세요.</EmptyListNote>
+                )}
+                {catalog.categories.map((category) => {
+                  const optionCount = catalog.options.filter((option) => option.categoryId === category.id).length;
+                  return (
+                    <TableRow key={category.id}>
+                      <div className="min-w-0">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <p className="truncate text-sm font-bold text-gray-900">{category.nameKo}</p>
+                          <span className="text-[10px] font-semibold text-gray-400">{category.key}</span>
+                        </div>
+                        <p className="mt-0.5 text-[11px] text-gray-500">
+                          {category.selectionType === 'single' ? '단일 선택' : '복수 선택'}
+                          {category.required ? ' · 필수' : ''}
+                          {` · 옵션 ${optionCount}개`}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <ConsoleStatusPill tone={category.isActive ? 'success' : 'neutral'}>
+                          {category.isActive ? '활성' : '숨김'}
+                        </ConsoleStatusPill>
+                        <RowActions
+                          onEdit={() => { setEditingCategoryId(category.id); setCategoryForm(categoryToForm(category)); }}
+                          onToggle={() => runAction('카테고리 노출 변경', () => setCustomizeEntityActive('category', category.id, !category.isActive))}
+                          active={category.isActive}
+                        />
+                      </div>
+                    </TableRow>
+                  );
+                })}
               </DataTable>
             </div>
           </AdminSection>
-        </TabsContent>
+        </div>
+        )}
 
-        <TabsContent value="options">
+        {activeTab === 'options' && (
+        <div role="tabpanel" id="customize-panel-options" aria-labelledby="customize-tab-options">
           <AdminSection
-            title="Options"
+            title="옵션"
+            description="카테고리별 옵션의 가격, 기본 선택, 모델 노출과 충돌 관계를 관리합니다."
             action={
-              <button className={consoleSecondaryButtonClass} onClick={() => { setOptionForm({ ...emptyOption, categoryId: catalog.categories[0]?.id || '' }); setEditingOptionId(undefined); }}>
+              <button className={consoleSecondaryButtonClass} onClick={() => { setOptionForm({ ...emptyOption, categoryId: catalog.categories.find((category) => category.key !== 'model')?.id || '' }); setEditingOptionId(undefined); }}>
                 <Plus className="h-4 w-4" /> 새 옵션
               </button>
             }
@@ -290,6 +453,11 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
             <div className="grid gap-6 xl:grid-cols-[460px_1fr]">
               <div className="space-y-5">
                 <ConsolePanel className="p-5">
+                  <FormStateHeader
+                    editing={Boolean(editingOptionId)}
+                    editLabel={`옵션 수정: ${optionForm.nameKo || optionForm.key}`}
+                    newLabel="새 옵션 등록"
+                  />
                   <OptionForm
                     form={optionForm}
                     setForm={setOptionForm}
@@ -299,7 +467,8 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
                   />
                 </ConsolePanel>
                 <ConsolePanel className="p-5">
-                  <h3 className="mb-4 text-sm font-bold text-gray-900">충돌 옵션 등록</h3>
+                  <h3 className="mb-1 text-sm font-bold text-gray-900">충돌 옵션 등록</h3>
+                  <p className="mb-4 text-[11px] text-gray-500">두 옵션을 같이 선택할 수 없도록 묶습니다.</p>
                   <div className="space-y-3">
                     <SelectField value={conflictForm.optionId} onChange={(value) => setConflictForm((current) => ({ ...current, optionId: value }))}>
                       <option value="">기준 옵션</option>
@@ -322,59 +491,113 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
                 </ConsolePanel>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-4">
                 {catalog.categories.filter((category) => category.key !== 'model').map((category) => {
                   const options = catalog.options.filter((option) => option.categoryId === category.id);
+                  const activeCount = options.filter((option) => option.isActive).length;
                   return (
-                    <ConsolePanel key={category.id} className="p-4">
-                      <h3 className="mb-3 text-sm font-bold text-gray-900">{category.nameKo}</h3>
-                      <div className="space-y-2">
-                        {options.map((option) => (
-                          <TableRow key={option.id}>
-                            <div>
-                              <p className="font-bold text-sm text-gray-900">{option.nameKo}</p>
-                              <p className="text-[11px] text-gray-500 mt-1">{option.key} · {option.priceType} · {option.availableModelIds.join(', ') || 'all'}</p>
-                            </div>
-                            <div className="flex items-center gap-4">
-                              <ConsoleStatusPill tone={option.isActive ? 'success' : 'neutral'}>
-                                {option.isActive ? '활성' : '숨김'}
-                              </ConsoleStatusPill>
+                    <ConsolePanel key={category.id}>
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#e5e5df] bg-[#fbfbfa] px-3 py-2">
+                        <div className="flex min-w-0 flex-wrap items-center gap-2">
+                          <h3 className="text-sm font-bold text-gray-900">{category.nameKo}</h3>
+                          <span className="text-[10px] font-semibold text-gray-400">{category.key}</span>
+                          <span className="rounded border border-[#e5e5df] bg-white px-1.5 py-0.5 text-[10px] font-bold text-gray-500">
+                            {category.selectionType === 'single' ? '단일 선택' : '복수 선택'}
+                          </span>
+                          {!category.isActive && (
+                            <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-bold text-gray-400">카테고리 숨김</span>
+                          )}
+                        </div>
+                        <span className="text-[11px] font-bold text-gray-500">{activeCount}/{options.length} 활성</span>
+                      </div>
+                      {options.length === 0 ? (
+                        <p className="px-3 py-5 text-center text-xs font-semibold text-gray-400">
+                          이 카테고리에 등록된 옵션이 없습니다. 주문 페이지에서는 빈 카테고리로 표시됩니다.
+                        </p>
+                      ) : (
+                        <div className="divide-y divide-[#f0f0eb]">
+                          {options.map((option) => (
+                            <div
+                              key={option.id}
+                              className={cn(
+                                'flex items-center justify-between gap-3 px-3 py-2 transition-colors hover:bg-[#fbfbfa]',
+                                !option.isActive && 'opacity-55'
+                              )}
+                            >
+                              <div className="min-w-0">
+                                <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                                  <p className="truncate text-[13px] font-bold text-gray-900">{option.nameKo}</p>
+                                  <span className={cn('text-[11px] font-bold', option.priceType === 'fixed' ? 'text-[#8a6a12]' : 'text-gray-500')}>
+                                    {optionPriceLabel(option)}
+                                  </span>
+                                  {option.isDefault && (
+                                    <span className="rounded bg-[#111111] px-1.5 py-0.5 text-[9px] font-bold text-white">기본 선택</span>
+                                  )}
+                                  {option.isActive && !option.imagePath?.trim() && (
+                                    <span className="rounded bg-[#fff7ed] px-1.5 py-0.5 text-[9px] font-bold text-[#9a3412]">이미지 없음</span>
+                                  )}
+                                </div>
+                                <p className="mt-0.5 truncate text-[11px] text-gray-500">
+                                  {option.key} · {modelScopeLabel(option, catalog.models)}
+                                </p>
+                              </div>
                               <RowActions
+                                compact
                                 onEdit={() => { setEditingOptionId(option.id); setOptionForm(optionToForm(option)); }}
                                 onToggle={() => runAction('옵션 노출 변경', () => setCustomizeEntityActive('option', option.id, !option.isActive))}
                                 active={option.isActive}
                               />
                             </div>
-                          </TableRow>
-                        ))}
-                      </div>
+                          ))}
+                        </div>
+                      )}
                     </ConsolePanel>
                   );
                 })}
 
-                <ConsolePanel className="p-4">
-                  <h3 className="mb-3 text-sm font-bold text-gray-900">등록된 충돌 관계</h3>
-                  <div className="space-y-2">
-                    {catalog.conflicts.map((conflict) => (
-                      <TableRow key={`${conflict.optionId}-${conflict.conflictsWithOptionId}`}>
-                        <div>
-                          <p className="font-bold text-sm text-gray-900">{optionNameById.get(conflict.optionId)} ↔ {optionNameById.get(conflict.conflictsWithOptionId)}</p>
-                          <p className="text-[11px] text-gray-500 mt-1">{conflict.reasonKo || '동시 선택 불가'}</p>
-                        </div>
-                        <button className={`${consoleIconButtonClass} text-red-600 hover:text-red-700 hover:border-red-200 hover:bg-red-50`} onClick={() => runAction('충돌 관계 삭제', () => deleteCustomizeOptionConflict(conflict.optionId, conflict.conflictsWithOptionId))}>
-                          <Trash2 className="h-4 w-4" />
-                        </button>
-                      </TableRow>
-                    ))}
+                <ConsolePanel>
+                  <div className="flex items-center justify-between gap-3 border-b border-[#e5e5df] bg-[#fbfbfa] px-3 py-2">
+                    <div className="flex items-center gap-2">
+                      <AlertTriangle className="size-3.5 text-[#9a3412]" />
+                      <h3 className="text-sm font-bold text-gray-900">등록된 충돌 관계</h3>
+                    </div>
+                    <span className="text-[11px] font-bold text-gray-500">{catalog.conflicts.length}건</span>
                   </div>
+                  {catalog.conflicts.length === 0 ? (
+                    <p className="px-3 py-5 text-center text-xs font-semibold text-gray-400">
+                      등록된 충돌 관계가 없습니다. 왼쪽 아래 폼에서 추가할 수 있습니다.
+                    </p>
+                  ) : (
+                    <div className="divide-y divide-[#f0f0eb]">
+                      {catalog.conflicts.map((conflict) => (
+                        <div key={`${conflict.optionId}-${conflict.conflictsWithOptionId}`} className="flex items-center justify-between gap-3 px-3 py-2">
+                          <div className="min-w-0">
+                            <p className="truncate text-[13px] font-bold text-gray-900">
+                              {optionNameById.get(conflict.optionId)} ↔ {optionNameById.get(conflict.conflictsWithOptionId)}
+                            </p>
+                            <p className="mt-0.5 truncate text-[11px] text-gray-500">{conflict.reasonKo || '동시 선택 불가'}</p>
+                          </div>
+                          <button
+                            className={cn(consoleIconButtonClass, 'h-8 w-8 text-red-600 hover:border-red-200 hover:bg-red-50 hover:text-red-700')}
+                            onClick={() => runAction('충돌 관계 삭제', () => deleteCustomizeOptionConflict(conflict.optionId, conflict.conflictsWithOptionId))}
+                            aria-label="충돌 관계 삭제"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </ConsolePanel>
               </div>
             </div>
           </AdminSection>
-        </TabsContent>
+        </div>
+        )}
 
-        <TabsContent value="assets">
-          <AdminSection title="Image Assets">
+        {activeTab === 'assets' && (
+        <div role="tabpanel" id="customize-panel-assets" aria-labelledby="customize-tab-assets">
+          <AdminSection title="이미지 자산" description="옵션 상세 모달 이미지와 평면 오버레이를 업로드합니다.">
             <div className="grid gap-6 lg:grid-cols-2">
               <ConsolePanel className="p-5">
                 <h3 className="mb-2 text-sm font-bold text-gray-900">정보 이미지 업로드</h3>
@@ -389,22 +612,60 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
               </ConsolePanel>
             </div>
           </AdminSection>
-        </TabsContent>
-      </Tabs>
+        </div>
+        )}
+      </div>
     </div>
   );
 }
 
-function AdminSection({ title, action, children }: { title: string; action?: ReactNode; children: ReactNode }) {
+function AdminSection({ title, description, action, children }: { title: string; description?: string; action?: ReactNode; children: ReactNode }) {
   return (
     <section className="space-y-4">
-      <div className="flex items-center justify-between gap-4">
-        <ConsoleSectionTitle>{title}</ConsoleSectionTitle>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="min-w-0">
+          <ConsoleSectionTitle>{title}</ConsoleSectionTitle>
+          {description && <p className="-mt-2 text-xs font-medium text-gray-500">{description}</p>}
+        </div>
         {action}
       </div>
       {children}
     </section>
   );
+}
+
+function FormStateHeader({ editing, editLabel, newLabel }: { editing: boolean; editLabel: string; newLabel: string }) {
+  return (
+    <div className="mb-4 flex items-center justify-between gap-3 border-b border-[#f0f0eb] pb-3">
+      <h3 className="min-w-0 truncate text-sm font-bold text-gray-900">{editing ? editLabel : newLabel}</h3>
+      <ConsoleStatusPill tone={editing ? 'dark' : 'neutral'}>{editing ? '수정 중' : '신규'}</ConsoleStatusPill>
+    </div>
+  );
+}
+
+function TabCount({ value }: { value: number }) {
+  return <span className="rounded bg-white/80 px-1 text-[10px] font-bold text-gray-400">{value}</span>;
+}
+
+function EmptyListNote({ children }: { children: ReactNode }) {
+  return (
+    <div className="flex items-center justify-center rounded-md border border-dashed border-[#d8d8d2] bg-[#fbfbfa] px-4 py-8 text-center text-xs font-semibold leading-5 text-gray-400">
+      {children}
+    </div>
+  );
+}
+
+function optionPriceLabel(option: CustomizeOption) {
+  if (option.priceType === 'included') return '기본 포함';
+  if (option.priceType === 'consult') return '협의';
+  return `+₩${option.price.toLocaleString('ko-KR')}`;
+}
+
+function modelScopeLabel(option: CustomizeOption, models: CustomizeModel[]) {
+  if (option.availableModelIds.length === 0) return '모든 모델';
+  return option.availableModelIds
+    .map((id) => models.find((model) => model.id === id)?.nameKo ?? id)
+    .join(', ');
 }
 
 function ModelForm({ form, setForm, onSave }: { form: typeof emptyModel; setForm: (value: typeof emptyModel) => void; onSave: () => void }) {
@@ -594,11 +855,16 @@ function TableRow({ children }: { children: ReactNode }) {
   return <div className="flex items-center justify-between gap-4 rounded-md border border-[#e5e5df] bg-white p-3 hover:border-gray-300 transition-colors">{children}</div>;
 }
 
-function RowActions({ onEdit, onToggle, active }: { onEdit: () => void; onToggle: () => void; active: boolean }) {
+function RowActions({ onEdit, onToggle, active, compact = false }: { onEdit: () => void; onToggle: () => void; active: boolean; compact?: boolean }) {
   return (
-    <div className="flex shrink-0 items-center gap-2">
+    <div className="flex shrink-0 items-center gap-1.5">
       <button className="px-2 py-1 text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors" onClick={onEdit}>수정</button>
-      <button className={consoleIconButtonClass} onClick={onToggle}>
+      <button
+        className={cn(consoleIconButtonClass, compact && 'h-8 w-8')}
+        onClick={onToggle}
+        aria-label={active ? '숨기기' : '노출하기'}
+        title={active ? '숨기기' : '노출하기'}
+      >
         {active ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
       </button>
     </div>

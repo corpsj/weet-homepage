@@ -28,6 +28,10 @@ If `agent-inbox/pro-review.md` exists, accept it as a manually supplied GPT Pro 
 
 If `.codex/current-task.md` does not exist, create it from the user's active request before starting implementation.
 
+## Implementation delegation
+
+For this project, code/frontend implementation is delegated to the user-opened Claude app session. The Claude app modifies repository files only and skips tests, lint, typecheck, build, dev server, Playwright, browser validation, git commit/push, and GPT review. Codex handles everything after implementation: git diff inspection, validation commands, visual QA, review packet creation, the GPT-5.5 Pro review, saving the review output, and applying concrete `MUST_FIX` feedback.
+
 ## Main loop
 
 Repeat at most 2 GPT-5.5 Pro review cycles.
@@ -40,7 +44,7 @@ Each cycle:
 
 3. Understand the active task and identify the smallest safe implementation unit.
 
-4. Modify the repository.
+4. Modify the repository. When the user routes implementation through the Claude app, pick up from the working tree the Claude app produced instead of re-implementing.
 
 5. Run relevant validation commands.
 

@@ -244,14 +244,13 @@ export default function Header() {
             <div className="xl:hidden absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-[60] flex items-center gap-2">
               <Link
                 href="/customize"
-              className="flex items-center justify-center rounded-sm bg-[#FEBD16] px-3 py-1.5 text-[12px] font-bold text-[#2f3432] shadow-[0_8px_18px_rgba(254,189,22,0.22)] transition-colors hover:bg-[#E2A80F] md:px-4 md:py-2 md:text-[13px] whitespace-nowrap"
-                aria-label={language === 'KO' ? '맞춤 견적' : 'Get a Quote'}
+                className="flex h-9 items-center justify-center whitespace-nowrap rounded-sm bg-[#FEBD16] px-3.5 text-[13px] font-bold text-[#2f3432] shadow-[0_8px_18px_rgba(254,189,22,0.22)] transition-colors hover:bg-[#E2A80F] md:h-10 md:px-4"
               >
-                {language === 'KO' ? '맞춤 견적' : 'Quote'}
+                {language === 'KO' ? '주문하기' : 'Order'}
               </Link>
               <button
                 onClick={handleMobileMenuToggle}
-                className="p-1.5 hover:bg-gray-100 rounded-md transition-colors active:bg-gray-200"
+                className="p-2 hover:bg-gray-100 rounded-md transition-colors active:bg-gray-200"
                 aria-label="Toggle mobile menu"
                 type="button"
               >
@@ -286,22 +285,20 @@ export default function Header() {
             </nav>
 
             {/* Desktop Right Side Content */}
-            <div className="hidden xl:flex absolute right-[64px] top-1/2 -translate-y-1/2 items-center gap-5">
-              {/* Social Icons & Language Switcher Block */}
-              <div className="flex flex-col items-end gap-1">
-                <div className="flex items-center space-x-3 text-gray-400">
-                  <Link href="https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/" target="_blank" className="hover:text-[#0d6e66] transition-colors" aria-label="Daangn">
-                    <Carrot className="w-[14px] h-[14px]" />
-                  </Link>
-                  <Link href="https://blog.naver.com/we-et" target="_blank" className="hover:text-[#0d6e66] transition-colors font-bold text-[14px] leading-none" aria-label="Naver Blog">
-                    N
-                  </Link>
-                  <Link href="https://www.instagram.com/weet_kr/" target="_blank" className="hover:text-[#0d6e66] transition-colors" aria-label="Instagram">
-                    <Instagram className="w-[14px] h-[14px]" />
-                  </Link>
-                </div>
-
-                <div className="flex items-center gap-1.5 text-[10px] font-medium">
+            <div className="hidden xl:flex absolute right-[64px] top-1/2 -translate-y-1/2 items-center gap-4">
+              {/* Secondary utilities: social + language in one compact row */}
+              <div className="flex items-center gap-3 text-gray-400">
+                <Link href="https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/" target="_blank" className="hover:text-[#0d6e66] transition-colors" aria-label="Daangn">
+                  <Carrot className="w-[14px] h-[14px]" />
+                </Link>
+                <Link href="https://blog.naver.com/we-et" target="_blank" className="hover:text-[#0d6e66] transition-colors font-bold text-[13px] leading-none" aria-label="Naver Blog">
+                  N
+                </Link>
+                <Link href="https://www.instagram.com/weet_kr/" target="_blank" className="hover:text-[#0d6e66] transition-colors" aria-label="Instagram">
+                  <Instagram className="w-[14px] h-[14px]" />
+                </Link>
+                <span aria-hidden="true" className="h-3.5 w-px bg-gray-200" />
+                <div className="flex items-center gap-1.5 text-[11px] font-medium">
                   <button
                     onClick={() => setLanguage('KO')}
                     className={cn("transition-colors", language === 'KO' ? "font-bold text-[#2f3432]" : "text-gray-300 hover:text-[#0d6e66]")}
@@ -320,10 +317,9 @@ export default function Header() {
               {/* Primary CTA */}
               <Link
                 href="/customize"
-                className="flex h-10 items-center justify-center rounded-sm bg-[#FEBD16] px-6 text-[13px] font-bold text-[#2f3432] shadow-[0_10px_24px_rgba(254,189,22,0.24)] transition-colors hover:bg-[#E2A80F] whitespace-nowrap"
-                aria-label={language === 'KO' ? '맞춤 견적' : 'Get a Quote'}
+                className="flex h-10 items-center justify-center rounded-sm bg-[#FEBD16] px-6 text-[14px] font-bold text-[#2f3432] shadow-[0_10px_24px_rgba(254,189,22,0.24)] transition-colors hover:bg-[#E2A80F] whitespace-nowrap"
               >
-                {language === 'KO' ? '맞춤 견적' : 'Get a Quote'}
+                {language === 'KO' ? '주문하기' : 'Order'}
               </Link>
             </div>
 
@@ -405,7 +401,7 @@ export default function Header() {
               onClick={handleMobileMenuClose}
               className="flex items-center justify-center w-full py-4 mb-8 bg-[#FEBD16] text-[#2f3432] rounded-md font-bold text-lg hover:bg-[#E2A80F] transition-colors shadow-sm"
             >
-              {language === 'KO' ? '모델 구성하기' : 'Configure Model'}
+              {language === 'KO' ? '주문하기' : 'Order'}
             </Link>
             {navigation.map((item, index) => {
               const hasSubmenu = item.submenu && item.submenu.length > 0;
