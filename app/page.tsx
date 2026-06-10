@@ -24,7 +24,8 @@ import { formatModelStartPrice } from '@/lib/customize/priceCalculator';
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: '이동식주택·농막·세컨하우스 제작 전문',
+  // 루트 세그먼트의 page는 layout의 title.template을 상속받지 않으므로 브랜드를 직접 포함한다.
+  title: '이동식주택·농막·세컨하우스 제작 전문 | 위트(weet)',
   description:
     '공장에서 제작해 현장에 설치하는 이동식주택 전문 위트(weet). 3x6(18㎡)·3x9(27㎡) 모델의 기본 가격을 공개하고, 운반·설치·인허가까지 투명하게 안내합니다.',
   alternates: {
