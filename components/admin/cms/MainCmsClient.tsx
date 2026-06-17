@@ -10,7 +10,6 @@ import {
     Link as LinkIcon,
     Loader2,
     Plus,
-    Save,
     Trash2,
 } from 'lucide-react';
 import Image from 'next/image';
@@ -19,6 +18,8 @@ import ImageUpload from '@/components/admin/media/ImageUpload';
 import { createHeroSlide, updateHeroSlide, deleteHeroSlide, setHeroSlideActive, updateSignatureStatus, reorderHeroSlides } from '@/app/actions/cms-actions';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { confirmToast } from '@/lib/ui/confirm';
+import { useUnsavedChangesWarning } from '@/hooks/useUnsavedChangesWarning';
 import {
     DndContext,
     closestCenter,
@@ -143,6 +144,9 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
     const router = useRouter();
     const [heroSlides, setHeroSlides] = useState(slides);
 
+    // F41: an open "new slide" form is an unsaved in-progress draft.
+    useUnsavedChangesWarning(isAdding);
+
     useEffect(() => {
         setHeroSlides(slides);
     }, [slides]);
@@ -181,9 +185,10 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
                     toast.error(`순서 저장 실패: ${result.error}`);
                 }
                 router.refresh();
-            } catch (error: any) {
+            } catch (error) {
                 setHeroSlides(previousItems);
-                toast.error(`순서 저장 중 오류 발생: ${error.message || '알 수 없는 오류'}`);
+                const message = error instanceof Error ? error.message : String(error);
+                toast.error(`순서 저장 중 오류 발생: ${message || '알 수 없는 오류'}`);
                 router.refresh();
             }
         });
@@ -207,7 +212,7 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm('정말 삭제하시겠습니까?')) return;
+        if (!(await confirmToast('정말 삭제하시겠습니까?', { confirmLabel: '삭제' }))) return;
         startTransition(async () => {
             try {
                 await deleteHeroSlide(id);
@@ -308,6 +313,9 @@ function SortableHeroSlideItem({
     const [isEditing, setIsEditing] = useState(false);
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
+
+    // F41: an open slide edit form is an unsaved in-progress draft.
+    useUnsavedChangesWarning(isEditing);
 
     const handleUpdate = async (data: HeroSlideFormData) => {
         startTransition(async () => {
@@ -544,6 +552,15 @@ function HeroSlideForm({
 function SignatureLineEditor({ products }: { products: Product[] }) {
     const [isPending, startTransition] = useTransition();
     const router = useRouter();
+    const [failedThumbnails, setFailedThumbnails] = useState<Set<string>>(() => new Set());
+    const markThumbnailFailed = (id: string) => {
+        setFailedThumbnails((prev) => {
+            if (prev.has(id)) return prev;
+            const next = new Set(prev);
+            next.add(id);
+            return next;
+        });
+    };
     const serverSignatureIds = useMemo(
         () => new Set(products.filter(p => p.is_signature).map(p => p.id)),
         [products]
@@ -578,8 +595,9 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
                     return rest;
                 });
                 router.refresh();
-            } catch (error: any) {
-                toast.error(error.message || '업데이트 실패');
+            } catch (error) {
+                const message = error instanceof Error ? error.message : String(error);
+                toast.error(message || '업데이트 실패');
                 setPendingOverrides(prev => {
                     const { [productId]: _, ...rest } = prev;
                     return rest;
@@ -623,9 +641,20 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
                                 </div>
 
                                 <div className="w-10 h-10 bg-gray-100 rounded border border-gray-200 flex-shrink-0 relative overflow-hidden">
-                                    {product.image_url && (
-                                        <Image src={product.image_url} alt={product.name} fill sizes="40px" className="object-cover" />
-                                    )}
+                                    {product.image_url && !failedThumbnails.has(product.id) ? (
+                                        <Image
+                                            src={product.image_url}
+                                            alt={product.name}
+                                            fill
+                                            sizes="40px"
+                                            className="object-cover"
+                                            onError={() => markThumbnailFailed(product.id)}
+                                        />
+                                    ) : product.image_url ? (
+                                        <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                                            <ImageIcon className="w-4 h-4" />
+                                        </div>
+                                    ) : null}
                                 </div>
 
                                 <div className="min-w-0">

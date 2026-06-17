@@ -45,9 +45,10 @@ export async function getTrafficStats(startDate = '7daysAgo', endDate = 'today')
         }), 'GA4 traffic stats');
 
         return response;
-    } catch (error: any) {
+    } catch (error) {
         console.error('GA4 Traffic Stats Error:', error);
-        return { error: error.message || 'Unknown error' };
+        const message = error instanceof Error ? error.message : String(error);
+        return { error: message || 'Unknown error' };
     }
 }
 

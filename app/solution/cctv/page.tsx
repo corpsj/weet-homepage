@@ -47,6 +47,26 @@ const DATA: SolutionPackageData = {
       ctaPrimary: "Check security in order options",
       ctaSecondary: "Discuss security options",
     },
+    ES: {
+      eyebrow: "SECURE ACCESS OPTION",
+      title: "Que La Operación Sin Personal Inspire Confianza",
+      lead:
+        "No se trata de comprar por separado una cámara CCTV y una cerradura inteligente. Weet planifica en conjunto la entrada, el lateral de las ventanas, la iluminación nocturna y las reglas de alerta para que los operadores puedan verificar el acceso de forma remota.",
+      imageAlt: "Imagen fotorrealista del detalle de CCTV, luz con sensor y cerradura inteligente en la entrada de un espacio modular coreano",
+      problemTitle: "El momento que más preocupa a los operadores",
+      problem:
+        "Las cafeterías sin personal, las estancias privadas y las casas de fin de semana remotas no siempre pueden contar con personal. Sin registros de acceso ni iluminación nocturna, las pequeñas señales pueden convertirse en grandes riesgos operativos.",
+      fitTitle: "Configuraciones recomendadas",
+      fit: ["Cafeterías sin personal y showrooms con reserva", "Estancias privadas y casas de fin de semana", "Espacios de trabajo que requieren controles nocturnos", "Pequeños espacios comerciales que almacenan equipos o existencias"],
+      includedTitle: "Alcance",
+      included: ["Posición de CCTV según los puntos ciegos de entrada y ventanas", "Permisos de cerradura inteligente y reglas de acceso de un solo uso", "Planificación del brillo de las luces con sensor y la cobertura nocturna", "Configuración del alcance de alertas y del responsable de respuesta"],
+      decisionsTitle: "Decisiones durante la consulta",
+      decisions: ["Cómo dividir el acceso para operadores, personal, huéspedes y equipos de mantenimiento", "Qué áreas necesitan grabación y cuáles requieren protección de la privacidad", "Quién recibe las alertas nocturnas y qué situaciones requieren comprobación", "Cómo complementar el almacenamiento y las alertas durante fallos de conectividad"],
+      outcomesTitle: "Resultados operativos",
+      outcomes: ["Verifique la entrada y los alrededores durante la noche.", "Mantenga el flujo de acceso registrado para huéspedes, personal y mantenimiento.", "Reduzca los puntos ciegos alineando luces y cámaras.", "Responda a pérdidas, daños o accesos no autorizados con registros, no con suposiciones."],
+      ctaPrimary: "Ver seguridad en las opciones de pedido",
+      ctaSecondary: "Consultar opciones de seguridad",
+    },
   },
 };
 

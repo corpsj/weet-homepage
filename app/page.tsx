@@ -1,4 +1,3 @@
-import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -21,23 +20,21 @@ import { getFaqs } from '@/app/actions/faq-actions';
 import { telHref } from '@/lib/site-settings';
 import { getSiteSettings } from '@/lib/site-settings.server';
 import { formatModelStartPrice } from '@/lib/customize/priceCalculator';
+import { buildPageMetadata } from '@/lib/seo';
 
 export const revalidate = 300;
 
-export const metadata: Metadata = {
-  // 루트 세그먼트의 page는 layout의 title.template을 상속받지 않으므로 브랜드를 직접 포함한다.
-  title: '이동식주택·농막·세컨하우스 제작 전문 | 위트(weet)',
-  description:
-    '공장에서 제작해 현장에 설치하는 이동식주택 전문 위트(weet). 3x6(18㎡)·3x9(27㎡) 모델의 기본 가격을 공개하고, 운반·설치·인허가까지 투명하게 안내합니다.',
-  alternates: {
-    canonical: '/',
-  },
-  openGraph: {
-    url: '/',
-    title: '위트(weet) — 이동식주택·모듈러주택 제작 전문',
+export const metadata = {
+  ...buildPageMetadata({
+    title: '이동식주택·농막·세컨하우스 제작 전문',
     description:
-      '작은 공간, 선명한 기준. 3x6·3x9 이동식주택을 직접 구성하고 기본 가격을 확인한 뒤, 현장 조건까지 투명하게 상담받으세요.',
-  },
+      '공장에서 제작해 현장에 설치하는 이동식주택 전문 위트(weet). 3x6(18㎡)·3x9(27㎡) 모델의 기본 가격을 공개하고, 운반·설치·인허가까지 투명하게 안내합니다.',
+    path: '/',
+  }),
+  // Home is the root segment's own page, so the root title template does not
+  // apply — bake the brand suffix into the document title explicitly. (og:title
+  // stays unsuffixed via buildPageMetadata's openGraph.)
+  title: '이동식주택·농막·세컨하우스 제작 전문 | 위트(weet)',
 };
 
 const transparencyFeatures = [
@@ -129,7 +126,7 @@ export default async function HomePage() {
     .slice(0, 4);
 
   return (
-    <main className="bg-[#fbfbfa] text-[#111111] selection:bg-black selection:text-white">
+    <div className="bg-[#fbfbfa] text-[#111111] selection:bg-black selection:text-white">
       {/* 1. First Viewport: Product-led, image-led, full-bleed hero */}
       <section className="relative min-h-[calc(100svh-192px)] w-full bg-[#111] text-white overflow-hidden">
         <Image
@@ -451,6 +448,6 @@ export default async function HomePage() {
           )}
         </div>
       </section>
-    </main>
+    </div>
   );
 }

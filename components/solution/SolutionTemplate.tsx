@@ -12,9 +12,8 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import type { Language } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
-
-type Lang = "KO" | "EN";
 
 type LocalizedSolution = {
   eyebrow: string;
@@ -39,11 +38,11 @@ export type SolutionPackageData = {
   id: "security" | "network" | "control" | "energy";
   href: string;
   image: string;
-  copy: Record<Lang, LocalizedSolution>;
+  copy: Record<Language, LocalizedSolution>;
 };
 
 const PACKAGE_NAV: Record<
-  Lang,
+  Language,
   Array<{ id: SolutionPackageData["id"]; href: string; name: string; desc: string }>
 > = {
   KO: [
@@ -58,6 +57,12 @@ const PACKAGE_NAV: Record<
     { id: "control", href: "/solution/iot", name: "Remote Ready", desc: "lighting · HVAC · ventilation" },
     { id: "energy", href: "/solution/energy", name: "Energy Stack", desc: "solar · ESS · EV charger" },
   ],
+  ES: [
+    { id: "security", href: "/solution/cctv", name: "Acceso Seguro", desc: "CCTV · cerradura · luz con sensor" },
+    { id: "network", href: "/solution/network", name: "Conexión Estable", desc: "TPV · reservas · Wi-Fi de invitados" },
+    { id: "control", href: "/solution/iot", name: "Listo en Remoto", desc: "iluminación · climatización · ventilación" },
+    { id: "energy", href: "/solution/energy", name: "Energy Stack", desc: "solar · ESS · cargador EV" },
+  ],
 };
 
 export default function SolutionTemplate({ data }: { data: SolutionPackageData }) {
@@ -66,14 +71,18 @@ export default function SolutionTemplate({ data }: { data: SolutionPackageData }
   const nav = PACKAGE_NAV[language];
 
   return (
-    <main className="min-h-screen bg-[#f7f6f1] text-[#2f3432]">
+    <div className="min-h-screen bg-[#f7f6f1] text-[#2f3432]">
       <section className="mx-auto max-w-[1440px] px-4 pb-14 pt-24 md:px-8 lg:pb-20 lg:pt-32">
         <Link
           href="/solution"
           className="inline-flex items-center gap-2 text-sm font-semibold text-[#6f756f] transition-colors hover:text-[#0d6e66]"
         >
           <ArrowLeft className="h-4 w-4" />
-          {language === "KO" ? "운영 옵션 전체" : "All operation options"}
+          {language === "KO"
+            ? "운영 옵션 전체"
+            : language === "ES"
+              ? "Todas las opciones de operación"
+              : "All operation options"}
         </Link>
 
         <div className="mt-8 grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(520px,1.1fr)] lg:items-end">
@@ -209,6 +218,6 @@ export default function SolutionTemplate({ data }: { data: SolutionPackageData }
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

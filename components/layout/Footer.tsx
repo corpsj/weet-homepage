@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Instagram, Carrot, MessageCircle } from 'lucide-react';
 import { telHref, type SiteSettings } from '@/lib/site-settings';
+import { BRAND } from '@/lib/site';
 
 export default function Footer({ settings }: { settings: SiteSettings }) {
   const { language } = useLanguage();
@@ -31,13 +32,18 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
             <div className="text-[11px] md:text-[12px] text-gray-400 leading-relaxed font-medium">
               {language === 'KO' ? (
                 <p>
-                  주식회사 위트(weet) &nbsp;|&nbsp; 전남 함평군 대동면 금산길 205-27 &nbsp;|&nbsp; 사업자 등록번호 660-86-01862 &nbsp;|&nbsp;{' '}
+                  {BRAND.legal} &nbsp;|&nbsp; 전남 함평군 대동면 금산길 205-27 &nbsp;|&nbsp; 사업자 등록번호 660-86-01862 &nbsp;|&nbsp;{' '}
                   <a href={telHref(settings.contact_phone)} className="hover:text-white transition-colors">{settings.contact_phone}</a>
                   {settings.consult_hours && <span> &nbsp;|&nbsp; 상담 {settings.consult_hours}</span>}
                 </p>
+              ) : language === 'ES' ? (
+                <p>
+                  {BRAND.en} Co., Ltd. &nbsp;|&nbsp; 205-27, Geumsan-gil, Daedong-myeon, Hampyeong-gun, Jeollanam-do, República de Corea <br className="hidden md:block" /> Reg. mercantil 660-86-01862 &nbsp;|&nbsp;{' '}
+                  <a href={telHref(settings.contact_phone)} className="hover:text-white transition-colors">{settings.contact_phone}</a>
+                </p>
               ) : (
                 <p>
-                  weet Co., Ltd. (weet) &nbsp;|&nbsp; 205-27, Geumsan-gil, Daedong-myeon, Hampyeong-gun, Jeollanam-do, Republic of Korea <br className="hidden md:block" /> Business Reg. 660-86-01862 &nbsp;|&nbsp;{' '}
+                  {BRAND.en} Co., Ltd. &nbsp;|&nbsp; 205-27, Geumsan-gil, Daedong-myeon, Hampyeong-gun, Jeollanam-do, Republic of Korea <br className="hidden md:block" /> Business Reg. 660-86-01862 &nbsp;|&nbsp;{' '}
                   <a href={telHref(settings.contact_phone)} className="hover:text-white transition-colors">{settings.contact_phone}</a>
                 </p>
               )}
@@ -95,11 +101,11 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
                 Copyright © weet All right reserved
               </p>
               <div className="flex flex-wrap gap-2 text-[10px] md:text-[11px] text-gray-400 md:justify-end font-bold">
-                <Link href="/privacy" className="hover:text-white transition-colors duration-200">{language === 'KO' ? '개인정보 처리방침' : 'Privacy Policy'}</Link>
+                <Link href="/privacy" className="hover:text-white transition-colors duration-200">{{ KO: '개인정보 처리방침', EN: 'Privacy Policy', ES: 'Política de privacidad' }[language]}</Link>
                 <span>|</span>
-                <Link href="/terms" className="hover:text-white transition-colors duration-200">{language === 'KO' ? '이용약관' : 'Terms of Use'}</Link>
+                <Link href="/terms" className="hover:text-white transition-colors duration-200">{{ KO: '이용약관', EN: 'Terms of Use', ES: 'Términos de uso' }[language]}</Link>
                 <span>|</span>
-                <Link href="/company" className="hover:text-white transition-colors duration-200">{language === 'KO' ? '회사소개' : 'About Us'}</Link>
+                <Link href="/company" className="hover:text-white transition-colors duration-200">{{ KO: '회사소개', EN: 'About Us', ES: 'Empresa' }[language]}</Link>
               </div>
             </div>
           </div>

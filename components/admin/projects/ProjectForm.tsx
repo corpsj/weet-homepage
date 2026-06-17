@@ -12,7 +12,24 @@ import { Project } from '@/types/supabase';
 import { createProject, updateProject } from '@/app/actions/project-actions';
 import { uploadImageAction } from '@/app/actions/storage-actions';
 import imageCompression from 'browser-image-compression';
-import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+import {
+    DndContext,
+    DragEndEvent,
+    closestCenter,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors,
+} from '@dnd-kit/core';
+import {
+    arrayMove,
+    SortableContext,
+    sortableKeyboardCoordinates,
+    horizontalListSortingStrategy,
+    useSortable,
+} from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
+import { useUnsavedChangesWarning } from '@/hooks/useUnsavedChangesWarning';
 import {
     ConsolePanel,
     ConsoleSectionTitle,
@@ -43,11 +60,12 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     const [images, setImages] = useState<string[]>(initialData?.images || []);
     const [uploading, setUploading] = useState(false);
     const [uploadProgress, setUploadProgress] = useState('');
+    const [imagesDirty, setImagesDirty] = useState(false);
 
     const {
         register,
         handleSubmit,
-        formState: { errors },
+        formState: { errors, isDirty: formIsDirty },
     } = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
@@ -60,6 +78,15 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
             status: initialData?.status || 'completed',
         },
     });
+
+    useUnsavedChangesWarning(formIsDirty || imagesDirty);
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
 
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files?.length) return;
@@ -110,6 +137,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
             }
 
             setImages((prev) => [...prev, ...newImages]);
+            setImagesDirty(true);
             toast.success(`${newImages.length}장 업로드 완료`);
         } catch (error) {
             console.error('Error uploading images:', error);
@@ -124,16 +152,20 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
 
     const removeImage = (index: number) => {
         setImages((prev) => prev.filter((_, i) => i !== index));
+        setImagesDirty(true);
     };
 
-    const handleOnDragEnd = (result: any) => {
-        if (!result.destination) return;
+    const handleOnDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event;
+        if (!over || active.id === over.id) return;
 
-        const items = Array.from(images);
-        const [reorderedItem] = items.splice(result.source.index, 1);
-        items.splice(result.destination.index, 0, reorderedItem);
-
-        setImages(items);
+        setImages((prev) => {
+            const oldIndex = prev.indexOf(String(active.id));
+            const newIndex = prev.indexOf(String(over.id));
+            if (oldIndex === -1 || newIndex === -1) return prev;
+            return arrayMove(prev, oldIndex, newIndex);
+        });
+        setImagesDirty(true);
     };
 
     const onSubmit = async (data: FormData) => {
@@ -162,6 +194,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                 toast.success('프로젝트가 등록되었습니다.');
             }
 
+            setImagesDirty(false);
             router.push('/admin/projects');
             router.refresh();
         } catch (error) {
@@ -211,57 +244,25 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                 </div>
 
                 {images.length > 0 ? (
-                    <DragDropContext onDragEnd={handleOnDragEnd}>
-                        <Droppable droppableId="project-images" direction="horizontal">
-                            {(provided) => (
-                                <div
-                                    {...provided.droppableProps}
-                                    ref={provided.innerRef}
-                                    className="flex gap-4 overflow-x-auto pb-4"
-                                >
-                                    {images.map((url, index) => (
-                                        <Draggable key={url} draggableId={url} index={index}>
-                                            {(provided) => (
-                                                <div
-                                                    ref={provided.innerRef}
-                                                    {...provided.draggableProps}
-                                                    {...provided.dragHandleProps}
-                                                    className="relative flex-shrink-0 w-40 aspect-[4/3] group bg-[#f4f4f1] border border-[#e5e5df] rounded"
-                                                >
-                                                    <Image
-                                                        src={url}
-                                                        alt={`Project image ${index + 1}`}
-                                                        fill
-                                                        sizes="160px"
-                                                        className="object-cover rounded"
-                                                    />
-                                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors rounded flex items-center justify-center opacity-0 group-hover:opacity-100">
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => removeImage(index)}
-                                                            className="p-1.5 bg-white rounded shadow text-red-600 hover:bg-red-50"
-                                                            aria-label={`프로젝트 이미지 ${index + 1} 제거`}
-                                                        >
-                                                            <X className="w-4 h-4" />
-                                                        </button>
-                                                    </div>
-                                                    {index === 0 && (
-                                                        <span className="absolute top-2 left-2 px-1.5 py-0.5 bg-black text-white text-[10px] font-bold rounded">
-                                                            대표
-                                                        </span>
-                                                    )}
-                                                    <div className="absolute top-2 right-2 p-1 bg-black/50 rounded cursor-grab active:cursor-grabbing text-white opacity-0 group-hover:opacity-100 transition-opacity">
-                                                        <GripVertical className="w-4 h-4" />
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </Draggable>
-                                    ))}
-                                    {provided.placeholder}
-                                </div>
-                            )}
-                        </Droppable>
-                    </DragDropContext>
+                    <DndContext
+                        id="admin-project-images"
+                        sensors={sensors}
+                        collisionDetection={closestCenter}
+                        onDragEnd={handleOnDragEnd}
+                    >
+                        <SortableContext items={images} strategy={horizontalListSortingStrategy}>
+                            <div className="flex gap-4 overflow-x-auto pb-4">
+                                {images.map((url, index) => (
+                                    <SortableImage
+                                        key={url}
+                                        url={url}
+                                        index={index}
+                                        onRemove={removeImage}
+                                    />
+                                ))}
+                            </div>
+                        </SortableContext>
+                    </DndContext>
                 ) : (
                     <div className="h-40 flex items-center justify-center border border-dashed border-[#d8d8d2] rounded bg-[#fbfbfa]">
                         <p className="text-gray-500 text-xs font-bold">이미지를 업로드해주세요</p>
@@ -379,5 +380,67 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                 </button>
             </div>
         </form>
+    );
+}
+
+function SortableImage({
+    url,
+    index,
+    onRemove,
+}: {
+    url: string;
+    index: number;
+    onRemove: (index: number) => void;
+}) {
+    const {
+        attributes,
+        listeners,
+        setNodeRef,
+        transform,
+        transition,
+        isDragging,
+    } = useSortable({ id: url });
+
+    const style = {
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.5 : 1,
+    };
+
+    return (
+        <div
+            ref={setNodeRef}
+            style={style}
+            {...attributes}
+            {...listeners}
+            className="relative flex-shrink-0 w-40 aspect-[4/3] group bg-[#f4f4f1] border border-[#e5e5df] rounded"
+        >
+            <Image
+                src={url}
+                alt={`Project image ${index + 1}`}
+                fill
+                sizes="160px"
+                className="object-cover rounded"
+            />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors rounded flex items-center justify-center opacity-0 group-hover:opacity-100">
+                <button
+                    type="button"
+                    onClick={() => onRemove(index)}
+                    onPointerDown={(e) => e.stopPropagation()}
+                    className="p-1.5 bg-white rounded shadow text-red-600 hover:bg-red-50"
+                    aria-label={`프로젝트 이미지 ${index + 1} 제거`}
+                >
+                    <X className="w-4 h-4" />
+                </button>
+            </div>
+            {index === 0 && (
+                <span className="absolute top-2 left-2 px-1.5 py-0.5 bg-black text-white text-[10px] font-bold rounded">
+                    대표
+                </span>
+            )}
+            <div className="absolute top-2 right-2 p-1 bg-black/50 rounded cursor-grab active:cursor-grabbing text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                <GripVertical className="w-4 h-4" />
+            </div>
+        </div>
     );
 }

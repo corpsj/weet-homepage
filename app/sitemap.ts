@@ -1,14 +1,37 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "@/lib/site";
+import { supabase } from "@/lib/supabase";
+import type { Project } from "@/types/supabase";
+import { isPublicReadyProject } from "@/lib/projects/publicProjects";
 
-const siteUrl = (() => {
-  try {
-    return new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000");
-  } catch {
-    return new URL("http://localhost:3000");
-  }
-})();
+async function getPublishedProjectEntries(
+  lastModified: Date,
+): Promise<MetadataRoute.Sitemap> {
+  const { data } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("status", "completed")
+    .order("completed_at", { ascending: false });
 
-export default function sitemap(): MetadataRoute.Sitemap {
+  const publicProjects = ((data as Project[] | null) ?? []).filter(
+    isPublicReadyProject,
+  );
+
+  return publicProjects.map((project) => {
+    const projectDate = project.completed_at ?? project.created_at;
+    const parsed = projectDate ? new Date(projectDate) : null;
+
+    return {
+      url: `${SITE_URL}/projects/${project.id}`,
+      lastModified:
+        parsed && !Number.isNaN(parsed.getTime()) ? parsed : lastModified,
+      changeFrequency: "monthly",
+      priority: 0.6,
+    };
+  });
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const lastModified = new Date();
 
   const routes: Array<{
@@ -33,11 +56,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/terms", changeFrequency: "yearly", priority: 0.2 },
   ];
 
-  return routes.map((route) => ({
-    url: `${siteUrl.origin}${route.path}`,
+  const staticEntries: MetadataRoute.Sitemap = routes.map((route) => ({
+    url: `${SITE_URL}${route.path}`,
     lastModified,
     changeFrequency: route.changeFrequency,
     priority: route.priority,
   }));
-}
 
+  try {
+    const projectEntries = await getPublishedProjectEntries(lastModified);
+    return [...staticEntries, ...projectEntries];
+  } catch {
+    // The sitemap must never throw; fall back to the static routes only.
+    return staticEntries;
+  }
+}

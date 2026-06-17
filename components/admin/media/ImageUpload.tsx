@@ -29,7 +29,9 @@ export default function ImageUpload({
     recommendedSize
 }: ImageUploadProps) {
     const [loading, setLoading] = useState(false);
+    const [failedValue, setFailedValue] = useState<string | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
+    const isBroken = !!value && failedValue === value;
 
     const handleClick = () => {
         inputRef.current?.click();
@@ -138,7 +140,7 @@ export default function ImageUpload({
                 className="hidden"
             />
 
-            {value ? (
+            {value && !isBroken ? (
                 <div className="relative w-full h-full min-h-[200px] rounded-lg overflow-hidden border border-gray-200 bg-gray-50 group">
                     <Image
                         src={value}
@@ -146,6 +148,7 @@ export default function ImageUpload({
                         fill
                         sizes="(max-width: 768px) 100vw, 400px"
                         className="object-cover"
+                        onError={() => setFailedValue(value)}
                     />
                     <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
                     <button
@@ -173,7 +176,7 @@ export default function ImageUpload({
                                 <Upload className="w-6 h-6" />
                             </div>
                             <div className="text-center">
-                                <p className="text-sm font-medium">클릭하여 이미지 업로드</p>
+                                <p className="text-sm font-medium">{isBroken ? '이미지 점검 필요 · 다시 업로드' : '클릭하여 이미지 업로드'}</p>
                                 <p className="text-xs text-gray-400 mt-1">PNG, JPG, GIF up to {quality === 'high' ? '20MB' : '10MB'}</p>
                             </div>
                         </>

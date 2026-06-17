@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -17,7 +17,12 @@ interface ImageModalProps {
     onPrev?: () => void;
     hasNext?: boolean;
     hasPrev?: boolean;
+    /** Element to return focus to when the modal closes. */
+    triggerRef?: React.RefObject<HTMLElement | null>;
 }
+
+const FOCUSABLE_SELECTOR =
+    'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 export default function ImageModal({
     isOpen,
@@ -30,20 +35,53 @@ export default function ImageModal({
     onPrev,
     hasNext = false,
     hasPrev = false,
+    triggerRef,
 }: ImageModalProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const dialogRef = useRef<HTMLDivElement>(null);
+    const closeButtonRef = useRef<HTMLButtonElement>(null);
+    const titleId = useId();
 
     const handleClose = useCallback(() => {
         setCurrentIndex(0);
         onClose();
     }, [onClose]);
 
-    // Handle keyboard navigation
+    // Handle keyboard navigation and focus trapping
     useEffect(() => {
         if (!isOpen) return;
 
         const handleKeyDown = (e: KeyboardEvent) => {
-            if (e.key === 'Escape') handleClose();
+            if (e.key === 'Escape') {
+                handleClose();
+                return;
+            }
+
+            // Trap focus within the dialog
+            if (e.key === 'Tab') {
+                const dialog = dialogRef.current;
+                if (!dialog) return;
+                const focusable = Array.from(
+                    dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+                ).filter((el) => el.offsetParent !== null || el === document.activeElement);
+                if (focusable.length === 0) {
+                    e.preventDefault();
+                    return;
+                }
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+                const active = document.activeElement;
+                if (e.shiftKey) {
+                    if (active === first || !dialog.contains(active)) {
+                        e.preventDefault();
+                        last.focus();
+                    }
+                } else if (active === last || !dialog.contains(active)) {
+                    e.preventDefault();
+                    first.focus();
+                }
+                return;
+            }
 
             // Internal carousel navigation
             if (e.key === 'ArrowRight') {
@@ -70,6 +108,18 @@ export default function ImageModal({
             document.body.style.overflow = 'unset';
         };
     }, [isOpen, handleClose, onNext, onPrev, hasNext, hasPrev, currentIndex, images.length]);
+
+    // Move focus into the dialog on open and restore it on close
+    useEffect(() => {
+        if (!isOpen) return;
+        const previouslyFocused =
+            triggerRef?.current ?? (document.activeElement as HTMLElement | null);
+        closeButtonRef.current?.focus();
+
+        return () => {
+            previouslyFocused?.focus?.();
+        };
+    }, [isOpen, triggerRef]);
 
     const handleNext = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -105,6 +155,11 @@ export default function ImageModal({
                     onClick={handleClose}
                 >
                     <motion.div
+                        ref={dialogRef}
+                        role="dialog"
+                        aria-modal="true"
+                        aria-label={title ? undefined : imageAlt}
+                        aria-labelledby={title ? titleId : undefined}
                         initial={{ scale: 0.95, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         exit={{ scale: 0.95, opacity: 0 }}
@@ -137,7 +192,9 @@ export default function ImageModal({
                             {/* Navigation Buttons (Over Image) */}
                             {(hasPrev || currentIndex > 0) && (
                                 <button
+                                    type="button"
                                     onClick={handlePrev}
+                                    aria-label="이전 이미지"
                                     className="absolute left-4 top-1/2 -translate-y-1/2 p-2 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 rounded-full transition-colors z-20"
                                 >
                                     <ChevronLeft className="w-8 h-8" />
@@ -145,7 +202,9 @@ export default function ImageModal({
                             )}
                             {(hasNext || currentIndex < images.length - 1) && (
                                 <button
+                                    type="button"
                                     onClick={handleNext}
+                                    aria-label="다음 이미지"
                                     className="absolute right-4 top-1/2 -translate-y-1/2 p-2 text-white/70 hover:text-white bg-black/20 hover:bg-black/40 rounded-full transition-colors z-20"
                                 >
                                     <ChevronRight className="w-8 h-8" />
@@ -165,7 +224,10 @@ export default function ImageModal({
                             {/* Header */}
                             <div className="p-6 border-b border-gray-100 flex items-center justify-end">
                                 <button
+                                    ref={closeButtonRef}
+                                    type="button"
                                     onClick={handleClose}
+                                    aria-label="닫기"
                                     className="p-1 hover:bg-gray-100 rounded-full transition-colors"
                                 >
                                     <X className="w-6 h-6 text-black" />
@@ -176,7 +238,7 @@ export default function ImageModal({
                             <div className="flex-1 overflow-y-auto p-6 custom-scrollbar flex flex-col">
                                 <div className="flex-1">
                                     {title && (
-                                        <h2 className="text-2xl font-bold mb-8 text-black">{title}</h2>
+                                        <h2 id={titleId} className="text-2xl font-bold mb-8 text-black">{title}</h2>
                                     )}
 
                                     {description && (

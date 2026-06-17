@@ -106,18 +106,18 @@ interface ProductsPageClientProps {
 
 export default function ProductsPageClient({ initialProducts }: ProductsPageClientProps) {
     const { language } = useLanguage();
-    const isKO = language === 'KO';
+    const t = (ko: string, en: string, es: string) => ({ KO: ko, EN: en, ES: es }[language]);
     const TEXT = {
-        description: isKO ? '설명' : 'Description',
-        specs: isKO ? '상세 정보' : 'Specifications',
-        price: isKO ? '가격' : 'Price',
-        size: isKO ? '크기' : 'Size',
-        structure: isKO ? '구조' : 'Structure',
-        roof: isKO ? '지붕재' : 'Roof',
-        exterior: isKO ? '외부마감' : 'Exterior',
-        interior: isKO ? '내부마감' : 'Interior',
-        floorPlan: isKO ? '도면' : 'Floor Plan',
-        floorPlanWaiting: isKO ? '도면 요청 시 제공' : 'Floor plan available on request',
+        description: t('설명', 'Description', 'Descripción'),
+        specs: t('상세 정보', 'Specifications', 'Especificaciones'),
+        price: t('가격', 'Price', 'Precio'),
+        size: t('크기', 'Size', 'Tamaño'),
+        structure: t('구조', 'Structure', 'Estructura'),
+        roof: t('지붕재', 'Roof', 'Cubierta'),
+        exterior: t('외부마감', 'Exterior', 'Acabado exterior'),
+        interior: t('내부마감', 'Interior', 'Acabado interior'),
+        floorPlan: t('도면', 'Floor Plan', 'Plano'),
+        floorPlanWaiting: t('도면 요청 시 제공', 'Floor plan available on request', 'Plano disponible bajo petición'),
     };
     const [products] = useState<ProductData[]>(() => sortProducts(initialProducts.map(mapProductToData)));
     const [visibleCount, setVisibleCount] = useState(() => Math.min(8, products.length));
@@ -130,6 +130,15 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
     };
 
     const [activeProduct, setActiveProduct] = useState<string>(() => products[0]?.id ?? "");
+    const [failedImages, setFailedImages] = useState<Set<string>>(() => new Set());
+    const markImageFailed = useCallback((src: string) => {
+        setFailedImages((prev) => {
+            if (prev.has(src)) return prev;
+            const next = new Set(prev);
+            next.add(src);
+            return next;
+        });
+    }, []);
     const productRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
     const sidebarRef = useRef<HTMLDivElement>(null);
     const sidebarItemRefs = useRef<{ [key: string]: HTMLLIElement | null }>({});
@@ -539,19 +548,23 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                 </div>
 
                 {/* Main Content */}
-                <main className="flex-1 min-h-screen pt-[120px] md:pt-[160px] lg:pt-[140px] px-4 lg:px-20 pb-40 bg-white lg:bg-transparent">
+                <div className="flex-1 min-h-screen pt-[120px] md:pt-[160px] lg:pt-[140px] px-4 lg:px-20 pb-40 bg-white lg:bg-transparent">
                     <div className="max-w-5xl mx-auto mb-10 lg:mb-32 text-center lg:text-left mt-4 lg:mt-0">
-                        <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">{isKO ? '제품 소개' : 'Products'}</h1>
+                        <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">{t('제품 소개', 'Products', 'Productos')}</h1>
                         <p className="text-gray-600 text-sm md:text-lg">
-                            {isKO ? '작고 단단한 내 집, 필요한 크기와 목적에 맞는 구성을 찾아보세요.' : 'Find the right size and layout for your needs.'}
+                            {t('작고 단단한 내 집, 필요한 크기와 목적에 맞는 구성을 찾아보세요.', 'Find the right size and layout for your needs.', 'Encuentre el tamaño y la distribución que se ajusten a sus necesidades.')}
                         </p>
                         {products.length > visibleCount && (
                             <p className="mt-3 text-xs font-semibold text-gray-400 md:text-sm">
-                                {isKO ? `대표 모델 ${visibleCount}개부터 확인하고 전체 ${products.length}개 라인업으로 이어집니다.` : `${visibleCount} representative models first, followed by the full ${products.length}-model lineup.`}
+                                {t(
+                                    `대표 모델 ${visibleCount}개부터 확인하고 전체 ${products.length}개 라인업으로 이어집니다.`,
+                                    `${visibleCount} representative models first, followed by the full ${products.length}-model lineup.`,
+                                    `Primero ${visibleCount} modelos representativos y, a continuación, la gama completa de ${products.length} modelos.`,
+                                )}
                             </p>
                         )}
                         <p className="mt-4 text-xs leading-5 text-gray-500 md:text-sm md:leading-6">
-                            {isKO ? (
+                            {language === 'KO' ? (
                                 <>
                                     라인업 제품은 구성과 마감에 따라 가격이 달라져 상담으로 안내드립니다. 기준 모델(3x6·3x9)의 공개 가격은{' '}
                                     <Link href="/customize" className="font-bold text-[#0d6e66] underline underline-offset-2">
@@ -562,6 +575,14 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                         비용 안내
                                     </Link>
                                     에 정리되어 있습니다.
+                                </>
+                            ) : language === 'ES' ? (
+                                <>
+                                    Los precios de la gama varían según la configuración. Consulte los precios base publicados en el{' '}
+                                    <Link href="/customize" className="font-bold text-[#0d6e66] underline underline-offset-2">
+                                        configurador
+                                    </Link>
+                                    .
                                 </>
                             ) : (
                                 <>
@@ -576,7 +597,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                     </div>
 
                     <div className="max-w-5xl mx-auto space-y-12 lg:space-y-[20vh]"> {/* Increased spacing for better scroll detection */}
-                        {visibleProducts.map((product, index) => {
+                        {visibleProducts.map((product) => {
                             // Check if this is the first product of its category to render the anchor
                             const globalIndex = products.findIndex((item) => item.id === product.id);
                             const isFirstOfCategory = globalIndex === 0 || products[globalIndex - 1]?.sizeCategory !== product.sizeCategory;
@@ -610,7 +631,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                                 className="group relative aspect-[16/9] w-full cursor-pointer overflow-hidden rounded-lg bg-gray-200 lg:mb-12"
                                                 onClick={() => openGallery(product)}
                                             >
-                                                {product.imageUrl ? (
+                                                {product.imageUrl && !failedImages.has(product.imageUrl) ? (
                                                     <>
                                                         <Image
                                                             src={product.imageUrl}
@@ -619,6 +640,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                                             className="object-cover group-hover:scale-105 transition-transform duration-500"
                                                             sizes="(max-width: 768px) 100vw, 80vw"
                                                             loading={globalIndex < 2 ? 'eager' : 'lazy'}
+                                                            onError={() => markImageFailed(product.imageUrl)}
                                                         />
                                                         {/* Gallery hint icon */}
                                                         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
@@ -646,7 +668,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                                 className="w-full mt-4 flex items-center justify-between lg:hidden text-gray-600 font-bold py-2 px-1 hover:text-gray-900"
                                                 onClick={() => toggleMobileProduct(product.id)}
                                             >
-                                                <span>{expandedMobileProducts.includes(product.id) ? (isKO ? '상세정보 닫기' : 'Hide Details') : (isKO ? '상세정보 보기' : 'View Details')}</span>
+                                                <span>{expandedMobileProducts.includes(product.id) ? t('상세정보 닫기', 'Hide Details', 'Ocultar detalles') : t('상세정보 보기', 'View Details', 'Ver detalles')}</span>
                                                 <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${expandedMobileProducts.includes(product.id) ? 'rotate-180' : ''}`} />
                                             </button>
                                         </div>
@@ -698,7 +720,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                             <div>
                                                 <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">{TEXT.floorPlan}</h3>
                                                 <div className="relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-lg border border-gray-100">
-                                                    {product.floorPlan.src ? (
+                                                    {product.floorPlan.src && !failedImages.has(product.floorPlan.src) ? (
                                                         <div className="relative w-full h-full">
                                                             <Image
                                                                 src={product.floorPlan.src}
@@ -706,6 +728,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                                                 fill
                                                                 className="object-contain"
                                                                 sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 36vw"
+                                                                onError={() => markImageFailed(product.floorPlan.src)}
                                                             />
                                                         </div>
                                                     ) : (
@@ -719,7 +742,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                                     href="/customize"
                                                     className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white border border-gray-200 text-gray-900 font-bold text-sm transition-colors hover:bg-gray-50"
                                                 >
-                                                    {isKO ? '구성 상담 시작하기' : 'Start a consultation'}
+                                                    {t('구성 상담 시작하기', 'Start a consultation', 'Iniciar una consulta')}
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                                                 </a>
                                             </div>
@@ -743,7 +766,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                             </div>
                         )}
                     </div>
-                </main>
+                </div>
             </div>
 
             {/* Gallery Modal */}
@@ -758,6 +781,8 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                     >
                         {/* Close Button */}
                         <button
+                            type="button"
+                            aria-label={t('갤러리 닫기', 'Close gallery', 'Cerrar galería')}
                             className="absolute top-4 right-4 md:top-8 md:right-8 text-white/50 hover:text-white z-50 p-2"
                             onClick={() => setGalleryOpen(false)}
                         >
@@ -768,22 +793,34 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
 
                             {/* Main Display */}
                             <div className="relative w-full aspect-[16/9] md:aspect-[16/10] max-h-[80vh] bg-black">
-                                <Image
-                                    src={currentGalleryImages[currentImageIndex]}
-                                    alt="Gallery"
-                                    fill
-                                    className="object-contain"
-                                    sizes="100vw"
-                                />
+                                {currentGalleryImages[currentImageIndex] && !failedImages.has(currentGalleryImages[currentImageIndex]) ? (
+                                    <Image
+                                        src={currentGalleryImages[currentImageIndex]}
+                                        alt="Gallery"
+                                        fill
+                                        className="object-contain"
+                                        sizes="100vw"
+                                        onError={() => markImageFailed(currentGalleryImages[currentImageIndex])}
+                                    />
+                                ) : (
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white/60">
+                                        <Home className="w-8 h-8 mb-2 opacity-50" />
+                                        <span className="text-sm font-bold">이미지 점검 필요</span>
+                                    </div>
+                                )}
 
                                 {/* Nav Arrows */}
                                 <button
+                                    type="button"
+                                    aria-label={t('이전 이미지', 'Previous image', 'Imagen anterior')}
                                     className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-3 rounded-full text-white backdrop-blur-md transition-all"
                                     onClick={prevImage}
                                 >
                                     <ChevronDown className="w-8 h-8 rotate-90" />
                                 </button>
                                 <button
+                                    type="button"
+                                    aria-label={t('다음 이미지', 'Next image', 'Imagen siguiente')}
                                     className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-3 rounded-full text-white backdrop-blur-md transition-all"
                                     onClick={nextImage}
                                 >
@@ -796,16 +833,25 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                 {currentGalleryImages.map((img, idx) => (
                                     <button
                                         key={idx}
+                                        type="button"
+                                        aria-label={t(`이미지 ${idx + 1} 보기`, `View image ${idx + 1}`, `Ver imagen ${idx + 1}`)}
                                         onClick={() => setCurrentImageIndex(idx)}
                                         className={`relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all ${currentImageIndex === idx ? 'border-[#FEBD16] opacity-100' : 'border-transparent opacity-50 hover:opacity-100'}`}
                                     >
-                                        <Image
-                                            src={img}
-                                            alt={`Thumb ${idx}`}
-                                            fill
-                                            className="object-cover"
-                                            sizes="96px"
-                                        />
+                                        {failedImages.has(img) ? (
+                                            <div className="absolute inset-0 flex items-center justify-center bg-gray-800 text-gray-400">
+                                                <Home className="w-5 h-5 opacity-50" />
+                                            </div>
+                                        ) : (
+                                            <Image
+                                                src={img}
+                                                alt={`Thumb ${idx}`}
+                                                fill
+                                                className="object-cover"
+                                                sizes="96px"
+                                                onError={() => markImageFailed(img)}
+                                            />
+                                        )}
                                     </button>
                                 ))}
                             </div>

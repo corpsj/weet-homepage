@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { migrateProducts } from '@/app/actions/migration-actions';
+import { confirmToast } from '@/lib/ui/confirm';
 import { Loader2 } from 'lucide-react';
 import { createClient } from '@/utils/supabase/client';
 import { ConsolePageHeader, ConsolePanel, ConsoleSectionTitle, consoleInputClass, consolePrimaryButtonClass } from '@/components/admin/ConsolePrimitives';
@@ -61,7 +62,12 @@ export default function AdminSettingsPage() {
     };
 
     const handleMigration = async () => {
-        if (!confirm('위험 작업입니다. 기존 제품 데이터를 데이터베이스로 이관하시겠습니까? 이미 데이터가 있으면 중복 데이터가 생성될 수 있습니다.')) {
+        const ok = await confirmToast('제품이 하나도 없을 때만 시드 데이터를 추가합니다. 진행할까요?', {
+            confirmLabel: '시드 추가',
+            cancelLabel: '취소',
+            description: '이미 제품이 등록되어 있으면 자동으로 중단되며 기존 데이터는 그대로 보존됩니다.',
+        });
+        if (!ok) {
             return;
         }
 

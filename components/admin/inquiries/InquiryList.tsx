@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { updateInquiryStatus, deleteInquiry, replyToInquiry } from '@/app/actions/inquiry-actions';
+import { confirmToast } from '@/lib/ui/confirm';
 import {
     ConsolePanel,
     ConsoleSectionTitle,
@@ -99,7 +100,7 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
     };
 
     const handleDelete = async (id: string) => {
-        if (!confirm('정말 삭제하시겠습니까?')) return;
+        if (!(await confirmToast('정말 삭제하시겠습니까?', { confirmLabel: '삭제' }))) return;
 
         const previousInquiries = inquiries;
         const previousSelectedInquiry = selectedInquiry;

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import Image from 'next/image';
 import { useTranslation } from '@/hooks/useTranslation';
 
@@ -15,11 +15,17 @@ export interface Slide {
 
 export default function HeroCarouselClient({ initialSlides }: { initialSlides: Slide[] }) {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(true);
+    const [isPaused, setIsPaused] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
+    const prefersReducedMotion = useReducedMotion();
     const t = useTranslation();
     const slideCount = initialSlides.length;
     const safeSlideIndex = slideCount > 0 && currentSlide < slideCount ? currentSlide : 0;
     const activeSlide = slideCount > 0 ? initialSlides[safeSlideIndex] : null;
+
+    // Disable enter/exit/transition animation when the user prefers reduced motion.
+    const transitionDuration = prefersReducedMotion ? 0 : 0.7;
 
     const nextSlide = useCallback(() => {
         if (slideCount === 0) return;
@@ -31,14 +37,17 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
         setCurrentSlide((prev) => (prev - 1 + slideCount) % slideCount);
     }, [slideCount]);
 
-    // Auto-advance slides every 10 seconds
+    // Auto-advance slides every 10 seconds.
+    // Skipped when paused (hover/focus), when manually stopped, or when the
+    // user prefers reduced motion.
     useEffect(() => {
         if (slideCount <= 1) return;
+        if (!isPlaying || isPaused || prefersReducedMotion) return;
         const timer = setInterval(() => {
             nextSlide();
         }, 10000);
         return () => clearInterval(timer);
-    }, [nextSlide, slideCount]);
+    }, [nextSlide, slideCount, isPlaying, isPaused, prefersReducedMotion]);
 
     if (!activeSlide) {
         return (
@@ -61,7 +70,23 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
     }
 
     return (
-        <section ref={containerRef} className="relative bg-[#EBEBEB] overflow-hidden w-full aspect-[2/3] md:aspect-[16/9] lg:aspect-auto lg:h-[calc(100vh-110px)]">
+        <section
+            ref={containerRef}
+            className="relative bg-[#EBEBEB] overflow-hidden w-full aspect-[2/3] md:aspect-[16/9] lg:aspect-auto lg:h-[calc(100vh-110px)]"
+            aria-roledescription="carousel"
+            aria-label="히어로 슬라이드"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            onFocusCapture={() => setIsPaused(true)}
+            onBlurCapture={() => setIsPaused(false)}
+        >
+            {/* Live region announcing the active slide for screen readers */}
+            <div aria-live="polite" aria-atomic="true" className="sr-only">
+                {slideCount > 0
+                    ? `${safeSlideIndex + 1} / ${slideCount}번 슬라이드: ${activeSlide.title || '히어로 이미지'}`
+                    : ''}
+            </div>
+
             {/* Blurred Background Layer */}
             <AnimatePresence mode="wait">
                 <motion.div
@@ -69,7 +94,7 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.7 }}
+                    transition={{ duration: transitionDuration }}
                     className="absolute inset-0 z-0"
                 >
                     <Image
@@ -91,10 +116,13 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={safeSlideIndex}
-                            initial={{ opacity: 0, scale: 1.05 }}
+                            role="group"
+                            aria-roledescription="슬라이드"
+                            aria-label={`${safeSlideIndex + 1} / ${slideCount}번 슬라이드${activeSlide.title ? `: ${activeSlide.title}` : ''}`}
+                            initial={prefersReducedMotion ? false : { opacity: 0, scale: 1.05 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            exit={{ opacity: 0 }}
-                            transition={{ duration: 0.7, ease: "easeInOut" }}
+                            exit={prefersReducedMotion ? { opacity: 1 } : { opacity: 0 }}
+                            transition={{ duration: transitionDuration, ease: "easeInOut" }}
                             className="w-full h-full absolute inset-0"
                         >
                             <Image
@@ -112,9 +140,9 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                             <div className="absolute inset-0 flex flex-col justify-center items-start text-left text-white px-8 md:px-16 lg:px-24">
                                 {activeSlide.title && (
                                     <motion.h1
-                                        initial={{ y: 20, opacity: 0 }}
+                                        initial={prefersReducedMotion ? false : { y: 20, opacity: 0 }}
                                         animate={{ y: 0, opacity: 1 }}
-                                        transition={{ delay: 0.3, duration: 0.8 }}
+                                        transition={prefersReducedMotion ? { duration: 0 } : { delay: 0.3, duration: 0.8 }}
                                         className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 drop-shadow-lg"
                                     >
                                         {activeSlide.title}
@@ -122,9 +150,9 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                                 )}
                                 {activeSlide.subtitle && (
                                     <motion.p
-                                        initial={{ y: 20, opacity: 0 }}
+                                        initial={prefersReducedMotion ? false : { y: 20, opacity: 0 }}
                                         animate={{ y: 0, opacity: 1 }}
-                                        transition={{ delay: 0.5, duration: 0.8 }}
+                                        transition={prefersReducedMotion ? { duration: 0 } : { delay: 0.5, duration: 0.8 }}
                                         className="text-xl md:text-2xl lg:text-3xl font-light tracking-wide drop-shadow-md"
                                     >
                                         {activeSlide.subtitle}
@@ -133,9 +161,9 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                                 {activeSlide.link_url && (
                                     <motion.a
                                         href={activeSlide.link_url}
-                                        initial={{ y: 20, opacity: 0 }}
+                                        initial={prefersReducedMotion ? false : { y: 20, opacity: 0 }}
                                         animate={{ y: 0, opacity: 1 }}
-                                        transition={{ delay: 0.65, duration: 0.8 }}
+                                        transition={prefersReducedMotion ? { duration: 0 } : { delay: 0.65, duration: 0.8 }}
                                         className="mt-8 inline-flex h-11 items-center justify-center rounded-md bg-white px-5 text-sm font-bold text-black transition-colors hover:bg-primary"
                                     >
                                         자세히 보기
@@ -149,36 +177,62 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
 
             {/* Navigation Arrows */}
             <button
+                type="button"
                 onClick={prevSlide}
                 className="absolute left-4 md:left-8 lg:left-[60px] top-1/2 -translate-y-1/2 w-[50px] h-[50px] md:w-[60px] md:h-[60px] lg:w-[80px] lg:h-[80px] flex items-center justify-center bg-black/20 hover:bg-black/40 transition-colors duration-200 backdrop-blur-md z-30 rounded-full group"
-                aria-label="Previous slide"
+                aria-label="이전 슬라이드"
             >
-                <svg className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 transition-transform group-hover:-translate-x-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg aria-hidden="true" focusable="false" className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 transition-transform group-hover:-translate-x-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M15 18L9 12L15 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
             </button>
 
             <button
+                type="button"
                 onClick={nextSlide}
                 className="absolute right-4 md:right-8 lg:right-[60px] top-1/2 -translate-y-1/2 w-[50px] h-[50px] md:w-[60px] md:h-[60px] lg:w-[80px] lg:h-[80px] flex items-center justify-center bg-black/20 hover:bg-black/40 transition-colors duration-200 backdrop-blur-md z-30 rounded-full group"
-                aria-label="Next slide"
+                aria-label="다음 슬라이드"
             >
-                <svg className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg aria-hidden="true" focusable="false" className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12 transition-transform group-hover:translate-x-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M9 18L15 12L9 6" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
             </button>
 
             {/* Slide Indicators - Moved up to avoid overlap with scroll indicator */}
-            <div className="absolute bottom-20 md:bottom-24 lg:bottom-28 left-1/2 -translate-x-1/2 flex space-x-3 z-30">
+            <div className="absolute bottom-20 md:bottom-24 lg:bottom-28 left-1/2 -translate-x-1/2 flex items-center space-x-3 z-30">
                 {initialSlides.map((_, idx) => (
                     <button
+                        type="button"
                         key={idx}
                         onClick={() => setCurrentSlide(idx)}
                         className={`h-[3px] md:h-[4px] rounded-full transition-all duration-200 ${idx === safeSlideIndex ? 'bg-white w-[40px] md:w-[50px]' : 'bg-white/40 hover:bg-white w-[20px] md:w-[30px]'
                             }`}
-                        aria-label={`Go to slide ${idx + 1}`}
+                        aria-label={`${idx + 1}번 슬라이드로 이동`}
+                        aria-current={idx === safeSlideIndex ? 'true' : undefined}
                     />
                 ))}
+
+                {/* Pause/Play auto-rotation toggle */}
+                {slideCount > 1 && !prefersReducedMotion && (
+                    <button
+                        type="button"
+                        onClick={() => setIsPlaying((prev) => !prev)}
+                        className="ml-2 flex h-7 w-7 md:h-8 md:w-8 items-center justify-center rounded-full bg-black/20 text-white backdrop-blur-md transition-colors duration-200 hover:bg-black/40"
+                        aria-label={isPlaying ? '슬라이드 자동 전환 멈춤' : '슬라이드 자동 전환 재생'}
+                        aria-pressed={!isPlaying}
+                    >
+                        {isPlaying ? (
+                            <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5 md:h-4 md:w-4" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="6" y="5" width="4" height="14" rx="1" />
+                                <rect x="14" y="5" width="4" height="14" rx="1" />
+                            </svg>
+                        ) : (
+                            <svg aria-hidden="true" focusable="false" className="h-3.5 w-3.5 md:h-4 md:w-4" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M8 5v14l11-7z" />
+                            </svg>
+                        )}
+                    </button>
+                )}
             </div>
 
             {/* Scroll Down Indicator */}

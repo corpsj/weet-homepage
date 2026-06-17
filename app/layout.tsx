@@ -2,25 +2,21 @@ import type { Metadata } from "next";
 import { Noto_Sans_KR, Geist } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/components/layout/ClientLayout";
+import { metadataBase, SITE_URL } from "@/lib/site";
 
 const noto = Noto_Sans_KR({
   subsets: ["latin"],
   weight: ["400", "500", "700"],
+  // Swap so Korean text renders immediately with a fallback instead of staying
+  // invisible while the (large CJK) font loads. (F36)
+  display: "swap",
   variable: "--font-noto-sans",
 });
-
-const metadataBase = (() => {
-  try {
-    return new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000");
-  } catch {
-    return new URL("http://localhost:3000");
-  }
-})();
 
 const defaultTitle = "위트(weet) — 이동식주택·모듈러주택 제작 전문";
 const defaultDescription =
   "공장에서 제작해 현장에 설치하는 이동식주택 전문 기업 위트(weet). 3x6·3x9 모듈러주택을 직접 구성하고 기본 가격을 확인한 뒤, 운반·설치 조건까지 투명하게 상담받으세요.";
-const siteOrigin = metadataBase.origin;
+const siteOrigin = SITE_URL;
 
 export const metadata: Metadata = {
   metadataBase,
@@ -168,7 +164,7 @@ export default async function RootLayout({
   ];
 
   return (
-    <html lang="ko" data-scroll-behavior="smooth" className={cn("font-sans", geist.variable)}>
+    <html lang="ko" data-scroll-behavior="smooth" className={cn("font-sans", geist.variable, noto.variable)}>
       <head>
         <script
           type="application/ld+json"

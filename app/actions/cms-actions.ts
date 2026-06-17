@@ -1,7 +1,8 @@
 'use server';
 
-import { createServiceRoleClient } from '@/utils/supabase/service';
+import { getSupabaseAdmin } from '@/lib/supabase';
 import { revalidatePath } from 'next/cache';
+import type { SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '@/types/supabase';
 import { requireAdmin } from '@/lib/admin-auth';
 
@@ -56,7 +57,7 @@ function normalizeHeroSlideInput(data: HeroSlideInput) {
     };
 }
 
-async function assertCanDeactivateHeroSlide(supabase: any, id: string) {
+async function assertCanDeactivateHeroSlide(supabase: SupabaseClient<Database>, id: string) {
     const { data: currentSlide, error: currentError } = await supabase
         .from('hero_slides')
         .select('is_active')
@@ -82,8 +83,8 @@ async function assertCanDeactivateHeroSlide(supabase: any, id: string) {
 export async function getHeroSlides() {
     await requireAdmin();
 
-    const supabase = createServiceRoleClient();
-    const { data, error } = await (supabase as any)
+    const supabase = getSupabaseAdmin();
+    const { data, error } = await supabase
         .from('hero_slides')
         .select('*')
         .order('sort_order', { ascending: true });
@@ -100,11 +101,11 @@ export async function createHeroSlide(data: HeroSlideInput) {
     await requireAdmin();
 
     try {
-        const supabase = createServiceRoleClient();
+        const supabase = getSupabaseAdmin();
         const normalized = normalizeHeroSlideInput(data);
 
         // Get max sort_order
-        const { data: maxOrderData, error: maxOrderError } = await (supabase as any)
+        const { data: maxOrderData, error: maxOrderError } = await supabase
             .from('hero_slides')
             .select('sort_order')
             .order('sort_order', { ascending: false })
@@ -117,7 +118,7 @@ export async function createHeroSlide(data: HeroSlideInput) {
 
         const nextOrder = (maxOrderData?.sort_order || 0) + 1;
 
-        const { error } = await (supabase as any)
+        const { error } = await supabase
             .from('hero_slides')
             .insert({
                 ...normalized,
@@ -132,9 +133,10 @@ export async function createHeroSlide(data: HeroSlideInput) {
         revalidatePath('/admin/main');
         revalidatePath('/');
         return { success: true };
-    } catch (error: any) {
+    } catch (error) {
         console.error('--- SERVER: createHeroSlide FAILED ---', error);
-        return { success: false, error: error.message || 'Internal server error' };
+        const message = error instanceof Error ? error.message : String(error);
+        return { success: false, error: message || 'Internal server error' };
     }
 }
 
@@ -142,14 +144,14 @@ export async function updateHeroSlide(id: string, data: HeroSlideInput) {
     await requireAdmin();
 
     try {
-        const supabase = createServiceRoleClient();
+        const supabase = getSupabaseAdmin();
         const normalized = normalizeHeroSlideInput(data);
 
         if (!normalized.is_active) {
             await assertCanDeactivateHeroSlide(supabase, id);
         }
 
-        const { error } = await (supabase as any)
+        const { error } = await supabase
             .from('hero_slides')
             .update(normalized)
             .eq('id', id);
@@ -162,9 +164,10 @@ export async function updateHeroSlide(id: string, data: HeroSlideInput) {
         revalidatePath('/admin/main');
         revalidatePath('/');
         return { success: true };
-    } catch (error: any) {
+    } catch (error) {
         console.error('--- SERVER: updateHeroSlide FAILED ---', error);
-        return { success: false, error: error.message || 'Internal server error' };
+        const message = error instanceof Error ? error.message : String(error);
+        return { success: false, error: message || 'Internal server error' };
     }
 }
 
@@ -172,8 +175,8 @@ export async function deleteHeroSlide(id: string) {
     await requireAdmin();
 
     // Use Service Role Client to bypass RLS
-    const supabase = createServiceRoleClient();
-    const { error } = await (supabase as any)
+    const supabase = getSupabaseAdmin();
+    const { error } = await supabase
         .from('hero_slides')
         .delete()
         .eq('id', id);
@@ -190,16 +193,17 @@ export async function deleteHeroSlide(id: string) {
 export async function setHeroSlideActive(id: string, isActive: boolean) {
     await requireAdmin();
 
-    const supabase = createServiceRoleClient();
+    const supabase = getSupabaseAdmin();
     if (!isActive) {
         try {
             await assertCanDeactivateHeroSlide(supabase, id);
-        } catch (error: any) {
-            return { success: false, error: error.message || '슬라이드를 숨길 수 없습니다.' };
+        } catch (error) {
+            const message = error instanceof Error ? error.message : String(error);
+            return { success: false, error: message || '슬라이드를 숨길 수 없습니다.' };
         }
     }
 
-    const { error } = await (supabase as any)
+    const { error } = await supabase
         .from('hero_slides')
         .update({ is_active: isActive })
         .eq('id', id);
@@ -218,12 +222,12 @@ export async function reorderHeroSlides(ids: string[]) {
     await requireAdmin();
 
     try {
-        const supabase = createServiceRoleClient();
+        const supabase = getSupabaseAdmin();
 
         // Sequential updates to avoid partial upsert validation issues
         for (let i = 0; i < ids.length; i++) {
             const id = ids[i];
-            const { error } = await (supabase as any)
+            const { error } = await supabase
                 .from('hero_slides')
                 .update({ sort_order: i })
                 .eq('id', id);
@@ -237,9 +241,10 @@ export async function reorderHeroSlides(ids: string[]) {
         revalidatePath('/admin/main');
         revalidatePath('/');
         return { success: true };
-    } catch (error: any) {
+    } catch (error) {
         console.error('--- SERVER: reorderHeroSlides FAILED ---', error);
-        return { success: false, error: error.message || 'Internal server error' };
+        const message = error instanceof Error ? error.message : String(error);
+        return { success: false, error: message || 'Internal server error' };
     }
 }
 
@@ -248,8 +253,8 @@ export async function reorderHeroSlides(ids: string[]) {
 export async function getSignatureProducts() {
     await requireAdmin();
 
-    const supabase = createServiceRoleClient();
-    const { data, error } = await (supabase as any)
+    const supabase = getSupabaseAdmin();
+    const { data, error } = await supabase
         .from('products')
         .select('*')
         .order('display_order', { ascending: true })
@@ -266,11 +271,11 @@ export async function getSignatureProducts() {
 export async function updateSignatureStatus(productId: string, isSignature: boolean) {
     await requireAdmin();
 
-    const supabase = createServiceRoleClient();
+    const supabase = getSupabaseAdmin();
 
     // Check current count if enabling
     if (isSignature) {
-        const { data: product, error: productError } = await (supabase as any)
+        const { data: product, error: productError } = await supabase
             .from('products')
             .select('is_active')
             .eq('id', productId)
@@ -281,7 +286,7 @@ export async function updateSignatureStatus(productId: string, isSignature: bool
             throw new Error('비공개 제품은 시그니처 라인에 노출할 수 없습니다.');
         }
 
-        const { count, error: countError } = await (supabase as any)
+        const { count, error: countError } = await supabase
             .from('products')
             .select('*', { count: 'exact', head: true })
             .eq('is_active', true)
@@ -293,7 +298,7 @@ export async function updateSignatureStatus(productId: string, isSignature: bool
         }
     }
 
-    const { error } = await (supabase as any)
+    const { error } = await supabase
         .from('products')
         .update({ is_signature: isSignature })
         .eq('id', productId);

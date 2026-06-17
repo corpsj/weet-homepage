@@ -21,9 +21,18 @@ import {
 import { getFaqs } from '@/app/actions/faq-actions';
 import { telHref } from '@/lib/site-settings';
 import { getSiteSettings } from '@/lib/site-settings.server';
+import { buildPageMetadata } from '@/lib/seo';
 import ConsultForm from '@/components/support/ConsultForm';
 
-export const dynamic = 'force-dynamic';
+// ISR: cache + revalidate every 5 minutes rather than force-dynamic. (F12)
+export const revalidate = 300;
+
+export const metadata = buildPageMetadata({
+  title: '고객지원 — 인허가·비용·진행 과정 안내',
+  description:
+    '이동식주택을 처음 준비해도 막막하지 않도록 — 농막·쉼터·주거 인허가 구분, 운반·설치 비용 구성, 진행 과정과 A/S까지 위트(weet)가 가장 많이 받는 질문을 기준으로 정리했습니다.',
+  path: '/support',
+});
 
 const steps = [
   { title: '구성·상담 신청', text: '원하는 모델과 옵션을 구성하거나, 상담 신청으로 바로 시작합니다.', icon: Ruler },
@@ -145,7 +154,7 @@ export default async function SupportPage() {
   };
 
   return (
-    <main className="bg-white text-gray-900">
+    <div className="bg-white text-gray-900">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
       <section className="px-4 py-14 md:px-8 md:py-20 lg:px-16">
@@ -420,7 +429,7 @@ export default async function SupportPage() {
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
 

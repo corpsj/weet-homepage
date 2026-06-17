@@ -12,8 +12,7 @@ import {
   Zap,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
-
-type Lang = "KO" | "EN";
+import type { Language } from "@/contexts/LanguageContext";
 
 type PackageCopy = {
   id: string;
@@ -46,7 +45,7 @@ type PageCopy = {
   process: Array<{ title: string; body: string }>;
 };
 
-const COPY: Record<Lang, PageCopy> = {
+const COPY: Record<Language, PageCopy> = {
   KO: {
     eyebrow: "WEET OPERATION OPTIONS",
     title: "테크 옵션으로 완성하는 모듈러 공간",
@@ -193,6 +192,79 @@ const COPY: Record<Lang, PageCopy> = {
       { title: "Option confirmation", body: "We define actual alerts and management scope before chasing device specs." },
     ],
   },
+  ES: {
+    eyebrow: "WEET OPERATION OPTIONS",
+    title: "Espacios Modulares Completados Con Opciones Tecnológicas",
+    lead:
+      "Un buen espacio no termina con una carcasa bonita. Weet planifica la seguridad, la conexión, el control remoto y la gestión energética en torno a los problemas que los operadores enfrentan cada día.",
+    heroLabel: "Las opciones son sistemas operativos",
+    heroTitle: "Definimos el flujo de uso y el alcance del control antes que las especificaciones de los equipos.",
+    heroBody:
+      "Comprobamos si el espacio funciona sin personal, si los pagos nunca pueden fallar y si la carga eléctrica es estable, antes de combinar las opciones adecuadas.",
+    selectLabel: "Criterios de selección",
+    detailLabel: "Especificaciones incluidas",
+    proofLabel: "Cambio operativo",
+    processTitle: "El flujo de trabajo de las opciones es diferente",
+    processLead:
+      "No añadimos equipos después de la finalización. El cableado, los sensores, los paneles de control y las cargas eléctricas se planifican junto con el espacio.",
+    ctaPrimary: "Ver opciones",
+    ctaSecondary: "Consulta",
+    packages: [
+      {
+        id: "security",
+        href: "/solution/cctv",
+        image: "/images/solution/generated/kr-security-realphoto.webp",
+        icon: LockKeyhole,
+        title: "Security Core",
+        subtitle: "CCTV · cerradura inteligente · sensores/registro de accesos",
+        problem: "Reduzca las brechas de seguridad en operaciones nocturnas y sin personal.",
+        promise: "Los registros de acceso, la detección nocturna y la iluminación de entrada se planifican como un único flujo operativo.",
+        details: ["Revisión de puntos ciegos", "Ubicación de CCTV y luces con sensor", "Planificación de permisos de cerradura inteligente"],
+        proof: "Los operadores saben quién entró por la noche y qué alertas merecen atención.",
+      },
+      {
+        id: "network",
+        href: "/solution/network",
+        image: "/images/solution/generated/kr-network-realphoto.webp",
+        icon: Router,
+        title: "Network Fabric",
+        subtitle: "TPV · Wi-Fi de invitados · preparación para router/satélite",
+        problem: "Reduzca las pérdidas cuando el pago, la reserva o el control remoto dependen de una conectividad inestable.",
+        promise: "Separamos las redes de operador, invitados y dispositivos y recomendamos la línea y el router adecuados.",
+        details: ["División de redes TPV/trabajo/invitados", "Ubicación de router y caja de red", "Revisión de línea de respaldo"],
+        proof: "Los pagos y las reservas se ven menos afectados por el tráfico de invitados y la carga de dispositivos.",
+      },
+      {
+        id: "control",
+        href: "/solution/iot",
+        image: "/images/solution/generated/kr-control-realphoto.webp",
+        icon: SlidersHorizontal,
+        title: "Control Layer",
+        subtitle: "iluminación IoT · climatización · programación de ventilación",
+        problem: "Reduzca las comprobaciones manuales repetidas en operaciones sin personal.",
+        promise: "La iluminación, la climatización, la ventilación y el estado de las puertas pueden seguir el horario de reservas y de operación.",
+        details: ["Interruptores inteligentes y paneles de temperatura", "Programación de climatización previa a la llegada", "Alertas de estado de puertas y operación"],
+        proof: "El espacio puede prepararse antes de que lleguen los huéspedes, con menos visitas innecesarias.",
+      },
+      {
+        id: "energy",
+        href: "/solution/energy",
+        image: "/images/customize/options/solar-panel.webp",
+        icon: Zap,
+        title: "Energy Stack",
+        subtitle: "solar · ESS · cargador EV · planificación de carga",
+        problem: "Resuelva los altos costos de electricidad y los riesgos de un suministro eléctrico inestable.",
+        promise: "Apoyamos la operación modular independiente con una infraestructura eléctrica estable y eficiente.",
+        details: ["Paneles solares integrados en el techo", "ESS para el excedente de energía", "Cargadores EV y planificación de carga"],
+        proof: "El consumo de energía se gestiona de forma sistemática y se refuerza la independencia energética.",
+      },
+    ],
+    process: [
+      { title: "Entrevista operativa", body: "Primero comprobamos las necesidades de operación sin personal, carga eléctrica y red." },
+      { title: "Mapa del sistema", body: "Los puntos de acceso, conexión, climatización y energía se organizan en un único mapa de opciones." },
+      { title: "Confirmación de opciones", body: "Definimos las alertas reales y el alcance de la gestión antes de perseguir especificaciones de equipos." },
+    ],
+  },
 };
 
 export default function SolutionPage() {
@@ -200,7 +272,7 @@ export default function SolutionPage() {
   const copy = COPY[language];
 
   return (
-    <main className="min-h-screen bg-[#fcfbfa] text-[#2f3432]">
+    <div className="min-h-screen bg-[#fcfbfa] text-[#2f3432]">
       {/* Hero Section */}
       <section className="mx-auto max-w-[1200px] px-6 pb-12 pt-28 md:px-10 lg:pb-16 lg:pt-36">
         <div className="grid gap-8 border-b border-[#e6dfd3] pb-10 lg:grid-cols-[1fr_0.8fr] lg:gap-16 lg:pb-14">
@@ -346,6 +418,6 @@ export default function SolutionPage() {
           {copy.ctaSecondary}
         </Link>
       </section>
-    </main>
+    </div>
   );
 }

@@ -1,18 +1,12 @@
 import React from 'react';
-import type { Metadata } from 'next';
+import { buildPageMetadata } from '@/lib/seo';
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: '개인정보처리방침',
-  description: '위트(WEET) 개인정보처리방침 안내 페이지입니다.',
-  alternates: {
-    canonical: '/privacy',
-  },
-  openGraph: {
-    url: '/privacy',
-    title: '개인정보처리방침',
-    description: '위트(WEET) 개인정보처리방침 안내 페이지입니다.',
-  },
-};
+  description:
+    '위트(weet) 개인정보처리방침 — 수집하는 개인정보 항목, 이용 목적, 보유 기간, 제3자 제공, 이용자 권리와 행사 방법을 안내합니다.',
+  path: '/privacy',
+});
 
 export default function PrivacyPage() {
   return (

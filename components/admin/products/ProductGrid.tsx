@@ -35,11 +35,11 @@ const hasValidProductImageUrl = (value: string | null | undefined) => {
     return /^https?:\/\/.+/i.test(value) || value.startsWith('/images/');
 };
 
-const getProductReadinessScore = (product: Product) => {
+const getProductReadinessScore = (product: Product, imageBroken = false) => {
     let score = 100;
     if (!product.is_active) score -= 20;
     if (!product.price) score -= 16;
-    if (!hasValidProductImageUrl(product.image_url)) score -= 24;
+    if (!hasValidProductImageUrl(product.image_url) || imageBroken) score -= 24;
     if (!product.description || product.description.length < 24) score -= 16;
     if (!product.size) score -= 12;
     if (!product.floor_plan_url) score -= 12;
@@ -58,13 +58,14 @@ function GridCard({
     priority?: boolean;
 }) {
     const imageUrl = hasValidProductImageUrl(product.image_url) ? product.image_url : null;
-    const readinessScore = getProductReadinessScore(product);
+    const [imageBroken, setImageBroken] = useState(false);
+    const readinessScore = getProductReadinessScore(product, imageBroken);
 
     return (
         <div className="group flex flex-col overflow-hidden rounded-md border border-[#e5e5df] bg-white shadow-sm transition-colors hover:border-[#cfcfcf]">
             {/* Image Area */}
             <div className="relative aspect-[4/3] overflow-hidden bg-[#f4f4f1]">
-                {imageUrl ? (
+                {imageUrl && !imageBroken ? (
                     <Image
                         src={imageUrl}
                         alt={product.name}
@@ -72,10 +73,11 @@ function GridCard({
                         loading={priority ? 'eager' : 'lazy'}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                         className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        onError={() => setImageBroken(true)}
                     />
                 ) : (
                     <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-                        이미지 점검 필요
+                        {imageUrl ? '이미지 오류' : '이미지 점검 필요'}
                     </div>
                 )}
 
@@ -114,8 +116,8 @@ function GridCard({
                     <ConsoleStatusPill tone={product.is_active ? 'success' : 'neutral'}>
                         {product.is_active ? '공개' : '비공개'}
                     </ConsoleStatusPill>
-                    <ConsoleStatusPill tone={imageUrl ? 'success' : 'warning'}>
-                        {imageUrl ? '이미지 정상' : '이미지 보완'}
+                    <ConsoleStatusPill tone={imageUrl && !imageBroken ? 'success' : 'warning'}>
+                        {!imageUrl ? '이미지 보완' : imageBroken ? '이미지 오류' : '이미지 정상'}
                     </ConsoleStatusPill>
                 </div>
 
@@ -143,14 +145,15 @@ function ListRow({
     priority?: boolean;
 }) {
     const imageUrl = hasValidProductImageUrl(product.image_url) ? product.image_url : null;
-    const readinessScore = getProductReadinessScore(product);
+    const [imageBroken, setImageBroken] = useState(false);
+    const readinessScore = getProductReadinessScore(product, imageBroken);
 
     return (
         <div className="group grid gap-4 rounded-md border border-[#e5e5df] bg-white p-4 shadow-sm transition-colors hover:border-[#cfcfcf] md:grid-cols-[48px_80px_minmax(180px,1fr)_120px_100px_96px] md:items-center">
             <ReadinessRing score={readinessScore} />
             {/* Thumbnail */}
             <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border border-[#e5e5df] bg-[#f4f4f1]">
-                {imageUrl ? (
+                {imageUrl && !imageBroken ? (
                     <Image
                         src={imageUrl}
                         alt={product.name}
@@ -158,10 +161,11 @@ function ListRow({
                         loading={priority ? 'eager' : 'lazy'}
                         sizes="80px"
                         className="object-cover"
+                        onError={() => setImageBroken(true)}
                     />
                 ) : (
                     <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-xs">
-                        이미지 없음
+                        {imageUrl ? '이미지 오류' : '이미지 없음'}
                     </div>
                 )}
             </div>
@@ -173,8 +177,8 @@ function ListRow({
                     {product.size_category} / {product.sub_category}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-1.5">
-                    <ConsoleStatusPill tone={imageUrl ? 'success' : 'warning'}>
-                        {imageUrl ? '이미지 정상' : '이미지 보완'}
+                    <ConsoleStatusPill tone={imageUrl && !imageBroken ? 'success' : 'warning'}>
+                        {!imageUrl ? '이미지 보완' : imageBroken ? '이미지 오류' : '이미지 정상'}
                     </ConsoleStatusPill>
                     <ConsoleStatusPill tone={product.price ? 'success' : 'warning'}>
                         {product.price ? '가격 입력' : '가격 미정'}

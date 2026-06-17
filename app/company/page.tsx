@@ -66,7 +66,7 @@ export default function CompanyPage() {
   return (
     <div className="min-h-screen bg-white pb-20">
       {/* Section 1: Hero */}
-      <section id="philosophy" className="bg-gray-50 py-16 lg:py-24 scroll-mt-[180px]">
+      <section id="philosophy" className="bg-gray-50 py-16 lg:py-24 scroll-mt-[88px]">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             {/* Left: Slogan Image */}
@@ -117,7 +117,7 @@ export default function CompanyPage() {
       </section>
 
       {/* Section 2: Enterprise CI */}
-      <section id="ci" className="bg-white py-16 lg:py-24 scroll-mt-[180px]">
+      <section id="ci" className="bg-white py-16 lg:py-24 scroll-mt-[88px]">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             {/* Left: Logo */}
@@ -206,7 +206,7 @@ export default function CompanyPage() {
       </section>
 
       {/* Section 3: weet Crew */}
-      <section id="crew" className="bg-gray-50 py-16 lg:py-24 scroll-mt-[180px]">
+      <section id="crew" className="bg-gray-50 py-16 lg:py-24 scroll-mt-[88px]">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
           <div className="flex flex-col lg:flex-row items-start lg:items-start gap-8 lg:gap-20">
             {/* Left: weet Crew Logo */}
@@ -288,7 +288,7 @@ export default function CompanyPage() {
       </section>
 
       {/* Section 4: weet Factory */}
-      <section id="factory" className="bg-gray-50 py-16 lg:py-24 border-t border-gray-100 scroll-mt-[180px]">
+      <section id="factory" className="bg-gray-50 py-16 lg:py-24 border-t border-gray-100 scroll-mt-[88px]">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
           <div className="flex flex-col lg:flex-row items-start gap-12 lg:gap-20">
             {/* Left: weet Factory Logo */}

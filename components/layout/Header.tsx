@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Menu, X, Instagram, Carrot, ChevronDown } from 'lucide-react';
@@ -53,10 +53,10 @@ const navigationKo = [
     width: 155,
     submenu: [
       { name: '운영 솔루션', href: '/solution' },
-      { name: '보안 (Security)', href: '/solution/cctv' },
-      { name: '네트워크 (Network)', href: '/solution/network' },
-      { name: '원격 제어 (Control)', href: '/solution/iot' },
-      { name: '에너지 (Energy Stack)', href: '/solution/energy' },
+      { name: 'Security Core', href: '/solution/cctv' },
+      { name: 'Network Fabric', href: '/solution/network' },
+      { name: 'Control Layer', href: '/solution/iot' },
+      { name: 'Energy Stack', href: '/solution/energy' },
     ],
   },
   {
@@ -128,9 +128,9 @@ const navigationEn = [
     width: 155,
     submenu: [
       { name: 'Operational Packages', href: '/solution' },
-      { name: 'Security Core', href: '/solution/cctv' },
-      { name: 'Network Fabric', href: '/solution/network' },
-      { name: 'Control Layer', href: '/solution/iot' },
+      { name: 'Secure Access', href: '/solution/cctv' },
+      { name: 'Stable Connection', href: '/solution/network' },
+      { name: 'Remote Ready', href: '/solution/iot' },
       { name: 'Energy Stack', href: '/solution/energy' },
     ],
   },
@@ -159,6 +159,81 @@ const navigationEn = [
   },
 ];
 
+const navigationEs = [
+  {
+    name: 'Sobre Modular',
+    href: '/modular',
+    width: 145,
+    submenu: [
+      { name: '¿Qué es lo modular?', href: '/modular#what-is-modular' },
+      { name: 'Precisión de fábrica', href: '/modular#factory-precision' },
+      { name: 'Transporte e instalación', href: '/modular#transport-install' },
+      { name: 'Confort de vida', href: '/modular#interior-comfort' },
+      { name: 'Expansión futura', href: '/modular#flexible-commercial' },
+    ],
+  },
+  {
+    name: 'Productos',
+    href: '/products',
+    width: 75,
+    submenu: [
+      { name: 'S', href: '/products#s' },
+      { name: 'M', href: '/products#m' },
+      { name: 'L', href: '/products#l' },
+      { name: 'XL', href: '/products#xl' },
+      { name: 'Proyectos', href: '/projects' },
+    ],
+  },
+  {
+    name: 'BESPOKE',
+    href: '/bespoke',
+    width: 100,
+    submenu: [
+      { name: 'Solución comercial a medida', href: '/bespoke#what-is-bespoke' },
+      { name: 'Café y tienda', href: '/bespoke#small-cafe' },
+      { name: 'Pop-up y showroom', href: '/bespoke#popup-store' },
+      { name: 'Alojamiento y espacio de trabajo', href: '/bespoke#accommodation' },
+      { name: 'Granja inteligente y laboratorio', href: '/bespoke#smart-farm' },
+    ],
+  },
+
+  {
+    name: 'SOLUTION',
+    href: '/solution',
+    width: 155,
+    submenu: [
+      { name: 'Paquetes operativos', href: '/solution' },
+      { name: 'Secure Access', href: '/solution/cctv' },
+      { name: 'Stable Connection', href: '/solution/network' },
+      { name: 'Remote Ready', href: '/solution/iot' },
+      { name: 'Energy Stack', href: '/solution/energy' },
+    ],
+  },
+  {
+    name: 'Empresa',
+    href: '/company',
+    width: 85,
+    submenu: [
+      { name: 'Nuestra filosofía', href: '/company#philosophy' },
+      { name: 'CI corporativa', href: '/company#ci' },
+      { name: 'weet Crew', href: '/company#crew' },
+      { name: 'weet Factory', href: '/company#factory' },
+      { name: 'weet Gallery', href: '/company#gallery' },
+    ],
+  },
+  {
+    name: 'Soporte',
+    href: '/support',
+    width: 75,
+    submenu: [
+      { name: '¿Cómo podemos ayudar?', href: '/support#help' },
+      { name: 'Proceso de compra', href: '/support#process' },
+      { name: 'Preguntas frecuentes', href: '/support#qa' },
+      { name: 'Servicio posventa', href: '/support#as' },
+    ],
+  },
+];
+
 export default function Header() {
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
@@ -168,7 +243,8 @@ export default function Header() {
   const { language, setLanguage } = useLanguage();
 
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
-  const navigation = language === 'KO' ? navigationKo : navigationEn;
+  const headerRef = useRef<HTMLElement>(null);
+  const navigation = { KO: navigationKo, EN: navigationEn, ES: navigationEs }[language];
 
   const handleMobileMenuToggle = useCallback(() => {
     setMobileMenuOpen(prev => !prev);
@@ -194,6 +270,19 @@ export default function Header() {
     setShowMegaMenu(true);
   }, []);
 
+  const handleNavBlur = useCallback(() => {
+    // Defer so the newly-focused element settles, then close only if focus
+    // has left the header entirely (covers tabbing between the nav and the
+    // mega-menu panel, which live in separate DOM subtrees).
+    window.setTimeout(() => {
+      const header = headerRef.current;
+      if (header && !header.contains(document.activeElement)) {
+        setShowMegaMenu(false);
+        setActiveMenu(null);
+      }
+    }, 0);
+  }, []);
+
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -216,6 +305,7 @@ export default function Header() {
   return (
     <>
       <header
+        ref={headerRef}
         className={cn(
           "bg-white fixed top-0 left-0 right-0 z-50 border-b border-gray-200 transition-transform duration-300",
           isVisible ? "translate-y-0" : "-translate-y-full"
@@ -246,12 +336,14 @@ export default function Header() {
                 href="/customize"
                 className="flex h-9 items-center justify-center whitespace-nowrap rounded-sm bg-[#FEBD16] px-3.5 text-[13px] font-bold text-[#2f3432] shadow-[0_8px_18px_rgba(254,189,22,0.22)] transition-colors hover:bg-[#E2A80F] md:h-10 md:px-4"
               >
-                {language === 'KO' ? '주문하기' : 'Order'}
+                {{ KO: '주문하기', EN: 'Order', ES: 'Pedir' }[language]}
               </Link>
               <button
                 onClick={handleMobileMenuToggle}
                 className="p-2 hover:bg-gray-100 rounded-md transition-colors active:bg-gray-200"
-                aria-label="Toggle mobile menu"
+                aria-label={mobileMenuOpen ? '메뉴 닫기' : '메뉴 열기'}
+                aria-expanded={mobileMenuOpen}
+                aria-controls="mobile-menu"
                 type="button"
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -262,6 +354,8 @@ export default function Header() {
             <nav
               className="hidden xl:flex absolute left-[140px] right-[330px] top-0 bottom-0 items-center justify-center pointer-events-none"
               onMouseEnter={handleMegaMenuEnter}
+              onFocus={handleMegaMenuEnter}
+              onBlur={handleNavBlur}
             >
               <div className="flex pointer-events-auto gap-[clamp(28px,3.1vw,58px)] pb-[70px] -mb-[70px]">
                 {navigation.map((item) => (
@@ -271,6 +365,10 @@ export default function Header() {
                   >
                     <Link
                       href={item.href}
+                      aria-haspopup="true"
+                      aria-expanded={showMegaMenu && activeMenu === item.name}
+                      aria-controls={`megamenu-${item.href}`}
+                      onFocus={() => handleMenuHover(item.name)}
                       className="relative inline-block text-[#2f3432] font-bold text-[15px] hover:text-[#0d6e66] transition-colors whitespace-nowrap group"
                     >
                       <span className="relative z-10">{item.name}</span>
@@ -287,7 +385,7 @@ export default function Header() {
             {/* Desktop Right Side Content */}
             <div className="hidden xl:flex absolute right-[64px] top-1/2 -translate-y-1/2 items-center gap-4">
               {/* Secondary utilities: social + language in one compact row */}
-              <div className="flex items-center gap-3 text-gray-400">
+              <div className="flex items-center gap-3 text-gray-600">
                 <Link href="https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/" target="_blank" rel="noopener noreferrer" className="hover:text-[#0d6e66] transition-colors" aria-label="Daangn">
                   <Carrot className="w-[14px] h-[14px]" />
                 </Link>
@@ -300,17 +398,33 @@ export default function Header() {
                 <span aria-hidden="true" className="h-3.5 w-px bg-gray-200" />
                 <div className="flex items-center gap-1.5 text-[11px] font-medium">
                   <button
+                    type="button"
+                    aria-label="한국어로 보기"
+                    aria-pressed={language === 'KO'}
                     onClick={() => setLanguage('KO')}
-                    className={cn("transition-colors", language === 'KO' ? "font-bold text-[#2f3432]" : "text-gray-300 hover:text-[#0d6e66]")}
+                    className={cn("transition-colors", language === 'KO' ? "font-bold text-[#2f3432]" : "text-gray-600 hover:text-[#0d6e66]")}
                   >
                     KO
                   </button>
-                  <span className="text-gray-200">|</span>
+                  <span aria-hidden="true" className="text-gray-200">|</span>
                   <button
+                    type="button"
+                    aria-label="View in English"
+                    aria-pressed={language === 'EN'}
                     onClick={() => setLanguage('EN')}
-                    className={cn("transition-colors", language === 'EN' ? "font-bold text-[#2f3432]" : "text-gray-300 hover:text-[#0d6e66]")}
+                    className={cn("transition-colors", language === 'EN' ? "font-bold text-[#2f3432]" : "text-gray-600 hover:text-[#0d6e66]")}
                   >
                     EN
+                  </button>
+                  <span aria-hidden="true" className="text-gray-200">|</span>
+                  <button
+                    type="button"
+                    aria-label="Ver en español"
+                    aria-pressed={language === 'ES'}
+                    onClick={() => setLanguage('ES')}
+                    className={cn("transition-colors", language === 'ES' ? "font-bold text-[#2f3432]" : "text-gray-600 hover:text-[#0d6e66]")}
+                  >
+                    ES
                   </button>
                 </div>
               </div>
@@ -319,7 +433,7 @@ export default function Header() {
                 href="/customize"
                 className="flex h-10 items-center justify-center rounded-sm bg-[#FEBD16] px-6 text-[14px] font-bold text-[#2f3432] shadow-[0_10px_24px_rgba(254,189,22,0.24)] transition-colors hover:bg-[#E2A80F] whitespace-nowrap"
               >
-                {language === 'KO' ? '주문하기' : 'Order'}
+                {{ KO: '주문하기', EN: 'Order', ES: 'Pedir' }[language]}
               </Link>
             </div>
 
@@ -335,10 +449,13 @@ export default function Header() {
                 <div
                   className="flex py-6 gap-[clamp(28px,3.1vw,58px)] pl-[60px] pr-[220px] rounded-b-md shadow-sm pointer-events-auto bg-gray-50 border-t border-gray-100"
                   onMouseEnter={() => setShowMegaMenu(true)}
+                  onFocus={handleMegaMenuEnter}
+                  onBlur={handleNavBlur}
                 >
                   {navigation.map((item) => (
                     <div
                       key={item.name}
+                      id={`megamenu-${item.href}`}
                       className="flex flex-col items-start"
                     >
                       {/* Invisible Placeholder for Alignment */}
@@ -351,6 +468,7 @@ export default function Header() {
                             <Link
                               key={idx}
                               href={subitem.href}
+                              onFocus={() => handleMenuHover(item.name)}
                               className="relative inline-block text-[13px] text-gray-600 hover:text-[#0d6e66] transition-colors group"
                             >
                               <span className="relative z-10">{subitem.name}</span>
@@ -370,7 +488,7 @@ export default function Header() {
 
       {/* Full Screen Mobile Menu - Rendered via Portal */}
       {typeof document !== 'undefined' && mobileMenuOpen && createPortal(
-        <div className="xl:hidden fixed inset-0 bg-white z-[100] overflow-y-auto animate-fade-in">
+        <div id="mobile-menu" className="xl:hidden fixed inset-0 bg-white z-[100] overflow-y-auto animate-fade-in">
           {/* Header with Close Button */}
           <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
             <Link href="/" onClick={handleMobileMenuClose}>
@@ -388,6 +506,7 @@ export default function Header() {
             <button
               onClick={handleMobileMenuClose}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              aria-label="메뉴 닫기"
               type="button"
             >
               <X className="w-7 h-7" />
@@ -401,7 +520,7 @@ export default function Header() {
               onClick={handleMobileMenuClose}
               className="flex items-center justify-center w-full py-4 mb-8 bg-[#FEBD16] text-[#2f3432] rounded-md font-bold text-lg hover:bg-[#E2A80F] transition-colors shadow-sm"
             >
-              {language === 'KO' ? '주문하기' : 'Order'}
+              {{ KO: '주문하기', EN: 'Order', ES: 'Pedir' }[language]}
             </Link>
             {navigation.map((item, index) => {
               const hasSubmenu = item.submenu && item.submenu.length > 0;
@@ -478,17 +597,33 @@ export default function Header() {
             {/* Language Selector */}
             <div className="flex items-center gap-3 text-xs font-medium">
               <button
+                type="button"
+                aria-label="한국어로 보기"
+                aria-pressed={language === 'KO'}
                 onClick={() => setLanguage('KO')}
-                className={cn("font-bold transition-colors", language === 'KO' ? "text-[#2f3432]" : "text-gray-400 hover:text-[#0d6e66]")}
+                className={cn("font-bold transition-colors", language === 'KO' ? "text-[#2f3432]" : "text-gray-600 hover:text-[#0d6e66]")}
               >
                 KO
               </button>
-              <span className="text-gray-300">|</span>
+              <span aria-hidden="true" className="text-gray-300">|</span>
               <button
+                type="button"
+                aria-label="View in English"
+                aria-pressed={language === 'EN'}
                 onClick={() => setLanguage('EN')}
-                className={cn("font-bold transition-colors", language === 'EN' ? "text-[#2f3432]" : "text-gray-400 hover:text-[#0d6e66]")}
+                className={cn("font-bold transition-colors", language === 'EN' ? "text-[#2f3432]" : "text-gray-600 hover:text-[#0d6e66]")}
               >
                 EN
+              </button>
+              <span aria-hidden="true" className="text-gray-300">|</span>
+              <button
+                type="button"
+                aria-label="Ver en español"
+                aria-pressed={language === 'ES'}
+                onClick={() => setLanguage('ES')}
+                className={cn("font-bold transition-colors", language === 'ES' ? "text-[#2f3432]" : "text-gray-600 hover:text-[#0d6e66]")}
+              >
+                ES
               </button>
             </div>            {/* Social Links */}
             <div className="flex items-center gap-4 pt-4 border-t border-gray-200">
@@ -526,7 +661,7 @@ export default function Header() {
             </div>
 
             {/* Footer Text */}
-            <p className="text-xs text-gray-400 pt-4">
+            <p className="text-xs text-gray-500 pt-4">
               WE make dreams comE True
             </p>
           </div>

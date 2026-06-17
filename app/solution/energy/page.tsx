@@ -47,6 +47,26 @@ const DATA: SolutionPackageData = {
       ctaPrimary: "Check energy in order options",
       ctaSecondary: "Discuss power options",
     },
+    ES: {
+      eyebrow: "ENERGY STACK OPTION",
+      title: "Prediga La Carga Eléctrica Antes De Operar",
+      lead:
+        "La energía solar, el ESS, la carga de vehículos eléctricos y la carga de climatización se planifican como un único stack energético. Incluso un pequeño espacio modular necesita un flujo de energía claro para operar de forma fiable.",
+      imageAlt: "Imagen fotorrealista de paneles solares y equipos eléctricos en el techo de una casa modular coreana",
+      problemTitle: "Los espacios pequeños también necesitan planificación eléctrica",
+      problem:
+        "La climatización, el agua caliente, la iluminación, el IoT y la carga de vehículos eléctricos pueden elevar rápidamente la carga máxima. Sin una ruta eléctrica clara, los operadores se arriesgan a disparos del interruptor, facturas de electricidad más altas y una menor vida útil de los equipos.",
+      fitTitle: "Configuración recomendada",
+      fit: ["Casas de fin de semana que necesitan carga de vehículos eléctricos", "Estancias privadas con alto uso de climatización", "Espacios comerciales con muchos dispositivos sin personal", "Espacios modulares que necesitan un uso eficiente de la acometida eléctrica"],
+      includedTitle: "Alcance",
+      included: ["Orientación de la integración solar en el techo", "Capacidad del ESS y diseño del circuito de respaldo", "Posición del cargador EV lento y derivación de energía", "Separación de cargas para climatización, agua caliente, iluminación e IoT"],
+      decisionsTitle: "Valores del sistema a definir",
+      decisions: ["Uso diario de energía y carga máxima previstos", "Si el ESS prioriza la energía de respaldo o el ahorro en la factura", "Si la carga de vehículos eléctricos es pública o solo para el operador", "Cómo se priorizan la generación solar y los circuitos esenciales"],
+      outcomesTitle: "Resultados operativos",
+      outcomes: ["El uso de energía y la carga máxima se vuelven más predecibles.", "Los dispositivos esenciales pueden separarse en circuitos de respaldo.", "La energía solar y el ESS se conectan al propósito real del espacio.", "La carga de vehículos eléctricos y la climatización se planifican juntas, reduciendo el riesgo eléctrico."],
+      ctaPrimary: "Ver energía en las opciones de pedido",
+      ctaSecondary: "Consultar opciones eléctricas",
+    },
   },
 };
 

@@ -5,10 +5,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { X } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
+import type { Language } from '@/contexts/LanguageContext';
 
-type Lang = 'KO' | 'EN';
-
-const COPY: Record<Lang, {
+const COPY: Record<Language, {
   headline: string;
   lead: string;
   highlight: string;
@@ -133,6 +132,60 @@ const COPY: Record<Lang, {
     ],
     overlayClose: 'Close',
   },
+  ES: {
+    headline: 'Soluciones a Medida para Espacios Comerciales',
+    lead: 'Las soluciones comerciales a medida de WEET aceleran el lanzamiento y la expansión de su negocio.',
+    highlight: 'Una solución modular B2B que ofrece lanzamientos rápidos, operaciones flexibles y experiencias espaciales impactantes.',
+    features: [
+      { title: 'Lanzamiento Rápido del Negocio', body: 'La prefabricación reduce drásticamente el tiempo de construcción del espacio físico, ayudando a que su negocio arranque más rápido.' },
+      { title: 'Expansión y Reubicación Flexible', body: 'Añada módulos a medida que su marca crece, o traslade toda la estructura a un nuevo emplazamiento conforme cambian las zonas objetivo.' },
+      { title: 'Flujo Operativo Eficiente', body: 'Ofrecemos diseños personalizados optimizados para instalaciones comerciales y de negocio, centrados en la circulación del cliente y la distribución del equipamiento.' },
+      { title: 'Integración Perfecta de la Infraestructura', body: 'Las utilidades, redes, seguridad y el diseño de marca necesarios para la operación se integran en el diseño desde la fase de planificación.' },
+    ],
+    sections: [
+      {
+        id: 'small-cafe',
+        badge: 'COMMERCIAL',
+        title: 'SMALL CAFE',
+        quote: 'Un espacio que satisface a la vez la eficiencia operativa y la experiencia del cliente.',
+        body: 'Una circulación de barra diseñada para aumentar la rotación incluso en terrenos reducidos, y un diseño exterior sensorial que recoge la historia de su marca. Se entrega en obra totalmente equipado con las instalaciones e interiores optimizados para negocios de restauración.',
+        cta: 'View portfolio',
+        image: { src: '/images/bespoke/small-cafe-v2.webp', alt: 'Small Cafe' },
+        imageOnRight: true,
+      },
+      {
+        id: 'popup-store',
+        badge: 'RETAIL & EVENT',
+        title: 'POP-UP STORE / BRAND SHOWROOM',
+        quote: 'Allí donde se necesite una "experiencia de marca", la desplegamos de inmediato.',
+        body: 'No son estructuras temporales que se desechan tras unos días. Es una solución inteligente que aplica un branding impecable durante un periodo determinado y se traslada rápidamente a otra zona tras el evento para exponer la marca de forma reiterada.',
+        cta: 'View portfolio',
+        image: { src: '/images/bespoke/popup-store-v2.webp', alt: 'Pop-up Store' },
+        imageOnRight: false,
+      },
+      {
+        id: 'accommodation',
+        badge: 'HOSPITALITY & WORKSPACE',
+        title: 'ACCOMMODATION / SITE OFFICE',
+        quote: 'Disfrute de habitaciones de lujo y espacios de trabajo confortables en cualquier lugar.',
+        body: '¿Necesita un alojamiento de lujo para un negocio de hospedaje o un espacio de trabajo premium para el personal de obra? Los módulos con aislamiento perfecto, acabados de lujo e infraestructura de utilidades integrada pueden ampliarse con rapidez hasta convertirse en instalaciones de gran escala conectando varias unidades.',
+        cta: 'View portfolio',
+        image: { src: '/images/modular/generated/flexible-commercial.webp', alt: 'Accommodation / Workspace' },
+        imageOnRight: true,
+      },
+      {
+        id: 'smart-farm',
+        badge: 'AGRITECH & LAB',
+        title: 'SMART FARM',
+        quote: 'Un espacio futurista de investigación y producción controlado con precisión.',
+        body: 'Una granja inteligente es un laboratorio preciso que debe aislar el entorno exterior y controlar el interior a la perfección. Al integrar complejos sistemas de control ambiental y redes dentro de una estructura modular con la máxima estanqueidad y aislamiento, ofrecemos la infraestructura de granja inteligente más estable.',
+        cta: 'View portfolio',
+        image: { src: '/images/bespoke/smart-farm-v2.webp', alt: 'Smart Farm' },
+        imageOnRight: false,
+      },
+    ],
+    overlayClose: 'Cerrar',
+  },
 };
 
 const IMAGES = [
@@ -149,7 +202,7 @@ export default function BespokePage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <section id="what-is-bespoke" className="bg-gray-50 py-20 md:py-28 lg:py-32 overflow-hidden scroll-mt-[180px]">
+      <section id="what-is-bespoke" className="bg-gray-50 py-20 md:py-28 lg:py-32 overflow-hidden scroll-mt-[88px]">
         <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -226,7 +279,7 @@ export default function BespokePage() {
           <section
             key={section.id}
             id={section.id}
-            className={`${section.imageOnRight ? 'bg-white' : 'bg-gray-50'} py-20 md:py-32 overflow-hidden scroll-mt-[180px]`}
+            className={`${section.imageOnRight ? 'bg-white' : 'bg-gray-50'} py-20 md:py-32 overflow-hidden scroll-mt-[88px]`}
           >
             <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
               <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">

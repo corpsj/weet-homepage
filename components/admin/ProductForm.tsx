@@ -1,11 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Product, ProductInsert } from '@/types/supabase';
 import { createProduct, updateProduct } from '@/app/actions/product-actions';
-import { Loader2, X } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useUnsavedChangesWarning } from '@/hooks/useUnsavedChangesWarning';
 import ImageUpload from '@/components/admin/media/ImageUpload';
 import MultiImageUpload from '@/components/admin/media/MultiImageUpload';
 import Image from 'next/image';
@@ -23,7 +24,16 @@ interface ProductFormProps {
 export default function ProductForm({ initialData, onSuccess }: ProductFormProps) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
-    const [formData, setFormData] = useState<Partial<ProductInsert>>({
+    const [failedSubImages, setFailedSubImages] = useState<Set<string>>(() => new Set());
+    const markSubImageFailed = (url: string) => {
+        setFailedSubImages((prev) => {
+            if (prev.has(url)) return prev;
+            const next = new Set(prev);
+            next.add(url);
+            return next;
+        });
+    };
+    const initialFormData = useMemo<Partial<ProductInsert>>(() => ({
         name: initialData?.name || '',
         sub_category: (!initialData || initialData.size_category === 'S') ? (initialData?.sub_category || 'Private') : null,
         size_category: initialData?.size_category || 'S',
@@ -40,7 +50,13 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
         is_active: initialData?.is_active ?? true,
         is_signature: initialData?.is_signature ?? false,
         sub_images: initialData?.sub_images || [],
-    });
+    }), [initialData]);
+
+    const [formData, setFormData] = useState<Partial<ProductInsert>>(initialFormData);
+    // F41: baseline of the last persisted values; updated after a successful save.
+    const [savedData, setSavedData] = useState<Partial<ProductInsert>>(initialFormData);
+    const isDirty = JSON.stringify(formData) !== JSON.stringify(savedData);
+    useUnsavedChangesWarning(isDirty);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
@@ -102,6 +118,8 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
             } else {
                 await createProduct(formData as ProductInsert);
             }
+            // Mark current values as the saved baseline so isDirty resets to false.
+            setSavedData(formData);
             router.refresh();
             if (onSuccess) {
                 onSuccess();
@@ -306,13 +324,20 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-2">
                             {formData.sub_images?.map((url: string, index: number) => (
                                 <div key={index} className="relative aspect-video bg-[#f4f4f1] rounded border border-[#e5e5df] overflow-hidden">
-                                    <Image
-                                        src={url}
-                                        alt={`Sub ${index}`}
-                                        fill
-                                        sizes="(max-width: 768px) 50vw, 220px"
-                                        className="object-cover"
-                                    />
+                                    {failedSubImages.has(url) ? (
+                                        <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-xs">
+                                            이미지 보완
+                                        </div>
+                                    ) : (
+                                        <Image
+                                            src={url}
+                                            alt={`Sub ${index}`}
+                                            fill
+                                            sizes="(max-width: 768px) 50vw, 220px"
+                                            className="object-cover"
+                                            onError={() => markSubImageFailed(url)}
+                                        />
+                                    )}
                                     <button
                                         type="button"
                                         onClick={() => handleSubImageRemove(index)}

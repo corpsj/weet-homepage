@@ -5,8 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Project } from "@/types/supabase";
 import { getProjectHeroImage, hasValidProjectImageUrl, isPublicReadyProject } from "@/lib/projects/publicProjects";
+import { buildPageMetadata } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
 
-export const dynamic = 'force-dynamic';
+// ISR: cache each project detail + revalidate every 5 minutes. (F12)
+export const revalidate = 300;
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
@@ -21,15 +24,15 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
     return { title: "프로젝트" };
   }
 
-  return {
-    title: project.title,
-    description: project.description ?? `위트(WEET) 시공 사례: ${project.title}`,
-    openGraph: {
-      url: `/projects/${id}`,
-      title: project.title,
-      description: project.description ?? `위트(WEET) 시공 사례: ${project.title}`,
-    },
-  };
+  const publicProject = project as Project;
+  const heroImage = getProjectHeroImage(publicProject);
+
+  return buildPageMetadata({
+    title: publicProject.title,
+    description: publicProject.description ?? `위트(weet) 시공 사례: ${publicProject.title}`,
+    path: `/projects/${id}`,
+    ...(heroImage ? { ogImage: heroImage } : {}),
+  });
 }
 
 export default async function ProjectDetailPage({ params }: { params: Promise<{ id: string }> }) {
@@ -58,7 +61,14 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
     .filter(hasValidProjectImageUrl);
 
   return (
-    <main className="min-h-screen bg-white px-4 pb-32 pt-16 md:px-8 lg:pt-20">
+    <div className="min-h-screen bg-white px-4 pb-32 pt-16 md:px-8 lg:pt-20">
+      <BreadcrumbJsonLd
+        items={[
+          { name: "홈", path: "/" },
+          { name: "시공 사례", path: "/projects" },
+          { name: project.title, path: `/projects/${id}` },
+        ]}
+      />
       <div className="mx-auto max-w-5xl">
         <Link 
           href="/projects"
@@ -126,6 +136,6 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           )}
         </div>
       </div>
-    </main>
+    </div>
   );
 }

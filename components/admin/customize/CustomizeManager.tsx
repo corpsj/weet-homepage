@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import ImageUpload from '@/components/admin/media/ImageUpload';
 import { cn } from '@/lib/utils';
+import { confirmToast } from '@/lib/ui/confirm';
 import {
   createCustomizeOptionConflict,
   deleteCustomizeCategory,
@@ -202,8 +203,8 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
   const saveCategory = () => runAction('카테고리 저장', () => upsertCustomizeCategory({ id: editingCategoryId, ...categoryForm }));
   const saveOption = () => runAction('옵션 저장', () => upsertCustomizeOption({ id: editingOptionId, ...optionForm }));
   const saveIncluded = () => runAction('포함 사양 저장', () => upsertCustomizeIncludedSpec({ id: editingIncludedId, ...includedForm }));
-  const deleteWithConfirm = (label: string, name: string, action: () => Promise<unknown>) => {
-    if (!confirm(`${name} 항목을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.`)) return;
+  const deleteWithConfirm = async (label: string, name: string, action: () => Promise<unknown>) => {
+    if (!(await confirmToast(`${name} 항목을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.`, { confirmLabel: '삭제' }))) return;
     runAction(`${label} 삭제`, action);
   };
 

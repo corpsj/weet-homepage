@@ -270,22 +270,26 @@ const productsData = [
 export async function migrateProducts() {
     await requireAdmin();
 
-    console.log('Starting migration...');
-
-    // 1. Clear existing data
-    const { error: deleteError } = await supabaseAdmin
+    // Safety guard (F10): this is a one-time SEED for an empty products table.
+    // It must never delete the live, admin-managed catalog and replace it with
+    // this stale hardcoded list. If any products already exist, abort instead of
+    // destroying data. (The previous implementation deleted ALL rows first.)
+    const { count, error: countError } = await supabaseAdmin
         .from('products')
-        .delete()
-        .neq('id', '00000000-0000-0000-0000-000000000000'); // Delete all rows
+        .select('id', { count: 'exact', head: true });
 
-    if (deleteError) {
-        console.error('Failed to clear products table:', deleteError);
-        throw new Error('Failed to clear existing data');
+    if (countError) {
+        console.error('Failed to check existing products:', countError);
+        throw new Error('제품 데이터 확인 중 오류가 발생했습니다.');
     }
 
-    console.log('Cleared existing products.');
+    if ((count ?? 0) > 0) {
+        throw new Error(
+            `이미 ${count}개의 제품이 등록되어 있어 시드 마이그레이션을 중단했습니다. 기존 데이터를 삭제하거나 덮어쓰지 않습니다.`,
+        );
+    }
 
-    // 2. Insert new data
+    // Insert seed data only into the empty table.
     for (const product of productsData) {
         const { error } = await supabaseAdmin
             .from('products')

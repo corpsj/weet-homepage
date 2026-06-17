@@ -8,6 +8,35 @@ const ALLOWED_IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'i
 const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 const SAFE_PATH_PATTERN = /^[a-zA-Z0-9/_-]+\.(jpe?g|png|webp|gif)$/i;
 
+/**
+ * Verify the file's actual leading bytes (magic numbers) match the declared
+ * MIME type, so a client can't bypass the MIME allowlist by mislabelling a
+ * non-image (e.g. an HTML/SVG/script) as image/png. (review backlog F49)
+ */
+function hasValidImageMagicBytes(buffer: Buffer, mime: string): boolean {
+    if (buffer.length < 12) return false;
+    switch (mime) {
+        case 'image/jpeg':
+            return buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff;
+        case 'image/png':
+            return (
+                buffer[0] === 0x89 && buffer[1] === 0x50 && buffer[2] === 0x4e && buffer[3] === 0x47 &&
+                buffer[4] === 0x0d && buffer[5] === 0x0a && buffer[6] === 0x1a && buffer[7] === 0x0a
+            );
+        case 'image/gif':
+            // "GIF87a" / "GIF89a"
+            return buffer[0] === 0x47 && buffer[1] === 0x49 && buffer[2] === 0x46 && buffer[3] === 0x38;
+        case 'image/webp':
+            // "RIFF"...."WEBP"
+            return (
+                buffer[0] === 0x52 && buffer[1] === 0x49 && buffer[2] === 0x46 && buffer[3] === 0x46 &&
+                buffer[8] === 0x57 && buffer[9] === 0x45 && buffer[10] === 0x42 && buffer[11] === 0x50
+            );
+        default:
+            return false;
+    }
+}
+
 export async function uploadImageAction(formData: FormData) {
     await requireAdmin();
 
@@ -40,6 +69,11 @@ export async function uploadImageAction(formData: FormData) {
 
         const arrayBuffer = await file.arrayBuffer();
         const buffer = Buffer.from(arrayBuffer);
+
+        // Content sniff: the declared MIME (client-supplied) must match the real bytes. (F49)
+        if (!hasValidImageMagicBytes(buffer, file.type)) {
+            throw new Error('파일 내용이 이미지 형식과 일치하지 않습니다.');
+        }
 
         const { data, error } = await supabaseAdmin.storage
             .from(bucket)

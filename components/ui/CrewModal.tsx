@@ -2,7 +2,7 @@
 
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useId, useRef, useState } from 'react';
 
 interface CrewModalProps {
     isOpen: boolean;
@@ -14,10 +14,22 @@ interface CrewModalProps {
         sections: { title: string; items: string[] }[];
         images: string[];
     } | null;
+    /** Element to return focus to when the modal closes. */
+    triggerRef?: React.RefObject<HTMLElement | null>;
 }
 
-export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
+const FOCUSABLE_SELECTOR =
+    'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+export default function CrewModal({ isOpen, onClose, data, triggerRef }: CrewModalProps) {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const dialogRef = useRef<HTMLDivElement>(null);
+    const titleId = useId();
+
+    const handleClose = useCallback(() => {
+        setCurrentImageIndex(0);
+        onClose();
+    }, [onClose]);
 
     useEffect(() => {
         if (isOpen) {
@@ -30,15 +42,60 @@ export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
         };
     }, [isOpen]);
 
+    // Escape to close and Tab focus trapping
+    useEffect(() => {
+        if (!isOpen) return;
+
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') {
+                handleClose();
+                return;
+            }
+            if (e.key === 'Tab') {
+                const dialog = dialogRef.current;
+                if (!dialog) return;
+                const focusable = Array.from(
+                    dialog.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
+                ).filter((el) => el.offsetParent !== null || el === document.activeElement);
+                if (focusable.length === 0) {
+                    e.preventDefault();
+                    return;
+                }
+                const first = focusable[0];
+                const last = focusable[focusable.length - 1];
+                const active = document.activeElement;
+                if (e.shiftKey) {
+                    if (active === first || !dialog.contains(active)) {
+                        e.preventDefault();
+                        last.focus();
+                    }
+                } else if (active === last || !dialog.contains(active)) {
+                    e.preventDefault();
+                    first.focus();
+                }
+            }
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [isOpen, handleClose]);
+
+    // Move focus into the dialog on open and restore it on close
+    useEffect(() => {
+        if (!isOpen) return;
+        const previouslyFocused =
+            triggerRef?.current ?? (document.activeElement as HTMLElement | null);
+        dialogRef.current?.focus();
+
+        return () => {
+            previouslyFocused?.focus?.();
+        };
+    }, [isOpen, triggerRef]);
+
     if (!isOpen || !data) return null;
 
     // Reset index when data changes by using key prop on inner content
     const key = data.name + data.images.length;
-
-    const handleClose = () => {
-        setCurrentImageIndex(0);
-        onClose();
-    };
 
     const nextImage = () => {
         setCurrentImageIndex((prev) => (prev + 1) % data.images.length);
@@ -52,12 +109,20 @@ export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm transition-opacity duration-300" onClick={handleClose}>
             <div
                 key={key}
-                className="bg-white w-full max-w-5xl h-[85vh] rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden animate-in fade-in zoom-in-95 duration-300"
+                ref={dialogRef}
+                role="dialog"
+                aria-modal="true"
+                aria-label={data.name}
+                aria-labelledby={titleId}
+                tabIndex={-1}
+                className="bg-white w-full max-w-5xl h-[85vh] rounded-2xl shadow-2xl flex flex-col md:flex-row overflow-hidden animate-in fade-in zoom-in-95 duration-300 focus:outline-none"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Close Button (Mobile: Top Right, Desktop: Absolute) */}
                 <button
+                    type="button"
                     onClick={handleClose}
+                    aria-label="닫기"
                     className="absolute top-4 right-4 z-20 p-2 bg-white/80 hover:bg-white rounded-full transition-colors shadow-sm md:hidden"
                 >
                     <X className="w-6 h-6 text-black" />
@@ -95,13 +160,17 @@ export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
                         {data.images.length > 1 && (
                             <>
                                 <button
+                                    type="button"
                                     onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                                    aria-label="이전 이미지"
                                     className="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2 bg-black/20 hover:bg-black/50 text-white rounded-full backdrop-blur-md transition-all opacity-0 group-hover:opacity-100"
                                 >
                                     <ChevronLeft className="w-6 h-6" />
                                 </button>
                                 <button
+                                    type="button"
                                     onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                                    aria-label="다음 이미지"
                                     className="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2 bg-black/20 hover:bg-black/50 text-white rounded-full backdrop-blur-md transition-all opacity-0 group-hover:opacity-100"
                                 >
                                     <ChevronRight className="w-6 h-6" />
@@ -112,7 +181,10 @@ export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
                                     {data.images.map((_, idx) => (
                                         <button
                                             key={idx}
+                                            type="button"
                                             onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(idx); }}
+                                            aria-label={`이미지 ${idx + 1}로 이동`}
+                                            aria-current={idx === currentImageIndex}
                                             className={`w-2 h-2 rounded-full transition-all shadow-sm ${idx === currentImageIndex ? 'bg-white w-4' : 'bg-white/40 hover:bg-white/80'}`}
                                         />
                                     ))}
@@ -132,7 +204,9 @@ export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
                 <div className="flex-1 overflow-y-auto relative bg-white">
                     {/* Desktop Close Button */}
                     <button
-                        onClick={onClose}
+                        type="button"
+                        onClick={handleClose}
+                        aria-label="닫기"
                         className="hidden md:block absolute top-6 right-6 p-2 text-gray-400 hover:text-black transition-colors z-10"
                     >
                         <X className="w-6 h-6" />
@@ -141,7 +215,7 @@ export default function CrewModal({ isOpen, onClose, data }: CrewModalProps) {
                     <div className="p-8 md:p-12 lg:p-16 space-y-12">
                         {/* Desktop Header */}
                         <div className="hidden md:block">
-                            <h2 className="text-4xl lg:text-5xl font-bold text-black mb-3 tracking-tight">{data.name}</h2>
+                            <h2 id={titleId} className="text-4xl lg:text-5xl font-bold text-black mb-3 tracking-tight">{data.name}</h2>
                             <p className="text-primary text-lg font-medium tracking-wider uppercase">{data.role}</p>
                         </div>
 

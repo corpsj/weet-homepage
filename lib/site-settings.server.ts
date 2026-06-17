@@ -9,11 +9,17 @@ import {
   type SiteSettings,
 } from '@/lib/site-settings';
 
+// `site_settings` is not present in the generated `Database` types, so the
+// typed client narrows `.from('site_settings')` to `never`. We assert the row
+// shape we actually select here instead of falling back to `any`.
+type SiteSettingRow = { key: string; value: string };
+
 const fetchSiteSettings = unstable_cache(
   async (): Promise<SiteSettings> => {
-    const { data, error } = await (supabase as any)
-      .from('site_settings')
-      .select('key, value');
+    const { data, error } = await supabase
+      .from('site_settings' as never)
+      .select('key, value')
+      .returns<SiteSettingRow[]>();
 
     const settings = { ...SITE_SETTING_DEFAULTS };
     if (error || !data) {
@@ -21,7 +27,7 @@ const fetchSiteSettings = unstable_cache(
       return settings;
     }
 
-    for (const row of data as { key: string; value: string }[]) {
+    for (const row of data) {
       if (!(row.key in settings) || row.value.trim() === '') continue;
 
       const key = row.key as keyof SiteSettings;

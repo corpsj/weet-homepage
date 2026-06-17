@@ -9,6 +9,7 @@ import { Project } from '@/types/supabase';
 import { getProjects, deleteProject } from '@/app/actions/project-actions';
 import { getProjectHeroImage, getProjectPublicIssues } from '@/lib/projects/publicProjects';
 import { formatKstDate } from '@/lib/date-format';
+import { confirmToast } from '@/lib/ui/confirm';
 import {
     ConsoleMetricCard,
     ConsolePageHeader,
@@ -91,7 +92,7 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
     }, [filterStatus, fetchProjects]);
 
     const handleDelete = async (id: string) => {
-        if (!confirm('정말 삭제하시겠습니까?')) return;
+        if (!(await confirmToast('정말 삭제하시겠습니까?', { confirmLabel: '삭제' }))) return;
 
         setDeleting(id);
         try {

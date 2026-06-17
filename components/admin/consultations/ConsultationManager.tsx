@@ -12,6 +12,7 @@ import {
 } from '@/app/actions/customize-actions';
 import { formatKstDateTime } from '@/lib/date-format';
 import { formatWon } from '@/lib/customize/priceCalculator';
+import { confirmToast } from '@/lib/ui/confirm';
 import type { ConsultationStatus, CustomizeConsultation } from '@/lib/customize/types';
 import {
   ConsoleMetricCard,
@@ -74,8 +75,8 @@ export default function ConsultationManager({ consultations, count }: Consultati
       }
     });
   };
-  const deleteConsultation = (id: string, name: string) => {
-    if (!confirm(`${name}님의 상담 요청을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.`)) return;
+  const deleteConsultation = async (id: string, name: string) => {
+    if (!(await confirmToast(`${name}님의 상담 요청을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.`, { confirmLabel: '삭제' }))) return;
     runAction('상담 삭제', () => deleteCustomizeConsultation(id));
   };
   const summary = consultations.reduce(

@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation';
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import ConsultBar from "@/components/layout/ConsultBar";
+import { SkipLink } from "@/components/a11y/SkipLink";
 import type { SiteSettings } from '@/lib/site-settings';
 import { Toaster } from 'sonner';
 
@@ -39,8 +40,9 @@ export default function ClientLayout({
 
     return (
         <>
+            <SkipLink />
             <Header />
-            <main className="flex-1 pt-[70px] md:pt-[80px] lg:pt-[80px] pb-14 lg:pb-0">{children}</main>
+            <main id="main-content" className="flex-1 pt-[70px] md:pt-[80px] lg:pt-[80px] pb-14 lg:pb-0">{children}</main>
             <Footer settings={settings} />
             <ConsultBar settings={settings} />
             <Toaster position="top-right" richColors />

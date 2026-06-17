@@ -47,6 +47,26 @@ const DATA: SolutionPackageData = {
       ctaPrimary: "Check remote readiness in order options",
       ctaSecondary: "Discuss operating workflow",
     },
+    ES: {
+      eyebrow: "REMOTE READY OPTION",
+      title: "Prepare El Espacio Sin Desplazarse",
+      lead:
+        "El estado de la climatización, la iluminación, la ventilación y la cerradura puede comprobarse antes de que lleguen los huéspedes. El control remoto no es solo comodidad; reduce el tiempo de operación.",
+      imageAlt: "Imagen fotorrealista de interruptores inteligentes y paneles de control dentro de un interior modular coreano",
+      problemTitle: "Las pequeñas visitas se acumulan",
+      problem:
+        "Las estancias con reserva, los showrooms sin personal y las casas de fin de semana necesitan encender, ajustar y cerrar el espacio una y otra vez. Depender de comprobaciones manuales hace que se pierda tiempo de operación.",
+      fitTitle: "Configuraciones recomendadas",
+      fit: ["Estancias privadas que necesitan control de temperatura previo a la llegada", "Salas de experiencia con reserva", "Casas de fin de semana gestionadas en remoto", "Showrooms donde la iluminación y la ventilación importan"],
+      includedTitle: "Alcance",
+      included: ["Ubicación de interruptores inteligentes y paneles de temperatura", "Programación de climatización y ventilación previa a la llegada", "Vínculos de alerta de cerradura, iluminación y climatización", "Automatización basada en horarios de operación y de reserva"],
+      decisionsTitle: "Decisiones durante la consulta",
+      decisions: ["Cuántas horas antes de la llegada debe prepararse el espacio", "Qué dispositivos necesitan control remoto: iluminación, climatización, ventilación", "Qué alertas requieren confirmación del operador y qué acciones pueden ser automáticas", "Qué pueden controlar los huéspedes frente a lo que solo controlan los operadores"],
+      outcomesTitle: "Resultados operativos",
+      outcomes: ["Ajuste la temperatura y la iluminación antes de que lleguen los huéspedes.", "Compruebe el estado de la cerradura y la climatización sin visitas repetidas.", "Reduzca la energía desperdiciada y el tiempo de desplazamiento del operador.", "Mantenga el estado del espacio más constante en los distintos horarios de reserva."],
+      ctaPrimary: "Ver preparación remota en las opciones de pedido",
+      ctaSecondary: "Consultar el flujo de operación",
+    },
   },
 };
 

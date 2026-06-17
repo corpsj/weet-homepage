@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Loader2, Pencil, Plus, Trash2, ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { deleteGalleryItem } from '@/app/actions/gallery-actions';
+import { confirmToast } from '@/lib/ui/confirm';
 import { GalleryItem } from '@/types/supabase';
 import { formatKstDate } from '@/lib/date-format';
 import {
@@ -21,8 +22,8 @@ export default function GalleryList({ initialItems }: { initialItems: GalleryIte
   const [deleting, setDeleting] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  const handleDelete = (id: string) => {
-    if (!confirm('정말 삭제하시겠습니까?')) return;
+  const handleDelete = async (id: string) => {
+    if (!(await confirmToast('정말 삭제하시겠습니까?', { confirmLabel: '삭제' }))) return;
 
     setDeleting(id);
     startTransition(async () => {

@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,22 +7,8 @@ import { getProjectHeroImage, isPublicReadyProject } from "@/lib/projects/public
 import { getPublicGalleryItems } from "@/app/actions/gallery-actions";
 import { getSiteSettings } from "@/lib/site-settings.server";
 
-export const dynamic = 'force-dynamic';
-
-export const metadata: Metadata = {
-  title: "이동식주택 시공 사례·제작 현장 기록",
-  description:
-    "위트(weet) 이동식주택의 시공 사례와 공장 제작·운송·설치 현장 기록입니다. 검증된 사례만 공개하며, 용접·단열·도장부터 현장 설치까지 실제 작업 과정을 확인하세요.",
-  alternates: {
-    canonical: "/projects",
-  },
-  openGraph: {
-    url: "/projects",
-    title: "이동식주택 시공 사례·제작 현장 기록 | 위트(weet)",
-    description:
-      "위트(weet) 이동식주택의 시공 사례와 공장 제작·운송·설치 현장 기록입니다. 실제 작업 과정을 확인하세요.",
-  },
-};
+// ISR: cache + revalidate every 5 minutes rather than force-dynamic. (F12)
+export const revalidate = 300;
 
 const publicReadiness = [
   {
@@ -82,7 +67,7 @@ export default async function ProjectsPage() {
   const publicProjects = ((projects as Project[] | null) ?? []).filter(isPublicReadyProject);
 
   return (
-    <main className="min-h-screen bg-white pb-40 pt-16 lg:pt-20">
+    <div className="min-h-screen bg-white pb-40 pt-16 lg:pt-20">
       <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[148px]">
         <div className="mb-12 lg:mb-20">
           <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">Projects</h1>
@@ -234,6 +219,6 @@ export default async function ProjectsPage() {
           </section>
         )}
       </div>
-    </main>
+    </div>
   );
 }

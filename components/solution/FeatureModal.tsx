@@ -18,7 +18,8 @@ interface FeatureModalProps {
 
 export default function FeatureModal({ isOpen, onClose, feature }: FeatureModalProps) {
     const { language } = useLanguage();
-    const imagePendingLabel = language === 'KO' ? '이미지 준비 중' : 'Image pending';
+    const imagePendingLabel =
+        language === 'KO' ? '이미지 준비 중' : language === 'ES' ? 'Imagen en preparación' : 'Image pending';
 
     useEffect(() => {
         if (isOpen) {

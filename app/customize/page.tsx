@@ -1,24 +1,16 @@
-import type { Metadata } from 'next';
 import CustomizeConfigurator from '@/components/customize/CustomizeConfigurator';
 import { getPublicCustomizeCatalog } from '@/app/actions/customize-actions';
 import { getSiteSettings } from '@/lib/site-settings.server';
+import { buildPageMetadata } from '@/lib/seo';
 
 export const dynamic = 'force-dynamic';
 
-export const metadata: Metadata = {
+export const metadata = buildPageMetadata({
   title: '이동식주택 맞춤 구성·예상 견적',
   description:
     '위트 이동식주택을 모델, 공간, 소재, 스마트 옵션별로 직접 구성하고 예상 견적을 즉시 확인하세요. 구성 그대로 상담·견적 요청까지 이어집니다.',
-  alternates: {
-    canonical: '/customize',
-  },
-  openGraph: {
-    url: '/customize',
-    title: '이동식주택 맞춤 구성·예상 견적 | 위트(weet)',
-    description:
-      '모델과 옵션을 직접 구성하고 예상 견적을 즉시 확인하세요. 구성 그대로 상담·견적 요청까지 이어집니다.',
-  },
-};
+  path: '/customize',
+});
 
 export default async function CustomizePage({
   searchParams,

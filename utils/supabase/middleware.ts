@@ -36,12 +36,10 @@ export async function updateSession(request: NextRequest) {
     } = await supabase.auth.getUser()
 
     if (request.nextUrl.pathname.startsWith('/admin') && !user) {
-        // Allow access to login page
-        if (request.nextUrl.pathname === '/admin/login') {
-            return response
-        }
+        // The admin login lives at /login (there is no /admin/login route), so
+        // unauthenticated /admin/* requests redirect straight there. (F50)
         const url = request.nextUrl.clone()
-        url.pathname = '/login' // Assuming /login is the login page
+        url.pathname = '/login'
         return NextResponse.redirect(url)
     }
 

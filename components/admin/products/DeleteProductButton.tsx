@@ -5,6 +5,7 @@ import { Trash2, Loader2 } from 'lucide-react';
 import { deleteProduct } from '@/app/actions/product-actions';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { confirmToast } from '@/lib/ui/confirm';
 
 interface DeleteProductButtonProps {
     productId: string;
@@ -15,7 +16,7 @@ export default function DeleteProductButton({ productId }: DeleteProductButtonPr
     const router = useRouter();
 
     const handleDelete = async () => {
-        if (!confirm('정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.')) {
+        if (!(await confirmToast('정말 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.', { confirmLabel: '삭제' }))) {
             return;
         }
 

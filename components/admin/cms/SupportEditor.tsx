@@ -2,10 +2,11 @@
 
 import { Fragment, useState } from 'react';
 import { Plus, Trash2, ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
-import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { createFaq, updateFaq, deleteFaq } from '@/app/actions/faq-actions';
 import { createNotice, updateNotice, deleteNotice } from '@/app/actions/notice-actions';
+import { useUnsavedChangesWarning } from '@/hooks/useUnsavedChangesWarning';
+import { useCrudDraftList } from './useCrudDraftList';
 import {
     ConsolePageHeader,
     ConsolePanel,
@@ -54,223 +55,117 @@ export default function SupportEditor({
     dbError?: string | null
 }) {
     const [activeTab, setActiveTab] = useState('faq');
-    const [faqs, setFAQs] = useState<FAQ[]>(initialFAQs);
-    const [notices, setNotices] = useState<Notice[]>(initialNotices);
-    const [faqDrafts, setFaqDrafts] = useState<Record<string, FAQ>>({});
-    const [noticeDrafts, setNoticeDrafts] = useState<Record<string, Notice>>({});
-    const [savingItems, setSavingItems] = useState<Record<string, boolean>>({});
     const [loading, setLoading] = useState(false);
     const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
     const [expandedNotice, setExpandedNotice] = useState<string | null>(null);
     const router = useRouter();
 
-    const setItemSaving = (key: string, value: boolean) => {
-        setSavingItems(prev => ({ ...prev, [key]: value }));
-    };
-
-    const getFaqDraft = (faq: FAQ) => faqDrafts[faq.id] || faq;
-    const getNoticeDraft = (notice: Notice) => noticeDrafts[notice.id] || notice;
-
-    const isFaqDirty = (faq: FAQ) => {
-        const draft = getFaqDraft(faq);
-        return (
-            draft.question_ko !== faq.question_ko ||
-            draft.answer_ko !== faq.answer_ko ||
-            (draft.question_en || '') !== (faq.question_en || '') ||
-            (draft.answer_en || '') !== (faq.answer_en || '')
-        );
-    };
-
-    const isNoticeDirty = (notice: Notice) => {
-        const draft = getNoticeDraft(notice);
-        return (
-            draft.title !== notice.title ||
-            draft.content !== notice.content ||
-            draft.is_pinned !== notice.is_pinned ||
-            draft.is_active !== notice.is_active
-        );
-    };
-
-    const handleChangeFAQDraft = (id: string, field: keyof FAQ, value: FAQ[keyof FAQ]) => {
-        const source = faqs.find(faq => faq.id === id);
-        if (!source) return;
-        setFaqDrafts(prev => ({
-            ...prev,
-            [id]: { ...(prev[id] || source), [field]: value }
-        }));
-    };
-
-    const handleChangeNoticeDraft = (id: string, field: keyof Notice, value: Notice[keyof Notice]) => {
-        const source = notices.find(notice => notice.id === id);
-        if (!source) return;
-        setNoticeDrafts(prev => ({
-            ...prev,
-            [id]: { ...(prev[id] || source), [field]: value }
-        }));
-    };
-
-    // --- FAQ Handlers ---
-    const handleAddFAQ = async () => {
-        setLoading(true);
-        try {
-            const newFAQData = {
+    // F38: FAQ + Notice share one create/edit/save/delete + draft-dirty lifecycle
+    // via useCrudDraftList; only the entity-specific payloads, dirty fields, and
+    // copy differ.
+    const faqList = useCrudDraftList<
+        FAQ,
+        Parameters<typeof createFaq>[0],
+        Parameters<typeof updateFaq>[1],
+        NonNullable<Awaited<ReturnType<typeof createFaq>>['data']>
+    >(
+        initialFAQs,
+        {
+            getId: (faq) => faq.id,
+            createAction: createFaq,
+            updateAction: updateFaq,
+            deleteAction: deleteFaq,
+            insertPosition: 'end',
+            savingKeyPrefix: 'faq',
+            setLoading,
+            onAdded: (id) => setExpandedFaq(id),
+            buildCreateInput: (items) => ({
                 question_ko: '새 질문',
                 answer_ko: '내용을 입력하세요.',
                 question_en: 'New Question',
                 answer_en: 'Enter content here.',
-                order_index: faqs.length,
-            };
-
-            const result = await createFaq(newFAQData);
-            if (result.success && result.data) {
-                setFAQs(prev => [...prev, result.data as FAQ]);
-                setExpandedFaq(result.data.id);
-                toast.success('FAQ가 추가되었습니다.');
-            } else {
-                toast.error(result.message || 'FAQ 추가 실패');
-            }
-        } catch (e) {
-            console.error(e);
-            toast.error('오류가 발생했습니다.');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleSaveFAQ = async (faq: FAQ) => {
-        const draft = getFaqDraft(faq);
-        const key = `faq:${faq.id}`;
-        setItemSaving(key, true);
-        try {
-            const result = await updateFaq(faq.id, {
+                order_index: items.length,
+            }),
+            buildUpdateInput: (draft) => ({
                 question_ko: draft.question_ko,
                 answer_ko: draft.answer_ko,
                 question_en: draft.question_en,
                 answer_en: draft.answer_en,
-            });
-            if (result.success && result.data) {
-                setFAQs(prev => prev.map(item => item.id === faq.id ? result.data as FAQ : item));
-                setFaqDrafts(prev => {
-                    const next = { ...prev };
-                    delete next[faq.id];
-                    return next;
-                });
-                toast.success('FAQ가 저장되었습니다.');
-            } else {
-                toast.error(result.message || 'FAQ 저장 실패');
-            }
-        } catch (e) {
-            console.error(e);
-            toast.error('FAQ 저장 중 오류가 발생했습니다.');
-        } finally {
-            setItemSaving(key, false);
+            }),
+            isDirty: (faq, draft) => (
+                draft.question_ko !== faq.question_ko ||
+                draft.answer_ko !== faq.answer_ko ||
+                (draft.question_en || '') !== (faq.question_en || '') ||
+                (draft.answer_en || '') !== (faq.answer_en || '')
+            ),
+            messages: {
+                addSuccess: 'FAQ가 추가되었습니다.',
+                addError: 'FAQ 추가 실패',
+                saveSuccess: 'FAQ가 저장되었습니다.',
+                saveError: 'FAQ 저장 실패',
+                saveErrorUnexpected: 'FAQ 저장 중 오류가 발생했습니다.',
+                deleteConfirm: '이 FAQ를 삭제하시겠습니까?',
+                deleteConfirmLabel: '삭제',
+                deleteSuccess: 'FAQ가 삭제되었습니다.',
+                genericError: '오류가 발생했습니다.',
+            },
         }
-    };
+    );
 
-    const handleDeleteFAQ = async (id: string) => {
-        if (!confirm('이 FAQ를 삭제하시겠습니까?')) return;
-        setLoading(true);
-        try {
-            const result = await deleteFaq(id);
-            if (result.success) {
-                setFAQs(prev => prev.filter(f => f.id !== id));
-                setFaqDrafts(prev => {
-                    const next = { ...prev };
-                    delete next[id];
-                    return next;
-                });
-                toast.success('FAQ가 삭제되었습니다.');
-            } else {
-                toast.error(result.message);
-            }
-        } catch (e) {
-            console.error(e);
-            toast.error('오류가 발생했습니다.');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // --- Notice Handlers ---
-    const handleAddNotice = async () => {
-        setLoading(true);
-        try {
-            const newNoticeData = {
+    const noticeList = useCrudDraftList<
+        Notice,
+        Parameters<typeof createNotice>[0],
+        Parameters<typeof updateNotice>[1],
+        NonNullable<Awaited<ReturnType<typeof createNotice>>['data']>
+    >(
+        initialNotices,
+        {
+            getId: (notice) => notice.id,
+            createAction: createNotice,
+            updateAction: updateNotice,
+            deleteAction: deleteNotice,
+            insertPosition: 'start',
+            savingKeyPrefix: 'notice',
+            setLoading,
+            onAdded: (id) => setExpandedNotice(id),
+            buildCreateInput: () => ({
                 title: '새 공지사항',
                 content: '내용을 입력하세요.',
                 is_pinned: false,
-                is_active: true
-            };
-
-            const result = await createNotice(newNoticeData);
-            if (result.success && result.data) {
-                setNotices(prev => [result.data as Notice, ...prev]);
-                setExpandedNotice(result.data.id);
-                toast.success('공지사항이 추가되었습니다.');
-            } else {
-                toast.error(result.message);
-            }
-        } catch (e) {
-            console.error(e);
-            toast.error('오류가 발생했습니다.');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const handleSaveNotice = async (notice: Notice) => {
-        const draft = getNoticeDraft(notice);
-        const key = `notice:${notice.id}`;
-        setItemSaving(key, true);
-        try {
-            const result = await updateNotice(notice.id, {
+                is_active: true,
+            }),
+            buildUpdateInput: (draft) => ({
                 title: draft.title,
                 content: draft.content,
                 is_pinned: draft.is_pinned,
                 is_active: draft.is_active,
-            });
-            if (result.success && result.data) {
-                setNotices(prev => prev.map(item => item.id === notice.id ? result.data as Notice : item));
-                setNoticeDrafts(prev => {
-                    const next = { ...prev };
-                    delete next[notice.id];
-                    return next;
-                });
-                toast.success('공지사항이 저장되었습니다.');
-            } else {
-                toast.error(result.message || '공지사항 저장 실패');
-            }
-        } catch (e) {
-            console.error(e);
-            toast.error('공지사항 저장 중 오류가 발생했습니다.');
-        } finally {
-            setItemSaving(key, false);
+            }),
+            isDirty: (notice, draft) => (
+                draft.title !== notice.title ||
+                draft.content !== notice.content ||
+                draft.is_pinned !== notice.is_pinned ||
+                draft.is_active !== notice.is_active
+            ),
+            messages: {
+                addSuccess: '공지사항이 추가되었습니다.',
+                addError: '공지사항 생성에 실패했습니다.',
+                saveSuccess: '공지사항이 저장되었습니다.',
+                saveError: '공지사항 저장 실패',
+                saveErrorUnexpected: '공지사항 저장 중 오류가 발생했습니다.',
+                deleteConfirm: '이 공지사항을 삭제하시겠습니까?',
+                deleteConfirmLabel: '삭제',
+                deleteSuccess: '공지사항이 삭제되었습니다.',
+                genericError: '오류가 발생했습니다.',
+            },
         }
-    };
+    );
 
-    const handleDeleteNotice = async (id: string) => {
-        if (!confirm('이 공지사항을 삭제하시겠습니까?')) return;
-        setLoading(true);
-        try {
-            const result = await deleteNotice(id);
-            if (result.success) {
-                setNotices(prev => prev.filter(n => n.id !== id));
-                setNoticeDrafts(prev => {
-                    const next = { ...prev };
-                    delete next[id];
-                    return next;
-                });
-                toast.success('공지사항이 삭제되었습니다.');
-            } else {
-                toast.error(result.message);
-            }
-        } catch (e) {
-            console.error(e);
-            toast.error('오류가 발생했습니다.');
-        } finally {
-            setLoading(false);
-        }
-    };
+    const faqs = faqList.items;
+    const notices = noticeList.items;
+
+    // F41: dirty whenever any FAQ or notice has an unsaved in-progress draft edit.
+    const hasUnsavedChanges = faqList.isAnyDirty || noticeList.isAnyDirty;
+    useUnsavedChangesWarning(hasUnsavedChanges);
 
     return (
         <div className="space-y-6">
@@ -377,7 +272,7 @@ END $$;`}
                         <div className="flex justify-between items-center">
                             <h3 className="text-sm font-black text-gray-900">FAQ 목록</h3>
                             <button
-                                onClick={handleAddFAQ}
+                                onClick={faqList.add}
                                 disabled={loading}
                                 className={consolePrimaryButtonClass + " px-3 py-1.5"}
                             >
@@ -388,9 +283,9 @@ END $$;`}
 
                         <div className="space-y-3">
                             {faqs.map((faq) => {
-                                const draft = getFaqDraft(faq);
-                                const dirty = isFaqDirty(faq);
-                                const saving = Boolean(savingItems[`faq:${faq.id}`]);
+                                const draft = faqList.getDraft(faq);
+                                const dirty = faqList.isItemDirty(faq);
+                                const saving = faqList.isSaving(faq);
 
                                 return (
                                     <div key={faq.id} className="border border-[#e5e5df] bg-white rounded overflow-hidden">
@@ -410,7 +305,7 @@ END $$;`}
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    handleDeleteFAQ(faq.id);
+                                                    faqList.remove(faq.id);
                                                 }}
                                                 aria-label="FAQ 삭제"
                                                 className={`${consoleIconButtonClass} text-gray-400 hover:text-red-500 hover:bg-red-50`}
@@ -434,7 +329,7 @@ END $$;`}
                                                         <input
                                                             type="text"
                                                             value={draft.question_ko}
-                                                            onChange={(e) => handleChangeFAQDraft(faq.id, 'question_ko', e.target.value)}
+                                                            onChange={(e) => faqList.changeDraft(faq.id, 'question_ko', e.target.value)}
                                                             placeholder="질문을 입력하세요"
                                                             className={consoleInputClass + " w-full bg-white"}
                                                         />
@@ -444,7 +339,7 @@ END $$;`}
                                                         <textarea
                                                             rows={3}
                                                             value={draft.answer_ko}
-                                                            onChange={(e) => handleChangeFAQDraft(faq.id, 'answer_ko', e.target.value)}
+                                                            onChange={(e) => faqList.changeDraft(faq.id, 'answer_ko', e.target.value)}
                                                             placeholder="답변 내용을 입력하세요"
                                                             className={consoleInputClass + " w-full bg-white resize-none"}
                                                         />
@@ -465,7 +360,7 @@ END $$;`}
                                                         <input
                                                             type="text"
                                                             value={draft.question_en || ''}
-                                                            onChange={(e) => handleChangeFAQDraft(faq.id, 'question_en', e.target.value)}
+                                                            onChange={(e) => faqList.changeDraft(faq.id, 'question_en', e.target.value)}
                                                             placeholder="English Question"
                                                             className={consoleInputClass + " w-full bg-white"}
                                                         />
@@ -475,7 +370,7 @@ END $$;`}
                                                         <textarea
                                                             rows={3}
                                                             value={draft.answer_en || ''}
-                                                            onChange={(e) => handleChangeFAQDraft(faq.id, 'answer_en', e.target.value)}
+                                                            onChange={(e) => faqList.changeDraft(faq.id, 'answer_en', e.target.value)}
                                                             placeholder="English Answer"
                                                             className={consoleInputClass + " w-full bg-white resize-none"}
                                                         />
@@ -489,11 +384,7 @@ END $$;`}
                                                 <div className="flex gap-2">
                                                     <button
                                                         type="button"
-                                                        onClick={() => setFaqDrafts(prev => {
-                                                            const next = { ...prev };
-                                                            delete next[faq.id];
-                                                            return next;
-                                                        })}
+                                                        onClick={() => faqList.resetDraft(faq.id)}
                                                         disabled={!dirty || saving}
                                                         className={consoleSecondaryButtonClass}
                                                     >
@@ -501,7 +392,7 @@ END $$;`}
                                                     </button>
                                                     <button
                                                         type="button"
-                                                        onClick={() => handleSaveFAQ(faq)}
+                                                        onClick={() => faqList.save(faq)}
                                                         disabled={!dirty || saving}
                                                         className={consolePrimaryButtonClass}
                                                     >
@@ -527,7 +418,7 @@ END $$;`}
                         <div className="flex justify-between items-center">
                             <h3 className="text-sm font-black text-gray-900">공지사항 목록</h3>
                             <button
-                                onClick={handleAddNotice}
+                                onClick={noticeList.add}
                                 disabled={loading}
                                 className={consolePrimaryButtonClass + " px-3 py-1.5"}
                             >
@@ -538,9 +429,9 @@ END $$;`}
 
                         <div className="space-y-3 md:hidden">
                             {notices.map((notice) => {
-                                const draft = getNoticeDraft(notice);
-                                const dirty = isNoticeDirty(notice);
-                                const saving = Boolean(savingItems[`notice:${notice.id}`]);
+                                const draft = noticeList.getDraft(notice);
+                                const dirty = noticeList.isItemDirty(notice);
+                                const saving = noticeList.isSaving(notice);
 
                                 return (
                                     <div key={notice.id} className="rounded border border-[#e5e5df] bg-white p-4">
@@ -551,7 +442,7 @@ END $$;`}
                                             <input
                                                 type="text"
                                                 value={draft.title}
-                                                onChange={(e) => handleChangeNoticeDraft(notice.id, 'title', e.target.value)}
+                                                onChange={(e) => noticeList.changeDraft(notice.id, 'title', e.target.value)}
                                                 className={consoleInputClass + " w-full bg-white"}
                                             />
                                             <div className="grid grid-cols-2 gap-3">
@@ -559,7 +450,7 @@ END $$;`}
                                                     <input
                                                         type="checkbox"
                                                         checked={draft.is_pinned}
-                                                        onChange={(e) => handleChangeNoticeDraft(notice.id, 'is_pinned', e.target.checked)}
+                                                        onChange={(e) => noticeList.changeDraft(notice.id, 'is_pinned', e.target.checked)}
                                                         className="w-3.5 h-3.5 text-[#111111] border-gray-300 rounded focus:ring-[#111111] accent-[#111111]"
                                                     />
                                                     고정
@@ -568,7 +459,7 @@ END $$;`}
                                                     <input
                                                         type="checkbox"
                                                         checked={draft.is_active}
-                                                        onChange={(e) => handleChangeNoticeDraft(notice.id, 'is_active', e.target.checked)}
+                                                        onChange={(e) => noticeList.changeDraft(notice.id, 'is_active', e.target.checked)}
                                                         className="w-3.5 h-3.5 text-[#111111] border-gray-300 rounded focus:ring-[#111111] accent-[#111111]"
                                                     />
                                                     공개
@@ -580,7 +471,7 @@ END $$;`}
                                             <textarea
                                                 rows={6}
                                                 value={draft.content}
-                                                onChange={(e) => handleChangeNoticeDraft(notice.id, 'content', e.target.value)}
+                                                onChange={(e) => noticeList.changeDraft(notice.id, 'content', e.target.value)}
                                                 placeholder="공지사항 본문을 입력하세요"
                                                 className={consoleInputClass + " h-auto w-full resize-y bg-white py-3 leading-relaxed"}
                                             />
@@ -590,11 +481,7 @@ END $$;`}
                                             <div className="grid grid-cols-[1fr_1fr_auto] gap-2">
                                                 <button
                                                     type="button"
-                                                    onClick={() => setNoticeDrafts(prev => {
-                                                        const next = { ...prev };
-                                                        delete next[notice.id];
-                                                        return next;
-                                                    })}
+                                                    onClick={() => noticeList.resetDraft(notice.id)}
                                                     disabled={!dirty || saving}
                                                     className={consoleSecondaryButtonClass}
                                                 >
@@ -602,7 +489,7 @@ END $$;`}
                                                 </button>
                                                 <button
                                                     type="button"
-                                                    onClick={() => handleSaveNotice(notice)}
+                                                    onClick={() => noticeList.save(notice)}
                                                     disabled={!dirty || saving}
                                                     className={consolePrimaryButtonClass}
                                                 >
@@ -611,7 +498,7 @@ END $$;`}
                                                 </button>
                                                 <button
                                                     type="button"
-                                                    onClick={() => handleDeleteNotice(notice.id)}
+                                                    onClick={() => noticeList.remove(notice.id)}
                                                     aria-label="공지사항 삭제"
                                                     className={`${consoleIconButtonClass} text-gray-400 hover:text-red-500 hover:bg-red-50 hover:border-red-100`}
                                                 >
@@ -641,9 +528,9 @@ END $$;`}
                                 </thead>
                                 <tbody className="divide-y divide-[#e5e5df] bg-white">
                                     {notices.map((notice) => {
-                                        const draft = getNoticeDraft(notice);
-                                        const dirty = isNoticeDirty(notice);
-                                        const saving = Boolean(savingItems[`notice:${notice.id}`]);
+                                        const draft = noticeList.getDraft(notice);
+                                        const dirty = noticeList.isItemDirty(notice);
+                                        const saving = noticeList.isSaving(notice);
 
                                         return (
                                             <Fragment key={notice.id}>
@@ -652,7 +539,7 @@ END $$;`}
                                                 <input
                                                     type="text"
                                                     value={draft.title}
-                                                    onChange={(e) => handleChangeNoticeDraft(notice.id, 'title', e.target.value)}
+                                                    onChange={(e) => noticeList.changeDraft(notice.id, 'title', e.target.value)}
                                                     className="w-full bg-transparent border-none focus:ring-0 font-bold text-gray-900 p-0 placeholder-gray-300"
                                                 />
                                                 <p className="mt-1 line-clamp-1 text-[11px] font-medium text-gray-400">
@@ -665,7 +552,7 @@ END $$;`}
                                                         <input
                                                             type="checkbox"
                                                             checked={draft.is_pinned}
-                                                            onChange={(e) => handleChangeNoticeDraft(notice.id, 'is_pinned', e.target.checked)}
+                                                            onChange={(e) => noticeList.changeDraft(notice.id, 'is_pinned', e.target.checked)}
                                                             className="w-3.5 h-3.5 text-[#111111] border-gray-300 rounded focus:ring-[#111111] accent-[#111111]"
                                                         />
                                                         <span className="font-bold text-gray-600">고정</span>
@@ -674,7 +561,7 @@ END $$;`}
                                                         <input
                                                             type="checkbox"
                                                             checked={draft.is_active}
-                                                            onChange={(e) => handleChangeNoticeDraft(notice.id, 'is_active', e.target.checked)}
+                                                            onChange={(e) => noticeList.changeDraft(notice.id, 'is_active', e.target.checked)}
                                                             className="w-3.5 h-3.5 text-[#111111] border-gray-300 rounded focus:ring-[#111111] accent-[#111111]"
                                                         />
                                                         <span className="font-bold text-gray-600">공개</span>
@@ -695,7 +582,7 @@ END $$;`}
                                                         {expandedNotice === notice.id ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                                                     </button>
                                                     <button
-                                                        onClick={() => handleDeleteNotice(notice.id)}
+                                                        onClick={() => noticeList.remove(notice.id)}
                                                         aria-label="공지사항 삭제"
                                                         className={`${consoleIconButtonClass} text-gray-400 hover:text-red-500 hover:bg-red-50 hover:border-red-100`}
                                                     >
@@ -714,7 +601,7 @@ END $$;`}
                                                         <textarea
                                                             rows={5}
                                                             value={draft.content}
-                                                            onChange={(e) => handleChangeNoticeDraft(notice.id, 'content', e.target.value)}
+                                                            onChange={(e) => noticeList.changeDraft(notice.id, 'content', e.target.value)}
                                                             placeholder="공지사항 본문을 입력하세요"
                                                             className={consoleInputClass + " h-auto w-full resize-y bg-white py-3 leading-relaxed"}
                                                         />
@@ -725,11 +612,7 @@ END $$;`}
                                                             <div className="flex gap-2">
                                                                 <button
                                                                     type="button"
-                                                                    onClick={() => setNoticeDrafts(prev => {
-                                                                        const next = { ...prev };
-                                                                        delete next[notice.id];
-                                                                        return next;
-                                                                    })}
+                                                                    onClick={() => noticeList.resetDraft(notice.id)}
                                                                     disabled={!dirty || saving}
                                                                     className={consoleSecondaryButtonClass}
                                                                 >
@@ -737,7 +620,7 @@ END $$;`}
                                                                 </button>
                                                                 <button
                                                                     type="button"
-                                                                    onClick={() => handleSaveNotice(notice)}
+                                                                    onClick={() => noticeList.save(notice)}
                                                                     disabled={!dirty || saving}
                                                                     className={consolePrimaryButtonClass}
                                                                 >

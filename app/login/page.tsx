@@ -18,7 +18,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function LoginPage() {
+export default async function LoginPage({
+    searchParams,
+}: {
+    searchParams: Promise<{ error?: string }>;
+}) {
+    // The login server action redirects to /login?error=... on failure; surface it. (F51)
+    const { error } = await searchParams;
     return (
         <div className="min-h-[calc(100vh-80px)] bg-gray-50 px-4 py-12 text-gray-900 sm:px-6 lg:px-8">
             <div className="mx-auto grid max-w-6xl overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm lg:grid-cols-[1.05fr_0.95fr]">
@@ -52,6 +58,12 @@ export default function LoginPage() {
                         <p className="mt-3 text-sm leading-6 text-gray-500">
                             위트 운영 계정으로 접속해 제품 구성과 상담 흐름을 관리합니다.
                         </p>
+
+                        {error && (
+                            <div role="alert" className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+                                아이디 또는 비밀번호가 올바르지 않습니다. 다시 확인해 주세요.
+                            </div>
+                        )}
 
                         <form className="mt-10 space-y-6">
                             <div className="space-y-5">

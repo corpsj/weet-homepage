@@ -3,11 +3,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
+import type { Language } from '@/contexts/LanguageContext';
 import { ArrowDown, ArrowRight } from 'lucide-react';
 
-type Lang = 'KO' | 'EN';
-
-const COPY: Record<Lang, {
+const COPY: Record<Language, {
   hero: { title: string; lead: string; scrollHint: string };
   intro: { title: string; paragraphs: string[] };
   processes: Array<{
@@ -134,6 +133,61 @@ const COPY: Record<Lang, {
       products: 'View all products',
       customize: 'Customize your weet',
       support: 'View purchase process'
+    }
+  },
+  ES: {
+    hero: {
+      title: 'Espacios Premium Sin Incertidumbre',
+      lead: 'La arquitectura modular de WEET es predecible. Se completa en fábricas perfectamente controladas y se entrega en su terreno justo a tiempo.',
+      scrollHint: 'El recorrido de la fábrica al emplazamiento'
+    },
+    intro: {
+      title: 'El Nuevo Estándar de la Construcción',
+      paragraphs: [
+        'La construcción tradicional depende del clima, la pericia de los operarios y un sinfín de variables en obra. WEET controla estas incertidumbres mediante la tecnología.',
+        'Cada espacio se construye con precisión en un entorno de fábrica con tolerancia cero. Eliminamos el ruido y el polvo de la obra, dando vida a su visión con los métodos más avanzados.'
+      ]
+    },
+    processes: [
+      {
+        id: 'factory-precision',
+        step: '01 / Precisión de Fábrica',
+        title: 'Ingeniería al milímetro',
+        description: 'Sin las limitaciones del clima, más del 80 % de la construcción se finaliza en interior. Desde la estructura hasta los últimos acabados, un riguroso control de calidad garantiza que los planos se reproduzcan a la perfección en la realidad.',
+        image: '/images/modular/generated/factory-precision.webp',
+        bg: 'light',
+      },
+      {
+        id: 'transport-install',
+        step: '02 / Transporte e Instalación',
+        title: 'Levantado en un solo día',
+        description: 'Los módulos terminados se transportan de forma segura hasta su terreno. Con una intervención mínima en obra, los módulos se izan y se conectan mediante grúa. Meses de espera se convierten en un único día de instalación.',
+        image: '/images/modular/generated/transport-install.webp',
+        bg: 'dark',
+      },
+      {
+        id: 'interior-comfort',
+        step: '03 / Confort Habitacional',
+        title: 'Calidad interior sin concesiones',
+        description: 'Nuestra estructura híbrida combina la durabilidad del acero con el cálido aislamiento de la madera para un rendimiento térmico y acústico superior. Disfrute de un entorno perfectamente acondicionado desde el primer día.',
+        image: '/images/modular/generated/interior-comfort.webp',
+        bg: 'light',
+      },
+      {
+        id: 'flexible-commercial',
+        step: '04 / Expansión Futura',
+        title: 'Flexibilidad para necesidades cambiantes',
+        description: 'Si su negocio crece o necesita mudarse, su módulo WEET se adapta. Amplíe añadiendo módulos o sepárelos y trasládelos a un nuevo emplazamiento: verdadera flexibilidad como un activo duradero.',
+        image: '/images/modular/generated/flexible-commercial.webp',
+        bg: 'dark',
+      },
+    ],
+    cta: {
+      title: 'Viva el futuro del espacio',
+      description: 'Explore los productos creados con la avanzada tecnología modular de WEET y personalice el suyo.',
+      products: 'Ver todos los productos',
+      customize: 'Crea tu weet',
+      support: 'Ver el proceso de compra'
     }
   },
 };

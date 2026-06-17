@@ -91,7 +91,7 @@ export default function GallerySection() {
 
     if (loading) {
         return (
-            <section id="gallery" className="bg-white py-16 lg:py-24 scroll-mt-[180px]">
+            <section id="gallery" className="bg-white py-16 lg:py-24 scroll-mt-[88px]">
                 <div className="flex justify-center">
                     <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
                 </div>
@@ -100,13 +100,13 @@ export default function GallerySection() {
     }
 
     return (
-        <section id="gallery" className="bg-white py-16 lg:py-24 scroll-mt-[180px]">
+        <section id="gallery" className="bg-white py-16 lg:py-24 scroll-mt-[88px]">
             <div className="max-w-[1600px] mx-auto px-4 md:px-8 lg:px-[140px]">
                 <div className="flex flex-col gap-12 lg:gap-20">
                     {/* Section Title */}
                     <div>
                         <h2 className="text-[32px] md:text-[40px] lg:text-[48px] font-semibold mb-4 text-black uppercase">
-                            {language === 'KO' ? 'weet Gallery' : 'weet Gallery'}
+                            weet Gallery
                         </h2>
                     </div>
 
@@ -193,9 +193,11 @@ export default function GallerySection() {
                             </>
                         ) : (
                             <div className="text-center py-20 text-gray-500 bg-gray-50 rounded-xl">
-                                {language === 'KO'
-                                    ? '등록된 프로젝트가 없습니다.'
-                                    : 'No projects listed yet.'}
+                                {{
+                                    KO: '등록된 프로젝트가 없습니다.',
+                                    EN: 'No projects listed yet.',
+                                    ES: 'Todavía no hay proyectos publicados.',
+                                }[language]}
                             </div>
                         )}
                     </div>

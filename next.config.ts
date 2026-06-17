@@ -3,6 +3,15 @@ import type { NextConfig } from "next";
 const enableHttpsOnlyHeaders =
   process.env.VERCEL === '1' || process.env.ENABLE_HTTPS_ONLY_HEADERS === 'true';
 
+// NOTE (F31): `'unsafe-inline'` is retained for script-src on purpose. Removing it
+// would require either a per-request nonce — which forces every page to render
+// dynamically and would undo the static/ISR caching added for the public pages
+// (F12) — or static hashes, which cannot cover the inline bootstrap scripts that
+// GTM/GA (@next/third-parties) and Microsoft Clarity (whose snippet interpolates a
+// runtime env id) inject. Eliminating it cleanly needs a deliberate analytics
+// re-architecture (e.g. nonce-based CSP with analytics moved behind it) and is
+// tracked as a follow-up rather than bundled here. `'unsafe-eval'` is already
+// dev-only, and script sources are otherwise restricted to an explicit allowlist.
 const scriptSrc = [
   "'self'",
   "'unsafe-inline'",
@@ -65,6 +74,9 @@ const nextConfig: NextConfig = {
   // 개발 인디케이터(좌하단 N 위젯)가 /customize 모바일 하단 고정 견적 바를 덮어 가격 가독성을 해치므로 비활성화한다.
   devIndicators: false,
   images: {
+    // Global loader: bypass Vercel's image optimizer (which 402s when quota is
+    // exhausted) and route Supabase images through Supabase's render transform. (F01)
+    loaderFile: './lib/image/supabase-loader.ts',
     remotePatterns: [
       {
         protocol: 'https',
@@ -92,6 +104,13 @@ const nextConfig: NextConfig = {
     serverActions: {
       bodySizeLimit: '5mb',
     },
+  },
+  async redirects() {
+    return [
+      // Deprecated stray solution route (was an in-component redirect cloning
+      // Energy metadata) — permanently send to the solution hub. (F05)
+      { source: '/solution/design', destination: '/solution', permanent: true },
+    ];
   },
   async headers() {
     return [
