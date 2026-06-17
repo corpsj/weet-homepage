@@ -3,6 +3,7 @@ import { Noto_Sans_KR, Geist } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/components/layout/ClientLayout";
 import { metadataBase, SITE_URL } from "@/lib/site";
+import { jsonLdHtml } from "@/lib/json-ld";
 
 const noto = Noto_Sans_KR({
   subsets: ["latin"],
@@ -168,7 +169,7 @@ export default async function RootLayout({
       <head>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+          dangerouslySetInnerHTML={{ __html: jsonLdHtml(structuredData) }}
         />
       </head>
       <body className="min-h-screen flex flex-col">

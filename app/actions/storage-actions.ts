@@ -9,6 +9,21 @@ const MAX_UPLOAD_BYTES = 5 * 1024 * 1024;
 const SAFE_PATH_PATTERN = /^[a-zA-Z0-9/_-]+\.(jpe?g|png|webp|gif)$/i;
 
 /**
+ * Folders the client may upload into. The final storage key is always derived
+ * server-side from one of these prefixes plus a random UUID, so a client can
+ * never choose (and therefore never overwrite) an existing object's key.
+ */
+const ALLOWED_PREFIXES = new Set(['', 'products', 'projects', 'gallery', 'customize']);
+
+/** Map a validated MIME type to the file extension used for the storage key. */
+const MIME_EXTENSIONS: Record<string, string> = {
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'image/webp': 'webp',
+    'image/gif': 'gif',
+};
+
+/**
  * Verify the file's actual leading bytes (magic numbers) match the declared
  * MIME type, so a client can't bypass the MIME allowlist by mislabelling a
  * non-image (e.g. an HTML/SVG/script) as image/png. (review backlog F49)
@@ -43,7 +58,8 @@ export async function uploadImageAction(formData: FormData) {
     try {
         const file = formData.get('file') as File;
         const bucket = formData.get('bucket') as string || 'products';
-        const path = formData.get('path') as string;
+        const prefixField = formData.get('prefix');
+        const legacyPath = formData.get('path');
 
         if (!file) {
             throw new Error('No file provided');
@@ -53,16 +69,40 @@ export async function uploadImageAction(formData: FormData) {
             throw new Error('허용되지 않은 스토리지 버킷입니다.');
         }
 
-        if (!path || !SAFE_PATH_PATTERN.test(path) || path.includes('..') || path.startsWith('/')) {
-            throw new Error('업로드 경로가 올바르지 않습니다.');
-        }
-
         if (!ALLOWED_IMAGE_TYPES.has(file.type)) {
             throw new Error('이미지 파일만 업로드할 수 있습니다.');
         }
 
         if (file.size > MAX_UPLOAD_BYTES) {
             throw new Error('이미지는 5MB 이하로 업로드해주세요.');
+        }
+
+        // Resolve the final storage key.
+        //
+        // Preferred mode (`prefix`): the client only supplies a folder from a
+        // server allowlist; the key is generated here with a random UUID and an
+        // extension derived from the validated MIME, so the client can never
+        // target — and therefore never overwrite — an existing object's key.
+        //
+        // Legacy mode (`path`): a fully-specified key is still accepted for
+        // callers not yet migrated, but is strictly validated. Combined with
+        // `upsert: false` below it can never clobber an existing object either.
+        let path: string;
+        if (typeof prefixField === 'string') {
+            const prefix = prefixField.replace(/^\/+|\/+$/g, '');
+            if (!ALLOWED_PREFIXES.has(prefix)) {
+                throw new Error('허용되지 않은 업로드 폴더입니다.');
+            }
+            const ext = MIME_EXTENSIONS[file.type];
+            const fileName = `${crypto.randomUUID()}.${ext}`;
+            path = prefix ? `${prefix}/${fileName}` : fileName;
+        } else if (typeof legacyPath === 'string') {
+            if (!SAFE_PATH_PATTERN.test(legacyPath) || legacyPath.includes('..') || legacyPath.startsWith('/')) {
+                throw new Error('업로드 경로가 올바르지 않습니다.');
+            }
+            path = legacyPath;
+        } else {
+            throw new Error('업로드 폴더가 지정되지 않았습니다.');
         }
 
         const supabaseAdmin = getSupabaseAdmin();
@@ -75,14 +115,21 @@ export async function uploadImageAction(formData: FormData) {
             throw new Error('파일 내용이 이미지 형식과 일치하지 않습니다.');
         }
 
-        const { data, error } = await supabaseAdmin.storage
+        const { error } = await supabaseAdmin.storage
             .from(bucket)
             .upload(path, buffer, {
                 contentType: file.type,
-                upsert: true
+                // Never overwrite an existing object. With server-derived UUID keys
+                // a collision is effectively impossible; this is defence in depth.
+                upsert: false
             });
 
         if (error) {
+            // Supabase returns a 409/"already exists" style error on key collision.
+            const message = error.message?.toLowerCase() ?? '';
+            if (message.includes('exists') || message.includes('duplicate')) {
+                throw new Error('동일한 경로의 파일이 이미 존재합니다. 다시 시도해주세요.');
+            }
             throw error;
         }
 
@@ -95,6 +142,7 @@ export async function uploadImageAction(formData: FormData) {
         console.error('Upload error details:', {
             error,
             bucket: formData.get('bucket'),
+            prefix: formData.get('prefix'),
             path: formData.get('path'),
             fileName: (formData.get('file') as File)?.name,
             fileSize: (formData.get('file') as File)?.size,

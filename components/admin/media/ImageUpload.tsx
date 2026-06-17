@@ -91,15 +91,14 @@ export default function ImageUpload({
                 }
             }
 
-            const fileExt = fileToUpload.name.split('.').pop();
-            const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+            // Send only the folder prefix; the final storage key is generated
+            // server-side (random UUID) so it can never overwrite a live object.
             const cleanPrefix = pathPrefix.replace(/^\/+|\/+$/g, '');
-            const filePath = cleanPrefix ? `${cleanPrefix}/${fileName}` : fileName;
 
             const formData = new FormData();
             formData.append('file', fileToUpload);
             formData.append('bucket', bucket);
-            formData.append('path', filePath);
+            formData.append('prefix', cleanPrefix);
 
             const result = await uploadImageAction(formData);
 

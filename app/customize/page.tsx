@@ -2,6 +2,7 @@ import CustomizeConfigurator from '@/components/customize/CustomizeConfigurator'
 import { getPublicCustomizeCatalog } from '@/app/actions/customize-actions';
 import { getSiteSettings } from '@/lib/site-settings.server';
 import { buildPageMetadata } from '@/lib/seo';
+import { jsonLdHtml } from '@/lib/json-ld';
 
 export const dynamic = 'force-dynamic';
 
@@ -46,7 +47,7 @@ export default async function CustomizePage({
 
   return (
     <>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml(productJsonLd) }} />
       <CustomizeConfigurator catalog={catalog} initialConfig={c ?? null} contactPhone={settings.contact_phone} />
     </>
   );

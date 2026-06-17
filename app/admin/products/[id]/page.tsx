@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation';
 import { supabaseAdmin } from '@/lib/supabase';
 import ProductForm from '@/components/admin/ProductForm';
 import { ConsolePageHeader } from '@/components/admin/ConsolePrimitives';
+import { requireAdmin } from '@/lib/admin-auth';
 
 // 빌드 시 정적 생성 방지
 export const dynamic = 'force-dynamic';
@@ -11,6 +12,8 @@ interface PageProps {
 }
 
 export default async function EditProductPage({ params }: PageProps) {
+    await requireAdmin();
+
     const { id } = await params;
 
     const { data: product, error } = await supabaseAdmin

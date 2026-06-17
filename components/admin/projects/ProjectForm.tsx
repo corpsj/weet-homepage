@@ -118,14 +118,12 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                     }
                 }
 
-                const fileExt = fileToUpload.name.split('.').pop();
-                const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-                const filePath = `projects/${fileName}`;
-
+                // Send only the folder prefix; the final storage key is generated
+                // server-side (random UUID) so it can never overwrite a live object.
                 const formData = new FormData();
                 formData.append('file', fileToUpload);
                 formData.append('bucket', 'images');
-                formData.append('path', filePath);
+                formData.append('prefix', 'projects');
 
                 const result = await uploadImageAction(formData);
 

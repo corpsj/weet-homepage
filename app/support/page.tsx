@@ -23,6 +23,7 @@ import { telHref } from '@/lib/site-settings';
 import { getSiteSettings } from '@/lib/site-settings.server';
 import { buildPageMetadata } from '@/lib/seo';
 import ConsultForm from '@/components/support/ConsultForm';
+import { jsonLdHtml } from '@/lib/json-ld';
 
 // ISR: cache + revalidate every 5 minutes rather than force-dynamic. (F12)
 export const revalidate = 300;
@@ -155,7 +156,7 @@ export default async function SupportPage() {
 
   return (
     <div className="bg-white text-gray-900">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLdHtml(faqJsonLd) }} />
 
       <section className="px-4 py-14 md:px-8 md:py-20 lg:px-16">
         <div className="mx-auto grid max-w-[1400px] gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">

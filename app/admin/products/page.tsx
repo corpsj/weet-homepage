@@ -1,6 +1,7 @@
 import { supabaseAdmin } from '@/lib/supabase';
 import { Product } from '@/types/supabase';
 import ProductGrid from '@/components/admin/products/ProductGrid';
+import { requireAdmin } from '@/lib/admin-auth';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,6 +16,8 @@ interface Props {
 const ITEMS_PER_PAGE = 12;
 
 export default async function AdminProductsPage({ searchParams }: Props) {
+    await requireAdmin();
+
     const resolvedParams = await searchParams;
     const currentPage = Number(resolvedParams?.page) || 1;
     const category = resolvedParams?.category || 'All';
@@ -48,10 +51,8 @@ export default async function AdminProductsPage({ searchParams }: Props) {
         console.error('Error fetching products:', error);
         return (
             <div className="p-4 bg-red-50 text-red-600 rounded-lg">
-                <h3 className="font-bold">Error loading products</h3>
-                <pre className="text-xs mt-2 whitespace-pre-wrap">
-                    {JSON.stringify(error, null, 2)}
-                </pre>
+                <h3 className="font-bold">제품 목록을 불러오지 못했습니다.</h3>
+                <p className="text-sm mt-2">잠시 후 다시 시도해 주세요. 문제가 계속되면 관리자에게 문의하세요.</p>
             </div>
         );
     }

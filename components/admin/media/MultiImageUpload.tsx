@@ -60,14 +60,13 @@ export default function MultiImageUpload({ onUpload, className = '', bucket = 'p
                         }
                     }
 
-                    const fileExt = fileToUpload.name.split('.').pop();
-                    const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-                    const filePath = `${fileName}`;
-
+                    // Send only the folder prefix (bucket root here); the final
+                    // storage key is generated server-side (random UUID) so it can
+                    // never overwrite a live object.
                     const formData = new FormData();
                     formData.append('file', fileToUpload);
                     formData.append('bucket', bucket);
-                    formData.append('path', filePath);
+                    formData.append('prefix', '');
 
                     const result = await uploadImageAction(formData);
 
