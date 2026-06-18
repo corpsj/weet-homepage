@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { Upload, Loader2, Plus } from 'lucide-react';
+import { Loader2, Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import imageCompression from 'browser-image-compression';
 import { uploadImageAction } from '@/app/actions/storage-actions';
@@ -27,7 +27,6 @@ export default function MultiImageUpload({ onUpload, className = '', bucket = 'p
 
         setLoading(true);
         const uploadedUrls: string[] = [];
-        const errors: string[] = [];
 
         try {
             // Process all files

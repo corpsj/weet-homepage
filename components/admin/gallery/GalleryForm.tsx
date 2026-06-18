@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { toast } from 'sonner';
-import { Loader2, Plus, X, Upload, GripVertical } from 'lucide-react';
+import { Loader2, X, Upload, GripVertical } from 'lucide-react';
 import { GalleryItem } from '@/types/supabase';
 import imageCompression from 'browser-image-compression';
 import {

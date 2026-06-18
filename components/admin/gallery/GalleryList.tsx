@@ -13,8 +13,7 @@ import {
   ConsolePageHeader,
   ConsolePanel,
   ConsoleStatusPill,
-  consolePrimaryButtonClass,
-  consoleIconButtonClass
+  consolePrimaryButtonClass
 } from '@/components/admin/ConsolePrimitives';
 
 export default function GalleryList({ initialItems }: { initialItems: GalleryItem[] }) {

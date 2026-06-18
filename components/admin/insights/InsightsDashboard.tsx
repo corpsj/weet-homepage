@@ -13,7 +13,6 @@ import {
     Cell,
     Legend
 } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface InsightsDashboardProps {
     totalInquiries: number;
@@ -103,7 +102,7 @@ export default function InsightsDashboard({
                                     paddingAngle={5}
                                     dataKey="value"
                                 >
-                                    {formattedStatusData.map((entry, index) => (
+                                    {formattedStatusData.map((_, index) => (
                                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                     ))}
                                 </Pie>

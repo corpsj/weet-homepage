@@ -2,15 +2,13 @@
 
 import { useState } from 'react';
 import {
-    Search, Filter, Mail, Phone, Calendar,
-    CheckCircle2, Clock, MessageSquare, Trash2,
-    MoreHorizontal, X
+    Search, Mail, Phone, Calendar,
+    CheckCircle2, MessageSquare, Trash2, X
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { updateInquiryStatus, deleteInquiry, replyToInquiry } from '@/app/actions/inquiry-actions';
 import { confirmToast } from '@/lib/ui/confirm';
 import {
-    ConsolePanel,
     ConsoleSectionTitle,
     ConsoleStatusPill,
     consoleInputClass,

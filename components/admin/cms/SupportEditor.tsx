@@ -2,7 +2,6 @@
 
 import { Fragment, useState } from 'react';
 import { Plus, Trash2, ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { createFaq, updateFaq, deleteFaq } from '@/app/actions/faq-actions';
 import { createNotice, updateNotice, deleteNotice } from '@/app/actions/notice-actions';
 import { useUnsavedChangesWarning } from '@/hooks/useUnsavedChangesWarning';
@@ -58,7 +57,6 @@ export default function SupportEditor({
     const [loading, setLoading] = useState(false);
     const [expandedFaq, setExpandedFaq] = useState<string | null>(null);
     const [expandedNotice, setExpandedNotice] = useState<string | null>(null);
-    const router = useRouter();
 
     // F38: FAQ + Notice share one create/edit/save/delete + draft-dirty lifecycle
     // via useCrudDraftList; only the entity-specific payloads, dirty fields, and

@@ -14,23 +14,6 @@ const CHART_BLUE = '#2563eb';
 const CHART_BLUE_SOFT = '#bfdbfe';
 const CHART_SLATE = '#64748b';
 
-interface AnalyticsMetric {
-    value: string;
-}
-
-interface AnalyticsDimension {
-    value: string;
-}
-
-interface AnalyticsRow {
-    dimensionValues: AnalyticsDimension[];
-    metricValues: AnalyticsMetric[];
-}
-
-interface AnalyticsResponse {
-    rows?: AnalyticsRow[];
-}
-
 interface AnalyticsDashboardProps {
     trafficStats: any;
     demographics: any;
@@ -265,7 +248,7 @@ export default function AnalyticsDashboard({
                                         dataKey="value"
                                         stroke="none"
                                     >
-                                        {deviceData.map((entry: any, index: number) => (
+                                        {deviceData.map((_: unknown, index: number) => (
                                             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                         ))}
                                     </Pie>
