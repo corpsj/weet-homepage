@@ -115,7 +115,10 @@ export function calculateEstimate(catalog: CustomizeCatalog, modelId: string, se
 
 export function floorplanSize(model: CustomizeModel) {
   const width = model.id === 'standard-3x9' || model.lengthM >= 9 ? 900 : 600;
-  return { x: 500 - width / 2, y: 60, width, height: 300 };
+  // 우측 고정(우변 x=950) · 좌측 확장. 3×6 → 3×9 시 오른쪽 벽은 그대로, 왼쪽 벽만 바깥으로 확장된다.
+  // 3×9는 기존과 동일한 x=50, 3×6만 x=350으로 우측 정렬되어 동일 스케일(100px/m) 비교가 된다.
+  const RIGHT_EDGE = 950;
+  return { x: RIGHT_EDGE - width, y: 60, width, height: 300 };
 }
 
 function encodeBase64Url(value: string) {

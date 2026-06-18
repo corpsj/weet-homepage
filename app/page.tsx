@@ -21,10 +21,11 @@ import { telHref } from '@/lib/site-settings';
 import { getSiteSettings } from '@/lib/site-settings.server';
 import { formatModelStartPrice } from '@/lib/customize/priceCalculator';
 import { buildPageMetadata } from '@/lib/seo';
+import type { Metadata } from 'next';
 
 export const revalidate = 300;
 
-export const metadata = {
+export const metadata: Metadata = {
   ...buildPageMetadata({
     title: '이동식주택·농막·세컨하우스 제작 전문',
     description:
@@ -126,41 +127,44 @@ export default async function HomePage() {
     .slice(0, 4);
 
   return (
-    <div className="bg-[#fbfbfa] text-[#111111] selection:bg-black selection:text-white">
+    <div className="bg-weet-paper text-weet-ink">
       {/* 1. First Viewport: Product-led, image-led, full-bleed hero */}
-      <section className="relative min-h-[calc(100svh-192px)] w-full bg-[#111] text-white overflow-hidden">
+      <section className="relative flex min-h-[calc(100svh-192px)] w-full items-end overflow-hidden bg-weet-ink text-weet-paper">
         <Image
           src="/images/hero_main.webp"
           alt="위트 이동식주택 외관"
           fill
           priority
           sizes="100vw"
-          className="object-cover opacity-60 mix-blend-overlay"
+          className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#111]/40 via-transparent to-[#111]" />
+        <div className="absolute inset-0 bg-[linear-gradient(103deg,rgba(35,29,22,0.72)_0%,rgba(35,29,22,0.34)_46%,rgba(35,29,22,0.04)_74%)]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-weet-ink/55 via-transparent to-transparent" />
 
-        <div className="absolute inset-0 flex flex-col justify-end px-6 pb-28 md:px-12 md:pb-32 lg:px-24 mx-auto w-full z-10">
-          <div className="max-w-4xl">
-            <p className="mb-4 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-300">WEET MOBILE HOME · 이동식주택</p>
-            <h1 className="text-5xl font-black leading-[1.1] md:text-7xl lg:text-[88px]">
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-[5vw] pb-[14vh] md:pb-[9vh]">
+          <div className="max-w-[46ch]">
+            <p className="mb-5 font-mono text-[clamp(11px,1vw,13px)] font-semibold uppercase tracking-[0.3em] text-weet-gold">
+              WEET MOBILE HOME · 이동식주택
+            </p>
+            <h1 className="m-0 text-[clamp(40px,6.4vw,86px)] font-semibold leading-[1.04] tracking-[-0.04em] kr-balance">
               작은 공간, <br />
               선명한 기준.
             </h1>
-            <p className="mt-8 max-w-2xl text-sm leading-relaxed text-gray-300 md:text-base lg:text-lg">
+            <p className="mt-6 max-w-[34ch] text-[clamp(15px,1.5vw,20px)] font-light leading-[1.7] text-weet-paper/85 kr-balance">
               이동식주택을 고를 때의 막연함을 없앱니다. <br className="hidden md:block" />
               모델 선택부터 운송, 설치, 그리고 예상 비용까지 모든 과정을 투명하게 공개합니다.
             </p>
-            <div className="mt-10 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/customize"
-                className="inline-flex h-12 items-center justify-center gap-3 rounded bg-white px-8 text-sm font-bold text-[#111] transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                className="inline-flex items-center justify-center gap-2 rounded-[6px] bg-weet-gold px-[30px] py-[15px] text-[15px] font-semibold text-weet-ink transition-transform duration-150 hover:-translate-y-0.5"
               >
                 모델 구성하기
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/support#consult"
-                className="inline-flex h-12 items-center justify-center rounded border border-white/30 px-8 text-sm font-bold text-white transition-colors hover:bg-white/10"
+                className="inline-flex items-center justify-center rounded-[6px] border border-weet-paper/45 bg-weet-paper/[0.08] px-7 py-[15px] text-[15px] font-medium text-weet-paper transition-colors duration-200 hover:bg-weet-paper/[0.16]"
               >
                 상담 신청
               </Link>
@@ -169,55 +173,60 @@ export default async function HomePage() {
         </div>
 
         {/* Scroll Hint */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex-col items-center gap-3 opacity-60 z-10 hidden md:flex">
-          <span className="text-[9px] font-black uppercase tracking-[0.3em]">Scroll</span>
-          <div className="w-[1px] h-12 bg-gradient-to-b from-white to-transparent" />
+        <div className="wt-bounce absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 md:flex">
+          <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.34em] text-weet-paper/70">Scroll</span>
+          <span className="h-[42px] w-px bg-gradient-to-b from-weet-paper/80 to-transparent" />
         </div>
       </section>
 
       {/* 2. Representative Models with real base prices */}
       {models.length > 0 && (
-        <section className="bg-[#fbfbfa] px-6 py-20 md:px-12 lg:px-24 lg:py-28">
-          <div className="mx-auto max-w-7xl">
-            <div className="mb-12">
-              <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">MODELS · 대표 모델</p>
-              <h2 className="text-3xl font-black md:text-4xl lg:text-5xl">두 가지 기준 모델, <br className="md:hidden" />공개된 기본 가격.</h2>
-              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-gray-600 md:text-base">
+        <section className="bg-weet-paper px-[5vw] py-14 md:py-24">
+          <div className="mx-auto max-w-[1440px]">
+            <div className="mb-14 max-w-[44ch]">
+              <p className="mb-4 font-mono text-[12px] font-semibold uppercase tracking-[0.24em] text-weet-gold-deep">MODELS · 대표 모델</p>
+              <h2 className="m-0 text-[clamp(28px,3.4vw,46px)] font-semibold leading-[1.1] tracking-[-0.025em] kr-balance">
+                두 가지 기준 모델, <br className="md:hidden" />공개된 기본 가격.
+              </h2>
+              <p className="mt-[18px] text-[15px] leading-[1.7] text-weet-sub kr-balance">
                 아래 가격은 제품 본체 기준이며, 운반·설치 등 현장 비용은{' '}
-                <Link href="/support#cost" className="font-bold text-[#0d6e66] underline-offset-2 hover:underline">
+                <Link href="/support#cost" className="font-semibold text-weet-gold-deep underline underline-offset-2 transition-colors hover:text-weet-ink">
                   비용 안내
                 </Link>
                 에서 항목별로 확인할 수 있습니다.
               </p>
             </div>
-            <div className="grid gap-6 lg:grid-cols-2">
+            <div className="grid gap-[22px] lg:grid-cols-2">
               {models.map((model) => {
                 const fit = MODEL_FIT_NOTES[model.id];
                 return (
-                  <div key={model.id} className="flex flex-col rounded border border-[#e5e5df] bg-white p-8 transition-shadow hover:shadow-md">
+                  <div
+                    key={model.id}
+                    className="flex flex-col rounded-[12px] border border-weet-line bg-weet-surface p-8 transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-weet-float"
+                  >
                     <div className="flex items-start justify-between gap-4">
                       <div>
-                        <h3 className="text-2xl font-black text-gray-900">{model.nameKo}</h3>
-                        <p className="mt-1 text-sm text-gray-500">
+                        <h3 className="m-0 text-[22px] font-semibold tracking-[-0.01em]">{model.nameKo}</h3>
+                        <p className="mt-1.5 text-[13px] text-weet-muted">
                           {model.widthM}m × {model.lengthM}m · {model.areaSqm}㎡
                         </p>
                       </div>
                       {fit && (
-                        <span className="shrink-0 rounded-full bg-[#0d6e66]/10 px-3 py-1.5 text-xs font-bold text-[#0d6e66]">
+                        <span className="shrink-0 rounded-full bg-weet-forest px-3 py-1.5 text-[11px] font-semibold tracking-[0.02em] text-weet-paper">
                           {fit.badge}
                         </span>
                       )}
                     </div>
-                    <p className="mt-5 text-sm leading-relaxed text-gray-600">{fit?.note}</p>
-                    <div className="mt-6 flex items-end justify-between gap-4 border-t border-[#e5e5df] pt-6">
+                    <p className="mt-3.5 text-[14px] leading-[1.65] text-weet-sub kr-balance">{fit?.note}</p>
+                    <div className="mt-6 flex items-end justify-between gap-4 border-t border-weet-line-2 pt-6">
                       <div>
-                        <p className="text-xs font-bold text-gray-500">기본가</p>
-                        <p className="text-xl font-black text-gray-900">{formatModelStartPrice(model.basePrice)}</p>
-                        <p className="mt-1 text-xs text-gray-500">운반·설치 별도</p>
+                        <p className="text-[12px] font-semibold text-weet-muted">기본가</p>
+                        <p className="mt-0.5 text-[22px] font-semibold tracking-[-0.01em] text-weet-ink">{formatModelStartPrice(model.basePrice)}</p>
+                        <p className="mt-0.5 text-[12px] text-weet-muted">운반·설치 별도</p>
                       </div>
                       <Link
                         href="/customize"
-                        className="inline-flex h-11 items-center justify-center gap-2 rounded bg-[#111111] px-5 text-sm font-bold text-white transition-transform hover:scale-[1.02]"
+                        className="inline-flex items-center justify-center gap-1.5 rounded-[6px] bg-weet-ink px-[18px] py-3 text-[14px] font-semibold text-weet-paper transition-transform duration-150 hover:-translate-y-0.5"
                       >
                         이 모델로 구성
                         <ArrowRight className="h-4 w-4" />
@@ -227,13 +236,13 @@ export default async function HomePage() {
                 );
               })}
             </div>
-            <p className="mt-6 text-sm text-gray-600">
+            <p className="mt-7 text-[14px] leading-[1.6] text-weet-sub">
               더 큰 조합과 상업 공간이 필요하다면{' '}
-              <Link href="/products" className="font-bold text-gray-900 underline underline-offset-2 hover:text-[#0d6e66]">
+              <Link href="/products" className="font-semibold text-weet-ink underline underline-offset-2 transition-colors hover:text-weet-gold-deep">
                 제품 라인업
               </Link>
               과{' '}
-              <Link href="/bespoke" className="font-bold text-gray-900 underline underline-offset-2 hover:text-[#0d6e66]">
+              <Link href="/bespoke" className="font-semibold text-weet-ink underline underline-offset-2 transition-colors hover:text-weet-gold-deep">
                 비스포크 제작
               </Link>
               을 확인하세요.
@@ -243,27 +252,28 @@ export default async function HomePage() {
       )}
 
       {/* 3. Trust / Transparency Section */}
-      <section className="bg-[#111111] px-6 pt-16 pb-20 md:px-12 md:pt-20 md:pb-24 lg:px-24 lg:pt-20 lg:pb-32 text-white">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-16 md:mb-24 flex flex-col md:flex-row md:items-end md:justify-between gap-8">
-            <div className="max-w-2xl">
-              <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">TRANSPARENCY · 투명성</p>
-              <h2 className="text-3xl font-black md:text-5xl lg:text-6xl">
+      <section className="bg-weet-ink px-[5vw] py-14 text-weet-paper md:py-24">
+        <div className="mx-auto max-w-[1440px]">
+          <div className="mb-16 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+            <div className="max-w-[30ch]">
+              <p className="mb-[18px] font-mono text-[12px] font-semibold uppercase tracking-[0.24em] text-weet-gold">TRANSPARENCY · 투명성</p>
+              <h2 className="m-0 text-[clamp(28px,4vw,52px)] font-semibold leading-[1.08] tracking-[-0.025em] kr-balance">
                 불확실성은 남기지 않습니다.
               </h2>
             </div>
-            <p className="max-w-md text-sm leading-relaxed text-gray-400">
+            <p className="max-w-[40ch] text-[15px] font-light leading-[1.75] text-weet-paper/65 kr-balance">
               &lsquo;예상치 못한 현장 비용&rsquo;과 &lsquo;품질 편차&rsquo;. 위트는 주택 설치의 가장 큰 리스크를 제거하기 위해 모든
               기준을 선명하게 설계합니다.
             </p>
           </div>
 
-          <div className="grid gap-x-8 gap-y-12 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-x-10 gap-y-11 md:grid-cols-2 lg:grid-cols-3">
             {transparencyFeatures.map((feature) => (
-              <div key={feature.title} className="group border-t border-white/10 pt-6">
-                <feature.icon className="h-6 w-6 text-gray-400 mb-5 transition-colors group-hover:text-white" />
-                <h3 className="text-lg font-bold">{feature.title}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-gray-400">
+              <div key={feature.title} className="group border-t border-weet-paper/[0.14] pt-[22px]">
+                <span className="mb-[18px] block h-0.5 w-8 bg-weet-gold" />
+                <feature.icon className="mb-4 h-5 w-5 text-weet-gold transition-colors group-hover:text-weet-paper" strokeWidth={1.75} />
+                <h3 className="m-0 mb-3 text-[18px] font-semibold">{feature.title}</h3>
+                <p className="m-0 text-[14px] font-light leading-[1.7] text-weet-paper/65 kr-balance">
                   {feature.text}
                 </p>
               </div>
@@ -273,14 +283,14 @@ export default async function HomePage() {
       </section>
 
       {/* 4. Real factory / installation evidence */}
-      <section className="px-4 py-12 md:px-8 lg:px-12 bg-[#111111] pb-20 md:pb-24">
-        <div className="mx-auto max-w-[1800px]">
-          <div className="mb-8 flex flex-col gap-4 px-2 md:flex-row md:items-end md:justify-between">
+      <section className="bg-weet-ink-deep px-[5vw] py-14 text-weet-paper md:py-[92px]">
+        <div className="mx-auto max-w-[1440px]">
+          <div className="mb-9 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="mb-2 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">RECORDS · 제작·설치 기록</p>
-              <h2 className="text-2xl font-black text-white md:text-3xl">공장과 현장에서 찍은 실제 기록</h2>
+              <p className="mb-3.5 font-mono text-[12px] font-semibold uppercase tracking-[0.24em] text-weet-gold">RECORDS · 제작·설치 기록</p>
+              <h2 className="m-0 text-[clamp(22px,2.6vw,34px)] font-semibold tracking-[-0.02em]">공장과 현장에서 찍은 실제 기록</h2>
             </div>
-            <Link href="/projects" className="inline-flex items-center gap-2 text-sm font-bold text-gray-300 hover:text-white">
+            <Link href="/projects" className="inline-flex items-center gap-2 text-[14px] font-semibold text-weet-paper/75 transition-colors hover:text-weet-gold">
               기록 더 보기
               <ArrowRight className="h-4 w-4" />
             </Link>
@@ -289,16 +299,16 @@ export default async function HomePage() {
           {galleryItems.length > 0 ? (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {galleryItems.map((item) => (
-                <div key={item.id} className="relative aspect-[4/3] overflow-hidden rounded bg-gray-900 group">
+                <div key={item.id} className="group relative aspect-[4/3] overflow-hidden rounded-[10px] bg-weet-ink">
                   <Image
                     src={item.image_url}
                     alt={cleanGalleryTitle(item.title)}
                     fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                    className="object-cover transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                  <p className="absolute bottom-4 left-4 right-4 text-sm font-bold text-white">
+                  <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(28,22,16,0.8),transparent_55%)]" />
+                  <p className="absolute bottom-4 left-[18px] right-[18px] text-[14px] font-semibold text-weet-paper">
                     {cleanGalleryTitle(item.title)}
                   </p>
                 </div>
@@ -311,22 +321,22 @@ export default async function HomePage() {
                 { src: '/images/products/small/private/3x6-house.webp', label: '최적화된 생활 동선' },
                 { src: '/images/products/large/L-2.webp', label: '안전한 현장 설치' },
               ].map((item) => (
-                <div key={item.src} className="relative aspect-[4/3] overflow-hidden rounded bg-gray-900">
-                  <Image src={item.src} alt={item.label} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-                  <p className="absolute bottom-4 left-4 right-4 text-sm font-bold text-white">{item.label}</p>
+                <div key={item.src} className="group relative aspect-[4/3] overflow-hidden rounded-[10px] bg-weet-ink">
+                  <Image src={item.src} alt={item.label} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:scale-105" />
+                  <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(28,22,16,0.8),transparent_55%)]" />
+                  <p className="absolute bottom-4 left-[18px] right-[18px] text-[14px] font-semibold text-weet-paper">{item.label}</p>
                 </div>
               ))}
             </div>
           )}
 
-          <p className="mt-6 px-2 text-xs leading-5 text-gray-500">
+          <p className="mt-6 text-[13px] font-light leading-[1.7] text-weet-muted">
             위 사진은 위트 공장과 설치 현장에서 직접 기록한 이미지입니다. 더 많은 현장 소식은{' '}
-            <a href={settings.naver_blog_url} target="_blank" rel="noopener noreferrer" className="font-bold text-gray-300 hover:text-white">
+            <a href={settings.naver_blog_url} target="_blank" rel="noopener noreferrer" className="font-semibold text-weet-paper/75 transition-colors hover:text-weet-gold">
               네이버 블로그
             </a>
             와{' '}
-            <a href={settings.instagram_url} target="_blank" rel="noopener noreferrer" className="font-bold text-gray-300 hover:text-white">
+            <a href={settings.instagram_url} target="_blank" rel="noopener noreferrer" className="font-semibold text-weet-paper/75 transition-colors hover:text-weet-gold">
               인스타그램
             </a>
             에서 확인할 수 있습니다.
@@ -335,24 +345,24 @@ export default async function HomePage() {
       </section>
 
       {/* 5. Process strip */}
-      <section className="bg-white px-6 py-20 md:px-12 lg:px-24 lg:py-28 border-b border-[#e5e5df]">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+      <section className="bg-weet-paper-alt px-[5vw] py-14 md:py-24">
+        <div className="mx-auto max-w-[1440px]">
+          <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
             <div>
-              <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">PROCESS · 진행 과정</p>
-              <h2 className="text-3xl font-black md:text-4xl">상담부터 입주까지, 여섯 단계.</h2>
+              <p className="mb-3.5 font-mono text-[12px] font-semibold uppercase tracking-[0.24em] text-weet-gold-deep">PROCESS · 진행 과정</p>
+              <h2 className="m-0 text-[clamp(26px,3.4vw,42px)] font-semibold tracking-[-0.025em]">상담부터 입주까지, 여섯 단계.</h2>
             </div>
-            <Link href="/support#process" className="inline-flex items-center gap-2 text-sm font-bold text-gray-700 hover:text-[#0d6e66]">
+            <Link href="/support#process" className="inline-flex items-center gap-2 text-[14px] font-semibold text-weet-ink transition-colors hover:text-weet-gold-deep">
               과정 자세히 보기
               <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
+          <div className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-6">
             {processSteps.map((step, index) => (
-              <div key={step.title} className="rounded border border-[#e5e5df] bg-[#fbfbfa] p-5">
-                <p className="text-sm font-black text-gray-300">{String(index + 1).padStart(2, '0')}</p>
-                <h3 className="mt-3 font-black text-gray-900">{step.title}</h3>
-                <p className="mt-2 text-xs leading-5 text-gray-600">{step.text}</p>
+              <div key={step.title} className="rounded-[10px] border border-weet-line bg-weet-surface p-6">
+                <p className="font-mono text-[13px] font-semibold text-weet-line-2">{String(index + 1).padStart(2, '0')}</p>
+                <h3 className="mt-3.5 text-[16px] font-semibold text-weet-ink">{step.title}</h3>
+                <p className="mt-2 text-[13px] leading-[1.6] text-weet-sub">{step.text}</p>
               </div>
             ))}
           </div>
@@ -360,21 +370,23 @@ export default async function HomePage() {
       </section>
 
       {/* 6. Target Audience */}
-      <section className="bg-[#fbfbfa] px-6 py-20 md:px-12 lg:px-24 lg:py-28">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-16">
-            <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">WHO IT FITS · 쓰임새</p>
-            <h2 className="text-3xl font-black md:text-4xl lg:text-5xl">
+      <section className="bg-weet-paper px-[5vw] py-14 md:py-24">
+        <div className="mx-auto max-w-[1440px]">
+          <div className="mb-[52px] max-w-[30ch]">
+            <p className="mb-4 font-mono text-[12px] font-semibold uppercase tracking-[0.24em] text-weet-gold-deep">WHO IT FITS · 쓰임새</p>
+            <h2 className="m-0 text-[clamp(28px,3.4vw,46px)] font-semibold leading-[1.1] tracking-[-0.025em] kr-balance">
               목적에 맞는 공간을 <br className="md:hidden" />
               정확하게.
             </h2>
           </div>
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-5 md:grid-cols-3">
             {buyerPaths.map((path) => (
-              <div key={path.title} className="rounded border border-[#e5e5df] bg-white p-8 transition-shadow hover:shadow-md">
-                <path.icon className="h-6 w-6 text-gray-900 mb-6" />
-                <h3 className="text-xl font-black text-gray-900">{path.title}</h3>
-                <p className="mt-4 text-sm leading-relaxed text-gray-600">
+              <div key={path.title} className="rounded-[12px] border border-weet-line bg-weet-surface p-8 transition-[transform,box-shadow] duration-300 hover:-translate-y-1 hover:shadow-weet-float">
+                <div className="mb-[22px] flex h-11 w-11 items-center justify-center rounded-full bg-[#FBEFD0]">
+                  <path.icon className="h-[22px] w-[22px] text-weet-gold-deep" strokeWidth={1.75} />
+                </div>
+                <h3 className="m-0 text-[19px] font-semibold text-weet-ink">{path.title}</h3>
+                <p className="mt-3 text-[14px] leading-[1.7] text-weet-sub kr-balance">
                   {path.text}
                 </p>
               </div>
@@ -385,24 +397,24 @@ export default async function HomePage() {
 
       {/* 7. FAQ teaser */}
       {teaserFaqs.length > 0 && (
-        <section className="bg-white px-6 py-20 md:px-12 lg:px-24 border-t border-[#e5e5df]">
-          <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.35fr_0.65fr]">
-            <div>
-              <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-500">FAQ</p>
-              <h2 className="text-3xl font-black md:text-4xl">자주 묻는 질문</h2>
-              <Link href="/support#faq" className="mt-6 inline-flex items-center gap-2 text-sm font-bold text-gray-700 hover:text-[#0d6e66]">
+        <section className="bg-weet-paper-alt px-[5vw] py-14 md:py-24">
+          <div className="mx-auto grid max-w-[1440px] items-start gap-12 lg:grid-cols-[0.35fr_0.65fr]">
+            <div className="max-w-[34ch]">
+              <p className="mb-4 font-mono text-[12px] font-semibold uppercase tracking-[0.24em] text-weet-gold-deep">FAQ</p>
+              <h2 className="m-0 text-[clamp(28px,3.4vw,42px)] font-semibold tracking-[-0.025em]">자주 묻는 질문</h2>
+              <Link href="/support#faq" className="mt-6 inline-flex items-center gap-2 text-[14px] font-semibold text-weet-ink transition-colors hover:text-weet-gold-deep">
                 전체 질문 보기
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
             <div className="space-y-3">
               {teaserFaqs.map((faq) => (
-                <details key={faq.id} className="group rounded border border-[#e5e5df] bg-[#fbfbfa]">
-                  <summary className="flex cursor-pointer items-center justify-between gap-4 px-5 py-4 text-left font-bold text-gray-900">
+                <details key={faq.id} className="group rounded-[10px] border border-weet-line bg-weet-surface">
+                  <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-[22px] py-5 text-left text-[15px] font-semibold text-weet-ink [&::-webkit-details-marker]:hidden">
                     {faq.question_ko}
-                    <ArrowRight className="h-4 w-4 shrink-0 text-gray-400 transition-transform group-open:rotate-90" />
+                    <ArrowRight className="h-4 w-4 shrink-0 text-weet-gold-deep transition-transform duration-300 group-open:rotate-90" />
                   </summary>
-                  <p className="border-t border-[#e5e5df] bg-white px-5 py-4 text-sm leading-7 text-gray-600">{faq.answer_ko}</p>
+                  <p className="m-0 border-t border-weet-line-2 px-[22px] py-[18px] text-[14px] leading-[1.75] text-weet-sub kr-balance">{faq.answer_ko}</p>
                 </details>
               ))}
             </div>
@@ -411,40 +423,40 @@ export default async function HomePage() {
       )}
 
       {/* 8. CTA + direct contact */}
-      <section className="bg-[#fbfbfa] px-6 py-24 md:px-12 lg:px-24 lg:py-32 text-center border-t border-[#e5e5df]">
-        <div className="mx-auto max-w-3xl">
-          <h2 className="text-3xl font-black md:text-5xl lg:text-6xl">
+      <section className="bg-weet-ink px-[5vw] py-20 text-center text-weet-paper md:py-[128px]">
+        <div className="mx-auto max-w-[720px]">
+          <h2 className="m-0 text-[clamp(30px,4.4vw,56px)] font-semibold leading-[1.08] tracking-[-0.025em] kr-balance">
             지금 바로 구성해보세요
           </h2>
-          <p className="mx-auto mt-6 max-w-xl text-sm leading-relaxed text-gray-600 md:text-base">
+          <p className="mx-auto mb-10 mt-6 max-w-[46ch] text-[clamp(14px,1.4vw,17px)] font-light leading-[1.75] text-weet-paper/70 kr-balance">
             원하는 크기와 옵션을 선택하면 예상 견적과 함께 <br className="hidden md:block" />
             위트 매니저가 현장 조건에 맞춘 정확한 안내를 도와드립니다.
           </p>
-          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:flex-wrap">
             <Link
               href="/customize"
-              className="inline-flex h-14 items-center justify-center gap-3 rounded bg-[#111111] px-10 text-sm font-bold text-white transition-transform hover:scale-[1.02] active:scale-[0.98]"
+              className="inline-flex items-center justify-center gap-2 rounded-[6px] bg-weet-gold px-8 py-4 text-[15px] font-semibold text-weet-ink transition-transform duration-150 hover:-translate-y-0.5"
             >
               나만의 위트 만들기
               <ArrowRight className="h-4 w-4" />
             </Link>
             <a
               href={telHref(settings.contact_phone)}
-              className="inline-flex h-14 items-center justify-center gap-2 rounded border border-[#d8d0c3] bg-white px-8 text-sm font-bold text-gray-900 transition-colors hover:border-[#0d6e66]"
+              className="inline-flex items-center justify-center gap-2 rounded-[6px] border border-weet-paper/40 px-7 py-4 text-[15px] font-medium text-weet-paper transition-[transform,border-color] duration-150 hover:-translate-y-0.5 hover:border-weet-gold"
             >
-              <Phone className="h-4 w-4 text-[#0d6e66]" />
+              <Phone className="h-4 w-4 text-weet-gold" />
               {settings.contact_phone}
             </a>
             <Link
               href="/support#consult"
-              className="inline-flex h-14 items-center justify-center gap-2 rounded border border-[#d8d0c3] bg-white px-8 text-sm font-bold text-gray-900 transition-colors hover:border-[#0d6e66]"
+              className="inline-flex items-center justify-center gap-2 rounded-[6px] border border-weet-paper/40 px-7 py-4 text-[15px] font-medium text-weet-paper transition-[transform,border-color] duration-150 hover:-translate-y-0.5 hover:border-weet-gold"
             >
-              <MessagesSquare className="h-4 w-4 text-[#0d6e66]" />
+              <MessagesSquare className="h-4 w-4 text-weet-gold" />
               상담 신청
             </Link>
           </div>
           {settings.consult_hours && (
-            <p className="mt-4 text-xs text-gray-500">상담 가능 시간 {settings.consult_hours}</p>
+            <p className="mt-5 text-[13px] text-weet-muted">상담 가능 시간 {settings.consult_hours}</p>
           )}
         </div>
       </section>

@@ -194,9 +194,9 @@ export function FloorplanCanvas({
 function FloorplanExpansionGuides({ box }: { box: ReturnType<typeof floorplanSize> }) {
   const shouldReduceMotion = useReducedMotion();
   const transition = shouldReduceMotion ? { duration: 0 } : { duration: 0.72, ease: 'easeInOut' };
-  const compactX = 500 - 600 / 2;
-  const compactRightX = compactX + 600;
-  const extensionWidth = Math.max(0, (box.width - 600) / 2);
+  // 우측 고정 · 좌측 확장: 6m 기준 좌측 벽은 항상 950-600=350, 확장분은 전부 왼쪽에 생긴다.
+  const compactLeftX = 950 - 600;
+  const extensionWidth = Math.max(0, box.width - 600);
   const hasExpansion = extensionWidth > 0;
   const inset = 12;
   const leftX = box.x + inset;
@@ -207,6 +207,7 @@ function FloorplanExpansionGuides({ box }: { box: ReturnType<typeof floorplanSiz
 
   return (
     <g data-testid="floorplan-expansion-guides" pointerEvents="none">
+      {/* 좌측 확장 영역(증설분) — 새 좌측 벽과 6m 기준선 사이 */}
       <motion.rect
         data-testid="floorplan-left-growth-zone"
         initial={false}
@@ -217,39 +218,16 @@ function FloorplanExpansionGuides({ box }: { box: ReturnType<typeof floorplanSiz
         rx="4"
         fill="#d8e4dd"
       />
-      <motion.rect
-        data-testid="floorplan-right-growth-zone"
-        initial={false}
-        animate={{ x: box.x + box.width - extensionWidth, width: Math.max(0, extensionWidth - inset), opacity: hasExpansion ? 0.28 : 0 }}
-        transition={transition}
-        y={box.y + inset}
-        height={box.height - inset * 2}
-        rx="4"
-        fill="#d8e4dd"
-      />
 
+      {/* 6m 기준 좌측 벽(확장 전 위치) 점선 — 우측 벽은 고정이라 별도 기준선 없음 */}
       <motion.line
         data-testid="floorplan-compact-left-reference"
         initial={false}
         animate={{ opacity: hasExpansion ? 0.58 : 0 }}
         transition={transition}
-        x1={compactX}
+        x1={compactLeftX}
         y1={box.y + 18}
-        x2={compactX}
-        y2={box.y + box.height - 18}
-        stroke="#b88b26"
-        strokeWidth="3"
-        strokeDasharray="7 7"
-        strokeLinecap="round"
-      />
-      <motion.line
-        data-testid="floorplan-compact-right-reference"
-        initial={false}
-        animate={{ opacity: hasExpansion ? 0.58 : 0 }}
-        transition={transition}
-        x1={compactRightX}
-        y1={box.y + 18}
-        x2={compactRightX}
+        x2={compactLeftX}
         y2={box.y + box.height - 18}
         stroke="#b88b26"
         strokeWidth="3"
