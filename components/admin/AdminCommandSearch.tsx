@@ -76,11 +76,11 @@ export default function AdminCommandSearch() {
 
   return (
     <div className="relative w-full md:w-64" ref={containerRef}>
-      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-[#a1a1aa]" />
       <input
         type="text"
         placeholder="명령 또는 화면 검색"
-        className={`${consoleInputClass} w-full pl-9 bg-white transition-shadow focus:ring-2 focus:ring-[#8a6a12]/20 focus:border-[#8a6a12]`}
+        className={`${consoleInputClass} w-full pl-9`}
         value={query}
         onChange={(e) => {
           setQuery(e.target.value);
@@ -92,7 +92,7 @@ export default function AdminCommandSearch() {
       />
 
       {isOpen && (
-        <div className="absolute top-full right-0 mt-1.5 w-full md:w-72 bg-[#fbfbfa] border border-[#e5e5df] rounded-md shadow-lg overflow-hidden z-50 py-1">
+        <div className="absolute top-full right-0 mt-1.5 w-full md:w-72 bg-white border border-admin-line-2 rounded-[12px] shadow-lg overflow-hidden z-50 py-1">
           {filteredCommands.length > 0 ? (
             <ul className="max-h-64 overflow-y-auto">
               {filteredCommands.map((cmd, idx) => {
@@ -106,12 +106,12 @@ export default function AdminCommandSearch() {
                         setQuery('');
                         setSelectedIndex(0);
                       }}
-                      className={`flex items-center gap-3 px-3 py-2 text-sm transition-colors ${
-                        isSelected ? 'bg-white text-gray-900 border-l-2 border-[#8a6a12]' : 'text-gray-600 hover:bg-white hover:text-gray-900 border-l-2 border-transparent'
+                      className={`flex items-center gap-3 px-3 py-2 text-sm transition-colors border-l-2 ${
+                        isSelected ? 'bg-admin-accent-soft text-admin-accent border-admin-accent' : 'text-[#3f3f46] hover:bg-[#f4f4f5] hover:text-admin-ink border-transparent'
                       }`}
                       onMouseEnter={() => setSelectedIndex(idx)}
                     >
-                      <cmd.icon className={`h-4 w-4 ${isSelected ? 'text-[#8a6a12]' : 'text-gray-400'}`} />
+                      <cmd.icon className={`h-4 w-4 ${isSelected ? 'text-admin-accent' : 'text-[#a1a1aa]'}`} />
                       <span className="font-medium">{cmd.title}</span>
                     </Link>
                   </li>
@@ -119,7 +119,7 @@ export default function AdminCommandSearch() {
               })}
             </ul>
           ) : (
-            <p className="px-3 py-3 text-sm font-medium text-gray-500">검색 결과가 없습니다.</p>
+            <p className="px-3 py-3 text-sm font-medium text-admin-muted">검색 결과가 없습니다.</p>
           )}
         </div>
       )}

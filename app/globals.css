@@ -107,6 +107,62 @@
     text-wrap: balance;
   }
 
+  /* ---- Weet 웜 시스템 유틸 (리디자인) ---- */
+  /* 스크롤 진입 시 reveal. 스크롤 타임라인 미지원 브라우저는 즉시 표시(both 가드). */
+  .wt-reveal {
+    animation: wtRevUp 0.85s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    animation-timeline: view();
+    animation-range: entry 0% entry 48%;
+  }
+  @keyframes wtRevUp {
+    from {
+      opacity: 0;
+      transform: translateY(28px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  /* 한글 본문 줄바꿈 품질 */
+  .kr-balance {
+    word-break: keep-all;
+    text-wrap: balance;
+  }
+  /* 로그인 브랜드 비주얼 슬로우 줌 */
+  .wt-zoom {
+    animation: wtZoom 18s ease-in-out infinite alternate;
+  }
+  @keyframes wtZoom {
+    from {
+      transform: scale(1.04);
+    }
+    to {
+      transform: scale(1.14);
+    }
+  }
+  /* 스크롤 힌트 바운스 */
+  .wt-bounce {
+    animation: wtBounce 1.8s ease-in-out infinite;
+  }
+  @keyframes wtBounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(6px);
+    }
+  }
+  /* 모션 비선호 시 reveal은 최종 상태로 고정 */
+  @media (prefers-reduced-motion: reduce) {
+    .wt-reveal {
+      animation: none !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
   .animate-fade-in {
     animation: fadeIn 0.3s ease-in-out;
   }

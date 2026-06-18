@@ -21,7 +21,7 @@ export function FloorplanZoomModal({
   useModalDismiss(onClose);
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-customize-shade/55 p-3 backdrop-blur-sm md:p-6" onClick={onClose}>
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-weet-ink/55 p-3 backdrop-blur-sm md:p-6" onClick={onClose}>
       <div
         role="dialog"
         aria-modal="true"
@@ -29,25 +29,25 @@ export function FloorplanZoomModal({
         className="mx-auto flex min-h-[calc(100dvh-24px)] w-full max-w-6xl flex-col justify-center md:min-h-[calc(100dvh-48px)]"
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="overflow-hidden rounded-lg border border-customize-stone bg-customize-sand shadow-2xl">
-          <div className="flex items-start justify-between gap-4 border-b border-customize-shell px-4 py-3 md:px-5">
+        <div className="overflow-hidden rounded-lg border border-weet-line bg-weet-surface shadow-2xl">
+          <div className="flex items-start justify-between gap-4 border-b border-weet-line px-4 py-3 md:px-5">
             <div>
-              <p className="text-xs font-bold text-customize-slate">도면 확대</p>
-              <h2 id="floorplan-zoom-title" className="text-lg font-black text-customize-ink md:text-xl">{model.nameKo}</h2>
-              <p className="mt-1 text-xs font-bold text-customize-bronze">{formatModelStartPrice(model.basePrice)}</p>
+              <p className="text-xs font-bold text-weet-muted">도면 확대</p>
+              <h2 id="floorplan-zoom-title" className="text-lg font-black text-weet-ink md:text-xl">{model.nameKo}</h2>
+              <p className="mt-1 text-xs font-bold text-weet-gold-deep">{formatModelStartPrice(model.basePrice)}</p>
             </div>
             <button
               type="button"
               data-testid="floorplan-zoom-close"
               aria-label="도면 확대 닫기"
               onClick={onClose}
-              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-customize-stone text-customize-ink transition-colors hover:bg-customize-linen focus:outline-none focus:ring-2 focus:ring-customize-bark/40"
+              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-weet-line text-weet-ink transition-colors hover:bg-weet-paper focus:outline-none focus:ring-2 focus:ring-weet-gold-deep/40"
             >
               <X className="h-4 w-4" />
             </button>
           </div>
-          <div className="bg-customize-linen p-2 md:p-5">
-            <div className="overflow-auto rounded-lg border border-customize-stone bg-customize-sand" aria-label="확대 도면 보기 영역">
+          <div className="bg-weet-paper p-2 md:p-5">
+            <div className="overflow-auto rounded-lg border border-weet-line bg-weet-surface" aria-label="확대 도면 보기 영역">
               <FloorplanCanvas
                 model={model}
                 selectedOptions={selectedOptions}

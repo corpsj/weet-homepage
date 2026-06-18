@@ -152,7 +152,7 @@ export function FloorplanCanvas({
         height={box.height}
         rx="6"
         fill="transparent"
-        stroke="#0d6e66"
+        stroke="#2E4A3F"
         strokeWidth="8"
         strokeLinecap="round"
         opacity="0.9"
@@ -215,7 +215,7 @@ function FloorplanExpansionGuides({ box }: { box: ReturnType<typeof floorplanSiz
         y={box.y + inset}
         height={box.height - inset * 2}
         rx="4"
-        fill="#d7efe9"
+        fill="#d8e4dd"
       />
       <motion.rect
         data-testid="floorplan-right-growth-zone"
@@ -225,7 +225,7 @@ function FloorplanExpansionGuides({ box }: { box: ReturnType<typeof floorplanSiz
         y={box.y + inset}
         height={box.height - inset * 2}
         rx="4"
-        fill="#d7efe9"
+        fill="#d8e4dd"
       />
 
       <motion.line
@@ -264,7 +264,7 @@ function FloorplanExpansionGuides({ box }: { box: ReturnType<typeof floorplanSiz
         transition={transition}
         y1={topY}
         y2={topY}
-        stroke="#0d6e66"
+        stroke="#2E4A3F"
         strokeWidth="5"
         strokeLinecap="round"
       />
@@ -275,7 +275,7 @@ function FloorplanExpansionGuides({ box }: { box: ReturnType<typeof floorplanSiz
         transition={transition}
         y1={bottomY}
         y2={bottomY}
-        stroke="#0d6e66"
+        stroke="#2E4A3F"
         strokeWidth="5"
         strokeLinecap="round"
       />
@@ -286,7 +286,7 @@ function FloorplanExpansionGuides({ box }: { box: ReturnType<typeof floorplanSiz
         transition={transition}
         y1={topY}
         y2={bottomY}
-        stroke="#0d6e66"
+        stroke="#2E4A3F"
         strokeWidth="5"
         strokeLinecap="round"
       />
@@ -297,7 +297,7 @@ function FloorplanExpansionGuides({ box }: { box: ReturnType<typeof floorplanSiz
         transition={transition}
         y1={topY}
         y2={bottomY}
-        stroke="#0d6e66"
+        stroke="#2E4A3F"
         strokeWidth="5"
         strokeLinecap="round"
       />
@@ -308,7 +308,7 @@ function FloorplanExpansionGuides({ box }: { box: ReturnType<typeof floorplanSiz
         animate={{ x: box.x + box.width / 2, opacity: hasExpansion ? 1 : 0 }}
         transition={transition}
         y={box.y + 32}
-        fill="#0d6e66"
+        fill="#2E4A3F"
         fontSize="13"
         fontWeight="900"
         textAnchor="middle"

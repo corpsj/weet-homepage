@@ -188,8 +188,8 @@ export default function SupportEditor({
                         현재 데이터베이스 스키마가 최신 코드가 요구하는 형식과 다릅니다. (에러: {dbError})
                         <br />아래 SQL을 Supabase SQL Editor에서 실행하여 테이블을 업데이트해주세요.
                     </p>
-                    <div className="bg-black rounded p-4 overflow-x-auto">
-                        <pre className="text-[11px] text-[#d8d8d2] font-mono leading-relaxed">
+                    <div className="bg-admin-ink rounded-[9px] p-4 overflow-x-auto">
+                        <pre className="text-[11px] text-[#e4e4e7] font-mono leading-relaxed">
                             {`-- 1. FAQ 테이블 최신화
 CREATE TABLE IF NOT EXISTS faqs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -243,13 +243,13 @@ END $$;`}
             )}
 
             {/* Tabs */}
-            <div className="border-b border-[#e5e5df]">
+            <div className="border-b border-admin-line">
                 <nav className="-mb-px flex space-x-6 px-1">
                     <button
                         onClick={() => setActiveTab('faq')}
                         className={`py-3 border-b-2 font-bold text-xs transition-colors ${activeTab === 'faq'
-                            ? 'border-[#111111] text-[#111111]'
-                            : 'border-transparent text-gray-400 hover:text-gray-900'
+                            ? 'border-admin-accent text-admin-accent'
+                            : 'border-transparent text-admin-muted hover:text-admin-ink'
                             }`}
                     >
                         FAQ 관리
@@ -257,8 +257,8 @@ END $$;`}
                     <button
                         onClick={() => setActiveTab('notices')}
                         className={`py-3 border-b-2 font-bold text-xs transition-colors ${activeTab === 'notices'
-                            ? 'border-[#111111] text-[#111111]'
-                            : 'border-transparent text-gray-400 hover:text-gray-900'
+                            ? 'border-admin-accent text-admin-accent'
+                            : 'border-transparent text-admin-muted hover:text-admin-ink'
                             }`}
                     >
                         공지사항 관리
@@ -270,7 +270,7 @@ END $$;`}
                 {activeTab === 'faq' ? (
                     <div className="space-y-6">
                         <div className="flex justify-between items-center">
-                            <h3 className="text-sm font-black text-gray-900">FAQ 목록</h3>
+                            <h3 className="text-sm font-black text-admin-ink">FAQ 목록</h3>
                             <button
                                 onClick={faqList.add}
                                 disabled={loading}
@@ -288,16 +288,16 @@ END $$;`}
                                 const saving = faqList.isSaving(faq);
 
                                 return (
-                                    <div key={faq.id} className="border border-[#e5e5df] bg-white rounded overflow-hidden">
+                                    <div key={faq.id} className="border border-admin-line bg-white rounded-[11px] overflow-hidden">
                                     <div
-                                        className="flex items-center justify-between p-4 cursor-pointer hover:bg-[#fbfbfa] transition-colors"
+                                        className="flex items-center justify-between p-4 cursor-pointer hover:bg-[#fafafb] transition-colors"
                                         onClick={() => setExpandedFaq(expandedFaq === faq.id ? null : faq.id)}
                                     >
                                         <div className="flex-1 mr-4">
-                                            <div className="font-bold text-sm text-gray-900">
+                                            <div className="font-bold text-sm text-admin-ink">
                                                 {faq.question_ko}
                                             </div>
-                                            <div className="text-[11px] font-medium text-gray-400 mt-0.5">
+                                            <div className="text-[11px] font-medium text-[#a1a1aa] mt-0.5">
                                                 {faq.question_en || '(No English Question)'}
                                             </div>
                                         </div>
@@ -308,24 +308,24 @@ END $$;`}
                                                     faqList.remove(faq.id);
                                                 }}
                                                 aria-label="FAQ 삭제"
-                                                className={`${consoleIconButtonClass} text-gray-400 hover:text-red-500 hover:bg-red-50`}
+                                                className={`${consoleIconButtonClass} text-[#a1a1aa] hover:text-red-500 hover:bg-red-50`}
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                             </button>
-                                            {expandedFaq === faq.id ? <ChevronUp className="w-4 h-4 text-gray-400" /> : <ChevronDown className="w-4 h-4 text-gray-400" />}
+                                            {expandedFaq === faq.id ? <ChevronUp className="w-4 h-4 text-[#a1a1aa]" /> : <ChevronDown className="w-4 h-4 text-[#a1a1aa]" />}
                                         </div>
                                     </div>
 
                                     {expandedFaq === faq.id && (
-                                        <div className="p-4 border-t border-[#e5e5df] bg-[#fbfbfa] space-y-6">
+                                        <div className="p-4 border-t border-admin-line bg-[#fafafb] space-y-6">
                                             {/* Primary Korean Section */}
                                             <div className="space-y-3">
-                                                <div className="flex items-center gap-2 border-l-2 border-[#111111] pl-2">
-                                                    <h4 className="text-xs font-black text-gray-900">국문 정보 (필수)</h4>
+                                                <div className="flex items-center gap-2 border-l-2 border-admin-accent pl-2">
+                                                    <h4 className="text-xs font-black text-admin-ink">국문 정보 (필수)</h4>
                                                 </div>
                                                 <div className="grid grid-cols-1 gap-3">
                                                     <div>
-                                                        <label className="text-[11px] font-bold text-gray-500 mb-1 block">질문 (Korean)</label>
+                                                        <label className="text-[11px] font-bold text-admin-muted mb-1 block">질문 (Korean)</label>
                                                         <input
                                                             type="text"
                                                             value={draft.question_ko}
@@ -335,7 +335,7 @@ END $$;`}
                                                         />
                                                     </div>
                                                     <div>
-                                                        <label className="text-[11px] font-bold text-gray-500 mb-1 block">답변 (Korean)</label>
+                                                        <label className="text-[11px] font-bold text-admin-muted mb-1 block">답변 (Korean)</label>
                                                         <textarea
                                                             rows={3}
                                                             value={draft.answer_ko}
@@ -348,15 +348,15 @@ END $$;`}
                                             </div>
 
                                             {/* Secondary English Section */}
-                                            <div className="space-y-3 pt-4 border-t border-[#e5e5df]">
+                                            <div className="space-y-3 pt-4 border-t border-admin-line">
                                                 <div className="flex items-center justify-between">
-                                                    <div className="flex items-center gap-2 border-l-2 border-gray-300 pl-2">
-                                                        <h4 className="text-xs font-bold text-gray-600">영문 정보 (선택)</h4>
+                                                    <div className="flex items-center gap-2 border-l-2 border-admin-line-2 pl-2">
+                                                        <h4 className="text-xs font-bold text-[#52525b]">영문 정보 (선택)</h4>
                                                     </div>
                                                 </div>
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 opacity-70 hover:opacity-100 transition-opacity">
                                                     <div>
-                                                        <label className="text-[11px] font-bold text-gray-500 mb-1 block">Question (English)</label>
+                                                        <label className="text-[11px] font-bold text-admin-muted mb-1 block">Question (English)</label>
                                                         <input
                                                             type="text"
                                                             value={draft.question_en || ''}
@@ -366,7 +366,7 @@ END $$;`}
                                                         />
                                                     </div>
                                                     <div>
-                                                        <label className="text-[11px] font-bold text-gray-500 mb-1 block">Answer (English)</label>
+                                                        <label className="text-[11px] font-bold text-admin-muted mb-1 block">Answer (English)</label>
                                                         <textarea
                                                             rows={3}
                                                             value={draft.answer_en || ''}
@@ -377,8 +377,8 @@ END $$;`}
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div className="flex flex-col gap-2 border-t border-[#e5e5df] pt-4 sm:flex-row sm:items-center sm:justify-between">
-                                                <p className="text-[11px] font-bold text-gray-500">
+                                            <div className="flex flex-col gap-2 border-t border-admin-line pt-4 sm:flex-row sm:items-center sm:justify-between">
+                                                <p className="text-[11px] font-bold text-admin-muted">
                                                     {dirty ? '저장되지 않은 변경사항이 있습니다.' : '최신 상태입니다.'}
                                                 </p>
                                                 <div className="flex gap-2">
@@ -407,7 +407,7 @@ END $$;`}
                                 );
                             })}
                             {faqs.length === 0 && (
-                                <div className="text-center py-12 text-xs font-bold text-gray-400 border border-dashed border-[#e5e5df] rounded bg-[#fbfbfa]">
+                                <div className="text-center py-12 text-xs font-bold text-[#a1a1aa] border border-dashed border-admin-line-2 rounded-[11px] bg-[#fafafb]">
                                     등록된 FAQ가 없습니다.
                                 </div>
                             )}
@@ -416,7 +416,7 @@ END $$;`}
                 ) : (
                     <div className="space-y-4">
                         <div className="flex justify-between items-center">
-                            <h3 className="text-sm font-black text-gray-900">공지사항 목록</h3>
+                            <h3 className="text-sm font-black text-admin-ink">공지사항 목록</h3>
                             <button
                                 onClick={noticeList.add}
                                 disabled={loading}
@@ -434,9 +434,9 @@ END $$;`}
                                 const saving = noticeList.isSaving(notice);
 
                                 return (
-                                    <div key={notice.id} className="rounded border border-[#e5e5df] bg-white p-4">
+                                    <div key={notice.id} className="rounded-[11px] border border-admin-line bg-white p-4">
                                         <div className="space-y-3">
-                                            <label className="block text-[11px] font-bold text-gray-500">
+                                            <label className="block text-[11px] font-bold text-admin-muted">
                                                 제목
                                             </label>
                                             <input
@@ -446,26 +446,26 @@ END $$;`}
                                                 className={consoleInputClass + " w-full bg-white"}
                                             />
                                             <div className="grid grid-cols-2 gap-3">
-                                                <label className="flex items-center gap-2 rounded border border-[#e5e5df] px-3 py-2 text-xs font-bold text-gray-700">
+                                                <label className="flex items-center gap-2 rounded-[9px] border border-admin-line-2 px-3 py-2 text-xs font-bold text-[#3f3f46]">
                                                     <input
                                                         type="checkbox"
                                                         checked={draft.is_pinned}
                                                         onChange={(e) => noticeList.changeDraft(notice.id, 'is_pinned', e.target.checked)}
-                                                        className="w-3.5 h-3.5 text-[#111111] border-gray-300 rounded focus:ring-[#111111] accent-[#111111]"
+                                                        className="w-3.5 h-3.5 text-admin-accent border-admin-line-2 rounded focus:ring-admin-accent accent-admin-accent"
                                                     />
                                                     고정
                                                 </label>
-                                                <label className="flex items-center gap-2 rounded border border-[#e5e5df] px-3 py-2 text-xs font-bold text-gray-700">
+                                                <label className="flex items-center gap-2 rounded-[9px] border border-admin-line-2 px-3 py-2 text-xs font-bold text-[#3f3f46]">
                                                     <input
                                                         type="checkbox"
                                                         checked={draft.is_active}
                                                         onChange={(e) => noticeList.changeDraft(notice.id, 'is_active', e.target.checked)}
-                                                        className="w-3.5 h-3.5 text-[#111111] border-gray-300 rounded focus:ring-[#111111] accent-[#111111]"
+                                                        className="w-3.5 h-3.5 text-admin-accent border-admin-line-2 rounded focus:ring-admin-accent accent-admin-accent"
                                                     />
                                                     공개
                                                 </label>
                                             </div>
-                                            <label className="block text-[11px] font-bold text-gray-500">
+                                            <label className="block text-[11px] font-bold text-admin-muted">
                                                 본문
                                             </label>
                                             <textarea
@@ -475,7 +475,7 @@ END $$;`}
                                                 placeholder="공지사항 본문을 입력하세요"
                                                 className={consoleInputClass + " h-auto w-full resize-y bg-white py-3 leading-relaxed"}
                                             />
-                                            <p className="text-[11px] font-bold text-gray-500">
+                                            <p className="text-[11px] font-bold text-admin-muted">
                                                 {dirty ? '저장되지 않은 변경사항이 있습니다.' : '최신 상태입니다.'}
                                             </p>
                                             <div className="grid grid-cols-[1fr_1fr_auto] gap-2">
@@ -500,7 +500,7 @@ END $$;`}
                                                     type="button"
                                                     onClick={() => noticeList.remove(notice.id)}
                                                     aria-label="공지사항 삭제"
-                                                    className={`${consoleIconButtonClass} text-gray-400 hover:text-red-500 hover:bg-red-50 hover:border-red-100`}
+                                                    className={`${consoleIconButtonClass} text-[#a1a1aa] hover:text-red-500 hover:bg-red-50 hover:border-red-100`}
                                                 >
                                                     <Trash2 className="w-4 h-4" />
                                                 </button>
@@ -510,23 +510,23 @@ END $$;`}
                                 );
                             })}
                             {notices.length === 0 && (
-                                <div className="rounded border border-dashed border-[#e5e5df] bg-[#fbfbfa] px-4 py-12 text-center text-xs font-bold text-gray-400">
+                                <div className="rounded-[11px] border border-dashed border-admin-line-2 bg-[#fafafb] px-4 py-12 text-center text-xs font-bold text-[#a1a1aa]">
                                     등록된 공지사항이 없습니다.
                                 </div>
                             )}
                         </div>
 
-                        <div className="hidden overflow-x-auto border border-[#e5e5df] rounded md:block">
+                        <div className="hidden overflow-x-auto border border-admin-line rounded-[11px] md:block">
                             <table className="w-full text-left text-xs">
-                                <thead className="bg-[#fbfbfa] border-b border-[#e5e5df]">
+                                <thead className="bg-[#fafafb] border-b border-admin-line">
                                     <tr>
-                                        <th className="px-4 py-3 font-bold text-gray-500">제목</th>
-                                        <th className="px-4 py-3 font-bold text-gray-500 w-32">상태</th>
-                                        <th className="px-4 py-3 font-bold text-gray-500 w-32">작성일</th>
-                                        <th className="px-4 py-3 font-bold text-gray-500 w-20 text-right">관리</th>
+                                        <th className="px-4 py-3 font-bold text-admin-muted">제목</th>
+                                        <th className="px-4 py-3 font-bold text-admin-muted w-32">상태</th>
+                                        <th className="px-4 py-3 font-bold text-admin-muted w-32">작성일</th>
+                                        <th className="px-4 py-3 font-bold text-admin-muted w-20 text-right">관리</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-[#e5e5df] bg-white">
+                                <tbody className="divide-y divide-admin-line bg-white">
                                     {notices.map((notice) => {
                                         const draft = noticeList.getDraft(notice);
                                         const dirty = noticeList.isItemDirty(notice);
@@ -534,15 +534,15 @@ END $$;`}
 
                                         return (
                                             <Fragment key={notice.id}>
-                                        <tr className="hover:bg-[#fbfbfa]">
+                                        <tr className="hover:bg-[#fafafb]">
                                             <td className="px-4 py-3">
                                                 <input
                                                     type="text"
                                                     value={draft.title}
                                                     onChange={(e) => noticeList.changeDraft(notice.id, 'title', e.target.value)}
-                                                    className="w-full bg-transparent border-none focus:ring-0 font-bold text-gray-900 p-0 placeholder-gray-300"
+                                                    className="w-full bg-transparent border-none focus:ring-0 font-bold text-admin-ink p-0 placeholder-[#d4d4d8]"
                                                 />
-                                                <p className="mt-1 line-clamp-1 text-[11px] font-medium text-gray-400">
+                                                <p className="mt-1 line-clamp-1 text-[11px] font-medium text-[#a1a1aa]">
                                                     {draft.content || '본문 없음'}
                                                 </p>
                                             </td>
@@ -553,22 +553,22 @@ END $$;`}
                                                             type="checkbox"
                                                             checked={draft.is_pinned}
                                                             onChange={(e) => noticeList.changeDraft(notice.id, 'is_pinned', e.target.checked)}
-                                                            className="w-3.5 h-3.5 text-[#111111] border-gray-300 rounded focus:ring-[#111111] accent-[#111111]"
+                                                            className="w-3.5 h-3.5 text-admin-accent border-admin-line-2 rounded focus:ring-admin-accent accent-admin-accent"
                                                         />
-                                                        <span className="font-bold text-gray-600">고정</span>
+                                                        <span className="font-bold text-[#52525b]">고정</span>
                                                     </label>
                                                     <label className="flex items-center gap-1.5 cursor-pointer">
                                                         <input
                                                             type="checkbox"
                                                             checked={draft.is_active}
                                                             onChange={(e) => noticeList.changeDraft(notice.id, 'is_active', e.target.checked)}
-                                                            className="w-3.5 h-3.5 text-[#111111] border-gray-300 rounded focus:ring-[#111111] accent-[#111111]"
+                                                            className="w-3.5 h-3.5 text-admin-accent border-admin-line-2 rounded focus:ring-admin-accent accent-admin-accent"
                                                         />
-                                                        <span className="font-bold text-gray-600">공개</span>
+                                                        <span className="font-bold text-[#52525b]">공개</span>
                                                     </label>
                                                 </div>
                                             </td>
-                                            <td className="px-4 py-3 text-gray-400 font-medium">
+                                            <td className="px-4 py-3 text-[#a1a1aa] font-medium">
                                                 {formatKstDate(notice.created_at)}
                                             </td>
                                             <td className="px-4 py-3 text-right">
@@ -584,7 +584,7 @@ END $$;`}
                                                     <button
                                                         onClick={() => noticeList.remove(notice.id)}
                                                         aria-label="공지사항 삭제"
-                                                        className={`${consoleIconButtonClass} text-gray-400 hover:text-red-500 hover:bg-red-50 hover:border-red-100`}
+                                                        className={`${consoleIconButtonClass} text-[#a1a1aa] hover:text-red-500 hover:bg-red-50 hover:border-red-100`}
                                                     >
                                                         <Trash2 className="w-4 h-4" />
                                                     </button>
@@ -593,9 +593,9 @@ END $$;`}
                                         </tr>
                                         {expandedNotice === notice.id && (
                                             <tr>
-                                                <td colSpan={4} className="bg-[#fbfbfa] px-4 py-4">
+                                                <td colSpan={4} className="bg-[#fafafb] px-4 py-4">
                                                     <div className="space-y-3">
-                                                        <label className="block text-[11px] font-bold text-gray-500">
+                                                        <label className="block text-[11px] font-bold text-admin-muted">
                                                             본문
                                                         </label>
                                                         <textarea
@@ -606,7 +606,7 @@ END $$;`}
                                                             className={consoleInputClass + " h-auto w-full resize-y bg-white py-3 leading-relaxed"}
                                                         />
                                                         <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-                                                            <p className="text-[11px] font-bold text-gray-500">
+                                                            <p className="text-[11px] font-bold text-admin-muted">
                                                                 {dirty ? '저장되지 않은 변경사항이 있습니다.' : '최신 상태입니다.'}
                                                             </p>
                                                             <div className="flex gap-2">
@@ -638,7 +638,7 @@ END $$;`}
                                     })}
                                     {notices.length === 0 && (
                                         <tr>
-                                            <td colSpan={4} className="px-4 py-12 text-center font-bold text-gray-400 bg-[#fbfbfa]">
+                                            <td colSpan={4} className="px-4 py-12 text-center font-bold text-[#a1a1aa] bg-[#fafafb]">
                                                 등록된 공지사항이 없습니다.
                                             </td>
                                         </tr>

@@ -21,41 +21,41 @@ export default async function InsightsPage() {
             {!isConfigured ? (
                 <ConsolePanel className="p-8 text-center md:p-12">
                     <div className="flex justify-center mb-6">
-                        <div className="grid h-16 w-16 place-items-center rounded-md border border-[#fed7aa] bg-[#fff7ed]">
-                            <AlertTriangle className="w-10 h-10 text-yellow-500" />
+                        <div className="grid h-16 w-16 place-items-center rounded-[12px] border border-[#fed7aa] bg-[#fff7ed]">
+                            <AlertTriangle className="w-10 h-10 text-[#9a3412]" />
                         </div>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-3">Google Analytics 연동 필요</h3>
-                    <p className="text-gray-500 mb-8 max-w-md mx-auto leading-relaxed">
+                    <h3 className="text-xl font-bold text-admin-ink mb-3">Google Analytics 연동 필요</h3>
+                    <p className="text-admin-muted mb-8 max-w-md mx-auto leading-relaxed">
                         데이터를 불러오기 위해서는 Google Analytics 4 (GA4) 연동 및 서비스 계정 설정이 필요합니다.<br />
                         설정 가이드를 참고하여 연동을 완료해주세요.
                     </p>
 
                     {(trafficStats as any)?.error && (
-                        <div className="mx-auto mb-8 max-w-lg rounded-md border border-red-100 bg-red-50 p-4 text-left text-sm text-red-600">
+                        <div className="mx-auto mb-8 max-w-lg rounded-[12px] border border-[#fecaca] bg-[#fef2f2] p-4 text-left text-sm text-[#b91c1c]">
                             <p className="font-bold mb-1">연동 오류:</p>
                             <p>{(trafficStats as any).error}</p>
                         </div>
                     )}
 
-                    <div className="inline-block rounded-md border border-[#e5e5df] bg-[#f4f4f1] p-6 text-left text-sm text-gray-500">
-                        <p className="font-medium mb-3 text-gray-900">필요한 환경 변수 (.env.local):</p>
+                    <div className="inline-block rounded-[12px] border border-admin-line bg-[#fafafb] p-6 text-left text-sm text-admin-muted">
+                        <p className="font-medium mb-3 text-admin-ink">필요한 환경 변수 (.env.local):</p>
                         <ul className="space-y-2">
                             <li className="flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-                                <code className="rounded border border-gray-200 bg-white px-2 py-0.5">NEXT_PUBLIC_GA_ID</code>
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#a1a1aa]" />
+                                <code className="rounded border border-admin-line-2 bg-white px-2 py-0.5">NEXT_PUBLIC_GA_ID</code>
                             </li>
                             <li className="flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-                                <code className="rounded border border-gray-200 bg-white px-2 py-0.5">GA_PROPERTY_ID</code>
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#a1a1aa]" />
+                                <code className="rounded border border-admin-line-2 bg-white px-2 py-0.5">GA_PROPERTY_ID</code>
                             </li>
                             <li className="flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-                                <code className="rounded border border-gray-200 bg-white px-2 py-0.5">GOOGLE_CLIENT_EMAIL</code>
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#a1a1aa]" />
+                                <code className="rounded border border-admin-line-2 bg-white px-2 py-0.5">GOOGLE_CLIENT_EMAIL</code>
                             </li>
                             <li className="flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-full bg-gray-400" />
-                                <code className="rounded border border-gray-200 bg-white px-2 py-0.5">GOOGLE_PRIVATE_KEY</code>
+                                <div className="w-1.5 h-1.5 rounded-full bg-[#a1a1aa]" />
+                                <code className="rounded border border-admin-line-2 bg-white px-2 py-0.5">GOOGLE_PRIVATE_KEY</code>
                             </li>
                         </ul>
                     </div>

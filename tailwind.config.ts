@@ -56,6 +56,35 @@ const config: Config = {
           bisque: '#eee8dc',
           ecru: '#efe9dd',
         },
+        // 리디자인 웜 시스템 토큰 (공개 페이지). README design tokens 1:1.
+        weet: {
+          paper: '#F6F1E8',       // 기본 배경
+          'paper-alt': '#EFE8DA', // 섹션 교차 배경
+          surface: '#FAF6EE',     // 카드 내부
+          'surface-2': '#FBF8F2', // 카드 내부(대안)
+          ink: '#231D16',         // 주 텍스트·다크 섹션 배경
+          'ink-deep': '#1C1610',  // 푸터 배경
+          sub: '#5A5044',         // 보조 텍스트
+          muted: '#8C8273',       // 캡션
+          line: '#E5DBC9',        // 보더
+          'line-2': '#E0D6C4',    // 보더(대안)
+          gold: '#FDB813',        // 1차 액센트(CTA·강조)
+          'gold-deep': '#B8791A', // 링크 호버·eyebrow
+          forest: '#2E4A3F',      // 2차 액센트(솔루션·확정 상태)
+        },
+        // 관리자 콘솔 2안(라이트·인박스). README admin tokens.
+        admin: {
+          bg: '#f7f7f8',
+          card: '#ffffff',
+          ink: '#18181b',
+          muted: '#71717a',
+          line: '#ececed',
+          'line-2': '#e4e4e7',
+          accent: '#2563eb',
+          'accent-hover': '#1d4ed8',
+          'accent-soft': '#eff6ff',
+          'accent-line': '#bfdbfe',
+        },
         black: '#000000',
         white: '#FFFFFF',
         gray: {
@@ -118,7 +147,14 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-geist-sans)', 'system-ui', 'sans-serif'],
+        // Geist(영문·숫자) → Noto Sans KR(한글) → 시스템 폴백
+        sans: [
+          'var(--font-geist-sans)',
+          'var(--font-noto-sans)',
+          'system-ui',
+          'sans-serif',
+        ],
+        mono: ['var(--font-geist-mono)', 'ui-monospace', 'monospace'],
       },
       maxWidth: {
         '8xl': '1440px',
@@ -132,6 +168,11 @@ const config: Config = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+      boxShadow: {
+        // 리디자인 부상형 이미지·카드 그림자 (README)
+        'weet-float': '0 30px 60px -34px rgba(35,29,22,.5)',
+        'weet-card': '0 1px 3px rgba(0,0,0,.04)',
       },
     },
   },

@@ -1,14 +1,15 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import {
   ArrowRight,
-  CheckCircle2,
   LockKeyhole,
   Router,
   SlidersHorizontal,
+  X,
   Zap,
 } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -19,6 +20,7 @@ type PackageCopy = {
   href: string;
   image: string;
   icon: LucideIcon;
+  code: string;
   title: string;
   subtitle: string;
   problem: string;
@@ -45,6 +47,13 @@ type PageCopy = {
   process: Array<{ title: string; body: string }>;
 };
 
+const PACKAGE_IMAGES: Record<string, string> = {
+  security: "/images/handoff/sol-security.webp",
+  network: "/images/handoff/sol-network.webp",
+  control: "/images/handoff/sol-control.webp",
+  energy: "/images/handoff/sol-energy.webp",
+};
+
 const COPY: Record<Language, PageCopy> = {
   KO: {
     eyebrow: "WEET OPERATION OPTIONS",
@@ -69,6 +78,7 @@ const COPY: Record<Language, PageCopy> = {
         href: "/solution/cctv",
         image: "/images/solution/generated/kr-security-realphoto.webp",
         icon: LockKeyhole,
+        code: "SYS_01",
         title: "보안 코어 (Security Core)",
         subtitle: "CCTV · 스마트락 · 센서 및 접근 로깅",
         problem: "야간·무인 운영에서 생기는 보안 공백을 줄입니다.",
@@ -81,6 +91,7 @@ const COPY: Record<Language, PageCopy> = {
         href: "/solution/network",
         image: "/images/solution/generated/kr-network-realphoto.webp",
         icon: Router,
+        code: "SYS_02",
         title: "네트워크 패브릭 (Network Fabric)",
         subtitle: "POS · 게스트 Wi-Fi · 라우터/위성망",
         problem: "결제, 예약, 원격 제어가 인터넷 품질에 묶이는 리스크를 줄입니다.",
@@ -93,6 +104,7 @@ const COPY: Record<Language, PageCopy> = {
         href: "/solution/iot",
         image: "/images/solution/generated/kr-control-realphoto.webp",
         icon: SlidersHorizontal,
+        code: "SYS_03",
         title: "제어 계층 (Control Layer)",
         subtitle: "IoT 조명 · 냉난방 제어 · 환기 스케줄링",
         problem: "입실 전마다 수동으로 확인해야 하는 반복 업무를 줄입니다.",
@@ -105,6 +117,7 @@ const COPY: Record<Language, PageCopy> = {
         href: "/solution/energy",
         image: "/images/customize/options/solar-panel.webp",
         icon: Zap,
+        code: "SYS_04",
         title: "에너지 스택 (Energy Stack)",
         subtitle: "태양광 · ESS · EV 충전기 · 부하 설계",
         problem: "높은 전기 요금과 전력 수급 불안정 리스크를 해소합니다.",
@@ -142,6 +155,7 @@ const COPY: Record<Language, PageCopy> = {
         href: "/solution/cctv",
         image: "/images/solution/generated/kr-security-realphoto.webp",
         icon: LockKeyhole,
+        code: "SYS_01",
         title: "Security Core",
         subtitle: "CCTV · smart lock · sensors/access logging",
         problem: "Reduce security gaps in night and unmanned operations.",
@@ -154,6 +168,7 @@ const COPY: Record<Language, PageCopy> = {
         href: "/solution/network",
         image: "/images/solution/generated/kr-network-realphoto.webp",
         icon: Router,
+        code: "SYS_02",
         title: "Network Fabric",
         subtitle: "POS · guest Wi-Fi · router/satellite readiness",
         problem: "Reduce losses when payment, booking, or remote control depends on unstable connectivity.",
@@ -166,6 +181,7 @@ const COPY: Record<Language, PageCopy> = {
         href: "/solution/iot",
         image: "/images/solution/generated/kr-control-realphoto.webp",
         icon: SlidersHorizontal,
+        code: "SYS_03",
         title: "Control Layer",
         subtitle: "IoT lighting · HVAC · ventilation schedules",
         problem: "Reduce repeated manual checks for unmanned operations.",
@@ -178,6 +194,7 @@ const COPY: Record<Language, PageCopy> = {
         href: "/solution/energy",
         image: "/images/customize/options/solar-panel.webp",
         icon: Zap,
+        code: "SYS_04",
         title: "Energy Stack",
         subtitle: "solar · ESS · EV charger · load planning",
         problem: "Resolve high utility costs and unstable power supply risks.",
@@ -215,6 +232,7 @@ const COPY: Record<Language, PageCopy> = {
         href: "/solution/cctv",
         image: "/images/solution/generated/kr-security-realphoto.webp",
         icon: LockKeyhole,
+        code: "SYS_01",
         title: "Security Core",
         subtitle: "CCTV · cerradura inteligente · sensores/registro de accesos",
         problem: "Reduzca las brechas de seguridad en operaciones nocturnas y sin personal.",
@@ -227,6 +245,7 @@ const COPY: Record<Language, PageCopy> = {
         href: "/solution/network",
         image: "/images/solution/generated/kr-network-realphoto.webp",
         icon: Router,
+        code: "SYS_02",
         title: "Network Fabric",
         subtitle: "TPV · Wi-Fi de invitados · preparación para router/satélite",
         problem: "Reduzca las pérdidas cuando el pago, la reserva o el control remoto dependen de una conectividad inestable.",
@@ -239,6 +258,7 @@ const COPY: Record<Language, PageCopy> = {
         href: "/solution/iot",
         image: "/images/solution/generated/kr-control-realphoto.webp",
         icon: SlidersHorizontal,
+        code: "SYS_03",
         title: "Control Layer",
         subtitle: "iluminación IoT · climatización · programación de ventilación",
         problem: "Reduzca las comprobaciones manuales repetidas en operaciones sin personal.",
@@ -251,6 +271,7 @@ const COPY: Record<Language, PageCopy> = {
         href: "/solution/energy",
         image: "/images/customize/options/solar-panel.webp",
         icon: Zap,
+        code: "SYS_04",
         title: "Energy Stack",
         subtitle: "solar · ESS · cargador EV · planificación de carga",
         problem: "Resuelva los altos costos de electricidad y los riesgos de un suministro eléctrico inestable.",
@@ -270,154 +291,301 @@ const COPY: Record<Language, PageCopy> = {
 export default function SolutionPage() {
   const { language } = useLanguage();
   const copy = COPY[language];
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  const active = openIndex !== null ? copy.packages[openIndex] : null;
+
+  // Cursor glow follows pointer inside each category card.
+  const handleGlow = (e: React.MouseEvent<HTMLElement>) => {
+    const el = e.currentTarget;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--mx", `${e.clientX - r.left}px`);
+    el.style.setProperty("--my", `${e.clientY - r.top}px`);
+  };
+
+  // Close modal on Escape + lock body scroll while open.
+  useEffect(() => {
+    if (active === null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setOpenIndex(null);
+    };
+    window.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [active]);
 
   return (
-    <div className="min-h-screen bg-[#fcfbfa] text-[#2f3432]">
-      {/* Hero Section */}
-      <section className="mx-auto max-w-[1200px] px-6 pb-12 pt-28 md:px-10 lg:pb-16 lg:pt-36">
-        <div className="grid gap-8 border-b border-[#e6dfd3] pb-10 lg:grid-cols-[1fr_0.8fr] lg:gap-16 lg:pb-14">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#0d6e66]">{copy.eyebrow}</p>
-            <h1 className="mt-4 text-4xl font-black leading-tight text-[#2f3432] md:text-5xl lg:text-6xl break-keep">
-              {copy.title}
-            </h1>
-            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-[#5a625e] md:text-xl break-keep">
-              {copy.lead}
-            </p>
+    <div className="min-h-screen bg-weet-ink-deep text-weet-paper">
+      {/* ===== HERO ===== */}
+      <section className="relative overflow-hidden border-b border-weet-paper/10">
+        {/* scanning grid */}
+        <div
+          className="pointer-events-none absolute inset-0 [background-image:linear-gradient(rgba(236,230,218,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(236,230,218,0.045)_1px,transparent_1px)] [background-size:44px_44px]"
+          aria-hidden
+        />
+        {/* gold radial */}
+        <div
+          className="pointer-events-none absolute inset-0 [background:radial-gradient(900px_circle_at_78%_16%,rgba(253,184,19,0.10),transparent_55%)]"
+          aria-hidden
+        />
+        <div className="relative mx-auto max-w-[1440px] px-[5vw] pb-[70px] pt-24 md:pt-[96px]">
+          <div className="mb-6 flex items-center gap-3">
+            <span className="h-2 w-2 animate-pulse rounded-full bg-weet-forest" />
+            <span className="font-mono text-[12px] font-semibold uppercase tracking-[0.2em] text-[#79D2B6]">
+              {copy.eyebrow}
+            </span>
           </div>
-
-          <div className="self-end rounded-lg border border-[#e6dfd3] bg-[#f5f2eb] p-6 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="flex h-2 w-2 rounded-full bg-[#f5a623]"></span>
-              <p className="text-xs font-bold uppercase tracking-wider text-[#7a6a3a]">{copy.heroLabel}</p>
-            </div>
-            <h2 className="text-xl font-bold leading-snug text-[#2f3432] break-keep">
-              {copy.heroTitle}
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-[#5a625e] break-keep">{copy.heroBody}</p>
-          </div>
+          <h1 className="m-0 max-w-[20ch] text-[clamp(34px,5.4vw,68px)] font-semibold leading-[1.03] tracking-[-0.04em] text-weet-paper kr-balance">
+            {copy.title}
+          </h1>
+          <p className="mt-6 max-w-[56ch] text-[clamp(15px,1.5vw,19px)] font-light leading-[1.65] text-weet-paper/75 kr-balance">
+            {copy.lead}
+          </p>
         </div>
       </section>
 
-      {/* Technical Modules Table Layout */}
-      <section className="mx-auto max-w-[1200px] px-6 pb-16 md:px-10 lg:pb-24">
-        <div className="flex flex-col gap-6">
+      {/* ===== INTENT BAR ===== */}
+      <section className="border-b border-weet-paper/10">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-4 px-[5vw] py-10 md:flex-row md:items-center md:justify-between md:gap-10">
+          <div className="flex items-start gap-3">
+            <span className="mt-1.5 h-2 w-2 flex-none rounded-full bg-weet-gold" />
+            <div>
+              <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#79D2B6]">
+                {copy.heroLabel}
+              </p>
+              <h2 className="mt-1.5 text-[clamp(18px,1.9vw,22px)] font-semibold leading-snug tracking-[-0.02em] text-weet-paper kr-balance">
+                {copy.heroTitle}
+              </h2>
+            </div>
+          </div>
+          <p className="max-w-[44ch] text-[14px] leading-[1.7] text-weet-paper/65 kr-balance">
+            {copy.heroBody}
+          </p>
+        </div>
+      </section>
+
+      {/* ===== CATEGORY CARDS ===== */}
+      <section className="mx-auto max-w-[1440px] px-[5vw] pb-[110px] pt-16">
+        <div className="grid grid-cols-1 gap-5 min-[861px]:grid-cols-2">
           {copy.packages.map((pkg, index) => {
             const Icon = pkg.icon;
             return (
-              <article
+              <button
                 key={pkg.id}
-                className="group relative flex flex-col overflow-hidden rounded-xl border border-[#e6dfd3] bg-white transition-shadow hover:shadow-md lg:flex-row"
+                type="button"
+                onClick={() => setOpenIndex(index)}
+                onMouseMove={handleGlow}
+                className="group wt-reveal relative flex flex-col overflow-hidden rounded-[16px] border border-weet-paper/12 bg-weet-ink text-left transition-[transform,border-color] duration-300 ease-[cubic-bezier(.2,.7,.2,1)] hover:-translate-y-[5px] hover:border-weet-gold/55"
               >
-                {/* Visual Strip */}
-                <div className="relative w-full shrink-0 border-b border-[#e6dfd3] bg-[#fcfbfa] p-4 lg:w-[280px] lg:border-b-0 lg:border-r lg:p-6">
-                  <div className="relative mb-4 flex items-center justify-between">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-md border border-[#c4e3e0] bg-[#e6f4f2] text-[#0d6e66]">
-                      <Icon className="h-5 w-5" strokeWidth={2} />
-                    </div>
-                    <span className="font-mono text-xs font-bold text-[#a3b3ac]">
-                      MOD_0{index + 1}
+                {/* cursor glow */}
+                <span
+                  className="pointer-events-none absolute inset-0 z-10 opacity-0 transition-opacity duration-300 [background:radial-gradient(420px_circle_at_var(--mx,50%)_var(--my,50%),rgba(253,184,19,0.16),transparent_60%)] group-hover:opacity-100"
+                  aria-hidden
+                />
+                {/* image strip */}
+                <div className="relative aspect-[16/8] overflow-hidden rounded-t-[16px] border-b border-weet-paper/10">
+                  <Image
+                    src={PACKAGE_IMAGES[pkg.id]}
+                    alt={pkg.title}
+                    fill
+                    sizes="(max-width: 860px) 100vw, 50vw"
+                    className="object-cover grayscale-[0.4] transition-[transform,filter] duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:scale-[1.07] group-hover:grayscale-0"
+                  />
+                  <span className="absolute left-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-full bg-weet-ink-deep/70 px-3 py-1.5 font-mono text-[11px] font-semibold tracking-[0.12em] text-[#79D2B6] backdrop-blur-sm">
+                    <Icon className="h-3 w-3" strokeWidth={2} />
+                    {pkg.code}
+                  </span>
+                </div>
+                {/* body */}
+                <div className="relative z-20 px-7 pb-7 pt-[26px]">
+                  <div className="mb-2 flex items-baseline gap-3">
+                    <h3 className="m-0 text-[26px] font-semibold tracking-[-0.02em] text-weet-paper">
+                      {pkg.title}
+                    </h3>
+                  </div>
+                  <p className="m-0 font-mono text-[12px] text-weet-paper/55">{pkg.subtitle}</p>
+                  <p className="mt-3 mb-[18px] text-[13.5px] leading-[1.65] text-weet-paper/70 kr-balance">
+                    {pkg.promise}
+                  </p>
+                  <div className="flex items-center justify-between border-t border-weet-paper/10 pt-4">
+                    <span className="font-mono text-[11.5px] text-weet-paper/50">{pkg.problem}</span>
+                    <span className="inline-flex items-center gap-1.5 font-mono text-[13px] font-semibold text-weet-paper/75 transition-colors group-hover:text-weet-gold">
+                      {copy.detailLabel}
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-[5px]" />
                     </span>
                   </div>
-                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-md border border-[#e6dfd3]">
-                    <Image
-                      src={pkg.image}
-                      alt={pkg.title}
-                      fill
-                      sizes="(max-width: 1024px) 100vw, 280px"
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  </div>
                 </div>
-
-                {/* Specs Console */}
-                <div className="flex w-full flex-col p-6 lg:flex-row lg:p-0">
-                  <div className="flex flex-1 flex-col justify-center border-b border-[#e6dfd3] pb-6 lg:border-b-0 lg:border-r lg:p-8 lg:pb-8">
-                    <h2 className="text-2xl font-black text-[#2f3432]">{pkg.title}</h2>
-                    <p className="mt-1 font-mono text-xs text-[#0d6e66]">{pkg.subtitle}</p>
-                    <p className="mt-4 text-sm leading-relaxed text-[#5a625e]">{pkg.promise}</p>
-
-                    <div className="mt-6 flex flex-wrap gap-2">
-                      {pkg.details.map((item) => (
-                        <span key={item} className="inline-flex items-center gap-1.5 rounded bg-[#f5f2eb] px-2.5 py-1 text-xs font-bold text-[#5a625e]">
-                          <CheckCircle2 className="h-3 w-3 text-[#f5a623]" />
-                          {item}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Impact Column */}
-                  <div className="flex w-full shrink-0 flex-col justify-between pt-6 lg:w-[320px] lg:p-8 lg:pt-8 bg-[#fcfbfa]">
-                    <div>
-                      <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#a3b3ac]">{copy.selectLabel}</p>
-                      <p className="mt-1.5 text-sm font-semibold leading-relaxed text-[#2f3432]">{pkg.problem}</p>
-                    </div>
-
-                    <div className="mt-6 border-t border-[#e6dfd3] pt-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className="h-1.5 w-1.5 rounded-full bg-[#0d6e66]"></div>
-                        <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#a3b3ac]">{copy.proofLabel}</p>
-                      </div>
-                      <p className="text-xs font-medium leading-relaxed text-[#0d6e66]">{pkg.proof}</p>
-                    </div>
-
-                    <div className="mt-6">
-                      <Link
-                        href={pkg.href}
-                        className="inline-flex h-9 w-full items-center justify-between rounded border border-[#0d6e66] px-4 text-xs font-bold text-[#0d6e66] transition-colors hover:bg-[#e6f4f2]"
-                      >
-                        {copy.detailLabel}
-                        <ArrowRight className="h-3.5 w-3.5" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </article>
+              </button>
             );
           })}
         </div>
       </section>
 
-      {/* Workflow Strip */}
-      <section className="border-y border-[#e6dfd3] bg-[#f5f2eb]">
-        <div className="mx-auto grid max-w-[1200px] gap-8 px-6 py-12 md:px-10 lg:grid-cols-[300px_1fr] lg:py-16">
+      {/* ===== WORKFLOW STRIP ===== */}
+      <section className="border-t border-weet-paper/10 bg-weet-ink">
+        <div className="mx-auto grid max-w-[1440px] gap-8 px-[5vw] py-16 lg:grid-cols-[300px_1fr] lg:py-24">
           <div>
-            <p className="font-mono text-[10px] font-bold uppercase tracking-widest text-[#f5a623]">Workflow</p>
-            <h2 className="mt-2 text-2xl font-black leading-tight text-[#2f3432] break-keep">
+            <p className="font-mono text-[12px] font-semibold uppercase tracking-[0.2em] text-weet-gold">
+              {copy.eyebrow}
+            </p>
+            <h2 className="mt-3 text-[clamp(24px,2.6vw,34px)] font-semibold leading-[1.1] tracking-[-0.03em] text-weet-paper kr-balance">
               {copy.processTitle}
             </h2>
-            <p className="mt-4 text-sm leading-relaxed text-[#5a625e] break-keep">{copy.processLead}</p>
+            <p className="mt-4 max-w-[40ch] text-[14px] leading-[1.7] text-weet-paper/65 kr-balance">
+              {copy.processLead}
+            </p>
           </div>
-
           <div className="grid gap-6 md:grid-cols-3">
             {copy.process.map((step, index) => (
-              <div key={step.title} className="flex flex-col border-t-2 border-[#e6dfd3] pt-4">
-                <span className="font-mono text-sm font-bold text-[#f5a623]">0{index + 1}</span>
-                <h3 className="mt-2 text-base font-bold text-[#2f3432] break-keep">{step.title}</h3>
-                <p className="mt-2 text-xs leading-relaxed text-[#5a625e] break-keep">{step.body}</p>
+              <div key={step.title} className="border-t-2 border-weet-paper/15 pt-4">
+                <span className="font-mono text-[13px] font-semibold text-weet-gold">
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <h3 className="mt-2 text-[15px] font-semibold text-weet-paper kr-balance">{step.title}</h3>
+                <p className="mt-2 text-[12.5px] leading-[1.6] text-weet-paper/55 kr-balance">{step.body}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Footer CTAs */}
-      <section className="mx-auto flex max-w-[1200px] flex-col gap-4 px-6 py-12 md:px-10 sm:flex-row">
+      {/* ===== FOOTER CTAS ===== */}
+      <section className="mx-auto flex max-w-[1440px] flex-col gap-3.5 px-[5vw] py-16 sm:flex-row">
         <Link
           href="/customize"
-          className="inline-flex h-11 items-center justify-center gap-2 rounded bg-[#febd16] px-6 text-sm font-bold text-[#2f3432] transition-colors hover:bg-[#e2a80f]"
+          className="inline-flex items-center justify-center gap-2 rounded-[6px] bg-weet-gold px-7 py-[15px] text-[15px] font-semibold text-weet-ink transition-transform duration-150 hover:-translate-y-0.5"
         >
           {copy.ctaPrimary}
           <ArrowRight className="h-4 w-4" />
         </Link>
         <Link
           href="/support"
-          className="inline-flex h-11 items-center justify-center rounded border border-[#d8d0c3] bg-white px-6 text-sm font-bold text-[#5a625e] transition-colors hover:border-[#2f3432] hover:text-[#2f3432]"
+          className="inline-flex items-center justify-center rounded-[6px] border border-weet-paper/30 px-7 py-[15px] text-[15px] font-medium text-weet-paper transition-transform duration-150 hover:-translate-y-0.5"
         >
           {copy.ctaSecondary}
         </Link>
       </section>
+
+      {/* ===== DETAIL MODAL ===== */}
+      {active && (
+        <div
+          onClick={() => setOpenIndex(null)}
+          className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-[rgba(10,8,5,0.7)] px-5 py-[5vh] backdrop-blur-sm"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="relative w-full max-w-[680px] overflow-hidden rounded-[18px] border border-weet-paper/16 bg-weet-ink shadow-[0_40px_90px_-30px_rgba(0,0,0,0.8)]"
+          >
+            {/* modal header image */}
+            <div className="relative aspect-[16/7] overflow-hidden">
+              <Image
+                src={PACKAGE_IMAGES[active.id]}
+                alt={active.title}
+                fill
+                sizes="680px"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-weet-ink/95 via-weet-ink/30 to-transparent" />
+              <button
+                type="button"
+                onClick={() => setOpenIndex(null)}
+                className="absolute right-4 top-4 flex h-[38px] w-[38px] items-center justify-center rounded-full bg-weet-ink-deep/70 backdrop-blur-sm transition-[transform,background] duration-200 hover:rotate-90 hover:bg-weet-paper/[0.16]"
+                aria-label="Close"
+              >
+                <X className="h-[15px] w-[15px] text-weet-paper" />
+              </button>
+              <div className="absolute inset-x-0 bottom-0 px-8 pb-7">
+                <div className="mb-2 font-mono text-[11px] font-semibold tracking-[0.16em] text-[#79D2B6]">
+                  {active.code} · {active.subtitle}
+                </div>
+                <h2 className="m-0 text-[clamp(24px,3vw,30px)] font-semibold tracking-[-0.025em] text-weet-paper">
+                  {active.title}
+                </h2>
+              </div>
+            </div>
+
+            {/* modal body */}
+            <div className="px-8 pb-[34px] pt-[30px]">
+              <p className="m-0 mb-[26px] text-[14.5px] leading-[1.8] text-weet-paper/70 kr-balance">
+                {active.promise}
+              </p>
+
+              {/* 포함 항목 */}
+              <div className="mb-3.5 font-mono text-[11px] font-semibold tracking-[0.14em] text-[#79D2B6]">
+                {"// "}
+                {copy.detailLabel}
+              </div>
+              <div className="mb-[30px] flex flex-col gap-2.5">
+                {active.details.map((item) => (
+                  <div
+                    key={item}
+                    className="flex items-start gap-3 rounded-[10px] border border-weet-paper/10 bg-weet-paper/[0.04] px-4 py-3.5"
+                  >
+                    <span className="mt-px flex-none font-mono text-[14px] font-semibold text-weet-gold">+</span>
+                    <div className="text-[14.5px] font-medium leading-[1.5] text-weet-paper kr-balance">
+                      {item}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* 이렇게 동작합니다 */}
+              <div className="mb-3.5 font-mono text-[11px] font-semibold tracking-[0.14em] text-[#79D2B6]">
+                {"// "}
+                {copy.processTitle}
+              </div>
+              <div className="mb-[30px] grid grid-cols-1 gap-4 sm:grid-cols-3">
+                {copy.process.map((step, index) => (
+                  <div key={step.title} className="border-t-2 border-weet-paper/15 pt-3.5">
+                    <span className="font-mono text-[13px] font-semibold text-weet-gold">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <h4 className="mb-1.5 mt-2 text-[14px] font-semibold text-weet-paper kr-balance">
+                      {step.title}
+                    </h4>
+                    <p className="m-0 text-[12px] leading-[1.6] text-weet-paper/50 kr-balance">{step.body}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* 일상의 변화 / 운영자가 체감하는 변화 */}
+              <div className="mb-7 flex items-start gap-3 rounded-[12px] border border-weet-paper/12 bg-weet-paper/[0.03] px-[22px] py-5 [background:radial-gradient(500px_circle_at_85%_30%,rgba(253,184,19,0.12),transparent_55%),rgba(236,230,218,0.03)]">
+                <span className="mt-1.5 h-2 w-2 flex-none rounded-full bg-weet-forest" />
+                <div>
+                  <div className="mb-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-weet-paper/50">
+                    {copy.proofLabel}
+                  </div>
+                  <p className="m-0 text-[15.5px] font-semibold leading-[1.4] text-weet-paper kr-balance">
+                    {active.proof}
+                  </p>
+                </div>
+              </div>
+
+              {/* actions: real subroute + close */}
+              <div className="flex flex-wrap gap-3">
+                <Link
+                  href={active.href}
+                  className="inline-flex items-center gap-2 rounded-[6px] bg-weet-gold px-6 py-[13px] text-[14px] font-semibold text-weet-ink transition-transform duration-150 hover:-translate-y-0.5"
+                >
+                  {copy.ctaSecondary}
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setOpenIndex(null)}
+                  className="inline-flex items-center rounded-[6px] border border-weet-paper/30 px-[22px] py-3 text-[14px] font-medium text-weet-paper transition-transform duration-150 hover:-translate-y-0.5"
+                >
+                  {language === "KO" ? "닫기" : language === "ES" ? "Cerrar" : "Close"}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

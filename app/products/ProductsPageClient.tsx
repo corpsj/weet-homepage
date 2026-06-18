@@ -139,11 +139,10 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
             return next;
         });
     }, []);
-    const productRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+    const productRefs = useRef<{ [key: string]: HTMLElement | null }>({});
     const sidebarRef = useRef<HTMLDivElement>(null);
     const sidebarItemRefs = useRef<{ [key: string]: HTMLLIElement | null }>({});
     const didHandleInitialHash = useRef(false);
-    const [isHeaderVisible, setIsHeaderVisible] = useState(true);
 
     // Sidebar Auto-Scroll Logic
     useEffect(() => {
@@ -335,13 +334,6 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
-
-            // Header Visibility Logic
-            if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
-                setIsHeaderVisible(false);
-            } else {
-                setIsHeaderVisible(true);
-            }
             lastScrollY.current = currentScrollY;
 
             // Active Product Logic using getBoundingClientRect (Viewport Relative)
@@ -395,12 +387,33 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
         return product?.name || id;
     };
 
+    // 사이드바 라인업 아이템 (활성 = 잉크/골드 점, 비활성 = muted)
+    const renderSidebarItem = (id: string) => {
+        const active = activeProduct === id;
+        return (
+            <li
+                key={id}
+                ref={el => { sidebarItemRefs.current[id] = el; }}
+                onClick={() => scrollToProduct(id)}
+                className={`relative cursor-pointer text-[13.5px] transition-all duration-200 hover:translate-x-1 ${active ? 'font-semibold text-weet-ink translate-x-0.5' : 'font-normal text-weet-muted hover:text-weet-sub'}`}
+            >
+                <span
+                    className={`absolute -left-[22px] top-[7px] h-1.5 w-1.5 rounded-full bg-weet-gold transition-opacity duration-300 ${active ? 'opacity-100' : 'opacity-0'}`}
+                />
+                {getProductName(id)}
+            </li>
+        );
+    };
+
     return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="flex flex-col lg:flex-row max-w-[1920px] mx-auto relative">
-                {/* Sidebar */}
-                <aside className="w-[280px] h-screen sticky top-0 hidden lg:flex flex-col pt-[140px] pb-10 pl-[60px] overflow-hidden bg-gray-50 border-r border-gray-100 z-10">
-                    <div ref={sidebarRef} className="flex-1 overflow-y-auto pr-6 custom-scrollbar space-y-12">
+        <div className="min-h-screen bg-weet-paper text-weet-ink">
+            <div className="relative mx-auto flex max-w-[1440px] flex-col lg:flex-row">
+                {/* ===== SIDEBAR (라인업, sticky) ===== */}
+                <aside className="sticky top-[72px] z-10 hidden h-[calc(100vh-72px)] w-[260px] flex-none flex-col overflow-hidden bg-weet-paper pb-10 pl-[5vw] pt-14 lg:flex">
+                    <div className="mb-9 font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-weet-gold-deep">
+                        Lineup · 라인업
+                    </div>
+                    <div ref={sidebarRef} className="custom-scrollbar flex-1 space-y-8 overflow-y-auto pr-4">
                         {(Object.keys(sidebarStructure) as Array<keyof typeof sidebarStructure>).map((key) => {
                             const category = sidebarStructure[key];
                             const isExpanded = expandedCategories.includes(key);
@@ -410,23 +423,18 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
 
                             if (!hasItems) return null;
 
+                            // 활성 카테고리: 현재 보고 있는 제품이 속한 카테고리
+                            const activeData = products.find(p => p.id === activeProduct);
+                            const isActiveCat = activeData?.sizeCategory === key;
+
                             return (
                                 <div key={key} className="group">
-                                    <div
-                                        className="flex items-center justify-between cursor-pointer mb-4 select-none group/header py-2" // Added padding for click area
+                                    <h2
                                         onClick={() => handleCategoryClick(key)}
+                                        className={`m-0 mb-3 cursor-pointer font-bold tracking-[-0.04em] transition-all duration-300 group-hover:translate-x-1.5 ${key === 'DESIGN' ? 'text-[26px] tracking-[-0.02em]' : 'text-[40px]'} ${isActiveCat ? 'text-weet-ink' : 'text-[#C9BFAE] group-hover:text-weet-muted'}`}
                                     >
-                                        <div className="transiton-transform duration-300 group-hover/header:translate-x-2"> {/* Increased movement */}
-                                            <h2 className={`text-5xl font-black tracking-tighter transition-colors duration-300 ${isExpanded ? 'text-black' : 'text-gray-200 group-hover:text-gray-400'}`}> {/* Larger font, lighter inactive color */}
-                                                {category.label}
-                                            </h2>
-                                            {category.subtitle && (
-                                                <p className="text-[10px] text-gray-400 mt-1 font-medium tracking-wide uppercase opacity-0 group-hover/header:opacity-100 transition-opacity transformtranslate-y-1 group-hover/header:translate-y-0">
-                                                    {category.subtitle}
-                                                </p>
-                                            )}
-                                        </div>
-                                    </div>
+                                        {category.label}
+                                    </h2>
 
                                     <AnimatePresence>
                                         {isExpanded && (
@@ -437,72 +445,36 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                                 transition={{ duration: 0.3, ease: "easeInOut" }}
                                                 className="overflow-hidden"
                                             >
-                                                <div className="pl-1 space-y-6 pt-2 pb-4">
+                                                <div className="space-y-5 pb-1 pt-1">
                                                     {/* S만 세부 카테고리(Private/Public) 지원 */}
                                                     {key === 'S' ? (
                                                         <>
                                                             {category.Private && category.Private.length > 0 && (
-                                                                <div className="mb-6">
-                                                                    <div className="flex items-center gap-2 mb-3">
-                                                                        <div className="h-[1px] w-3 bg-gray-300"></div>
-                                                                        <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Private</h3>
+                                                                <div>
+                                                                    <div className="mb-3 flex items-center gap-2">
+                                                                        <span className="h-px w-3 bg-weet-line-2" />
+                                                                        <h3 className="text-[10px] font-semibold uppercase tracking-[0.18em] text-weet-muted">Private</h3>
                                                                     </div>
-                                                                    <ul className="space-y-3 pl-5 border-l border-gray-100">
-                                                                        {category.Private.map((id: string) => (
-                                                                            <li
-                                                                                key={id}
-                                                                                ref={el => { sidebarItemRefs.current[id] = el; }} // Attach Ref
-                                                                                className={`text-[13px] cursor-pointer transition-all duration-200 relative ${activeProduct === id ? 'text-black font-bold translate-x-1' : 'text-gray-400 hover:text-gray-600 hover:translate-x-1'}`}
-                                                                                onClick={() => scrollToProduct(id)}
-                                                                            >
-                                                                                {activeProduct === id && (
-                                                                                    <span className="absolute -left-[21px] top-1.5 w-1.5 h-1.5 bg-[#FEBD16] rounded-full" />
-                                                                                )}
-                                                                                {getProductName(id)}
-                                                                            </li>
-                                                                        ))}
+                                                                    <ul className="ml-1 flex list-none flex-col gap-3 border-l border-weet-line-2 pl-4">
+                                                                        {category.Private.map(renderSidebarItem)}
                                                                     </ul>
                                                                 </div>
                                                             )}
                                                             {category.Public && category.Public.length > 0 && (
                                                                 <div>
-                                                                    <div className="flex items-center gap-2 mb-3">
-                                                                        <div className="h-[1px] w-3 bg-gray-300"></div>
-                                                                        <h3 className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Public</h3>
+                                                                    <div className="mb-3 flex items-center gap-2">
+                                                                        <span className="h-px w-3 bg-weet-line-2" />
+                                                                        <h3 className="text-[10px] font-semibold uppercase tracking-[0.18em] text-weet-muted">Public</h3>
                                                                     </div>
-                                                                    <ul className="space-y-3 pl-5 border-l border-gray-100">
-                                                                        {category.Public.map((id: string) => (
-                                                                            <li
-                                                                                key={id}
-                                                                                ref={el => { sidebarItemRefs.current[id] = el; }} // Attach Ref
-                                                                                className={`text-[13px] cursor-pointer transition-all duration-200 relative ${activeProduct === id ? 'text-black font-bold translate-x-1' : 'text-gray-400 hover:text-gray-600 hover:translate-x-1'}`}
-                                                                                onClick={() => scrollToProduct(id)}
-                                                                            >
-                                                                                {activeProduct === id && (
-                                                                                    <span className="absolute -left-[21px] top-1.5 w-1.5 h-1.5 bg-[#FEBD16] rounded-full" />
-                                                                                )}
-                                                                                {getProductName(id)}
-                                                                            </li>
-                                                                        ))}
+                                                                    <ul className="ml-1 flex list-none flex-col gap-3 border-l border-weet-line-2 pl-4">
+                                                                        {category.Public.map(renderSidebarItem)}
                                                                     </ul>
                                                                 </div>
                                                             )}
                                                         </>
                                                     ) : (
-                                                        <ul className="space-y-3 pl-5 border-l border-gray-100">
-                                                            {category.items?.map((id: string) => (
-                                                                <li
-                                                                    key={id}
-                                                                    ref={el => { sidebarItemRefs.current[id] = el; }} // Attach Ref
-                                                                    className={`text-[13px] cursor-pointer transition-all duration-200 relative ${activeProduct === id ? 'text-black font-bold translate-x-1' : 'text-gray-400 hover:text-gray-600 hover:translate-x-1'}`}
-                                                                    onClick={() => scrollToProduct(id)}
-                                                                >
-                                                                    {activeProduct === id && (
-                                                                        <span className="absolute -left-[21px] top-1.5 w-1.5 h-1.5 bg-[#FEBD16] rounded-full" />
-                                                                    )}
-                                                                    {getProductName(id)}
-                                                                </li>
-                                                            ))}
+                                                        <ul className="ml-1 flex list-none flex-col gap-3 border-l border-weet-line-2 pl-4">
+                                                            {category.items?.map(renderSidebarItem)}
                                                         </ul>
                                                     )}
                                                 </div>
@@ -515,9 +487,9 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                     </div>
                 </aside>
 
-                {/* Mobile Top Navigation */}
-                <div className={`lg:hidden sticky z-40 bg-white/95 backdrop-blur-sm border-b border-gray-100 shadow-sm transition-[top] duration-300 ${isHeaderVisible ? 'top-[70px] md:top-[80px]' : 'top-0'}`}>
-                    <div className="flex overflow-x-auto px-4 py-3 gap-6 no-scrollbar">
+                {/* ===== Mobile Top Navigation ===== */}
+                <div className="sticky top-[72px] z-40 border-b border-weet-line bg-weet-paper/95 backdrop-blur-sm lg:hidden">
+                    <div className="no-scrollbar flex gap-6 overflow-x-auto px-[5vw] py-3">
                         {(Object.keys(sidebarStructure) as Array<keyof typeof sidebarStructure>).map((key) => {
                             const category = sidebarStructure[key];
                             let isActiveCategory = false;
@@ -537,8 +509,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                 <button
                                     key={key}
                                     onClick={() => scrollToProduct(firstProductId)}
-                                    className={`whitespace-nowrap text-sm font-bold transition-colors min-h-[44px] flex items-center px-1 duration-200 hover:text-primary ${isActiveCategory ? 'text-primary' : 'text-gray-500'
-                                        }`}
+                                    className={`flex min-h-[44px] items-center whitespace-nowrap px-1 text-sm font-semibold transition-colors duration-200 hover:text-weet-gold-deep ${isActiveCategory ? 'text-weet-gold-deep' : 'text-weet-muted'}`}
                                 >
                                     {category.label}
                                 </button>
@@ -547,15 +518,15 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                     </div>
                 </div>
 
-                {/* Main Content */}
-                <div className="flex-1 min-h-screen pt-[120px] md:pt-[160px] lg:pt-[140px] px-4 lg:px-20 pb-40 bg-white lg:bg-transparent">
-                    <div className="max-w-5xl mx-auto mb-10 lg:mb-32 text-center lg:text-left mt-4 lg:mt-0">
-                        <h1 className="text-3xl md:text-5xl font-black text-gray-900 mb-4">{t('제품 소개', 'Products', 'Productos')}</h1>
-                        <p className="text-gray-600 text-sm md:text-lg">
-                            {t('작고 단단한 내 집, 필요한 크기와 목적에 맞는 구성을 찾아보세요.', 'Find the right size and layout for your needs.', 'Encuentre el tamaño y la distribución que se ajusten a sus necesidades.')}
+                {/* ===== Main Content ===== */}
+                <main className="min-h-screen flex-1 px-[5vw] pb-40 pt-8 lg:max-w-[1000px] lg:pt-14">
+                    <div className="mb-12 lg:mb-20">
+                        <h1 className="mb-4 text-[clamp(32px,4vw,52px)] font-semibold tracking-[-0.03em]">{t('제품 소개', 'Products', 'Productos')}</h1>
+                        <p className="mb-3.5 max-w-[54ch] text-[clamp(15px,1.4vw,18px)] leading-[1.7] text-weet-sub kr-balance">
+                            {t('작고 단단한 내 집. 필요한 크기와 목적에 맞는 구성을 찾아보세요.', 'Find the right size and layout for your needs.', 'Encuentre el tamaño y la distribución que se ajusten a sus necesidades.')}
                         </p>
                         {products.length > visibleCount && (
-                            <p className="mt-3 text-xs font-semibold text-gray-400 md:text-sm">
+                            <p className="mb-2 text-[13.5px] font-medium text-weet-muted">
                                 {t(
                                     `대표 모델 ${visibleCount}개부터 확인하고 전체 ${products.length}개 라인업으로 이어집니다.`,
                                     `${visibleCount} representative models first, followed by the full ${products.length}-model lineup.`,
@@ -563,15 +534,15 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                 )}
                             </p>
                         )}
-                        <p className="mt-4 text-xs leading-5 text-gray-500 md:text-sm md:leading-6">
+                        <p className="max-w-[60ch] text-[13.5px] leading-[1.7] text-weet-muted kr-balance">
                             {language === 'KO' ? (
                                 <>
                                     라인업 제품은 구성과 마감에 따라 가격이 달라져 상담으로 안내드립니다. 기준 모델(3x6·3x9)의 공개 가격은{' '}
-                                    <Link href="/customize" className="font-bold text-[#0d6e66] underline underline-offset-2">
+                                    <Link href="/customize" className="font-semibold text-weet-gold-deep underline underline-offset-2">
                                         맞춤 구성
                                     </Link>
                                     에서 바로 확인할 수 있고, 운반·설치 등 별도 비용 구성은{' '}
-                                    <Link href="/support#cost" className="font-bold text-[#0d6e66] underline underline-offset-2">
+                                    <Link href="/support#cost" className="font-semibold text-weet-gold-deep underline underline-offset-2">
                                         비용 안내
                                     </Link>
                                     에 정리되어 있습니다.
@@ -579,7 +550,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                             ) : language === 'ES' ? (
                                 <>
                                     Los precios de la gama varían según la configuración. Consulte los precios base publicados en el{' '}
-                                    <Link href="/customize" className="font-bold text-[#0d6e66] underline underline-offset-2">
+                                    <Link href="/customize" className="font-semibold text-weet-gold-deep underline underline-offset-2">
                                         configurador
                                     </Link>
                                     .
@@ -587,7 +558,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                             ) : (
                                 <>
                                     Lineup prices vary by configuration. Check the published base prices in the{' '}
-                                    <Link href="/customize" className="font-bold text-[#0d6e66] underline underline-offset-2">
+                                    <Link href="/customize" className="font-semibold text-weet-gold-deep underline underline-offset-2">
                                         configurator
                                     </Link>
                                     .
@@ -596,39 +567,41 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                         </p>
                     </div>
 
-                    <div className="max-w-5xl mx-auto space-y-12 lg:space-y-[20vh]"> {/* Increased spacing for better scroll detection */}
+                    <div className="flex flex-col gap-20 lg:gap-[120px]">
                         {visibleProducts.map((product) => {
                             // Check if this is the first product of its category to render the anchor
                             const globalIndex = products.findIndex((item) => item.id === product.id);
                             const isFirstOfCategory = globalIndex === 0 || products[globalIndex - 1]?.sizeCategory !== product.sizeCategory;
-                            const categoryId = product.sizeCategory.toLowerCase(); // s, m, l, xl, solution, design
+                            const categoryId = product.sizeCategory.toLowerCase(); // s, m, l, xl, design
+                            const imageCount = (product.subImages?.filter(Boolean).length || 0) + (product.imageUrl ? 1 : 0);
 
                             return (
                                 <div key={product.id} className="relative">
                                     {/* Anchor for Scroll */}
                                     {isFirstOfCategory && (
-                                        <div id={categoryId} className="absolute -top-[140px] invisible" />
+                                        <div id={categoryId} className="invisible absolute -top-[140px]" />
                                     )}
 
-                                    <div
+                                    <article
                                         id={product.id}
                                         ref={(el) => { productRefs.current[product.id] = el; }}
-                                        className="overflow-hidden rounded-lg border border-gray-100 bg-gray-50 shadow-sm scroll-mt-32 lg:border-none lg:bg-transparent lg:p-0 lg:shadow-none"
+                                        className="wt-reveal scroll-mt-[100px] overflow-hidden rounded-[12px] border border-weet-line-2 bg-weet-surface shadow-weet-card lg:overflow-visible lg:rounded-none lg:border-none lg:bg-transparent lg:p-0 lg:shadow-none"
                                     >
                                         <div className="p-5 lg:p-0">
                                             {/* Product Header */}
-                                            <div className="mb-4 lg:mb-8">
-                                                <div className="flex items-baseline gap-4 mb-1 lg:mb-2">
-                                                    <h2 className="text-2xl lg:text-4xl font-bold text-gray-900">{product.name}</h2>
+                                            <div className="mb-5 lg:mb-6">
+                                                <div className="flex items-baseline gap-3.5">
+                                                    <span className="font-mono text-[13px] font-semibold text-weet-gold-deep">{product.sizeCategory}</span>
+                                                    <h2 className="text-[clamp(24px,3vw,38px)] font-semibold tracking-[-0.02em]">{product.name}</h2>
                                                 </div>
                                                 {product.tagline && (
-                                                    <p className="text-sm lg:text-lg text-gray-600">{product.tagline}</p>
+                                                    <p className="mt-2 text-[15px] text-weet-sub kr-balance lg:text-base">{product.tagline}</p>
                                                 )}
                                             </div>
 
-                                            {/* Main Image */}
+                                            {/* Main Image (hover hint + count pill, click → gallery) */}
                                             <div
-                                                className="group relative aspect-[16/9] w-full cursor-pointer overflow-hidden rounded-lg bg-gray-200 lg:mb-12"
+                                                className="group relative mb-8 aspect-[16/9] w-full cursor-pointer overflow-hidden rounded-[10px] bg-weet-line lg:mb-10"
                                                 onClick={() => openGallery(product)}
                                             >
                                                 {product.imageUrl && !failedImages.has(product.imageUrl) ? (
@@ -637,119 +610,116 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                                             src={product.imageUrl}
                                                             alt={product.name}
                                                             fill
-                                                            className="object-cover group-hover:scale-105 transition-transform duration-500"
+                                                            className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.06]"
                                                             sizes="(max-width: 768px) 100vw, 80vw"
                                                             loading={globalIndex < 2 ? 'eager' : 'lazy'}
                                                             onError={() => markImageFailed(product.imageUrl)}
                                                         />
-                                                        {/* Gallery hint icon */}
-                                                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity bg-black/20">
-                                                            <div className="bg-white/80 backdrop-blur-sm p-3 rounded-full">
-                                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 3h6v6" /><path d="M9 21H3v-6" /><path d="M21 3l-7 7" /><path d="M3 21l7-7" /></svg>
-                                                            </div>
+                                                        {/* "자세히 보기" hint pill */}
+                                                        <div className="pointer-events-none absolute bottom-4 left-4 flex translate-y-2.5 items-center gap-1.5 rounded-full bg-weet-paper/95 px-3.5 py-2 text-[12px] font-semibold text-weet-ink opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                                                            {t('자세히 보기', 'View details', 'Ver detalles')} →
                                                         </div>
                                                         {/* Image count indicator if multiple */}
-                                                        {(product.subImages && product.subImages.length > 0) && (
-                                                            <div className="absolute bottom-4 right-4 bg-black/60 text-white px-3 py-1 rounded-full text-xs font-bold backdrop-blur-sm">
-                                                                + {product.subImages.length + 1}
+                                                        {imageCount > 1 && (
+                                                            <div className="pointer-events-none absolute bottom-4 right-4 rounded-full bg-weet-ink/60 px-3 py-1.5 text-[12px] font-semibold text-weet-paper backdrop-blur-sm">
+                                                                + {imageCount}
                                                             </div>
                                                         )}
                                                     </>
                                                 ) : (
-                                                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 text-gray-400">
-                                                        <Home className="w-8 h-8 mb-2 opacity-50" />
-                                                        <span className="text-sm font-bold">제품 사진 준비 중</span>
+                                                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-weet-paper-alt text-weet-muted">
+                                                        <Home className="mb-2 h-8 w-8 opacity-50" />
+                                                        <span className="text-sm font-semibold">{t('제품 사진 준비 중', 'Photo coming soon', 'Foto próximamente')}</span>
                                                     </div>
                                                 )}
                                             </div>
 
                                             {/* Mobile Accordion Toggle */}
                                             <button
-                                                className="w-full mt-4 flex items-center justify-between lg:hidden text-gray-600 font-bold py-2 px-1 hover:text-gray-900"
+                                                className="mt-2 flex w-full items-center justify-between px-1 py-2 font-semibold text-weet-sub hover:text-weet-ink lg:hidden"
                                                 onClick={() => toggleMobileProduct(product.id)}
                                             >
                                                 <span>{expandedMobileProducts.includes(product.id) ? t('상세정보 닫기', 'Hide Details', 'Ocultar detalles') : t('상세정보 보기', 'View Details', 'Ver detalles')}</span>
-                                                <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${expandedMobileProducts.includes(product.id) ? 'rotate-180' : ''}`} />
+                                                <ChevronDown className={`h-5 w-5 transition-transform duration-300 ${expandedMobileProducts.includes(product.id) ? 'rotate-180' : ''}`} />
                                             </button>
                                         </div>
 
                                         {/* Details Grid (Collapsible on Mobile) */}
                                         <div className={`lg:block ${expandedMobileProducts.includes(product.id) ? 'block px-5 pb-5' : 'hidden'} lg:px-0 lg:pb-0`}>
-                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-20">
-                                            {/* Left: Description & Specs */}
-                                            <div className="space-y-8">
-                                                <div>
-                                                    <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">{TEXT.description}</h3>
-                                                    <p className="text-gray-600 leading-relaxed whitespace-pre-line">
-                                                        {product.description}
-                                                    </p>
+                                            <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:gap-14">
+                                                {/* Left: Description & Specs */}
+                                                <div className="flex flex-col gap-8">
+                                                    <div>
+                                                        <h3 className="mb-3.5 border-b border-weet-line-2 pb-2.5 text-base font-semibold text-weet-ink">{TEXT.description}</h3>
+                                                        <p className="whitespace-pre-line text-[14.5px] leading-[1.8] text-weet-sub kr-balance">
+                                                            {product.description}
+                                                        </p>
+                                                    </div>
+
+                                                    <div>
+                                                        <h3 className="mb-4 border-b border-weet-line-2 pb-2.5 text-base font-semibold text-weet-ink">{TEXT.specs}</h3>
+                                                        <dl className="grid grid-cols-2 gap-x-4 gap-y-[18px]">
+                                                            <div>
+                                                                <dt className="text-[12.5px] font-medium text-weet-muted">{TEXT.price}</dt>
+                                                                <dd className="mt-1 text-[14px] text-weet-ink">{product.details.price}</dd>
+                                                            </div>
+                                                            <div>
+                                                                <dt className="text-[12.5px] font-medium text-weet-muted">{TEXT.size}</dt>
+                                                                <dd className="mt-1 text-[14px] text-weet-ink">{product.details.size}</dd>
+                                                            </div>
+                                                            <div>
+                                                                <dt className="text-[12.5px] font-medium text-weet-muted">{TEXT.structure}</dt>
+                                                                <dd className="mt-1 text-[14px] text-weet-ink">{product.details.structure}</dd>
+                                                            </div>
+                                                            <div>
+                                                                <dt className="text-[12.5px] font-medium text-weet-muted">{TEXT.roof}</dt>
+                                                                <dd className="mt-1 text-[14px] text-weet-ink">{product.details.roofType}</dd>
+                                                            </div>
+                                                            <div>
+                                                                <dt className="text-[12.5px] font-medium text-weet-muted">{TEXT.exterior}</dt>
+                                                                <dd className="mt-1 text-[14px] text-weet-ink">{product.details.exterior}</dd>
+                                                            </div>
+                                                            <div>
+                                                                <dt className="text-[12.5px] font-medium text-weet-muted">{TEXT.interior}</dt>
+                                                                <dd className="mt-1 text-[14px] text-weet-ink">{product.details.interior}</dd>
+                                                            </div>
+                                                        </dl>
+                                                    </div>
                                                 </div>
 
+                                                {/* Right: Floor Plan + CTA */}
                                                 <div>
-                                                    <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">{TEXT.specs}</h3>
-                                                    <dl className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
-                                                        <div className="sm:col-span-1">
-                                                            <dt className="text-sm font-medium text-gray-500">{TEXT.price}</dt>
-                                                            <dd className="mt-1 text-sm text-gray-900">{product.details.price}</dd>
-                                                        </div>
-                                                        <div className="sm:col-span-1">
-                                                            <dt className="text-sm font-medium text-gray-500">{TEXT.size}</dt>
-                                                            <dd className="mt-1 text-sm text-gray-900">{product.details.size}</dd>
-                                                        </div>
-                                                        <div className="sm:col-span-1">
-                                                            <dt className="text-sm font-medium text-gray-500">{TEXT.structure}</dt>
-                                                            <dd className="mt-1 text-sm text-gray-900">{product.details.structure}</dd>
-                                                        </div>
-                                                        <div className="sm:col-span-1">
-                                                            <dt className="text-sm font-medium text-gray-500">{TEXT.roof}</dt>
-                                                            <dd className="mt-1 text-sm text-gray-900">{product.details.roofType}</dd>
-                                                        </div>
-                                                        <div className="sm:col-span-1">
-                                                            <dt className="text-sm font-medium text-gray-500">{TEXT.exterior}</dt>
-                                                            <dd className="mt-1 text-sm text-gray-900">{product.details.exterior}</dd>
-                                                        </div>
-                                                        <div className="sm:col-span-1">
-                                                            <dt className="text-sm font-medium text-gray-500">{TEXT.interior}</dt>
-                                                            <dd className="mt-1 text-sm text-gray-900">{product.details.interior}</dd>
-                                                        </div>
-                                                    </dl>
+                                                    <h3 className="mb-3.5 border-b border-weet-line-2 pb-2.5 text-base font-semibold text-weet-ink">{TEXT.floorPlan}</h3>
+                                                    <div className="relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-[10px] border border-weet-line-2 bg-white">
+                                                        {product.floorPlan.src && !failedImages.has(product.floorPlan.src) ? (
+                                                            <div className="relative h-full w-full p-4">
+                                                                <Image
+                                                                    src={product.floorPlan.src}
+                                                                    alt="Floor Plan"
+                                                                    fill
+                                                                    className="object-contain"
+                                                                    sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 36vw"
+                                                                    onError={() => markImageFailed(product.floorPlan.src)}
+                                                                />
+                                                            </div>
+                                                        ) : (
+                                                            <div className="text-[13px] text-weet-muted">{TEXT.floorPlanWaiting}</div>
+                                                        )}
+                                                    </div>
+
+                                                    {/* Soft CTA */}
+                                                    <div className="mt-7 flex justify-center border-t border-weet-line-2 pt-5 lg:justify-start">
+                                                        <Link
+                                                            href="/customize"
+                                                            className="inline-flex items-center gap-2 rounded-[6px] border border-weet-line-2 bg-white px-5 py-3 text-sm font-semibold text-weet-ink transition-transform duration-150 hover:-translate-y-0.5"
+                                                        >
+                                                            {t('구성 상담 시작하기', 'Start a consultation', 'Iniciar una consulta')} →
+                                                        </Link>
+                                                    </div>
                                                 </div>
                                             </div>
-
-                                            {/* Right: Floor Plan */}
-                                            <div>
-                                                <h3 className="text-lg font-bold text-gray-900 mb-4 border-b border-gray-200 pb-2">{TEXT.floorPlan}</h3>
-                                                <div className="relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-lg border border-gray-100">
-                                                    {product.floorPlan.src && !failedImages.has(product.floorPlan.src) ? (
-                                                        <div className="relative w-full h-full">
-                                                            <Image
-                                                                src={product.floorPlan.src}
-                                                                alt="Floor Plan"
-                                                                fill
-                                                                className="object-contain"
-                                                                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 36vw"
-                                                                onError={() => markImageFailed(product.floorPlan.src)}
-                                                            />
-                                                        </div>
-                                                    ) : (
-                                                        <div className="text-gray-400 text-sm">{TEXT.floorPlanWaiting}</div>
-                                                    )}
-                                            </div>
-
-                                            {/* Soft CTA */}
-                                            <div className="mt-8 lg:mt-12 pt-6 border-t border-gray-100 flex justify-center lg:justify-start">
-                                                <a
-                                                    href="/customize"
-                                                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white border border-gray-200 text-gray-900 font-bold text-sm transition-colors hover:bg-gray-50"
-                                                >
-                                                    {t('구성 상담 시작하기', 'Start a consultation', 'Iniciar una consulta')}
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-                                                </a>
-                                            </div>
                                         </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    </article>
                                 </div>
                             );
                         })}
@@ -759,17 +729,17 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                 <button
                                     type="button"
                                     onClick={() => setVisibleCount((current) => Math.min(products.length, current + 8))}
-                                    className="inline-flex h-12 items-center justify-center rounded-lg border border-gray-200 bg-white px-6 text-sm font-bold text-gray-900 transition-colors hover:bg-gray-50"
+                                    className="inline-flex h-12 items-center justify-center rounded-[8px] border border-weet-line-2 bg-white px-6 text-sm font-semibold text-weet-ink transition-colors hover:bg-weet-surface"
                                 >
-                                    더 많은 제품 보기 ({Math.min(products.length, visibleCount + 8)} / {products.length})
+                                    {t('더 많은 제품 보기', 'View more products', 'Ver más productos')} ({Math.min(products.length, visibleCount + 8)} / {products.length})
                                 </button>
                             </div>
                         )}
                     </div>
-                </div>
+                </main>
             </div>
 
-            {/* Gallery Modal */}
+            {/* Gallery Modal (Lightbox) */}
             <AnimatePresence>
                 {galleryOpen && (
                     <motion.div
@@ -777,22 +747,21 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setGalleryOpen(false)}
-                        className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4 md:p-10"
+                        className="fixed inset-0 z-[100] flex items-center justify-center bg-weet-ink-deep/95 p-4 md:p-10"
                     >
                         {/* Close Button */}
                         <button
                             type="button"
                             aria-label={t('갤러리 닫기', 'Close gallery', 'Cerrar galería')}
-                            className="absolute top-4 right-4 md:top-8 md:right-8 text-white/50 hover:text-white z-50 p-2"
+                            className="absolute right-4 top-4 z-50 p-2 text-weet-paper/60 transition-colors hover:text-weet-paper md:right-8 md:top-8"
                             onClick={() => setGalleryOpen(false)}
                         >
-                            <X className="w-8 h-8 md:w-10 md:h-10" />
+                            <X className="h-8 w-8 md:h-10 md:w-10" />
                         </button>
 
-                        <div className="relative w-full max-w-7xl max-h-full flex flex-col items-center justify-center" onClick={e => e.stopPropagation()}>
-
+                        <div className="relative flex max-h-full w-full max-w-7xl flex-col items-center justify-center" onClick={e => e.stopPropagation()}>
                             {/* Main Display */}
-                            <div className="relative w-full aspect-[16/9] md:aspect-[16/10] max-h-[80vh] bg-black">
+                            <div className="relative aspect-[16/9] max-h-[80vh] w-full bg-black md:aspect-[16/10]">
                                 {currentGalleryImages[currentImageIndex] && !failedImages.has(currentGalleryImages[currentImageIndex]) ? (
                                     <Image
                                         src={currentGalleryImages[currentImageIndex]}
@@ -803,9 +772,9 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                         onError={() => markImageFailed(currentGalleryImages[currentImageIndex])}
                                     />
                                 ) : (
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white/60">
-                                        <Home className="w-8 h-8 mb-2 opacity-50" />
-                                        <span className="text-sm font-bold">이미지 점검 필요</span>
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center text-weet-paper/60">
+                                        <Home className="mb-2 h-8 w-8 opacity-50" />
+                                        <span className="text-sm font-semibold">{t('이미지 점검 필요', 'Image unavailable', 'Imagen no disponible')}</span>
                                     </div>
                                 )}
 
@@ -813,34 +782,34 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                 <button
                                     type="button"
                                     aria-label={t('이전 이미지', 'Previous image', 'Imagen anterior')}
-                                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-3 rounded-full text-white backdrop-blur-md transition-all"
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-weet-paper/10 p-3 text-weet-paper backdrop-blur-md transition-all hover:bg-weet-paper/20"
                                     onClick={prevImage}
                                 >
-                                    <ChevronDown className="w-8 h-8 rotate-90" />
+                                    <ChevronDown className="h-8 w-8 rotate-90" />
                                 </button>
                                 <button
                                     type="button"
                                     aria-label={t('다음 이미지', 'Next image', 'Imagen siguiente')}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 hover:bg-white/20 p-3 rounded-full text-white backdrop-blur-md transition-all"
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-weet-paper/10 p-3 text-weet-paper backdrop-blur-md transition-all hover:bg-weet-paper/20"
                                     onClick={nextImage}
                                 >
-                                    <ChevronDown className="w-8 h-8 -rotate-90" />
+                                    <ChevronDown className="h-8 w-8 -rotate-90" />
                                 </button>
                             </div>
 
                             {/* Thumbnails */}
-                            <div className="mt-6 flex gap-3 overflow-x-auto max-w-full pb-2 hide-scrollbar px-4">
+                            <div className="hide-scrollbar mt-6 flex max-w-full gap-3 overflow-x-auto px-4 pb-2">
                                 {currentGalleryImages.map((img, idx) => (
                                     <button
                                         key={idx}
                                         type="button"
                                         aria-label={t(`이미지 ${idx + 1} 보기`, `View image ${idx + 1}`, `Ver imagen ${idx + 1}`)}
                                         onClick={() => setCurrentImageIndex(idx)}
-                                        className={`relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all ${currentImageIndex === idx ? 'border-[#FEBD16] opacity-100' : 'border-transparent opacity-50 hover:opacity-100'}`}
+                                        className={`relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border-2 transition-all md:h-24 md:w-24 ${currentImageIndex === idx ? 'border-weet-gold opacity-100' : 'border-transparent opacity-50 hover:opacity-100'}`}
                                     >
                                         {failedImages.has(img) ? (
-                                            <div className="absolute inset-0 flex items-center justify-center bg-gray-800 text-gray-400">
-                                                <Home className="w-5 h-5 opacity-50" />
+                                            <div className="absolute inset-0 flex items-center justify-center bg-weet-ink text-weet-muted">
+                                                <Home className="h-5 w-5 opacity-50" />
                                             </div>
                                         ) : (
                                             <Image

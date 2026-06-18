@@ -38,7 +38,7 @@ export default function DeleteProductButton({ productId }: DeleteProductButtonPr
             type="button"
             onClick={handleDelete}
             disabled={loading}
-            className="p-2 text-gray-400 hover:text-red-600 transition-colors disabled:opacity-50"
+            className="p-2 text-[#a1a1aa] hover:text-[#dc2626] transition-colors disabled:opacity-50"
             aria-label="제품 삭제"
         >
             {loading ? (

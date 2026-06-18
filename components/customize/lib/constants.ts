@@ -1,5 +1,4 @@
 import { floorplanSize } from '@/lib/customize/priceCalculator';
-import type { CustomizeOption } from '@/lib/customize/types';
 
 export const PLAN_LABEL_POSITIONS: Record<string, (box: ReturnType<typeof floorplanSize>, index: number) => { x: number; y: number }> = {
   exterior: (box) => ({ x: box.x + 58, y: box.y + box.height + 22 }),
@@ -57,8 +56,8 @@ export type ConsultationDraft = {
   memo: string;
 };
 
-export const inputClass = 'h-11 rounded-lg border-gray-300 bg-customize-sand text-sm focus-visible:ring-customize-bark';
-export const selectClass = 'h-11 w-full rounded-lg border border-gray-300 bg-customize-sand px-3 text-sm outline-none focus:ring-2 focus:ring-customize-bark/30';
+export const inputClass = 'h-11 rounded-lg border-gray-300 bg-weet-surface text-sm focus-visible:ring-weet-gold-deep';
+export const selectClass = 'h-11 w-full rounded-lg border border-gray-300 bg-weet-surface px-3 text-sm outline-none focus:ring-2 focus:ring-weet-gold-deep/30';
 
 export type FloorplanBox = ReturnType<typeof floorplanSize>;
 // 도면 외벽 스트로크(12px)가 박스 경계 바깥으로 6px 나가므로 클립에 여유를 둔다.

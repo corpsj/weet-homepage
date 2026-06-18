@@ -19,26 +19,26 @@ export function OptionCard({
   return (
     <div
       className={cn(
-        'group relative rounded-lg border bg-customize-sand transition-all hover:shadow-sm',
-        selected ? 'border-customize-ink shadow-sm ring-1 ring-customize-ink' : 'border-customize-taupe hover:border-customize-mushroom'
+        'group relative rounded-lg border bg-weet-surface transition-all hover:shadow-weet-card',
+        selected ? 'border-weet-ink shadow-weet-card ring-1 ring-weet-ink' : 'border-weet-line-2 hover:border-weet-muted'
       )}
     >
       <button
         type="button"
         onClick={onToggle}
-        className="flex min-h-[44px] w-full items-center gap-2.5 rounded-lg px-2.5 py-2 pr-9 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-customize-bark"
+        className="flex min-h-[44px] w-full items-center gap-2.5 rounded-lg px-2.5 py-2 pr-9 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep"
         aria-pressed={selected}
       >
         <span
           className={cn(
             'flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition-colors',
-            selected ? 'border-customize-teal bg-customize-teal text-white' : 'border-customize-ash bg-customize-sand group-hover:border-customize-slate'
+            selected ? 'border-weet-forest bg-weet-forest text-white' : 'border-weet-line-2 bg-weet-surface group-hover:border-weet-muted'
           )}
         >
           {selected && <Check className="h-3 w-3" />}
         </span>
         {SWATCH_CATEGORY_KEYS.has(option.categoryKey) && (
-          <span aria-hidden="true" className="relative h-9 w-9 shrink-0 overflow-hidden rounded-md border border-customize-shell bg-customize-dune">
+          <span aria-hidden="true" className="relative h-9 w-9 shrink-0 overflow-hidden rounded-md border border-weet-line bg-weet-paper-alt">
             <Image
               src={`/images/customize/options/${option.key || option.id}.webp?v=${OPTION_IMAGE_VERSION}`}
               alt=""
@@ -52,23 +52,23 @@ export function OptionCard({
         )}
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between gap-2">
-            <span className="truncate text-sm font-bold text-customize-ink">{option.nameKo}</span>
+            <span className="truncate text-sm font-bold text-weet-ink">{option.nameKo}</span>
             <div className="flex shrink-0 items-center gap-2">
               {option.priceType === 'included' ? (
-                <span className="rounded bg-customize-dune/50 px-1.5 py-0.5 text-[10px] font-black text-customize-slate">
+                <span className="rounded bg-weet-paper-alt/60 px-1.5 py-0.5 text-[10px] font-black text-weet-muted">
                   기본 포함
                 </span>
               ) : option.priceType === 'consult' ? (
-                <span className="rounded bg-customize-linen px-1.5 py-0.5 text-[10px] font-black text-customize-amber">{COPY.consultNeeded}</span>
+                <span className="rounded bg-weet-gold/10 px-1.5 py-0.5 text-[10px] font-black text-weet-gold-deep">{COPY.consultNeeded}</span>
               ) : (
-                <span className="text-xs font-bold text-customize-bronze-dark">
+                <span className="text-xs font-bold text-weet-gold-deep">
                   {optionPriceDisplay(option)}
                 </span>
               )}
             </div>
           </div>
           {option.shortDescriptionKo && (
-            <span className="mt-0.5 block truncate text-[11px] text-customize-slate">{option.shortDescriptionKo}</span>
+            <span className="mt-0.5 block truncate text-[11px] text-weet-muted">{option.shortDescriptionKo}</span>
           )}
         </div>
       </button>
@@ -80,7 +80,7 @@ export function OptionCard({
             event.stopPropagation();
             onInfo();
           }}
-          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-customize-slate opacity-100 transition-opacity hover:text-customize-ink focus:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-customize-bark md:opacity-0 md:group-hover:opacity-100"
+          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-weet-muted opacity-100 transition-opacity hover:text-weet-ink focus:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep md:opacity-0 md:group-hover:opacity-100"
           aria-label="옵션 상세 보기"
         >
           <Info className="h-4 w-4" />

@@ -62,9 +62,9 @@ function GridCard({
     const readinessScore = getProductReadinessScore(product, imageBroken);
 
     return (
-        <div className="group flex flex-col overflow-hidden rounded-md border border-[#e5e5df] bg-white shadow-sm transition-colors hover:border-[#cfcfcf]">
+        <div className="group flex flex-col overflow-hidden rounded-[12px] border border-admin-line bg-white shadow-sm transition-colors hover:border-admin-line-2">
             {/* Image Area */}
-            <div className="relative aspect-[4/3] overflow-hidden bg-[#f4f4f1]">
+            <div className="relative aspect-[4/3] overflow-hidden bg-[#f4f4f5]">
                 {imageUrl && !imageBroken ? (
                     <Image
                         src={imageUrl}
@@ -76,7 +76,7 @@ function GridCard({
                         onError={() => setImageBroken(true)}
                     />
                 ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                    <div className="absolute inset-0 flex items-center justify-center text-admin-muted">
                         {imageUrl ? '이미지 오류' : '이미지 점검 필요'}
                     </div>
                 )}
@@ -105,8 +105,8 @@ function GridCard({
             <div className="flex flex-1 flex-col p-4">
                 <div className="mb-2 flex items-start justify-between">
                     <div>
-                        <h3 className="font-bold text-gray-900 line-clamp-1">{product.name}</h3>
-                        <p className="text-xs text-gray-500 mt-0.5">
+                        <h3 className="font-bold text-admin-ink line-clamp-1">{product.name}</h3>
+                        <p className="text-xs text-admin-muted mt-0.5">
                             {product.size_category} / {product.sub_category}
                         </p>
                     </div>
@@ -121,8 +121,8 @@ function GridCard({
                     </ConsoleStatusPill>
                 </div>
 
-                <div className="mt-auto flex items-center justify-between border-t border-[#f0f0ec] pt-4">
-                    <span className="text-sm font-medium text-gray-900">
+                <div className="mt-auto flex items-center justify-between border-t border-[#f1f1f3] pt-4">
+                    <span className="text-sm font-semibold text-admin-ink">
                         {product.price || '가격 미정'}
                     </span>
                     <div className="flex items-center gap-2">
@@ -149,10 +149,10 @@ function ListRow({
     const readinessScore = getProductReadinessScore(product, imageBroken);
 
     return (
-        <div className="group grid gap-4 rounded-md border border-[#e5e5df] bg-white p-4 shadow-sm transition-colors hover:border-[#cfcfcf] md:grid-cols-[48px_80px_minmax(180px,1fr)_120px_100px_96px] md:items-center">
+        <div className="group grid gap-4 rounded-[12px] border border-admin-line bg-white p-4 shadow-sm transition-colors hover:border-admin-line-2 md:grid-cols-[48px_80px_minmax(180px,1fr)_120px_100px_96px] md:items-center">
             <ReadinessRing score={readinessScore} />
             {/* Thumbnail */}
-            <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-md border border-[#e5e5df] bg-[#f4f4f1]">
+            <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-[9px] border border-admin-line-2 bg-[#f4f4f5]">
                 {imageUrl && !imageBroken ? (
                     <Image
                         src={imageUrl}
@@ -164,7 +164,7 @@ function ListRow({
                         onError={() => setImageBroken(true)}
                     />
                 ) : (
-                    <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-xs">
+                    <div className="absolute inset-0 flex items-center justify-center text-admin-muted text-xs">
                         {imageUrl ? '이미지 오류' : '이미지 없음'}
                     </div>
                 )}
@@ -172,8 +172,8 @@ function ListRow({
 
             {/* Info */}
             <div className="flex-1 min-w-0">
-                <h3 className="font-bold text-gray-900 truncate">{product.name}</h3>
-                <p className="text-sm text-gray-500">
+                <h3 className="font-bold text-admin-ink truncate">{product.name}</h3>
+                <p className="text-sm text-admin-muted">
                     {product.size_category} / {product.sub_category}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-1.5">
@@ -187,7 +187,7 @@ function ListRow({
             </div>
 
             {/* Price */}
-            <div className="text-sm font-medium text-gray-900 flex-shrink-0">
+            <div className="text-sm font-semibold text-admin-ink flex-shrink-0">
                 {product.price || '가격 미정'}
             </div>
 
@@ -307,17 +307,17 @@ export default function ProductGrid({
 
                 <ConsolePanel className="p-4">
                     <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-                        <div className="flex items-center bg-[#f4f4f1] rounded-md border border-[#e5e5df] p-1">
+                        <div className="flex items-center bg-[#f4f4f5] rounded-[9px] border border-admin-line-2 p-1">
                         <button
                             onClick={() => setViewMode('grid')}
-                            className={`p-2 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                            className={`p-2 rounded-[7px] transition-colors ${viewMode === 'grid' ? 'bg-white text-admin-accent shadow-sm' : 'text-admin-muted hover:text-admin-ink'}`}
                             aria-label="그리드 보기"
                         >
                             <LayoutGrid className="w-4 h-4" />
                         </button>
                         <button
                             onClick={() => setViewMode('list')}
-                            className={`p-2 rounded-md transition-colors ${viewMode === 'list' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                            className={`p-2 rounded-[7px] transition-colors ${viewMode === 'list' ? 'bg-white text-admin-accent shadow-sm' : 'text-admin-muted hover:text-admin-ink'}`}
                             aria-label="목록 보기"
                         >
                             <List className="w-4 h-4" />
@@ -383,8 +383,8 @@ export default function ProductGrid({
 
             {/* No Data */}
             {filteredProducts.length === 0 && (
-                <div className="mb-8 rounded-md border border-dashed border-[#d8d8d2] bg-white py-20 text-center">
-                    <p className="text-gray-500">등록된 제품이 없습니다.</p>
+                <div className="mb-8 rounded-[12px] border border-dashed border-admin-line-2 bg-white py-20 text-center">
+                    <p className="text-admin-muted">등록된 제품이 없습니다.</p>
                 </div>
             )}
 

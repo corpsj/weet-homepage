@@ -130,7 +130,7 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
     if (loading && projects.length === 0) {
         return (
             <div className="flex items-center justify-center h-64">
-                <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
+                <Loader2 className="w-8 h-8 animate-spin text-[#a1a1aa]" />
             </div>
         );
     }
@@ -169,10 +169,10 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
             </div>
 
             <ConsolePanel>
-                <div className="flex flex-col gap-3 border-b border-[#e5e5df] bg-[#f4f4f1] p-4 md:flex-row md:items-center md:justify-between">
+                <div className="flex flex-col gap-3 border-b border-admin-line bg-[#fafafb] p-4 md:flex-row md:items-center md:justify-between">
                     <div>
-                        <p className="text-xs font-bold text-[#8a6a12]">IMAGE HEALTH</p>
-                        <p className="mt-1 text-sm font-semibold text-[#111111]">{visibleSummary.withImages.toLocaleString('ko-KR')}건이 유효한 대표 이미지를 사용 중입니다.</p>
+                        <p className="text-xs font-bold uppercase tracking-[0.06em] text-admin-accent">IMAGE HEALTH</p>
+                        <p className="mt-1 text-sm font-semibold text-admin-ink">{visibleSummary.withImages.toLocaleString('ko-KR')}건이 유효한 대표 이미지를 사용 중입니다.</p>
                     </div>
                     <input
                         value={searchTerm}
@@ -181,7 +181,7 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
                         className={`${consoleInputClass} w-full md:w-72`}
                     />
                 </div>
-                <div className="grid grid-cols-[72px_88px_minmax(180px,1fr)_110px_160px_120px_120px] gap-4 border-b border-[#e5e5df] bg-[#fbfbfa] px-4 py-3 text-xs font-bold text-gray-500 max-lg:hidden">
+                <div className="grid grid-cols-[72px_88px_minmax(180px,1fr)_110px_160px_120px_120px] gap-4 border-b border-admin-line bg-[#fafafb] px-4 py-3 text-xs font-bold text-[#a1a1aa] max-lg:hidden">
                     <span>준비도</span>
                     <span>이미지</span>
                     <span>프로젝트</span>
@@ -197,14 +197,14 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
                     return (
                         <div
                             key={project.id}
-                            className="grid gap-4 border-b border-[#f0f0ec] px-4 py-4 last:border-b-0 lg:grid-cols-[72px_88px_minmax(180px,1fr)_110px_160px_120px_120px] lg:items-center"
+                            className="grid gap-4 border-b border-[#f1f1f3] px-4 py-4 transition-colors last:border-b-0 hover:bg-[#fafafb] lg:grid-cols-[72px_88px_minmax(180px,1fr)_110px_160px_120px_120px] lg:items-center"
                         >
                             <div className="flex items-center justify-between lg:block">
-                                <span className="text-xs font-bold text-gray-400 lg:hidden">준비도</span>
+                                <span className="text-xs font-bold text-[#a1a1aa] lg:hidden">준비도</span>
                                 <ReadinessRing score={readinessScore(publicIssues)} />
                             </div>
 
-                            <div className="relative h-20 w-20 overflow-hidden rounded-md border border-[#e5e5df] bg-[#f4f4f1]">
+                            <div className="relative h-20 w-20 overflow-hidden rounded-[9px] border border-admin-line bg-[#f4f4f5]">
                                 {heroImage ? (
                                     <Image
                                         src={heroImage}
@@ -215,14 +215,14 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
                                         className="object-cover"
                                     />
                                 ) : (
-                                    <div className="absolute inset-0 flex items-center justify-center px-2 text-center text-xs font-semibold text-gray-400">
+                                    <div className="absolute inset-0 flex items-center justify-center px-2 text-center text-xs font-semibold text-[#a1a1aa]">
                                         {project.images?.[0] ? 'URL 확인' : '이미지 없음'}
                                     </div>
                                 )}
                             </div>
 
                             <div className="min-w-0">
-                                <h3 className="truncate font-semibold text-gray-900">{project.title}</h3>
+                                <h3 className="truncate font-semibold text-admin-ink">{project.title}</h3>
                                 <div className="mt-2 flex flex-wrap gap-1.5">
                                     {publicIssues.length === 0 ? (
                                         <ConsoleStatusPill tone="success">공개 가능</ConsoleStatusPill>
@@ -246,7 +246,7 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
                                 <ConsoleStatusPill tone={statusColor(project.status)}>{statusLabel(project.status)}</ConsoleStatusPill>
                             </div>
 
-                            <div className="space-y-1 text-sm text-gray-600">
+                            <div className="space-y-1 text-sm text-admin-muted">
                                 {project.client && (
                                     <p className="flex items-center gap-1.5">
                                         <User className="h-3.5 w-3.5" />
@@ -261,7 +261,7 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
                                 )}
                             </div>
 
-                            <div className="flex items-center gap-1.5 text-sm text-gray-600">
+                            <div className="flex items-center gap-1.5 text-sm text-admin-muted">
                                 <Calendar className="h-3.5 w-3.5" />
                                 {formatKstDate(project.completed_at)}
                             </div>
@@ -278,7 +278,7 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
                                     type="button"
                                     onClick={() => handleDelete(project.id)}
                                     disabled={deleting === project.id}
-                                    className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-red-200 bg-white text-red-600 transition-colors hover:bg-red-50 disabled:opacity-60"
+                                    className="inline-flex h-9 w-9 items-center justify-center rounded-[9px] border border-red-200 bg-white text-red-600 transition-colors hover:bg-red-50 disabled:opacity-60"
                                     aria-label={`${project.title} 삭제`}
                                 >
                                     {deleting === project.id ? (
@@ -294,8 +294,8 @@ export default function AdminProjectsClient({ initialProjects }: AdminProjectsCl
             </ConsolePanel>
 
             {filteredProjects.length === 0 && (
-                <div className="rounded-md border border-dashed border-[#d8d8d2] bg-white py-12 text-center">
-                    <p className="text-gray-500">등록된 프로젝트가 없습니다.</p>
+                <div className="rounded-[12px] border border-dashed border-admin-line-2 bg-white py-12 text-center">
+                    <p className="text-admin-muted">등록된 프로젝트가 없습니다.</p>
                 </div>
             )}
         </div>

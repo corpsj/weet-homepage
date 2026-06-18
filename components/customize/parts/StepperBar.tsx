@@ -17,9 +17,9 @@ export function StepperBar({
   const stepIndex = STEPS.findIndex((s) => s.id === currentStep);
 
   return (
-    <div className="sticky top-14 z-30 border-b border-customize-stone bg-customize-sand/95 backdrop-blur md:top-16 lg:h-[72px]">
+    <div className="sticky top-14 z-30 border-b border-weet-line bg-weet-surface/95 backdrop-blur md:top-16 lg:h-[72px]">
       <div className="mx-auto max-w-[1800px] px-4 py-2 lg:flex lg:h-full lg:items-center lg:px-10 lg:py-0">
-        <p className="mb-1.5 text-[11px] font-bold text-customize-slate lg:hidden">
+        <p className="mb-1.5 text-[11px] font-bold text-weet-muted lg:hidden">
           {stepIndex + 1}/{STEPS.length} 단계 · {STEPS[stepIndex].label}
         </p>
         <ol className="flex w-full items-stretch gap-1 overflow-x-auto pb-0.5 lg:gap-2 lg:overflow-visible" aria-label="구성 진행 단계">
@@ -38,19 +38,19 @@ export function StepperBar({
                   data-state={state}
                   onClick={() => setCurrentStep(step.id)}
                   className={cn(
-                    'flex min-h-10 w-full items-center justify-center gap-1.5 rounded-md border px-2 py-1.5 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-customize-bark lg:justify-start lg:px-3',
-                    isCurrent && 'border-customize-ink bg-customize-ink text-customize-sand',
-                    isComplete && 'border-customize-clay bg-customize-dune text-customize-espresso hover:border-customize-mushroom',
-                    state === 'upcoming' && 'border-customize-shell bg-customize-sand text-customize-slate hover:border-customize-mushroom hover:text-customize-ink'
+                    'flex min-h-10 w-full items-center justify-center gap-1.5 rounded-md border px-2 py-1.5 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep lg:justify-start lg:px-3',
+                    isCurrent && 'border-weet-ink bg-weet-ink text-weet-paper',
+                    isComplete && 'border-weet-line-2 bg-weet-paper-alt text-weet-sub hover:border-weet-muted',
+                    state === 'upcoming' && 'border-weet-line bg-weet-surface text-weet-muted hover:border-weet-muted hover:text-weet-ink'
                   )}
                 >
                   <span
                     aria-hidden="true"
                     className={cn(
                       'flex h-5 w-5 shrink-0 items-center justify-center rounded-full border text-[10px] font-black',
-                      isCurrent && 'border-customize-sand/60 bg-customize-sand text-customize-ink',
-                      isComplete && 'border-customize-teal bg-customize-teal text-white',
-                      state === 'upcoming' && 'border-customize-clay bg-transparent text-customize-slate'
+                      isCurrent && 'border-weet-surface/60 bg-weet-surface text-weet-ink',
+                      isComplete && 'border-weet-forest bg-weet-forest text-white',
+                      state === 'upcoming' && 'border-weet-line-2 bg-transparent text-weet-muted'
                     )}
                   >
                     {isComplete ? <Check className="h-3 w-3" /> : index + 1}
@@ -60,7 +60,7 @@ export function StepperBar({
                     <span
                       className={cn(
                         'hidden truncate text-[10px] font-semibold lg:block',
-                        isCurrent ? 'text-customize-stone' : 'text-customize-mist'
+                        isCurrent ? 'text-weet-line' : 'text-weet-muted'
                       )}
                     >
                       {stepStatusText(step.id, stepCounts[step.id])}
@@ -68,7 +68,7 @@ export function StepperBar({
                   </span>
                 </button>
                 {index < STEPS.length - 1 && (
-                  <span aria-hidden="true" className="hidden h-px w-3 shrink-0 bg-customize-clay lg:block" />
+                  <span aria-hidden="true" className="hidden h-px w-3 shrink-0 bg-weet-line-2 lg:block" />
                 )}
               </li>
             );

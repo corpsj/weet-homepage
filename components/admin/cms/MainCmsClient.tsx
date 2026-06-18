@@ -103,12 +103,12 @@ export default function MainCmsClient({ initialHeroSlides, initialProducts }: Ma
             </div>
 
             <div className="overflow-x-auto">
-                <nav className="inline-flex min-w-max items-center rounded-md border border-[#e5e5df] bg-[#f4f4f1] p-1">
+                <nav className="inline-flex min-w-max items-center rounded-[9px] border border-admin-line-2 bg-[#f4f4f5] p-1">
                     <button
                         onClick={() => setActiveTab('hero')}
-                        className={`inline-flex items-center gap-2 rounded px-4 py-2 text-sm font-bold transition-colors ${activeTab === 'hero'
-                            ? 'bg-white text-[#111111] shadow-sm'
-                            : 'text-gray-500 hover:text-[#111111]'
+                        className={`inline-flex items-center gap-2 rounded-[7px] px-4 py-2 text-sm font-bold transition-colors ${activeTab === 'hero'
+                            ? 'bg-white text-admin-ink shadow-sm'
+                            : 'text-admin-muted hover:text-admin-ink'
                             }`}
                     >
                         <ImageIcon className="h-4 w-4" />
@@ -116,9 +116,9 @@ export default function MainCmsClient({ initialHeroSlides, initialProducts }: Ma
                     </button>
                     <button
                         onClick={() => setActiveTab('signature')}
-                        className={`inline-flex items-center gap-2 rounded px-4 py-2 text-sm font-bold transition-colors ${activeTab === 'signature'
-                            ? 'bg-white text-[#111111] shadow-sm'
-                            : 'text-gray-500 hover:text-[#111111]'
+                        className={`inline-flex items-center gap-2 rounded-[7px] px-4 py-2 text-sm font-bold transition-colors ${activeTab === 'signature'
+                            ? 'bg-white text-admin-ink shadow-sm'
+                            : 'text-admin-muted hover:text-admin-ink'
                             }`}
                     >
                         <CheckCircle2 className="h-4 w-4" />
@@ -242,7 +242,7 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
                 <ConsoleSectionTitle>슬라이드 관리</ConsoleSectionTitle>
                 <button
                     onClick={() => setIsAdding(true)}
-                    className="text-xs text-blue-600 hover:text-blue-700 font-bold flex items-center gap-1"
+                    className="text-xs text-admin-accent hover:text-admin-accent-hover font-bold flex items-center gap-1"
                 >
                     <Plus className="w-4 h-4" /> 새 슬라이드
                 </button>
@@ -273,8 +273,8 @@ function HeroSectionEditor({ slides }: { slides: HeroSlide[] }) {
             </DndContext>
 
             {isAdding && (
-                <div className="border border-[#e5e5df] rounded-md p-4 bg-[#fbfbfa]">
-                    <h4 className="text-sm font-bold text-gray-900 mb-4">새 슬라이드</h4>
+                <div className="border border-admin-line-2 rounded-[11px] p-4 bg-[#fafafb]">
+                    <h4 className="text-sm font-bold text-admin-ink mb-4">새 슬라이드</h4>
                     <HeroSlideForm
                         onSubmit={handleCreate}
                         onCancel={() => setIsAdding(false)}
@@ -336,7 +336,7 @@ function SortableHeroSlideItem({
 
     if (isEditing) {
         return (
-            <div className="border border-[#e5e5df] rounded-md p-4 bg-[#fbfbfa]" style={style} ref={setNodeRef}>
+            <div className="border border-admin-line-2 rounded-[11px] p-4 bg-[#fafafb]" style={style} ref={setNodeRef}>
                 <HeroSlideForm
                     initialData={slide}
                     onSubmit={handleUpdate}
@@ -351,18 +351,18 @@ function SortableHeroSlideItem({
         <div
             ref={setNodeRef}
             style={style}
-            className="grid gap-3 p-3 bg-white rounded-md border border-[#e5e5df] hover:border-gray-300 transition-colors group md:grid-cols-[auto_80px_minmax(0,1fr)_auto] md:items-center"
+            className="grid gap-3 p-3 bg-white rounded-[11px] border border-admin-line hover:border-admin-line-2 transition-colors group md:grid-cols-[auto_80px_minmax(0,1fr)_auto] md:items-center"
         >
             <div
                 {...attributes}
                 {...listeners}
-                className="cursor-move text-gray-400 hover:text-gray-600 p-1 hidden md:block"
+                className="cursor-grab text-[#d4d4d8] hover:text-[#a1a1aa] p-1 hidden md:block"
                 aria-label={`${slide.title} 순서 변경`}
             >
                 <GripVertical className="w-5 h-5" />
             </div>
             <div className="grid grid-cols-[80px_minmax(0,1fr)] gap-3 md:contents">
-                <div className="relative w-20 h-14 bg-gray-100 rounded flex-shrink-0 border border-gray-200 overflow-hidden">
+                <div className="relative w-20 h-14 bg-[#f4f4f5] rounded-[7px] flex-shrink-0 border border-admin-line-2 overflow-hidden">
                     {slide.image_url ? (
                         <Image
                             src={slide.image_url}
@@ -373,15 +373,15 @@ function SortableHeroSlideItem({
                             className="object-cover"
                         />
                     ) : (
-                        <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                        <div className="absolute inset-0 flex items-center justify-center text-[#a1a1aa]">
                             <ImageIcon className="w-5 h-5" />
                         </div>
                     )}
                 </div>
                 <div className="min-w-0 grid gap-2 md:grid-cols-2 md:gap-4">
                     <div className="min-w-0">
-                    <p className="text-[11px] font-bold text-gray-500 mb-0.5">메인 타이틀</p>
-                    <p className="text-sm font-bold text-gray-900 truncate">{slide.title}</p>
+                    <p className="text-[11px] font-bold text-admin-muted mb-0.5">메인 타이틀</p>
+                    <p className="text-sm font-bold text-admin-ink truncate">{slide.title}</p>
                     <div className="mt-1 flex flex-wrap gap-1.5">
                         <ConsoleStatusPill tone={slide.is_active ? 'success' : 'neutral'}>
                             {slide.is_active ? '공개' : '숨김'}
@@ -392,10 +392,10 @@ function SortableHeroSlideItem({
                     </div>
                     </div>
                     <div className="min-w-0">
-                    <p className="text-[11px] font-bold text-gray-500 mb-0.5">서브 타이틀</p>
-                    <p className="text-xs text-gray-600 truncate">{slide.subtitle || '-'}</p>
+                    <p className="text-[11px] font-bold text-admin-muted mb-0.5">서브 타이틀</p>
+                    <p className="text-xs text-[#52525b] truncate">{slide.subtitle || '-'}</p>
                     {slide.link_url && (
-                        <p className="mt-1 flex items-center gap-1 truncate text-[11px] text-gray-400">
+                        <p className="mt-1 flex items-center gap-1 truncate text-[11px] text-[#a1a1aa]">
                             <LinkIcon className="h-3 w-3 shrink-0" />
                             {slide.link_url}
                         </p>
@@ -415,14 +415,14 @@ function SortableHeroSlideItem({
                 </button>
                 <button
                     onClick={() => setIsEditing(true)}
-                    className="px-2 py-1 text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors"
+                    className="px-2 py-1 text-xs font-bold text-admin-muted hover:text-admin-ink transition-colors"
                     aria-label={`${slide.title} 수정`}
                 >
                     수정
                 </button>
                 <button
                     onClick={() => onDelete(slide.id)}
-                    className="p-1.5 text-gray-400 hover:text-red-600 transition-colors"
+                    className="p-1.5 text-[#a1a1aa] hover:text-red-600 transition-colors"
                     aria-label={`${slide.title} 삭제`}
                 >
                     <Trash2 className="w-4 h-4" />
@@ -467,7 +467,7 @@ function HeroSlideForm({
         <form onSubmit={handleSubmit} className="space-y-4">
             <div className="grid gap-6 lg:grid-cols-[192px_minmax(0,1fr)]">
                 <div>
-                    <label className="block text-xs font-bold text-gray-600 mb-2">이미지</label>
+                    <label className="block text-xs font-bold text-admin-muted mb-2">이미지</label>
                     <ImageUpload
                         value={imageUrl}
                         onChange={(url) => {
@@ -477,7 +477,7 @@ function HeroSlideForm({
                         onUploadStart={() => setIsUploading(true)}
                         className="h-32"
                     />
-                    <label className="mt-3 block text-xs font-bold text-gray-600 mb-1">이미지 URL 직접 입력</label>
+                    <label className="mt-3 block text-xs font-bold text-admin-muted mb-1">이미지 URL 직접 입력</label>
                     <input
                         value={imageUrl}
                         onChange={(event) => setImageUrl(event.target.value)}
@@ -488,7 +488,7 @@ function HeroSlideForm({
                 <div className="flex-1 space-y-4">
                     <div className="grid gap-4 md:grid-cols-2">
                         <div>
-                            <label className="block text-xs font-bold text-gray-600 mb-1">메인 타이틀</label>
+                            <label className="block text-xs font-bold text-admin-muted mb-1">메인 타이틀</label>
                             <input
                                 name="title"
                                 defaultValue={initialData?.title}
@@ -496,7 +496,7 @@ function HeroSlideForm({
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-bold text-gray-600 mb-1">서브 타이틀</label>
+                            <label className="block text-xs font-bold text-admin-muted mb-1">서브 타이틀</label>
                             <input
                                 name="subtitle"
                                 defaultValue={initialData?.subtitle || ''}
@@ -505,7 +505,7 @@ function HeroSlideForm({
                         </div>
                     </div>
                     <div>
-                        <label className="block text-xs font-bold text-gray-600 mb-1">클릭 링크 URL (선택)</label>
+                        <label className="block text-xs font-bold text-admin-muted mb-1">클릭 링크 URL (선택)</label>
                         <input
                             name="link_url"
                             defaultValue={initialData?.link_url || ''}
@@ -513,16 +513,16 @@ function HeroSlideForm({
                             className={`${consoleInputClass} w-full`}
                         />
                     </div>
-                    <label className="inline-flex items-center gap-2 rounded-md border border-[#e5e5df] bg-[#fbfbfa] px-3 py-2 text-xs font-bold text-gray-700">
+                    <label className="inline-flex items-center gap-2 rounded-[9px] border border-admin-line-2 bg-[#fafafb] px-3 py-2 text-xs font-bold text-[#3f3f46]">
                         <input
                             type="checkbox"
                             checked={isActive}
                             onChange={(event) => setIsActive(event.target.checked)}
-                            className="h-4 w-4 accent-black"
+                            className="h-4 w-4 accent-admin-accent"
                         />
                         홈 화면에 공개
                     </label>
-                    <div className="rounded-md border border-[#e5e5df] bg-[#fbfbfa] px-3 py-2 text-[11px] font-medium leading-5 text-gray-500">
+                    <div className="rounded-[9px] border border-admin-line-2 bg-[#fafafb] px-3 py-2 text-[11px] font-medium leading-5 text-admin-muted">
                         숨김 상태의 슬라이드는 관리자 목록에 남지만 공개 홈 캐러셀에는 표시되지 않습니다.
                     </div>
                 </div>
@@ -610,7 +610,7 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
         <div className="space-y-6">
             <div>
                 <ConsoleSectionTitle>노출 제품 선택 (최대 10개)</ConsoleSectionTitle>
-                <p className="mt-1 text-xs font-medium leading-5 text-gray-500">
+                <p className="mt-1 text-xs font-medium leading-5 text-admin-muted">
                     공개 상태 제품만 홈 시그니처 라인에 표시됩니다. 비공개 제품은 선택을 해제할 수 있지만 새로 노출할 수 없습니다.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 mt-4">
@@ -621,9 +621,9 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
                             <div
                                 key={product.id}
                                 onClick={() => !isPending && handleToggle(product.id)}
-                                className={`flex items-center gap-3 p-3 rounded-md border cursor-pointer transition-all ${isSelected
-                                    ? 'border-gray-900 bg-[#f4f4f1] shadow-sm'
-                                    : 'border-[#e5e5df] hover:border-gray-400 bg-white'
+                                className={`flex items-center gap-3 p-3 rounded-[11px] border cursor-pointer transition-all ${isSelected
+                                    ? 'border-admin-accent-line bg-admin-accent-soft shadow-sm'
+                                    : 'border-admin-line-2 hover:border-[#d4d4d8] bg-white'
                                     } ${isPending ? 'opacity-70' : ''} ${isInactive && !isSelected ? 'opacity-60' : ''}`}
                                 role="button"
                                 tabIndex={0}
@@ -635,12 +635,12 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
                                     }
                                 }}
                             >
-                                <div className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors ${isSelected ? 'bg-gray-900 border-gray-900' : 'border-gray-300 bg-white'
+                                <div className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-colors ${isSelected ? 'bg-admin-accent border-admin-accent' : 'border-[#d4d4d8] bg-white'
                                     }`}>
                                     {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-sm" />}
                                 </div>
 
-                                <div className="w-10 h-10 bg-gray-100 rounded border border-gray-200 flex-shrink-0 relative overflow-hidden">
+                                <div className="w-10 h-10 bg-[#f4f4f5] rounded-[7px] border border-admin-line-2 flex-shrink-0 relative overflow-hidden">
                                     {product.image_url && !failedThumbnails.has(product.id) ? (
                                         <Image
                                             src={product.image_url}
@@ -651,14 +651,14 @@ function SignatureLineEditor({ products }: { products: Product[] }) {
                                             onError={() => markThumbnailFailed(product.id)}
                                         />
                                     ) : product.image_url ? (
-                                        <div className="absolute inset-0 flex items-center justify-center text-gray-400">
+                                        <div className="absolute inset-0 flex items-center justify-center text-[#a1a1aa]">
                                             <ImageIcon className="w-4 h-4" />
                                         </div>
                                     ) : null}
                                 </div>
 
                                 <div className="min-w-0">
-                                    <p className="text-sm font-bold text-gray-900 truncate">{product.name}</p>
+                                    <p className="text-sm font-bold text-admin-ink truncate">{product.name}</p>
                                     <div className="mt-1 flex flex-wrap gap-1.5">
                                         <ConsoleStatusPill tone={product.is_active ? 'success' : 'neutral'}>
                                             {product.is_active ? '공개' : '비공개'}

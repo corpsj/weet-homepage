@@ -196,9 +196,9 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
 
   if (!currentModel || catalog.models.length === 0) {
     return (
-      <div className="min-h-dvh bg-customize-linen px-6 py-20 text-center text-customize-ink">
+      <div className="min-h-dvh bg-weet-paper px-6 py-20 text-center text-weet-ink">
         <p className="text-lg font-bold">주문 구성을 준비 중입니다.</p>
-        <p className="mt-3 text-sm text-customize-gravel">관리자에서 모델과 옵션을 활성화하면 페이지가 표시됩니다.</p>
+        <p className="mt-3 text-sm text-weet-muted">관리자에서 모델과 옵션을 활성화하면 페이지가 표시됩니다.</p>
       </div>
     );
   }
@@ -207,7 +207,7 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
   const nextStep = currentStepIndex < STEPS.length - 1 ? STEPS[currentStepIndex + 1] : null;
 
   return (
-    <div className="min-h-dvh bg-customize-linen text-customize-ink">
+    <div className="min-h-dvh bg-weet-paper text-weet-ink">
       <ConfiguratorAppBar contactPhone={contactPhone} />
       <StepperBar
         currentStep={currentStep}
@@ -249,7 +249,7 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
           </section>
 
           {/* 모바일/태블릿: 드로어 없이 도면 아래에서 바로 이어지는 인라인 단계 구성 (Tesla 주문 흐름 참고) */}
-          <div id="customize-options" className="scroll-mt-[150px] border-t border-customize-stone bg-customize-sand md:scroll-mt-[162px] lg:hidden">
+          <div id="customize-options" className="scroll-mt-[150px] border-t border-weet-line bg-weet-surface md:scroll-mt-[162px] lg:hidden">
             <OptionsPanel
               catalog={catalog}
               modelId={modelId}
@@ -267,7 +267,7 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
 
           <aside
             data-testid="customize-desktop-rail"
-            className="hidden shrink-0 border-l border-customize-stone bg-customize-sand lg:block lg:w-[400px] xl:w-[460px]"
+            className="hidden shrink-0 border-l border-weet-line bg-weet-surface lg:block lg:w-[400px] xl:w-[460px]"
           >
             <OptionsPanel
               catalog={catalog}
@@ -288,21 +288,21 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
 
       {/* 모바일/태블릿 고정 바: 구성 단계에서만 노출. 검토 단계는 본문에 자체 제출 CTA를 가진다. */}
       {currentStep !== 'review' && nextStep && (
-        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-customize-stone bg-customize-sand/95 px-4 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] shadow-[0_-8px_30px_rgba(55,48,39,0.12)] backdrop-blur lg:hidden">
+        <div className="fixed inset-x-0 bottom-0 z-40 border-t border-weet-line bg-weet-surface/95 px-4 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] shadow-[0_-8px_30px_rgba(55,48,39,0.12)] backdrop-blur lg:hidden">
           <div className="mx-auto flex max-w-[1800px] items-center justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-[11px] font-semibold text-customize-driftwood">{COPY.estimatedAmount}</p>
-              <p className="truncate text-lg font-black text-customize-ink">
+              <p className="text-[11px] font-semibold text-weet-sub">{COPY.estimatedAmount}</p>
+              <p className="truncate text-lg font-black text-weet-ink">
                 <span data-testid="mobile-estimated-total">{estimate ? formatWon(estimate.estimatedTotal) : '-'}</span>
                 {estimate && estimate.consultOptionCount > 0 && (
-                  <span className="ml-1 text-xs font-bold text-customize-amber">+ 상담 {estimate.consultOptionCount}건</span>
+                  <span className="ml-1 text-xs font-bold text-weet-gold-deep">+ 상담 {estimate.consultOptionCount}건</span>
                 )}
               </p>
-              <p className="truncate text-[11px] text-customize-fog">운반/설치 별도 · {COPY.finalQuote}</p>
+              <p className="truncate text-[11px] text-weet-muted">운반/설치 별도 · {COPY.finalQuote}</p>
             </div>
             <Button
               data-testid="mobile-next-cta"
-              className="h-12 shrink-0 bg-customize-ink px-4 text-customize-sand hover:bg-customize-ink-dark"
+              className="h-12 shrink-0 bg-weet-ink px-4 text-weet-paper hover:bg-weet-ink-deep"
               onClick={() => handleStepSelect(nextStep.id)}
             >
               {nextStepCta(currentStep)}

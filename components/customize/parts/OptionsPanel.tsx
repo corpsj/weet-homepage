@@ -58,7 +58,7 @@ export function OptionsPanel({
       {currentStep === 'space' && (
         <section className="mb-6">
           <CategoryHeading title="공간 모델" status="" icon={<Layers className="h-4 w-4" />} />
-          <p className="mb-3 mt-1 text-xs leading-5 text-customize-pebble">설치할 공간의 크기와 목적에 맞는 모델을 선택하세요.</p>
+          <p className="mb-3 mt-1 text-xs leading-5 text-weet-sub">설치할 공간의 크기와 목적에 맞는 모델을 선택하세요.</p>
           <div className="grid gap-2">
             {catalog.models.map((model) => (
               <button
@@ -66,26 +66,26 @@ export function OptionsPanel({
                 type="button"
                 onClick={() => onModelChange(model.id)}
                 className={cn(
-                  'rounded-lg border p-3 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-customize-bark',
+                  'rounded-lg border p-3 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep',
                   model.id === modelId
-                    ? 'border-customize-ink bg-customize-dune shadow-sm'
-                    : 'border-customize-taupe bg-customize-sand hover:border-customize-mushroom'
+                    ? 'border-weet-ink bg-weet-paper-alt shadow-weet-card'
+                    : 'border-weet-line-2 bg-weet-surface hover:border-weet-muted'
                 )}
               >
                 <div className="flex items-start justify-between gap-3">
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
-                      <p className="text-sm font-black text-customize-ink">{model.nameKo}</p>
-                      <span className="rounded-full bg-customize-shell px-2 py-0.5 text-[10px] font-bold text-customize-bronze">
+                      <p className="text-sm font-black text-weet-ink">{model.nameKo}</p>
+                      <span className="rounded-full bg-weet-paper-alt px-2 py-0.5 text-[10px] font-bold text-weet-gold-deep">
                         {model.id === 'compact-3x6' ? '소형 주말주택' : '프리미엄 거주'}
                       </span>
                     </div>
-                    <p className="mt-0.5 text-xs text-customize-pebble">{model.widthM}m x {model.lengthM}m · {model.areaSqm}m²</p>
+                    <p className="mt-0.5 text-xs text-weet-sub">{model.widthM}m x {model.lengthM}m · {model.areaSqm}m²</p>
                   </div>
-                  {model.id === modelId && <Check className="h-4 w-4 shrink-0 text-customize-ink" />}
+                  {model.id === modelId && <Check className="h-4 w-4 shrink-0 text-weet-ink" />}
                 </div>
-                <p className="mt-2 text-sm font-bold text-customize-bronze">
-                  <span className="mr-1.5 text-[11px] font-semibold text-customize-slate">{COPY.basePrice}</span>
+                <p className="mt-2 text-sm font-bold text-weet-gold-deep">
+                  <span className="mr-1.5 text-[11px] font-semibold text-weet-muted">{COPY.basePrice}</span>
                   {formatModelStartPrice(model.basePrice)}
                 </p>
               </button>
@@ -97,12 +97,12 @@ export function OptionsPanel({
       {(currentStep === 'included' || currentStep === 'mood' || currentStep === 'smart') && (
         <>
           {currentStep === 'included' && (
-            <div className="mb-5 rounded-lg bg-customize-dune/50 p-3">
+            <div className="mb-5 rounded-lg bg-weet-paper-alt/60 p-3">
               <div className="mb-1.5 flex items-center gap-2">
-                <ShieldCheck className="h-4 w-4 text-customize-slate" />
-                <p className="text-sm font-bold text-customize-ink">위트 기본 포함 내역</p>
+                <ShieldCheck className="h-4 w-4 text-weet-forest" />
+                <p className="text-sm font-bold text-weet-ink">위트 기본 포함 내역</p>
               </div>
-              <p className="text-xs leading-relaxed text-customize-pebble">
+              <p className="text-xs leading-relaxed text-weet-sub">
                 골조, 단열, 내/외장재, 바닥재, 도어, 창호, 싱크대 등 생활에 필요한 필수 구성요소가 기본 가격에 포함되어 있습니다.
               </p>
             </div>
@@ -116,8 +116,8 @@ export function OptionsPanel({
                 return (
                   <section key={category.id} className="mb-6">
                     <CategoryHeading title={category.nameKo} status="" icon={<Layers className="h-4 w-4" />} />
-                    <div className="mt-2 flex items-center justify-center rounded-lg border border-dashed border-customize-taupe bg-customize-sand py-6">
-                      <p className="text-sm text-customize-slate">현재 선택 가능한 옵션이 없습니다.</p>
+                    <div className="mt-2 flex items-center justify-center rounded-lg border border-dashed border-weet-line-2 bg-weet-surface py-6">
+                      <p className="text-sm text-weet-muted">현재 선택 가능한 옵션이 없습니다.</p>
                     </div>
                   </section>
                 );
@@ -148,7 +148,7 @@ export function OptionsPanel({
               return (
                 <section key={category.id} className="mb-6 scroll-mt-20">
                   <CategoryHeading title={category.nameKo} status={categoryStatus} icon={<Icon className={cn('h-4 w-4', meta?.tone)} />} />
-                  {category.descriptionKo && <p className="mt-1 text-xs leading-5 text-customize-pebble">{category.descriptionKo}</p>}
+                  {category.descriptionKo && <p className="mt-1 text-xs leading-5 text-weet-sub">{category.descriptionKo}</p>}
                   <div className="mt-2 grid gap-1.5">
                     {sortedOptions.map((option) => (
                       <OptionCard
@@ -182,10 +182,10 @@ export function OptionsPanel({
 
   return (
     <div className="flex h-[calc(100dvh-136px)] flex-col overflow-hidden">
-      <div className="border-b border-customize-stone bg-customize-sand/95 px-5 py-3 backdrop-blur">
+      <div className="border-b border-weet-line bg-weet-surface/95 px-5 py-3 backdrop-blur">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-black text-customize-ink">이동식주택 구성</h2>
-          <span className="text-xs font-bold text-customize-slate">{stepIndex + 1} / {STEPS.length} 단계</span>
+          <h2 className="text-lg font-black text-weet-ink">이동식주택 구성</h2>
+          <span className="text-xs font-bold text-weet-muted">{stepIndex + 1} / {STEPS.length} 단계</span>
         </div>
       </div>
 

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 import { buildUtmUrl } from '@/lib/utm/builder';
 import { classifyAcquisition } from '@/lib/analytics/acquisition';
 import { ConsolePanel, ConsoleSectionTitle, consoleInputClass, consoleSelectClass, consolePrimaryButtonClass, consoleSecondaryButtonClass } from '@/components/admin/ConsolePrimitives';
@@ -105,11 +106,11 @@ export default function UtmBuilder() {
     <div className="space-y-6">
       <ConsolePanel className="p-6">
         <ConsoleSectionTitle>기본 설정</ConsoleSectionTitle>
-        <p className="text-sm text-gray-500 mt-1 mb-6">홈 랜딩(/) 기준으로 캠페인 링크를 생성합니다.</p>
+        <p className="mt-1 mb-6 text-sm text-admin-muted">홈 랜딩(/) 기준으로 캠페인 링크를 생성합니다.</p>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-bold text-gray-600 mb-1">Base URL</label>
+            <label className="mb-1 block text-xs font-bold text-admin-muted">Base URL</label>
             <input
               value={baseUrl}
               onChange={(e) => setBaseUrl(e.target.value)}
@@ -118,7 +119,7 @@ export default function UtmBuilder() {
             />
           </div>
           <div>
-            <label className="block text-xs font-bold text-gray-600 mb-1">Path</label>
+            <label className="mb-1 block text-xs font-bold text-admin-muted">Path</label>
             <input
               value={path}
               onChange={(e) => setPath(e.target.value)}
@@ -130,10 +131,10 @@ export default function UtmBuilder() {
       </ConsolePanel>
 
       <ConsolePanel className="p-6">
-        <div className="flex items-start justify-between gap-4 mb-6">
+        <div className="mb-6 flex items-start justify-between gap-4">
           <div>
             <ConsoleSectionTitle>UTM 파라미터</ConsoleSectionTitle>
-            <p className="text-sm text-gray-500 mt-1">`utm_source`, `utm_medium`, `utm_campaign`는 필수입니다.</p>
+            <p className="mt-1 text-sm text-admin-muted">`utm_source`, `utm_medium`, `utm_campaign`는 필수입니다.</p>
           </div>
           <button
             type="button"
@@ -144,9 +145,33 @@ export default function UtmBuilder() {
           </button>
         </div>
 
+        <div className="mb-5">
+          <label className="mb-2 block text-xs font-bold text-admin-muted">유입 소스 프리셋</label>
+          <div className="flex flex-wrap gap-2">
+            {PRESETS.map((p) => {
+              const active = preset === p.label;
+              return (
+                <button
+                  key={p.label}
+                  type="button"
+                  onClick={() => applyPreset(p.label)}
+                  className={cn(
+                    'rounded-full border px-3.5 py-2 text-[13px] font-semibold transition-colors',
+                    active
+                      ? 'border-admin-accent-line bg-admin-accent-soft text-admin-accent'
+                      : 'border-admin-line-2 bg-white text-[#52525b] hover:border-[#d4d4d8] hover:bg-[#f4f4f5]'
+                  )}
+                >
+                  {p.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label className="block text-xs font-bold text-gray-600 mb-1">프리셋</label>
+            <label className="mb-1 block text-xs font-bold text-admin-muted">프리셋</label>
             <select
               value={preset}
               onChange={(e) => applyPreset(e.target.value)}
@@ -162,7 +187,7 @@ export default function UtmBuilder() {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-gray-600 mb-1">utm_source</label>
+              <label className="mb-1 block text-xs font-bold text-admin-muted">utm_source</label>
               <input
                 value={utmSource}
                 onChange={(e) => setUtmSource(e.target.value)}
@@ -170,7 +195,7 @@ export default function UtmBuilder() {
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-gray-600 mb-1">utm_medium</label>
+              <label className="mb-1 block text-xs font-bold text-admin-muted">utm_medium</label>
               <input
                 value={utmMedium}
                 onChange={(e) => setUtmMedium(e.target.value)}
@@ -180,19 +205,19 @@ export default function UtmBuilder() {
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-600 mb-1">utm_campaign</label>
+            <label className="mb-1 block text-xs font-bold text-admin-muted">utm_campaign</label>
             <input
               value={utmCampaign}
               onChange={(e) => setUtmCampaign(e.target.value)}
               placeholder="202512_brand_home"
               className={`${consoleInputClass} w-full`}
             />
-            <p className="text-xs text-gray-500 mt-2">권장: `yyyymm_goal_theme` (예: `202512_brand_home`)</p>
+            <p className="mt-2 text-xs text-admin-muted">권장: `yyyymm_goal_theme` (예: `202512_brand_home`)</p>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-gray-600 mb-1">utm_content (선택)</label>
+              <label className="mb-1 block text-xs font-bold text-admin-muted">utm_content (선택)</label>
               <input
                 value={utmContent}
                 onChange={(e) => setUtmContent(e.target.value)}
@@ -201,7 +226,7 @@ export default function UtmBuilder() {
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-gray-600 mb-1">utm_term (선택)</label>
+              <label className="mb-1 block text-xs font-bold text-admin-muted">utm_term (선택)</label>
               <input
                 value={utmTerm}
                 onChange={(e) => setUtmTerm(e.target.value)}
@@ -216,8 +241,26 @@ export default function UtmBuilder() {
       <ConsolePanel className="p-6">
         <ConsoleSectionTitle>생성 결과</ConsoleSectionTitle>
 
+        {/* 다크 타일 — 2안에서 생성된 링크를 강조 표시 */}
+        <div className="mt-4 rounded-[12px] bg-admin-ink p-5 text-white">
+          <div className="mb-3 flex items-center justify-between gap-3">
+            <span className="text-xs font-semibold text-[#a1a1aa]">생성된 링크</span>
+            <button
+              type="button"
+              onClick={copy}
+              disabled={!canGenerate}
+              className="inline-flex h-[30px] items-center gap-1.5 rounded-[7px] bg-admin-accent px-3 text-xs font-bold text-white transition-colors hover:bg-admin-accent-hover disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              복사
+            </button>
+          </div>
+          <p className="m-0 break-all font-mono text-[12.5px] leading-[1.7] text-[#e4e4e7]">
+            {generatedUrl || '대상 URL과 필수 파라미터를 입력하면 링크가 생성됩니다.'}
+          </p>
+        </div>
+
         <div className="mt-4">
-          <label className="block text-xs font-bold text-gray-600 mb-1">UTM 링크</label>
+          <label className="mb-1 block text-xs font-bold text-admin-muted">UTM 링크</label>
           <div className="flex gap-2">
             <input
               readOnly
@@ -245,26 +288,26 @@ export default function UtmBuilder() {
 
         {preview && (
           <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="p-4 rounded-md border border-[#e5e5df] bg-[#f4f4f1]">
-              <p className="text-[11px] font-bold text-gray-500">예상 채널그룹</p>
-              <p className="text-sm font-bold text-gray-900 mt-1">{preview.channelGroup}</p>
+            <div className="rounded-[12px] border border-admin-line bg-[#fafafb] p-4">
+              <p className="text-[11px] font-bold text-admin-muted">예상 채널그룹</p>
+              <p className="mt-1 text-sm font-bold text-admin-ink">{preview.channelGroup}</p>
             </div>
-            <div className="p-4 rounded-md border border-[#e5e5df] bg-[#f4f4f1]">
-              <p className="text-[11px] font-bold text-gray-500">source / medium</p>
-              <p className="text-sm font-bold text-gray-900 mt-1">
+            <div className="rounded-[12px] border border-admin-line bg-[#fafafb] p-4">
+              <p className="text-[11px] font-bold text-admin-muted">source / medium</p>
+              <p className="mt-1 text-sm font-bold text-admin-ink">
                 {preview.source} / {preview.medium}
               </p>
             </div>
-            <div className="p-4 rounded-md border border-[#e5e5df] bg-[#f4f4f1]">
-              <p className="text-[11px] font-bold text-gray-500">campaign</p>
-              <p className="text-sm font-bold text-gray-900 mt-1">{preview.campaign ?? '-'}</p>
+            <div className="rounded-[12px] border border-admin-line bg-[#fafafb] p-4">
+              <p className="text-[11px] font-bold text-admin-muted">campaign</p>
+              <p className="mt-1 text-sm font-bold text-admin-ink">{preview.campaign ?? '-'}</p>
             </div>
           </div>
         )}
 
-        <div className="mt-6 text-sm text-gray-600 bg-[#f4f4f1] p-4 rounded-md">
-          <p className="font-bold text-gray-900 text-xs mb-2">운영 규칙 요약</p>
-          <ul className="list-disc list-inside space-y-1 text-xs">
+        <div className="mt-6 rounded-[12px] border border-admin-line bg-[#fafafb] p-4 text-sm text-admin-ink">
+          <p className="mb-2 text-xs font-bold text-admin-ink">운영 규칙 요약</p>
+          <ul className="list-inside list-disc space-y-1 text-xs text-admin-muted">
             <li>인스타/당근/블로그처럼 referrer가 깨질 수 있는 채널은 UTM을 반드시 붙입니다.</li>
             <li>하나의 캠페인(utm_campaign)은 기간/목적이 바뀌면 새로 만듭니다.</li>
             <li>소재/버전 구분은 utm_content로 분리합니다.</li>

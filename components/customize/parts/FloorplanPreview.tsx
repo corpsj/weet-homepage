@@ -21,23 +21,23 @@ export function FloorplanPreview({
     <div className="w-full max-w-[1100px]">
       <div className="mb-4 flex items-end justify-between gap-4">
         <div>
-          <p className="text-sm font-bold text-customize-slate">선택 모델</p>
-          <h1 className="text-2xl font-black text-customize-ink md:text-3xl">{model.nameKo}</h1>
+          <p className="text-sm font-bold text-weet-muted">선택 모델</p>
+          <h1 className="text-2xl font-black text-weet-ink md:text-3xl">{model.nameKo}</h1>
         </div>
         <div className="text-right">
-          <p className="text-sm font-bold text-customize-slate">{COPY.basePrice}</p>
-          <p className="text-lg font-black text-customize-bronze">{formatModelStartPrice(model.basePrice)}</p>
+          <p className="text-sm font-bold text-weet-muted">{COPY.basePrice}</p>
+          <p className="text-lg font-black text-weet-gold-deep">{formatModelStartPrice(model.basePrice)}</p>
         </div>
       </div>
 
-      <div className="relative overflow-hidden rounded-lg border border-customize-stone bg-customize-sand shadow-sm">
+      <div className="relative overflow-hidden rounded-lg border border-weet-line bg-weet-surface shadow-weet-card">
         {onOpenViewer && (
           <button
             type="button"
             data-testid="floorplan-zoom-open"
             aria-label="도면 크게 보기"
             onClick={onOpenViewer}
-            className="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-md border border-customize-stone bg-customize-sand/95 text-customize-ink shadow-sm backdrop-blur transition-colors hover:border-customize-mushroom hover:bg-white focus:outline-none focus:ring-2 focus:ring-customize-bark/40"
+            className="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-md border border-weet-line bg-weet-surface/95 text-weet-ink shadow-weet-card backdrop-blur transition-colors hover:border-weet-muted hover:bg-white focus:outline-none focus:ring-2 focus:ring-weet-gold-deep/40"
           >
             <Maximize2 className="h-4 w-4" />
           </button>

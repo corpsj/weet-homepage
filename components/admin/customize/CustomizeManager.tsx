@@ -69,8 +69,8 @@ const TAB_ITEMS: { value: CustomizeTab; label: string; Icon: LucideIcon }[] = [
   { value: 'assets', label: '이미지 자산', Icon: ImageIcon },
 ];
 
-const textareaClass = 'min-h-20 w-full rounded-md border border-[#d8d8d2] bg-[#fbfbfa] px-3 py-2 text-sm text-[#111111] outline-none transition-colors focus:border-[#111111] focus:ring-2 focus:ring-[#111111]/10 disabled:cursor-not-allowed disabled:opacity-60';
-const labelClass = 'mb-1 block text-xs font-bold text-gray-600';
+const textareaClass = 'min-h-20 w-full rounded-[9px] border border-admin-line-2 bg-white px-3 py-2 text-sm text-admin-ink outline-none transition-colors placeholder:text-[#a1a1aa] focus:border-admin-accent focus:ring-2 focus:ring-admin-accent/15 disabled:cursor-not-allowed disabled:opacity-60';
+const labelClass = 'mb-1 block text-xs font-bold text-admin-muted';
 
 const emptyModel = {
   id: '',
@@ -216,7 +216,7 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
         description="모델, 옵션, 평면 오버레이와 상담 저장 흐름을 관리합니다."
         actions={
           isPending && (
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 rounded text-xs font-bold text-gray-500">
+            <div className="flex items-center gap-2 rounded-[9px] border border-admin-accent-line bg-admin-accent-soft px-3 py-1.5 text-xs font-bold text-admin-accent">
               <Loader2 className="h-4 w-4 animate-spin" />
               저장 중...
             </div>
@@ -261,7 +261,7 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
           <div
             role="tablist"
             aria-label="주문 구성 관리 탭"
-            className="inline-flex min-w-max items-center rounded-lg border border-[#e5e5df] bg-[#f4f4f1] p-[3px]"
+            className="inline-flex min-w-max items-center rounded-[9px] border border-admin-line-2 bg-[#f4f4f5] p-[3px]"
           >
             {TAB_ITEMS.map(({ value, label, Icon }) => {
               const selected = activeTab === value;
@@ -276,8 +276,8 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
                   aria-controls={`customize-panel-${value}`}
                   onClick={() => setActiveTab(value)}
                   className={cn(
-                    'inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-md px-3 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#111111]/20',
-                    selected ? 'bg-white text-[#111111] shadow-sm' : 'text-gray-500 hover:text-[#111111]'
+                    'inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-[7px] px-3 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-admin-accent/20',
+                    selected ? 'bg-white text-admin-accent shadow-sm' : 'text-[#71717a] hover:text-admin-ink'
                   )}
                 >
                   <Icon className="size-3.5" />
@@ -317,10 +317,10 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
                   <TableRow key={model.id}>
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
-                        <p className="truncate text-sm font-bold text-gray-900">{model.nameKo}</p>
-                        <span className="text-[10px] font-semibold text-gray-400">{model.id}</span>
+                        <p className="truncate text-sm font-bold text-admin-ink">{model.nameKo}</p>
+                        <span className="text-[10px] font-semibold text-[#a1a1aa]">{model.id}</span>
                       </div>
-                      <p className="mt-0.5 text-[11px] text-gray-500">
+                      <p className="mt-0.5 text-[11px] text-admin-muted">
                         {model.widthM}×{model.lengthM}m · {model.areaSqm}m² · ₩{model.basePrice.toLocaleString('ko-KR')}
                       </p>
                     </div>
@@ -371,8 +371,8 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
                 {catalog.includedSpecs.map((spec) => (
                   <TableRow key={spec.id}>
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-bold text-gray-900">{spec.nameKo}</p>
-                      <p className="mt-0.5 text-[11px] text-gray-500">{spec.modelId || '공통'} · {spec.categoryKey || '-'}</p>
+                      <p className="truncate text-sm font-bold text-admin-ink">{spec.nameKo}</p>
+                      <p className="mt-0.5 text-[11px] text-admin-muted">{spec.modelId || '공통'} · {spec.categoryKey || '-'}</p>
                     </div>
                     <div className="flex items-center gap-3">
                       <ConsoleStatusPill tone={spec.isActive ? 'success' : 'neutral'}>
@@ -424,10 +424,10 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
                     <TableRow key={category.id}>
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
-                          <p className="truncate text-sm font-bold text-gray-900">{category.nameKo}</p>
-                          <span className="text-[10px] font-semibold text-gray-400">{category.key}</span>
+                          <p className="truncate text-sm font-bold text-admin-ink">{category.nameKo}</p>
+                          <span className="text-[10px] font-semibold text-[#a1a1aa]">{category.key}</span>
                         </div>
-                        <p className="mt-0.5 text-[11px] text-gray-500">
+                        <p className="mt-0.5 text-[11px] text-admin-muted">
                           {category.selectionType === 'single' ? '단일 선택' : '복수 선택'}
                           {category.required ? ' · 필수' : ''}
                           {` · 옵션 ${optionCount}개`}
@@ -482,8 +482,8 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
                   />
                 </ConsolePanel>
                 <ConsolePanel className="p-5">
-                  <h3 className="mb-1 text-sm font-bold text-gray-900">충돌 옵션 등록</h3>
-                  <p className="mb-4 text-[11px] text-gray-500">두 옵션을 같이 선택할 수 없도록 묶습니다.</p>
+                  <h3 className="mb-1 text-sm font-bold text-admin-ink">충돌 옵션 등록</h3>
+                  <p className="mb-4 text-[11px] text-admin-muted">두 옵션을 같이 선택할 수 없도록 묶습니다.</p>
                   <div className="space-y-3">
                     <SelectField value={conflictForm.optionId} onChange={(value) => setConflictForm((current) => ({ ...current, optionId: value }))}>
                       <option value="">기준 옵션</option>
@@ -512,47 +512,47 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
                   const activeCount = options.filter((option) => option.isActive).length;
                   return (
                     <ConsolePanel key={category.id}>
-                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#e5e5df] bg-[#fbfbfa] px-3 py-2">
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#f1f1f3] px-3 py-2">
                         <div className="flex min-w-0 flex-wrap items-center gap-2">
-                          <h3 className="text-sm font-bold text-gray-900">{category.nameKo}</h3>
-                          <span className="text-[10px] font-semibold text-gray-400">{category.key}</span>
-                          <span className="rounded border border-[#e5e5df] bg-white px-1.5 py-0.5 text-[10px] font-bold text-gray-500">
+                          <h3 className="text-sm font-bold text-admin-ink">{category.nameKo}</h3>
+                          <span className="text-[10px] font-semibold text-[#a1a1aa]">{category.key}</span>
+                          <span className="rounded border border-admin-line-2 bg-white px-1.5 py-0.5 text-[10px] font-bold text-admin-muted">
                             {category.selectionType === 'single' ? '단일 선택' : '복수 선택'}
                           </span>
                           {!category.isActive && (
-                            <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-bold text-gray-400">카테고리 숨김</span>
+                            <span className="rounded bg-[#f4f4f5] px-1.5 py-0.5 text-[10px] font-bold text-[#a1a1aa]">카테고리 숨김</span>
                           )}
                         </div>
-                        <span className="text-[11px] font-bold text-gray-500">{activeCount}/{options.length} 활성</span>
+                        <span className="text-[11px] font-bold text-admin-muted">{activeCount}/{options.length} 활성</span>
                       </div>
                       {options.length === 0 ? (
-                        <p className="px-3 py-5 text-center text-xs font-semibold text-gray-400">
+                        <p className="px-3 py-5 text-center text-xs font-semibold text-[#a1a1aa]">
                           이 카테고리에 등록된 옵션이 없습니다. 주문 페이지에서는 빈 카테고리로 표시됩니다.
                         </p>
                       ) : (
-                        <div className="divide-y divide-[#f0f0eb]">
+                        <div className="divide-y divide-[#f4f4f5]">
                           {options.map((option) => (
                             <div
                               key={option.id}
                               className={cn(
-                                'flex items-center justify-between gap-3 px-3 py-2 transition-colors hover:bg-[#fbfbfa]',
+                                'flex items-center justify-between gap-3 px-3 py-2 transition-colors hover:bg-[#fafafb]',
                                 !option.isActive && 'opacity-55'
                               )}
                             >
                               <div className="min-w-0">
                                 <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-                                  <p className="truncate text-[13px] font-bold text-gray-900">{option.nameKo}</p>
-                                  <span className={cn('text-[11px] font-bold', option.priceType === 'fixed' ? 'text-[#8a6a12]' : 'text-gray-500')}>
+                                  <p className="truncate text-[13px] font-bold text-admin-ink">{option.nameKo}</p>
+                                  <span className={cn('text-[11px] font-bold', option.priceType === 'fixed' ? 'text-admin-accent' : option.priceType === 'consult' ? 'text-[#a16207]' : 'text-[#a1a1aa]')}>
                                     {optionPriceLabel(option)}
                                   </span>
                                   {option.isDefault && (
-                                    <span className="rounded bg-[#111111] px-1.5 py-0.5 text-[9px] font-bold text-white">기본 선택</span>
+                                    <span className="rounded bg-admin-ink px-1.5 py-0.5 text-[9px] font-bold text-white">기본 선택</span>
                                   )}
                                   {option.isActive && !option.imagePath?.trim() && (
                                     <span className="rounded bg-[#fff7ed] px-1.5 py-0.5 text-[9px] font-bold text-[#9a3412]">이미지 없음</span>
                                   )}
                                 </div>
-                                <p className="mt-0.5 truncate text-[11px] text-gray-500">
+                                <p className="mt-0.5 truncate text-[11px] text-admin-muted">
                                   {option.key} · {modelScopeLabel(option, catalog.models)}
                                 </p>
                               </div>
@@ -573,26 +573,26 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
                 })}
 
                 <ConsolePanel>
-                  <div className="flex items-center justify-between gap-3 border-b border-[#e5e5df] bg-[#fbfbfa] px-3 py-2">
+                  <div className="flex items-center justify-between gap-3 border-b border-[#f1f1f3] px-3 py-2">
                     <div className="flex items-center gap-2">
                       <AlertTriangle className="size-3.5 text-[#9a3412]" />
-                      <h3 className="text-sm font-bold text-gray-900">등록된 충돌 관계</h3>
+                      <h3 className="text-sm font-bold text-admin-ink">등록된 충돌 관계</h3>
                     </div>
-                    <span className="text-[11px] font-bold text-gray-500">{catalog.conflicts.length}건</span>
+                    <span className="text-[11px] font-bold text-admin-muted">{catalog.conflicts.length}건</span>
                   </div>
                   {catalog.conflicts.length === 0 ? (
-                    <p className="px-3 py-5 text-center text-xs font-semibold text-gray-400">
+                    <p className="px-3 py-5 text-center text-xs font-semibold text-[#a1a1aa]">
                       등록된 충돌 관계가 없습니다. 왼쪽 아래 폼에서 추가할 수 있습니다.
                     </p>
                   ) : (
-                    <div className="divide-y divide-[#f0f0eb]">
+                    <div className="divide-y divide-[#f4f4f5]">
                       {catalog.conflicts.map((conflict) => (
                         <div key={`${conflict.optionId}-${conflict.conflictsWithOptionId}`} className="flex items-center justify-between gap-3 px-3 py-2">
                           <div className="min-w-0">
-                            <p className="truncate text-[13px] font-bold text-gray-900">
+                            <p className="truncate text-[13px] font-bold text-admin-ink">
                               {optionNameById.get(conflict.optionId)} ↔ {optionNameById.get(conflict.conflictsWithOptionId)}
                             </p>
-                            <p className="mt-0.5 truncate text-[11px] text-gray-500">{conflict.reasonKo || '동시 선택 불가'}</p>
+                            <p className="mt-0.5 truncate text-[11px] text-admin-muted">{conflict.reasonKo || '동시 선택 불가'}</p>
                           </div>
                           <button
                             className={cn(consoleIconButtonClass, 'h-8 w-8 text-red-600 hover:border-red-200 hover:bg-red-50 hover:text-red-700')}
@@ -617,14 +617,14 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
           <AdminSection title="이미지 자산" description="옵션 상세 모달 이미지와 평면 오버레이를 업로드합니다.">
             <div className="grid gap-6 lg:grid-cols-2">
               <ConsolePanel className="p-5">
-                <h3 className="mb-2 text-sm font-bold text-gray-900">정보 이미지 업로드</h3>
-                <p className="mb-4 text-[11px] text-gray-500">옵션 상세 모달에 사용할 이미지를 `images/customize/`에 업로드합니다.</p>
+                <h3 className="mb-2 text-sm font-bold text-admin-ink">정보 이미지 업로드</h3>
+                <p className="mb-4 text-[11px] text-admin-muted">옵션 상세 모달에 사용할 이미지를 `images/customize/`에 업로드합니다.</p>
                 <ImageUpload value={uploadedUrl} onChange={setUploadedUrl} bucket="images" pathPrefix="customize" quality="standard" />
                 {uploadedUrl && <input className={`${consoleInputClass} w-full mt-4`} readOnly value={uploadedUrl} onFocus={(event) => event.currentTarget.select()} />}
               </ConsolePanel>
               <ConsolePanel className="p-5">
-                <h3 className="mb-2 text-sm font-bold text-gray-900">평면 오버레이 업로드</h3>
-                <p className="mb-4 text-[11px] text-gray-500">오버레이는 1000x420px 투명 PNG/WebP를 권장합니다. 크기가 달라도 업로드는 진행됩니다.</p>
+                <h3 className="mb-2 text-sm font-bold text-admin-ink">평면 오버레이 업로드</h3>
+                <p className="mb-4 text-[11px] text-admin-muted">오버레이는 1000x420px 투명 PNG/WebP를 권장합니다. 크기가 달라도 업로드는 진행됩니다.</p>
                 <ImageUpload value={uploadedUrl} onChange={setUploadedUrl} bucket="images" pathPrefix="customize" quality="high" recommendedSize={{ width: 1000, height: 420 }} />
               </ConsolePanel>
             </div>
@@ -642,7 +642,7 @@ function AdminSection({ title, description, action, children }: { title: string;
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="min-w-0">
           <ConsoleSectionTitle>{title}</ConsoleSectionTitle>
-          {description && <p className="-mt-2 text-xs font-medium text-gray-500">{description}</p>}
+          {description && <p className="-mt-2 text-xs font-medium text-admin-muted">{description}</p>}
         </div>
         {action}
       </div>
@@ -653,20 +653,20 @@ function AdminSection({ title, description, action, children }: { title: string;
 
 function FormStateHeader({ editing, editLabel, newLabel }: { editing: boolean; editLabel: string; newLabel: string }) {
   return (
-    <div className="mb-4 flex items-center justify-between gap-3 border-b border-[#f0f0eb] pb-3">
-      <h3 className="min-w-0 truncate text-sm font-bold text-gray-900">{editing ? editLabel : newLabel}</h3>
+    <div className="mb-4 flex items-center justify-between gap-3 border-b border-[#f1f1f3] pb-3">
+      <h3 className="min-w-0 truncate text-sm font-bold text-admin-ink">{editing ? editLabel : newLabel}</h3>
       <ConsoleStatusPill tone={editing ? 'dark' : 'neutral'}>{editing ? '수정 중' : '신규'}</ConsoleStatusPill>
     </div>
   );
 }
 
 function TabCount({ value }: { value: number }) {
-  return <span className="rounded bg-white/80 px-1 text-[10px] font-bold text-gray-400">{value}</span>;
+  return <span className="rounded bg-white/80 px-1 text-[10px] font-bold text-[#a1a1aa]">{value}</span>;
 }
 
 function EmptyListNote({ children }: { children: ReactNode }) {
   return (
-    <div className="flex items-center justify-center rounded-md border border-dashed border-[#d8d8d2] bg-[#fbfbfa] px-4 py-8 text-center text-xs font-semibold leading-5 text-gray-400">
+    <div className="flex items-center justify-center rounded-[9px] border border-dashed border-admin-line-2 bg-[#fafafb] px-4 py-8 text-center text-xs font-semibold leading-5 text-[#a1a1aa]">
       {children}
     </div>
   );
@@ -770,8 +770,8 @@ function OptionForm({
         <span className={labelClass}>모델 노출</span>
         <div className="flex flex-wrap gap-2 mt-1">
           {models.map((model) => (
-            <label key={model.id} className="inline-flex items-center gap-2 rounded-md border border-[#d8d8d2] bg-[#fbfbfa] px-3 py-2 text-[11px] font-bold cursor-pointer hover:border-gray-400">
-              <input type="checkbox" checked={form.availableModelIds.includes(model.id)} onChange={() => toggleModel(model.id)} className="accent-black" />
+            <label key={model.id} className="inline-flex items-center gap-2 rounded-[9px] border border-admin-line-2 bg-white px-3 py-2 text-[11px] font-bold cursor-pointer text-admin-ink hover:border-[#d4d4d8] hover:bg-[#f4f4f5]">
+              <input type="checkbox" checked={form.availableModelIds.includes(model.id)} onChange={() => toggleModel(model.id)} className="accent-admin-accent" />
               {model.nameKo}
             </label>
           ))}
@@ -857,8 +857,8 @@ function SelectField({ label, value, onChange, children }: { label?: string; val
 
 function CheckboxField({ label, checked, onChange }: { label: string; checked: boolean; onChange: (checked: boolean) => void }) {
   return (
-    <label className="flex items-center gap-2 text-xs font-bold text-gray-700 cursor-pointer">
-      <input type="checkbox" checked={checked} onChange={(event) => onChange(event.target.checked)} className="accent-black w-4 h-4" />
+    <label className="flex items-center gap-2 text-xs font-bold text-[#3f3f46] cursor-pointer">
+      <input type="checkbox" checked={checked} onChange={(event) => onChange(event.target.checked)} className="accent-admin-accent w-4 h-4" />
       {label}
     </label>
   );
@@ -869,7 +869,7 @@ function DataTable({ children }: { children: ReactNode }) {
 }
 
 function TableRow({ children }: { children: ReactNode }) {
-  return <div className="flex items-center justify-between gap-4 rounded-md border border-[#e5e5df] bg-white p-3 hover:border-gray-300 transition-colors">{children}</div>;
+  return <div className="flex items-center justify-between gap-4 rounded-[12px] border border-admin-line bg-white p-3 hover:border-[#d4d4d8] transition-colors">{children}</div>;
 }
 
 function RowActions({
@@ -889,7 +889,7 @@ function RowActions({
 }) {
   return (
     <div className="flex shrink-0 items-center gap-1.5">
-      <button className="px-2 py-1 text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors" onClick={onEdit}>수정</button>
+      <button className="px-2 py-1 text-xs font-bold text-admin-muted hover:text-admin-accent transition-colors" onClick={onEdit}>수정</button>
       <button
         className={cn(consoleIconButtonClass, compact && 'h-8 w-8')}
         onClick={onToggle}

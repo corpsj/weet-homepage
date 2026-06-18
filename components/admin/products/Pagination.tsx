@@ -54,7 +54,7 @@ export default function Pagination({
             <button
                 onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                 disabled={currentPage === 1}
-                className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:hover:bg-white text-gray-600 transition-colors"
+                className="p-2 rounded-[9px] border border-admin-line-2 bg-white hover:bg-[#f4f4f5] disabled:opacity-50 disabled:hover:bg-white text-[#52525b] transition-colors"
             >
                 <ChevronLeft className="w-4 h-4" />
             </button>
@@ -63,14 +63,14 @@ export default function Pagination({
                 <>
                     <button
                         onClick={() => handlePageChange(1)}
-                        className={`w-9 h-9 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${currentPage === 1
-                                ? 'bg-black text-white'
-                                : 'text-gray-600 hover:bg-gray-100'
+                        className={`w-9 h-9 flex items-center justify-center rounded-[9px] text-sm font-medium transition-colors ${currentPage === 1
+                                ? 'bg-admin-accent text-white'
+                                : 'text-admin-muted hover:bg-[#f4f4f5]'
                             }`}
                     >
                         1
                     </button>
-                    {startPage > 2 && <span className="text-gray-400">...</span>}
+                    {startPage > 2 && <span className="text-[#a1a1aa]">...</span>}
                 </>
             )}
 
@@ -78,9 +78,9 @@ export default function Pagination({
                 <button
                     key={page}
                     onClick={() => handlePageChange(page)}
-                    className={`w-9 h-9 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${currentPage === page
-                            ? 'bg-black text-white'
-                            : 'text-gray-600 hover:bg-gray-100'
+                    className={`w-9 h-9 flex items-center justify-center rounded-[9px] text-sm font-medium transition-colors ${currentPage === page
+                            ? 'bg-admin-accent text-white'
+                            : 'text-admin-muted hover:bg-[#f4f4f5]'
                         }`}
                 >
                     {page}
@@ -89,12 +89,12 @@ export default function Pagination({
 
             {endPage < totalPages && (
                 <>
-                    {endPage < totalPages - 1 && <span className="text-gray-400">...</span>}
+                    {endPage < totalPages - 1 && <span className="text-[#a1a1aa]">...</span>}
                     <button
                         onClick={() => handlePageChange(totalPages)}
-                        className={`w-9 h-9 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${currentPage === totalPages
-                                ? 'bg-black text-white'
-                                : 'text-gray-600 hover:bg-gray-100'
+                        className={`w-9 h-9 flex items-center justify-center rounded-[9px] text-sm font-medium transition-colors ${currentPage === totalPages
+                                ? 'bg-admin-accent text-white'
+                                : 'text-admin-muted hover:bg-[#f4f4f5]'
                             }`}
                     >
                         {totalPages}
@@ -105,7 +105,7 @@ export default function Pagination({
             <button
                 onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                 disabled={currentPage === totalPages}
-                className="p-2 rounded-lg border border-gray-200 hover:bg-gray-50 disabled:opacity-50 disabled:hover:bg-white text-gray-600 transition-colors"
+                className="p-2 rounded-[9px] border border-admin-line-2 bg-white hover:bg-[#f4f4f5] disabled:opacity-50 disabled:hover:bg-white text-[#52525b] transition-colors"
             >
                 <ChevronRight className="w-4 h-4" />
             </button>

@@ -7,7 +7,7 @@ import { telHref } from '@/lib/site-settings';
 
 function trackConsultClick(channel: string) {
   try {
-    (window as any).gtag?.('event', 'consult_click', { channel });
+    (window as unknown as { gtag?: (...args: unknown[]) => void }).gtag?.('event', 'consult_click', { channel });
   } catch {
     // analytics is optional
   }
@@ -18,15 +18,15 @@ export default function ConsultBar({ settings }: { settings: SiteSettings }) {
 
   return (
     <>
-      {/* 모바일·태블릿: 하단 고정 상담 바 */}
-      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[#0b5d56] bg-[#0d6e66] pb-[env(safe-area-inset-bottom)] lg:hidden">
-        <div className="grid h-14 grid-cols-2 divide-x divide-white/15 text-sm font-bold text-white">
+      {/* 모바일·태블릿: 하단 고정 상담 바 (웜 잉크) */}
+      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-weet-ink-deep bg-weet-ink pb-[env(safe-area-inset-bottom)] lg:hidden">
+        <div className="grid h-14 grid-cols-2 divide-x divide-weet-paper/15 text-sm font-semibold text-weet-paper">
           <a
             href={telHref(settings.contact_phone)}
             onClick={() => trackConsultClick('tel')}
-            className="flex items-center justify-center gap-2 active:bg-[#0b5d56]"
+            className="flex items-center justify-center gap-2 active:bg-weet-ink-deep"
           >
-            <Phone className="h-4 w-4" />
+            <Phone className="h-4 w-4 text-weet-gold" />
             전화 상담
           </a>
           {hasKakao ? (
@@ -35,18 +35,18 @@ export default function ConsultBar({ settings }: { settings: SiteSettings }) {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackConsultClick('kakao')}
-              className="flex items-center justify-center gap-2 active:bg-[#0b5d56]"
+              className="flex items-center justify-center gap-2 active:bg-weet-ink-deep"
             >
-              <MessageCircle className="h-4 w-4" />
+              <MessageCircle className="h-4 w-4 text-weet-gold" />
               카카오톡 상담
             </a>
           ) : (
             <Link
               href="/support#consult"
               onClick={() => trackConsultClick('form')}
-              className="flex items-center justify-center gap-2 active:bg-[#0b5d56]"
+              className="flex items-center justify-center gap-2 active:bg-weet-ink-deep"
             >
-              <MessagesSquare className="h-4 w-4" />
+              <MessagesSquare className="h-4 w-4 text-weet-gold" />
               상담 신청
             </Link>
           )}
@@ -61,29 +61,29 @@ export default function ConsultBar({ settings }: { settings: SiteSettings }) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => trackConsultClick('kakao')}
-            className="flex h-11 items-center gap-2 rounded-full border border-[#e5e5df] bg-white px-5 text-sm font-bold text-gray-900 shadow-lg transition-transform hover:scale-[1.03]"
+            className="flex h-11 items-center gap-2 rounded-full border border-weet-line bg-weet-surface px-5 text-sm font-semibold text-weet-ink shadow-weet-float transition-transform hover:scale-[1.03]"
           >
-            <MessageCircle className="h-4 w-4 text-[#0d6e66]" />
+            <MessageCircle className="h-4 w-4 text-weet-gold-deep" />
             카카오톡 상담
           </a>
         )}
         <a
           href={telHref(settings.contact_phone)}
           onClick={() => trackConsultClick('tel')}
-          className="flex h-11 items-center gap-2 rounded-full border border-[#e5e5df] bg-white px-5 text-sm font-bold text-gray-900 shadow-lg transition-transform hover:scale-[1.03]"
+          className="flex h-11 items-center gap-2 rounded-full border border-weet-line bg-weet-surface px-5 text-sm font-semibold text-weet-ink shadow-weet-float transition-transform hover:scale-[1.03]"
         >
-          <Phone className="h-4 w-4 text-[#0d6e66]" />
+          <Phone className="h-4 w-4 text-weet-gold-deep" />
           {settings.contact_phone}
           {settings.consult_hours && (
-            <span className="text-xs font-medium text-gray-500">{settings.consult_hours}</span>
+            <span className="text-xs font-medium text-weet-muted">{settings.consult_hours}</span>
           )}
         </a>
         <Link
           href="/support#consult"
           onClick={() => trackConsultClick('form')}
-          className="flex h-11 items-center gap-2 rounded-full bg-[#0d6e66] px-5 text-sm font-bold text-white shadow-lg transition-transform hover:scale-[1.03]"
+          className="flex h-11 items-center gap-2 rounded-full bg-weet-ink px-5 text-sm font-semibold text-weet-paper shadow-weet-float transition-transform hover:scale-[1.03] hover:bg-weet-ink-deep"
         >
-          <MessagesSquare className="h-4 w-4" />
+          <MessagesSquare className="h-4 w-4 text-weet-gold" />
           상담 신청
         </Link>
       </div>

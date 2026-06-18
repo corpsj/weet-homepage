@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useTransition } from 'react';
+import { useMemo, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
-import { ChevronDown, Loader2, Save, Trash2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Loader2, Phone, Save, Settings2, Trash2 } from 'lucide-react';
 import {
   deleteCustomizeConsultation,
   updateCustomizeConsultationMemo,
@@ -13,12 +12,14 @@ import {
 import { formatKstDateTime } from '@/lib/date-format';
 import { formatWon } from '@/lib/customize/priceCalculator';
 import { confirmToast } from '@/lib/ui/confirm';
+import { cn } from '@/lib/utils';
 import type { ConsultationStatus, CustomizeConsultation } from '@/lib/customize/types';
 import {
   ConsoleMetricCard,
   ConsolePageHeader,
-  ConsolePanel,
   ConsoleStatusPill,
+  consolePrimaryButtonClass,
+  consoleSecondaryButtonClass,
   consoleSelectClass,
 } from '@/components/admin/ConsolePrimitives';
 
@@ -28,13 +29,14 @@ interface ConsultationManagerProps {
 }
 
 const STATUSES: ConsultationStatus[] = ['신규', '진행중', '완료', '보류'];
+const STATUS_FILTERS: ('전체' | ConsultationStatus)[] = ['전체', '신규', '진행중', '완료', '보류'];
 
 const statusTone = (status: ConsultationStatus): 'neutral' | 'success' | 'warning' | 'danger' | 'dark' => {
   switch (status) {
     case '신규':
-      return 'warning';
-    case '진행중':
       return 'dark';
+    case '진행중':
+      return 'warning';
     case '완료':
       return 'success';
     case '보류':
@@ -63,6 +65,8 @@ export default function ConsultationManager({ consultations, count }: Consultati
   const [memos, setMemos] = useState<Record<string, string>>(() =>
     Object.fromEntries(consultations.map((item) => [item.id, item.internalMemo ?? '']))
   );
+  const [statusFilter, setStatusFilter] = useState<'전체' | ConsultationStatus>('전체');
+  const [selectedId, setSelectedId] = useState<string | null>(consultations[0]?.id ?? null);
 
   const runAction = (label: string, action: () => Promise<unknown>) => {
     startTransition(async () => {
@@ -88,15 +92,28 @@ export default function ConsultationManager({ consultations, count }: Consultati
     { 신규: 0, 진행중: 0, 완료: 0, 보류: 0, slaRisk: 0 } as Record<ConsultationStatus, number> & { slaRisk: number }
   );
 
+  const filteredConsultations = useMemo(() => {
+    const list = statusFilter === '전체' ? consultations.slice() : consultations.filter((item) => item.status === statusFilter);
+    return list.sort((a, b) => getAgeMinutes(a.createdAt) - getAgeMinutes(b.createdAt));
+  }, [consultations, statusFilter]);
+
+  const selected = useMemo(
+    () => consultations.find((item) => item.id === selectedId) ?? null,
+    [consultations, selectedId]
+  );
+
+  const filterCount = (filter: '전체' | ConsultationStatus) =>
+    filter === '전체' ? consultations.length : consultations.filter((item) => item.status === filter).length;
+
   return (
     <div className="space-y-6">
       <ConsolePageHeader
         eyebrow="CONSULTATION SLA"
         title={`상담 관리 · ${count.toLocaleString('ko-KR')}건`}
-        description="주문 상담을 최신순으로 확인하고, 2시간 이상 미처리된 요청을 먼저 처리합니다."
+        description="주문 상담을 인박스에서 확인하고, 2시간 이상 미처리된 요청을 먼저 처리합니다."
         actions={
-          <div className="flex h-10 items-center gap-2 text-sm font-bold text-gray-500">
-            {isPending && <Loader2 className="h-5 w-5 animate-spin text-gray-500" />}
+          <div className="flex h-10 items-center gap-2 text-sm font-bold text-admin-muted">
+            {isPending && <Loader2 className="h-5 w-5 animate-spin text-admin-accent" />}
             <span>상태 저장 대기열</span>
           </div>
         }
@@ -109,123 +126,204 @@ export default function ConsultationManager({ consultations, count }: Consultati
         <ConsoleMetricCard label="완료" value={summary.완료.toLocaleString('ko-KR')} caption="처리 완료 상담" />
       </div>
 
-      <ConsolePanel>
-        <div className="hidden grid-cols-[110px_1fr_140px_150px_1.2fr_120px_150px] gap-4 border-b border-[#e5e5df] bg-[#fbfbfa] px-4 py-3 text-xs font-bold text-gray-500 lg:grid">
-          <span>상태</span>
-          <span>이름</span>
-          <span>연락처</span>
-          <span>지역</span>
-          <span>메모</span>
-          <span>SLA</span>
-          <span>생성일</span>
+      {/* status filter chips (segmented) */}
+      <div className="flex flex-wrap gap-1.5">
+        {STATUS_FILTERS.map((filter) => {
+          const isActive = statusFilter === filter;
+          return (
+            <button
+              key={filter}
+              type="button"
+              onClick={() => setStatusFilter(filter)}
+              className={cn(
+                'inline-flex items-center gap-1.5 rounded-[8px] border px-3 py-1.5 text-[12.5px] font-semibold transition-colors',
+                isActive
+                  ? 'border-admin-accent bg-admin-accent text-white'
+                  : 'border-admin-line-2 bg-white text-[#52525b] hover:bg-[#f4f4f5]'
+              )}
+            >
+              {filter}
+              <span className="opacity-60">{filterCount(filter)}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* inbox split view: [360px list | 1fr detail] */}
+      <div className="grid items-start gap-4 lg:grid-cols-[360px_1fr]">
+        {/* list */}
+        <div className="overflow-hidden rounded-[12px] border border-admin-line bg-white">
+          {filteredConsultations.length === 0 ? (
+            <div className="p-[34px] text-center text-sm text-[#a1a1aa]">해당 조건의 상담이 없습니다.</div>
+          ) : (
+            filteredConsultations.map((item) => {
+              const ageMinutes = getAgeMinutes(item.createdAt);
+              const isSlaRisk = item.status !== '완료' && ageMinutes >= 120;
+              const isActive = item.id === selectedId;
+
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setSelectedId(item.id)}
+                  className={cn(
+                    'block w-full border-b border-[#f4f4f5] border-l-2 px-4 py-[13px] text-left transition-colors last:border-b-0',
+                    isActive
+                      ? 'border-l-admin-accent bg-admin-accent-soft'
+                      : isSlaRisk
+                        ? 'border-l-[#ef4444] hover:bg-[#fafafb]'
+                        : 'border-l-transparent hover:bg-[#fafafb]'
+                  )}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <strong className={cn('text-[13.5px]', isActive ? 'text-admin-accent' : 'text-admin-ink')}>
+                      {item.customerName}
+                    </strong>
+                    <span className="text-[11px] text-[#a1a1aa]">{formatAge(ageMinutes)}</span>
+                  </div>
+                  <div className="mt-1 flex items-center justify-between gap-2">
+                    <span className="truncate text-[12px] text-admin-muted">
+                      {item.region} · {item.phone}
+                    </span>
+                    <ConsoleStatusPill tone={isSlaRisk ? 'danger' : statusTone(item.status)}>
+                      {isSlaRisk ? 'SLA 위험' : item.status}
+                    </ConsoleStatusPill>
+                  </div>
+                </button>
+              );
+            })
+          )}
         </div>
 
-        {consultations.length === 0 ? (
-          <div className="p-10 text-center text-sm text-gray-500">등록된 상담 요청이 없습니다.</div>
+        {/* detail */}
+        {selected ? (
+          <ConsultationDetail
+            key={selected.id}
+            consultation={selected}
+            memo={memos[selected.id] ?? ''}
+            onMemoChange={(value) => setMemos((current) => ({ ...current, [selected.id]: value }))}
+            onStatusChange={(status) => runAction('상태 변경', () => updateCustomizeConsultationStatus(selected.id, status))}
+            onMemoSave={() => runAction('내부 메모 저장', () => updateCustomizeConsultationMemo(selected.id, memos[selected.id] ?? ''))}
+            onDelete={() => deleteConsultation(selected.id, selected.customerName)}
+          />
         ) : (
-          consultations.map((item) => {
-            const ageMinutes = getAgeMinutes(item.createdAt);
-            const isSlaRisk = item.status !== '완료' && ageMinutes >= 120;
-
-            return (
-            <div key={item.id} className="border-b border-[#f0f0ec] last:border-b-0">
-              <div className="grid gap-3 px-4 py-4 text-sm lg:grid-cols-[110px_1fr_140px_150px_1.2fr_120px_150px] lg:items-center lg:gap-4">
-                <div className="flex items-center justify-between gap-3 lg:block">
-                  <span className="text-xs font-bold uppercase text-gray-400 lg:hidden">상태</span>
-                  <select
-                    value={item.status}
-                    onChange={(event) => runAction('상태 변경', () => updateCustomizeConsultationStatus(item.id, event.target.value as ConsultationStatus))}
-                    className={`${consoleSelectClass} w-32 lg:w-full`}
-                  >
-                    {STATUSES.map((status) => <option key={status} value={status}>{status}</option>)}
-                  </select>
-                </div>
-                <div>
-                  <span className="mb-1 block text-xs font-bold uppercase text-gray-400 lg:hidden">이름</span>
-                  <strong className="text-gray-950">{item.customerName}</strong>
-                </div>
-                <div>
-                  <span className="mb-1 block text-xs font-bold uppercase text-gray-400 lg:hidden">연락처</span>
-                  <span>{item.phone}</span>
-                </div>
-                <div>
-                  <span className="mb-1 block text-xs font-bold uppercase text-gray-400 lg:hidden">지역</span>
-                  <span>{item.region}</span>
-                </div>
-                <div className="min-w-0">
-                  <span className="mb-1 block text-xs font-bold uppercase text-gray-400 lg:hidden">메모</span>
-                  <span className="block truncate text-gray-600">{item.memo || '-'}</span>
-                </div>
-                <div>
-                  <span className="mb-1 block text-xs font-bold uppercase text-gray-400 lg:hidden">SLA</span>
-                  <ConsoleStatusPill tone={isSlaRisk ? 'danger' : statusTone(item.status)}>
-                    {isSlaRisk ? 'SLA 위험' : formatAge(ageMinutes)}
-                  </ConsoleStatusPill>
-                </div>
-                <div>
-                  <span className="mb-1 block text-xs font-bold uppercase text-gray-400 lg:hidden">생성일</span>
-                  <span className="text-gray-500">{formatKstDateTime(item.createdAt)}</span>
-                </div>
-              </div>
-
-              <details className="group px-4 pb-4">
-                <summary className="flex cursor-pointer items-center gap-2 rounded-md border border-[#e5e5df] bg-[#f4f4f1] px-4 py-3 text-sm font-bold text-gray-700">
-                  상세 정보
-                  <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" />
-                </summary>
-                <div className="grid gap-5 border-x border-b border-[#e5e5df] p-4 lg:grid-cols-[0.8fr_1fr]">
-                  <div className="space-y-3 text-sm">
-                    <InfoRow label="구매 시기" value={item.purchaseTimeline} />
-                    <InfoRow label="지목" value={item.landType} />
-                    <InfoRow label="설치 주소" value={item.installAddress} />
-                    <InfoRow label="예산" value={item.budgetRange} />
-                    <InfoRow label="예상 총액" value={formatWon(item.estimatedTotal)} />
-                    <InfoRow label="구성 URL" value={item.configQuery ? `/customize?c=${item.configQuery}` : null} />
-                  </div>
-
-                  <div className="space-y-4">
-                    <details className="rounded-md border border-[#e5e5df]">
-                      <summary className="cursor-pointer px-4 py-3 text-sm font-bold">구성 snapshot</summary>
-                      <pre className="max-h-72 overflow-auto border-t border-[#e5e5df] bg-gray-950 p-4 text-xs text-gray-100">
-                        {JSON.stringify(item.configSnapshot, null, 2)}
-                      </pre>
-                    </details>
-
-                    <div>
-                      <label className="mb-2 block text-sm font-bold text-gray-700">내부 메모</label>
-                      <textarea
-                        value={memos[item.id] ?? ''}
-                        onChange={(event) => setMemos((current) => ({ ...current, [item.id]: event.target.value }))}
-                        className="min-h-24 w-full rounded-md border border-[#d8d8d2] bg-[#fbfbfa] p-3 text-sm outline-none focus:ring-2 focus:ring-black/20"
-                      />
-                      <div className="mt-3 flex flex-col justify-between gap-3 sm:flex-row">
-                        <Button variant="outline" onClick={() => runAction('내부 메모 저장', () => updateCustomizeConsultationMemo(item.id, memos[item.id] ?? ''))}>
-                          <Save className="h-4 w-4" />
-                          메모 저장
-                        </Button>
-                        <Button variant="danger" onClick={() => deleteConsultation(item.id, item.customerName)}>
-                          <Trash2 className="h-4 w-4" />
-                          삭제
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </details>
-            </div>
-            );
-          })
+          <div className="rounded-[12px] border border-admin-line bg-white p-[60px] text-center text-sm text-[#a1a1aa]">
+            왼쪽에서 상담을 선택하세요.
+          </div>
         )}
-      </ConsolePanel>
+      </div>
+    </div>
+  );
+}
+
+function ConsultationDetail({
+  consultation,
+  memo,
+  onMemoChange,
+  onStatusChange,
+  onMemoSave,
+  onDelete,
+}: {
+  consultation: CustomizeConsultation;
+  memo: string;
+  onMemoChange: (value: string) => void;
+  onStatusChange: (status: ConsultationStatus) => void;
+  onMemoSave: () => void;
+  onDelete: () => void;
+}) {
+  return (
+    <div className="overflow-hidden rounded-[12px] border border-admin-line bg-white">
+      <div className="flex items-start justify-between gap-4 border-b border-[#f1f1f3] px-[22px] py-5">
+        <div className="min-w-0">
+          <h2 className="text-[19px] font-extrabold tracking-[-0.01em] text-admin-ink">{consultation.customerName}</h2>
+          <p className="mt-1 text-[13px] text-admin-muted">
+            {consultation.region} · {consultation.phone} · 예상 {formatWon(consultation.estimatedTotal)}
+          </p>
+        </div>
+        <select
+          value={consultation.status}
+          onChange={(event) => onStatusChange(event.target.value as ConsultationStatus)}
+          className={`${consoleSelectClass} h-9 shrink-0`}
+        >
+          {STATUSES.map((status) => (
+            <option key={status} value={status}>
+              {status}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="grid gap-[22px] px-[22px] py-5 lg:grid-cols-2">
+        {/* key/value detail rows */}
+        <div className="flex flex-col">
+          <InfoRow label="구매 시기" value={consultation.purchaseTimeline} />
+          <InfoRow label="지목" value={consultation.landType} />
+          <InfoRow label="설치 주소" value={consultation.installAddress} />
+          <InfoRow label="예산" value={consultation.budgetRange} />
+          <InfoRow label="예상 총액" value={formatWon(consultation.estimatedTotal)} />
+          <InfoRow label="요청 메모" value={consultation.memo} />
+          <InfoRow label="구성 URL" value={consultation.configQuery ? `/customize?c=${consultation.configQuery}` : null} />
+          <InfoRow label="생성일" value={formatKstDateTime(consultation.createdAt)} />
+          <details className="group mt-3 rounded-[9px] border border-admin-line-2">
+            <summary className="cursor-pointer px-3 py-2.5 text-[13px] font-semibold text-admin-ink">구성 snapshot</summary>
+            <pre className="max-h-72 overflow-auto border-t border-admin-line-2 bg-[#fafafb] p-3 text-xs text-[#3f3f46]">
+              {JSON.stringify(consultation.configSnapshot, null, 2)}
+            </pre>
+          </details>
+        </div>
+
+        {/* action buttons + internal memo */}
+        <div>
+          <div className="mb-4 flex gap-2">
+            <a
+              href={consultation.phone ? `tel:${consultation.phone}` : undefined}
+              className={`${consolePrimaryButtonClass} flex-1`}
+            >
+              <Phone className="h-4 w-4" />
+              통화 기록
+            </a>
+            <a
+              href={consultation.configQuery ? `/customize?c=${consultation.configQuery}` : undefined}
+              target={consultation.configQuery ? '_blank' : undefined}
+              rel={consultation.configQuery ? 'noreferrer' : undefined}
+              className={cn(consoleSecondaryButtonClass, 'flex-1', !consultation.configQuery && 'pointer-events-none opacity-60')}
+            >
+              <Settings2 className="h-4 w-4" />
+              구성 보기
+            </a>
+          </div>
+
+          <label className="mb-2 block text-[12px] font-semibold text-admin-muted">내부 메모</label>
+          <textarea
+            value={memo}
+            onChange={(event) => onMemoChange(event.target.value)}
+            className="min-h-[120px] w-full resize-y rounded-[10px] border border-admin-line-2 bg-[#fafafb] p-3 text-[13px] text-admin-ink outline-none transition-colors placeholder:text-[#a1a1aa] focus:border-admin-accent focus:ring-2 focus:ring-admin-accent/15"
+          />
+          <div className="mt-2.5 flex items-center justify-between gap-3">
+            <button type="button" onClick={onMemoSave} className={`${consoleSecondaryButtonClass} h-9`}>
+              <Save className="h-4 w-4" />
+              메모 저장
+            </button>
+            <button
+              type="button"
+              onClick={onDelete}
+              className="inline-flex h-9 items-center justify-center gap-2 rounded-[9px] border border-[#fecaca] bg-[#fef2f2] px-4 text-sm font-semibold text-[#dc2626] transition-colors hover:bg-[#fee2e2] focus:outline-none focus:ring-2 focus:ring-[#dc2626]/15"
+            >
+              <Trash2 className="h-4 w-4" />
+              삭제
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
 function InfoRow({ label, value }: { label: string; value: string | null }) {
   return (
-    <div className="grid grid-cols-[90px_1fr] gap-3">
-      <span className="font-bold text-gray-500">{label}</span>
-      <span className="break-all text-gray-900">{value || '-'}</span>
+    <div className="grid grid-cols-[92px_1fr] gap-3 border-b border-[#f6f6f7] py-[9px] text-[13px] last:border-b-0">
+      <span className="font-semibold text-[#a1a1aa]">{label}</span>
+      <span className="break-all text-admin-ink">{value || '-'}</span>
     </div>
   );
 }

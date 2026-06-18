@@ -7,8 +7,8 @@ import { Product } from '@/types/supabase';
 
 const ProductForm = dynamic(() => import('@/components/admin/ProductForm'), {
     loading: () => (
-        <div className="h-96 flex flex-col items-center justify-center text-gray-400">
-            <Loader2 className="w-8 h-8 animate-spin mb-4" />
+        <div className="h-96 flex flex-col items-center justify-center text-admin-muted">
+            <Loader2 className="w-8 h-8 animate-spin mb-4 text-admin-accent" />
             <p>Loading form...</p>
         </div>
     ),
@@ -45,15 +45,15 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
             />
 
             {/* Modal Content */}
-            <div className="relative w-full max-w-4xl max-h-[90vh] bg-[#fbfbfa] rounded-md border border-[#e5e5df] shadow-[0_16px_48px_rgba(17,17,17,0.18)] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+            <div className="relative w-full max-w-4xl max-h-[90vh] bg-white rounded-[12px] border border-admin-line shadow-[0_16px_48px_rgba(17,17,17,0.12)] flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200">
                 {/* Header */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-[#e5e5df] bg-[#fbfbfa] z-10">
-                    <h2 className="text-lg font-black text-gray-900">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-admin-line bg-white z-10">
+                    <h2 className="text-lg font-black text-admin-ink">
                         {product ? '제품 수정' : '새 제품 등록'}
                     </h2>
                     <button
                         onClick={onClose}
-                        className="p-2 text-gray-400 hover:text-gray-900 hover:bg-[#e5e5df] rounded transition-colors"
+                        className="p-2 text-admin-muted hover:text-admin-ink hover:bg-[#f4f4f5] rounded-[9px] transition-colors"
                         aria-label="제품 모달 닫기"
                     >
                         <X className="w-5 h-5" />

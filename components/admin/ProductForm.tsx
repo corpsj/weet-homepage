@@ -146,7 +146,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                     <ConsoleSectionTitle>기본 정보</ConsoleSectionTitle>
 
                     <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1.5">제품명</label>
+                        <label className="block text-xs font-bold text-admin-ink mb-1.5">제품명</label>
                         <input
                             type="text"
                             name="name"
@@ -159,7 +159,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
 
                     <div className={formData.size_category === 'S' ? "grid grid-cols-2 gap-4" : ""}>
                         <div>
-                            <label className="block text-xs font-bold text-gray-700 mb-1.5">카테고리</label>
+                            <label className="block text-xs font-bold text-admin-ink mb-1.5">카테고리</label>
                             <select
                                 name="size_category"
                                 value={formData.size_category}
@@ -176,7 +176,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                         </div>
                         {formData.size_category === 'S' && (
                             <div>
-                                <label className="block text-xs font-bold text-gray-700 mb-1.5">세부 카테고리</label>
+                                <label className="block text-xs font-bold text-admin-ink mb-1.5">세부 카테고리</label>
                                 <select
                                     name="sub_category"
                                     value={formData.sub_category || 'Private'}
@@ -198,9 +198,9 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                                 id="is_active"
                                 checked={formData.is_active ?? false}
                                 onChange={handleChange}
-                                className="w-4 h-4 text-black border-gray-300 rounded focus:ring-black accent-black cursor-pointer"
+                                className="w-4 h-4 text-admin-accent border-admin-line-2 rounded focus:ring-admin-accent accent-admin-accent cursor-pointer"
                             />
-                            <label htmlFor="is_active" className="text-xs font-bold text-gray-700 cursor-pointer">활성화 (공개)</label>
+                            <label htmlFor="is_active" className="text-xs font-bold text-admin-ink cursor-pointer select-none">활성화 (공개)</label>
                         </div>
 
                         <div className="flex items-center gap-2">
@@ -210,9 +210,9 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                                 id="is_signature"
                                 checked={formData.is_signature ?? false}
                                 onChange={handleChange}
-                                className="w-4 h-4 text-black border-gray-300 rounded focus:ring-black accent-black cursor-pointer"
+                                className="w-4 h-4 text-admin-accent border-admin-line-2 rounded focus:ring-admin-accent accent-admin-accent cursor-pointer"
                             />
-                            <label htmlFor="is_signature" className="text-xs font-bold text-gray-700 cursor-pointer">시그니처 라인 노출</label>
+                            <label htmlFor="is_signature" className="text-xs font-bold text-admin-ink cursor-pointer select-none">시그니처 라인 노출</label>
                         </div>
                     </div>
 
@@ -221,7 +221,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                         <ConsoleSectionTitle>상세 스펙</ConsoleSectionTitle>
                         <div className="grid grid-cols-2 gap-4 mt-4">
                             <div>
-                                <label className="block text-xs font-bold text-gray-700 mb-1.5">가격</label>
+                                <label className="block text-xs font-bold text-admin-ink mb-1.5">가격</label>
                                 <input
                                     type="text"
                                     name="price"
@@ -231,7 +231,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-gray-700 mb-1.5">크기</label>
+                                <label className="block text-xs font-bold text-admin-ink mb-1.5">크기</label>
                                 <input
                                     type="text"
                                     name="size"
@@ -241,7 +241,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-gray-700 mb-1.5">구조</label>
+                                <label className="block text-xs font-bold text-admin-ink mb-1.5">구조</label>
                                 <input
                                     type="text"
                                     name="structure"
@@ -251,7 +251,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-gray-700 mb-1.5">지붕형태</label>
+                                <label className="block text-xs font-bold text-admin-ink mb-1.5">지붕형태</label>
                                 <input
                                     type="text"
                                     name="roof_type"
@@ -261,7 +261,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-gray-700 mb-1.5">외부마감</label>
+                                <label className="block text-xs font-bold text-admin-ink mb-1.5">외부마감</label>
                                 <input
                                     type="text"
                                     name="exterior_finish"
@@ -271,7 +271,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                                 />
                             </div>
                             <div>
-                                <label className="block text-xs font-bold text-gray-700 mb-1.5">내부마감</label>
+                                <label className="block text-xs font-bold text-admin-ink mb-1.5">내부마감</label>
                                 <input
                                     type="text"
                                     name="interior_finish"
@@ -285,7 +285,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
 
                     {/* Description */}
                     <div className="pt-6">
-                        <label className="block text-xs font-bold text-gray-700 mb-1.5">설명 (Description)</label>
+                        <label className="block text-xs font-bold text-admin-ink mb-1.5">설명 (Description)</label>
                         <textarea
                             name="description"
                             rows={5}
@@ -301,7 +301,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                     <ConsoleSectionTitle>이미지</ConsoleSectionTitle>
 
                     <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1.5">메인 이미지</label>
+                        <label className="block text-xs font-bold text-admin-ink mb-1.5">메인 이미지</label>
                         <ImageUpload
                             value={formData.image_url || ''}
                             onChange={handleImageChange}
@@ -309,7 +309,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                     </div>
 
                     <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1.5">도면 이미지</label>
+                        <label className="block text-xs font-bold text-admin-ink mb-1.5">도면 이미지</label>
                         <div className="space-y-2">
                             <ImageUpload
                                 value={formData.floor_plan_url || ''}
@@ -320,12 +320,12 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                     </div>
 
                     <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1.5">서브 이미지 (추가)</label>
+                        <label className="block text-xs font-bold text-admin-ink mb-1.5">서브 이미지 (추가)</label>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-2">
                             {formData.sub_images?.map((url: string, index: number) => (
-                                <div key={index} className="relative aspect-video bg-[#f4f4f1] rounded border border-[#e5e5df] overflow-hidden">
+                                <div key={index} className="relative aspect-video bg-[#fafafb] rounded-[9px] border border-admin-line-2 overflow-hidden">
                                     {failedSubImages.has(url) ? (
-                                        <div className="absolute inset-0 flex items-center justify-center text-gray-400 text-xs">
+                                        <div className="absolute inset-0 flex items-center justify-center text-admin-muted text-xs">
                                             이미지 보완
                                         </div>
                                     ) : (
@@ -341,7 +341,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                                     <button
                                         type="button"
                                         onClick={() => handleSubImageRemove(index)}
-                                        className="absolute top-1 right-1 bg-white shadow-sm text-red-600 p-1 rounded hover:bg-red-50 transition-colors"
+                                        className="absolute top-1 right-1 bg-white shadow-sm text-[#dc2626] p-1 rounded-[7px] hover:bg-[#fef2f2] transition-colors"
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 18 18" /></svg>
                                     </button>
@@ -354,7 +354,7 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
                                 />
                             </div>
                         </div>
-                        <p className="text-[11px] text-gray-400 font-medium">
+                        <p className="text-[11px] text-admin-muted font-medium">
                             * + 버튼을 눌러 이미지를 계속 추가할 수 있습니다.
                         </p>
                     </div>

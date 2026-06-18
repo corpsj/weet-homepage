@@ -17,28 +17,28 @@ export function OptionInfoModal({ option, onClose }: { option: CustomizeOption; 
   const specs = fallback?.specs || [];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-customize-shade/35 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-weet-ink/35 p-4" onClick={onClose}>
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="w-full max-w-xl rounded-lg bg-customize-sand p-5 shadow-2xl"
+        className="w-full max-w-xl rounded-lg bg-weet-surface p-5 shadow-2xl"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="mb-4 flex items-start justify-between gap-4">
           <div>
             <div className="mb-1 flex items-center gap-2">
-              {option.priceType === 'included' && <span className="rounded bg-customize-dune px-2 py-0.5 text-[11px] font-black text-customize-slate">기본 포함</span>}
-              {option.priceType === 'consult' && <span className="rounded bg-customize-linen px-2 py-0.5 text-[11px] font-black text-customize-amber">{COPY.consultNeeded}</span>}
-              {option.priceType === 'fixed' && <p className="text-xs font-bold text-customize-slate">{optionPriceDisplay(option)}</p>}
+              {option.priceType === 'included' && <span className="rounded bg-weet-paper-alt px-2 py-0.5 text-[11px] font-black text-weet-muted">기본 포함</span>}
+              {option.priceType === 'consult' && <span className="rounded bg-weet-gold/10 px-2 py-0.5 text-[11px] font-black text-weet-gold-deep">{COPY.consultNeeded}</span>}
+              {option.priceType === 'fixed' && <p className="text-xs font-bold text-weet-gold-deep">{optionPriceDisplay(option)}</p>}
             </div>
-            <h3 id={titleId} className="text-xl font-black text-customize-ink">{option.nameKo}</h3>
+            <h3 id={titleId} className="text-xl font-black text-weet-ink">{option.nameKo}</h3>
           </div>
           <Button variant="ghost" size="icon-sm" onClick={onClose}>
             <X className="h-4 w-4" />
           </Button>
         </div>
-        <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-lg bg-customize-bisque">
+        <div className="relative mb-4 aspect-[16/9] overflow-hidden rounded-lg bg-weet-paper-alt">
           <Image
             src={imagePath}
             alt={option.nameKo}
@@ -52,13 +52,14 @@ export function OptionInfoModal({ option, onClose }: { option: CustomizeOption; 
         {specs.length > 0 && (
           <div className="mb-3 flex flex-wrap gap-2">
             {specs.map(spec => (
-              <span key={spec} className="rounded-full border border-customize-stone bg-customize-oat px-3 py-1 text-xs font-bold text-customize-umber">
+              <span key={spec} className="inline-flex items-center gap-1.5 rounded-full border border-weet-line bg-weet-paper px-3 py-1 text-xs font-bold text-weet-sub">
+                <span aria-hidden="true" className="text-weet-forest">•</span>
                 {spec}
               </span>
             ))}
           </div>
         )}
-        <p className="whitespace-pre-wrap text-sm leading-7 text-customize-cocoa">
+        <p className="whitespace-pre-wrap text-sm leading-7 text-weet-sub">
           {desc}
         </p>
       </div>

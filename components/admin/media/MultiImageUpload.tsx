@@ -127,18 +127,18 @@ export default function MultiImageUpload({ onUpload, className = '', bucket = 'p
                 onClick={handleClick}
                 disabled={loading}
                 type="button"
-                className="w-full h-full min-h-[120px] border-2 border-dashed border-gray-300 rounded-lg hover:border-black hover:bg-gray-50 transition-all flex flex-col items-center justify-center gap-2 text-gray-500 hover:text-black group"
+                className="w-full h-full min-h-[120px] border-2 border-dashed border-admin-line-2 rounded-[12px] hover:border-admin-accent hover:bg-admin-accent-soft transition-all flex flex-col items-center justify-center gap-2 text-admin-muted hover:text-admin-accent group"
             >
                 {loading ? (
-                    <Loader2 className="w-6 h-6 animate-spin text-black" />
+                    <Loader2 className="w-6 h-6 animate-spin text-admin-accent" />
                 ) : (
                     <>
-                        <div className="p-2 bg-gray-100 rounded-full group-hover:bg-white transition-colors">
+                        <div className="p-2 bg-[#f4f4f5] rounded-full group-hover:bg-white transition-colors">
                             <Plus className="w-5 h-5" />
                         </div>
                         <div className="text-center px-2">
                             <p className="text-sm font-medium">이미지 추가</p>
-                            <p className="text-[10px] text-gray-400 mt-0.5">여러 장 선택 가능</p>
+                            <p className="text-[10px] text-[#a1a1aa] mt-0.5">여러 장 선택 가능</p>
                         </div>
                     </>
                 )}

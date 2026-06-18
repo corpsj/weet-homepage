@@ -210,7 +210,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                 <div className="flex items-center justify-between mb-4">
                     <div>
                         <ConsoleSectionTitle>프로젝트 이미지</ConsoleSectionTitle>
-                        <p className="text-xs text-gray-500 mt-1">첫 번째 이미지가 대표 이미지로 사용됩니다.</p>
+                        <p className="text-xs text-admin-muted mt-1">첫 번째 이미지가 대표 이미지로 사용됩니다.</p>
                     </div>
                     <div className="relative">
                         <input
@@ -262,8 +262,8 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                         </SortableContext>
                     </DndContext>
                 ) : (
-                    <div className="h-40 flex items-center justify-center border border-dashed border-[#d8d8d2] rounded bg-[#fbfbfa]">
-                        <p className="text-gray-500 text-xs font-bold">이미지를 업로드해주세요</p>
+                    <div className="h-40 flex items-center justify-center border border-dashed border-admin-line-2 rounded-[9px] bg-[#fafafb]">
+                        <p className="text-admin-muted text-xs font-bold">이미지를 업로드해주세요</p>
                     </div>
                 )}
             </ConsolePanel>
@@ -273,7 +273,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                 <ConsoleSectionTitle>기본 정보</ConsoleSectionTitle>
 
                 <div>
-                    <label className="block text-xs font-bold text-gray-600 mb-1">
+                    <label className="block text-xs font-bold text-admin-muted mb-1">
                         프로젝트 이름 *
                     </label>
                     <input
@@ -288,7 +288,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
 
                 <div className="grid grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-xs font-bold text-gray-600 mb-1">
+                        <label className="block text-xs font-bold text-admin-muted mb-1">
                             클라이언트
                         </label>
                         <input
@@ -298,7 +298,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                         />
                     </div>
                     <div>
-                        <label className="block text-xs font-bold text-gray-600 mb-1">
+                        <label className="block text-xs font-bold text-admin-muted mb-1">
                             위치
                         </label>
                         <input
@@ -311,7 +311,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
 
                 <div className="grid grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-xs font-bold text-gray-600 mb-1">
+                        <label className="block text-xs font-bold text-admin-muted mb-1">
                             완공일
                         </label>
                         <input
@@ -321,7 +321,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                         />
                     </div>
                     <div>
-                        <label className="block text-xs font-bold text-gray-600 mb-1">
+                        <label className="block text-xs font-bold text-admin-muted mb-1">
                             상태
                         </label>
                         <select
@@ -336,7 +336,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                 </div>
 
                 <div>
-                    <label className="block text-xs font-bold text-gray-600 mb-1">
+                    <label className="block text-xs font-bold text-admin-muted mb-1">
                         설명
                     </label>
                     <textarea
@@ -348,7 +348,7 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
                 </div>
 
                 <div>
-                    <label className="block text-xs font-bold text-gray-600 mb-1">
+                    <label className="block text-xs font-bold text-admin-muted mb-1">
                         태그 (쉼표로 구분)
                     </label>
                     <input
@@ -411,32 +411,32 @@ function SortableImage({
             style={style}
             {...attributes}
             {...listeners}
-            className="relative flex-shrink-0 w-40 aspect-[4/3] group bg-[#f4f4f1] border border-[#e5e5df] rounded"
+            className="relative flex-shrink-0 w-40 aspect-[4/3] group bg-[#f4f4f5] border border-admin-line rounded-[9px]"
         >
             <Image
                 src={url}
                 alt={`Project image ${index + 1}`}
                 fill
                 sizes="160px"
-                className="object-cover rounded"
+                className="object-cover rounded-[9px]"
             />
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors rounded flex items-center justify-center opacity-0 group-hover:opacity-100">
+            <div className="absolute inset-0 bg-admin-ink/0 group-hover:bg-admin-ink/20 transition-colors rounded-[9px] flex items-center justify-center opacity-0 group-hover:opacity-100">
                 <button
                     type="button"
                     onClick={() => onRemove(index)}
                     onPointerDown={(e) => e.stopPropagation()}
-                    className="p-1.5 bg-white rounded shadow text-red-600 hover:bg-red-50"
+                    className="p-1.5 bg-white rounded-[9px] shadow text-red-600 hover:bg-red-50"
                     aria-label={`프로젝트 이미지 ${index + 1} 제거`}
                 >
                     <X className="w-4 h-4" />
                 </button>
             </div>
             {index === 0 && (
-                <span className="absolute top-2 left-2 px-1.5 py-0.5 bg-black text-white text-[10px] font-bold rounded">
+                <span className="absolute top-2 left-2 px-2 py-0.5 bg-admin-ink/72 backdrop-blur-[4px] text-white text-[10px] font-bold rounded-full">
                     대표
                 </span>
             )}
-            <div className="absolute top-2 right-2 p-1 bg-black/50 rounded cursor-grab active:cursor-grabbing text-white opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute top-2 right-2 p-1 bg-admin-ink/50 rounded-[9px] cursor-grab active:cursor-grabbing text-white opacity-0 group-hover:opacity-100 transition-opacity">
                 <GripVertical className="w-4 h-4" />
             </div>
         </div>

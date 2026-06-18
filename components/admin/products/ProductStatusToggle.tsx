@@ -41,19 +41,22 @@ export default function ProductStatusToggle({ id, isActive: initialActive }: Pro
 
     return (
         <button
+            type="button"
             onClick={handleToggle}
             disabled={loading}
-            className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium transition-colors ${active
-                ? 'bg-green-100 text-green-800 hover:bg-green-200'
-                : 'bg-gray-100 text-gray-800 hover:bg-gray-200'
+            role="switch"
+            aria-checked={active}
+            aria-label={active ? '노출 켜짐' : '노출 꺼짐'}
+            className={`relative inline-flex h-[23px] w-10 shrink-0 items-center rounded-full p-0.5 transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${active
+                ? 'bg-admin-accent'
+                : 'bg-[#e4e4e7]'
                 }`}
         >
-            {loading ? (
-                <Loader2 className="w-3 h-3 animate-spin mr-1" />
-            ) : (
-                <span className={`w-1.5 h-1.5 rounded-full mr-1.5 ${active ? 'bg-green-600' : 'bg-gray-500'}`} />
-            )}
-            {active ? '활성' : '비활성'}
+            <span
+                className={`flex h-[19px] w-[19px] items-center justify-center rounded-full bg-white shadow-[0_1px_2px_rgba(0,0,0,0.25)] transition-transform ${active ? 'translate-x-[17px]' : 'translate-x-0'}`}
+            >
+                {loading && <Loader2 className="h-3 w-3 animate-spin text-admin-accent" />}
+            </span>
         </button>
     );
 }

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Noto_Sans_KR, Geist } from "next/font/google";
+import { Noto_Sans_KR, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ClientLayout from "@/components/layout/ClientLayout";
 import { metadataBase, SITE_URL } from "@/lib/site";
@@ -93,7 +93,10 @@ import Script from 'next/script';
 import { LanguageProvider } from '@/contexts/LanguageContext';
 import { cn } from "@/lib/utils";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+// Geist(영문·숫자)·Geist Mono(모노)·Noto Sans KR(한글) — README 타이포 스택.
+// 변수명을 tailwind fontFamily 참조(--font-geist-sans/--font-geist-mono)와 일치시킨다.
+const geist = Geist({ subsets: ['latin'], display: 'swap', variable: '--font-geist-sans' });
+const geistMono = Geist_Mono({ subsets: ['latin'], display: 'swap', variable: '--font-geist-mono' });
 const enableVercelAnalytics =
   process.env.VERCEL === "1" || process.env.NEXT_PUBLIC_ENABLE_VERCEL_ANALYTICS === "true";
 
@@ -165,7 +168,7 @@ export default async function RootLayout({
   ];
 
   return (
-    <html lang="ko" data-scroll-behavior="smooth" className={cn("font-sans", geist.variable, noto.variable)}>
+    <html lang="ko" data-scroll-behavior="smooth" className={cn("font-sans", geist.variable, geistMono.variable, noto.variable)}>
       <head>
         <script
           type="application/ld+json"

@@ -21,7 +21,7 @@ interface InsightsDashboardProps {
     statusDistribution: { name: string; value: number }[];
 }
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+const COLORS = ['#2563eb', '#60a5fa', '#93c5fd', '#bfdbfe'];
 
 const STATUS_MAP: Record<string, string> = {
     'new': '신규 문의',
@@ -45,17 +45,17 @@ export default function InsightsDashboard({
         <div className="space-y-8">
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-white p-6 rounded-md border border-[#e5e5df]">
-                    <h3 className="text-sm font-medium text-gray-500">총 문의 건수</h3>
-                    <p className="text-3xl font-bold text-gray-900 mt-2">{totalInquiries}</p>
+                <div className="bg-white p-6 rounded-[12px] border border-admin-line">
+                    <h3 className="text-sm font-medium text-admin-muted">총 문의 건수</h3>
+                    <p className="text-3xl font-bold text-admin-ink mt-2">{totalInquiries}</p>
                 </div>
                 {/* Add more summary cards here if needed */}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Monthly Trend Chart */}
-                <div className="bg-white p-6 rounded-md border border-[#e5e5df]">
-                    <h3 className="text-lg font-bold text-gray-900 mb-6">월별 문의 추이</h3>
+                <div className="bg-white p-6 rounded-[12px] border border-admin-line">
+                    <h3 className="text-lg font-bold text-admin-ink mb-6">월별 문의 추이</h3>
                     <div className="h-[300px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={monthlyTrends}>
@@ -73,12 +73,12 @@ export default function InsightsDashboard({
                                     allowDecimals={false}
                                 />
                                 <Tooltip
-                                    cursor={{ fill: '#f3f4f6' }}
-                                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                                    cursor={{ fill: '#eff6ff' }}
+                                    contentStyle={{ borderRadius: '12px', border: '1px solid #ececed', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                                 />
                                 <Bar
                                     dataKey="count"
-                                    fill="#111827"
+                                    fill="#2563eb"
                                     radius={[4, 4, 0, 0]}
                                     barSize={40}
                                 />
@@ -88,8 +88,8 @@ export default function InsightsDashboard({
                 </div>
 
                 {/* Status Distribution Chart */}
-                <div className="bg-white p-6 rounded-md border border-[#e5e5df]">
-                    <h3 className="text-lg font-bold text-gray-900 mb-6">문의 처리 현황</h3>
+                <div className="bg-white p-6 rounded-[12px] border border-admin-line">
+                    <h3 className="text-lg font-bold text-admin-ink mb-6">문의 처리 현황</h3>
                     <div className="h-[300px] w-full">
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
@@ -108,7 +108,7 @@ export default function InsightsDashboard({
                                     ))}
                                 </Pie>
                                 <Tooltip
-                                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                                    contentStyle={{ borderRadius: '12px', border: '1px solid #ececed', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                                 />
                                 <Legend verticalAlign="bottom" height={36} />
                             </PieChart>

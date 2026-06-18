@@ -59,20 +59,20 @@ export default function GalleryList({ initialItems }: { initialItems: GalleryIte
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {items.map((item, index) => (
-          <ConsolePanel key={item.id} className="group relative overflow-hidden p-0 border-[#e5e5df] transition-colors hover:border-gray-400">
-            <div className="aspect-[4/3] relative bg-[#f4f4f1] border-b border-[#e5e5df]">
+          <ConsolePanel key={item.id} className="group relative cursor-pointer overflow-hidden p-0 border-admin-line transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(.2,.7,.2,1)] hover:-translate-y-[3px] hover:shadow-[0_18px_40px_-24px_rgba(24,24,27,.4)]">
+            <div className="aspect-[4/3] relative overflow-hidden bg-[#f4f4f5] border-b border-admin-line">
               <Image
                 src={item.image_url}
                 alt={item.title}
                 fill
                 loading={index === 0 ? 'eager' : 'lazy'}
                 sizes="(max-width: 768px) 100vw, 25vw"
-                className="object-cover"
+                className="object-cover transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
+              <div className="absolute inset-0 bg-admin-ink/0 group-hover:bg-admin-ink/20 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
                 <Link
                   href={`/admin/gallery/${item.id}`}
-                  className="p-2 bg-white rounded shadow text-gray-700 hover:text-black transition-colors"
+                  className="p-2 bg-white rounded-[9px] shadow text-[#52525b] hover:text-admin-accent transition-colors"
                   aria-label={`${item.title} 수정`}
                 >
                   <Pencil className="w-4 h-4" />
@@ -80,7 +80,7 @@ export default function GalleryList({ initialItems }: { initialItems: GalleryIte
                 <button
                   onClick={() => handleDelete(item.id)}
                   disabled={deleting === item.id || isPending}
-                  className="p-2 bg-white rounded shadow text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+                  className="p-2 bg-white rounded-[9px] shadow text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
                   aria-label={`${item.title} 삭제`}
                 >
                   {deleting === item.id ? (
@@ -92,12 +92,12 @@ export default function GalleryList({ initialItems }: { initialItems: GalleryIte
               </div>
             </div>
             <div className="p-3">
-              <h3 className="font-bold text-sm text-gray-900 truncate">{item.title}</h3>
+              <h3 className="font-bold text-sm text-admin-ink truncate">{item.title}</h3>
               {item.description && (
-                <p className="text-xs text-gray-500 truncate mt-0.5">{item.description}</p>
+                <p className="text-xs text-admin-muted truncate mt-0.5">{item.description}</p>
               )}
               <div className="mt-3 flex items-center justify-between">
-                <span className="text-[11px] font-bold text-gray-400">
+                <span className="text-[11px] font-bold text-[#a1a1aa]">
                   {formatKstDate(item.created_at)}
                 </span>
                 <ConsoleStatusPill tone={item.is_active ? 'success' : 'neutral'}>
@@ -110,9 +110,9 @@ export default function GalleryList({ initialItems }: { initialItems: GalleryIte
       </div>
 
       {items.length === 0 && (
-        <ConsolePanel className="p-12 flex flex-col items-center justify-center text-gray-400 border-dashed">
+        <ConsolePanel className="p-12 flex flex-col items-center justify-center text-[#a1a1aa] border-dashed border-admin-line-2">
           <ImageIcon className="w-8 h-8 mb-3 opacity-20" />
-          <p className="text-sm font-bold text-gray-500">등록된 이미지가 없습니다.</p>
+          <p className="text-sm font-bold text-admin-muted">등록된 이미지가 없습니다.</p>
         </ConsolePanel>
       )}
     </div>

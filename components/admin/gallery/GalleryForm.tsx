@@ -200,7 +200,7 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
                 <div className="flex items-center justify-between mb-4">
                     <div>
                         <ConsoleSectionTitle>이미지 등록</ConsoleSectionTitle>
-                        <p className="text-xs text-gray-500 mt-1">첫 번째 이미지가 대표 이미지가 됩니다.</p>
+                        <p className="text-xs text-admin-muted mt-1">첫 번째 이미지가 대표 이미지가 됩니다.</p>
                     </div>
                     <div className="relative">
                         <input
@@ -247,8 +247,8 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
                         </SortableContext>
                     </DndContext>
                 ) : (
-                    <div className="h-40 flex items-center justify-center border border-dashed border-[#d8d8d2] rounded bg-[#fbfbfa]">
-                        <p className="text-gray-500 text-xs font-bold">이미지를 업로드해주세요</p>
+                    <div className="h-40 flex items-center justify-center border border-dashed border-admin-line-2 rounded-[9px] bg-[#fafafb]">
+                        <p className="text-admin-muted text-xs font-bold">이미지를 업로드해주세요</p>
                     </div>
                 )}
             </ConsolePanel>
@@ -256,7 +256,7 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
             <ConsolePanel className="p-6 space-y-6">
                 <ConsoleSectionTitle>기본 정보</ConsoleSectionTitle>
                 <div>
-                    <label className="block text-xs font-bold text-gray-600 mb-1">제목</label>
+                    <label className="block text-xs font-bold text-admin-muted mb-1">제목</label>
                     <input
                         {...register('title')}
                         className={`${consoleInputClass} w-full`}
@@ -268,7 +268,7 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
                 </div>
 
                 <div>
-                    <label className="block text-xs font-bold text-gray-600 mb-1">설명</label>
+                    <label className="block text-xs font-bold text-admin-muted mb-1">설명</label>
                     <textarea
                         {...register('description')}
                         rows={3}
@@ -279,7 +279,7 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
 
                 <div className="grid grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-xs font-bold text-gray-600 mb-1">표시 순서</label>
+                        <label className="block text-xs font-bold text-admin-muted mb-1">표시 순서</label>
                         <input
                             type="number"
                             {...register('display_order', { valueAsNumber: true })}
@@ -292,9 +292,9 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
                             type="checkbox"
                             id="is_active"
                             {...register('is_active')}
-                            className="w-4 h-4 rounded border-gray-300 text-black focus:ring-black accent-black cursor-pointer"
+                            className="w-4 h-4 rounded border-admin-line-2 text-admin-accent focus:ring-admin-accent accent-admin-accent cursor-pointer"
                         />
-                        <label htmlFor="is_active" className="text-xs font-bold text-gray-700 cursor-pointer">
+                        <label htmlFor="is_active" className="text-xs font-bold text-[#3f3f46] cursor-pointer">
                             공개 여부
                         </label>
                     </div>
@@ -352,32 +352,32 @@ function SortableImage({
             style={style}
             {...attributes}
             {...listeners}
-            className="relative flex-shrink-0 w-40 aspect-[4/3] group bg-[#f4f4f1] border border-[#e5e5df] rounded"
+            className="relative flex-shrink-0 w-40 aspect-[4/3] group bg-[#f4f4f5] border border-admin-line rounded-[9px]"
         >
             <Image
                 src={url}
                 alt={`Gallery image ${index + 1}`}
                 fill
                 sizes="160px"
-                className="object-cover rounded"
+                className="object-cover rounded-[9px]"
             />
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors rounded flex items-center justify-center opacity-0 group-hover:opacity-100">
+            <div className="absolute inset-0 bg-admin-ink/0 group-hover:bg-admin-ink/20 transition-colors rounded-[9px] flex items-center justify-center opacity-0 group-hover:opacity-100">
                 <button
                     type="button"
                     onClick={() => onRemove(index)}
                     onPointerDown={(e) => e.stopPropagation()}
-                    className="p-1.5 bg-white rounded shadow text-red-600 hover:bg-red-50"
+                    className="p-1.5 bg-white rounded-[9px] shadow text-red-600 hover:bg-red-50"
                     aria-label={`갤러리 이미지 ${index + 1} 제거`}
                 >
                     <X className="w-4 h-4" />
                 </button>
             </div>
             {index === 0 && (
-                <span className="absolute top-2 left-2 px-1.5 py-0.5 bg-black text-white text-[10px] font-bold rounded">
+                <span className="absolute top-2 left-2 px-2 py-0.5 bg-admin-ink/72 backdrop-blur-[4px] text-white text-[10px] font-bold rounded-full">
                     대표
                 </span>
             )}
-            <div className="absolute top-2 right-2 p-1 bg-black/50 rounded cursor-grab active:cursor-grabbing text-white opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute top-2 right-2 p-1 bg-admin-ink/50 rounded-[9px] cursor-grab active:cursor-grabbing text-white opacity-0 group-hover:opacity-100 transition-opacity">
                 <GripVertical className="w-4 h-4" />
             </div>
         </div>

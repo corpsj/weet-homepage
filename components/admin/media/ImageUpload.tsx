@@ -140,7 +140,7 @@ export default function ImageUpload({
             />
 
             {value && !isBroken ? (
-                <div className="relative w-full h-full min-h-[200px] rounded-lg overflow-hidden border border-gray-200 bg-gray-50 group">
+                <div className="relative w-full h-full min-h-[200px] rounded-[12px] overflow-hidden border border-admin-line bg-[#fafafb] group">
                     <Image
                         src={value}
                         alt="Uploaded image"
@@ -165,18 +165,18 @@ export default function ImageUpload({
                     disabled={loading}
                     type="button"
                     aria-label="이미지 업로드"
-                    className="w-full h-full min-h-[200px] border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400 hover:bg-gray-50 transition-all flex flex-col items-center justify-center gap-3 text-gray-500 hover:text-gray-600"
+                    className="w-full h-full min-h-[200px] border-2 border-dashed border-admin-line-2 rounded-[12px] hover:border-admin-accent hover:bg-admin-accent-soft transition-all flex flex-col items-center justify-center gap-3 text-admin-muted hover:text-admin-accent"
                 >
                     {loading ? (
-                        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+                        <Loader2 className="w-8 h-8 animate-spin text-admin-accent" />
                     ) : (
                         <>
-                            <div className="p-3 bg-gray-100 rounded-full">
+                            <div className="p-3 bg-[#f4f4f5] rounded-full">
                                 <Upload className="w-6 h-6" />
                             </div>
                             <div className="text-center">
                                 <p className="text-sm font-medium">{isBroken ? '이미지 점검 필요 · 다시 업로드' : '클릭하여 이미지 업로드'}</p>
-                                <p className="text-xs text-gray-400 mt-1">PNG, JPG, GIF up to {quality === 'high' ? '20MB' : '10MB'}</p>
+                                <p className="text-xs text-[#a1a1aa] mt-1">PNG, JPG, GIF up to {quality === 'high' ? '20MB' : '10MB'}</p>
                             </div>
                         </>
                     )}
