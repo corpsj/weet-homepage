@@ -1,0 +1,53 @@
+<svg width="1000" height="420" viewBox="0 0 1000 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1000" height="420" fill="#f5f1ea"></rect>
+  <text x="200" y="48" fill="#6f6658" font-family="sans-serif" font-size="15" font-weight="800">Compact 3x6 / 18m2</text>
+  <rect x="200" y="60" width="600" height="300" rx="6" fill="#fbf7ef" stroke="#2f3432" stroke-width="12"></rect>
+  <rect x="218" y="78" width="564" height="264" rx="3" fill="#f8f4ec" stroke="#c8bdab" stroke-width="2"></rect>
+  <g stroke="#e3dccf" stroke-width="1">
+    <path d="M242 78V342"></path>
+    <path d="M266 78V342"></path>
+    <path d="M290 78V342"></path>
+    <path d="M314 78V342"></path>
+    <path d="M338 78V342"></path>
+    <path d="M362 78V342"></path>
+    <path d="M386 78V342"></path>
+    <path d="M410 78V342"></path>
+    <path d="M434 78V342"></path>
+    <path d="M458 78V342"></path>
+    <path d="M482 78V342"></path>
+    <path d="M506 78V342"></path>
+    <path d="M530 78V342"></path>
+    <path d="M554 78V342"></path>
+    <path d="M578 78V342"></path>
+    <path d="M602 78V342"></path>
+    <path d="M626 78V342"></path>
+    <path d="M650 78V342"></path>
+    <path d="M674 78V342"></path>
+    <path d="M698 78V342"></path>
+    <path d="M722 78V342"></path>
+    <path d="M746 78V342"></path>
+    <path d="M770 78V342"></path>
+    <path d="M218 102H782"></path>
+    <path d="M218 126H782"></path>
+    <path d="M218 150H782"></path>
+    <path d="M218 174H782"></path>
+    <path d="M218 198H782"></path>
+    <path d="M218 222H782"></path>
+    <path d="M218 246H782"></path>
+    <path d="M218 270H782"></path>
+    <path d="M218 294H782"></path>
+    <path d="M218 318H782"></path>
+  </g>
+  <rect x="710" y="344" width="58" height="16" fill="#8d7a5a"></rect>
+  <path d="M716 344Q714 292 766 292" stroke="#8d7a5a" stroke-width="3"></path>
+  <text x="678" y="326" fill="#5f5448" font-family="sans-serif" font-size="14" font-weight="700">현관도어</text>
+  <rect x="366" y="54" width="80" height="12" fill="#7f9aa0"></rect>
+  <text x="376" y="95" fill="#5f5448" font-family="sans-serif" font-size="14" font-weight="700">기본창</text>
+  <rect x="250" y="252" width="126" height="62" rx="4" fill="#e1d7c8" stroke="#6b6258" stroke-width="2"></rect>
+  <circle cx="276" cy="283" r="15" stroke="#6b6258" stroke-width="2"></circle>
+  <text x="272" y="244" fill="#5f5448" font-family="sans-serif" font-size="14" font-weight="700">싱크대</text>
+  <rect x="614" y="106" width="124" height="102" rx="4" fill="#e7e1d8" stroke="#6b6258" stroke-width="2"></rect>
+  <circle cx="706" cy="142" r="17" stroke="#6b6258" stroke-width="2"></circle>
+  <rect x="626" y="118" width="48" height="30" rx="4" stroke="#6b6258" stroke-width="2"></rect>
+  <text x="630" y="230" fill="#5f5448" font-family="sans-serif" font-size="14" font-weight="700">욕실</text>
+</svg>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#231D16; -webkit-font-smoothing:antialiased; }
+  ::selection { background:#FDB813; color:#231D16; }
+  .mono { font-family:'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace; }
+  .wt-btn { transition:transform .15s, background .2s, color .2s, border-color .2s, box-shadow .2s; cursor:pointer; } .wt-btn:hover { transform:translateY(-2px); }
+  .wt-in { transition:border-color .2s, box-shadow .2s, background .2s; } .wt-in:focus { outline:none; border-color:#231D16; box-shadow:0 0 0 3px rgba(35,29,22,.1); background:#fff; }
+  .wt-link { transition:color .2s; cursor:pointer; } .wt-link:hover { color:#B8791A !important; }
+  .heroimg { animation:wtZoom 18s ease-in-out infinite alternate; }
+  @keyframes wtZoom { from { transform:scale(1.04);} to { transform:scale(1.14);} }
+  @media (prefers-reduced-motion: reduce){ .heroimg{animation:none!important;} }
+  @media (max-width:900px){ .login-aside { display:none !important; } .login-wrap { grid-template-columns:1fr !important; } }
+</style>
+</helmet>
+
+<div class="login-wrap" style="font-family:'Geist','Noto Sans KR',sans-serif; display:grid; grid-template-columns:1.1fr 0.9fr; min-height:100vh; background:#F6F1E8;">
+
+  <!-- LEFT: brand visual -->
+  <aside class="login-aside" style="position:relative; overflow:hidden; background:#231D16;">
+    <img class="heroimg" src="img/hero_main.webp" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:.92;">
+    <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(28,22,16,.92) 4%, rgba(35,29,22,.4) 55%, rgba(35,29,22,.25) 100%);"></div>
+    <div style="position:absolute; top:0; left:0; right:0; padding:40px 48px;">
+      <img src="img/weet-wordmark.webp" alt="weet" style="height:26px; width:auto; filter:brightness(0) invert(1);">
+    </div>
+    <div style="position:absolute; left:0; right:0; bottom:0; padding:0 48px 64px;">
+      <div class="mono" style="font-size:12px; font-weight:600; letter-spacing:.22em; color:#FDB813; margin-bottom:18px;">WEET CONSOLE</div>
+      <h2 style="font-size:clamp(28px,3vw,40px); font-weight:600; letter-spacing:-0.03em; line-height:1.12; margin:0 0 14px; color:#F6F1E8; text-wrap:balance;">작은 공간,<br>선명한 기준.</h2>
+      <p style="font-size:15px; font-weight:300; line-height:1.7; color:#C8BFAD; margin:0; max-width:38ch;">관리자 콘솔에서 상담·제품·콘텐츠를 통합 관리하세요.</p>
+    </div>
+  </aside>
+
+  <!-- RIGHT: form -->
+  <main style="display:flex; align-items:center; justify-content:center; padding:48px 32px;">
+    <div style="width:100%; max-width:380px;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:36px;">
+        <span style="width:34px; height:34px; border-radius:9px; background:#231D16; color:#F6F1E8; display:flex; align-items:center; justify-content:center; font-size:16px; font-weight:800;">W</span>
+        <div style="line-height:1.15;"><div style="font-size:15px; font-weight:700; color:#231D16;">weet</div><div class="mono" style="font-size:10px; color:#8C8273; letter-spacing:.1em;">CONSOLE</div></div>
+      </div>
+
+      <h1 style="font-size:26px; font-weight:700; letter-spacing:-0.02em; margin:0 0 6px; color:#231D16;">다시 오신 것을 환영합니다</h1>
+      <p style="font-size:14px; color:#8C8273; margin:0 0 30px;">계정 정보로 로그인해 콘솔에 접속하세요.</p>
+
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div>
+          <label style="display:block; font-size:12.5px; font-weight:600; color:#5A5044; margin-bottom:8px;">이메일</label>
+          <input class="wt-in" type="email" placeholder="admin@weet.com" value="{{ email }}" onInput="{{ onEmail }}" style="width:100%; box-sizing:border-box; height:46px; font-family:inherit; font-size:14px; color:#231D16; background:#FAF6EE; border:1px solid #DCD2C0; border-radius:9px; padding:0 14px;">
+        </div>
+        <div>
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+            <label style="font-size:12.5px; font-weight:600; color:#5A5044;">비밀번호</label>
+            <span class="wt-link" style="font-size:12px; color:#8C8273;">비밀번호 찾기</span>
+          </div>
+          <div style="position:relative;">
+            <input class="wt-in" type="{{ pwType }}" placeholder="••••••••" value="{{ pw }}" onInput="{{ onPw }}" style="width:100%; box-sizing:border-box; height:46px; font-family:inherit; font-size:14px; color:#231D16; background:#FAF6EE; border:1px solid #DCD2C0; border-radius:9px; padding:0 44px 0 14px;">
+            <span class="wt-link" onClick="{{ togglePw }}" style="position:absolute; right:12px; top:50%; transform:translateY(-50%); font-size:12px; font-weight:600; color:#8C8273;">{{ pwToggleLabel }}</span>
+          </div>
+        </div>
+        <label style="display:flex; align-items:center; gap:9px; font-size:13px; color:#5A5044; cursor:pointer; user-select:none;" onClick="{{ toggleRemember }}">
+          <span style="width:18px; height:18px; border-radius:5px; border:1.5px solid {{ rememberBd }}; background:{{ rememberBg }}; display:flex; align-items:center; justify-content:center; color:#fff; font-size:11px;">{{ rememberCheck }}</span>
+          로그인 상태 유지
+        </label>
+        <span class="wt-btn" style="display:flex; align-items:center; justify-content:center; gap:8px; background:#231D16; color:#F6F1E8; font-size:15px; font-weight:600; height:48px; border-radius:10px; margin-top:6px;">로그인 →</span>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:14px; margin:26px 0;">
+        <span style="flex:1; height:1px; background:#E5DBC9;"></span><span class="mono" style="font-size:11px; color:#A89E8C;">또는</span><span style="flex:1; height:1px; background:#E5DBC9;"></span>
+      </div>
+      <span class="wt-btn" style="display:flex; align-items:center; justify-content:center; gap:10px; background:#fff; border:1px solid #DCD2C0; color:#231D16; font-size:14px; font-weight:600; height:46px; border-radius:10px;">
+        <span style="width:16px; height:16px; border-radius:50%; background:conic-gradient(#EA4335,#FBBC05,#34A853,#4285F4);"></span> Google로 계속하기
+      </span>
+
+      <p style="font-size:11.5px; line-height:1.6; color:#A89E8C; margin:30px 0 0; text-align:center;">관리자 전용 페이지입니다. 접근 권한이 필요하면 운영팀에 문의하세요.</p>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:820}}">
+class Component extends DCLogic {
+  state = { email:'', pw:'', showPw:false, remember:true };
+  renderVals(){
+    return {
+      email:this.state.email, pw:this.state.pw,
+      onEmail:(e)=>this.setState({email:e.target.value}), onPw:(e)=>this.setState({pw:e.target.value}),
+      pwType:this.state.showPw?'text':'password', pwToggleLabel:this.state.showPw?'숨기기':'표시',
+      togglePw:()=>this.setState(s=>({showPw:!s.showPw})),
+      toggleRemember:()=>this.setState(s=>({remember:!s.remember})),
+      rememberBd:this.state.remember?'#231D16':'#C9BFAE', rememberBg:this.state.remember?'#231D16':'#FAF6EE', rememberCheck:this.state.remember?'✓':''
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#f4f0e8; -webkit-font-smoothing:antialiased; }
+  ::selection { background:#0d6e66; color:#fff; }
+  .ff { font-family:'Geist','Noto Sans KR',sans-serif; }
+  .wt-step { transition:border-color .2s, background .2s; cursor:pointer; }
+  .wt-step[data-state="current"] { border-color:#2f3432 !important; background:#2f3432 !important; }
+  .wt-step[data-state="current"] .wt-sl { color:#fbfaf7 !important; } .wt-step[data-state="current"] .wt-ss { color:#d8d0c3 !important; }
+  .wt-step[data-state="current"] .wt-sn { border-color:rgba(251,250,247,.6) !important; background:#fbfaf7 !important; color:#2f3432 !important; }
+  .wt-step[data-state="complete"] { border-color:#cfc4b3 !important; background:#efe6d4 !important; }
+  .wt-step[data-state="complete"] .wt-sn { border-color:var(--acc,#0d6e66) !important; background:var(--acc,#0d6e66) !important; color:#fff !important; }
+  .wt-step[data-state="complete"] .wt-ss { color:#9a8f7d !important; }
+  .wt-mbtn { transition:border-color .2s, background .2s; cursor:pointer; }
+  .wt-mbtn:hover { border-color:#b9aa94; }
+  .wt-mbtn[data-sel="true"] { border-color:#2f3432 !important; background:#efe6d4 !important; box-shadow:0 1px 3px rgba(47,52,50,.1); }
+  .wt-mbtn[data-sel="true"] .wt-mchk { opacity:1; }
+  .wt-mchk { opacity:0; }
+  .wt-opt { transition:border-color .2s, box-shadow .2s; cursor:pointer; }
+  .wt-opt:hover { border-color:#b9aa94; box-shadow:0 1px 2px rgba(47,52,50,.06); }
+  .wt-opt[data-sel="true"] { border-color:#2f3432 !important; box-shadow:0 0 0 1px #2f3432; }
+  .wt-opt[data-sel="true"] .wt-radio { border-color:var(--acc,#0d6e66) !important; background:var(--acc,#0d6e66) !important; }
+  .wt-opt[data-sel="true"] .wt-radio svg { opacity:1; } .wt-radio svg { opacity:0; }
+  .wt-btn { transition:transform .15s, background .2s; } .wt-btn:hover { transform:translateY(-1px); }
+  .wt-in { transition:border-color .2s, box-shadow .2s; } .wt-in:focus { outline:none; border-color:#b88b26; box-shadow:0 0 0 2px rgba(184,139,38,.25); }
+  .wt-info { color:#a89e8c; cursor:pointer; transition:color .2s, background .2s; } .wt-info:hover { color:#2f3432; background:#efe6d4; }
+  .wt-edit { display:inline-flex; align-items:center; gap:4px; border:1px solid #d8d0c3; background:#fbfaf7; color:#4f473d; font-size:12px; font-weight:700; padding:5px 10px; border-radius:6px; cursor:pointer; transition:border-color .2s; } .wt-edit:hover { border-color:#b9aa94; }
+  .wt-mx:hover { background:#efe6d4; }
+  .wt-stage { box-shadow:0 14px 34px -22px rgba(47,52,50,.45); transition:box-shadow .3s; }
+  .wt-stage svg { transition:transform .5s cubic-bezier(.2,.7,.2,1); } .wt-stage:hover svg { transform:scale(1.03); }
+  .wt-opt:hover { transform:translateY(-1px); } .wt-mbtn:hover { transform:translateY(-1px); }
+  .wt-opt[data-sel="true"], .wt-mbtn[data-sel="true"] { box-shadow:0 0 0 2px var(--acc,#0d6e66) !important; }
+</style>
+</helmet>
+
+<div class="ff" style="background:#f4f0e8; color:#2f3432; min-height:100vh;">
+
+  <!-- APP BAR -->
+  <header style="position:sticky; top:0; z-index:40; height:56px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid #d8d0c3; background:rgba(251,250,247,.95); backdrop-filter:blur(8px); padding:0 20px;">
+    <span style="display:inline-flex; align-items:center; gap:8px; font-size:14px; font-weight:700; cursor:pointer;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>WEET
+    </span>
+    <div style="text-align:center;">
+      <p style="margin:0; font-size:14px; font-weight:800;">위트 맞춤제작</p>
+      <p style="margin:0; font-size:12px; color:#83796a;">나만의 위트 만들기</p>
+    </div>
+    <span style="display:inline-flex; height:36px; width:56px; align-items:center; justify-content:center; border-radius:6px; color:#0d6e66; cursor:pointer;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+    </span>
+  </header>
+
+  <!-- STEPPER -->
+  <div style="position:sticky; top:56px; z-index:30; border-bottom:1px solid #d8d0c3; background:rgba(251,250,247,.95); backdrop-filter:blur(8px);">
+    <div style="max-width:1800px; margin:0 auto; height:72px; display:flex; align-items:center; gap:8px; padding:0 24px; overflow-x:auto;">
+      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="5">
+        <div class="wt-step" data-state="{{ s.state }}" onClick="{{ s.onPick }}" style="flex:1; min-width:128px; display:flex; align-items:center; gap:9px; border:1px solid #e2dacd; background:#fbfaf7; border-radius:8px; padding:8px 12px;">
+          <span class="wt-sn" style="flex:none; width:22px; height:22px; border-radius:50%; border:1px solid #cfc4b3; background:transparent; color:#8a806f; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center;">{{ s.num }}</span>
+          <span style="min-width:0;">
+            <span class="wt-sl" style="display:block; font-size:13px; font-weight:700; color:#2f3432; white-space:nowrap;">{{ s.label }}</span>
+            <span class="wt-ss" style="display:block; font-size:10px; font-weight:600; color:#9a8f7d; white-space:nowrap;">{{ s.sub }}</span>
+          </span>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- REVIEW -->
+  <sc-if value="{{ isReview }}" hint-placeholder-val="{{ false }}">
+    <main style="max-width:1100px; margin:0 auto; padding:40px 5vw 120px;">
+      <h1 style="font-size:clamp(24px,3vw,34px); font-weight:800; letter-spacing:-0.02em; margin:0 0 6px;">구성 검토 및 상담 요청</h1>
+      <p style="font-size:13px; line-height:1.6; color:#8a806f; margin:0 0 24px;">선택하신 구성을 확인한 뒤 상담을 요청하세요. 상담 요청이며 결제는 진행되지 않으며, 최종 견적은 상담 후 확정됩니다.</p>
+      <div style="display:grid; grid-template-columns:1.15fr 1fr; gap:20px; align-items:start;">
+        <div style="display:flex; flex-direction:column; gap:14px;">
+        <div style="background:#fbfaf7; border:1px solid #d8d0c3; border-radius:12px; padding:18px 20px;">
+          <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px;">
+            <div>
+              <p style="margin:0; font-size:11px; font-weight:700; color:#8a806f;">선택 모델</p>
+              <p style="margin:3px 0 0; font-size:18px; font-weight:800;">{{ modelName }}</p>
+              <p style="margin:0; font-size:12px; color:#756d61;">{{ modelSub }}</p>
+              <p style="margin:6px 0 0; font-size:12px; font-weight:700; color:#8a6a2a;">기본 제품가 {{ basePriceLabel }}</p>
+            </div>
+            <span class="wt-edit" onClick="{{ onEditModel }}">✎ 수정</span>
+          </div>
+          <div style="display:flex; flex-wrap:wrap; gap:7px; margin-top:14px; padding-top:14px; border-top:1px solid #f0ebe0;">
+            <sc-for list="{{ moodSwatches }}" as="m" hint-placeholder-count="3">
+              <span style="display:inline-flex; align-items:center; gap:6px; background:#f5f1ea; border:1px solid #e2dacd; padding:4px 10px 4px 5px; border-radius:100px;"><span style="width:13px; height:13px; border-radius:50%; background:{{ m.color }}; border:1px solid rgba(47,52,50,.12);"></span><span style="font-size:11px; font-weight:700; color:#6f6658;">{{ m.name }}</span></span>
+            </sc-for>
+          </div>
+        </div>
+        <sc-for list="{{ reviewGroups }}" as="g" hint-placeholder-count="3">
+          <div style="background:#fbfaf7; border:1px solid #d8d0c3; border-radius:12px; padding:16px 20px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
+              <h3 style="margin:0; font-size:14px; font-weight:800;">{{ g.label }}</h3>
+              <span class="wt-edit" onClick="{{ g.onEdit }}">✎ 수정</span>
+            </div>
+            <sc-if value="{{ g.hasItems }}" hint-placeholder-val="{{ true }}">
+              <div style="margin-top:6px;">
+                <sc-for list="{{ g.items }}" as="it" hint-placeholder-count="2">
+                  <div style="display:flex; justify-content:space-between; gap:10px; padding:7px 0; font-size:13.5px; border-top:1px solid #f4f0e8;"><span style="color:#4f473d; font-weight:600;">{{ it.name }}</span><span style="font-weight:700; color:{{ it.color }};">{{ it.price }}</span></div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ g.noItems }}" hint-placeholder-val="{{ false }}"><p style="margin:8px 0 0; font-size:12px; color:#8a806f;">선택한 옵션이 없습니다. 비워두셔도 상담에서 함께 정할 수 있습니다.</p></sc-if>
+          </div>
+        </sc-for>
+        <sc-if value="{{ hasConsult }}" hint-placeholder-val="{{ false }}">
+          <div style="border:1px solid #e6d8b0; background:#f8f1e0; border-radius:12px; padding:14px 18px;">
+            <p style="margin:0; font-size:13px; font-weight:800; color:#a56f16;">상담 필요 항목 {{ consultCount }}개</p>
+            <p style="margin:4px 0 0; font-size:12px; line-height:1.6; color:#9a7a2a;">상담 필요 항목은 담당자가 설치 가능 여부와 금액을 확인해 안내드립니다. 선택한 구성은 상담 요청서에 함께 전달됩니다.</p>
+          </div>
+        </sc-if>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div style="background:#fbfaf7; border:1px solid #d8d0c3; border-radius:12px; padding:18px 20px;">
+            <h2 style="margin:0 0 12px; font-size:14px; font-weight:800;">가격 요약</h2>
+            <div style="display:flex; justify-content:space-between; padding:6px 0; font-size:14px;"><span style="font-weight:600; color:#7b7468;">기본 제품가</span><span style="font-weight:700;">{{ basePriceLabel }}</span></div>
+            <div style="display:flex; justify-content:space-between; padding:6px 0; font-size:14px;"><span style="font-weight:600; color:#7b7468;">옵션 합계</span><span style="font-weight:700;">{{ optionSubtotalLabel }}</span></div>
+            <div style="display:flex; justify-content:space-between; align-items:baseline; padding:12px 0 0; margin-top:6px; border-top:1px solid #e2dacd;"><span style="font-size:15px; font-weight:800;">예상 제품 금액</span><span style="font-size:20px; font-weight:800;">{{ totalLabel }}</span></div>
+            <sc-if value="{{ hasConsult }}" hint-placeholder-val="{{ false }}"><div style="display:flex; justify-content:space-between; padding:6px 0 0; font-size:13px; color:#a56f16;"><span style="font-weight:600;">상담 필요 항목</span><span style="font-weight:700;">{{ consultCount }}개 · 견적 별도</span></div></sc-if>
+            <p style="margin:10px 0 0; font-size:11px; line-height:1.6; color:#8a806f;">운반/설치 별도 · 현장 조건에 따라 최종 견적 확정</p>
+            <span class="wt-btn" style="margin-top:12px; display:flex; align-items:center; justify-content:center; gap:7px; border:1px solid #cfc4b3; background:#fbfaf7; color:#2f3432; font-size:14px; font-weight:700; padding:11px; border-radius:8px; cursor:pointer;">⬇ 견적 요약 저장</span>
+          </div>
+        <div style="background:#fbfaf7; border:1px solid #d8d0c3; border-radius:12px; padding:28px;">
+          <h2 style="font-size:17px; font-weight:800; margin:0 0 4px;">상담·견적 요청</h2>
+          <p style="font-size:13px; color:#8a806f; margin:0 0 18px;">상담 요청이며 결제는 진행되지 않습니다.</p>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px;">
+            <div><label style="display:block; font-size:12px; font-weight:700; color:#6f6a60; margin-bottom:6px;">이름 *</label><input class="wt-in" type="text" placeholder="홍길동" style="width:100%; box-sizing:border-box; font-family:inherit; font-size:14px; height:44px; background:#fbfaf7; border:1px solid #d8d0c3; border-radius:8px; padding:0 12px;"></div>
+            <div><label style="display:block; font-size:12px; font-weight:700; color:#6f6a60; margin-bottom:6px;">연락처 *</label><input class="wt-in" type="tel" placeholder="010-0000-0000" style="width:100%; box-sizing:border-box; font-family:inherit; font-size:14px; height:44px; background:#fbfaf7; border:1px solid #d8d0c3; border-radius:8px; padding:0 12px;"></div>
+          </div>
+          <div style="margin-bottom:12px;"><label style="display:block; font-size:12px; font-weight:700; color:#6f6a60; margin-bottom:6px;">설치 지역 *</label><input class="wt-in" type="text" placeholder="예) 경기 양평군" style="width:100%; box-sizing:border-box; font-family:inherit; font-size:14px; height:44px; background:#fbfaf7; border:1px solid #d8d0c3; border-radius:8px; padding:0 12px;"></div>
+          <div style="margin-bottom:18px;"><label style="display:block; font-size:12px; font-weight:700; color:#6f6a60; margin-bottom:6px;">문의 내용</label><textarea class="wt-in" rows="3" placeholder="부지 조건이나 궁금한 점을 적어주세요." style="width:100%; box-sizing:border-box; font-family:inherit; font-size:14px; background:#fbfaf7; border:1px solid #d8d0c3; border-radius:8px; padding:12px; resize:vertical;"></textarea></div>
+          <span class="wt-btn" style="display:flex; align-items:center; justify-content:center; gap:8px; background:var(--acc,#0d6e66); color:#fff; font-size:15px; font-weight:700; padding:15px; border-radius:8px; cursor:pointer;">이 구성으로 견적 요청</span>
+          <p style="font-size:11px; line-height:1.6; color:#8a806f; margin:12px 0 0; text-align:center;">입력하신 정보는 견적 안내와 상담 연락을 위해 사용됩니다.</p>
+        </div>
+        </div>
+      </div>
+      <div style="margin-top:22px;"><span class="wt-btn" onClick="{{ onBack }}" style="display:inline-flex; align-items:center; gap:8px; background:#fbfaf7; border:1px solid #d8d0c3; color:#6f6a60; font-size:14px; font-weight:700; padding:11px 20px; border-radius:8px; cursor:pointer;">← 구성 수정</span></div>
+    </main>
+  </sc-if>
+
+  <!-- CONFIG -->
+  <sc-if value="{{ isConfig }}" hint-placeholder-val="{{ true }}">
+    <main style="max-width:1800px; margin:0 auto; display:flex; flex-direction:row; align-items:stretch; height:calc(100vh - 128px);">
+      <!-- LEFT: floorplan + summary board -->
+      <section style="flex:1; min-width:0; overflow-y:auto; padding:24px 32px; display:flex; flex-direction:column; gap:18px;">
+        <div style="flex:1; display:flex; align-items:center; justify-content:center;">
+          <div class="wt-stage" style="position:relative; width:100%; max-width:1100px; aspect-ratio:1000/460; background:#f5f1ea; border:1px solid #d8d0c3; border-radius:14px; overflow:hidden;">
+            <span style="position:absolute; top:14px; left:18px; z-index:3; font-size:12px; font-weight:800; color:#6f6658;">{{ modelName }} / {{ modelSub }}</span>
+            <span style="position:absolute; top:14px; right:18px; z-index:3; font-size:11px; font-weight:700; letter-spacing:.08em; color:#9a8f7d;">FLOOR PLAN</span>
+            <svg viewBox="0 0 1000 460" style="position:absolute; inset:0; width:100%; height:100%;">
+              <!-- length rail -->
+              <line id="railLine" x1="326" y1="86" x2="830" y2="86" stroke="#b9aa94" stroke-width="2" stroke-dasharray="5 5" opacity=".8"/>
+              <line id="railTickL" x1="326" y1="78" x2="326" y2="94" stroke="#b9aa94" stroke-width="2"/>
+              <line x1="830" y1="78" x2="830" y2="94" stroke="#b9aa94" stroke-width="2"/>
+              <text id="railText" x="578" y="80" fill="#8a806f" font-size="13" font-weight="800" text-anchor="middle">{{ modelLen }}</text>
+              <!-- floor + wall : right edge fixed at 830, left wall extends -->
+              <rect id="planWall" x="326" y="116" width="504" height="252" rx="4" fill="{{ floorFill }}" stroke="#2f3432" stroke-width="10"/>
+              <!-- utility block (right, fixed) -->
+              <line x1="640" y1="120" x2="640" y2="364" stroke="#cbbfa9" stroke-width="2"/>
+              <line x1="640" y1="244" x2="826" y2="244" stroke="#cbbfa9" stroke-width="2"/>
+              <text x="733" y="190" text-anchor="middle" fill="#9a8f7d" font-size="15">욕실</text>
+              <text x="733" y="312" text-anchor="middle" fill="#9a8f7d" font-size="15">주방</text>
+              <text x="455" y="248" text-anchor="middle" fill="#7b7468" font-size="17" font-weight="600">거실 · 침실</text>
+              <!-- door (bottom wall, fixed) -->
+              <rect x="548" y="362" width="56" height="10" fill="{{ floorFill }}"/>
+              <path d="M548 367 A56 56 0 0 0 604 367" fill="none" stroke="#b9aa94" stroke-width="2"/>
+              <sc-if value="{{ smartOn }}" hint-placeholder-val="{{ false }}"><circle cx="542" cy="367" r="6" fill="var(--acc,#0d6e66)"/></sc-if>
+            </svg>
+            <sc-if value="{{ isLarge }}" hint-placeholder-val="{{ false }}">
+              <span style="position:absolute; bottom:14px; left:50%; transform:translateX(-50%); z-index:3; font-size:11px; font-weight:800; color:var(--acc,#0d6e66); background:rgba(13,110,102,.1); padding:5px 12px; border-radius:100px;">6m 기준에서 9m로 확장됨</span>
+            </sc-if>
+          </div>
+        </div>
+        <!-- summary board (3-col order sheet) -->
+        <div style="background:#fbfaf7; border:1px solid #d8d0c3; border-radius:10px; box-shadow:0 1px 2px rgba(47,52,50,.05);">
+          <div style="display:grid; grid-template-columns:0.9fr 1.5fr 0.9fr;">
+            <div style="padding:16px; border-right:1px solid #e2dacd;">
+              <p style="margin:0; font-size:11px; font-weight:700; color:#8a806f;">선택 모델</p>
+              <p style="margin:4px 0 0; font-size:14px; font-weight:800;">{{ modelName }}</p>
+              <p style="margin:0; font-size:12px; color:#756d61;">{{ modelSub }}</p>
+              <p style="margin:6px 0 0; font-size:12px; font-weight:700; color:#6f6658;">기본 제품가 {{ basePriceLabel }}</p>
+            </div>
+            <div style="padding:16px; border-right:1px solid #e2dacd; min-width:0;">
+              <p style="margin:0 0 7px; font-size:11px; font-weight:700; color:#8a806f;">선택 옵션</p>
+              <sc-if value="{{ hasItems }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                  <sc-for list="{{ summaryItems }}" as="it" hint-placeholder-count="2">
+                    <span style="display:inline-flex; align-items:center; gap:5px; border:1px solid {{ it.chipBorder }}; background:{{ it.chipBg }}; color:{{ it.color }}; font-size:11px; font-weight:700; padding:4px 9px; border-radius:100px;">{{ it.name }}<span style="font-weight:600; color:#8a806f;">{{ it.price }}</span></span>
+                  </sc-for>
+                </div>
+              </sc-if>
+              <sc-if value="{{ noItems }}" hint-placeholder-val="{{ true }}"><p style="margin:0; font-size:12px; color:#8a806f;">추가 선택 옵션 없음 · 기본 구성</p></sc-if>
+            </div>
+            <div style="padding:16px;">
+              <p style="margin:0; font-size:11px; font-weight:700; color:#8a806f;">예상 제품 금액</p>
+              <p style="margin:4px 0 0; font-size:18px; font-weight:800;">{{ totalLabel }}</p>
+              <sc-if value="{{ hasConsult }}" hint-placeholder-val="{{ false }}"><p style="margin:2px 0 0; font-size:12px; font-weight:700; color:#a56f16;">+ 상담 필요 {{ consultCount }}개 · 견적 별도</p></sc-if>
+              <p style="margin:6px 0 0; font-size:11px; color:#8a806f;">운반/설치 별도 · 현장 조건에 따라 최종 견적 확정</p>
+            </div>
+          </div>
+          <p style="border-top:1px solid #e2dacd; margin:0; padding:8px 16px; font-size:11px; color:#8a806f;">상담 요청용 예상 금액입니다. 결제 단계가 아니며, 운반/설치 및 현장 조건에 따라 최종 견적이 달라질 수 있습니다.</p>
+        </div>
+      </section>
+
+      <!-- RIGHT: options rail -->
+      <aside style="flex:none; width:430px; border-left:1px solid #d8d0c3; background:#fbfaf7; display:flex; flex-direction:column;">
+        <div style="border-bottom:1px solid #d8d0c3; padding:13px 20px; display:flex; align-items:center; justify-content:space-between;">
+          <h2 style="margin:0; font-size:17px; font-weight:800;">이동식주택 구성</h2>
+          <span style="font-size:12px; font-weight:700; color:#8a806f;">{{ stepNo }} / 5 단계</span>
+        </div>
+        <div style="flex:1; overflow-y:auto; padding:20px;">
+          <sc-if value="{{ isIncluded }}" hint-placeholder-val="{{ false }}">
+            <div style="background:rgba(239,230,212,.5); border-radius:8px; padding:12px; margin-bottom:18px;">
+              <p style="margin:0 0 4px; font-size:13px; font-weight:700;">⛨ 위트 기본 포함 내역</p>
+              <p style="margin:0; font-size:12px; line-height:1.6; color:#756d61;">골조, 단열, 내/외장재, 바닥재, 도어, 창호, 싱크대 등 생활에 필요한 필수 구성요소가 기본 가격에 포함되어 있습니다.</p>
+            </div>
+          </sc-if>
+
+          <sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
+            <div style="margin-bottom:22px;">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:4px;">
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <span style="flex:none; width:28px; height:28px; border-radius:6px; background:#efe6d4; display:flex; align-items:center; justify-content:center; color:#2f3432;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span>
+                  <h3 style="margin:0; font-size:14px; font-weight:800;">{{ g.label }}</h3>
+                </div>
+                <p style="margin:0; font-size:12px; font-weight:700; color:#7a6a3a;">{{ g.status }}</p>
+              </div>
+              <sc-if value="{{ g.hasDesc }}" hint-placeholder-val="{{ false }}"><p style="margin:0 0 8px; font-size:12px; line-height:1.5; color:#756d61;">{{ g.desc }}</p></sc-if>
+
+              <sc-if value="{{ g.isModel }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                  <sc-for list="{{ g.opts }}" as="o" hint-placeholder-count="2">
+                    <div class="wt-mbtn" data-sel="{{ o.selected }}" onClick="{{ o.onToggle }}" style="border:1px solid #ded5c8; background:#fbfaf7; border-radius:8px; padding:12px;">
+                      <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px;">
+                        <div style="min-width:0;">
+                          <div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px;">
+                            <span style="font-size:14px; font-weight:800;">{{ o.name }}</span>
+                            <span style="border-radius:100px; background:#e2dacd; padding:2px 8px; font-size:10px; font-weight:700; color:#6f6658;">{{ o.badge }}</span>
+                          </div>
+                          <p style="margin:3px 0 0; font-size:12px; color:#756d61;">{{ o.sub }}</p>
+                        </div>
+                        <span class="wt-mchk" style="flex:none; color:#2f3432;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+                      </div>
+                      <p style="margin:8px 0 0; font-size:14px; font-weight:700; color:#8a6a2a;"><span style="font-size:11px; font-weight:600; color:#8a806f; margin-right:6px;">기본 제품가</span>{{ o.price }}</p>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ g.isList }}" hint-placeholder-val="{{ true }}">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+                  <sc-for list="{{ g.opts }}" as="o" hint-placeholder-count="4">
+                    <div class="wt-opt" data-sel="{{ o.selected }}" onClick="{{ o.onToggle }}" style="position:relative; display:flex; align-items:center; gap:8px; border:1px solid #ded5c8; background:#fbfaf7; border-radius:8px; padding:8px 9px; min-height:42px;">
+                      <span class="wt-radio" style="flex:none; width:16px; height:16px; border-radius:50%; border:1px solid #bcb2a3; background:#fbfaf7; display:flex; align-items:center; justify-content:center;"><svg width="10" height="10" viewBox="0 0 12 12"><path d="M2 6.3L4.7 9 10 3.5" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+                      <sc-if value="{{ o.swatch }}" hint-placeholder-val="{{ false }}"><span style="flex:none; width:22px; height:22px; border-radius:5px; background:{{ o.color }}; border:1px solid #e2dacd;"></span></sc-if>
+                      <div style="flex:1; min-width:0;">
+                        <span style="display:block; font-size:12.5px; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">{{ o.name }}</span>
+                        <span style="display:block; font-size:11px; font-weight:800; color:{{ o.priceColor }};">{{ o.price }}</span>
+                      </div>
+                      <span class="wt-info" onClick="{{ o.onInfo }}" style="flex:none; display:flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:6px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg></span>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <!-- rail summary footer -->
+        <div style="border-top:1px solid #d8d0c3; padding:12px 20px 16px;">
+          <div style="font-size:12px; margin-bottom:10px;">
+            <div style="display:flex; justify-content:space-between; padding:2px 0;"><span style="font-weight:600; color:#7b7468;">기본 제품가</span><span style="font-weight:700;">{{ basePriceLabel }}</span></div>
+            <div style="display:flex; justify-content:space-between; padding:2px 0;"><span style="font-weight:600; color:#7b7468;">옵션 합계</span><span style="font-weight:700;">{{ optionSubtotalLabel }}</span></div>
+            <div style="display:flex; justify-content:space-between; padding:6px 0 0; margin-top:4px; border-top:1px solid #e2dacd;"><span style="font-size:14px; font-weight:800;">예상 제품 금액</span><span style="font-size:15px; font-weight:800;">{{ totalLabel }}</span></div>
+            <sc-if value="{{ hasConsult }}" hint-placeholder-val="{{ false }}"><div style="display:flex; justify-content:space-between; padding:2px 0; color:#a56f16;"><span style="font-weight:600;">상담 필요 항목</span><span style="font-weight:700;">{{ consultCount }}개 · 견적 별도</span></div></sc-if>
+          </div>
+          <p style="margin:0 0 10px; font-size:11px; line-height:1.5; color:#8a806f;">운반/설치 별도 · 최종 견적은 상담 후 확정됩니다.</p>
+          <div style="display:flex; gap:8px;">
+            <sc-if value="{{ hasPrev }}" hint-placeholder-val="{{ false }}"><span class="wt-btn" onClick="{{ onPrev }}" style="flex:none; display:inline-flex; align-items:center; gap:5px; height:44px; box-sizing:border-box; border:1px solid #cfc4b3; background:#fbfaf7; color:#2f3432; font-size:14px; font-weight:700; padding:0 14px; border-radius:8px; cursor:pointer;">← 이전</span></sc-if>
+            <span class="wt-btn" onClick="{{ onNext }}" style="flex:1; display:inline-flex; align-items:center; justify-content:center; gap:6px; height:44px; box-sizing:border-box; background:#2f3432; color:#fbfaf7; font-size:14px; font-weight:700; border-radius:8px; cursor:pointer;">{{ nextCta }} →</span>
+          </div>
+          <p style="margin:10px 0 0; font-size:11px; text-align:center; color:#8a806f;">상담 요청이며 결제는 진행되지 않습니다.</p>
+        </div>
+      </aside>
+    </main>
+  </sc-if>
+
+  <!-- OPTION INFO MODAL -->
+  <sc-if value="{{ infoOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeInfo }}" style="position:fixed; inset:0; z-index:100; background:rgba(31,36,34,.55); backdrop-filter:blur(3px); display:flex; align-items:center; justify-content:center; padding:24px;">
+      <div onClick="{{ stopInfo }}" style="position:relative; width:100%; max-width:440px; background:#fbfaf7; border:1px solid #d8d0c3; border-radius:14px; box-shadow:0 30px 70px -30px rgba(31,36,34,.6); overflow:hidden;">
+        <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:12px; padding:24px 26px 16px;">
+          <div>
+            <h3 style="margin:0 0 6px; font-size:19px; font-weight:800; color:#2f3432;">{{ infoName }}</h3>
+            <span style="font-size:13px; font-weight:800; color:{{ infoColor }};">{{ infoPrice }}</span>
+          </div>
+          <span class="wt-mx" onClick="{{ closeInfo }}" style="flex:none; display:flex; align-items:center; justify-content:center; width:32px; height:32px; border-radius:8px; cursor:pointer; color:#6f6a60;"><svg width="15" height="15" viewBox="0 0 16 16"><path d="M3 3L13 13M13 3L3 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+        </div>
+        <div style="padding:0 26px 26px;">
+          <p style="margin:0 0 18px; font-size:14px; line-height:1.75; color:#5f574d;">{{ infoDesc }}</p>
+          <div style="display:flex; flex-wrap:wrap; gap:7px;">
+            <sc-for list="{{ infoSpecs }}" as="sp" hint-placeholder-count="3">
+              <span style="display:inline-flex; align-items:center; gap:5px; background:#f4f0e8; border:1px solid #e2dacd; font-size:12px; font-weight:600; color:#6f6658; padding:5px 11px; border-radius:100px;"><span style="color:var(--acc,#0d6e66);">•</span>{{ sp }}</span>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;accent&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;teal&quot;,&quot;terracotta&quot;,&quot;forest&quot;],&quot;default&quot;:&quot;teal&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;planStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;line&quot;,&quot;filled&quot;],&quot;default&quot;:&quot;filled&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { step:'space', furthest:0, info:null, sel:{ model:'3x6', windows:'basic', door:'standard', exterior:'white', interior:'paper', flooring:'whiteoak', kitchen:[], bath:[], furniture:[], energy:[], connectivity:[] } };
+
+  SPECS = { basic:['표준 창호','채광/환기','단열 검토'], extra:['추가 채광','환기 강화','가구 간섭 검토'], wide:['파노라마 뷰','대형 개구부','프라이버시 검토'], standard:['비밀번호','카드키','기본 출입'], smart:['앱 권한','출입 로그','운영형 출입'], fridge:['빌트인 수납','저소음 검토','주방 라인 정리'], washer:['급수/배수','진동 검토','장기 체류'], bidet:['전원 위치','위생 설비','욕실 연동'], vanity:['건식 동선','거울/수납','공용 사용'], storage:['맞춤 수납','동선 확보','댐퍼 힌지'], table:['접이식 구조','벽 보강','작업/식사 겸용'], bed:['하부 수납','수면 영역','평면 맞춤'], white:['세로 리브 패턴','밝은 외장 톤','기본 외피'], zinc:['메탈 패널','저채도 그레이','프리미엄 외피'], cedar:['목재 포인트','입면 대비','부분 적용'], paper:['기본 내장','밝은 톤','비용 효율'], silk:['표면 내구','오염 관리','고급 질감'], birch:['자작나무 톤','포인트 월','내장 패널'], whiteoak:['SPC 바닥','화이트 오크','생활 방수'], naturaloak:['내추럴 오크','스크래치 대응','따뜻한 톤'], porcelain:['고내구 표면','논슬립 검토','오염 관리'], solar:['지붕 통합','인버터 연동','음영 검토'], ess:['배터리 저장','백업 부하','안전 거리'], ev:['완속 충전','부하 설계','주차 동선'], iot:['원격 제어','상태 알림','스케줄링'], security:['CCTV/센서','야간 알림','출입 감지'], satellite:['외곽 통신','안테나 시야','백업망'], router:['LTE/5G','외부 안테나','장비망 분리'] };
+
+  STEPS = [
+    { id:'space', label:'모델', title:'', desc:'설치할 공간의 크기와 목적에 맞는 모델을 선택하세요.' },
+    { id:'included', label:'공간 구성', desc:'' },
+    { id:'mood', label:'무드 & 소재', desc:'' },
+    { id:'smart', label:'스마트 테크', desc:'' },
+    { id:'review', label:'검토·요청' }
+  ];
+
+  CATS = {
+    model:{ type:'single', step:'space', label:'공간 모델', kind:'model', desc:'설치할 공간의 크기와 목적에 맞는 모델을 선택하세요.', opts:[
+      { id:'3x6', name:'3×6 compact', sub:'3m × 6m · 18㎡', badge:'소형 주말주택', price:2800 },
+      { id:'3x9', name:'3×9 standard', sub:'3m × 9m · 27㎡', badge:'프리미엄 거주', price:3900 } ] },
+    windows:{ type:'single', step:'included', label:'창호', opts:[
+      { id:'basic', name:'기본 창호', price:0, desc:'채광·환기·단열 균형 표준 사양' }, { id:'extra', name:'추가 창호', price:120, desc:'주방·침실 추가 채광' }, { id:'wide', name:'와이드 창호', price:280, desc:'파노라마형 대형 개구부' } ] },
+    door:{ type:'single', step:'included', label:'도어', opts:[
+      { id:'standard', name:'표준 도어락', price:0, desc:'비밀번호·카드키 기본 출입' }, { id:'smart', name:'스마트락', price:45, desc:'앱 권한·출입 로그' } ] },
+    kitchen:{ type:'multi', step:'included', label:'주방', desc:'기본 싱크대는 포함되어 있습니다.', opts:[
+      { id:'fridge', name:'빌트인 냉장고', price:90, desc:'주방 라인 정리' }, { id:'washer', name:'미니 세탁기', price:70, desc:'급수·배수·진동 검토' } ] },
+    bath:{ type:'multi', step:'included', label:'욕실', desc:'기본 욕실은 포함되어 있습니다.', opts:[
+      { id:'bidet', name:'비데', price:35, desc:'전원·세정수 연동' }, { id:'vanity', name:'건식 세면대', price:60, desc:'욕실 밖 손씻기 동선' } ] },
+    furniture:{ type:'multi', step:'included', label:'가구', opts:[
+      { id:'storage', name:'빌트인 수납', price:80, desc:'맞춤 수납·댐퍼 힌지' }, { id:'table', name:'접이식 테이블', price:30, desc:'작업·식사 겸용' }, { id:'bed', name:'침대 프레임', price:60, desc:'하부 수납형' } ] },
+    exterior:{ type:'single', step:'mood', label:'외장', swatch:true, opts:[
+      { id:'white', name:'화이트 리브 강판', price:0, color:'#E4DFD4', desc:'밝은 기본 외피' }, { id:'zinc', name:'징크 그레이', price:150, color:'#6B6E70', desc:'프리미엄 메탈 패널' }, { id:'cedar', name:'적삼목 포인트', price:90, color:'#9B6A42', desc:'목재 포인트 면' } ] },
+    interior:{ type:'single', step:'mood', label:'내장', swatch:true, opts:[
+      { id:'paper', name:'합지 벽지', price:0, color:'#EFE9DD', desc:'비용 효율·밝은 톤' }, { id:'silk', name:'실크 벽지', price:40, color:'#E2D6C2', desc:'표면 내구·오염 관리' }, { id:'birch', name:'자작 패널', price:70, color:'#D8B98A', desc:'포인트 월 목재' } ] },
+    flooring:{ type:'single', step:'mood', label:'바닥', swatch:true, opts:[
+      { id:'whiteoak', name:'화이트 오크 SPC', price:0, color:'#D9C7A8', desc:'밝은 생활 방수' }, { id:'naturaloak', name:'내추럴 오크 SPC', price:0, color:'#B58E5E', desc:'따뜻한 톤' }, { id:'porcelain', name:'포세린 타일', price:50, color:'#BFC0BC', desc:'고내구·논슬립' } ] },
+    energy:{ type:'multi', step:'smart', label:'에너지', opts:[
+      { id:'solar', name:'태양광 패널', consult:true, desc:'지붕 통합·인버터' }, { id:'ess', name:'가정용 ESS', consult:true, desc:'백업 부하 저장' }, { id:'ev', name:'EV 충전기', consult:true, desc:'완속·부하 설계' } ] },
+    connectivity:{ type:'multi', step:'smart', label:'네트워크 · 보안', opts:[
+      { id:'iot', name:'IoT 패키지', price:120, desc:'원격 제어·스케줄' }, { id:'security', name:'보안 패키지', price:90, desc:'CCTV·야간 알림' }, { id:'satellite', name:'위성 인터넷', consult:true, desc:'외곽 백업망' }, { id:'router', name:'LTE/5G 라우터', price:40, desc:'장비망 분리' } ] }
+  };
+
+  won(v){ return (v * 10000).toLocaleString() + '원'; }
+  priceLabel(o){ if(o.consult) return '상담 필요'; if(!o.price) return '기본 포함'; return '+'+this.won(o.price); }
+  isSel(c,o){ const v=this.state.sel[c]; return Array.isArray(v)?v.includes(o):v===o; }
+  toggle(c,o){ const cat=this.CATS[c]; this.setState((s)=>{ const sel={...s.sel}; if(cat.type==='single')sel[c]=o; else { const a=sel[c].slice(); const i=a.indexOf(o); if(i>=0)a.splice(i,1); else a.push(o); sel[c]=a; } return {sel}; }); }
+  estimate(){ const s=this.state.sel; let total=0,consult=0; for(const c in this.CATS){ const cat=this.CATS[c]; const ch=Array.isArray(s[c])?s[c]:[s[c]]; cat.opts.forEach(o=>{ if(ch.includes(o.id)){ if(o.consult)consult++; else total+=(o.price||0); } }); } return {total,consult}; }
+  goStep(id){ const idx=this.STEPS.findIndex(x=>x.id===id); this.setState((s)=>({ step:id, furthest:Math.max(s.furthest,idx) })); const sec=document.querySelector('aside'); if(sec){ const sc=sec.querySelector('div[style*="overflow-y"]'); if(sc)sc.scrollTop=0; } }
+
+  ACCENTS = { teal:'#0d6e66', terracotta:'#b05a3c', forest:'#2e6b4f' };
+  applyAccent(){ const el=document.querySelector('.ff'); if(el) el.style.setProperty('--acc', this.ACCENTS[this.props.accent] || this.ACCENTS.teal); }
+  geomFor(m){ return m==='3x9' ? { x:74, w:756 } : { x:326, w:504 }; }
+  applyGeom(g){ const set=(id,a,v)=>{const e=document.getElementById(id); if(e)e.setAttribute(a,v);}; set('planWall','x',g.x); set('planWall','width',g.w); set('railLine','x1',g.x); set('railTickL','x1',g.x); set('railTickL','x2',g.x); set('railText','x',((parseFloat(g.x)+830)/2).toFixed(0)); }
+  tweenPlan(model){ if(this._iv)clearInterval(this._iv); const w=document.getElementById('planWall'); if(!w)return; const t=this.geomFor(model); const x0=parseFloat(w.getAttribute('x')), w0=parseFloat(w.getAttribute('width')); const t0=Date.now(),dur=600,ease=(p)=>1-Math.pow(1-p,3); this._iv=setInterval(()=>{ const p=Math.min((Date.now()-t0)/dur,1),e=ease(p); this.applyGeom({x:(x0+(t.x-x0)*e).toFixed(1), w:(w0+(t.w-w0)*e).toFixed(1)}); if(p>=1){clearInterval(this._iv);this._iv=null;} },16); }
+  selectModel(id){ this.setState((s)=>({ sel:{...s.sel, model:id} })); this.tweenPlan(id); }
+  componentDidMount(){ this.applyGeom(this.geomFor(this.state.sel.model)); this.applyAccent(); }
+  componentDidUpdate(){ this.applyAccent(); }
+  componentWillUnmount(){ if(this._iv)clearInterval(this._iv); }
+
+  catStatus(c){ const cat=this.CATS[c]; const ch=Array.isArray(this.state.sel[c])?this.state.sel[c]:[this.state.sel[c]]; const sel=cat.opts.filter(o=>ch.includes(o.id)); const amt=sel.reduce((s,o)=>s+(o.consult?0:(o.price||0)),0); const con=sel.filter(o=>o.consult).length; if(amt>0)return sel.length+'개 선택 · +'+this.won(amt); if(con>0)return '상담 필요 '+con+'개'; if(sel.length>0)return '기본 포함'; return '선택 안 함'; }
+
+  renderVals(){
+    const s=this.state, est=this.estimate(), model=this.CATS.model.opts.find(o=>o.id===s.sel.model);
+    const curIdx=this.STEPS.findIndex(x=>x.id===s.step), cur=this.STEPS[curIdx];
+    const cntStep=(st)=>{ let n=0; for(const c in this.CATS){ const x=this.CATS[c]; if(x.step!==st)continue; n+= x.type==='single'?1:s.sel[c].length; } return n; };
+    const subFor=(id)=> id==='space'?'선택 완료':(id==='review'?'최종 확인':cntStep(id)+'개 선택');
+    const steps=this.STEPS.map((st,i)=>({ num: st.id==='review'?'✓':String(i+1), label:st.label, sub:subFor(st.id), state: s.step===st.id?'current':(i<s.furthest?'complete':'upcoming'), onPick:()=>this.goStep(st.id) }));
+
+    const groups=[];
+    if(cur && cur.id!=='review'){ for(const c in this.CATS){ const cat=this.CATS[c]; if(cat.step!==cur.id)continue;
+      groups.push({ label:cat.label, status: cat.kind==='model'?'':this.catStatus(c), hasDesc: cat.desc?'true':'false', desc:cat.desc||'', isModel:cat.kind==='model', isList:!cat.kind,
+        opts:cat.opts.map(o=>({ id:o.id, name:o.name, sub:o.sub||'', badge:o.badge||'', color:o.color||'#ccc', swatch:cat.swatch?'true':'false',
+          price: cat.kind==='model'?this.won(o.price):this.priceLabel(o), priceColor:o.consult?'#a56f16':(o.price?'#2f3432':'#8a806f'),
+          hasDesc:o.desc?'true':'false', desc:o.desc||'',
+          selected:this.isSel(c,o.id)?'true':'false', onToggle: c==='model'?(()=>this.selectModel(o.id)):(()=>this.toggle(c,o.id)),
+          onInfo:(e)=>{ if(e&&e.stopPropagation)e.stopPropagation(); this.setState({ info:{ name:o.name, price:(cat.kind==='model'?this.won(o.price):this.priceLabel(o)), color:(o.consult?'#a56f16':(o.price?'#2f3432':'#8a806f')), desc:o.desc||'', specs:this.SPECS[o.id]||[] } }); } })) });
+    } }
+
+    const summaryItems=[]; for(const c in this.CATS){ if(c==='model')continue; const cat=this.CATS[c]; const ch=Array.isArray(s.sel[c])?s.sel[c]:[s.sel[c]]; cat.opts.forEach(o=>{ if(ch.includes(o.id)&&(o.consult||o.price)) summaryItems.push({ name:o.name, price:this.priceLabel(o), color:o.consult?'#a56f16':'#4f473d', chipBg:o.consult?'#f8f1e0':'#f5f1ea', chipBorder:o.consult?'#e6d8b0':'#d8d0c3' }); }); }
+
+    const nextLabels={ space:'다음: 공간 구성', included:'다음: 무드 & 소재', mood:'다음: 스마트 테크', smart:'구성 검토하기' };
+    return {
+      isReview:s.step==='review', isConfig:s.step!=='review', isIncluded:s.step==='included', steps, stepNo:curIdx+1,
+      modelName:model.name, modelSub:model.sub, isLarge:s.sel.model==='3x9',
+      modelLen: s.sel.model==='3x9'?'9m':'6m', smartOn:s.sel.door==='smart',
+      floorFill: (this.props.planStyle==='filled') ? '#f1ece1' : '#fdfbf7',
+      basePriceLabel:this.won(model.price), optionSubtotalLabel: est.total>model.price?('+'+this.won(est.total-model.price)):this.won(0), totalLabel:this.won(est.total),
+      consultCount:est.consult, hasConsult:est.consult>0,
+      groups, summaryItems, hasItems:summaryItems.length>0, noItems:summaryItems.length===0,
+      moodSwatches: ['exterior','interior','flooring'].map(c=>{ const o=this.CATS[c].opts.find(x=>x.id===s.sel[c]); return { name:o.name.split(' ')[0], color:o.color }; }),
+      onEditModel:()=>this.goStep('space'),
+      reviewGroups: ['included','mood','smart'].map(stId=>{ const st=this.STEPS.find(x=>x.id===stId); const items=[]; for(const c in this.CATS){ const cat=this.CATS[c]; if(cat.step!==stId)continue; const ch=Array.isArray(s.sel[c])?s.sel[c]:[s.sel[c]]; cat.opts.forEach(o=>{ if(ch.includes(o.id)) items.push({ name:o.name, price:this.priceLabel(o), color:o.consult?'#a56f16':(o.price?'#2f3432':'#8a806f') }); }); } return { label:st.label, items, hasItems:items.length>0, noItems:items.length===0, onEdit:()=>this.goStep(stId) }; }),
+      infoOpen:!!s.info, infoName:s.info?s.info.name:'', infoPrice:s.info?s.info.price:'', infoColor:s.info?s.info.color:'#2f3432', infoDesc:s.info?s.info.desc:'', infoSpecs:s.info?s.info.specs:[], closeInfo:()=>this.setState({info:null}), stopInfo:(e)=>e.stopPropagation(),
+      nextCta:nextLabels[s.step]||'상담·견적 요청하기', hasPrev:curIdx>0,
+      onNext:()=>this.goStep(this.STEPS[Math.min(curIdx+1,this.STEPS.length-1)].id),
+      onPrev:()=>this.goStep(this.STEPS[Math.max(curIdx-1,0)].id),
+      onBack:()=>this.goStep('mood')
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#F6F1E8; -webkit-font-smoothing:antialiased; }
+  ::selection { background:#FDB813; color:#231D16; }
+  .mono { font-family:'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace; }
+  .wt-link { transition:color .2s; } .wt-link:hover { color:#B8791A !important; }
+  .wt-btn { transition:transform .15s, background .2s, color .2s, border-color .2s; cursor:pointer; } .wt-btn:hover { transform:translateY(-2px); }
+  .seg { cursor:pointer; transition:background .18s, color .18s, border-color .18s; }
+  @keyframes wtRevUp { from { opacity:0; transform:translateY(26px);} to { opacity:1; transform:none;} }
+  [data-reveal] { animation:wtRevUp .8s cubic-bezier(.2,.7,.2,1) both; animation-timeline:view(); animation-range:entry 0% entry 60%; }
+  @media (prefers-reduced-motion: reduce){ [data-reveal]{animation:none!important;opacity:1!important;transform:none!important;} }
+  .card { cursor:pointer; transition:transform .3s cubic-bezier(.2,.7,.2,1), box-shadow .3s; } .card:hover { transform:translateY(-4px); box-shadow:0 22px 46px -26px rgba(35,29,22,.45); }
+  .card:hover .cimg { transform:scale(1.06); } .cimg { transition:transform .7s cubic-bezier(.2,.7,.2,1); }
+  .card:hover .cover { opacity:1; }
+  .cover { transition:opacity .3s; }
+  .wt-x:hover { background:rgba(246,241,232,.16) !important; }
+  .thumb { cursor:pointer; transition:opacity .2s, outline-color .2s; outline:2px solid transparent; outline-offset:2px; } .thumb[data-on="true"] { outline-color:#FDB813; } .thumb:hover { opacity:.85; }
+  @media (max-width:860px){
+    .wt-nav { display:none !important; }
+    .gal-grid { grid-template-columns:1fr 1fr !important; }
+    .lb-body { grid-template-columns:1fr !important; }
+    .ft-cols { grid-template-columns:1fr 1fr !important; gap:32px 24px !important; }
+  }
+  @media (max-width:520px){ .gal-grid { grid-template-columns:1fr !important; } }
+</style>
+</helmet>
+
+<div style="font-family:'Geist','Noto Sans KR',sans-serif; background:#F6F1E8; color:#231D16;">
+
+  <!-- HEADER -->
+  <header style="position:sticky; top:0; z-index:50; background:rgba(246,241,232,.88); backdrop-filter:blur(12px); border-bottom:1px solid #E5DBC9;">
+    <div style="max-width:1440px; margin:0 auto; padding:0 5vw; height:72px; display:flex; align-items:center; justify-content:space-between; gap:24px;">
+      <img src="img/weet-wordmark.webp" alt="weet" style="height:26px; width:auto; display:block;">
+      <nav class="wt-nav" style="display:flex; gap:30px; font-size:14px; font-weight:500; color:#3A3026;">
+        <span class="wt-link" style="cursor:pointer;">모듈러건축</span>
+        <span class="wt-link" style="cursor:pointer;">제품소개</span>
+        <span class="wt-link" style="cursor:pointer;">BESPOKE</span>
+        <span class="wt-link" style="cursor:pointer;">SOLUTION</span>
+        <span class="wt-link" style="cursor:pointer;">회사소개</span>
+        <span class="wt-link" style="cursor:pointer;">고객지원</span>
+      </nav>
+      <div style="display:flex; align-items:center; gap:18px;">
+        <span style="font-size:12px; font-weight:600; color:#8C8273;">KR</span>
+        <span class="wt-btn" style="background:#231D16; color:#F6F1E8; font-size:13px; font-weight:600; padding:10px 18px; border-radius:4px; cursor:pointer;">주문하기</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- INTRO -->
+  <section style="max-width:1440px; margin:0 auto; padding:72px 5vw 32px;">
+    <div style="font-size:12px; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:#B8791A; margin-bottom:16px;">Projects · 시공 사례</div>
+    <h1 style="font-size:clamp(34px,4.4vw,58px); font-weight:600; letter-spacing:-0.035em; line-height:1.04; margin:0 0 18px; max-width:18ch;">완성된 공간으로<br>증명합니다.</h1>
+    <p style="font-size:clamp(15px,1.5vw,18px); font-weight:300; line-height:1.65; color:#5A5044; margin:0; max-width:50ch;">전원주택·세컨하우스부터 상업 공간까지, WEET가 만든 실제 프로젝트를 둘러보세요. 카드를 클릭하면 상세를 볼 수 있습니다.</p>
+    <div style="display:flex; gap:8px; margin-top:30px; flex-wrap:wrap;">
+      <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4"><span class="seg" onClick="{{ f.go }}" style="padding:8px 16px; border-radius:100px; font-size:13.5px; font-weight:600; border:1px solid {{ f.bd }}; background:{{ f.bg }}; color:{{ f.fg }};">{{ f.label }}</span></sc-for>
+    </div>
+  </section>
+
+  <!-- GRID -->
+  <section style="max-width:1440px; margin:0 auto; padding:24px 5vw 90px;">
+    <div class="gal-grid" data-reveal="" style="display:grid; grid-template-columns:repeat(3,1fr); gap:20px;">
+      <sc-for list="{{ items }}" as="g" hint-placeholder-count="6">
+        <div class="card" onClick="{{ g.open }}" style="border-radius:14px; overflow:hidden; background:#fff; border:1px solid #E5DBC9;">
+          <div style="position:relative; aspect-ratio:4/3; overflow:hidden;">
+            <img class="cimg" src="{{ g.img }}" alt="{{ g.title }}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+            <span class="mono" style="position:absolute; top:14px; left:14px; background:rgba(35,29,22,.62); backdrop-filter:blur(4px); color:#F6F1E8; font-size:11px; font-weight:600; padding:5px 11px; border-radius:100px;">{{ g.cat }}</span>
+            <div class="cover" style="position:absolute; inset:0; opacity:0; background:linear-gradient(to top, rgba(35,29,22,.72), transparent 55%); display:flex; align-items:flex-end; padding:18px;"><span class="mono" style="color:#FDB813; font-size:12px; font-weight:600;">자세히 보기 →</span></div>
+          </div>
+          <div style="padding:16px 18px;">
+            <strong style="font-size:16px; letter-spacing:-0.01em;">{{ g.title }}</strong>
+            <span style="display:block; font-size:13px; color:#8C8273; margin-top:3px;">{{ g.meta }}</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="background:#1C1610; color:#A89E8C;">
+    <div style="max-width:1440px; margin:0 auto; padding:72px 5vw 40px;">
+      <div class="ft-cols" style="display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:48px;">
+        <div>
+          <img src="img/weet-wordmark.webp" alt="weet" style="height:24px; width:auto; filter:brightness(0) invert(1); opacity:.95;">
+          <p style="font-size:13.5px; line-height:1.75; color:#8C8273; margin:18px 0 0; max-width:30ch;">작은 공간, 선명한 기준. 모델 선택부터 운송·설치, 예상 비용까지 모든 과정을 투명하게 안내합니다.</p>
+        </div>
+        <sc-for list="{{ footerCols }}" as="col" hint-placeholder-count="3">
+          <div>
+            <h4 style="font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#6B6253; margin:0 0 16px;">{{ col.title }}</h4>
+            <div style="display:flex; flex-direction:column; gap:11px;"><sc-for list="{{ col.links }}" as="l" hint-placeholder-count="4"><span class="wt-link" style="font-size:13.5px; color:#A89E8C; cursor:pointer;">{{ l }}</span></sc-for></div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-top:56px; padding-top:24px; border-top:1px solid rgba(246,241,232,.1);">
+        <span class="mono" style="font-size:11.5px; color:#6B6253;">© 2026 WEET. All rights reserved.</span>
+        <div style="display:flex; gap:22px;"><span class="wt-link" style="font-size:12px; color:#8C8273; cursor:pointer;">이용약관</span><span class="wt-link" style="font-size:12px; color:#8C8273; cursor:pointer;">개인정보처리방침</span><span class="mono" style="font-size:12px; color:#8C8273;">☎ 1533-0000</span></div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- LIGHTBOX / DETAIL -->
+  <sc-if value="{{ open }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ close }}" style="position:fixed; inset:0; z-index:100; background:rgba(20,16,11,.82); backdrop-filter:blur(4px); display:flex; align-items:flex-start; justify-content:center; padding:5vh 24px; overflow-y:auto;">
+      <div onClick="{{ stop }}" style="position:relative; width:100%; max-width:1000px; background:#F6F1E8; border-radius:16px; overflow:hidden; box-shadow:0 50px 100px -40px rgba(20,16,11,.7);">
+        <div onClick="{{ close }}" class="wt-x" style="position:absolute; top:16px; right:16px; z-index:5; width:40px; height:40px; border-radius:50%; background:rgba(35,29,22,.55); backdrop-filter:blur(4px); display:flex; align-items:center; justify-content:center; cursor:pointer;"><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 3L13 13M13 3L3 13" stroke="#F6F1E8" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <div style="position:relative; aspect-ratio:16/9; overflow:hidden; background:#231D16;">
+          <img src="{{ selMain }}" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+          <span class="mono" style="position:absolute; top:16px; left:16px; background:rgba(35,29,22,.62); backdrop-filter:blur(4px); color:#FDB813; font-size:11px; font-weight:600; padding:6px 12px; border-radius:100px;">{{ selCat }}</span>
+        </div>
+        <div class="lb-body" style="display:grid; grid-template-columns:1.4fr 1fr; gap:32px; padding:30px 34px 36px;">
+          <div>
+            <h2 style="font-size:clamp(24px,2.6vw,32px); font-weight:600; letter-spacing:-0.025em; margin:0 0 6px;">{{ selTitle }}</h2>
+            <p style="font-size:13.5px; color:#8C8273; margin:0 0 20px;">{{ selMeta }}</p>
+            <p style="font-size:15px; line-height:1.85; color:#5A5044; margin:0 0 24px;">{{ selDesc }}</p>
+            <div style="display:flex; gap:8px;">
+              <sc-for list="{{ selThumbs }}" as="t" hint-placeholder-count="3"><span class="thumb" data-on="{{ t.on }}" onClick="{{ t.pick }}" style="width:72px; height:54px; border-radius:7px; overflow:hidden; border:1px solid #E0D6C4;"><img src="{{ t.img }}" alt="" style="width:100%; height:100%; object-fit:cover;"></span></sc-for>
+            </div>
+          </div>
+          <div style="border-left:1px solid #E0D6C4; padding-left:32px;">
+            <h4 class="mono" style="font-size:11px; font-weight:600; letter-spacing:.14em; text-transform:uppercase; color:#A89E8C; margin:0 0 16px;">프로젝트 정보</h4>
+            <div style="display:flex; flex-direction:column; gap:13px;">
+              <sc-for list="{{ selSpecs }}" as="s" hint-placeholder-count="4"><div style="display:flex; justify-content:space-between; gap:12px; font-size:13.5px; padding-bottom:11px; border-bottom:1px solid #EFE8DA;"><span style="color:#8C8273; font-weight:500;">{{ s.k }}</span><span style="color:#231D16; font-weight:600;">{{ s.v }}</span></div></sc-for>
+            </div>
+            <span class="wt-btn" style="display:flex; align-items:center; justify-content:center; gap:7px; background:#FDB813; color:#231D16; font-size:14px; font-weight:600; padding:13px; border-radius:8px; margin-top:24px;">비슷한 공간 상담 →</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  state = { cat:'전체', openId:null, thumbIdx:0 };
+  data = [
+    { id:'p1', title:'양평 세컨하우스', cat:'세컨하우스', meta:'3×9 standard · 경기 양평 · 2025.04', img:'img/hero_main.webp', gallery:['img/hero_main.webp','img/m-3x9.webp','img/co-workshop.webp'], desc:'주말마다 찾는 세컨하우스. 거실·침실을 분리한 3×9 모델에 와이드 창호와 데크를 더해 전망을 끌어들였습니다. 설계부터 설치까지 6주가 걸렸습니다.', specs:[['모델','3×9 standard'],['면적','27㎡'],['용도','세컨하우스'],['공사기간','6주']] },
+    { id:'p2', title:'홍천 주말농장 농막', cat:'농막', meta:'3×6 compact · 강원 홍천 · 2025.03', img:'img/m-3x6.webp', gallery:['img/m-3x6.webp','img/sol-control.webp','img/m-medium.webp'], desc:'농지에 가설건축물로 설치한 18㎡ 농막. 작업 후 쉴 수 있는 최소한의 단단한 공간으로, 태양광을 더해 전기 걱정을 줄였습니다.', specs:[['모델','3×6 compact'],['면적','18㎡'],['용도','농막'],['공사기간','4주']] },
+    { id:'p3', title:'담양 스테이', cat:'상업공간', meta:'BESPOKE · 전남 담양 · 2025.02', img:'img/bsp-stay.webp', gallery:['img/bsp-stay.webp','img/bsp-cafe.webp','img/hero_main.webp'], desc:'스테이 비즈니스를 위한 고급 숙박 모듈. 단열·마감·유틸리티를 통합한 두 개 모듈을 연결해 객실과 라운지를 구성했습니다.', specs:[['유형','BESPOKE'],['구성','2모듈 연결'],['용도','숙박'],['공사기간','9주']] },
+    { id:'p4', title:'제천 듀얼 모듈', cat:'전원주택', meta:'36+36 medium · 충북 제천 · 2024.12', img:'img/m-medium.webp', gallery:['img/m-medium.webp','img/m-3x9.webp','img/co-workshop.webp'], desc:'상시 거주를 위한 미디엄 라인. 두 모듈을 결합해 거실과 침실을 넉넉히 분리하고, 냉난방 자동화를 적용했습니다.', specs:[['모델','36+36 medium'],['면적','약 54㎡'],['용도','전원주택'],['공사기간','8주']] },
+    { id:'p5', title:'가평 카페', cat:'상업공간', meta:'BESPOKE · 경기 가평 · 2024.11', img:'img/bsp-cafe.webp', gallery:['img/bsp-cafe.webp','img/bsp-popup.webp','img/bsp-stay.webp'], desc:'한정된 대지에서 회전율을 높이는 바 동선과 브랜드 외관을 담은 소형 카페. F&B 설비를 갖춘 채 현장으로 배송됐습니다.', specs:[['유형','BESPOKE'],['용도','카페(F&B)'],['특징','바 동선 설계'],['공사기간','7주']] },
+    { id:'p6', title:'영주 단독', cat:'전원주택', meta:'3×9 standard · 경북 영주 · 2024.10', img:'img/m-3x9.webp', gallery:['img/m-3x9.webp','img/hero_main.webp','img/sol-control.webp'], desc:'은퇴 후 거주를 위한 단독 주택. 자작 패널 내장과 내추럴 오크 바닥으로 따뜻한 톤을 완성했습니다.', specs:[['모델','3×9 standard'],['면적','27㎡'],['용도','전원주택'],['공사기간','6주']] }
+  ];
+  renderVals(){
+    const cats=['전체','전원주택','세컨하우스','농막','상업공간'];
+    const filters=cats.map(c=>({ label:c, go:()=>this.setState({cat:c}), ...(this.state.cat===c?{bd:'#231D16',bg:'#231D16',fg:'#F6F1E8'}:{bd:'#DCD2C0',bg:'#fff',fg:'#5A5044'}) }));
+    const list=this.state.cat==='전체'?this.data:this.data.filter(d=>d.cat===this.state.cat);
+    const items=list.map(d=>({ title:d.title, cat:d.cat, meta:d.meta, img:d.img, open:()=>this.setState({openId:d.id, thumbIdx:0}) }));
+    const sel=this.data.find(d=>d.id===this.state.openId)||null;
+    const main=sel?(sel.gallery[this.state.thumbIdx]||sel.img):'';
+    return {
+      filters, items,
+      footerCols:[ {title:'제품',links:['모듈러건축','제품소개','BESPOKE','나만의 위트 만들기']}, {title:'회사',links:['회사소개','솔루션','프로젝트','갤러리']}, {title:'지원',links:['고객지원','인허가 안내','비용 안내','자주 묻는 질문']} ],
+      open:!!sel, close:()=>this.setState({openId:null}), stop:(e)=>e.stopPropagation(),
+      selMain:main, selTitle:sel?sel.title:'', selCat:sel?sel.cat:'', selMeta:sel?sel.meta:'', selDesc:sel?sel.desc:'',
+      selThumbs: sel?sel.gallery.map((g,i)=>({ img:g, on:String(i===this.state.thumbIdx), pick:()=>this.setState({thumbIdx:i}) })):[],
+      selSpecs: sel?sel.specs.map(s=>({k:s[0],v:s[1]})):[]
+    };
+  }
+}
+</script>
+</body>
+</html>

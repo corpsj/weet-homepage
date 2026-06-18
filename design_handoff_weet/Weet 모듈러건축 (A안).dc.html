@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500;600&family=Noto+Sans+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#F6F1E8; -webkit-font-smoothing:antialiased; }
+  ::selection { background:#FDB813; color:#231D16; }
+  .mono { font-family:'Geist Mono', ui-monospace, 'SF Mono', Menlo, monospace; }
+  .wt-link { transition:color .2s; } .wt-link:hover { color:#B8791A !important; }
+  .wt-btn { transition:transform .15s, background .2s, color .2s, border-color .2s; } .wt-btn:hover { transform:translateY(-2px); }
+  @keyframes wtRevUp { from { opacity:0; transform:translateY(32px);} to { opacity:1; transform:none;} }
+  [data-reveal] { animation:wtRevUp .9s cubic-bezier(.2,.7,.2,1) both; animation-timeline:view(); animation-range:entry 0% entry 48%; }
+  @media (prefers-reduced-motion: reduce){ [data-reveal]{animation:none!important;opacity:1!important;transform:none!important;} .heroimg,.bounce{animation:none!important;} }
+  .heroimg { transition:transform 1s cubic-bezier(.2,.7,.2,1); }
+  .band:nth-child(even) .band-fig { order:2; }
+  .band-fig img { transition:transform .8s cubic-bezier(.2,.7,.2,1); } .band:hover .band-fig img { transform:scale(1.04); }
+  @keyframes wtBounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(6px);} }
+  .bounce { animation:wtBounce 1.8s ease-in-out infinite; }
+  @media (max-width:860px){
+    .wt-nav { display:none !important; }
+    .mod-band { grid-template-columns:1fr !important; gap:28px !important; padding:56px 0 !important; }
+    .mod-band .band-fig { order:0 !important; }
+    .mod-intro { grid-template-columns:1fr !important; gap:24px !important; }
+    .ft-cols { grid-template-columns:1fr 1fr !important; gap:32px 24px !important; }
+  }
+</style>
+</helmet>
+
+<div style="font-family:'Geist','Noto Sans KR',sans-serif; background:#F6F1E8; color:#231D16;">
+
+  <!-- HEADER -->
+  <header style="position:sticky; top:0; z-index:50; background:rgba(246,241,232,.88); backdrop-filter:blur(12px); border-bottom:1px solid #E5DBC9;">
+    <div style="max-width:1440px; margin:0 auto; padding:0 5vw; height:72px; display:flex; align-items:center; justify-content:space-between; gap:24px;">
+      <img src="img/weet-wordmark.webp" alt="weet" style="height:26px; width:auto; display:block;">
+      <nav class="wt-nav" style="display:flex; gap:30px; font-size:14px; font-weight:500; color:#3A3026;">
+        <span class="wt-link" style="cursor:pointer; color:#B8791A;">모듈러건축</span>
+        <span class="wt-link" style="cursor:pointer;">제품소개</span>
+        <span class="wt-link" style="cursor:pointer;">BESPOKE</span>
+        <span class="wt-link" style="cursor:pointer;">SOLUTION</span>
+        <span class="wt-link" style="cursor:pointer;">회사소개</span>
+        <span class="wt-link" style="cursor:pointer;">고객지원</span>
+      </nav>
+      <div style="display:flex; align-items:center; gap:18px;">
+        <span style="font-size:12px; font-weight:600; color:#8C8273;">KR</span>
+        <span class="wt-btn" style="background:#231D16; color:#F6F1E8; font-size:13px; font-weight:600; padding:10px 18px; border-radius:4px; cursor:pointer;">주문하기</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <section style="position:relative; height:88vh; min-height:560px; overflow:hidden; background:#231D16;">
+    <img class="heroimg" src="img/mod-hero.webp" alt="" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transform:scale(1.05);">
+    <div style="position:absolute; inset:0; background:linear-gradient(to top, rgba(35,29,22,.9) 5%, rgba(35,29,22,.35) 55%, rgba(35,29,22,.15) 100%);"></div>
+    <div style="position:absolute; left:0; right:0; bottom:0; padding:0 5vw 92px;">
+      <div style="max-width:1440px; margin:0 auto;">
+        <div class="mono" style="font-size:12px; font-weight:600; letter-spacing:.22em; color:#FDB813; margin-bottom:20px;">MODULAR ARCHITECTURE</div>
+        <h1 style="font-size:clamp(36px,5.4vw,78px); font-weight:600; letter-spacing:-0.04em; line-height:1.02; margin:0; color:#F6F1E8; max-width:18ch;">불확실성을 지운<br>프리미엄 공간.</h1>
+        <p style="font-size:clamp(16px,1.6vw,21px); font-weight:300; line-height:1.6; color:#E4DBCB; margin:24px 0 0; max-width:52ch;">WEET의 모듈러 건축은 예측 가능합니다. 통제된 공장에서 완성되어, 합의된 일정에 맞춰 당신의 대지 위로 배송됩니다.</p>
+      </div>
+    </div>
+    <div class="bounce" style="position:absolute; bottom:30px; left:0; right:0; display:flex; flex-direction:column; align-items:center; gap:8px; color:rgba(246,241,232,.75);">
+      <span class="mono" style="font-size:11px; font-weight:600; letter-spacing:.18em;">제작부터 설치까지</span>
+      <span style="font-size:18px;">↓</span>
+    </div>
+  </section>
+
+  <!-- INTRO -->
+  <section style="max-width:1440px; margin:0 auto; padding:96px 5vw;">
+    <div class="mod-intro" data-reveal="" style="display:grid; grid-template-columns:0.9fr 1.1fr; gap:56px; align-items:start;">
+      <h2 style="font-size:clamp(28px,3.4vw,46px); font-weight:600; letter-spacing:-0.03em; line-height:1.08; margin:0; text-wrap:balance;">건축의<br>새로운 기준.</h2>
+      <div style="display:flex; flex-direction:column; gap:20px; padding-top:8px;">
+        <p style="font-size:clamp(16px,1.5vw,19px); line-height:1.75; color:#5A5044; margin:0;">기존의 현장 건축은 날씨와 작업자의 숙련도, 수많은 변수에 의존해야 했습니다. WEET는 이 모든 불확실성을 기술로 통제합니다.</p>
+        <p style="font-size:clamp(15px,1.4vw,17px); line-height:1.8; color:#7A6E5E; margin:0;">모든 공간은 오차를 줄이도록 설계된 공장 환경에서 정밀하게 사전 제작됩니다. 현장의 소음과 분진을 최소화하고, 검증된 공정으로 당신의 공간을 현실로 만듭니다.</p>
+        <div style="display:flex; gap:40px; margin-top:14px; flex-wrap:wrap;">
+          <div><div style="font-size:34px; font-weight:700; letter-spacing:-0.02em;">80<span style="font-size:18px; color:#B8791A;">%+</span></div><div style="font-size:12.5px; color:#8C8273; margin-top:4px;">공장 사전 제작</div></div>
+          <div><div style="font-size:34px; font-weight:700; letter-spacing:-0.02em;">1<span style="font-size:18px; color:#B8791A;">일</span></div><div style="font-size:12.5px; color:#8C8273; margin-top:4px;">현장 조립</div></div>
+          <div><div style="font-size:34px; font-weight:700; letter-spacing:-0.02em;">mm</div><div style="font-size:12.5px; color:#8C8273; margin-top:4px;">단위 정밀 시공</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROCESS BANDS -->
+  <section style="border-top:1px solid #E0D6C4;">
+    <div style="max-width:1320px; margin:0 auto; padding:0 5vw;">
+      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="4">
+        <article class="band mod-band" data-reveal="" style="display:grid; grid-template-columns:1fr 1fr; gap:72px; align-items:center; padding:88px 0; border-bottom:1px solid #E0D6C4;">
+          <div class="band-fig">
+            <div style="position:relative; aspect-ratio:16/11; border-radius:14px; overflow:hidden; border:1px solid #E0D6C4; box-shadow:0 30px 60px -36px rgba(35,29,22,.5);">
+              <img src="{{ s.img }}" alt="{{ s.title }}" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover;">
+            </div>
+          </div>
+          <div>
+            <span class="mono" style="display:block; font-size:12px; font-weight:600; letter-spacing:.14em; color:#B8791A; margin-bottom:18px;">{{ s.step }}</span>
+            <h3 style="font-size:clamp(26px,3vw,40px); font-weight:600; letter-spacing:-0.03em; line-height:1.08; margin:0 0 18px; text-wrap:balance;">{{ s.title }}</h3>
+            <p style="font-size:16px; line-height:1.85; color:#5A5044; margin:0; max-width:46ch;">{{ s.body }}</p>
+          </div>
+        </article>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section style="background:#231D16; color:#F6F1E8;">
+    <div data-reveal="" style="max-width:1320px; margin:0 auto; padding:100px 5vw; text-align:center;">
+      <div class="mono" style="font-size:12px; font-weight:600; letter-spacing:.18em; color:#FDB813; margin-bottom:16px;">EXPERIENCE THE FUTURE</div>
+      <h2 style="font-size:clamp(28px,3.6vw,48px); font-weight:600; letter-spacing:-0.03em; line-height:1.08; margin:0 auto 16px; max-width:20ch;">공간의 미래를 경험하세요.</h2>
+      <p style="font-size:16px; font-weight:300; line-height:1.7; color:#A89E8C; margin:0 auto 34px; max-width:44ch;">WEET의 모듈러 기술로 완성된 제품을 확인하고, 나만의 공간을 구성해보세요.</p>
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+        <span class="wt-btn" style="background:#FDB813; color:#231D16; font-size:15px; font-weight:600; padding:15px 30px; border-radius:6px; cursor:pointer;">나만의 위트 만들기 →</span>
+        <span class="wt-btn" style="background:#F6F1E8; color:#231D16; font-size:15px; font-weight:600; padding:15px 28px; border-radius:6px; cursor:pointer;">제품 전체 보기</span>
+        <span class="wt-btn" style="background:transparent; border:1px solid rgba(246,241,232,.4); color:#F6F1E8; font-size:15px; font-weight:500; padding:14px 26px; border-radius:6px; cursor:pointer;">구매 과정 알아보기</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ UNIFIED FOOTER ============ -->
+  <footer style="background:#1C1610; color:#A89E8C;">
+    <div style="max-width:1440px; margin:0 auto; padding:72px 5vw 40px;">
+      <div class="ft-cols" style="display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr; gap:48px;">
+        <div>
+          <img src="img/weet-wordmark.webp" alt="weet" style="height:24px; width:auto; filter:brightness(0) invert(1); opacity:.95;">
+          <p style="font-size:13.5px; line-height:1.75; color:#8C8273; margin:18px 0 0; max-width:30ch;">작은 공간, 선명한 기준. 모델 선택부터 운송·설치, 예상 비용까지 모든 과정을 투명하게 안내합니다.</p>
+          <div style="display:flex; gap:10px; margin-top:22px;">
+            <span class="wt-btn" style="display:flex; width:36px; height:36px; align-items:center; justify-content:center; border:1px solid rgba(246,241,232,.2); border-radius:8px; cursor:pointer; color:#E4DBCB;">in</span>
+            <span class="wt-btn" style="display:flex; width:36px; height:36px; align-items:center; justify-content:center; border:1px solid rgba(246,241,232,.2); border-radius:8px; cursor:pointer; color:#E4DBCB;">◎</span>
+            <span class="wt-btn" style="display:flex; width:36px; height:36px; align-items:center; justify-content:center; border:1px solid rgba(246,241,232,.2); border-radius:8px; cursor:pointer; color:#E4DBCB;">▶</span>
+          </div>
+        </div>
+        <sc-for list="{{ footerCols }}" as="col" hint-placeholder-count="3">
+          <div>
+            <h4 style="font-size:11px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:#6B6253; margin:0 0 16px;">{{ col.title }}</h4>
+            <div style="display:flex; flex-direction:column; gap:11px;">
+              <sc-for list="{{ col.links }}" as="l" hint-placeholder-count="4"><span class="wt-link" style="font-size:13.5px; color:#A89E8C; cursor:pointer;">{{ l }}</span></sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-top:56px; padding-top:24px; border-top:1px solid rgba(246,241,232,.1);">
+        <span class="mono" style="font-size:11.5px; color:#6B6253;">© 2026 WEET. All rights reserved.</span>
+        <div style="display:flex; gap:22px;">
+          <span class="wt-link" style="font-size:12px; color:#8C8273; cursor:pointer;">이용약관</span>
+          <span class="wt-link" style="font-size:12px; color:#8C8273; cursor:pointer;">개인정보처리방침</span>
+          <span class="mono" style="font-size:12px; color:#8C8273;">☎ 1533-0000</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900}}">
+class Component extends DCLogic {
+  renderVals(){
+    return {
+      steps: [
+        { step:'01 / 공장 제작', title:'mm 단위의 정밀한 엔지니어링', img:'img/mod-factory.webp', body:'날씨의 영향을 받지 않는 실내 공장에서 골조부터 마감까지 전체 공정의 80% 이상을 완성합니다. 일관된 품질 관리와 엄격한 검수로 도면의 수치를 정확하게 실제 공간으로 구현합니다.' },
+        { step:'02 / 운송 및 크레인 조립', title:'하루 만에 완성되는 적층의 미학', img:'img/mod-transport.webp', body:'완성된 모듈을 당신의 대지로 안전하게 운송합니다. 현장에서는 복잡한 공사 없이 크레인으로 모듈을 결합하기만 하면 됩니다. 수개월의 기다림이 단 하루의 감동으로 바뀝니다.' },
+        { step:'03 / 생활과 운영', title:'타협 없는 거주의 쾌적함', img:'img/mod-interior.webp', body:'강철의 견고함과 목재의 따뜻함을 결합한 하이브리드 구조로 단열과 방음 성능을 챙깁니다. 입주 첫날부터 준비된 쾌적한 실내 환경에서 새로운 일상을 시작하세요.' },
+        { step:'04 / 미래 확장과 이동', title:'변화하는 삶에 맞추는 유연성', img:'img/bsp-stay.webp', body:'비즈니스가 성장하거나 삶의 터전이 바뀌더라도 걱정 없습니다. WEET의 모듈은 필요에 따라 공간을 덧붙여 확장하거나, 통째로 분리해 새로운 장소로 이동할 수 있는 진정한 자산입니다.' }
+      ],
+      footerCols: [
+        { title:'제품', links:['모듈러건축','제품소개','BESPOKE','나만의 위트 만들기'] },
+        { title:'회사', links:['회사소개','솔루션','프로젝트','갤러리'] },
+        { title:'지원', links:['고객지원','인허가 안내','비용 안내','자주 묻는 질문'] }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
