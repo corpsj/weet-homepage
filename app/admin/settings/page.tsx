@@ -101,27 +101,27 @@ export default function AdminSettingsPage() {
                     <ConsoleSectionTitle>계정 설정</ConsoleSectionTitle>
                     <div className="grid gap-6 max-w-xl mt-4">
                         <div>
-                            <label className="block text-xs font-bold text-gray-600 mb-1">아이디</label>
+                            <label className="block text-xs font-bold text-admin-muted mb-1">아이디</label>
                             <input
                                 type="text"
                                 disabled
                                 value={userId}
-                                className={`${consoleInputClass} w-full bg-gray-50`}
+                                className={`${consoleInputClass} w-full bg-[#f4f4f5]`}
                             />
                         </div>
                         <div>
-                            <label className="block text-xs font-bold text-gray-600 mb-1">비밀번호</label>
+                            <label className="block text-xs font-bold text-admin-muted mb-1">비밀번호</label>
                             <button
                                 type="button"
                                 onClick={() => setPasswordOpen((current) => !current)}
-                                className="text-sm text-blue-600 hover:underline font-bold"
+                                className="text-sm text-admin-accent hover:underline font-bold"
                             >
                                 비밀번호 변경
                             </button>
                             {passwordOpen && (
-                                <div className="mt-3 space-y-3 rounded-md border border-[#e5e5df] bg-[#fbfbfa] p-4">
+                                <div className="mt-3 space-y-3 rounded-md border border-admin-line bg-admin-bg p-4">
                                     <div>
-                                        <label className="block text-xs font-bold text-gray-600 mb-1">새 비밀번호</label>
+                                        <label className="block text-xs font-bold text-admin-muted mb-1">새 비밀번호</label>
                                         <input
                                             type="password"
                                             value={newPassword}
@@ -131,7 +131,7 @@ export default function AdminSettingsPage() {
                                         />
                                     </div>
                                     <div>
-                                        <label className="block text-xs font-bold text-gray-600 mb-1">새 비밀번호 확인</label>
+                                        <label className="block text-xs font-bold text-admin-muted mb-1">새 비밀번호 확인</label>
                                         <input
                                             type="password"
                                             value={confirmPassword}
@@ -163,9 +163,9 @@ export default function AdminSettingsPage() {
                 {/* Notification Settings */}
                 <ConsolePanel className="p-6">
                     <ConsoleSectionTitle>알림 설정</ConsoleSectionTitle>
-                    <div className="mt-4 max-w-xl rounded-md border border-[#e5e5df] bg-[#fbfbfa] p-4">
-                        <p className="text-sm font-bold text-gray-900">이메일 알림 연동 전</p>
-                        <p className="mt-1 text-[11px] font-medium leading-5 text-gray-500">
+                    <div className="mt-4 max-w-xl rounded-md border border-admin-line bg-admin-bg p-4">
+                        <p className="text-sm font-bold text-admin-ink">이메일 알림 연동 전</p>
+                        <p className="mt-1 text-[11px] font-medium leading-5 text-admin-muted">
                             현재 문의 알림 발송 백엔드는 연결되어 있지 않습니다. 조작 가능한 토글을 노출하지 않고, 실제 발송 연동 후 설정 항목을 활성화합니다.
                         </p>
                     </div>
@@ -179,8 +179,8 @@ export default function AdminSettingsPage() {
                             고급 / 위험 작업
                         </summary>
                         <div className="border-t border-red-200 bg-white p-4 rounded-b-md">
-                            <h3 className="font-bold text-gray-900 text-sm mb-1">초기 데이터 이관 (Migration)</h3>
-                            <p className="text-xs text-gray-500 mb-4 leading-relaxed">
+                            <h3 className="font-bold text-admin-ink text-sm mb-1">초기 데이터 이관 (Migration)</h3>
+                            <p className="text-xs text-admin-muted mb-4 leading-relaxed">
                                 하드코딩된 제품 데이터를 Supabase 데이터베이스로 복사합니다.
                                 <br />
                                 이미 데이터가 존재하는 경우 중복될 수 있으니 주의하세요.

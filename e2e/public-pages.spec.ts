@@ -289,17 +289,11 @@ test.describe('Admin responsive shell', () => {
       const migrationButton = page.getByRole('button', { name: '데이터 이관 실행' });
       await expect(migrationButton).toBeVisible();
 
-      let confirmMessage = '';
-      const dialogHandled = new Promise<void>((resolve) => {
-        page.once('dialog', async (dialog) => {
-          confirmMessage = dialog.message();
-          await dialog.dismiss();
-          resolve();
-        });
-      });
+      // 파괴적 작업은 네이티브 confirm이 아니라 sonner confirmToast로 한 번 더 확인받는다. (lib/ui/confirm)
       await migrationButton.click();
-      await dialogHandled;
-      expect(confirmMessage).toContain('위험 작업입니다');
+      await expect(page.getByText('제품이 하나도 없을 때만 시드 데이터를 추가합니다')).toBeVisible({ timeout: 5000 });
+      // 실제 이관을 실행하지 않도록 취소한다.
+      await page.getByRole('button', { name: '취소' }).first().click();
 
       const overflowX = await page.evaluate(() => {
         return document.documentElement.scrollWidth > document.documentElement.clientWidth;

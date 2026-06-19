@@ -50,16 +50,21 @@ async function createE2EAdminCredentials() {
 async function loginAsAdmin(page: Page, credentials: { id: string; password: string }) {
   await page.goto('/login');
   await page.getByLabel('아이디').fill(credentials.id);
-  await page.getByLabel('비밀번호').fill(credentials.password);
+  // 리디자인 로그인 폼의 비밀번호 표시/숨기기 토글(aria-label "비밀번호 표시") 충돌 방지.
+  await page.getByLabel('비밀번호', { exact: true }).fill(credentials.password);
   await page.getByRole('button', { name: '로그인' }).click();
   await expect(page).toHaveURL(/\/admin/);
   await expect(page.getByRole('heading', { name: '작업실' })).toBeVisible();
 }
 
+// 파괴적 작업 확인: 앱은 네이티브 confirm 대신 sonner confirmToast(F42)를 쓴다.
+// 삭제 트리거를 누른 *직후* 호출해, (1) 혹시 모를 네이티브 dialog 폴백 + (2) 뜨는
+// confirmToast의 '삭제'(정확 일치) 버튼을 클릭한다. (삭제 트리거는 "X 삭제"라 충돌 없음)
 async function acceptNextDialog(page: Page) {
-  page.once('dialog', async (dialog) => {
-    await dialog.accept();
+  page.once('dialog', (dialog) => {
+    void dialog.accept().catch(() => {});
   });
+  await page.getByRole('button', { name: '삭제', exact: true }).last().click();
 }
 
 async function waitForRecordId(table: string, key: string, value: string) {
@@ -174,8 +179,8 @@ test.describe.serial('Admin functional operations', () => {
         return data?.subtitle;
       }).toBe('수정된 부제');
 
-      await acceptNextDialog(page);
       await page.getByLabel(`${slideTitle} 삭제`).click();
+      await acceptNextDialog(page);
       await expect.poll(async () => {
         const { data } = await serviceClient!
           .from('hero_slides')
@@ -316,8 +321,8 @@ test.describe.serial('Admin functional operations', () => {
       const specId = await waitForRecordId('customize_included_specs', 'key', specKey);
 
       await page.getByRole('tab', { name: /모델/ }).click();
-      await acceptNextDialog(page);
       await page.getByLabel(`${modelName} 모델 삭제`).click();
+      await acceptNextDialog(page);
       await expect.poll(async () => {
         const { data } = await serviceClient!.from('customize_models').select('id').eq('id', modelId);
         return data?.length ?? -1;
@@ -332,16 +337,16 @@ test.describe.serial('Admin functional operations', () => {
       }).toEqual([]);
 
       await page.getByRole('tab', { name: /기본 포함 사양/ }).click();
-      await acceptNextDialog(page);
       await page.getByLabel(`${specName} 포함 사양 삭제`).click();
+      await acceptNextDialog(page);
       await expect.poll(async () => {
         const { data } = await serviceClient!.from('customize_included_specs').select('id').eq('id', specId);
         return data?.length ?? -1;
       }).toBe(0);
 
       await page.getByRole('tab', { name: /옵션/ }).click();
-      await acceptNextDialog(page);
       await page.getByLabel(`${optionName} 옵션 삭제`).click();
+      await acceptNextDialog(page);
       await expect.poll(async () => {
         const { data } = await serviceClient!.from('customize_options').select('id').eq('id', optionId);
         return data?.length ?? -1;
@@ -357,8 +362,8 @@ test.describe.serial('Admin functional operations', () => {
       await serviceClient!.from('customize_options').delete().eq('id', conflictOptionId);
 
       await page.getByRole('tab', { name: /카테고리/ }).click();
-      await acceptNextDialog(page);
       await page.getByLabel(`${categoryName} 카테고리 삭제`).click();
+      await acceptNextDialog(page);
       await expect.poll(async () => {
         const { data } = await serviceClient!.from('customize_categories').select('id').eq('id', categoryId);
         return data?.length ?? -1;
