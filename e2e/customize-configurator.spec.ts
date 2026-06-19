@@ -32,7 +32,7 @@ test.describe('Customize configurator', () => {
     // 인라인 SVG 도면: 우측 벽 고정·좌측 확장. 3×6 → 동일 스케일로 width 504.
     await expect(page.getByTestId('floorplan-length-rail')).toContainText('6m');
     await expect(page.getByTestId('model-footprint')).toHaveCount(1);
-    await expect(page.getByTestId('model-footprint')).toHaveAttribute('width', '504');
+    await expect(page.getByTestId('model-footprint')).toHaveAttribute('data-plan-width', '504');
     await expect(page.getByTestId('customize-step-space')).toHaveAttribute('aria-current', 'step');
     await expect(page.getByTestId('customize-step-space')).toContainText('모델');
     await expect(page.getByTestId('customize-step-included')).toContainText('공간 구성');
@@ -50,7 +50,7 @@ test.describe('Customize configurator', () => {
     // 3×9 선택 시 좌측 벽이 확장(504 → 756)되고 레일도 9m로 갱신된다.
     await expect(page.getByTestId('floorplan-length-rail')).toContainText('9m');
     await expect(page.getByTestId('model-footprint')).toHaveCount(1);
-    await expect(page.getByTestId('model-footprint')).toHaveAttribute('width', '756');
+    await expect(page.getByTestId('model-footprint')).toHaveAttribute('data-plan-width', '756');
 
     await page.getByTestId('customize-step-mood').click();
     await expect(page.getByTestId('customize-step-mood')).toHaveAttribute('aria-current', 'step');
@@ -219,7 +219,7 @@ test.describe('Customize configurator', () => {
     await expect(dialog).toBeVisible();
     await expect(dialog.getByTestId('floorplan-zoom-canvas')).toBeVisible();
     await expect(dialog.getByTestId('model-footprint')).toHaveCount(1);
-    await expect(dialog.getByTestId('model-footprint')).toHaveAttribute('width', '504');
+    await expect(dialog.getByTestId('model-footprint')).toHaveAttribute('data-plan-width', '504');
 
     await dialog.getByTestId('floorplan-zoom-close').click();
     await expect(dialog).not.toBeVisible();
@@ -239,7 +239,7 @@ test.describe('Customize configurator', () => {
       await expect(page.getByRole('heading', { level: 1, name: 'Standard 3x9' })).toBeVisible();
       await expect(page.getByTestId('mobile-estimated-total')).toHaveText('₩34,900,000');
       await expect(page.getByTestId('model-footprint')).toHaveCount(1);
-      await expect(page.getByTestId('model-footprint')).toHaveAttribute('width', '756');
+      await expect(page.getByTestId('model-footprint')).toHaveAttribute('data-plan-width', '756');
       await expect(page).toHaveURL(/\/customize\?c=/);
     }
   });
