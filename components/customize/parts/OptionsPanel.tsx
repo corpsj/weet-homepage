@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 import { Check, Layers, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { formatModelStartPrice, formatWon } from '@/lib/customize/priceCalculator';
+import { formatWon } from '@/lib/customize/priceCalculator';
 import type {
   CustomizeCatalog,
   CustomizeCategory,
@@ -85,7 +85,7 @@ export function OptionsPanel({
                 </div>
                 <p className="mt-2 text-sm font-bold text-weet-gold-deep">
                   <span className="mr-1.5 text-[11px] font-semibold text-weet-muted">{COPY.basePrice}</span>
-                  {formatModelStartPrice(model.basePrice)}
+                  {formatWon(model.basePrice)}
                 </p>
               </button>
             ))}

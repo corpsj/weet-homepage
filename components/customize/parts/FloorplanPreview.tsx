@@ -27,6 +27,10 @@ export function FloorplanPreview({
       </div>
 
       <div className="relative overflow-hidden rounded-lg border border-weet-line bg-weet-surface shadow-weet-card">
+        {/* 시안 stage 라벨 */}
+        <span className="pointer-events-none absolute left-3 top-3 z-10 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] text-customize-mist">
+          FLOOR PLAN
+        </span>
         {onOpenViewer && (
           <button
             type="button"

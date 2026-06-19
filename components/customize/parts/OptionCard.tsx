@@ -32,7 +32,7 @@ export function OptionCard({
     // 시안 .wt-opt: 2열 컴팩트 카드. border #ded5c8 / hover #b9aa94 / 선택 #2f3432 + box-shadow 0 0 0 1px.
     <div
       className={cn(
-        'group relative flex min-h-[44px] items-center gap-2 rounded-lg border bg-customize-sand transition-[border-color,box-shadow]',
+        'group relative flex min-h-[42px] items-center gap-2 rounded-lg border bg-customize-sand transition-[border-color,box-shadow]',
         selected
           ? 'border-customize-ink shadow-[0_0_0_1px_#2f3432]'
           : 'border-customize-taupe hover:border-customize-mushroom'

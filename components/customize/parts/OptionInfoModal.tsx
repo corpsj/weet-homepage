@@ -1,9 +1,17 @@
 import { X } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import type { CustomizeOption } from '@/lib/customize/types';
-import { COPY, FALLBACK_CATALOG } from '../lib/constants';
+import { FALLBACK_CATALOG } from '../lib/constants';
 import { optionPriceDisplay } from '../lib/helpers';
 import { useModalDismiss } from '../lib/hooks';
+
+// 시안 infoColor: 가격은 priceType별 단일 색 텍스트 한 줄로 노출.
+const PRICE_TONE: Record<CustomizeOption['priceType'], string> = {
+  consult: 'text-[#a16207]',
+  fixed: 'text-[#18181b]',
+  included: 'text-[#9ca3af]',
+};
 
 // 시안(B안) 옵션 상세 모달: 이름 · 가격 · 설명 + 스펙 칩(최대 3개). 사진 없음.
 export function OptionInfoModal({ option, onClose }: { option: CustomizeOption; onClose: () => void }) {
@@ -26,17 +34,9 @@ export function OptionInfoModal({ option, onClose }: { option: CustomizeOption; 
       >
         <div className="mb-3 flex items-start justify-between gap-4">
           <div>
-            <div className="mb-1.5 flex items-center gap-2">
-              {option.priceType === 'included' && (
-                <span className="rounded bg-customize-dune px-2 py-0.5 text-[11px] font-black text-[#9ca3af]">기본 포함</span>
-              )}
-              {option.priceType === 'consult' && (
-                <span className="rounded bg-[#a16207]/10 px-2 py-0.5 text-[11px] font-black text-[#a16207]">{COPY.consultNeeded}</span>
-              )}
-              {option.priceType === 'fixed' && (
-                <p className="text-sm font-extrabold text-[#18181b]">{optionPriceDisplay(option)}</p>
-              )}
-            </div>
+            <p className={cn('mb-1.5 text-[13px] font-extrabold', PRICE_TONE[option.priceType])}>
+              {optionPriceDisplay(option)}
+            </p>
             <h3 id={titleId} className="text-xl font-black text-customize-ink">{option.nameKo}</h3>
           </div>
           <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label="닫기">

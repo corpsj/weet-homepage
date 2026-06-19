@@ -100,7 +100,7 @@ export default function SolutionTemplate({ data }: { data: SolutionPackageData }
           <div className="mt-9 grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(520px,1.1fr)] lg:items-end">
             <div className="max-w-2xl">
               <div className="mb-5 flex items-center gap-3">
-                <span className="h-2 w-2 animate-pulse rounded-full bg-weet-forest" />
+                <span className="h-2 w-2 animate-pulse rounded-full bg-[#79D2B6]" />
                 <p className="font-mono text-[12px] font-semibold uppercase tracking-[0.2em] text-[#79D2B6]">
                   {copy.eyebrow}
                 </p>

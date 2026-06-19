@@ -24,11 +24,11 @@ export function RailSummaryFooter({
       {estimate && (
         <dl className="mb-3 space-y-1 text-xs">
           <div className="flex items-center justify-between gap-3">
-            <dt className="font-semibold text-weet-sub">{COPY.basePrice}</dt>
+            <dt className="font-semibold text-customize-driftwood">{COPY.basePrice}</dt>
             <dd className="font-bold text-weet-ink">{formatWon(estimate.model.basePrice)}</dd>
           </div>
           <div className="flex items-center justify-between gap-3">
-            <dt className="font-semibold text-weet-sub">{COPY.optionSubtotal}</dt>
+            <dt className="font-semibold text-customize-driftwood">{COPY.optionSubtotal}</dt>
             <dd className="font-bold text-weet-ink">{estimate.optionTotal > 0 ? `+${formatWon(estimate.optionTotal)}` : formatWon(0)}</dd>
           </div>
           <div className="flex items-center justify-between gap-3 border-t border-weet-line pt-1.5">
@@ -36,7 +36,7 @@ export function RailSummaryFooter({
               <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-weet-forest" />
               {COPY.estimatedAmount}
             </dt>
-            <dd className="text-base font-black text-weet-ink" data-testid="desktop-estimated-total">
+            <dd className="text-[15px] font-extrabold text-weet-ink" data-testid="desktop-estimated-total">
               {formatWon(estimate.estimatedTotal)}
             </dd>
           </div>

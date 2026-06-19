@@ -452,7 +452,7 @@ export default function SolutionPage() {
         />
         <div className="relative mx-auto max-w-[1440px] px-[5vw] pb-[70px] pt-24 md:pt-[96px]">
           <div className="mb-6 flex items-center gap-3">
-            <span className="h-2 w-2 animate-pulse rounded-full bg-weet-forest" />
+            <span className="h-2 w-2 animate-pulse rounded-full bg-[#79D2B6]" />
             <span className="font-mono text-[12px] font-semibold uppercase tracking-[0.2em] text-[#79D2B6]">
               {copy.eyebrow}
             </span>
@@ -675,7 +675,7 @@ export default function SolutionPage() {
 
               {/* 일상의 변화 */}
               <div className="mb-7 flex items-start gap-3 rounded-[12px] border border-weet-paper/12 bg-weet-paper/[0.03] px-[22px] py-5 [background:radial-gradient(500px_circle_at_85%_30%,rgba(253,184,19,0.12),transparent_55%),rgba(236,230,218,0.03)]">
-                <span className="mt-1.5 h-2 w-2 flex-none rounded-full bg-weet-forest" />
+                <span className="mt-1.5 h-2 w-2 flex-none rounded-full bg-[#79D2B6]" />
                 <div>
                   <div className="mb-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-weet-paper/50">
                     {copy.changeLabel}
