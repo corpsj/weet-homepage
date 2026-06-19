@@ -28,16 +28,13 @@ test.describe('Header Navigation', () => {
     await expect(page).toHaveURL(/\/customize(\?c=.*)?$/);
   });
 
-  test('should have active highlight bar on menu hover', async ({ page }) => {
-    await page.goto('/');
+  test('active nav item is highlighted for the current route', async ({ page }) => {
+    // 웜 리디자인 헤더: 호버 하이라이트 바 대신, 현재 경로의 메뉴가 gold-deep + aria-current="page"로 강조된다.
+    await page.goto('/products');
 
-    const navItem = page.getByText('제품 소개').first();
-    await navItem.hover();
-
-    await page.waitForTimeout(300);
-
-    const highlightBar = page.locator('span.bg-primary.opacity-100').first();
-    await expect(highlightBar).toBeVisible();
+    const activeLink = page.getByRole('link', { name: '제품소개', exact: true }).first();
+    await expect(activeLink).toBeVisible();
+    await expect(activeLink).toHaveAttribute('aria-current', 'page');
   });
 
   test('mobile menu should have "주문하기" item', async ({ page }) => {
@@ -46,7 +43,7 @@ test.describe('Header Navigation', () => {
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    const menuButton = page.locator('button[aria-label="Toggle mobile menu"]');
+    const menuButton = page.locator('button[aria-label="메뉴 열기"]');
     await expect(menuButton).toBeVisible();
     await menuButton.click();
 
@@ -59,13 +56,14 @@ test.describe('Header Navigation', () => {
     await expect(page).toHaveURL(/\/customize(\?c=.*)?$/);
   });
 
-  test('tablet menu opens between lg and xl breakpoints', async ({ page }) => {
-    await page.setViewportSize({ width: 1100, height: 800 });
+  test('nav collapses to a hamburger menu at <=860px', async ({ page }) => {
+    // 리디자인 네비 접힘 기준은 860px (min-[861px]:flex / max-[860px] 숨김).
+    await page.setViewportSize({ width: 800, height: 900 });
 
     await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    const menuButton = page.locator('button[aria-label="Toggle mobile menu"]');
+    const menuButton = page.locator('button[aria-label="메뉴 열기"]');
     await expect(menuButton).toBeVisible();
     await menuButton.click();
 

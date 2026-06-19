@@ -75,7 +75,9 @@ async function createE2EAdminCredentials() {
 async function loginAsAdmin(page: import('@playwright/test').Page, credentials: { id: string; password: string }) {
   await page.goto('/login');
   await page.getByLabel('아이디').fill(credentials.id);
-  await page.getByLabel('비밀번호').fill(credentials.password);
+  // 리디자인 로그인 폼엔 비밀번호 표시/숨기기 토글(aria-label "비밀번호 표시")이 있어
+  // 정확 일치로 입력 필드만 선택한다.
+  await page.getByLabel('비밀번호', { exact: true }).fill(credentials.password);
   await page.getByRole('button', { name: '로그인' }).click();
   await expect(page).toHaveURL(/\/admin/);
   await expect(page.getByRole('heading', { name: '작업실' })).toBeVisible();
@@ -85,7 +87,7 @@ test.describe('Public page transition', () => {
   test('homepage leads with mobile home configuration CTA', async ({ page }) => {
     await page.goto('/');
 
-    await expect(page.getByText('작은 공간,')).toBeVisible();
+    await expect(page.getByRole('heading', { name: /작은 공간/ })).toBeVisible();
     await expect(page.getByText('이동식주택을 고를 때의 막연함을 없앱니다.')).toBeVisible();
     await expect(page.getByRole('heading', { name: '불확실성은 남기지 않습니다.' })).toBeVisible();
     await expect(page.getByText('카페·팝업·숙박 운영')).toBeVisible();
@@ -129,9 +131,9 @@ test.describe('Public page transition', () => {
     await expect(page.getByText('03 / 생활과 운영')).toBeVisible();
     await expect(page.getByText('04 / 미래 확장과 이동')).toBeVisible();
 
-    // Assert images are used
-    await expect(page.locator('img[src*="modular-hero.webp"]')).toBeAttached();
-    await expect(page.locator('img[src*="factory-precision.webp"]')).toBeAttached();
+    // Assert images are used (리디자인: 시안 자산 mod-hero/mod-factory 사용)
+    await expect(page.locator('img[src*="mod-hero.webp"]')).toBeAttached();
+    await expect(page.locator('img[src*="mod-factory.webp"]')).toBeAttached();
   });
 
   test('solution public page shows operational packages', async ({ page }) => {
@@ -143,16 +145,20 @@ test.describe('Public page transition', () => {
     await expect(page.getByRole('heading', { name: '제어 계층 (Control Layer)' })).toBeVisible();
     await expect(page.getByRole('heading', { name: '에너지 스택 (Energy Stack)' })).toBeVisible();
     await expect(page.getByText('옵션은 장식이 아니라 운영 시스템입니다')).toBeVisible();
-    await expect(page.locator('img[src*="kr-security-realphoto.webp"]')).toBeAttached();
-    await expect(page.locator('a[href="/solution/energy"]').first()).toBeVisible();
+    // 다크 테크 리디자인: 카테고리 카드 이미지가 렌더되고, 상세 사진은 모달로 이동.
+    await expect(page.locator('img[src*="security"]').first()).toBeAttached();
+    // 카드 클릭 → 상세 모달에서 실제 서브라우트(/solution/energy)로 가는 링크가 노출된다.
+    await page.getByRole('heading', { name: '에너지 스택 (Energy Stack)' }).first().click();
+    await expect(page.locator('a[href="/solution/energy"]').first()).toBeVisible({ timeout: 5000 });
   });
 
-  test('footer contains hidden admin link on True', async ({ page }) => {
+  test('footer contains hidden admin link on the copyright wordmark', async ({ page }) => {
     await page.goto('/');
 
+    // 웜 리디자인 푸터: 숨은 /admin 링크가 카피라이트의 "WEET" 워드마크에 있다.
     const adminLink = page.locator('footer a[href="/admin"]');
     await expect(adminLink).toBeAttached();
-    await expect(adminLink).toHaveText('True');
+    await expect(adminLink).toHaveText('WEET');
     await expect(adminLink).toHaveCSS('cursor', 'default');
 
     await adminLink.click();
