@@ -8,10 +8,9 @@ import type {
   SelectedOptions,
 } from './types';
 
-// 시안(B안) 표기를 그대로 따른다: (만원값*10000).toLocaleString()+'원' → "28,000,000원".
-// "~만원" 약식 표기는 쓰지 않는다(정확한 원화).
+// 정확한 원화 표기: ₩ 기호 + 천단위 구분 → "₩28,000,000". "~만원" 약식 표기는 쓰지 않는다.
 export function formatWon(value: number) {
-  return `${Math.max(0, value).toLocaleString('ko-KR')}원`;
+  return `₩${Math.max(0, value).toLocaleString('ko-KR')}`;
 }
 
 export function formatModelStartPrice(value: number) {
