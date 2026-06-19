@@ -46,22 +46,22 @@ const PACKAGE_NAV: Record<
   Array<{ id: SolutionPackageData["id"]; href: string; name: string; desc: string }>
 > = {
   KO: [
-    { id: "security", href: "/solution/cctv", name: "Security Core", desc: "CCTV · 스마트락 · 센서" },
-    { id: "network", href: "/solution/network", name: "Network Fabric", desc: "POS · Wi-Fi · 백업망" },
-    { id: "control", href: "/solution/iot", name: "Control Layer", desc: "조명 · 공조 · 자동화" },
-    { id: "energy", href: "/solution/energy", name: "Energy Stack", desc: "태양광 · ESS · EV" },
+    { id: "security", href: "/solution/cctv", name: "시큐리티", desc: "CCTV · 스마트락 · 동작 감지" },
+    { id: "network", href: "/solution/network", name: "네트워크", desc: "와이파이 · 라우터 · 위성/LTE" },
+    { id: "control", href: "/solution/iot", name: "IoT", desc: "조명 · 냉난방 · 환기" },
+    { id: "energy", href: "/solution/energy", name: "에너지", desc: "태양광 · ESS · EV" },
   ],
   EN: [
-    { id: "security", href: "/solution/cctv", name: "Secure Access", desc: "CCTV · lock · sensor light" },
-    { id: "network", href: "/solution/network", name: "Stable Connection", desc: "POS · booking · guest Wi-Fi" },
-    { id: "control", href: "/solution/iot", name: "Remote Ready", desc: "lighting · HVAC · ventilation" },
-    { id: "energy", href: "/solution/energy", name: "Energy Stack", desc: "solar · ESS · EV charger" },
+    { id: "security", href: "/solution/cctv", name: "Security", desc: "CCTV · smart lock · sensor light" },
+    { id: "network", href: "/solution/network", name: "Network", desc: "Wi-Fi · router · satellite/LTE" },
+    { id: "control", href: "/solution/iot", name: "IoT", desc: "lighting · HVAC · ventilation" },
+    { id: "energy", href: "/solution/energy", name: "Energy", desc: "solar · ESS · EV charger" },
   ],
   ES: [
-    { id: "security", href: "/solution/cctv", name: "Acceso Seguro", desc: "CCTV · cerradura · luz con sensor" },
-    { id: "network", href: "/solution/network", name: "Conexión Estable", desc: "TPV · reservas · Wi-Fi de invitados" },
-    { id: "control", href: "/solution/iot", name: "Listo en Remoto", desc: "iluminación · climatización · ventilación" },
-    { id: "energy", href: "/solution/energy", name: "Energy Stack", desc: "solar · ESS · cargador EV" },
+    { id: "security", href: "/solution/cctv", name: "Seguridad", desc: "CCTV · cerradura · luz con sensor" },
+    { id: "network", href: "/solution/network", name: "Red", desc: "Wi-Fi · router · satélite/LTE" },
+    { id: "control", href: "/solution/iot", name: "IoT", desc: "iluminación · climatización · ventilación" },
+    { id: "energy", href: "/solution/energy", name: "Energía", desc: "solar · ESS · cargador EV" },
   ],
 };
 

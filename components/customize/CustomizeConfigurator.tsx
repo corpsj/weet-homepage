@@ -259,7 +259,7 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
 
           <aside
             data-testid="customize-desktop-rail"
-            className="hidden shrink-0 border-l border-weet-line bg-weet-surface lg:block lg:w-[400px] xl:w-[460px]"
+            className="hidden shrink-0 border-l border-customize-stone bg-customize-sand lg:block lg:w-[430px]"
           >
             <OptionsPanel
               catalog={catalog}

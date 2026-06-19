@@ -11,6 +11,19 @@ export const STEPS: { id: ConfigStep; label: string; categories?: string[] }[] =
 ];
 export const SWATCH_CATEGORY_KEYS = new Set(['exterior', 'interior', 'flooring']);
 
+// 시안(B안) 무드 옵션 색상 스와치(22px). 옵션 key → 정확한 hex. 평면도 색 반영과 동일 값.
+export const OPTION_SWATCH: Record<string, string> = {
+  'ribbed-steel-white': '#E4DFD4',
+  'zinc-gray': '#6B6E70',
+  'cedar-point': '#9B6A42',
+  'paper-wall': '#EFE9DD',
+  'silk-wallpaper': '#E2D6C2',
+  'birch-panel': '#D8B98A',
+  'spc-white-oak': '#D9C7A8',
+  'spc-natural-oak': '#B58E5E',
+  'porcelain-tile': '#BFC0BC',
+};
+
 // 가격/신뢰 문구는 한 곳에서 관리한다. 보수적 표현만 사용한다(결제·할인·보증 약속 금지).
 export const COPY = {
   basePrice: '기본 제품가',

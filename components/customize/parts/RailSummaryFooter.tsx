@@ -20,7 +20,7 @@ export function RailSummaryFooter({
   const currentStep = STEPS[stepIndex];
 
   return (
-    <div className="border-t border-weet-line bg-weet-surface px-5 pb-4 pt-3">
+    <div className="border-t border-customize-stone bg-customize-sand px-5 pb-4 pt-3">
       {estimate && (
         <dl className="mb-3 space-y-1 text-xs">
           <div className="flex items-center justify-between gap-3">

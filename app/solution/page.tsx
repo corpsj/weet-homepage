@@ -15,18 +15,21 @@ import {
 import { useLanguage } from "@/contexts/LanguageContext";
 import type { Language } from "@/contexts/LanguageContext";
 
+type IncludeItem = { name: string; desc: string };
+type StepItem = { n: string; t: string; d: string };
+
 type PackageCopy = {
   id: string;
   href: string;
-  image: string;
   icon: LucideIcon;
   code: string;
-  title: string;
-  subtitle: string;
-  problem: string;
-  promise: string;
-  details: string[];
-  proof: string;
+  cat: string;       // 시큐리티 / 네트워크 / IoT / 에너지
+  tagline: string;   // 집을 지키는 눈 …
+  tag: string;       // CCTV · 스마트락 · 동작 감지 조명
+  desc: string;
+  includes: IncludeItem[]; // 포함 항목 (3)
+  steps: StepItem[];       // 이렇게 동작합니다 (3)
+  change: string;          // 일상의 변화
 };
 
 type PageCopy = {
@@ -36,11 +39,14 @@ type PageCopy = {
   heroLabel: string;
   heroTitle: string;
   heroBody: string;
-  selectLabel: string;
-  detailLabel: string;
-  proofLabel: string;
+  detailLabel: string;   // 포함 항목
+  worksLabel: string;    // 이렇게 동작합니다
+  changeLabel: string;   // 일상의 변화
+  viewDetail: string;    // 상세 보기
   processTitle: string;
   processLead: string;
+  consultLabel: string;  // 이 옵션 상담하기
+  closeLabel: string;
   ctaPrimary: string;
   ctaSecondary: string;
   packages: PackageCopy[];
@@ -54,236 +60,348 @@ const PACKAGE_IMAGES: Record<string, string> = {
   energy: "/images/handoff/sol-energy.webp",
 };
 
+const CARD_IMAGES: Record<string, string> = {
+  security: "/images/solution/generated/kr-security-realphoto.webp",
+  network: "/images/solution/generated/kr-network-realphoto.webp",
+  control: "/images/solution/generated/kr-control-realphoto.webp",
+  energy: "/images/customize/options/solar-panel.webp",
+};
+
 const COPY: Record<Language, PageCopy> = {
   KO: {
-    eyebrow: "WEET OPERATION OPTIONS",
+    eyebrow: "WEET LIVING OPTIONS",
     title: "테크 옵션으로 완성하는 모듈러 공간",
     lead:
-      "Weet 솔루션은 장비 나열이 아니라 보안, 네트워크, 제어, 에너지 스택을 공간 목적에 맞춰 조합하는 테크 옵션 레이어입니다.",
-    heroLabel: "옵션은 장식이 아니라 운영 시스템입니다",
-    heroTitle: "스펙보다 먼저 사용 흐름과 제어 범위를 정의합니다.",
+      "Weet 솔루션은 장비 나열이 아니라 시큐리티·네트워크·IoT·에너지를 생활 목적에 맞춰 조합하는 테크 옵션 레이어입니다.",
+    heroLabel: "옵션은 장식이 아니라 생활의 기반입니다",
+    heroTitle: "스펙보다 먼저, 우리 집의 생활 방식을 봅니다.",
     heroBody:
-      "출입 권한, 결제망, 원격 제어, 전력 부하를 먼저 정리한 뒤 실제로 필요한 옵션만 선택합니다.",
-    selectLabel: "선택 기준",
-    detailLabel: "포함 스펙",
-    proofLabel: "운영자가 체감하는 변화",
-    processTitle: "옵션을 붙이는 방식도 다릅니다",
+      "출입과 보안, 연결, 자동화, 전력을 먼저 정리한 뒤 실제로 필요한 옵션만 고릅니다.",
+    detailLabel: "포함 항목",
+    worksLabel: "이렇게 동작합니다",
+    changeLabel: "일상의 변화",
+    viewDetail: "상세 보기",
+    processTitle: "옵션을 더하는 방식이 다릅니다",
     processLead:
-      "완공 후 장비를 덧붙이는 방식이 아니라, 배선·센서·제어 패널·전력 부하를 설계 단계에서 함께 잡습니다.",
+      "완공 후 장비를 덧붙이는 방식이 아니라, 배선·센서·제어·전력 부하를 설계 단계에서 함께 잡습니다.",
+    consultLabel: "이 옵션 상담하기",
+    closeLabel: "닫기",
     ctaPrimary: "주문 옵션 확인",
-    ctaSecondary: "테크 옵션 문의",
+    ctaSecondary: "옵션 상담하기",
     packages: [
       {
         id: "security",
         href: "/solution/cctv",
-        image: "/images/solution/generated/kr-security-realphoto.webp",
         icon: LockKeyhole,
         code: "SYS_01",
-        title: "보안 코어 (Security Core)",
-        subtitle: "CCTV · 스마트락 · 센서 및 접근 로깅",
-        problem: "야간·무인 운영에서 생기는 보안 공백을 줄입니다.",
-        promise: "출입 기록, 야간 감지, 현관 조명을 하나의 운영 흐름으로 설계합니다.",
-        details: ["현관/창측 사각지대 검토", "CCTV와 센서등 위치 제안", "스마트락 권한/접근 방식 정리"],
-        proof: "밤에도 누가 들어왔는지, 어떤 알림을 받아야 하는지 명확해집니다.",
+        cat: "시큐리티",
+        tagline: "집을 지키는 눈",
+        tag: "CCTV · 스마트락 · 동작 감지 조명",
+        desc: "멀리 떨어진 세컨하우스도 스마트폰으로 출입과 주변을 확인합니다.",
+        includes: [
+          { name: "사각지대 없는 CCTV", desc: "집 안팎을 빈틈없이 비추도록 카메라 위치를 설계합니다." },
+          { name: "스마트락 원격 출입", desc: "멀리서도 문을 열어 주고 출입 기록을 남깁니다." },
+          { name: "동작 감지 센서등", desc: "움직임이 감지되면 현관 조명이 자동으로 켜집니다." },
+        ],
+        steps: [
+          { n: "01", t: "사각지대 진단", d: "현관·창측 동선을 분석해 카메라 위치를 정합니다." },
+          { n: "02", t: "설계 단계 배선", d: "시공 단계에서 배선과 전원을 함께 잡습니다." },
+          { n: "03", t: "하나의 앱 연동", d: "출입·감지·조명을 한 앱으로 묶습니다." },
+        ],
+        change: "집을 비워도, 휴대폰으로 우리 집을 한눈에 봅니다.",
       },
       {
         id: "network",
         href: "/solution/network",
-        image: "/images/solution/generated/kr-network-realphoto.webp",
         icon: Router,
         code: "SYS_02",
-        title: "네트워크 패브릭 (Network Fabric)",
-        subtitle: "POS · 게스트 Wi-Fi · 라우터/위성망",
-        problem: "결제, 예약, 원격 제어가 인터넷 품질에 묶이는 리스크를 줄입니다.",
-        promise: "운영망, 고객망, 장비망을 구분하고 용도별 회선과 라우터 구성을 제안합니다.",
-        details: ["POS/업무/게스트망 분리", "라우터/위성망/LTE 통신함 계획", "백업 회선 필요성 점검"],
-        proof: "카드 결제와 예약 확인이 고객 Wi-Fi 트래픽에 덜 흔들립니다.",
+        cat: "네트워크",
+        tagline: "어디서나 끊김 없이",
+        tag: "와이파이 · 라우터 · 위성/LTE",
+        desc: "산속·외진 부지에서도 안정적으로 연결되도록 통신 환경을 설계합니다.",
+        includes: [
+          { name: "집 전체 와이파이", desc: "데드존 없이 모든 공간을 덮는 메시 구성으로 연결합니다." },
+          { name: "위성·LTE 백업", desc: "외진 부지에서도 끊기지 않도록 백업 회선을 둡니다." },
+          { name: "영상통화 최적화", desc: "영상통화와 스트리밍에 맞춰 회선을 정리합니다." },
+        ],
+        steps: [
+          { n: "01", t: "생활 반경 분석", d: "주로 머무는 공간과 사용 기기를 파악합니다." },
+          { n: "02", t: "회선·라우터 설계", d: "부지 환경에 맞는 회선과 라우터를 배치합니다." },
+          { n: "03", t: "백업망 구성", d: "끊김에 대비한 보조 회선을 연결합니다." },
+        ],
+        change: "어느 방에서든 영상통화와 스트리밍이 끊기지 않습니다.",
       },
       {
         id: "control",
         href: "/solution/iot",
-        image: "/images/solution/generated/kr-control-realphoto.webp",
         icon: SlidersHorizontal,
         code: "SYS_03",
-        title: "제어 계층 (Control Layer)",
-        subtitle: "IoT 조명 · 냉난방 제어 · 환기 스케줄링",
-        problem: "입실 전마다 수동으로 확인해야 하는 반복 업무를 줄입니다.",
-        promise: "조명, 공조, 환기, 도어 상태를 예약과 운영 시간에 맞춰 제어할 수 있게 구성합니다.",
-        details: ["스마트 스위치/온도 패널", "입실 전 냉난방 자동 스케줄", "도어 상태 및 운영 알림"],
-        proof: "고객이 도착하기 전 공간 상태를 미리 준비하고, 불필요한 방문을 줄입니다.",
+        cat: "IoT",
+        tagline: "알아서 준비되는 집",
+        tag: "스마트 조명 · 냉난방 · 환기",
+        desc: "도착 시간에 맞춰 조명·냉난방·환기가 미리 준비됩니다.",
+        includes: [
+          { name: "도착 전 냉난방 예약", desc: "도착 시간에 맞춰 미리 온도를 맞춰 둡니다." },
+          { name: "음성·앱 제어", desc: "앱과 음성으로 공간별 조명과 기기를 제어합니다." },
+          { name: "자동 환기", desc: "시간과 공기질에 맞춰 환기를 스케줄링합니다." },
+        ],
+        steps: [
+          { n: "01", t: "생활 패턴 파악", d: "머무는 시간과 방식을 먼저 이해합니다." },
+          { n: "02", t: "시나리오 설계", d: "도착·취침·외출 시나리오를 구성합니다." },
+          { n: "03", t: "앱·음성 연동", d: "하나의 앱과 음성으로 묶어 제어합니다." },
+        ],
+        change: "문을 열면 이미 따뜻하고 환한 집이 맞이합니다.",
       },
       {
         id: "energy",
         href: "/solution/energy",
-        image: "/images/customize/options/solar-panel.webp",
         icon: Zap,
         code: "SYS_04",
-        title: "에너지 스택 (Energy Stack)",
-        subtitle: "태양광 · ESS · EV 충전기 · 부하 설계",
-        problem: "높은 전기 요금과 전력 수급 불안정 리스크를 해소합니다.",
-        promise: "안정적이고 효율적인 전력 인프라로 독립적인 모듈러 운영을 지원합니다.",
-        details: ["태양광 패널 지붕 통합", "잉여 전력 보관용 ESS 연동", "방문객 EV 충전기 및 부하 설계"],
-        proof: "전력 사용량이 체계적으로 관리되고, 에너지 독립성이 강화됩니다.",
+        cat: "에너지",
+        tagline: "스스로 만드는 전기",
+        tag: "태양광 · 가정용 ESS · EV 충전",
+        desc: "햇빛으로 전기를 만들고 저장해, 전기요금과 정전 걱정을 줄입니다.",
+        includes: [
+          { name: "지붕 일체형 태양광", desc: "지붕과 일체화된 패널로 전기를 만듭니다." },
+          { name: "가정용 ESS", desc: "잉여 전력을 저장해 밤과 정전에 대비합니다." },
+          { name: "EV 충전기", desc: "전기차 충전과 전체 전력 부하를 함께 설계합니다." },
+        ],
+        steps: [
+          { n: "01", t: "전력 사용 진단", d: "사용 패턴과 예상 부하를 분석합니다." },
+          { n: "02", t: "발전·저장 설계", d: "태양광과 ESS 용량을 설계합니다." },
+          { n: "03", t: "부하 관리", d: "사용량을 체계적으로 관리합니다." },
+        ],
+        change: "햇빛으로 충전하고, 정전에도 끄떡없습니다.",
       },
     ],
     process: [
-      { title: "사용 흐름 진단", body: "무인, 상시 상주, 전력 부하, 네트워크 환경을 먼저 파악합니다." },
-      { title: "시스템 맵 구성", body: "출입, 통신, 공조, 전력 연결 지점을 하나의 옵션 맵으로 정리합니다." },
-      { title: "필요 옵션만 확정", body: "장비 스펙보다 운영자가 실제로 받을 알림과 제어 범위를 먼저 정합니다." },
+      { title: "생활 방식 진단", body: "머무는 방식, 전력·통신 환경, 보안 필요를 먼저 파악합니다." },
+      { title: "시스템 맵 구성", body: "출입·연결·자동화·전력 지점을 하나의 옵션 맵으로 정리합니다." },
+      { title: "필요한 옵션만 확정", body: "스펙보다 실제 생활에서 받을 편의와 안심을 먼저 정합니다." },
     ],
   },
   EN: {
-    eyebrow: "WEET OPERATION OPTIONS",
+    eyebrow: "WEET LIVING OPTIONS",
     title: "Modular Spaces Completed With Tech Options",
     lead:
-      "A good space does not end with a beautiful shell. Weet plans security, connection, remote control, and energy management around the problems operators face every day.",
-    heroLabel: "Options are operating systems",
-    heroTitle: "We define usage flow and control scope before device specs.",
+      "Weet solutions are not a list of devices. They are a tech-option layer that combines Security, Network, IoT, and Energy around how you actually live.",
+    heroLabel: "Options are the foundation of daily life, not decoration",
+    heroTitle: "We look at how your home is lived in, before the spec sheet.",
     heroBody:
-      "We check whether the space runs unmanned, whether payments must never fail, and whether power load is stable, before combining the right options.",
-    selectLabel: "Selection Criteria",
-    detailLabel: "Included Specs",
-    proofLabel: "Operational change",
-    processTitle: "The option workflow is different",
+      "We organize access and security, connectivity, automation, and power first, then choose only the options you truly need.",
+    detailLabel: "What's included",
+    worksLabel: "How it works",
+    changeLabel: "What changes day to day",
+    viewDetail: "View details",
+    processTitle: "We add options differently",
     processLead:
-      "We do not bolt devices on after completion. Wiring, sensors, control panels, and power loads are planned with the space.",
+      "We do not bolt devices on after completion. Wiring, sensors, control, and power load are planned together at the design stage.",
+    consultLabel: "Ask about this option",
+    closeLabel: "Close",
     ctaPrimary: "Check Options",
-    ctaSecondary: "Consultation",
+    ctaSecondary: "Ask about options",
     packages: [
       {
         id: "security",
         href: "/solution/cctv",
-        image: "/images/solution/generated/kr-security-realphoto.webp",
         icon: LockKeyhole,
         code: "SYS_01",
-        title: "Security Core",
-        subtitle: "CCTV · smart lock · sensors/access logging",
-        problem: "Reduce security gaps in night and unmanned operations.",
-        promise: "Access logs, night detection, and entrance lighting are planned as one operating flow.",
-        details: ["Blind-spot review", "CCTV and sensor-light placement", "Smart-lock permission planning"],
-        proof: "Operators know who entered at night and which alerts deserve attention.",
+        cat: "Security",
+        tagline: "Eyes that watch over your home",
+        tag: "CCTV · smart lock · motion-sensing lights",
+        desc: "Check entry and surroundings of even a faraway second home from your phone.",
+        includes: [
+          { name: "Blind-spot-free CCTV", desc: "Camera positions are planned to cover the home inside and out." },
+          { name: "Remote smart-lock entry", desc: "Open the door from afar and keep an access record." },
+          { name: "Motion-sensing lights", desc: "Entrance lights turn on automatically when motion is detected." },
+        ],
+        steps: [
+          { n: "01", t: "Blind-spot review", d: "We analyze entrance and window paths to set camera positions." },
+          { n: "02", t: "Design-stage wiring", d: "Wiring and power are planned during construction." },
+          { n: "03", t: "One-app integration", d: "Access, detection, and lighting are tied into a single app." },
+        ],
+        change: "Even when you're away, you see your whole home at a glance on your phone.",
       },
       {
         id: "network",
         href: "/solution/network",
-        image: "/images/solution/generated/kr-network-realphoto.webp",
         icon: Router,
         code: "SYS_02",
-        title: "Network Fabric",
-        subtitle: "POS · guest Wi-Fi · router/satellite readiness",
-        problem: "Reduce losses when payment, booking, or remote control depends on unstable connectivity.",
-        promise: "We separate operator, guest, and device networks and recommend the right line and router.",
-        details: ["POS/work/guest network split", "Router and network-box placement", "Backup-line review"],
-        proof: "Payments and reservations are less affected by guest traffic and device load.",
+        cat: "Network",
+        tagline: "No drop-offs, anywhere",
+        tag: "Wi-Fi · router · satellite/LTE",
+        desc: "We design connectivity so even mountain or remote sites stay reliably online.",
+        includes: [
+          { name: "Whole-home Wi-Fi", desc: "A mesh setup covers every space with no dead zones." },
+          { name: "Satellite/LTE backup", desc: "A backup line keeps remote sites from dropping out." },
+          { name: "Video-call optimized", desc: "Lines are tuned for video calls and streaming." },
+        ],
+        steps: [
+          { n: "01", t: "Living-area review", d: "We map the spaces you use and the devices you rely on." },
+          { n: "02", t: "Line & router design", d: "Lines and routers are placed to fit the site." },
+          { n: "03", t: "Backup network", d: "A secondary line is connected against drop-offs." },
+        ],
+        change: "Video calls and streaming stay smooth in any room.",
       },
       {
         id: "control",
         href: "/solution/iot",
-        image: "/images/solution/generated/kr-control-realphoto.webp",
         icon: SlidersHorizontal,
         code: "SYS_03",
-        title: "Control Layer",
-        subtitle: "IoT lighting · HVAC · ventilation schedules",
-        problem: "Reduce repeated manual checks for unmanned operations.",
-        promise: "Lighting, HVAC, ventilation, and door state can follow booking time and operating hours.",
-        details: ["Smart switches and temperature panels", "Pre-arrival HVAC schedule", "Door state and operation alerts"],
-        proof: "The space can be prepared before guests arrive, with fewer unnecessary visits.",
+        cat: "IoT",
+        tagline: "A home that gets itself ready",
+        tag: "smart lighting · HVAC · ventilation",
+        desc: "Lighting, heating, cooling, and ventilation are ready in time for your arrival.",
+        includes: [
+          { name: "Pre-arrival HVAC", desc: "Temperature is set in advance to match your arrival." },
+          { name: "Voice & app control", desc: "Control lighting and devices by room with app and voice." },
+          { name: "Automatic ventilation", desc: "Ventilation is scheduled by time and air quality." },
+        ],
+        steps: [
+          { n: "01", t: "Read your routine", d: "We first understand when and how you use the home." },
+          { n: "02", t: "Scenario design", d: "We build arrival, sleep, and away scenarios." },
+          { n: "03", t: "App & voice link", d: "Everything is tied into one app and voice control." },
+        ],
+        change: "Open the door and a warm, bright home is already waiting.",
       },
       {
         id: "energy",
         href: "/solution/energy",
-        image: "/images/customize/options/solar-panel.webp",
         icon: Zap,
         code: "SYS_04",
-        title: "Energy Stack",
-        subtitle: "solar · ESS · EV charger · load planning",
-        problem: "Resolve high utility costs and unstable power supply risks.",
-        promise: "We support independent modular operation with stable and efficient power infrastructure.",
-        details: ["Roof-integrated solar panels", "ESS for surplus power", "EV chargers and load planning"],
-        proof: "Power consumption is systematically managed, and energy independence is strengthened.",
+        cat: "Energy",
+        tagline: "Electricity you make yourself",
+        tag: "solar · home ESS · EV charging",
+        desc: "Generate and store electricity from sunlight, easing bills and outage worries.",
+        includes: [
+          { name: "Roof-integrated solar", desc: "Panels integrated with the roof generate your power." },
+          { name: "Home ESS", desc: "Surplus power is stored for nights and outages." },
+          { name: "EV charger", desc: "EV charging and total power load are planned together." },
+        ],
+        steps: [
+          { n: "01", t: "Power-use review", d: "We analyze usage patterns and expected load." },
+          { n: "02", t: "Generate & store", d: "We size the solar array and ESS capacity." },
+          { n: "03", t: "Load management", d: "Consumption is managed systematically." },
+        ],
+        change: "Charged by sunlight, steady even through an outage.",
       },
     ],
     process: [
-      { title: "Operating interview", body: "We first check unmanned, power load, and network needs." },
-      { title: "System map", body: "Access, connection, HVAC, and power points are organized as one option map." },
-      { title: "Option confirmation", body: "We define actual alerts and management scope before chasing device specs." },
+      { title: "Lifestyle review", body: "We first understand how you stay, your power and network conditions, and security needs." },
+      { title: "System map", body: "Access, connectivity, automation, and power points are organized into one option map." },
+      { title: "Only what you need", body: "We define the comfort and peace of mind you'll feel in real life, before specs." },
     ],
   },
   ES: {
-    eyebrow: "WEET OPERATION OPTIONS",
+    eyebrow: "WEET LIVING OPTIONS",
     title: "Espacios Modulares Completados Con Opciones Tecnológicas",
     lead:
-      "Un buen espacio no termina con una carcasa bonita. Weet planifica la seguridad, la conexión, el control remoto y la gestión energética en torno a los problemas que los operadores enfrentan cada día.",
-    heroLabel: "Las opciones son sistemas operativos",
-    heroTitle: "Definimos el flujo de uso y el alcance del control antes que las especificaciones de los equipos.",
+      "Las soluciones Weet no son una lista de equipos. Son una capa de opciones tecnológicas que combina Seguridad, Red, IoT y Energía según cómo vive realmente.",
+    heroLabel: "Las opciones son la base de la vida diaria, no decoración",
+    heroTitle: "Miramos cómo se vive su hogar antes que la ficha técnica.",
     heroBody:
-      "Comprobamos si el espacio funciona sin personal, si los pagos nunca pueden fallar y si la carga eléctrica es estable, antes de combinar las opciones adecuadas.",
-    selectLabel: "Criterios de selección",
-    detailLabel: "Especificaciones incluidas",
-    proofLabel: "Cambio operativo",
-    processTitle: "El flujo de trabajo de las opciones es diferente",
+      "Primero organizamos el acceso y la seguridad, la conectividad, la automatización y la energía, y luego elegimos solo las opciones que realmente necesita.",
+    detailLabel: "Qué incluye",
+    worksLabel: "Cómo funciona",
+    changeLabel: "Qué cambia en el día a día",
+    viewDetail: "Ver detalles",
+    processTitle: "Añadimos las opciones de otra forma",
     processLead:
-      "No añadimos equipos después de la finalización. El cableado, los sensores, los paneles de control y las cargas eléctricas se planifican junto con el espacio.",
+      "No añadimos equipos tras la finalización. El cableado, los sensores, el control y la carga eléctrica se planifican juntos en la fase de diseño.",
+    consultLabel: "Consultar esta opción",
+    closeLabel: "Cerrar",
     ctaPrimary: "Ver opciones",
-    ctaSecondary: "Consulta",
+    ctaSecondary: "Consultar opciones",
     packages: [
       {
         id: "security",
         href: "/solution/cctv",
-        image: "/images/solution/generated/kr-security-realphoto.webp",
         icon: LockKeyhole,
         code: "SYS_01",
-        title: "Security Core",
-        subtitle: "CCTV · cerradura inteligente · sensores/registro de accesos",
-        problem: "Reduzca las brechas de seguridad en operaciones nocturnas y sin personal.",
-        promise: "Los registros de acceso, la detección nocturna y la iluminación de entrada se planifican como un único flujo operativo.",
-        details: ["Revisión de puntos ciegos", "Ubicación de CCTV y luces con sensor", "Planificación de permisos de cerradura inteligente"],
-        proof: "Los operadores saben quién entró por la noche y qué alertas merecen atención.",
+        cat: "Seguridad",
+        tagline: "Los ojos que cuidan su hogar",
+        tag: "CCTV · cerradura inteligente · luces con sensor",
+        desc: "Controle el acceso y el entorno de su segunda residencia lejana desde el móvil.",
+        includes: [
+          { name: "CCTV sin puntos ciegos", desc: "Las cámaras se ubican para cubrir el interior y el exterior." },
+          { name: "Acceso remoto con cerradura", desc: "Abra la puerta a distancia y deje un registro de accesos." },
+          { name: "Luces con sensor de movimiento", desc: "La luz de entrada se enciende sola al detectar movimiento." },
+        ],
+        steps: [
+          { n: "01", t: "Revisión de puntos ciegos", d: "Analizamos los recorridos de entrada y ventanas para ubicar cámaras." },
+          { n: "02", t: "Cableado en diseño", d: "El cableado y la alimentación se planifican durante la obra." },
+          { n: "03", t: "Integración en una app", d: "Acceso, detección e iluminación se unen en una sola app." },
+        ],
+        change: "Aunque esté fuera, ve toda su casa de un vistazo en el móvil.",
       },
       {
         id: "network",
         href: "/solution/network",
-        image: "/images/solution/generated/kr-network-realphoto.webp",
         icon: Router,
         code: "SYS_02",
-        title: "Network Fabric",
-        subtitle: "TPV · Wi-Fi de invitados · preparación para router/satélite",
-        problem: "Reduzca las pérdidas cuando el pago, la reserva o el control remoto dependen de una conectividad inestable.",
-        promise: "Separamos las redes de operador, invitados y dispositivos y recomendamos la línea y el router adecuados.",
-        details: ["División de redes TPV/trabajo/invitados", "Ubicación de router y caja de red", "Revisión de línea de respaldo"],
-        proof: "Los pagos y las reservas se ven menos afectados por el tráfico de invitados y la carga de dispositivos.",
+        cat: "Red",
+        tagline: "Sin cortes, en cualquier lugar",
+        tag: "Wi-Fi · router · satélite/LTE",
+        desc: "Diseñamos la conectividad para que incluso parcelas remotas sigan conectadas con fiabilidad.",
+        includes: [
+          { name: "Wi-Fi en toda la casa", desc: "Una malla cubre cada espacio sin zonas muertas." },
+          { name: "Respaldo satélite/LTE", desc: "Una línea de respaldo evita cortes en parcelas aisladas." },
+          { name: "Optimizado para videollamadas", desc: "Las líneas se ajustan para videollamadas y streaming." },
+        ],
+        steps: [
+          { n: "01", t: "Análisis del uso diario", d: "Mapeamos los espacios y los dispositivos que usa." },
+          { n: "02", t: "Diseño de línea y router", d: "Líneas y routers se colocan según la parcela." },
+          { n: "03", t: "Red de respaldo", d: "Se conecta una línea secundaria ante cortes." },
+        ],
+        change: "Las videollamadas y el streaming no se cortan en ninguna habitación.",
       },
       {
         id: "control",
         href: "/solution/iot",
-        image: "/images/solution/generated/kr-control-realphoto.webp",
         icon: SlidersHorizontal,
         code: "SYS_03",
-        title: "Control Layer",
-        subtitle: "iluminación IoT · climatización · programación de ventilación",
-        problem: "Reduzca las comprobaciones manuales repetidas en operaciones sin personal.",
-        promise: "La iluminación, la climatización, la ventilación y el estado de las puertas pueden seguir el horario de reservas y de operación.",
-        details: ["Interruptores inteligentes y paneles de temperatura", "Programación de climatización previa a la llegada", "Alertas de estado de puertas y operación"],
-        proof: "El espacio puede prepararse antes de que lleguen los huéspedes, con menos visitas innecesarias.",
+        cat: "IoT",
+        tagline: "Una casa que se prepara sola",
+        tag: "iluminación inteligente · climatización · ventilación",
+        desc: "La luz, la climatización y la ventilación se preparan a tiempo para su llegada.",
+        includes: [
+          { name: "Climatización previa", desc: "La temperatura se ajusta de antemano según su llegada." },
+          { name: "Control por voz y app", desc: "Controle luces y equipos por estancia con app y voz." },
+          { name: "Ventilación automática", desc: "La ventilación se programa por hora y calidad del aire." },
+        ],
+        steps: [
+          { n: "01", t: "Entender su rutina", d: "Primero entendemos cuándo y cómo usa la casa." },
+          { n: "02", t: "Diseño de escenarios", d: "Creamos escenarios de llegada, descanso y salida." },
+          { n: "03", t: "Enlace app y voz", d: "Todo se une en una sola app y control por voz." },
+        ],
+        change: "Abre la puerta y una casa cálida y luminosa ya le espera.",
       },
       {
         id: "energy",
         href: "/solution/energy",
-        image: "/images/customize/options/solar-panel.webp",
         icon: Zap,
         code: "SYS_04",
-        title: "Energy Stack",
-        subtitle: "solar · ESS · cargador EV · planificación de carga",
-        problem: "Resuelva los altos costos de electricidad y los riesgos de un suministro eléctrico inestable.",
-        promise: "Apoyamos la operación modular independiente con una infraestructura eléctrica estable y eficiente.",
-        details: ["Paneles solares integrados en el techo", "ESS para el excedente de energía", "Cargadores EV y planificación de carga"],
-        proof: "El consumo de energía se gestiona de forma sistemática y se refuerza la independencia energética.",
+        cat: "Energía",
+        tagline: "La electricidad que usted mismo genera",
+        tag: "solar · ESS doméstico · carga EV",
+        desc: "Genere y almacene electricidad del sol, reduciendo la factura y el miedo a los apagones.",
+        includes: [
+          { name: "Solar integrado en el techo", desc: "Paneles integrados con el techo generan su energía." },
+          { name: "ESS doméstico", desc: "El excedente se almacena para la noche y los apagones." },
+          { name: "Cargador EV", desc: "La carga del vehículo y la carga total se planifican juntas." },
+        ],
+        steps: [
+          { n: "01", t: "Revisión del consumo", d: "Analizamos los patrones de uso y la carga prevista." },
+          { n: "02", t: "Generar y almacenar", d: "Dimensionamos la instalación solar y el ESS." },
+          { n: "03", t: "Gestión de carga", d: "El consumo se gestiona de forma sistemática." },
+        ],
+        change: "Cargada por el sol, firme incluso durante un apagón.",
       },
     ],
     process: [
-      { title: "Entrevista operativa", body: "Primero comprobamos las necesidades de operación sin personal, carga eléctrica y red." },
-      { title: "Mapa del sistema", body: "Los puntos de acceso, conexión, climatización y energía se organizan en un único mapa de opciones." },
-      { title: "Confirmación de opciones", body: "Definimos las alertas reales y el alcance de la gestión antes de perseguir especificaciones de equipos." },
+      { title: "Revisión del estilo de vida", body: "Primero entendemos cómo se queda, su entorno eléctrico y de red, y sus necesidades de seguridad." },
+      { title: "Mapa del sistema", body: "Acceso, conectividad, automatización y energía se organizan en un único mapa de opciones." },
+      { title: "Solo lo necesario", body: "Definimos la comodidad y la tranquilidad que sentirá en la vida real, antes que las especificaciones." },
     ],
   },
 };
@@ -389,8 +507,8 @@ export default function SolutionPage() {
                 {/* image strip */}
                 <div className="relative aspect-[16/8] overflow-hidden rounded-t-[16px] border-b border-weet-paper/10">
                   <Image
-                    src={PACKAGE_IMAGES[pkg.id]}
-                    alt={pkg.title}
+                    src={CARD_IMAGES[pkg.id]}
+                    alt={pkg.cat}
                     fill
                     sizes="(max-width: 860px) 100vw, 50vw"
                     className="object-cover grayscale-[0.4] transition-[transform,filter] duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:scale-[1.07] group-hover:grayscale-0"
@@ -404,17 +522,17 @@ export default function SolutionPage() {
                 <div className="relative z-20 px-7 pb-7 pt-[26px]">
                   <div className="mb-2 flex items-baseline gap-3">
                     <h3 className="m-0 text-[26px] font-semibold tracking-[-0.02em] text-weet-paper">
-                      {pkg.title}
+                      {pkg.cat}
                     </h3>
+                    <span className="font-mono text-[12px] text-weet-paper/55">{pkg.tagline}</span>
                   </div>
-                  <p className="m-0 font-mono text-[12px] text-weet-paper/55">{pkg.subtitle}</p>
                   <p className="mt-3 mb-[18px] text-[13.5px] leading-[1.65] text-weet-paper/70 kr-balance">
-                    {pkg.promise}
+                    {pkg.desc}
                   </p>
                   <div className="flex items-center justify-between border-t border-weet-paper/10 pt-4">
-                    <span className="font-mono text-[11.5px] text-weet-paper/50">{pkg.problem}</span>
+                    <span className="font-mono text-[11.5px] text-weet-paper/50">{pkg.tag}</span>
                     <span className="inline-flex items-center gap-1.5 font-mono text-[13px] font-semibold text-weet-paper/75 transition-colors group-hover:text-weet-gold">
-                      {copy.detailLabel}
+                      {copy.viewDetail}
                       <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-[5px]" />
                     </span>
                   </div>
@@ -484,7 +602,7 @@ export default function SolutionPage() {
             <div className="relative aspect-[16/7] overflow-hidden">
               <Image
                 src={PACKAGE_IMAGES[active.id]}
-                alt={active.title}
+                alt={active.cat}
                 fill
                 sizes="680px"
                 className="object-cover"
@@ -494,16 +612,16 @@ export default function SolutionPage() {
                 type="button"
                 onClick={() => setOpenIndex(null)}
                 className="absolute right-4 top-4 flex h-[38px] w-[38px] items-center justify-center rounded-full bg-weet-ink-deep/70 backdrop-blur-sm transition-[transform,background] duration-200 hover:rotate-90 hover:bg-weet-paper/[0.16]"
-                aria-label="Close"
+                aria-label={copy.closeLabel}
               >
                 <X className="h-[15px] w-[15px] text-weet-paper" />
               </button>
               <div className="absolute inset-x-0 bottom-0 px-8 pb-7">
                 <div className="mb-2 font-mono text-[11px] font-semibold tracking-[0.16em] text-[#79D2B6]">
-                  {active.code} · {active.subtitle}
+                  {active.code} · {active.tag}
                 </div>
                 <h2 className="m-0 text-[clamp(24px,3vw,30px)] font-semibold tracking-[-0.025em] text-weet-paper">
-                  {active.title}
+                  {active.cat} <span className="text-weet-paper/55">— {active.tagline}</span>
                 </h2>
               </div>
             </div>
@@ -511,7 +629,7 @@ export default function SolutionPage() {
             {/* modal body */}
             <div className="px-8 pb-[34px] pt-[30px]">
               <p className="m-0 mb-[26px] text-[14.5px] leading-[1.8] text-weet-paper/70 kr-balance">
-                {active.promise}
+                {active.desc}
               </p>
 
               {/* 포함 항목 */}
@@ -520,14 +638,19 @@ export default function SolutionPage() {
                 {copy.detailLabel}
               </div>
               <div className="mb-[30px] flex flex-col gap-2.5">
-                {active.details.map((item) => (
+                {active.includes.map((item) => (
                   <div
-                    key={item}
+                    key={item.name}
                     className="flex items-start gap-3 rounded-[10px] border border-weet-paper/10 bg-weet-paper/[0.04] px-4 py-3.5"
                   >
                     <span className="mt-px flex-none font-mono text-[14px] font-semibold text-weet-gold">+</span>
-                    <div className="text-[14.5px] font-medium leading-[1.5] text-weet-paper kr-balance">
-                      {item}
+                    <div>
+                      <div className="text-[14.5px] font-semibold leading-[1.4] text-weet-paper kr-balance">
+                        {item.name}
+                      </div>
+                      <div className="mt-1 text-[13px] leading-[1.6] text-weet-paper/55 kr-balance">
+                        {item.desc}
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -536,31 +659,29 @@ export default function SolutionPage() {
               {/* 이렇게 동작합니다 */}
               <div className="mb-3.5 font-mono text-[11px] font-semibold tracking-[0.14em] text-[#79D2B6]">
                 {"// "}
-                {copy.processTitle}
+                {copy.worksLabel}
               </div>
               <div className="mb-[30px] grid grid-cols-1 gap-4 sm:grid-cols-3">
-                {copy.process.map((step, index) => (
-                  <div key={step.title} className="border-t-2 border-weet-paper/15 pt-3.5">
-                    <span className="font-mono text-[13px] font-semibold text-weet-gold">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
+                {active.steps.map((step) => (
+                  <div key={step.n} className="border-t-2 border-weet-paper/15 pt-3.5">
+                    <span className="font-mono text-[13px] font-semibold text-weet-gold">{step.n}</span>
                     <h4 className="mb-1.5 mt-2 text-[14px] font-semibold text-weet-paper kr-balance">
-                      {step.title}
+                      {step.t}
                     </h4>
-                    <p className="m-0 text-[12px] leading-[1.6] text-weet-paper/50 kr-balance">{step.body}</p>
+                    <p className="m-0 text-[12px] leading-[1.6] text-weet-paper/50 kr-balance">{step.d}</p>
                   </div>
                 ))}
               </div>
 
-              {/* 일상의 변화 / 운영자가 체감하는 변화 */}
+              {/* 일상의 변화 */}
               <div className="mb-7 flex items-start gap-3 rounded-[12px] border border-weet-paper/12 bg-weet-paper/[0.03] px-[22px] py-5 [background:radial-gradient(500px_circle_at_85%_30%,rgba(253,184,19,0.12),transparent_55%),rgba(236,230,218,0.03)]">
                 <span className="mt-1.5 h-2 w-2 flex-none rounded-full bg-weet-forest" />
                 <div>
                   <div className="mb-1.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-weet-paper/50">
-                    {copy.proofLabel}
+                    {copy.changeLabel}
                   </div>
                   <p className="m-0 text-[15.5px] font-semibold leading-[1.4] text-weet-paper kr-balance">
-                    {active.proof}
+                    {active.change}
                   </p>
                 </div>
               </div>
@@ -571,7 +692,7 @@ export default function SolutionPage() {
                   href={active.href}
                   className="inline-flex items-center gap-2 rounded-[6px] bg-weet-gold px-6 py-[13px] text-[14px] font-semibold text-weet-ink transition-transform duration-150 hover:-translate-y-0.5"
                 >
-                  {copy.ctaSecondary}
+                  {copy.consultLabel}
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
                 <button
@@ -579,7 +700,7 @@ export default function SolutionPage() {
                   onClick={() => setOpenIndex(null)}
                   className="inline-flex items-center rounded-[6px] border border-weet-paper/30 px-[22px] py-3 text-[14px] font-medium text-weet-paper transition-transform duration-150 hover:-translate-y-0.5"
                 >
-                  {language === "KO" ? "닫기" : language === "ES" ? "Cerrar" : "Close"}
+                  {copy.closeLabel}
                 </button>
               </div>
             </div>

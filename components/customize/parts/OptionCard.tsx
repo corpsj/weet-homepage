@@ -1,9 +1,15 @@
-import Image from 'next/image';
 import { Check, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import type { CustomizeOption } from '@/lib/customize/types';
-import { COPY, OPTION_IMAGE_VERSION, SWATCH_CATEGORY_KEYS } from '../lib/constants';
+import { OPTION_SWATCH, SWATCH_CATEGORY_KEYS } from '../lib/constants';
 import { hasOptionInfo, optionPriceDisplay } from '../lib/helpers';
+
+// 시안(B안) 가격색: 상담필요 #a16207 / 유료 #18181b / 기본포함 #9ca3af.
+const PRICE_TONE: Record<CustomizeOption['priceType'], string> = {
+  consult: 'text-[#a16207]',
+  fixed: 'text-[#18181b]',
+  included: 'text-[#9ca3af]',
+};
 
 export function OptionCard({
   option,
@@ -16,74 +22,72 @@ export function OptionCard({
   onToggle: () => void;
   onInfo: () => void;
 }) {
+  const optionKey = option.key || option.id;
+  const swatch = SWATCH_CATEGORY_KEYS.has(option.categoryKey)
+    ? OPTION_SWATCH[optionKey] ?? OPTION_SWATCH[option.id]
+    : undefined;
+  const showInfo = hasOptionInfo(option);
+
   return (
+    // 시안 .wt-opt: 2열 컴팩트 카드. border #ded5c8 / hover #b9aa94 / 선택 #2f3432 + box-shadow 0 0 0 1px.
     <div
       className={cn(
-        'group relative rounded-lg border bg-weet-surface transition-all hover:shadow-weet-card',
-        selected ? 'border-weet-ink shadow-weet-card ring-1 ring-weet-ink' : 'border-weet-line-2 hover:border-weet-muted'
+        'group relative flex min-h-[44px] items-center gap-2 rounded-lg border bg-customize-sand transition-[border-color,box-shadow]',
+        selected
+          ? 'border-customize-ink shadow-[0_0_0_1px_#2f3432]'
+          : 'border-customize-taupe hover:border-customize-mushroom'
       )}
     >
       <button
         type="button"
         onClick={onToggle}
-        className="flex min-h-[44px] w-full items-center gap-2.5 rounded-lg px-2.5 py-2 pr-9 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep"
         aria-pressed={selected}
+        className={cn(
+          'flex flex-1 items-center gap-2 rounded-lg py-2 pl-2.5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-forest',
+          showInfo ? 'pr-1' : 'pr-2.5'
+        )}
       >
+        {/* 라디오 16px: 선택 시 border/bg = forest(--acc) #2E4A3F */}
         <span
           className={cn(
             'flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition-colors',
-            selected ? 'border-weet-forest bg-weet-forest text-white' : 'border-weet-line-2 bg-weet-surface group-hover:border-weet-muted'
+            selected ? 'border-weet-forest bg-weet-forest text-white' : 'border-customize-ash bg-customize-sand'
           )}
         >
-          {selected && <Check className="h-3 w-3" />}
+          {selected && <Check className="h-2.5 w-2.5" strokeWidth={3} />}
         </span>
-        {SWATCH_CATEGORY_KEYS.has(option.categoryKey) && (
-          <span aria-hidden="true" className="relative h-9 w-9 shrink-0 overflow-hidden rounded-md border border-weet-line bg-weet-paper-alt">
-            <Image
-              src={`/images/customize/options/${option.key || option.id}.webp?v=${OPTION_IMAGE_VERSION}`}
-              alt=""
-              fill
-              unoptimized
-              sizes="36px"
-              className="object-cover"
-              onError={(event) => { event.currentTarget.style.display = 'none'; }}
-            />
-          </span>
+
+        {/* 색상 스와치 22px (mood 카테고리만) */}
+        {swatch && (
+          <span
+            aria-hidden="true"
+            className="h-[22px] w-[22px] shrink-0 rounded-[5px] border border-customize-shell"
+            style={{ backgroundColor: swatch }}
+          />
         )}
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center justify-between gap-2">
-            <span className="truncate text-sm font-bold text-weet-ink">{option.nameKo}</span>
-            <div className="flex shrink-0 items-center gap-2">
-              {option.priceType === 'included' ? (
-                <span className="rounded bg-weet-paper-alt/60 px-1.5 py-0.5 text-[10px] font-black text-weet-muted">
-                  기본 포함
-                </span>
-              ) : option.priceType === 'consult' ? (
-                <span className="rounded bg-weet-gold/10 px-1.5 py-0.5 text-[10px] font-black text-weet-gold-deep">{COPY.consultNeeded}</span>
-              ) : (
-                <span className="text-xs font-bold text-weet-gold-deep">
-                  {optionPriceDisplay(option)}
-                </span>
-              )}
-            </div>
-          </div>
-          {option.shortDescriptionKo && (
-            <span className="mt-0.5 block truncate text-[11px] text-weet-muted">{option.shortDescriptionKo}</span>
-          )}
-        </div>
+
+        {/* 이름 13px/700 + 가격 11px/800 */}
+        <span className="min-w-0 flex-1">
+          <span className="block truncate text-[13px] font-bold leading-tight text-customize-ink">{option.nameKo}</span>
+          <span className={cn('mt-0.5 block text-[11px] font-extrabold leading-tight', PRICE_TONE[option.priceType])}>
+            {optionPriceDisplay(option)}
+          </span>
+        </span>
       </button>
-      {hasOptionInfo(option) && (
+
+      {/* ⓘ 인포 22px: 카드 본문 클릭(=토글)과 분리 */}
+      {showInfo && (
         <button
           type="button"
-          data-testid={`option-info-${option.key || option.id}`}
+          data-testid={`option-info-${optionKey}`}
           onClick={(event) => {
             event.stopPropagation();
             onInfo();
           }}
-          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md p-1 text-weet-muted opacity-100 transition-opacity hover:text-weet-ink focus:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep md:opacity-0 md:group-hover:opacity-100"
           aria-label="옵션 상세 보기"
+          className="mr-1.5 flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-md text-customize-slate transition-colors hover:bg-customize-dune hover:text-customize-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-forest"
         >
-          <Info className="h-4 w-4" />
+          <Info className="h-3.5 w-3.5" />
         </button>
       )}
     </div>

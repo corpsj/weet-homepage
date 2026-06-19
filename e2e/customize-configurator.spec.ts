@@ -28,7 +28,7 @@ test.describe('Customize configurator', () => {
     await page.waitForLoadState('networkidle');
 
     await expect(page.getByRole('heading', { level: 1, name: 'Compact 3x6' })).toBeVisible();
-    await expect(page.getByTestId('desktop-estimated-total')).toHaveText('₩27,900,000');
+    await expect(page.getByTestId('desktop-estimated-total')).toHaveText('27,900,000원');
     // 인라인 SVG 도면: 우측 벽 고정·좌측 확장. 3×6 → 동일 스케일로 width 504.
     await expect(page.getByTestId('floorplan-length-rail')).toContainText('6m');
     await expect(page.getByTestId('model-footprint')).toHaveCount(1);
@@ -46,7 +46,7 @@ test.describe('Customize configurator', () => {
 
     await page.getByRole('button', { name: /Standard 3x9/ }).click();
     await expect(page.getByRole('heading', { level: 1, name: 'Standard 3x9' })).toBeVisible();
-    await expect(page.getByTestId('desktop-estimated-total')).toHaveText('₩34,900,000');
+    await expect(page.getByTestId('desktop-estimated-total')).toHaveText('34,900,000원');
     // 3×9 선택 시 좌측 벽이 확장(504 → 756)되고 레일도 9m로 갱신된다.
     await expect(page.getByTestId('floorplan-length-rail')).toContainText('9m');
     await expect(page.getByTestId('model-footprint')).toHaveCount(1);
@@ -57,7 +57,7 @@ test.describe('Customize configurator', () => {
     // 진행 시스템: 도달한 단계 이전의 단계는 완료 상태로 표시된다.
     await expect(page.getByTestId('customize-step-space')).toHaveAttribute('data-state', 'complete');
     await page.getByRole('button', { name: /적삼목 포인트/ }).click();
-    await expect(page.getByTestId('desktop-estimated-total')).toHaveText('₩37,100,000');
+    await expect(page.getByTestId('desktop-estimated-total')).toHaveText('37,100,000원');
 
     await page.getByTestId('customize-step-smart').click();
     await page.getByRole('button', { name: /태양광 패널/ }).click();
@@ -68,7 +68,7 @@ test.describe('Customize configurator', () => {
     await page.getByTestId('customize-step-space').click();
     await page.getByRole('button', { name: /Compact 3x6/ }).click();
     await expect(page.getByRole('heading', { level: 1, name: 'Compact 3x6' })).toBeVisible();
-    await expect(page.getByTestId('desktop-estimated-total')).toHaveText('₩30,100,000');
+    await expect(page.getByTestId('desktop-estimated-total')).toHaveText('30,100,000원');
   });
 
   test('review step shows configuration summary, pricing breakdown, and consultation form', async ({ page }) => {
@@ -82,7 +82,7 @@ test.describe('Customize configurator', () => {
     await expect(review.getByRole('heading', { name: '구성 검토 및 상담 요청' })).toBeVisible();
     await expect(review.getByText('기본 제품가').first()).toBeVisible();
     await expect(review.getByText('옵션 합계')).toBeVisible();
-    await expect(review.getByTestId('review-estimated-total')).toHaveText('₩27,900,000');
+    await expect(review.getByTestId('review-estimated-total')).toHaveText('27,900,000원');
     await expect(review.getByText('운반/설치 별도', { exact: false }).first()).toBeVisible();
     await expect(review.getByText('상담 요청이며 결제는 진행되지 않습니다.').first()).toBeVisible();
 
@@ -157,7 +157,7 @@ test.describe('Customize configurator', () => {
     await expect(page.getByTestId('customize-step-mood')).toHaveAttribute('aria-current', 'step');
     await expect(page.getByRole('heading', { name: '외장' })).toBeVisible();
     await page.getByRole('button', { name: /적삼목 포인트/ }).click();
-    await expect(page.getByTestId('mobile-estimated-total')).toHaveText('₩30,100,000');
+    await expect(page.getByTestId('mobile-estimated-total')).toHaveText('30,100,000원');
     // 구성 단계에서는 다음 단계 CTA가 하단 고정 바의 기본 동작이다.
     await expect(page.getByTestId('mobile-next-cta')).toContainText('다음: 스마트 테크');
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
@@ -237,7 +237,7 @@ test.describe('Customize configurator', () => {
       await page.getByRole('button', { name: /Standard 3x9/ }).click();
 
       await expect(page.getByRole('heading', { level: 1, name: 'Standard 3x9' })).toBeVisible();
-      await expect(page.getByTestId('mobile-estimated-total')).toHaveText('₩34,900,000');
+      await expect(page.getByTestId('mobile-estimated-total')).toHaveText('34,900,000원');
       await expect(page.getByTestId('model-footprint')).toHaveCount(1);
       await expect(page.getByTestId('model-footprint')).toHaveAttribute('data-plan-width', '756');
       await expect(page).toHaveURL(/\/customize\?c=/);

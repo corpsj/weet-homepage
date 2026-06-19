@@ -3,9 +3,9 @@ import { buildPageMetadata } from "@/lib/seo";
 import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "원격 준비 옵션",
+  title: "IoT 옵션",
   description:
-    "위트(WEET) 원격 준비 옵션. 조명, 냉난방, 환기, 도어 상태를 예약과 운영 시간에 맞춰 제어할 수 있게 설계합니다.",
+    "위트(WEET) IoT 옵션. 조명, 냉난방, 환기, 도어 상태를 도착 시간에 맞춰 자동으로 준비되게 설계합니다. 문을 열면 이미 쾌적한 집.",
   path: "/solution/iot",
 });
 
@@ -19,8 +19,8 @@ export default function SolutionIotLayout({
       <BreadcrumbJsonLd
         items={[
           { name: "홈", path: "/" },
-          { name: "운영 솔루션", path: "/solution" },
-          { name: "원격 준비 옵션", path: "/solution/iot" },
+          { name: "솔루션", path: "/solution" },
+          { name: "IoT 옵션", path: "/solution/iot" },
         ]}
       />
       {children}

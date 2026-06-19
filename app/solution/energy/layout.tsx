@@ -3,9 +3,9 @@ import { buildPageMetadata } from "@/lib/seo";
 import { BreadcrumbJsonLd } from "@/components/seo/BreadcrumbJsonLd";
 
 export const metadata: Metadata = buildPageMetadata({
-  title: "에너지 스택 옵션",
+  title: "에너지",
   description:
-    "위트(WEET) 에너지 스택 옵션. 태양광, ESS, EV 충전기, 전력 부하 설계를 모듈러 공간 목적에 맞춰 구성합니다.",
+    "위트(WEET) 에너지 옵션. 지붕 일체형 태양광, 가정용 ESS, EV 충전기로 전기요금과 정전 걱정을 줄여 스스로 전기를 만드는 세컨하우스를 설계합니다.",
   path: "/solution/energy",
 });
 
@@ -19,8 +19,8 @@ export default function SolutionEnergyLayout({
       <BreadcrumbJsonLd
         items={[
           { name: "홈", path: "/" },
-          { name: "운영 솔루션", path: "/solution" },
-          { name: "에너지 스택 옵션", path: "/solution/energy" },
+          { name: "솔루션", path: "/solution" },
+          { name: "에너지", path: "/solution/energy" },
         ]}
       />
       {children}

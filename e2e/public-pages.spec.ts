@@ -140,15 +140,15 @@ test.describe('Public page transition', () => {
     await page.goto('/solution');
 
     await expect(page.getByRole('heading', { name: '테크 옵션으로 완성하는 모듈러 공간' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: '보안 코어 (Security Core)' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: '네트워크 패브릭 (Network Fabric)' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: '제어 계층 (Control Layer)' })).toBeVisible();
-    await expect(page.getByRole('heading', { name: '에너지 스택 (Energy Stack)' })).toBeVisible();
-    await expect(page.getByText('옵션은 장식이 아니라 운영 시스템입니다')).toBeVisible();
+    await expect(page.getByRole('heading', { name: '시큐리티', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '네트워크', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'IoT', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: '에너지', exact: true })).toBeVisible();
+    await expect(page.getByText('옵션은 장식이 아니라 생활의 기반입니다')).toBeVisible();
     // 다크 테크 리디자인: 카테고리 카드 이미지가 렌더되고, 상세 사진은 모달로 이동.
     await expect(page.locator('img[src*="security"]').first()).toBeAttached();
     // 카드 클릭 → 상세 모달에서 실제 서브라우트(/solution/energy)로 가는 링크가 노출된다.
-    await page.getByRole('heading', { name: '에너지 스택 (Energy Stack)' }).first().click();
+    await page.getByRole('heading', { name: '에너지', exact: true }).first().click();
     await expect(page.locator('a[href="/solution/energy"]').first()).toBeVisible({ timeout: 5000 });
   });
 

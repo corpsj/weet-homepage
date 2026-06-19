@@ -1,7 +1,6 @@
 import { useRef } from 'react';
 import { Check, Layers, ShieldCheck } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { CATEGORY_META } from '@/lib/customize/config';
 import { formatModelStartPrice, formatWon } from '@/lib/customize/priceCalculator';
 import type {
   CustomizeCatalog,
@@ -134,9 +133,6 @@ export function OptionsPanel({
                     : categorySelected.length > 0
                       ? '기본 포함'
                       : '선택 안 함';
-              const meta = CATEGORY_META[category.key as keyof typeof CATEGORY_META];
-              const Icon = meta?.icon ?? Layers;
-
               const sortedOptions = [...options].sort((a, b) => {
                 if (a.priceType === 'included' && b.priceType !== 'included') return -1;
                 if (a.priceType !== 'included' && b.priceType === 'included') return 1;
@@ -147,9 +143,9 @@ export function OptionsPanel({
 
               return (
                 <section key={category.id} className="mb-6 scroll-mt-20">
-                  <CategoryHeading title={category.nameKo} status={categoryStatus} icon={<Icon className={cn('h-4 w-4', meta?.tone)} />} />
+                  <CategoryHeading title={category.nameKo} status={categoryStatus} icon={<Layers className="h-4 w-4" />} />
                   {category.descriptionKo && <p className="mt-1 text-xs leading-5 text-weet-sub">{category.descriptionKo}</p>}
-                  <div className="mt-2 grid gap-1.5">
+                  <div className="mt-2 grid grid-cols-2 gap-1.5">
                     {sortedOptions.map((option) => (
                       <OptionCard
                         key={option.id}
@@ -182,10 +178,10 @@ export function OptionsPanel({
 
   return (
     <div className="flex h-[calc(100dvh-136px)] flex-col overflow-hidden">
-      <div className="border-b border-weet-line bg-weet-surface/95 px-5 py-3 backdrop-blur">
+      <div className="border-b border-customize-stone bg-customize-sand px-5 py-3.5">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-black text-weet-ink">이동식주택 구성</h2>
-          <span className="text-xs font-bold text-weet-muted">{stepIndex + 1} / {STEPS.length} 단계</span>
+          <h2 className="text-[17px] font-extrabold text-customize-ink">이동식주택 구성</h2>
+          <span className="text-xs font-bold text-customize-slate">{stepIndex + 1} / {STEPS.length} 단계</span>
         </div>
       </div>
 
