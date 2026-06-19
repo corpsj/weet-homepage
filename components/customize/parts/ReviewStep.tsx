@@ -21,7 +21,6 @@ import {
   type ConfigStep,
   type ConsultationDraft,
   type FieldRenderArgs,
-  type FloorplanImageStatus,
   type OptionStep,
   type RequiredFieldName,
 } from '../lib/constants';
@@ -32,8 +31,6 @@ import { FloorplanCanvas } from './FloorplanCanvas';
 export function ReviewStep({
   estimate,
   selectedOptions,
-  floorplanImagePath,
-  floorplanImageStatus,
   goToStep,
   form,
   setForm,
@@ -45,8 +42,6 @@ export function ReviewStep({
 }: {
   estimate: EstimateBreakdown;
   selectedOptions: CustomizeOption[];
-  floorplanImagePath?: string | null;
-  floorplanImageStatus?: FloorplanImageStatus;
   goToStep: (step: ConfigStep) => void;
   form: ConsultationDraft;
   setForm: Dispatch<SetStateAction<ConsultationDraft>>;
@@ -93,8 +88,6 @@ export function ReviewStep({
                 <FloorplanCanvas
                   model={estimate.model}
                   selectedOptions={selectedOptions}
-                  floorplanImagePath={floorplanImagePath}
-                  floorplanImageStatus={floorplanImageStatus}
                   testId="review-floorplan-canvas"
                 />
               </div>

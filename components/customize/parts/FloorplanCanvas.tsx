@@ -1,337 +1,150 @@
-import { useMemo, useState } from 'react';
-import { motion, useReducedMotion } from 'framer-motion';
+'use client';
+
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
-import { floorplanSize } from '@/lib/customize/priceCalculator';
 import type { CustomizeModel, CustomizeOption } from '@/lib/customize/types';
-import {
-  FLOORPLAN_CLIP_PAD,
-  PLAN_LABEL_POSITIONS,
-  type FloorplanBox,
-  type FloorplanImageStatus,
-} from '../lib/constants';
-import { floorplanImagePathForModel } from '../lib/helpers';
-import { useFloorplanImageStatus } from '../lib/hooks';
+
+// 시안: design_handoff_weet/Weet 커스터마이즈 (B안).dc.html 의 인라인 SVG(viewBox 0 0 1000 460)를 그대로 포팅.
+// 우측 벽은 x=830에 고정하고 좌측 벽만 확장한다. 동일 스케일(1m=84px) → 3×6:{x:326,w:504}, 3×9:{x:74,w:756}.
+const PLAN_RIGHT_EDGE = 830;
+const PLAN_SCALE = 84;
+const PLAN_TWEEN_MS = 620; // 시안 tweenPlan(600ms)을 기대 사양(620ms ease-out)에 맞춤
+const DEFAULT_WALL_INK = '#2f3432'; // 시안 planWall stroke(구조선)
+const DEFAULT_FLOOR_FILL = '#f1ece1'; // 시안 floorFill(filled) 기본값
+const SMART_ACCENT = '#2E4A3F'; // weet-forest = 시안 --acc 대응
+
+type PlanGeom = { x: number; w: number };
+
+// geomFor: 모델 길이(m)로 좌측 벽 x와 폭 w 산출 (시안 geomFor 포팅 — 우변 고정·동일 스케일로 일반화).
+function geomFor(lengthM: number): PlanGeom {
+  const w = Math.round(lengthM * PLAN_SCALE);
+  return { x: PLAN_RIGHT_EDGE - w, w };
+}
+
+const easeOutCubic = (p: number) => 1 - Math.pow(1 - p, 3); // 시안 ease
+const round1 = (n: number) => Math.round(n * 10) / 10;
+
+// 시안 swatch 색값(option key 기준). 외장 → 벽 스킨, 바닥 → 바닥 fill 에 반영한다.
+const PLAN_SWATCH: Record<string, string> = {
+  'ribbed-steel-white': '#E4DFD4',
+  'zinc-gray': '#6B6E70',
+  'cedar-point': '#9B6A42',
+  'paper-wall': '#EFE9DD',
+  'silk-wallpaper': '#E2D6C2',
+  'birch-panel': '#D8B98A',
+  'spc-white-oak': '#D9C7A8',
+  'spc-natural-oak': '#B58E5E',
+  'porcelain-tile': '#BFC0BC',
+};
+
+function swatchColor(options: CustomizeOption[], categoryKey: string): string | null {
+  const option = options.find((item) => item.categoryKey === categoryKey);
+  if (!option) return null;
+  return PLAN_SWATCH[option.key] ?? PLAN_SWATCH[option.id] ?? null;
+}
 
 export function FloorplanCanvas({
   model,
   selectedOptions,
-  floorplanImagePath,
-  floorplanImageStatus,
   testId,
   className,
 }: {
   model: CustomizeModel;
   selectedOptions: CustomizeOption[];
-  floorplanImagePath?: string | null;
-  floorplanImageStatus?: FloorplanImageStatus;
   testId: string;
   className?: string;
 }) {
-  const box = useMemo(() => floorplanSize(model), [model]);
   const shouldReduceMotion = useReducedMotion();
-  const selectedLabels = selectedOptions.filter((option) => option.overlayLabelKo);
-  const resolvedFloorplanImagePath = floorplanImagePath ?? floorplanImagePathForModel(model);
-  const localImageStatus = useFloorplanImageStatus(resolvedFloorplanImagePath);
-  const imageStatus = floorplanImageStatus ?? localImageStatus;
-  const [lastShownImage, setLastShownImage] = useState<{ path: string; box: FloorplanBox } | null>(null);
-  const [imageTransition, setImageTransition] = useState<{ fromPath: string; fromBox: FloorplanBox } | null>(null);
+  const [geom, setGeom] = useState<PlanGeom>(() => geomFor(model.lengthM));
+  const geomRef = useRef(geom);
+  const rafRef = useRef<number | null>(null);
 
-  // 모델이 바뀌어 새 도면이 로드되면 직전 도면 기준의 확장/축소 트랜지션을 시작한다.
-  // (렌더 중 상태 보정 패턴 — https://react.dev/learn/you-might-not-need-an-effect)
-  if (imageStatus === 'loaded' && resolvedFloorplanImagePath && lastShownImage?.path !== resolvedFloorplanImagePath) {
-    if (lastShownImage) {
-      if (!shouldReduceMotion && lastShownImage.box.width !== box.width) {
-        setImageTransition({ fromPath: lastShownImage.path, fromBox: lastShownImage.box });
-      } else {
-        setImageTransition(null);
+  // applyGeom: 산출된 geometry를 뷰에 반영 (시안의 setAttribute 일괄 갱신을 React state로 변환).
+  const applyGeom = useCallback((next: PlanGeom) => {
+    geomRef.current = next;
+    setGeom(next);
+  }, []);
+
+  // tweenPlan: 현재 → 목표 좌측 벽을 ease-out으로 보간 (시안 setInterval → requestAnimationFrame 포팅).
+  const tweenPlan = useCallback(
+    (target: PlanGeom) => {
+      if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
+      const from = geomRef.current;
+      const start = performance.now();
+      const step = (now: number) => {
+        const p = Math.min((now - start) / PLAN_TWEEN_MS, 1);
+        if (p >= 1) {
+          applyGeom(target); // 마지막 프레임은 정확한 목표값으로 마감
+          rafRef.current = null;
+          return;
+        }
+        const e = easeOutCubic(p);
+        applyGeom({
+          x: round1(from.x + (target.x - from.x) * e),
+          w: round1(from.w + (target.w - from.w) * e),
+        });
+        rafRef.current = requestAnimationFrame(step);
+      };
+      rafRef.current = requestAnimationFrame(step);
+    },
+    [applyGeom]
+  );
+
+  // 모델(길이) 변경 시 좌측 벽 확장/축소. prefers-reduced-motion 또는 동일 geometry면 즉시 반영.
+  useEffect(() => {
+    const target = geomFor(model.lengthM);
+    if (shouldReduceMotion || Math.abs(geomRef.current.x - target.x) < 0.5) {
+      if (rafRef.current != null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
       }
+      applyGeom(target);
+      return;
     }
-    setLastShownImage({ path: resolvedFloorplanImagePath, box });
-  }
+    tweenPlan(target);
+    return () => {
+      if (rafRef.current != null) {
+        cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
+      }
+    };
+  }, [model.lengthM, shouldReduceMotion, applyGeom, tweenPlan]);
 
-  // 다음 모델 도면이 로드되는 동안 직전 도면을 유지해 플리커를 없앤다.
-  const displayedImagePath =
-    imageStatus === 'loaded'
-      ? resolvedFloorplanImagePath
-      : imageStatus === 'loading'
-        ? lastShownImage?.path ?? null
-        : null;
-  const hasBaseImage = Boolean(displayedImagePath);
-  const gridId = `${testId}-grid`;
-  const clipId = `${testId}-expansion-clip`;
-
-  const isGrowing = imageTransition ? box.width >= imageTransition.fromBox.width : true;
-  const baseLayerPath = imageTransition && isGrowing ? imageTransition.fromPath : displayedImagePath;
-  const animatedLayerPath = imageTransition ? (isGrowing ? displayedImagePath : imageTransition.fromPath) : null;
+  const floorColor = swatchColor(selectedOptions, 'flooring') ?? DEFAULT_FLOOR_FILL;
+  const exteriorColor = swatchColor(selectedOptions, 'exterior') ?? DEFAULT_WALL_INK;
+  const doorSmart = selectedOptions.some((option) => option.categoryKey === 'door' && /smart/i.test(option.key || option.id));
+  const railMidX = Math.round((geom.x + PLAN_RIGHT_EDGE) / 2);
 
   return (
-    <svg viewBox="0 0 1000 420" className={cn('aspect-[1000/420] w-full', className)} data-testid={testId}>
-      <defs>
-        <pattern id={gridId} width="24" height="24" patternUnits="userSpaceOnUse">
-          <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#e4ddd1" strokeWidth="1" />
-        </pattern>
-        {imageTransition && (
-          <clipPath id={clipId}>
-            {/* clipPath 내부에서는 CSS transform이 무시되므로 attrX로 SVG 속성을 직접 애니메이션한다. */}
-            <motion.rect
-              key={`${imageTransition.fromPath}->${displayedImagePath ?? 'none'}`}
-              initial={{
-                attrX: imageTransition.fromBox.x - FLOORPLAN_CLIP_PAD,
-                width: imageTransition.fromBox.width + FLOORPLAN_CLIP_PAD * 2,
-              }}
-              animate={{ attrX: box.x - FLOORPLAN_CLIP_PAD, width: box.width + FLOORPLAN_CLIP_PAD * 2 }}
-              transition={{ duration: 0.72, ease: 'easeInOut' }}
-              onAnimationComplete={() => setImageTransition(null)}
-              y={0}
-              height={420}
-            />
-          </clipPath>
-        )}
-      </defs>
-      <rect width="1000" height="420" fill="#f5f1ea" />
+    <svg viewBox="0 0 1000 460" className={cn('aspect-[1000/460] w-full', className)} data-testid={testId}>
+      <rect width="1000" height="460" fill="#f5f1ea" />
 
-      {hasBaseImage ? (
-        <g>
-          <image
-            data-testid="base-floorplan-image"
-            href={baseLayerPath ?? undefined}
-            x="0"
-            y="0"
-            width="1000"
-            height="420"
-            preserveAspectRatio="xMidYMid meet"
-          />
-          {imageTransition && animatedLayerPath && (
-            <g clipPath={`url(#${clipId})`} data-testid="floorplan-image-transition">
-              <motion.g
-                key={`${imageTransition.fromPath}->${animatedLayerPath}`}
-                initial={{ opacity: 1 }}
-                animate={{ opacity: isGrowing ? 1 : [1, 1, 0] }}
-                transition={{ duration: 0.72, ease: 'easeInOut' }}
-              >
-                <image
-                  href={animatedLayerPath}
-                  x="0"
-                  y="0"
-                  width="1000"
-                  height="420"
-                  preserveAspectRatio="xMidYMid meet"
-                />
-              </motion.g>
-            </g>
-          )}
-        </g>
-      ) : (
-        <>
-          <rect x={box.x} y={box.y} width={box.width} height={box.height} fill="#f8f4ec" stroke="#2f3432" strokeWidth="12" className="transition-all duration-[600ms] motion-reduce:transition-none" />
-          <rect x={box.x + 12} y={box.y + 12} width={box.width - 24} height={box.height - 24} fill={`url(#${gridId})`} stroke="#bfb4a2" strokeWidth="2" className="transition-all duration-[600ms] motion-reduce:transition-none" />
-          <BasePlanObjects box={box} />
-        </>
-      )}
+      {/* 길이 레일: 좌측 눈금만 좌측 벽을 따라 이동, 우측 눈금(x=830)은 고정 */}
+      <g data-testid="floorplan-length-rail">
+        <line x1={geom.x} y1="86" x2={PLAN_RIGHT_EDGE} y2="86" stroke="#b9aa94" strokeWidth="2" strokeDasharray="5 5" opacity="0.8" />
+        <line x1={geom.x} y1="78" x2={geom.x} y2="94" stroke="#b9aa94" strokeWidth="2" />
+        <line x1={PLAN_RIGHT_EDGE} y1="78" x2={PLAN_RIGHT_EDGE} y2="94" stroke="#b9aa94" strokeWidth="2" />
+        <text x={railMidX} y="80" fill="#8a806f" fontSize="13" fontWeight="800" textAnchor="middle">
+          {model.lengthM}m
+        </text>
+      </g>
 
-      {!hasBaseImage && (
-        <rect
-          data-testid="model-footprint"
-          x={box.x}
-          y={box.y}
-          width={box.width}
-          height={box.height}
-          fill="transparent"
-          stroke="#2f3432"
-          strokeWidth="6"
-          className="transition-all duration-[600ms] motion-reduce:transition-none"
-        />
-      )}
+      {/* 바닥 + 벽: 우변 고정(x=830), 좌측 벽 확장. 바닥 fill=바닥재 색, 벽 스킨=외장 색 */}
+      <rect data-testid="model-footprint" x={geom.x} y="116" width={geom.w} height="252" rx="4" fill={floorColor} stroke={DEFAULT_WALL_INK} strokeWidth="10" />
+      <rect x={geom.x} y="116" width={geom.w} height="252" rx="4" fill="none" stroke={exteriorColor} strokeWidth="6" />
 
-      <motion.rect
-        data-testid="floorplan-expansion-shell"
-        initial={false}
-        animate={{ x: box.x, width: box.width }}
-        transition={{ duration: 0.6, ease: "easeInOut" }}
-        y={box.y}
-        height={box.height}
-        rx="6"
-        fill="transparent"
-        stroke="#2E4A3F"
-        strokeWidth="8"
-        strokeLinecap="round"
-        opacity="0.9"
-      />
+      {/* 설비 블록(우측 고정) */}
+      <line x1="640" y1="120" x2="640" y2="364" stroke="#cbbfa9" strokeWidth="2" />
+      <line x1="640" y1="244" x2="826" y2="244" stroke="#cbbfa9" strokeWidth="2" />
+      <text x="733" y="190" textAnchor="middle" fill="#9a8f7d" fontSize="15">욕실</text>
+      <text x="733" y="312" textAnchor="middle" fill="#9a8f7d" fontSize="15">주방</text>
+      <text x="455" y="248" textAnchor="middle" fill="#7b7468" fontSize="17" fontWeight="600">거실 · 침실</text>
 
-      <FloorplanExpansionGuides box={box} />
-      <FloorplanLengthRail box={box} lengthM={model.lengthM} />
-
-      {selectedOptions.map((option) => option.overlayImagePath ? (
-        <g key={option.id} className="transition-all duration-[600ms] motion-reduce:transition-none">
-          <image
-            href={option.overlayImagePath}
-            x="0"
-            y="0"
-            width="1000"
-            height="420"
-            preserveAspectRatio="xMidYMid meet"
-            opacity="0.88"
-            className="transition-opacity duration-[250ms]"
-          />
-        </g>
-      ) : null)}
-
-      {selectedLabels.map((option, index) => {
-        const position = (PLAN_LABEL_POSITIONS[option.categoryKey] ?? PLAN_LABEL_POSITIONS.interior)(box, index);
-        return (
-          <g key={option.id} className="transition-all duration-[250ms]">
-            <rect x={position.x - 8} y={position.y - 19} width={Math.max(58, (option.overlayLabelKo?.length ?? 2) * 14 + 20)} height="30" rx="6" fill="#2f3432" />
-            <text x={position.x + 4} y={position.y + 1} fill="#fbfaf7" fontSize="15" fontWeight="700">
-              {option.overlayLabelKo}
-            </text>
-          </g>
-        );
-      })}
+      {/* 현관 도어(하단 벽, 고정) + 스마트락 표시 */}
+      <rect x="548" y="362" width="56" height="10" fill={floorColor} />
+      <path d="M548 367 A56 56 0 0 0 604 367" fill="none" stroke="#b9aa94" strokeWidth="2" />
+      {doorSmart && <circle cx="542" cy="367" r="6" fill={SMART_ACCENT} />}
     </svg>
-  );
-}
-
-function FloorplanExpansionGuides({ box }: { box: ReturnType<typeof floorplanSize> }) {
-  const shouldReduceMotion = useReducedMotion();
-  const transition = shouldReduceMotion ? { duration: 0 } : { duration: 0.72, ease: 'easeInOut' };
-  // 우측 고정 · 좌측 확장: 6m 기준 좌측 벽은 항상 950-600=350, 확장분은 전부 왼쪽에 생긴다.
-  const compactLeftX = 950 - 600;
-  const extensionWidth = Math.max(0, box.width - 600);
-  const hasExpansion = extensionWidth > 0;
-  const inset = 12;
-  const leftX = box.x + inset;
-  const rightX = box.x + box.width - inset;
-  const topY = box.y + inset;
-  const bottomY = box.y + box.height - inset;
-  const guideOpacity = hasExpansion ? 0.95 : 0.72;
-
-  return (
-    <g data-testid="floorplan-expansion-guides" pointerEvents="none">
-      {/* 좌측 확장 영역(증설분) — 새 좌측 벽과 6m 기준선 사이 */}
-      <motion.rect
-        data-testid="floorplan-left-growth-zone"
-        initial={false}
-        animate={{ x: box.x + inset, width: Math.max(0, extensionWidth - inset), opacity: hasExpansion ? 0.28 : 0 }}
-        transition={transition}
-        y={box.y + inset}
-        height={box.height - inset * 2}
-        rx="4"
-        fill="#d8e4dd"
-      />
-
-      {/* 6m 기준 좌측 벽(확장 전 위치) 점선 — 우측 벽은 고정이라 별도 기준선 없음 */}
-      <motion.line
-        data-testid="floorplan-compact-left-reference"
-        initial={false}
-        animate={{ opacity: hasExpansion ? 0.58 : 0 }}
-        transition={transition}
-        x1={compactLeftX}
-        y1={box.y + 18}
-        x2={compactLeftX}
-        y2={box.y + box.height - 18}
-        stroke="#b88b26"
-        strokeWidth="3"
-        strokeDasharray="7 7"
-        strokeLinecap="round"
-      />
-
-      <motion.line
-        data-testid="floorplan-expansion-top-wall"
-        initial={false}
-        animate={{ x1: leftX, x2: rightX, opacity: guideOpacity }}
-        transition={transition}
-        y1={topY}
-        y2={topY}
-        stroke="#2E4A3F"
-        strokeWidth="5"
-        strokeLinecap="round"
-      />
-      <motion.line
-        data-testid="floorplan-expansion-bottom-wall"
-        initial={false}
-        animate={{ x1: leftX, x2: rightX, opacity: guideOpacity }}
-        transition={transition}
-        y1={bottomY}
-        y2={bottomY}
-        stroke="#2E4A3F"
-        strokeWidth="5"
-        strokeLinecap="round"
-      />
-      <motion.line
-        data-testid="floorplan-expansion-left-wall"
-        initial={false}
-        animate={{ x1: leftX, x2: leftX, opacity: guideOpacity }}
-        transition={transition}
-        y1={topY}
-        y2={bottomY}
-        stroke="#2E4A3F"
-        strokeWidth="5"
-        strokeLinecap="round"
-      />
-      <motion.line
-        data-testid="floorplan-expansion-right-wall"
-        initial={false}
-        animate={{ x1: rightX, x2: rightX, opacity: guideOpacity }}
-        transition={transition}
-        y1={topY}
-        y2={bottomY}
-        stroke="#2E4A3F"
-        strokeWidth="5"
-        strokeLinecap="round"
-      />
-
-      <motion.text
-        data-testid="floorplan-expansion-label"
-        initial={false}
-        animate={{ x: box.x + box.width / 2, opacity: hasExpansion ? 1 : 0 }}
-        transition={transition}
-        y={box.y + 32}
-        fill="#2E4A3F"
-        fontSize="13"
-        fontWeight="900"
-        textAnchor="middle"
-      >
-        6m 기준선에서 9m로 확장
-      </motion.text>
-    </g>
-  );
-}
-
-function FloorplanLengthRail({ box, lengthM }: { box: ReturnType<typeof floorplanSize>; lengthM: number }) {
-  const railY = box.y + box.height + 34;
-  const labelX = box.x + box.width / 2;
-
-  return (
-    <g data-testid="floorplan-length-rail" className="transition-all duration-[600ms] motion-reduce:transition-none">
-      <line x1={box.x} y1={railY} x2={box.x + box.width} y2={railY} stroke="#b9aa94" strokeWidth="2" strokeDasharray="4 4" opacity="0.85" />
-      <line x1={box.x} y1={railY - 8} x2={box.x} y2={railY + 8} stroke="#b9aa94" strokeWidth="2" />
-      <line x1={box.x + box.width} y1={railY - 8} x2={box.x + box.width} y2={railY + 8} stroke="#b9aa94" strokeWidth="2" />
-      <rect x={labelX - 22} y={railY - 14} width="44" height="28" rx="4" fill="#f5f1ea" stroke="#d8d0c3" />
-      <text x={labelX} y={railY + 5} fill="#6f6658" fontSize="12" fontWeight="800" textAnchor="middle">
-        {lengthM}m
-      </text>
-    </g>
-  );
-}
-
-function BasePlanObjects({ box }: { box: ReturnType<typeof floorplanSize> }) {
-  return (
-    <g className="transition-all duration-[600ms]">
-      <rect x={box.x + box.width - 84} y={box.y + box.height - 8} width="60" height="16" fill="#8d7a5a" />
-      <path d={`M ${box.x + box.width - 78} ${box.y + box.height - 8} Q ${box.x + box.width - 80} ${box.y + box.height - 70} ${box.x + box.width - 20} ${box.y + box.height - 70}`} fill="none" stroke="#8d7a5a" strokeWidth="3" />
-      <text x={box.x + box.width - 96} y={box.y + box.height - 28} fill="#5f5448" fontSize="14" fontWeight="700">현관도어</text>
-
-      <rect x={box.x + box.width * 0.25} y={box.y - 6} width="96" height="12" fill="#7f9aa0" />
-      <text x={box.x + box.width * 0.25 + 12} y={box.y + 24} fill="#5f5448" fontSize="14" fontWeight="700">기본창</text>
-
-      <rect x={box.x + 60} y={box.y + box.height - 108} width="150" height="64" rx="4" fill="#e1d7c8" stroke="#6b6258" strokeWidth="2" />
-      <circle cx={box.x + 88} cy={box.y + box.height - 76} r="16" fill="none" stroke="#6b6258" strokeWidth="2" />
-      <text x={box.x + 92} y={box.y + box.height - 116} fill="#5f5448" fontSize="14" fontWeight="700">싱크대</text>
-
-      <rect x={box.x + box.width - 210} y={box.y + 46} width="140" height="112" rx="4" fill="#e7e1d8" stroke="#6b6258" strokeWidth="2" />
-      <circle cx={box.x + box.width - 104} cy={box.y + 86} r="18" fill="none" stroke="#6b6258" strokeWidth="2" />
-      <rect x={box.x + box.width - 198} y={box.y + 58} width="48" height="32" rx="4" fill="none" stroke="#6b6258" strokeWidth="2" />
-      <text x={box.x + box.width - 196} y={box.y + 178} fill="#5f5448" fontSize="14" fontWeight="700">욕실</text>
-    </g>
   );
 }

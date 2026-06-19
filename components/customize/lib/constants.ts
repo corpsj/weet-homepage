@@ -1,25 +1,4 @@
-import { floorplanSize } from '@/lib/customize/priceCalculator';
-
-export const PLAN_LABEL_POSITIONS: Record<string, (box: ReturnType<typeof floorplanSize>, index: number) => { x: number; y: number }> = {
-  exterior: (box) => ({ x: box.x + 58, y: box.y + box.height + 22 }),
-  windows: (box, index) => ({ x: box.x + box.width * (index % 2 === 0 ? 0.28 : 0.72), y: box.y - 16 }),
-  door: (box) => ({ x: box.x + box.width - 92, y: box.y + box.height + 22 }),
-  interior: (box) => ({ x: box.x + box.width * 0.48, y: box.y + box.height * 0.5 }),
-  flooring: (box) => ({ x: box.x + box.width * 0.48, y: box.y + box.height * 0.75 }),
-  sink: (box) => ({ x: box.x + 102, y: box.y + box.height - 62 }),
-  bathroom: (box) => ({ x: box.x + box.width - 148, y: box.y + 78 }),
-  furniture: (box, index) => ({ x: box.x + box.width * 0.36, y: box.y + 82 + index * 34 }),
-  energy: (box, index) => ({ x: box.x + 70 + index * 108, y: box.y - 42 }),
-  connectivity: (box, index) => ({ x: box.x + box.width - 208 + index * 96, y: box.y - 42 }),
-};
-
-export const PLACEHOLDER_FLOORPLAN_PATH = '/images/customize/dummy-base.svg';
-export const MODEL_FALLBACK_FLOORPLANS: Record<string, string> = {
-  'compact-3x6': '/images/customize/compact-3x6-base.svg',
-  'standard-3x9': '/images/customize/standard-3x9-base.svg',
-};
 export const OPTION_IMAGE_VERSION = '20260610-0137';
-export type FloorplanImageStatus = 'missing' | 'loading' | 'loaded' | 'failed';
 
 export type ConfigStep = 'space' | 'included' | 'mood' | 'smart' | 'review';
 export type OptionStep = Exclude<ConfigStep, 'review'>;
@@ -58,10 +37,6 @@ export type ConsultationDraft = {
 
 export const inputClass = 'h-11 rounded-lg border-gray-300 bg-weet-surface text-sm focus-visible:ring-weet-gold-deep';
 export const selectClass = 'h-11 w-full rounded-lg border border-gray-300 bg-weet-surface px-3 text-sm outline-none focus:ring-2 focus:ring-weet-gold-deep/30';
-
-export type FloorplanBox = ReturnType<typeof floorplanSize>;
-// 도면 외벽 스트로크(12px)가 박스 경계 바깥으로 6px 나가므로 클립에 여유를 둔다.
-export const FLOORPLAN_CLIP_PAD = 14;
 
 export const FALLBACK_CATALOG: Record<string, { desc: string; specs: string[] }> = {
   'ribbed-steel-white': { desc: '화이트 리브 강판은 가장 기본적인 외장 레이어입니다. 밝은 색으로 작은 공간을 가볍게 보이게 하고, 세로 골 패턴이 빗물 흐름과 표면 오염을 정돈해 주기 때문에 유지관리 부담이 낮습니다.', specs: ['세로 리브 패턴', '밝은 외장 톤', '기본 외피'] },

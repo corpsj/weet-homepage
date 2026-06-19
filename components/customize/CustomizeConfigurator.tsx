@@ -32,10 +32,8 @@ import {
 import {
   buildSelectionsForModelChange,
   buildQuoteHtml,
-  floorplanImagePathForModel,
   nextStepCta,
 } from './lib/helpers';
-import { useFloorplanImageStatus } from './lib/hooks';
 import { ConfiguratorAppBar } from './parts/ConfiguratorAppBar';
 import { ConfigSummaryBoard } from './parts/ConfigSummaryBoard';
 import { FloorplanPreview } from './parts/FloorplanPreview';
@@ -95,8 +93,6 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
   }, [encodedConfig, estimate, shouldSyncConfigUrl]);
 
   const currentModel = estimate?.model ?? catalog.models[0];
-  const currentFloorplanImagePath = currentModel ? floorplanImagePathForModel(currentModel) : null;
-  const currentFloorplanImageStatus = useFloorplanImageStatus(currentFloorplanImagePath);
   const visibleOptions = useMemo(() => optionsForModel(catalog.options.filter((option) => option.isActive), modelId), [catalog.options, modelId]);
   const stepCounts = useMemo(() => {
     const counts: Record<ConfigStep, number> = { space: 1, included: 0, mood: 0, smart: 0, review: 0 };
@@ -221,8 +217,6 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
         <ReviewStep
           estimate={estimate}
           selectedOptions={selectedOptionsList}
-          floorplanImagePath={currentFloorplanImagePath}
-          floorplanImageStatus={currentFloorplanImageStatus}
           goToStep={handleStepSelect}
           form={form}
           setForm={setForm}
@@ -240,8 +234,6 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
               <FloorplanPreview
                 model={currentModel}
                 selectedOptions={selectedOptionsList}
-                floorplanImagePath={currentFloorplanImagePath}
-                floorplanImageStatus={currentFloorplanImageStatus}
                 onOpenViewer={() => setPlanViewerOpen(true)}
               />
               {estimate && <ConfigSummaryBoard estimate={estimate} selectedOptions={selectedOptionsList} />}
@@ -318,8 +310,6 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
         <FloorplanZoomModal
           model={currentModel}
           selectedOptions={selectedOptionsList}
-          floorplanImagePath={currentFloorplanImagePath}
-          floorplanImageStatus={currentFloorplanImageStatus}
           onClose={() => setPlanViewerOpen(false)}
         />
       )}

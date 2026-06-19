@@ -29,10 +29,10 @@ test.describe('Customize configurator', () => {
 
     await expect(page.getByRole('heading', { level: 1, name: 'Compact 3x6' })).toBeVisible();
     await expect(page.getByTestId('desktop-estimated-total')).toHaveText('₩27,900,000');
-    await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('href', /compact-3x6-base\.svg/);
-    await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('preserveAspectRatio', 'xMidYMid meet');
+    // 인라인 SVG 도면: 우측 벽 고정·좌측 확장. 3×6 → 동일 스케일로 width 504.
     await expect(page.getByTestId('floorplan-length-rail')).toContainText('6m');
-    await expect(page.getByTestId('model-footprint')).toHaveCount(0);
+    await expect(page.getByTestId('model-footprint')).toHaveCount(1);
+    await expect(page.getByTestId('model-footprint')).toHaveAttribute('width', '504');
     await expect(page.getByTestId('customize-step-space')).toHaveAttribute('aria-current', 'step');
     await expect(page.getByTestId('customize-step-space')).toContainText('모델');
     await expect(page.getByTestId('customize-step-included')).toContainText('공간 구성');
@@ -47,21 +47,10 @@ test.describe('Customize configurator', () => {
     await page.getByRole('button', { name: /Standard 3x9/ }).click();
     await expect(page.getByRole('heading', { level: 1, name: 'Standard 3x9' })).toBeVisible();
     await expect(page.getByTestId('desktop-estimated-total')).toHaveText('₩34,900,000');
-    await expect(page.getByTestId('base-floorplan-image')).toHaveCount(1);
-    await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('href', /standard-3x9-base\.svg/);
-    await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('preserveAspectRatio', 'xMidYMid meet');
+    // 3×9 선택 시 좌측 벽이 확장(504 → 756)되고 레일도 9m로 갱신된다.
     await expect(page.getByTestId('floorplan-length-rail')).toContainText('9m');
-    await expect(page.getByTestId('model-footprint')).toHaveCount(0);
-
-    const floorplanSvgGeometry = await page.evaluate(async () => {
-      const [compactSvg, standardSvg] = await Promise.all([
-        fetch('/images/customize/compact-3x6-base.svg').then((response) => response.text()),
-        fetch('/images/customize/standard-3x9-base.svg').then((response) => response.text()),
-      ]);
-      return { compactSvg, standardSvg };
-    });
-    expect(floorplanSvgGeometry.compactSvg).toContain('<rect x="200" y="60" width="600" height="300"');
-    expect(floorplanSvgGeometry.standardSvg).toContain('<rect x="50" y="60" width="900" height="300"');
+    await expect(page.getByTestId('model-footprint')).toHaveCount(1);
+    await expect(page.getByTestId('model-footprint')).toHaveAttribute('width', '756');
 
     await page.getByTestId('customize-step-mood').click();
     await expect(page.getByTestId('customize-step-mood')).toHaveAttribute('aria-current', 'step');
@@ -229,9 +218,8 @@ test.describe('Customize configurator', () => {
     const dialog = page.getByRole('dialog').filter({ hasText: '도면 확대' });
     await expect(dialog).toBeVisible();
     await expect(dialog.getByTestId('floorplan-zoom-canvas')).toBeVisible();
-    await expect(dialog.getByTestId('base-floorplan-image')).toHaveCount(1);
-    await expect(dialog.getByTestId('base-floorplan-image')).toHaveAttribute('href', /compact-3x6-base\.svg/);
-    await expect(dialog.getByTestId('model-footprint')).toHaveCount(0);
+    await expect(dialog.getByTestId('model-footprint')).toHaveCount(1);
+    await expect(dialog.getByTestId('model-footprint')).toHaveAttribute('width', '504');
 
     await dialog.getByTestId('floorplan-zoom-close').click();
     await expect(dialog).not.toBeVisible();
@@ -250,22 +238,10 @@ test.describe('Customize configurator', () => {
 
       await expect(page.getByRole('heading', { level: 1, name: 'Standard 3x9' })).toBeVisible();
       await expect(page.getByTestId('mobile-estimated-total')).toHaveText('₩34,900,000');
-      await expect(page.getByTestId('base-floorplan-image')).toHaveCount(1);
-      await expect(page.getByTestId('base-floorplan-image')).toHaveAttribute('href', /standard-3x9-base\.svg/);
-      await expect(page.getByTestId('model-footprint')).toHaveCount(0);
+      await expect(page.getByTestId('model-footprint')).toHaveCount(1);
+      await expect(page.getByTestId('model-footprint')).toHaveAttribute('width', '756');
       await expect(page).toHaveURL(/\/customize\?c=/);
     }
-  });
-
-  test('floorplan falls back to generated footprint when the base image fails', async ({ page }) => {
-    await page.route('**/compact-3x6-base.svg', (route) => route.abort());
-    await page.goto('/customize');
-    await page.waitForLoadState('networkidle');
-
-    await expect(page.getByRole('heading', { level: 1, name: 'Compact 3x6' })).toBeVisible();
-    await expect(page.getByTestId('base-floorplan-image')).toHaveCount(0);
-    await expect(page.getByTestId('model-footprint')).toHaveCount(1);
-    await expect(page.getByTestId('model-footprint')).toHaveAttribute('width', '600');
   });
 
 });

@@ -5,7 +5,6 @@ import {
 } from '@/lib/customize/priceCalculator';
 import type {
   CustomizeCatalog,
-  CustomizeModel,
   CustomizeOption,
   EstimateBreakdown,
   SelectedOptions,
@@ -13,8 +12,6 @@ import type {
 import {
   COPY,
   FALLBACK_CATALOG,
-  MODEL_FALLBACK_FLOORPLANS,
-  PLACEHOLDER_FLOORPLAN_PATH,
   type ConfigStep,
 } from './constants';
 
@@ -31,15 +28,6 @@ export function optionPriceDisplay(option: Pick<CustomizeOption, 'priceType' | '
   if (option.priceType === 'included') return '기본 포함';
   if (option.priceType === 'consult') return '상담 필요';
   return `+${formatWon(option.price)}`;
-}
-
-export function floorplanImagePathForModel(model: CustomizeModel) {
-  const configuredPath = model.floorplanImagePath?.trim();
-  const fallbackPath = MODEL_FALLBACK_FLOORPLANS[model.id];
-
-  if (!configuredPath) return fallbackPath ?? null;
-  if (configuredPath === PLACEHOLDER_FLOORPLAN_PATH) return fallbackPath ?? configuredPath;
-  return configuredPath;
 }
 
 export function buildSelectionsForModelChange(

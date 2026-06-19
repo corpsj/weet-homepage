@@ -1,21 +1,16 @@
 import { X } from 'lucide-react';
 import { formatModelStartPrice } from '@/lib/customize/priceCalculator';
 import type { CustomizeModel, CustomizeOption } from '@/lib/customize/types';
-import { type FloorplanImageStatus } from '../lib/constants';
 import { useModalDismiss } from '../lib/hooks';
 import { FloorplanCanvas } from './FloorplanCanvas';
 
 export function FloorplanZoomModal({
   model,
   selectedOptions,
-  floorplanImagePath,
-  floorplanImageStatus,
   onClose,
 }: {
   model: CustomizeModel;
   selectedOptions: CustomizeOption[];
-  floorplanImagePath?: string | null;
-  floorplanImageStatus?: FloorplanImageStatus;
   onClose: () => void;
 }) {
   useModalDismiss(onClose);
@@ -51,8 +46,6 @@ export function FloorplanZoomModal({
               <FloorplanCanvas
                 model={model}
                 selectedOptions={selectedOptions}
-                floorplanImagePath={floorplanImagePath}
-                floorplanImageStatus={floorplanImageStatus}
                 testId="floorplan-zoom-canvas"
                 className="min-w-[640px] md:min-w-0"
               />

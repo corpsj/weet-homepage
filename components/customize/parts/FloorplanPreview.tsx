@@ -1,20 +1,16 @@
 import { Maximize2 } from 'lucide-react';
 import { formatModelStartPrice } from '@/lib/customize/priceCalculator';
 import type { CustomizeModel, CustomizeOption } from '@/lib/customize/types';
-import { COPY, type FloorplanImageStatus } from '../lib/constants';
+import { COPY } from '../lib/constants';
 import { FloorplanCanvas } from './FloorplanCanvas';
 
 export function FloorplanPreview({
   model,
   selectedOptions,
-  floorplanImagePath,
-  floorplanImageStatus,
   onOpenViewer,
 }: {
   model: CustomizeModel;
   selectedOptions: CustomizeOption[];
-  floorplanImagePath?: string | null;
-  floorplanImageStatus?: FloorplanImageStatus;
   onOpenViewer?: () => void;
 }) {
   return (
@@ -45,10 +41,17 @@ export function FloorplanPreview({
         <FloorplanCanvas
           model={model}
           selectedOptions={selectedOptions}
-          floorplanImagePath={floorplanImagePath}
-          floorplanImageStatus={floorplanImageStatus}
           testId="floorplan-canvas"
         />
+        {/* 시안 stage 배지: 우측 벽 고정 기준(6m)에서 확장된 모델임을 알린다. */}
+        {model.lengthM > 6 && (
+          <span
+            data-testid="floorplan-expansion-badge"
+            className="pointer-events-none absolute bottom-3 left-1/2 z-10 -translate-x-1/2 rounded-full bg-weet-forest/10 px-3 py-1.5 text-[11px] font-extrabold text-weet-forest"
+          >
+            6m 기준에서 {model.lengthM}m로 확장됨
+          </span>
+        )}
       </div>
     </div>
   );
