@@ -64,3 +64,6 @@ __pycache__/
 
 # agent runtime artifacts (review packets, QA screenshots, state files — secrets/세션 정보가 섞일 수 있어 추적 금지)
 .codex/
+
+# 디자인 레퍼런스(로컬 보관용, 빌드/배포 제외)
+design_handoff_weet/
