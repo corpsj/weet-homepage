@@ -10,6 +10,7 @@ import {
   BUDGET_RANGES,
   LAND_TYPES,
   PURCHASE_TIMELINES,
+  choiceLabel,
 } from '@/lib/customize/config';
 import { formatModelStartPrice, formatWon } from '@/lib/customize/priceCalculator';
 import type { Language } from '@/contexts/LanguageContext';
@@ -225,7 +226,7 @@ export function ReviewStep({
               </Button>
             </div>
           ) : (
-            <ConsultationForm form={form} setForm={setForm} isPending={isPending} onSubmit={onSubmit} copy={copy} />
+            <ConsultationForm form={form} setForm={setForm} isPending={isPending} onSubmit={onSubmit} copy={copy} language={language} />
           )}
         </section>
       </div>
@@ -253,12 +254,14 @@ function ConsultationForm({
   isPending,
   onSubmit,
   copy,
+  language,
 }: {
   form: ConsultationDraft;
   setForm: Dispatch<SetStateAction<ConsultationDraft>>;
   isPending: boolean;
   onSubmit: () => void;
   copy: CustomizeUiCopy;
+  language: Language;
 }) {
   const [showOptional, setShowOptional] = useState(false);
   // 필수 필드 검증 결과 + UI 피드백(에러 표시·포커스 이동)은 ReviewStep이 단독으로 담당한다.
@@ -385,17 +388,17 @@ function ConsultationForm({
         <div className="mt-4 grid gap-4">
           <Field label={copy.fieldTimeline} fieldId="consultation-timeline" helper={copy.fieldTimelineHelp} copy={copy}>
             {({ id, describedBy }) => (
-              <Select id={id} ariaDescribedBy={describedBy} value={form.purchaseTimeline} onChange={(value) => updateField('purchaseTimeline', value)} options={PURCHASE_TIMELINES} copy={copy} />
+              <Select id={id} ariaDescribedBy={describedBy} value={form.purchaseTimeline} onChange={(value) => updateField('purchaseTimeline', value)} options={PURCHASE_TIMELINES} copy={copy} language={language} />
             )}
           </Field>
           <Field label={copy.fieldLandType} fieldId="consultation-landtype" helper={copy.fieldLandTypeHelp} copy={copy}>
             {({ id, describedBy }) => (
-              <Select id={id} ariaDescribedBy={describedBy} value={form.landType} onChange={(value) => updateField('landType', value)} options={LAND_TYPES} copy={copy} />
+              <Select id={id} ariaDescribedBy={describedBy} value={form.landType} onChange={(value) => updateField('landType', value)} options={LAND_TYPES} copy={copy} language={language} />
             )}
           </Field>
           <Field label={copy.fieldBudget} fieldId="consultation-budget" helper={copy.fieldBudgetHelp} copy={copy}>
             {({ id, describedBy }) => (
-              <Select id={id} ariaDescribedBy={describedBy} value={form.budgetRange} onChange={(value) => updateField('budgetRange', value)} options={BUDGET_RANGES} copy={copy} />
+              <Select id={id} ariaDescribedBy={describedBy} value={form.budgetRange} onChange={(value) => updateField('budgetRange', value)} options={BUDGET_RANGES} copy={copy} language={language} />
             )}
           </Field>
           <Field label={copy.fieldAddress} fieldId="consultation-address" helper={copy.fieldAddressHelp} copy={copy}>
@@ -481,6 +484,7 @@ function Select({
   onChange,
   options,
   copy,
+  language,
 }: {
   id?: string;
   ariaDescribedBy?: string;
@@ -488,6 +492,7 @@ function Select({
   onChange: (value: string) => void;
   options: readonly string[];
   copy: CustomizeUiCopy;
+  language: Language;
 }) {
   return (
     <div className="relative">
@@ -498,10 +503,11 @@ function Select({
         onChange={(event) => onChange(event.target.value)}
         className={selectClass}
       >
+        {/* value(KO)는 서버 저장 일관성을 위해 그대로, 표시 라벨만 언어별로 변환 */}
         <option value="">{copy.selectNone}</option>
         {options.map((option) => (
           <option key={option} value={option}>
-            {option}
+            {choiceLabel(option, language)}
           </option>
         ))}
       </select>
