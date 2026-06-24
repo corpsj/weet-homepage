@@ -649,20 +649,20 @@ export default function HomeClient({
                           {model.widthM}m × {model.lengthM}m · {model.areaSqm}㎡
                         </p>
                       </div>
-                      <span className="shrink-0 rounded-full bg-weet-forest px-3 py-1.5 text-[11px] font-semibold tracking-[0.02em] text-weet-paper">
+                      <span className="shrink-0 break-keep rounded-full bg-weet-forest px-3 py-1.5 text-[11px] font-semibold tracking-[0.02em] text-weet-paper">
                         {fit.badge}
                       </span>
                     </div>
                     <p className="mt-3.5 text-[14px] leading-[1.65] text-weet-sub kr-balance">{fit.note}</p>
-                    <div className="mt-6 flex items-end justify-between gap-4 border-t border-weet-line-2 pt-6">
+                    <div className="mt-6 flex flex-col items-start gap-4 border-t border-weet-line-2 pt-6 sm:flex-row sm:items-end sm:justify-between">
                       <div>
                         <p className="text-[12px] font-semibold text-weet-muted">{copy.models.basePrice}</p>
-                        <p className="mt-0.5 text-[22px] font-semibold tracking-[-0.01em] text-weet-ink">{formatModelStartPrice(model.basePrice)}</p>
+                        <p className="mt-0.5 break-keep text-[22px] font-semibold tracking-[-0.01em] text-weet-ink">{formatModelStartPrice(model.basePrice)}</p>
                         <p className="mt-0.5 text-[12px] text-weet-muted">{copy.models.deliveryNote}</p>
                       </div>
                       <Link
                         href="/customize"
-                        className="inline-flex items-center justify-center gap-1.5 rounded-[6px] bg-weet-ink px-[18px] py-3 text-[14px] font-semibold text-weet-paper transition-transform duration-150 hover:-translate-y-0.5"
+                        className="inline-flex shrink-0 items-center justify-center gap-1.5 whitespace-nowrap rounded-[6px] bg-weet-ink px-[18px] py-3 text-[14px] font-semibold text-weet-paper transition-transform duration-150 hover:-translate-y-0.5"
                       >
                         {copy.models.cardCta}
                         <ArrowRight className="h-4 w-4" />
