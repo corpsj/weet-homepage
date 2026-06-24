@@ -318,7 +318,7 @@ export default function CompanyPage() {
             </h2>
           </div>
           <p className="m-0 mb-[50px] max-w-[52ch] text-[16px] text-weet-sub kr-balance">
-            꿈을 연구하고, 꿈을 짓는 공간. 자체 생산 시설에서 품질을 끝까지 책임집니다.
+            꿈을 연구하고 꿈을 짓는 공간. 자체 생산 시설에서 품질을 끝까지 책임집니다.
           </p>
 
           <div className="grid grid-cols-1 gap-7 md:grid-cols-2">

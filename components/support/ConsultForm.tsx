@@ -55,7 +55,7 @@ const COPY: Record<
       { value: '아직 모르겠어요 (상담으로 결정)', label: '아직 모르겠어요 (상담으로 결정)' },
     ],
     messageLabel: '궁금한 점',
-    messagePlaceholder: '부지 조건, 예산 범위, 사용 목적 등 편하게 적어주세요. 비워두셔도 연락드립니다.',
+    messagePlaceholder: '부지 조건이나 예산 범위, 사용 목적 등 편하게 적어주세요. 비워두셔도 연락드립니다.',
     consentRequired: '[필수]',
     consentText: '상담을 위한 개인정보 수집·이용에 동의합니다.',
     privacyPolicy: '개인정보 처리방침',

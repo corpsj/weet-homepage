@@ -113,7 +113,7 @@ const COPY: Record<Language, SupportCopy> = {
     checklist: {
       eyebrow: 'Checklist · 사전 확인',
       title: '시작하기 전에',
-      lead: '이동식주택을 준비하며 가장 많이 고민하시는 세 가지 핵심 사항을 먼저 확인해 보세요.',
+      lead: '이동식주택을 준비할 때 가장 많이 고민하시는 세 가지를 먼저 확인해 보세요.',
       cards: [
         {
           n: '01',
@@ -229,7 +229,7 @@ const COPY: Record<Language, SupportCopy> = {
     as: {
       eyebrow: 'A/S',
       title: '사용 이후까지 확인합니다.',
-      lead: '완성 후에도 문, 창호, 욕실, 설비처럼 실제 생활에서 자주 쓰는 부분을 중심으로 불편 사항을 확인하고 필요한 조치를 안내합니다.',
+      lead: '완성 후에도 문과 창호, 욕실, 설비처럼 실제 생활에서 자주 쓰는 부분을 살펴 불편한 점을 확인하고 필요한 조치를 안내합니다.',
       items: ['문·창호', '욕실·설비', '마감 점검'],
     },
     consult: {
