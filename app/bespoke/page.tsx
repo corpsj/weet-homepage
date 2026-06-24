@@ -24,6 +24,14 @@ const COPY: Record<Language, {
     imageOnRight: boolean;
   }>;
   overlayClose: string;
+  viewLarger: string;
+  finalCta: {
+    eyebrow: string;
+    title: string;
+    description: string;
+    primary: string;
+    secondary: string;
+  };
 }> = {
   KO: {
     headline: '상업 공간 맞춤 솔루션',
@@ -78,6 +86,14 @@ const COPY: Record<Language, {
       },
     ],
     overlayClose: '닫기',
+    viewLarger: '크게 보기 ⤢',
+    finalCta: {
+      eyebrow: "LET'S BUILD",
+      title: '비즈니스에 맞는 공간, 함께 설계합니다.',
+      description: '용도와 운영 방식을 들려주시면, 기획 단계부터 1:1로 제안드립니다.',
+      primary: 'B2B 상담 신청',
+      secondary: '포트폴리오 보기',
+    },
   },
   EN: {
     headline: 'Commercial Space Custom Solutions',
@@ -132,6 +148,14 @@ const COPY: Record<Language, {
       },
     ],
     overlayClose: 'Close',
+    viewLarger: 'View larger ⤢',
+    finalCta: {
+      eyebrow: "LET'S BUILD",
+      title: "Let's design the right space for your business, together.",
+      description: 'Tell us your use case and how you operate, and we will propose a one-on-one plan from the very first stage.',
+      primary: 'Request a B2B consultation',
+      secondary: 'View Portfolio',
+    },
   },
   ES: {
     headline: 'Soluciones a Medida para Espacios Comerciales',
@@ -186,6 +210,14 @@ const COPY: Record<Language, {
       },
     ],
     overlayClose: 'Cerrar',
+    viewLarger: 'Ver más grande ⤢',
+    finalCta: {
+      eyebrow: "LET'S BUILD",
+      title: 'Diseñemos juntos el espacio ideal para su negocio.',
+      description: 'Cuéntenos su uso y forma de operar, y le presentaremos una propuesta personalizada desde la primera fase.',
+      primary: 'Solicitar asesoría B2B',
+      secondary: 'Ver portafolio',
+    },
   },
 };
 
@@ -291,7 +323,7 @@ export default function BespokePage() {
                     className="object-cover transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:scale-[1.04]"
                   />
                   <span className="pointer-events-none absolute bottom-4 right-4 translate-y-1.5 rounded-full bg-weet-ink/70 px-3 py-1.5 font-mono text-[11px] font-semibold text-weet-paper opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                    크게 보기 ⤢
+                    {copy.viewLarger}
                   </span>
                 </button>
               </div>
@@ -327,26 +359,26 @@ export default function BespokePage() {
       <section className="bg-weet-ink text-weet-paper">
         <div className="wt-reveal mx-auto max-w-[1440px] px-[5vw] py-24 text-center max-[860px]:py-14">
           <div className="mb-4 font-mono text-[12px] font-semibold uppercase tracking-[0.18em] text-weet-gold">
-            LET&apos;S BUILD
+            {copy.finalCta.eyebrow}
           </div>
           <h2 className="mx-auto mb-4 max-w-[22ch] text-[clamp(28px,3.4vw,46px)] font-semibold leading-[1.1] tracking-[-0.03em] kr-balance">
-            비즈니스에 맞는 공간, 함께 설계합니다.
+            {copy.finalCta.title}
           </h2>
           <p className="mx-auto mb-[34px] max-w-[44ch] text-[16px] font-light leading-[1.7] text-weet-paper/65 kr-balance">
-            용도와 운영 방식을 들려주시면, 기획 단계부터 1:1로 제안드립니다.
+            {copy.finalCta.description}
           </p>
           <div className="flex flex-wrap justify-center gap-3.5">
             <Link
               href="/support"
               className="rounded-[6px] bg-weet-gold px-[30px] py-[15px] text-[15px] font-semibold text-weet-ink transition-transform duration-150 hover:-translate-y-0.5"
             >
-              B2B 상담 신청 →
+              {copy.finalCta.primary} →
             </Link>
             <Link
               href="/projects"
               className="rounded-[6px] border border-weet-paper/40 px-7 py-3.5 text-[15px] font-medium text-weet-paper transition-transform duration-150 hover:-translate-y-0.5"
             >
-              포트폴리오 보기
+              {copy.finalCta.secondary}
             </Link>
           </div>
         </div>

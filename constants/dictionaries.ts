@@ -1,4 +1,3 @@
-// TODO(ux): 실제 ES 번역 필요 — 현재 'es'는 DICTIONARY에 없어 useTranslation()에서 ko로 폴백된다.
 export const DICTIONARY = {
     ko: {
         common: {
@@ -298,6 +297,156 @@ export const DICTIONARY = {
             roof: 'Roof',
             exterior: 'Exterior',
             interior: 'Interior',
+        }
+    },
+    es: {
+        common: {
+            more: 'MÁS',
+            viewDetails: 'Ver detalles',
+            close: 'Cerrar',
+            loading: 'Cargando...',
+            confirm: 'Confirmar',
+            cancel: 'Cancelar',
+        },
+        header: {
+            menu: {
+                company: 'Empresa',
+                products: 'Productos',
+                solutions: 'Soluciones',
+                support: 'Soporte',
+                factory: 'weet Factory',
+            },
+            factory: {
+                lab: 'LAB',
+                workshop: 'WORKSHOP',
+            }
+        },
+        main: {
+            hero: {
+                title: 'Construimos valor más allá del espacio',
+                subtitle: 'we make dreams come true',
+            },
+            partners: 'PARTNERS',
+            video: {
+                title: 'weet Video',
+                description: 'Descubre la historia de los nuevos espacios que crea weet.',
+                overlayTitle: 'Te presentamos weet',
+                overlayDesc: 'El nuevo estándar de la arquitectura modular',
+            },
+            sns: {
+                title: 'INSTAGRAM',
+                description: '@weet_official',
+            }
+        },
+        company: {
+            hero: {
+                title: "'Construimos los sueños de nuestros clientes'",
+                subtitle: 'El comienzo y la promesa de weet, los constructores de sueños',
+                desc1: "weet nació de una sola idea: 'ser los artesanos que hacen realidad el ideal y las necesidades del cliente'.",
+                desc2: "Para nosotros, la 'arquitectura' consiste en satisfacer dos cosas. Una es el espacio ideal que el cliente ha imaginado, es decir, su 'ideal (Dream)'. La otra son las condiciones para que ese espacio funcione a la perfección en la realidad, es decir, las necesidades (Needs).",
+                desc3: "Cuando muchos hablan de buscar un punto medio entre el ideal y las necesidades, los 'artesanos' de weet buscan la manera de hacer realidad ambos.",
+                desc3_1: "*En lugar de promesas vistosas, hablamos con tecnología precisa y experiencia comprobada.",
+                desc3_2: "*Escuchamos el 'ideal' abstracto del cliente y lo traducimos en las 'necesidades' más razonables para hacerlo realidad.",
+                desc3_3: "*Resolvemos las exigentes 'necesidades' del cliente sin olvidar nunca el valor del 'ideal' que contienen.",
+                desc4: "Por eso, para weet, \"construir los sueños del cliente\" no es un lema emotivo, sino nuestra propia 'forma de trabajar'. Se trata de que la imaginación más ideal del cliente (su sueño) y su necesidad más real pasen por nuestras manos para convertirse en el resultado más sólido. Esta es la razón de ser de weet y el motivo por el que nos llamamos 'artesanos'.",
+                companyName: 'WEET Inc.',
+            },
+            ci: {
+                title: 'CI corporativo',
+                meaning1_title: 'weet',
+                meaning1_desc: 'Significa que construimos los sueños de nuestros clientes.',
+                meaning1_sub: "Sigla de 'We make dreams come true'",
+                meaning2_title: 'weet',
+                meaning2_desc: "La pronunciación de 'weet' es igual a la de 'wit' (ingenio). Significa que siempre somos positivos e ingeniosos al resolver problemas.",
+                meaning2_sub: ':) Sonrisa',
+                color_title: 'Black & Yellow',
+                color_sub: 'Negro, amarillo',
+                color_desc: "El negro y el amarillo son los colores representativos de las obras de construcción. Los elegimos como colores corporativos porque siempre buscamos la identidad del artesano que fabrica buenos productos.",
+                shape_title: 'Triángulo invertido',
+                shape_desc: 'Forma triangular que representa a los 3 expertos y codirectores. Forma de estructura de armadura que simboliza una estructura arquitectónica sólida y el desafío.',
+            },
+            crew: {
+                title: 'weet Crew',
+                more: 'MÁS',
+                design: {
+                    title: 'División de Diseño',
+                    name: 'Park Hyun-tae',
+                    role: 'Diseñador principal de weet',
+                    description: `Como diseñador principal de weet, está a cargo del diseño general y el branding.\nTras graduarse de la universidad, desarrolló su carrera en un estudio de diseño arquitectónico en Seúl y trabajó como freelance en arquitectura mientras vivía cuatro años en el extranjero.\nDe regreso tras la pandemia, construyó su propia casa y trabajó como carpintero en obra para comprender de primera mano los métodos y materiales de construcción. Con base en esa experiencia, reflexiona y desarrolla diseños y métodos constructivos razonables.`,
+                    education: { title: 'Formación', items: ['Universidad Hongik, Departamento de Ingeniería Arquitectónica, especialidad en Arquitectura (programa de 5 años)'] },
+                    career: {
+                        title: 'Trayectoria', items: [
+                            'Ian Design Architects',
+                            'hom Architects',
+                            'Kujungjeong Architects',
+                            'Guía especializado en regeneración urbana del barrio del Raval, Barcelona, España',
+                            'Instructor de clase de arquitectura, Arts Council Korea',
+                            "Instructor de 'Local to the Table', Fundación Cultural de Jeonnam",
+                            'Director de Leon Design Studio',
+                            'Director del espacio cultural h/p1'
+                        ]
+                    },
+                    awards: {
+                        title: 'Premios', items: [
+                            '2010 Diseño Nacional del Acceso a la Ciudad de Gwangju - 2.º lugar, Ciudad Metropolitana de Gwangju',
+                            '2010 Concurso Barrier-Free de Korea Land Corporation - Mención, Korea Land Corporation',
+                            '2010 Concurso Internacional de Diseño Urbano de Incheon - Mención, Ciudad Metropolitana de Incheon',
+                            '2012 Concurso de Diseño en Acero de POSCO - 1.er lugar, POSCO',
+                            '2018 Diseño Arquitectónico del Memorial del Gobierno Provisional - Mención especial, Ministerio de Patriotas y Veteranos',
+                            '2018 Contenido Expositivo del Memorial del Gobierno Provisional - Mención, Ministerio de Patriotas y Veteranos',
+                            '2018 Mirador del Parque Naksan, Jongno-gu, Seúl - 1.er lugar, Ciudad Metropolitana de Seúl',
+                            '2019 Concurso de Embellecimiento de Seoksan de la Corporación Urbana de Incheon - 3.er lugar, Ciudad Metropolitana de Incheon',
+                            '2020 Diseño de Escultura de Mangchi Development - Mención, Mangchi Development'
+                        ]
+                    }
+                },
+                solution: {
+                    title: 'División HOME SOLUTION',
+                    name: 'Park Sung-ju',
+                    role: 'Desarrollador principal de soluciones de weet',
+                    description: `**"Tecnología que hasta mi abuela puede usar."**\n\nEstá a cargo de todas las 'soluciones para el hogar' que hacen más cómoda la vida diaria del cliente, dentro y fuera del espacio, una vez terminada la edificación. Desarrolla 'Home OS' para que la casa se anticipe a las necesidades del usuario y apoye su vida en silencio, desde lugares invisibles. Llevar la tecnología más avanzada a la interfaz más sencilla y cálida: esa es mi filosofía.`,
+                    education: { title: 'Formación y certificaciones', items: [] },
+                    career: { title: 'Trayectoria', items: [] },
+                    awards: { title: '', items: [] }
+                }
+            },
+            factory: {
+                title: 'weet Factory',
+                lab: {
+                    title: 'LAB',
+                    desc: 'Donde investigamos tu sueño',
+                    images: ['/images/modular/generated/factory-precision.webp']
+                },
+                workshop: {
+                    title: 'WORKSHOP',
+                    desc: 'Donde construimos tu sueño',
+                    images: ['/images/modular/generated/transport-install.webp']
+                }
+            }
+        },
+        products: {
+            filter: {
+                all: 'Todos',
+                private: 'Privado',
+                public: 'Público',
+            },
+            sort: {
+                popular: 'Populares',
+                newest: 'Más recientes',
+                lowPrice: 'Menor precio',
+                highPrice: 'Mayor precio',
+            },
+            prev: 'Anterior',
+            next: 'Siguiente',
+            floorPlan: 'Plano',
+            noFloorPlan: 'Disponible a solicitud',
+            price: 'Precio',
+            vatIncluded: '(IVA incluido)',
+            size: 'Tamaño',
+            structure: 'Estructura',
+            roof: 'Techo',
+            exterior: 'Acabado exterior',
+            interior: 'Acabado interior',
         }
     }
 };

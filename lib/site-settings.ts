@@ -6,6 +6,8 @@ export type SiteSettings = {
   naver_blog_url: string;
   instagram_url: string;
   daangn_url: string;
+  business_representative: string;
+  mail_order_sales_number: string;
   trust_founded_year: string;
   trust_units_built: string;
   lead_time_note: string;
@@ -19,6 +21,8 @@ export const SITE_SETTING_LABELS: Record<keyof SiteSettings, string> = {
   naver_blog_url: '네이버 블로그 URL',
   instagram_url: '인스타그램 URL',
   daangn_url: '당근 프로필 URL',
+  business_representative: '대표자명 (사업자등록증상 대표자)',
+  mail_order_sales_number: '통신판매업 신고번호 (예: 제2024-전남함평-0000호)',
   trust_founded_year: '설립 연도 (예: 2021)',
   trust_units_built: '누적 제작 대수 (검증된 숫자만)',
   lead_time_note: '평균 제작 기간 안내 문구 (예: 계약 후 4–6주)',
@@ -33,6 +37,8 @@ export const SITE_SETTING_DEFAULTS: SiteSettings = {
   naver_blog_url: 'https://blog.naver.com/we-et',
   instagram_url: 'https://www.instagram.com/weet_kr/',
   daangn_url: 'https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/',
+  business_representative: '',
+  mail_order_sales_number: '',
   trust_founded_year: '',
   trust_units_built: '',
   lead_time_note: '',

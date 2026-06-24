@@ -199,7 +199,12 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
           {language === 'KO' ? (
             <p>
               {BRAND.legal} &nbsp;|&nbsp; 전남 함평군 대동면 금산길 205-27 &nbsp;|&nbsp; 사업자 등록번호 660-86-01862
-              {/* TODO(ux): 통신판매업 신고번호·대표자 (실제 값 필요) */}
+              {settings.business_representative && (
+                <span> &nbsp;|&nbsp; 대표자 {settings.business_representative}</span>
+              )}
+              {settings.mail_order_sales_number && (
+                <span> &nbsp;|&nbsp; 통신판매업 신고번호 {settings.mail_order_sales_number}</span>
+              )}
               &nbsp;|&nbsp;{' '}
               <a href={telHref(settings.contact_phone)} className="transition-colors hover:text-weet-gold">
                 {settings.contact_phone}
@@ -218,18 +223,50 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
           ) : language === 'ES' ? (
             <p>
               {BRAND.en} Co., Ltd. &nbsp;|&nbsp; 205-27, Geumsan-gil, Daedong-myeon, Hampyeong-gun, Jeollanam-do,
-              República de Corea &nbsp;|&nbsp; Reg. mercantil 660-86-01862 &nbsp;|&nbsp;{' '}
+              República de Corea &nbsp;|&nbsp; Reg. mercantil 660-86-01862
+              {settings.business_representative && (
+                <span> &nbsp;|&nbsp; Representante legal: {settings.business_representative}</span>
+              )}
+              {settings.mail_order_sales_number && (
+                <span> &nbsp;|&nbsp; Reg. de venta a distancia: {settings.mail_order_sales_number}</span>
+              )}
+              &nbsp;|&nbsp;{' '}
               <a href={telHref(settings.contact_phone)} className="transition-colors hover:text-weet-gold">
                 {settings.contact_phone}
               </a>
+              {settings.contact_email && (
+                <span>
+                  {' '}
+                  &nbsp;|&nbsp;{' '}
+                  <a href={`mailto:${settings.contact_email}`} className="transition-colors hover:text-weet-gold">
+                    {settings.contact_email}
+                  </a>
+                </span>
+              )}
             </p>
           ) : (
             <p>
               {BRAND.en} Co., Ltd. &nbsp;|&nbsp; 205-27, Geumsan-gil, Daedong-myeon, Hampyeong-gun, Jeollanam-do,
-              Republic of Korea &nbsp;|&nbsp; Business Reg. 660-86-01862 &nbsp;|&nbsp;{' '}
+              Republic of Korea &nbsp;|&nbsp; Business Reg. 660-86-01862
+              {settings.business_representative && (
+                <span> &nbsp;|&nbsp; Representative: {settings.business_representative}</span>
+              )}
+              {settings.mail_order_sales_number && (
+                <span> &nbsp;|&nbsp; Mail-Order Sales Reg. {settings.mail_order_sales_number}</span>
+              )}
+              &nbsp;|&nbsp;{' '}
               <a href={telHref(settings.contact_phone)} className="transition-colors hover:text-weet-gold">
                 {settings.contact_phone}
               </a>
+              {settings.contact_email && (
+                <span>
+                  {' '}
+                  &nbsp;|&nbsp;{' '}
+                  <a href={`mailto:${settings.contact_email}`} className="transition-colors hover:text-weet-gold">
+                    {settings.contact_email}
+                  </a>
+                </span>
+              )}
             </p>
           )}
         </div>
