@@ -1,4 +1,4 @@
-
+// TODO(ux): 실제 ES 번역 필요 — 현재 'es'는 DICTIONARY에 없어 useTranslation()에서 ko로 폴백된다.
 export const DICTIONARY = {
     ko: {
         common: {
@@ -21,19 +21,6 @@ export const DICTIONARY = {
                 lab: 'LAB',
                 workshop: 'WORKSHOP',
             }
-        },
-        footer: {
-            address: '주소 : 경기도 이천시 신둔면 원적로 159번길 86',
-            company: '주식회사 weet',
-            ceo: '대표자 : 박현태, 장혁훈, 박성주',
-            bizNum: '사업자등록번호 : 468-81-03099',
-            tel: 'TEL : 1566-6734',
-            fax: 'FAX : 0504-205-6490',
-            mail: 'MAIL : sales@we-et.com',
-            copyright: 'COPYRIGHT(C) 2024 WEET. ALL RIGHTS RESERVED.',
-            terms: '이용약관',
-            privacy: '개인정보처리방침',
-            slogan: 'WE make dreams come True'
         },
         main: {
             hero: {
@@ -185,19 +172,6 @@ export const DICTIONARY = {
                 workshop: 'WORKSHOP',
             }
         },
-        footer: {
-            address: 'Address: 86, Wonjeok-ro 159beon-gil, Sindun-myeon, Icheon-si, Gyeonggi-do, Republic of Korea',
-            company: 'WEET Inc.',
-            ceo: 'CEO: Park Hyun-tae, Jang Hyuk-hoon, Park Sung-ju',
-            bizNum: 'Business License: 468-81-03099',
-            tel: 'TEL : +82-1566-6734',
-            fax: 'FAX : +82-504-205-6490',
-            mail: 'MAIL : sales@we-et.com',
-            copyright: 'COPYRIGHT(C) 2024 WEET. ALL RIGHTS RESERVED.',
-            terms: 'Terms of Use',
-            privacy: 'Privacy Policy',
-            slogan: 'WE make dreams come True'
-        },
         main: {
             hero: {
                 title: 'Building Value Beyond Space',
@@ -282,8 +256,8 @@ export const DICTIONARY = {
                     name: 'Park Sung-ju',
                     role: 'Chief Solution Director',
                     description: `**"Technology that even grandmothers can use."**\n\nI am responsible for the overall 'home solutions' that make the daily lives of customers, both inside and outside the space, more convenient after the building is completed. I develop 'Home OS' so that the house can first speak to the user and quietly support their life from unseen places. Solving cutting-edge technology with the simplest and warmest interface—that is my philosophy.`,
-                    education: { title: 'Education and Qualifications', items: ['Coming Soon'] },
-                    career: { title: 'Career', items: ['Coming Soon'] },
+                    education: { title: 'Education and Qualifications', items: [] },
+                    career: { title: 'Career', items: [] },
                     awards: { title: '', items: [] }
                 }
             },

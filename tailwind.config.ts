@@ -10,7 +10,7 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: '#FEBD16', // weet yellow
+          DEFAULT: '#FDB813', // weet yellow (= weet.gold, 브랜드 옐로우 단일 정의)
           dark: '#E5A410',
         },
         // /customize 컨피규레이터 전용 색 토큰. 값은 기존 하드코딩 hex와 1:1로 동일하다(픽셀 동일성 보장).
@@ -62,15 +62,20 @@ const config: Config = {
           'paper-alt': '#EFE8DA', // 섹션 교차 배경
           surface: '#FAF6EE',     // 카드 내부
           'surface-2': '#FBF8F2', // 카드 내부(대안)
+          card: '#FAF6EE',        // 카드 표면(= surface, bg-weet-card 별칭)
           ink: '#231D16',         // 주 텍스트·다크 섹션 배경
           'ink-deep': '#1C1610',  // 푸터 배경
           sub: '#5A5044',         // 보조 텍스트
-          muted: '#8C8273',       // 캡션
+          muted: '#6E6555',       // 캡션 (paper 배경 WCAG AA 대비 확보)
           line: '#E5DBC9',        // 보더
           'line-2': '#E0D6C4',    // 보더(대안)
           gold: '#FDB813',        // 1차 액센트(CTA·강조)
           'gold-deep': '#B8791A', // 링크 호버·eyebrow
           forest: '#2E4A3F',      // 2차 액센트(솔루션·확정 상태)
+          teal: '#79D2B6',        // 시맨틱 액센트
+          'teal-tint': '#EAF0EC', // teal 연한 배경
+          'teal-line': '#CBDDD2', // teal 보더
+          cream: '#FBEFD0',       // 크림 강조 배경
         },
         // 관리자 콘솔 2안(라이트·인박스). README admin tokens.
         admin: {
@@ -168,6 +173,9 @@ const config: Config = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+        card: '14px',
+        chip: '10px',
+        dialog: '18px',
       },
       boxShadow: {
         // 리디자인 부상형 이미지·카드 그림자 (README)
