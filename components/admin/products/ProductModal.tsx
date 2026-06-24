@@ -53,6 +53,12 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
         dirtyRef.current = true;
     }, []);
 
+    // Authoritative dirty signal lifted from ProductForm's own isDirty (covers
+    // image removals that don't emit bubbling input/change events).
+    const handleDirtyChange = useCallback((dirty: boolean) => {
+        dirtyRef.current = dirty;
+    }, []);
+
     // Close without confirmation (used after a successful save).
     const handleClean = useCallback(() => {
         dirtyRef.current = false;
@@ -102,6 +108,7 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
                     <ProductForm
                         initialData={product}
                         onSuccess={handleClean}
+                        onDirtyChange={handleDirtyChange}
                     />
                 </div>
             </div>

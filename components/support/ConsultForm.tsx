@@ -90,7 +90,8 @@ export default function ConsultForm() {
     const nextErrors: Partial<Record<FieldName, string>> = {};
     if (!name) nextErrors.name = '이름을 입력해주세요.';
     if (!phone) nextErrors.phone = '연락처를 입력해주세요.';
-    else if (!/^[0-9+\-\s().]{7,}$/.test(phone)) nextErrors.phone = '연락처 형식이 올바르지 않습니다.';
+    else if (!/^[0-9+\-\s().]+$/.test(phone) || phone.replace(/[\s().+-]/g, '').length < 7)
+      nextErrors.phone = '연락처 형식이 올바르지 않습니다.';
     if (!consent) nextErrors.consent = '개인정보 수집·이용에 동의해주세요.';
 
     if (Object.keys(nextErrors).length > 0) {

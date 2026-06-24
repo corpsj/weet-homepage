@@ -442,10 +442,12 @@ export default function SolutionPage() {
         if (items.length === 0) return;
         const first = items[0];
         const last = items[items.length - 1];
-        if (e.shiftKey && document.activeElement === first) {
+        const activeEl = document.activeElement;
+        const outside = !modal.contains(activeEl);
+        if (e.shiftKey && (activeEl === first || outside)) {
           e.preventDefault();
           last.focus();
-        } else if (!e.shiftKey && document.activeElement === last) {
+        } else if (!e.shiftKey && (activeEl === last || outside)) {
           e.preventDefault();
           first.focus();
         }
@@ -454,7 +456,9 @@ export default function SolutionPage() {
     window.addEventListener("keydown", onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    modal?.focus();
+    // Move focus to the first interactive element (close button), not the
+    // non-interactive container — keeps the Tab/Shift+Tab trap consistent.
+    (modal?.querySelector<HTMLElement>(FOCUSABLE) ?? modal)?.focus();
     return () => {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prev;

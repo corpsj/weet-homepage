@@ -66,13 +66,13 @@ export default function MultiImageUpload({ onUpload, className = '', bucket = 'p
 
                     // Compress/Convert to WebP (all files here are images, validated above).
                     const options = quality === 'high' ? {
-                        maxSizeMB: 20,
+                        maxSizeMB: 4.5,
                         maxWidthOrHeight: 2560,
                         useWebWorker: true,
                         fileType: 'image/webp',
                         initialQuality: 0.9,
                     } : {
-                        maxSizeMB: 10,
+                        maxSizeMB: 4.5,
                         maxWidthOrHeight: 1600,
                         useWebWorker: true,
                         fileType: 'image/webp',

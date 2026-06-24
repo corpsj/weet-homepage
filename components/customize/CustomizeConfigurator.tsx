@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useState, useTransition } from 'react';
+import { useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -86,10 +86,13 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
     [catalog, modelId, selectedOptions]
   );
   const encodedConfig = useMemo(() => encodeConfig(modelId, selectedOptions), [modelId, selectedOptions]);
+  // 진입 시점의 구성(기본값 또는 공유 링크로 디코딩된 값)의 인코딩. 이와 달라질 때만 URL에 반영한다.
+  const initialEncodedConfigRef = useRef(encodedConfig);
 
-  // 첫 진입부터 현재 구성을 URL에 반영해 '구성 링크 복사'가 항상 유효한 링크를 제공하도록 한다.
+  // 구성이 진입 기본값과 달라지면 ?c= 로 동기화(공유/복원). 기본 상태에서는 URL을 깨끗하게 유지한다.
   useEffect(() => {
     if (!estimate || typeof window === 'undefined') return;
+    if (encodedConfig === initialEncodedConfigRef.current) return;
     const nextUrl = `${window.location.pathname}?c=${encodedConfig}`;
     window.history.replaceState(null, '', nextUrl);
   }, [encodedConfig, estimate]);

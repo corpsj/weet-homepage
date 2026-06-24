@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Product, ProductInsert } from '@/types/supabase';
 import { createProduct, updateProduct } from '@/app/actions/product-actions';
@@ -19,9 +19,10 @@ import {
 interface ProductFormProps {
     initialData?: Product;
     onSuccess?: () => void;
+    onDirtyChange?: (dirty: boolean) => void;
 }
 
-export default function ProductForm({ initialData, onSuccess }: ProductFormProps) {
+export default function ProductForm({ initialData, onSuccess, onDirtyChange }: ProductFormProps) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const [failedSubImages, setFailedSubImages] = useState<Set<string>>(() => new Set());
@@ -57,6 +58,11 @@ export default function ProductForm({ initialData, onSuccess }: ProductFormProps
     const [savedData, setSavedData] = useState<Partial<ProductInsert>>(initialFormData);
     const isDirty = JSON.stringify(formData) !== JSON.stringify(savedData);
     useUnsavedChangesWarning(isDirty);
+    // Lift dirty state so a wrapping modal can guard in-app close (incl. image
+    // removals, which don't bubble DOM input/change events).
+    useEffect(() => {
+        onDirtyChange?.(isDirty);
+    }, [isDirty, onDirtyChange]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;

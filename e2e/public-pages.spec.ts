@@ -131,9 +131,9 @@ test.describe('Public page transition', () => {
     await expect(page.getByText('03 / 생활과 운영')).toBeVisible();
     await expect(page.getByText('04 / 미래 확장과 이동')).toBeVisible();
 
-    // Assert images are used (리디자인: 시안 자산 mod-hero/mod-factory 사용)
-    await expect(page.locator('img[src*="mod-hero.webp"]')).toBeAttached();
-    await expect(page.locator('img[src*="mod-factory.webp"]')).toBeAttached();
+    // Assert images are used (리디자인 생성 자산: modular-hero / factory-precision)
+    await expect(page.locator('img[src*="modular-hero.webp"]')).toBeAttached();
+    await expect(page.locator('img[src*="factory-precision.webp"]')).toBeAttached();
   });
 
   test('solution public page shows operational packages', async ({ page }) => {
@@ -152,17 +152,12 @@ test.describe('Public page transition', () => {
     await expect(page.locator('a[href="/solution/energy"]').first()).toBeVisible({ timeout: 5000 });
   });
 
-  test('footer contains hidden admin link on the copyright wordmark', async ({ page }) => {
+  test('footer no longer exposes a hidden admin link on the copyright wordmark', async ({ page }) => {
     await page.goto('/');
 
-    // 웜 리디자인 푸터: 숨은 /admin 링크가 카피라이트의 "WEET" 워드마크에 있다.
-    const adminLink = page.locator('footer a[href="/admin"]');
-    await expect(adminLink).toBeAttached();
-    await expect(adminLink).toHaveText('WEET');
-    await expect(adminLink).toHaveCSS('cursor', 'default');
-
-    await adminLink.click();
-    await expect(page).toHaveURL(/\/login/);
+    // UX 개선: 카피라이트 "WEET"에 숨겨둔 /admin 링크 제거(오클릭·발견성 문제). 관리자는 /login 직접 접근.
+    await expect(page.locator('footer a[href="/admin"]')).toHaveCount(0);
+    await expect(page.locator('footer')).toContainText('WEET');
   });
 
   test('products page mobile detail accordion opens without overflow', async ({ page }) => {
@@ -184,8 +179,14 @@ test.describe('Public page transition', () => {
   test('products and projects avoid misleading public conversion states', async ({ page }) => {
     await page.goto('/products');
 
+    // 오인 전환 방지: 제품별 /customize?product= 딥링크 없음.
     await expect(page.locator('a[href*="/customize?product="]')).toHaveCount(0);
-    await expect(page.getByRole('link', { name: /구성 상담 시작하기/ }).first()).toHaveAttribute('href', '/customize');
+    // 기준 모델(3x6·3x9)은 /customize, 비기준 모델은 /support#consult 로 분기(오인 방지).
+    const configureLinks = page.getByRole('link', { name: /이 모델 구성하기|Configure this model/ });
+    const consultLinks = page.getByRole('link', { name: /구성 상담 문의하기|Request a consultation/ });
+    expect((await configureLinks.count()) + (await consultLinks.count())).toBeGreaterThan(0);
+    if ((await configureLinks.count()) > 0) await expect(configureLinks.first()).toHaveAttribute('href', '/customize');
+    if ((await consultLinks.count()) > 0) await expect(consultLinks.first()).toHaveAttribute('href', '/support#consult');
 
     await page.goto('/projects');
 

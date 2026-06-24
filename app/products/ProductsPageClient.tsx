@@ -88,7 +88,7 @@ const HEADER_OFFSET = 72;
 
 // /customize 구성기가 다루는 기준 모델 = 이름에 3x6 / 3x9 가 들어가는 모델.
 // 그 외(비기준) 모델은 구성/마감별로 가격이 달라 상담(/support#consult)로 안내.
-const isBaseModel = (name: string) => /3\s*[x×]\s*[69]/i.test(name);
+const isBaseModel = (name: string) => /(?:^|[^0-9])3\s*[x×]\s*[69](?![0-9])/i.test(name);
 
 const sortProducts = (products: ProductData[]) => {
     return [...products].sort((a, b) => {
@@ -185,7 +185,6 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
             }
         }
     }, [activeProduct]);
-    const lastScrollY = useRef(0);
     // Gallery Modal State
     const [galleryOpen, setGalleryOpen] = useState(false);
     const [currentGalleryImages, setCurrentGalleryImages] = useState<string[]>([]);
@@ -345,7 +344,6 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
         const update = () => {
             ticking = false;
             const currentScrollY = window.scrollY;
-            lastScrollY.current = currentScrollY;
 
             // Active Product Logic using getBoundingClientRect (Viewport Relative)
             // Trigger point: 30% down from top of viewport
