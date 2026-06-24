@@ -6,8 +6,73 @@ import Link from 'next/link';
 import { X, ArrowRight } from 'lucide-react';
 import type { Project } from '@/types/supabase';
 import { getProjectHeroImage, hasValidProjectImageUrl } from '@/lib/projects/publicProjects';
+import { useLanguage, type Language } from '@/contexts/LanguageContext';
 
-const ALL = '전체';
+// Stable internal sentinel for the "all categories" pill (decoupled from its
+// visible label, which is localized). DB category tags are never translated.
+const ALL = '__ALL__';
+
+const COPY: Record<Language, {
+  all: string;
+  categoryFallback: string;
+  viewDetail: string;
+  noCases: string;
+  close: string;
+  imageAria: (n: number) => string;
+  projectInfo: string;
+  viewFullPage: string;
+  consult: string;
+  specClient: string;
+  specLocation: string;
+  specCompletedAt: string;
+  specTags: string;
+}> = {
+  KO: {
+    all: '전체',
+    categoryFallback: '프로젝트',
+    viewDetail: '자세히 보기 →',
+    noCases: '해당 분류의 공개 사례가 아직 없습니다.',
+    close: '닫기',
+    imageAria: (n) => `이미지 ${n} 보기`,
+    projectInfo: '프로젝트 정보',
+    viewFullPage: '전체 페이지로 보기',
+    consult: '비슷한 공간 상담 →',
+    specClient: '고객사',
+    specLocation: '위치',
+    specCompletedAt: '완료일',
+    specTags: '분류',
+  },
+  EN: {
+    all: 'All',
+    categoryFallback: 'Project',
+    viewDetail: 'View details →',
+    noCases: 'No public cases in this category yet.',
+    close: 'Close',
+    imageAria: (n) => `View image ${n}`,
+    projectInfo: 'Project info',
+    viewFullPage: 'View full page',
+    consult: 'Ask about a similar space →',
+    specClient: 'Client',
+    specLocation: 'Location',
+    specCompletedAt: 'Completed',
+    specTags: 'Category',
+  },
+  ES: {
+    all: 'Todos',
+    categoryFallback: 'Proyecto',
+    viewDetail: 'Ver detalles →',
+    noCases: 'Aún no hay casos públicos en esta categoría.',
+    close: 'Cerrar',
+    imageAria: (n) => `Ver imagen ${n}`,
+    projectInfo: 'Información del proyecto',
+    viewFullPage: 'Ver página completa',
+    consult: 'Consultar por un espacio similar →',
+    specClient: 'Cliente',
+    specLocation: 'Ubicación',
+    specCompletedAt: 'Finalizado',
+    specTags: 'Categoría',
+  },
+};
 
 type GalleryCard = {
   project: Project;
@@ -17,24 +82,27 @@ type GalleryCard = {
   meta: string;
 };
 
-function projectCategory(project: Project): string {
-  return project.tags?.find((t) => t && t.trim().length > 0)?.trim() ?? '프로젝트';
+function projectCategory(project: Project, fallback: string): string {
+  return project.tags?.find((t) => t && t.trim().length > 0)?.trim() ?? fallback;
 }
 
 function projectMeta(project: Project): string {
   return [project.location, project.completed_at].filter(Boolean).join(' · ');
 }
 
-function buildSpecs(project: Project): { k: string; v: string }[] {
+function buildSpecs(project: Project, copy: (typeof COPY)[Language]): { k: string; v: string }[] {
   const specs: { k: string; v: string }[] = [];
-  if (project.client) specs.push({ k: '고객사', v: project.client });
-  if (project.location) specs.push({ k: '위치', v: project.location });
-  if (project.completed_at) specs.push({ k: '완료일', v: project.completed_at });
-  if (project.tags && project.tags.length > 0) specs.push({ k: '분류', v: project.tags.join(' · ') });
+  if (project.client) specs.push({ k: copy.specClient, v: project.client });
+  if (project.location) specs.push({ k: copy.specLocation, v: project.location });
+  if (project.completed_at) specs.push({ k: copy.specCompletedAt, v: project.completed_at });
+  if (project.tags && project.tags.length > 0) specs.push({ k: copy.specTags, v: project.tags.join(' · ') });
   return specs;
 }
 
 export default function ProjectsGallery({ projects }: { projects: Project[] }) {
+  const { language } = useLanguage();
+  const copy = COPY[language];
+
   const cards = useMemo<GalleryCard[]>(() => {
     return projects.map((project) => {
       const hero = getProjectHeroImage(project) ?? '';
@@ -45,12 +113,12 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
       return {
         project,
         hero,
-        cat: projectCategory(project),
+        cat: projectCategory(project, copy.categoryFallback),
         images,
         meta: projectMeta(project),
       };
     });
-  }, [projects]);
+  }, [projects, copy.categoryFallback]);
 
   const categories = useMemo<string[]>(() => {
     const set = new Set<string>();
@@ -95,7 +163,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
   }, [selected, close]);
 
   const selMain = selected ? selected.images[thumbIdx] ?? selected.hero : '';
-  const selSpecs = selected ? buildSpecs(selected.project) : [];
+  const selSpecs = selected ? buildSpecs(selected.project, copy) : [];
 
   return (
     <>
@@ -115,7 +183,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                   : 'border-weet-line-2 bg-weet-surface text-weet-sub hover:border-weet-ink/40',
               ].join(' ')}
             >
-              {cat}
+              {cat === ALL ? copy.all : cat}
             </button>
           );
         })}
@@ -145,7 +213,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                 {card.cat}
               </span>
               <div className="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-weet-ink/70 to-transparent to-[55%] p-[18px] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <span className="font-mono text-[12px] font-semibold text-weet-gold">자세히 보기 →</span>
+                <span className="font-mono text-[12px] font-semibold text-weet-gold">{copy.viewDetail}</span>
               </div>
             </div>
             <div className="px-[18px] py-4">
@@ -162,7 +230,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
 
       {filtered.length === 0 && (
         <p className="mt-10 text-center text-[14px] text-weet-muted">
-          해당 분류의 공개 사례가 아직 없습니다.
+          {copy.noCases}
         </p>
       )}
 
@@ -182,7 +250,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
             <button
               type="button"
               onClick={close}
-              aria-label="닫기"
+              aria-label={copy.close}
               className="absolute right-4 top-4 z-[5] flex h-10 w-10 items-center justify-center rounded-full bg-weet-ink/[0.55] text-weet-paper backdrop-blur-sm transition-colors hover:bg-weet-paper/20"
             >
               <X className="h-4 w-4" strokeWidth={1.8} />
@@ -223,7 +291,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                         key={`${img}-${i}`}
                         type="button"
                         onClick={() => setThumbIdx(i)}
-                        aria-label={`이미지 ${i + 1} 보기`}
+                        aria-label={copy.imageAria(i + 1)}
                         className={[
                           'relative h-[54px] w-[72px] overflow-hidden rounded-[7px] border border-weet-line-2 outline outline-2 outline-offset-2 transition-opacity hover:opacity-85',
                           i === thumbIdx ? 'outline-weet-gold' : 'outline-transparent',
@@ -238,7 +306,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
 
               <div className="border-weet-line-2 min-[861px]:border-l min-[861px]:pl-8">
                 <h4 className="m-0 mb-4 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-weet-muted">
-                  프로젝트 정보
+                  {copy.projectInfo}
                 </h4>
                 <div className="flex flex-col gap-[13px]">
                   {selSpecs.map((s) => (
@@ -256,14 +324,14 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                   href={`/projects/${selected.project.id}`}
                   className="mt-6 flex items-center justify-center gap-1.5 rounded-[8px] border border-weet-line-2 bg-weet-surface px-3 py-3 text-[14px] font-semibold text-weet-ink transition-transform duration-150 hover:-translate-y-0.5"
                 >
-                  전체 페이지로 보기
+                  {copy.viewFullPage}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   href="/support#consult"
                   className="mt-2.5 flex items-center justify-center gap-1.5 rounded-[8px] bg-weet-gold px-3 py-[13px] text-[14px] font-semibold text-weet-ink transition-transform duration-150 hover:-translate-y-0.5"
                 >
-                  비슷한 공간 상담 →
+                  {copy.consult}
                 </Link>
               </div>
             </div>
