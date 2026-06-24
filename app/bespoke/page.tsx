@@ -40,8 +40,8 @@ const COPY: Record<Language, {
     features: [
       { title: '빠른 비즈니스 런칭', body: '미리 제작해 오프라인 공간 구축 기간을 크게 줄여, 비즈니스를 빠르게 시작하도록 돕습니다.' },
       { title: '유연한 확장과 이동', body: '비즈니스의 성장이나 타겟 지역의 변화에 맞춰 모듈을 추가하거나 통째로 새로운 부지로 이동할 수 있습니다.' },
-      { title: '효율적인 운영 플로우', body: '고객의 동선, 설비의 배치, 공간의 목적 등 상업/업무 시설에 최적화된 설계를 1:1로 제안합니다.' },
-      { title: '인프라 완벽 통합', body: '실무에 필요한 유틸리티와 네트워크, 보안, 브랜드 디자인까지 기획 단계부터 설계에 반영합니다.' },
+      { title: '효율적인 운영 플로우', body: '고객 동선과 설비 배치, 운영 목적까지 따져 상업·업무 시설에 맞는 설계를 1:1로 제안합니다.' },
+      { title: '인프라 통합 설계', body: '실무에 필요한 유틸리티와 네트워크, 보안, 브랜드 디자인까지 기획 단계부터 설계에 담습니다.' },
     ],
     sections: [
       {
@@ -68,7 +68,7 @@ const COPY: Record<Language, {
         id: 'accommodation',
         badge: 'HOSPITALITY & WORKSPACE',
         title: 'ACCOMMODATION / SITE OFFICE',
-        quote: "어디서든 최고급 객실과\n쾌적한 업무 공간을 누리다",
+        quote: "어디서든 고급 객실과\n쾌적한 업무 공간을 누리다",
         body: '스테이(Stay) 비즈니스를 위한 고급 숙박 시설이나 현장 인력을 위한 프리미엄 워크스페이스가 필요하신가요? 꼼꼼한 단열, 고급스러운 마감, 유틸리티 인프라가 통합된 모듈은 여러 채를 연결하여 대규모 시설로도 빠르게 확장할 수 있습니다.',
         cta: '포트폴리오 보기',
         image: { src: '/images/handoff/bsp-stay.webp', alt: 'Accommodation / Workspace' },

@@ -377,7 +377,7 @@ export default function CompanyPage() {
             당신의 꿈을, 위트와 함께.
           </h2>
           <p className="mx-auto mb-9 max-w-[44ch] text-[16px] font-light leading-[1.7] text-weet-paper/65 kr-balance">
-            로망과 니즈, 그 둘을 모두 실현하는 작업자들이 기다립니다.
+            로망과 니즈를 함께 실현하는 작업자들이 기다립니다.
           </p>
           <div className="flex flex-wrap justify-center gap-3.5">
             <Link

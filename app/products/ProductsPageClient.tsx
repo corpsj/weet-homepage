@@ -587,11 +587,11 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                         <p className="max-w-[60ch] text-[13.5px] leading-[1.7] text-weet-muted kr-balance">
                             {language === 'KO' ? (
                                 <>
-                                    라인업 제품은 구성과 마감에 따라 가격이 달라져 상담으로 안내드립니다. 기준 모델(3x6·3x9)의 공개 가격은{' '}
+                                    라인업 제품은 구성과 마감에 따라 가격이 달라 상담으로 안내드립니다. 기준 모델(3x6·3x9)의 공개 가격은{' '}
                                     <Link href="/customize" className="font-semibold text-weet-gold-deep underline underline-offset-2">
                                         맞춤 구성
                                     </Link>
-                                    에서 바로 확인할 수 있고, 운반·설치 등 별도 비용 구성은{' '}
+                                    에서 바로 확인할 수 있고, 운반·설치 등 추가로 드는 비용은{' '}
                                     <Link href="/support#cost" className="font-semibold text-weet-gold-deep underline underline-offset-2">
                                         비용 안내
                                     </Link>

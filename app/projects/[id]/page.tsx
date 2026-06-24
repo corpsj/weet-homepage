@@ -140,7 +140,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               비슷한 공간을 계획 중이신가요?
             </h2>
             <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-weet-sub kr-balance">
-              부지 조건과 용도를 알려주시면 목적에 맞는 구성과 예상 범위를 함께 안내해 드립니다.
+              부지 조건과 용도를 알려주시면 알맞은 구성과 예상 범위를 함께 안내해 드립니다.
             </p>
             <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
               <Link
