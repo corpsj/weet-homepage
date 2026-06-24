@@ -129,7 +129,8 @@ export default function SolutionTemplate({ data }: { data: SolutionPackageData }
 
       {/* ===== PACKAGE NAV ===== */}
       <section className="border-b border-weet-paper/10 bg-weet-ink">
-        <div className="mx-auto flex max-w-[1440px] gap-2.5 overflow-x-auto px-[5vw] py-3.5">
+        {/* Mobile: 2×2 chip grid  /  sm+: horizontal scroll row */}
+        <div className="mx-auto grid max-w-[1440px] grid-cols-2 gap-2 px-[5vw] py-3 sm:flex sm:gap-2.5 sm:overflow-x-auto sm:py-3.5">
           {nav.map((item) => {
             const isActive = item.id === data.id;
             return (
@@ -137,16 +138,16 @@ export default function SolutionTemplate({ data }: { data: SolutionPackageData }
                 key={item.id}
                 href={item.href}
                 className={cn(
-                  "min-w-[220px] rounded-[10px] border px-4 py-3 transition-[border-color,background,transform] duration-200",
+                  "rounded-[10px] border px-3 py-2.5 transition-[border-color,background,transform] duration-200 sm:min-w-[220px] sm:px-4 sm:py-3",
                   isActive
                     ? "border-weet-gold/55 bg-weet-gold/[0.08] text-weet-gold"
                     : "border-weet-paper/12 bg-weet-paper/[0.03] text-weet-paper/70 hover:-translate-y-0.5 hover:border-weet-gold/40 hover:text-weet-paper",
                 )}
               >
-                <span className="block text-[14px] font-semibold tracking-[-0.01em]">{item.name}</span>
+                <span className="block text-[13px] font-semibold tracking-[-0.01em] sm:text-[14px]">{item.name}</span>
                 <span
                   className={cn(
-                    "mt-1 block font-mono text-[11.5px]",
+                    "mt-0.5 block font-mono text-[11px] sm:mt-1 sm:text-[11.5px]",
                     isActive ? "text-weet-gold/70" : "text-weet-paper/45",
                   )}
                 >

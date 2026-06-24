@@ -34,19 +34,19 @@ const proofModules = [
     icon: Factory,
     title: "공장 제작 기반",
     text: "현장 변수보다 통제된 제작 환경에서 구조·마감·설비 품질을 먼저 맞춥니다.",
-    image: "/images/company/factory.webp",
+    image: "/images/modular/generated/factory-precision.webp",
   },
   {
     icon: ShieldCheck,
     title: "출고 전 검수",
     text: "치수, 창호, 마감, 설비처럼 입주 후 체감되는 항목을 출고 전 체크리스트로 확인합니다.",
-    image: "/images/company/workshop.webp",
+    image: "/images/modular/generated/modular-hero.webp",
   },
   {
     icon: Truck,
     title: "운반·설치 조건 확인",
     text: "진입로, 크레인 작업, 인입 조건을 먼저 확인해 일정과 별도 비용의 불확실성을 줄입니다.",
-    image: "/images/support/step6.webp",
+    image: "/images/handoff/sup-6.webp",
   },
 ];
 

@@ -71,3 +71,15 @@ design_handoff_weet/
 # Playwright 산출물(로컬 전용)
 test-results/
 playwright-report/
+
+# image generation / QA workdirs (local evidence only)
+product-image-i2i-work/
+site-image-refresh-work/
+customize-option-image-audit-latest/
+local-product-assets-audit/
+product-all-image-audit-latest/
+site-image-continuity-audit/
+site-mobile-layout-audit/
+sitewide-image-audit-latest/
+tmp/
+visual-qa-latest/

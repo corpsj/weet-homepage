@@ -5,7 +5,7 @@ import SolutionTemplate, { type SolutionPackageData } from "@/components/solutio
 const DATA: SolutionPackageData = {
   id: "energy",
   href: "/solution/energy",
-  image: "/images/customize/options/solar-panel.webp",
+  image: "/images/solution/generated/kr-energy-realphoto.webp",
   copy: {
     KO: {
       eyebrow: "ENERGY OPTION",

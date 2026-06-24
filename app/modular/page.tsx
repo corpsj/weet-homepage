@@ -5,12 +5,12 @@ import Link from 'next/link';
 import { useLanguage } from '@/contexts/LanguageContext';
 import type { Language } from '@/contexts/LanguageContext';
 
-// 공정 이미지는 언어 무관 — 시안(mod-*) 자산으로 고정.
+// 공정 이미지는 언어 무관 — 모듈러 전용 생성 자산으로 고정.
 const PROCESS_IMAGES: Record<string, string> = {
-  'factory-precision': '/images/handoff/mod-factory.webp',
-  'transport-install': '/images/handoff/mod-transport.webp',
-  'interior-comfort': '/images/handoff/mod-interior.webp',
-  'flexible-commercial': '/images/handoff/bsp-stay.webp',
+  'factory-precision': '/images/modular/generated/factory-precision.webp',
+  'transport-install': '/images/modular/generated/transport-install.webp',
+  'interior-comfort': '/images/modular/generated/interior-comfort.webp',
+  'flexible-commercial': '/images/modular/generated/flexible-commercial.webp',
 };
 
 const COPY: Record<Language, {
@@ -181,7 +181,7 @@ const COPY: Record<Language, {
   },
 };
 
-const HERO_IMAGE = '/images/handoff/mod-hero.webp';
+const HERO_IMAGE = '/images/modular/generated/modular-hero.webp';
 
 export default function ModularPage() {
   const { language } = useLanguage();

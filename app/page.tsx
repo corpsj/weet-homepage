@@ -317,9 +317,9 @@ export default async function HomePage() {
           ) : (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {[
-                { src: '/images/company/factory.webp', label: '표준화된 제작 환경' },
-                { src: '/images/products/small/private/3x6-house.webp', label: '최적화된 생활 동선' },
-                { src: '/images/products/large/L-2.webp', label: '안전한 현장 설치' },
+                { src: '/images/modular/generated/factory-precision.webp', label: '표준화된 제작 환경' },
+                { src: '/images/hero_main.webp', label: '최적화된 생활 동선' },
+                { src: '/images/modular/generated/transport-install.webp', label: '안전한 현장 설치' },
               ].map((item) => (
                 <div key={item.src} className="group relative aspect-[4/3] overflow-hidden rounded-[10px] bg-weet-ink">
                   <Image src={item.src} alt={item.label} fill sizes="(max-width: 768px) 100vw, 33vw" className="object-cover transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:scale-105" />

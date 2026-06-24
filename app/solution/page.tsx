@@ -54,17 +54,17 @@ type PageCopy = {
 };
 
 const PACKAGE_IMAGES: Record<string, string> = {
-  security: "/images/handoff/sol-security.webp",
-  network: "/images/handoff/sol-network.webp",
-  control: "/images/handoff/sol-control.webp",
-  energy: "/images/handoff/sol-energy.webp",
+  security: "/images/solution/generated/kr-security-realphoto.webp",
+  network: "/images/solution/generated/kr-network-realphoto.webp",
+  control: "/images/solution/generated/kr-control-realphoto.webp",
+  energy: "/images/solution/generated/kr-energy-realphoto.webp",
 };
 
 const CARD_IMAGES: Record<string, string> = {
   security: "/images/solution/generated/kr-security-realphoto.webp",
   network: "/images/solution/generated/kr-network-realphoto.webp",
   control: "/images/solution/generated/kr-control-realphoto.webp",
-  energy: "/images/customize/options/solar-panel.webp",
+  energy: "/images/solution/generated/kr-energy-realphoto.webp",
 };
 
 const COPY: Record<Language, PageCopy> = {

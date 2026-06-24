@@ -114,37 +114,6 @@ export const DICTIONARY = {
                         ]
                     }
                 },
-                construction: {
-                    title: '시공 / 품질 부문',
-                    name: '장혁훈',
-                    role: 'weet의 대표 엔지니어',
-                    description: `weet의 디자인이 고객의 꿈을 담으려 노력할 때 현실에서 그 꿈을 만들어 내는 일의 기술적 분야 전반을 책임지고 있다.
-건축기사이고 단독주택과 소형상업건물(상가, 펜션 등)을 전문으로 건축하는 회사의 대표를 10년간 수행하였고 약 100억원의 계약 및 시공실적 경험을 가지고 있다.
-'따뜻하고 단단한 주택'의 원칙을 타협 없이 지켜가려 노력하는 엔지니어이다.`,
-                    education: {
-                        title: '학력 및 자격', items: [
-                            '건축기사(1급)',
-                            '캐나다 벤쿠버 BCIT, Industrial engineering 중퇴'
-                        ]
-                    },
-                    career: {
-                        title: '경력', items: [
-                            '(주)제주도 디자인 대표이사(2009~2019)',
-                            '2009년 제주시 애월읍 광령리 A펜션 외 다섯 현장 설계, 시공',
-                            '2010년 서귀포시 강정읍 A단독주택 외 다섯 현장 설계, 시공',
-                            '2011년 제주시 해안동 A단독주택 외 네 현장 설계, 시공',
-                            '2012년 제주시 구좌읍 행원리 A펜션 외 네 현장 설계, 시공',
-                            '2013년 서귀포시 대정읍 사계리 A펜션 외 네 현장 설계, 시공',
-                            '2014년 제주시 애월읍 애월리 B주상복합 외 세 현장 설계, 시공',
-                            '2015년 제주시 한경면 판포리 A펜션, A커피숍 외 세 현장 설계, 시공',
-                            '2016년 제주시 애월읍 상귀리 A단독주택 외 세 현장 설계, 시공',
-                            '2017년 제주시 애월읍 애월리 A단독주택 외 두 현장 설계, 시공',
-                            '2018년 제주시 한림읍 금능리 A펜션 외 세 현장 설계, 시공',
-                            '2019년 제주시 오라동 B단독주택 외 한 현장 설계, 시공'
-                        ]
-                    },
-                    awards: { title: '', items: [] }
-                },
                 solution: {
                     title: 'HOME SOLUTION 부문',
                     name: '박성주',
@@ -160,12 +129,12 @@ export const DICTIONARY = {
                 lab: {
                     title: 'LAB',
                     desc: '당신의 꿈을 연구하는곳',
-                    images: ['/images/company/lab_new.webp']
+                    images: ['/images/modular/generated/factory-precision.webp']
                 },
                 workshop: {
                     title: 'WORKSHOP',
                     desc: '당신의 꿈을 짓는곳',
-                    images: ['/images/company/workshop.webp']
+                    images: ['/images/modular/generated/transport-install.webp']
                 }
             }
         },
@@ -308,37 +277,6 @@ export const DICTIONARY = {
                         ]
                     }
                 },
-                construction: {
-                    title: 'Construction / Quality Division',
-                    name: 'Jang Hyuk-hoon',
-                    role: 'Head of Construction / Quality',
-                    description: `When weet's design strives to capture customers' dreams, he is responsible for the overall technical aspects of making those dreams a reality.
-He is a licensed architectural engineer who served as the CEO of a company specializing in the construction of single-family homes and small commercial buildings (shops, pensions, etc.) for 10 years, with contract and construction performance worth approximately 10 billion KRW.
-He is an engineer who strives to uphold the principle of 'warm and solid housing' without compromise.`,
-                    education: {
-                        title: 'Education and Qualifications', items: [
-                            'Architectural Engineer (Grade 1)',
-                            'Dropped out of Industrial Engineering, BCIT, Vancouver, Canada'
-                        ]
-                    },
-                    career: {
-                        title: 'Career', items: [
-                            'CEO of Jeju-do Design Co., Ltd. (2009~2019)',
-                            '2009: Design and construction of Pension A and five other sites in Gwangryeong-ri, Aewol-eup, Jeju-si',
-                            '2010: Design and construction of Single-family Home A and five other sites in Gangjeong-eup, Seogwipo-si',
-                            '2011: Design and construction of Single-family Home A and four other sites in Haean-dong, Jeju-si',
-                            '2012: Design and construction of Pension A and four other sites in Haengwon-ri, Gujwa-eup, Jeju-si',
-                            '2013: Design and construction of Pension A and four other sites in Sagye-ri, Daejeong-eup, Seogwipo-si',
-                            '2014: Design and construction of Residential-Commercial Complex B and three other sites in Aewol-ri, Aewol-eup, Jeju-si',
-                            '2015: Design and construction of Pension A, Coffee Shop A and three other sites in Panpo-ri, Hangyeong-myeon, Jeju-si',
-                            '2016: Design and construction of Single-family Home A and three other sites in Sanggwi-ri, Aewol-eup, Jeju-si',
-                            '2017: Design and construction of Single-family Home A and two other sites in Aewol-ri, Aewol-eup, Jeju-si',
-                            '2018: Design and construction of Pension A and three other sites in Geumneung-ri, Hallim-eup, Jeju-si',
-                            '2019: Design and construction of Single-family Home B and one other site in Ora-dong, Jeju-si'
-                        ]
-                    },
-                    awards: { title: '', items: [] }
-                },
                 solution: {
                     title: 'HOME SOLUTION Division',
                     name: 'Park Sung-ju',
@@ -354,12 +292,12 @@ He is an engineer who strives to uphold the principle of 'warm and solid housing
                 lab: {
                     title: 'LAB',
                     desc: 'Where your dreams are researched',
-                    images: ['/images/company/lab_new.webp']
+                    images: ['/images/modular/generated/factory-precision.webp']
                 },
                 workshop: {
                     title: 'WORKSHOP',
                     desc: 'Where your dreams are built',
-                    images: ['/images/company/workshop.webp']
+                    images: ['/images/modular/generated/transport-install.webp']
                 }
             }
         },

@@ -20,14 +20,14 @@ export default function ConsultBar({ settings }: { settings: SiteSettings }) {
     <>
       {/* 모바일·태블릿: 하단 고정 상담 바 (웜 잉크) */}
       <div className="fixed inset-x-0 bottom-0 z-50 border-t border-weet-ink-deep bg-weet-ink pb-[env(safe-area-inset-bottom)] lg:hidden">
-        <div className="grid h-14 grid-cols-2 divide-x divide-weet-paper/15 text-sm font-semibold text-weet-paper">
+        <div className="grid h-11 grid-cols-2 divide-x divide-weet-paper/15 text-[13px] font-semibold leading-none text-weet-paper">
           <a
             href={telHref(settings.contact_phone)}
             onClick={() => trackConsultClick('tel')}
-            className="flex items-center justify-center gap-2 active:bg-weet-ink-deep"
+            className="flex min-w-0 items-center justify-center gap-1.5 whitespace-nowrap active:bg-weet-ink-deep"
           >
-            <Phone className="h-4 w-4 text-weet-gold" />
-            전화 상담
+            <Phone className="h-4 w-4 shrink-0 text-weet-gold" />
+            <span className="leading-none">전화 상담</span>
           </a>
           {hasKakao ? (
             <a
@@ -35,19 +35,19 @@ export default function ConsultBar({ settings }: { settings: SiteSettings }) {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackConsultClick('kakao')}
-              className="flex items-center justify-center gap-2 active:bg-weet-ink-deep"
+              className="flex min-w-0 items-center justify-center gap-1.5 whitespace-nowrap active:bg-weet-ink-deep"
             >
-              <MessageCircle className="h-4 w-4 text-weet-gold" />
-              카카오톡 상담
+              <MessageCircle className="h-4 w-4 shrink-0 text-weet-gold" />
+              <span className="leading-none">카카오톡 상담</span>
             </a>
           ) : (
             <Link
               href="/support#consult"
               onClick={() => trackConsultClick('form')}
-              className="flex items-center justify-center gap-2 active:bg-weet-ink-deep"
+              className="flex min-w-0 items-center justify-center gap-1.5 whitespace-nowrap active:bg-weet-ink-deep"
             >
-              <MessagesSquare className="h-4 w-4 text-weet-gold" />
-              상담 신청
+              <MessagesSquare className="h-4 w-4 shrink-0 text-weet-gold" />
+              <span className="leading-none">상담 신청</span>
             </Link>
           )}
         </div>

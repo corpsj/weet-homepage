@@ -16,13 +16,12 @@ interface CrewData {
 }
 
 // 데코 이미지는 언어 무관 — 시안(co-*) 자산으로 고정.
-const HERO_IMAGE = '/images/handoff/co-lab.webp';
+const HERO_IMAGE = '/images/modular/generated/factory-precision.webp';
 const SLOGAN_IMAGE = '/images/handoff/co-slogan.webp';
 const CI_LOGO_IMAGE = '/images/handoff/co-ci-logo.webp';
 
 const CREW_AVATARS: Record<string, string> = {
   design: '/images/handoff/co-crew-design.webp',
-  construction: '/images/handoff/co-crew-construction.webp',
   solution: '/images/handoff/co-crew-solution.webp',
 };
 
@@ -42,17 +41,6 @@ export default function CompanyPage() {
         t.company.crew.design.awards,
       ],
       images: ['/images/crew/park-profile.webp', '/images/crew/park-action.webp'],
-    },
-    construction: {
-      name: t.company.crew.construction.name,
-      role: t.company.crew.construction.role,
-      description: t.company.crew.construction.description,
-      sections: [
-        t.company.crew.construction.education,
-        t.company.crew.construction.career,
-        t.company.crew.construction.awards,
-      ],
-      images: [],
     },
     solution: {
       name: t.company.crew.solution.name,
@@ -76,7 +64,6 @@ export default function CompanyPage() {
 
   const crewOrder: { key: keyof typeof CREW_DATA; dept: string }[] = [
     { key: 'design', dept: t.company.crew.design.title },
-    { key: 'construction', dept: t.company.crew.construction.title },
     { key: 'solution', dept: t.company.crew.solution.title },
   ];
 

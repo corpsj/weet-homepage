@@ -127,7 +127,22 @@
   /* 한글 본문 줄바꿈 품질 */
   .kr-balance {
     word-break: keep-all;
+    overflow-wrap: break-word;
     text-wrap: balance;
+    letter-spacing: 0;
+  }
+  /* 한글 긴 단락 — 마지막 줄 고아 방지 */
+  .kr-pretty {
+    word-break: keep-all;
+    overflow-wrap: break-word;
+    text-wrap: pretty;
+    letter-spacing: 0;
+  }
+
+  @media (max-width: 480px) {
+    .kr-balance {
+      text-wrap: pretty;
+    }
   }
   /* 로그인 브랜드 비주얼 슬로우 줌 */
   .wt-zoom {

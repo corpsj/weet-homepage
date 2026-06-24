@@ -71,6 +71,9 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  turbopack: {
+    root: process.cwd(),
+  },
   // 개발 인디케이터(좌하단 N 위젯)가 /customize 모바일 하단 고정 견적 바를 덮어 가격 가독성을 해치므로 비활성화한다.
   devIndicators: false,
   images: {

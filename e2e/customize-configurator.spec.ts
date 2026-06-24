@@ -99,6 +99,30 @@ test.describe('Customize configurator', () => {
     await expect(page.getByTestId('mobile-next-cta')).toHaveCount(0);
   });
 
+  test('option info modal shows explanatory image and no keyword pills', async ({ page }) => {
+    await page.goto('/customize');
+    await page.waitForLoadState('networkidle');
+
+    await page.getByTestId('customize-step-included').click();
+    await page.getByTestId('customize-desktop-rail').getByTestId('option-info-basic-window').click();
+
+    const dialog = page.getByRole('dialog', { name: '기본창' });
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByTestId('option-info-image')).toBeVisible();
+    await expect(dialog.getByText('추천 사용:', { exact: false })).toBeVisible();
+    await expect(dialog.getByText('상담 때 확인할 점:', { exact: false })).toBeVisible();
+    await expect(dialog.getByText('상담 메모')).toBeVisible();
+
+    const imageLoaded = await dialog.getByTestId('option-info-image').evaluate((node) => {
+      const image = node as HTMLImageElement;
+      return image.naturalWidth > 0 && image.naturalHeight > 0;
+    });
+    expect(imageLoaded).toBe(true);
+
+    await expect(dialog.getByText('채광/환기')).toHaveCount(0);
+    await expect(dialog.getByText('단열 검토')).toHaveCount(0);
+  });
+
   test('consultation submission succeeds with insert-only RLS and stores snapshot', async ({ page }) => {
     test.skip(!serviceClient, 'Supabase service role env is required for consultation cleanup.');
 

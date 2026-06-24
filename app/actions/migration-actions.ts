@@ -9,7 +9,7 @@ const productsData = [
         category: "Small unit",
         sub_category: "Private",
         size_category: "S",
-        image_url: "/images/products/small/private/01-3x9-house.webp",
+        image_url: "/images/products/small/private/1. 3x9집.webp",
         description: `완벽하게 계산된 3m x 9m의 효율적인 공간. 하지만 이 집의 진짜 매력은 발코니문을 여는 순간 시작됩니다.
 나만의 작은 발코니에서 즐기는 아침의 커피 한 잔,
 살랑이는 바람을 맞으며 읽는 오후의 책 한 권,
@@ -29,7 +29,7 @@ const productsData = [
         category: "Small unit",
         sub_category: "Private",
         size_category: "S",
-        image_url: "/images/products/small/private/02-3x6-house-render.webp",
+        image_url: "/images/products/small/private/2. 3x6집.webp",
         description: `우리는 이 공간을 건축물처럼 짓지 않고, 가구처럼 정밀하게 짜 맞췄습니다.
 마치 잘 설계된 수납장을 열었을 때 감탄하게 되는 짜임새처럼, 현관부터 거실, 주방, 욕실까지 모든 공간이 유기적으로 연결되어 단 1cm의 낭비도 허용하지 않습니다.`,
         price: "위트문의",
@@ -47,7 +47,7 @@ const productsData = [
         category: "Small unit",
         sub_category: "Private",
         size_category: "S",
-        image_url: "/images/products/small/private/03-3x6-house-stucco.webp",
+        image_url: "/images/products/small/private/3x6-house.webp",
         description: `우리는 이 공간을 건축물처럼 짓지 않고, 가구처럼 정밀하게 짜 맞췄습니다.
 마치 잘 설계된 수납장을 열었을 때 감탄하게 되는 짜임새처럼, 현관부터 거실, 주방, 욕실까지 모든 공간이 유기적으로 연결되어 단 1cm의 낭비도 허용하지 않습니다.`,
         price: "위트문의",
@@ -65,7 +65,7 @@ const productsData = [
         category: "Small unit",
         sub_category: "Private",
         size_category: "S",
-        image_url: "/images/products/small/private/04-3x6-house-corrugated.webp",
+        image_url: "/images/products/small/private/4. 3x6집.webp",
         description: `우리는 이 공간을 건축물처럼 짓지 않고, 가구처럼 정밀하게 짜 맞췄습니다.
 마치 잘 설계된 수납장을 열었을 때 감탄하게 되는 짜임새처럼, 현관부터 거실, 주방, 욕실까지 모든 공간이 유기적으로 연결되어 단 1cm의 낭비도 허용하지 않습니다.`,
         price: "위트문의",
@@ -83,7 +83,7 @@ const productsData = [
         category: "Small unit",
         sub_category: "Private",
         size_category: "S",
-        image_url: "/images/products/small/private/05-3x6-camper.webp",
+        image_url: "/images/products/small/private/10. 캠퍼.webp",
         description: `벽을 없애 자연과 하나 되는 개방감을 주되, 생활의 필수 요소인 위생과 조리 시설은 모듈러 공법으로 완벽하게 갖췄습니다.
 텐트를 걷으면 탁 트인 파빌리온이 되고, 텐트를 치면 나만의 요새가 됩니다.
 물과 불, 그리고 지붕. 인류의 가장 오래된 안식처를 현대 기술로 재해석했습니다.
@@ -103,7 +103,7 @@ const productsData = [
         category: "Small unit",
         sub_category: "Private",
         size_category: "S",
-        image_url: "/images/products/small/private/06-3x3-sauna.webp",
+        image_url: "/images/products/small/private/9. 사우나.webp",
         description: `진정한 휴식은 비워내는 것에서 시작합니다.
 그윽한 나무 향기가 가득한 3x3m의 아늑한 방. 뜨거운 공기 속에 땀과 스트레스를 온전히 흘려보내세요.
 그리고 문을 열고 나가보세요. 길게 뻗은 처마가 만들어준 프라이빗한 공간 아래, 시원하게 쏟아지는 야외 냉수 샤워가 당신을 기다립니다.
@@ -123,7 +123,7 @@ const productsData = [
         category: "Small unit",
         sub_category: "Private",
         size_category: "S",
-        image_url: "/images/products/small/private/07-3x3-library.webp",
+        image_url: "/images/products/small/private/5. 3x3 내서재.webp",
         description: `3면을 채운 책들의 지혜와, 1면을 채운 자연의 영감. 오직 당신만을 위한 '지적 요새'입니다.
 누구의 방해도 받지 않는 고요함. 문을 닫는 순간, 등 뒤로는 당신이 사랑하는 장서들이 든든한 벽이 되어주고, 눈앞의 긴 창으로는 계절의 변화가 한 폭의 그림처럼 펼쳐집니다.
 창가에 놓인 넓은 책상에 앉아보세요. 시선은 확 트이고, 집중력은 깊어집니다.
@@ -143,7 +143,7 @@ const productsData = [
         category: "Small unit",
         sub_category: "Private",
         size_category: "S",
-        image_url: "/images/products/small/private/08-3x3-retreat.webp",
+        image_url: "/images/products/small/private/6. 리트릿.webp",
         description: `소란스러운 세상을 차단하고, 오직 당신의 호흡과 낮은 햇살만이 머무는 공간.
 진정한 몰입을 위해 우리는 창의 높이를 과감히 낮췄습니다.
 바닥과 맞닿은 낮고 긴 창을 통해 들어온 햇살은 눈을 찌르는 대신, 바닥에 차분하고 깊은 그림자를 만듭니다.
@@ -164,7 +164,7 @@ const productsData = [
         category: "Small unit",
         sub_category: "Private",
         size_category: "S",
-        image_url: "/images/products/small/private/09-3x6-manscave.webp",
+        image_url: "/images/products/small/private/8. 맨즈케이브.webp",
         description: `가족의 행복을 위해, 회사의 목표를 위해 치열하게 살아온 당신. 오직 당신의 룰대로 움직이는 공간이 필요합니다.
 외부는 어떤 시선도 허용하지 않는 견고한 디자인입니다.
 하지만 육중한 문을 열고 들어서는 순간, 완벽히 다른 세상이 펼쳐집니다.
@@ -185,7 +185,7 @@ const productsData = [
         category: "Small unit",
         sub_category: "Private",
         size_category: "S",
-        image_url: "/images/products/small/private/10-3x6-peterpan.webp",
+        image_url: "/images/products/small/private/11. 피터팬의 모험.webp",
         description: `아이들의 가장 위대한 능력은 보이지 않는 것을 보는 힘입니다.
 이 공간은 아이들의 상상력이 더해지는 순간, 완전히 다른 세상으로 변합니다.
 어떤 날은 인디언의 비밀 텐트가, 어떤 날은 해적선이, 또 어떤 날은 요정의 숲이 됩니다.
@@ -207,7 +207,7 @@ const productsData = [
         category: "Small unit",
         sub_category: "Public",
         size_category: "S",
-        image_url: "/images/products/small/public/11-3x6-busstop.webp",
+        image_url: "/images/products/small/public/1. 버스정류장.webp",
         description: `시골 버스는 조금 늦게 와도 괜찮습니다. 우리에게는 이야기꽃을 피울 수 있는 넓은 '평상'이 있으니까요.
 위트는 시골 어르신들이 버스를 기다리는 시간이 지루하지 않도록, 다리를 펴고 편히 쉬거나 이웃과 담소를 나눌 수 있는 한국적인 평상 구조를 도입했습니다.
 또한, 정류장 한편에는 어르신들의 발이 되어주는 유모차(보행기)와 학생들의 자전거가 비를 맞지 않도록 3m x 6m의 넉넉한 공간을 나누어 전용 주차 구역을 마련했습니다.
@@ -227,7 +227,7 @@ const productsData = [
         category: "Small unit",
         sub_category: "Public",
         size_category: "S",
-        image_url: "/images/products/small/public/12-4x8-restroom.webp",
+        image_url: "/images/products/small/public/3. 화장실.webp",
         description: `시선은 차단하고, 하늘은 열었습니다.
 가장 프라이빗한 곳에서 만나는 자유, 'The Sky' 공중화장실의 핵심은 첫째도 청결, 둘째도 유지보수입니다.
 우리는 습기와 오염에 가장 강한 소재인 '스테인리스 스틸'을 내외장재로 채택했습니다.
@@ -248,7 +248,7 @@ const productsData = [
         category: "Small unit",
         sub_category: "Public",
         size_category: "S",
-        image_url: "/images/products/small/public/13-3x9-pergola.webp",
+        image_url: "/images/products/small/public/2. 파고라.webp",
         description: `최소한의 기둥, 최대한의 개방감. 철의 강인함으로 나무의 온기를 공중에 띄웠습니다.
 아름다운 건축은 풍경을 가리지 않습니다. 단지 풍경이 머물 자리를 만들어줄 뿐입니다.
 위트의 파고라는 3m x 9m의 긴 지붕을 지탱하는 구조체를 극한으로 얇게 설계했습니다.

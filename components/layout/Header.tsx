@@ -315,7 +315,7 @@ export default function Header() {
           <div className="flex items-center gap-2 min-[861px]:hidden">
             <Link
               href="/customize"
-              className="rounded-[4px] bg-weet-ink px-3.5 py-2 text-[12px] font-semibold text-weet-paper"
+              className="inline-flex h-9 items-center justify-center rounded-[4px] bg-weet-ink px-3.5 text-[12px] font-semibold leading-none text-weet-paper"
             >
               {orderLabel[language]}
             </Link>
@@ -325,7 +325,7 @@ export default function Header() {
               aria-label="메뉴 열기"
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-menu"
-              className="rounded-md p-2 text-weet-ink transition-colors hover:bg-weet-paper-alt"
+              className="flex h-9 w-9 items-center justify-center rounded-md text-weet-ink transition-colors hover:bg-weet-paper-alt"
             >
               <Menu className="h-6 w-6" />
             </button>

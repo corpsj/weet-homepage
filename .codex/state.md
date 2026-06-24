@@ -2,112 +2,96 @@
 
 ## Active task
 
-Improve the Weet homepage/order experience and admin order-configuration manager from the supplied report direction: strengthen evidence/consultation paths, move the header `주문하기` CTA, reduce oversized order option cards, replace the mobile order bottom drawer with an inline Tesla-inspired flow, and visually reorganize the admin `주문 구성 관리` tab.
+Second-pass website image realism and customize-detail upgrade:
+
+- Re-audit generated imagery for Korean realism and AI artifacts.
+- Regenerate awkward assets, especially the bespoke smart-farm image with the Porter-style truck.
+- Improve `/modular` page imagery with modular-appropriate generated assets.
+- Redesign the `/customize` option info modal by removing pill keyword/spec boxes, adding explanatory option images, and strengthening detail copy.
 
 ## Current phase
 
-complete
-
-## Implementation boundary
-
-- User required all code implementation to be done through the open Claude app.
-- Claude app was instructed to implement code only and skip tests, lint, typecheck, build, dev server, Playwright/browser validation, git, and GPT review.
-- Codex handled repository inspection, validation, visual QA, GPT Pro review packets, GPT review result saving, feedback routing, and state updates.
+Implementation, deployment, local QA, live QA, and the final GPT-5.5 Pro review attempt are complete. The Pro review was blocked by disabled Pro access before any prompt was sent.
 
 ## Changes made
 
-- Updated harness docs to persist the role split: Claude app for code implementation only; Codex for validation, QA, GPT review, and git/workflow control.
-- Updated `.gitignore` to ignore local `.codex/` artifacts while keeping Supabase migration SQL trackable.
-- Moved/refined the public header `주문하기` CTA:
-  - desktop CTA sits with compact social/language controls at the right side
-  - mobile CTA is visible beside the menu button
-- Reworked `/customize` order flow:
-  - removed the mobile option drawer trigger/dialog
-  - added inline step options under the floorplan on mobile/tablet
-  - kept a fixed bottom total/quote CTA bar
-  - made option cards denser and less wide/tall
-  - narrowed and cleaned the desktop option rail
-- Reworked `components/admin/customize/CustomizeManager.tsx`:
-  - added overview metric cards
-  - converted tabs and labels to Korean operational language
-  - reorganized model/included/category/options/assets sections
-  - added empty states, form state headers, compact row actions, status badges, option category grouping, and conflict-management layout
-  - replaced Base UI Tabs with a local controlled tablist after QA found tab selection did not update in the stale dev-server session
-  - fixed GPT Pro `MUST_FIX`: `새 옵션` now defaults to the first non-model category instead of `catalog.categories[0]`
-- Updated E2E assertions for header CTA and the mobile inline configurator.
+- Updated `.codex/current-task.md`, this state file, and `.codex/review-packet.md` for the second-pass request.
+- Attempted Claude app delegation through Computer Use; the visible app was on `Claude Design` and did not expose a repository-editing/code-agent input surface, so implementation proceeded directly in Codex.
+- Replaced the bespoke smart-farm image at `public/images/handoff/bsp-farm.webp` with a new Chrome/ChatGPT i2i result. The new image keeps the product form while adding a more believable Korean farm context, realistic work vehicle detail, and human/context elements where they help realism.
+- Replaced four modular page images:
+  - `public/images/modular/generated/modular-hero.webp`
+  - `public/images/modular/generated/factory-precision.webp`
+  - `public/images/modular/generated/transport-install.webp`
+  - `public/images/modular/generated/flexible-commercial.webp`
+- Kept the existing `public/images/modular/generated/interior-comfort.webp` because two separate Chrome/ChatGPT i2i attempts stalled at generation and did not produce a downloadable result.
+- Updated `app/modular/page.tsx` to use the modular generated image set instead of old `handoff/mod-*` or unrelated bespoke imagery.
+- Added `OPTION_DETAIL_GUIDE` for all fallback customize options in `components/customize/lib/constants.ts`.
+- Reworked `components/customize/parts/OptionInfoModal.tsx`:
+  - Larger scrollable modal.
+  - Option explanatory image from `/images/customize/options/{optionKey}.webp?v={OPTION_IMAGE_VERSION}`.
+  - Removed all old pill/spec keyword boxes from the modal UI.
+  - Added recommendation, consultation-check, and note copy.
+- Added an E2E test that opens the option info modal, verifies the image loads, verifies new explanatory copy, and verifies old keyword-pill text is absent.
+- Added `turbopack.root = process.cwd()` in `next.config.ts` to stop Turbopack from inferring `/Users/zoopark-studio` as workspace root because of a parent `bun.lock`.
+- Deployed to Vercel production and aliased the deployment to `https://www.we-et.com`.
 
 ## Commands run
 
 - `git status --short`
 - `git diff --stat`
-- `rg ...`
-- `sed -n ...` for workflow files, source files, and review artifacts
-- `git diff --check -- . ':(exclude)test-results'` (pass)
-- `npm run lint` (pass)
-- `npx tsc --noEmit` (pass)
-- `npm test` (3 files, 20 tests pass)
-- `npm run build` (pass; existing Next warnings noted below)
-- `npx playwright test e2e/header-navigation.spec.ts e2e/customize-configurator.spec.ts --project=chromium` (13 passed)
-- `npm run start -- --port 3100` for fresh production-server visual QA
-- Playwright screenshot/DOM QA scripts for `/`, `/customize`, and authenticated `/admin/customize`
-- Chrome/ChatGPT GPT-5.5 Pro review for `REVIEW_PACKET_ORDER_UI_ADMIN_20260610_V1`
-- Chrome/ChatGPT GPT-5.5 Pro review for `REVIEW_PACKET_ORDER_UI_ADMIN_20260610_V2`
-- `rm -rf test-results`
-- `screencapture -x .codex/qa/order-ui-admin-20260610-final/fresh-3100/chatgpt-pro-review-v2-result.png`
+- `npm run lint`
+- `npm run build`
+- `npx playwright test e2e/customize-configurator.spec.ts --grep "option info modal"`
+- Playwright local visual QA for `/customize`, `/modular`, and `/bespoke`
+- Playwright live visual QA for `https://www.we-et.com/customize`, `/modular`, and `/bespoke`
+- Live static SHA-256 verification against `https://www.we-et.com`
+- `vercel --prod --yes`
+- Chrome/ChatGPT normal-chat Pro availability check
 
-## Visual QA
+## Validation results
 
-- Fresh production-server QA saved under `.codex/qa/order-ui-admin-20260610-final/fresh-3100/`.
-- Screenshots inspected:
-  - `home-desktop-header.png`
-  - `home-mobile-header.png`
-  - `customize-desktop-options.png`
-  - `customize-mobile-inline-options.png`
-  - `customize-mobile-smart-options.png`
-  - `admin-desktop-options-new.png`
-  - `admin-mobile-options.png`
-  - `chatgpt-pro-review-v2-result.png`
-- Visual findings:
-  - Header CTA is visible on desktop and mobile with no horizontal overflow.
-  - Mobile order flow no longer exposes an `옵션 구성` drawer button or dialog; options continue inline under the floorplan.
-  - Mobile bottom fixed bar contains only total/quote CTA and does not block the option flow enough to prevent completion.
-  - Desktop order layout keeps the floorplan primary and the option rail compact.
-  - Admin desktop options tab shows the overview, form, conflict form, and category-grouped option list in a scannable layout.
-  - Admin mobile has no page-level horizontal overflow; tabs are horizontally scrollable by design.
-  - Fresh 3100 admin QA confirmed `옵션30` selects, `customize-panel-options` is visible, model panel is hidden, and `새 옵션` defaults to `외장`.
-
-## Browser / tool notes
-
-- Browser/Chrome DOM-specific tools were not exposed by `tool_search`; ChatGPT review used Computer Use fallback in Chrome.
-- The previous `V1` ChatGPT tab remained stuck at `답변 마무리 중` and then Chrome reported `RESULT_CODE_HUNG`. The already saved `V1` result was retained, the hung page was closed, and a new ChatGPT root was used for `V2`.
-- The first attempt to start a second Next dev server on port 3100 failed because Next detected the existing port 3000 dev server for the same project. Codex used `next start --port 3100` from the latest successful build instead.
-- The stale port 3000 dev server showed admin client click handlers not updating, but the fresh 3100 production server did not reproduce that behavior.
-
-## Pro review cycles
-
-2
-
-## Last Pro verdict
-
-PASS: `NO MUST_FIX` for `REVIEW_PACKET_ORDER_UI_ADMIN_20260610_V2`
-
-## Applied Pro feedback
-
-- Applied the concrete `MUST_FIX` from `REVIEW_PACKET_ORDER_UI_ADMIN_20260610_V1`: `components/admin/customize/CustomizeManager.tsx` initializes a new option with the first non-model category.
-
-## Skipped Pro feedback
-
-- V1 OPTIONAL: 320/360px header regression test, long option-name title/details handling, and `test-results/` cleanup advice. Cleanup was done; the other items were advisory.
-- V2 returned no `MUST_FIX`.
+- `npm run lint`: passed.
+- `npm run build`: passed. Only the existing Next middleware deprecation warning appeared.
+- E2E modal test: passed after scoping the desktop rail and accounting for the actual option title `기본창`.
+- Local visual QA:
+  - `/customize` option modal image loaded at 1672x941 and old keyword-pill text was absent.
+  - `/modular` generated images loaded with no broken images.
+  - `/bespoke` smart-farm image loaded with no broken images.
+  - Desktop and mobile checks reported no console errors, page errors, or horizontal overflow.
+- Live visual QA:
+  - `/customize` option modal image loaded from `https://www.we-et.com/images/customize/options/basic-window.webp?v=20260610-0137`, natural size 1672x941, rendered size 724x406.
+  - `/modular` loaded all five generated modular image paths with no broken images.
+  - `/bespoke` loaded the refreshed `bsp-farm.webp` on desktop and mobile with no broken images.
+  - No console errors, page errors, or horizontal overflow were reported.
+- Production static hash check:
+  - `bsp-farm.webp`, `modular-hero.webp`, `factory-precision.webp`, `transport-install.webp`, and `flexible-commercial.webp` matched local SHA-256 hashes on `https://www.we-et.com`.
 
 ## Current failures
 
-- No current code/test/visual QA failure.
-- Existing Next build warnings remain:
-  - deprecated `middleware` file convention in favor of `proxy`
-  - `/` marked dynamic during static generation because cookies are used
-- Local-only Vercel analytics script 404/MIME errors appeared under `next start`; these are unrelated to the UI changes.
+- GPT-5.5 Pro review could not be sent. Chrome/ChatGPT normal chat showed `최신 • 5.5`, `Thinking • 확장` checked, and a disabled `Pro • 표준` radio item with the disabled message `한도에 도달했습니다. 관리자에게 액세스를 요청하세요`.
+- The modular interior image regeneration failed operationally: two Chrome/ChatGPT image-generation attempts stalled at "더욱 자세한 이미지를 생성하고 있습니다", so the existing interior image remains in place.
+
+## Pro review cycles
+
+0 completed; 1 final attempt blocked before send by disabled Pro access.
+
+## Last Pro verdict
+
+Unavailable. `.codex/pro-review.md` still belongs to an older task and must not be treated as review evidence for this second-pass task. The current block is recorded in `.codex/pro-review-unavailable.md`, `.codex/qa/second-pass-live/chatgpt-pro-disabled.json`, and `.codex/qa/second-pass-live/chatgpt-pro-disabled.png`.
+
+## Applied Pro feedback
+
+- None yet.
+
+## Skipped Pro feedback
+
+- None yet.
+
+## Remaining risks
+
+- GPT-5.5 Pro review remains unavailable until Pro access/quota is restored in the user's Chrome/ChatGPT workspace.
+- The modular interior image was not newly regenerated in this pass because generation stalled twice, though live QA confirms the retained asset loads correctly.
 
 ## Next step
 
-No code blocker remains for this slice.
+Finish with the completed validation/deployment evidence and report the Pro review block to the user.

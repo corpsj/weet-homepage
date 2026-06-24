@@ -180,12 +180,12 @@ export default async function SupportPage() {
             <div className="mb-5 font-mono text-[12px] font-semibold uppercase tracking-[0.2em] text-weet-gold-deep">
               Support · 고객지원
             </div>
-            <h1 className="m-0 text-[clamp(34px,4.6vw,60px)] font-semibold leading-[1.04] tracking-[-0.035em] kr-balance">
+            <h1 className="m-0 text-[clamp(26px,4.6vw,60px)] font-semibold leading-[1.08] tracking-[-0.03em] kr-balance">
               이동식주택,
               <br />
               궁금한 것부터 해결하세요.
             </h1>
-            <p className="mt-[22px] max-w-[46ch] text-[clamp(16px,1.5vw,19px)] font-light leading-[1.65] text-weet-sub kr-balance">
+            <p className="mt-[22px] max-w-[46ch] text-[clamp(15px,1.5vw,19px)] font-light leading-[1.7] text-weet-sub kr-pretty">
               농막·세컨하우스를 처음 준비해도 막막하지 않도록 — 인허가, 비용, 진행 과정과 A/S까지 실제로 가장 많이 받는 질문을
               기준으로 정리했습니다.
             </p>

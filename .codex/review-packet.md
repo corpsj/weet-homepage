@@ -1,281 +1,290 @@
-# GPT Pro Review Packet
+# GPT-5.5 Pro Review Packet
 
-Marker: `REVIEW_PACKET_ORDER_UI_ADMIN_20260610_V2`
+## Marker
 
-## Review Request
-
-Please review the current local working tree for concrete `MUST_FIX` issues only. Treat `OPTIONAL` suggestions as advisory. Focus on user-facing regressions, broken flows, accessibility/interaction bugs, and missing validation that could hide a real defect.
-
-Return with the marker `REVIEW_PACKET_ORDER_UI_ADMIN_20260610_V2` and one of:
-
-- `NO MUST_FIX`
-- `MUST_FIX` findings with file/line references and exact fixes
+WEET_IMAGE_SECOND_PASS_REVIEW_20260620_001
 
 ## Active Task Brief
 
-The user asked to improve the Weet website based on a report direction: solve lack of evidence and consultation paths, improve the order flow, move the header `주문하기` CTA to a better location, visually redesign the admin `주문 구성 관리` tab, reduce overly large order option cards, and remove the inconvenient mobile bottom drawer by referencing Tesla-style order UI.
+The user requested a second-pass quality improvement for `https://www.we-et.com`:
 
-The user explicitly required implementation through the already-open Claude app, not Claude CLI and not Antigravity. Claude app was instructed to perform only file edits and skip tests/lint/typecheck/build/dev server/Playwright/browser validation/git/GPT review. Codex performed all validation, QA, review packet creation, GPT Pro review, and feedback application orchestration.
+- Find generated images that still do not feel Korean or still look AI-generated, and improve them.
+- Specifically fix the bespoke smart-farm image where the Porter-style truck looked artificially blank after text/logo removal.
+- In this pass, people and text-like real-world details are allowed if they increase realism.
+- Improve the `/customize` option info modal opened by each `i` button:
+  - Remove pill-shaped keyword/spec boxes.
+  - Add 1-3 appropriate explanatory images per option.
+  - Supplement each option's detailed explanation.
+- Improve the `/modular` page images so they are modular-appropriate and high quality.
+
+Image generation was performed through visible Chrome/ChatGPT image mode using the Thinking model with expanded reasoning where available, not Pro. i2i was used for improved image targets.
 
 ## Current Progress / State
 
-- Claude app implemented the public header/order UI, admin `주문 구성 관리`, docs, and E2E-file changes.
-- Codex validated the first implementation and sent this packet as `REVIEW_PACKET_ORDER_UI_ADMIN_20260610_V1`.
-- GPT-5.5 Pro returned one concrete `MUST_FIX`: admin `새 옵션` initialized `categoryId` from `catalog.categories[0]`, which could select the internal `model` category.
-- Codex sent a code-only Claude app prompt for that `MUST_FIX`; Claude changed the initializer to first non-model category.
-- Codex then found a local admin click/hydration symptom on the old port 3000 dev server. Claude app replaced Base UI Tabs in `CustomizeManager.tsx` with an explicit local controlled tablist and conditional panels.
-- Codex reran validation and fresh production-server visual QA on port 3100. The old 3000 dev-server symptom did not reproduce there; tabs and buttons worked normally.
+Implementation, deployment, local validation, and live visual QA are complete.
+
+- Refreshed bespoke smart-farm image.
+- Refreshed four modular page images.
+- Kept modular interior image after two ChatGPT generation attempts stalled.
+- Rewired `/modular` to use generated modular assets.
+- Rebuilt the `/customize` option info modal with explanatory images and richer copy.
+- Removed the old pill/spec keyword UI from the modal.
+- Added E2E coverage for the modal behavior.
+- Deployed to Vercel production and verified `https://www.we-et.com`.
 
 ## Project Snapshot
 
-- Framework: Next.js 16.2.7, React, TypeScript, Tailwind-style classes.
-- Main changed surfaces:
-  - Public header: `components/layout/Header.tsx`
-  - Public order configurator: `components/customize/CustomizeConfigurator.tsx`
-  - Admin order configuration manager: `components/admin/customize/CustomizeManager.tsx`
-  - E2E assertions: `e2e/header-navigation.spec.ts`, `e2e/customize-configurator.spec.ts`
-  - Workflow/harness docs: `AGENTS.md`, `codex-loop.md`, `.codex/current-task.md`, `.codex/chatgpt-procedure.md`, `agent-inbox/*`
-  - `.gitignore`
+- Framework: Next.js app router.
+- Main changed UI files:
+  - `app/modular/page.tsx`
+  - `components/customize/lib/constants.ts`
+  - `components/customize/parts/OptionInfoModal.tsx`
+  - `e2e/customize-configurator.spec.ts`
+  - `next.config.ts`
+- Refreshed image files:
+  - `public/images/handoff/bsp-farm.webp`
+  - `public/images/modular/generated/modular-hero.webp`
+  - `public/images/modular/generated/factory-precision.webp`
+  - `public/images/modular/generated/transport-install.webp`
+  - `public/images/modular/generated/flexible-commercial.webp`
 
 ## Git Status
 
-```text
- M .codex/chatgpt-procedure.md
+```
  M .codex/current-task.md
+ M .codex/review-packet.md
+ M .codex/state.md
  M .gitignore
- M AGENTS.md
- M agent-inbox/안티그래비티의 작업범위.md
- M agent-inbox/컴퓨터유즈,웹제어.md
- M codex-loop.md
- M components/admin/customize/CustomizeManager.tsx
- M components/customize/CustomizeConfigurator.tsx
- M components/layout/Header.tsx
+ M app/modular/page.tsx
+ M app/solution/energy/page.tsx
+ M app/solution/page.tsx
+ M components/customize/lib/constants.ts
+ M components/customize/parts/OptionInfoModal.tsx
  M e2e/customize-configurator.spec.ts
- M e2e/header-navigation.spec.ts
+ M next.config.ts
+ M public/images/handoff/bsp-cafe.webp
+ M public/images/handoff/bsp-farm.webp
+ M public/images/handoff/bsp-popup.webp
+ M public/images/handoff/bsp-stay.webp
+ M public/images/handoff/sup-1.webp
+ M public/images/handoff/sup-3.webp
+ M public/images/handoff/sup-6.webp
+ M public/images/hero_main.webp
+ M public/images/modular/generated/factory-precision.webp
+ M public/images/modular/generated/flexible-commercial.webp
+ M public/images/modular/generated/modular-hero.webp
+ M public/images/modular/generated/transport-install.webp
+ M public/images/solution/generated/kr-control-realphoto.webp
+ M public/images/solution/generated/kr-network-realphoto.webp
+ M public/images/solution/generated/kr-security-realphoto.webp
+?? .vercelignore
+?? public/images/solution/generated/kr-energy-realphoto.webp
 ```
 
-## Changed Files / Diff Stat
+Note: this working tree also contains the earlier site-wide image refresh from the same user image-improvement thread: landing/support/bespoke/solution static assets, solution code paths, `.gitignore`, `.vercelignore`, and one new solution energy asset. Those earlier changes were not reverted.
 
-```text
- .codex/chatgpt-procedure.md                        |   2 +
- .codex/current-task.md                             |  49 +--
- .gitignore                                         |   5 +
- AGENTS.md                                          |   4 +-
- agent-inbox/안티그래비티의 작업범위.md             |   4 +-
- agent-inbox/컴퓨터유즈,웹제어.md                   |   2 +
- codex-loop.md                                      |   6 +-
- components/admin/customize/CustomizeManager.tsx    | 448 ++++++++++++++++-----
- components/customize/CustomizeConfigurator.tsx     | 367 +++++++++--------
- components/layout/Header.tsx                       |  44 +-
- e2e/customize-configurator.spec.ts                 |  25 +-
- e2e/header-navigation.spec.ts                      |  14 +-
- 12 files changed, 646 insertions(+), 324 deletions(-)
+## Relevant Code Diff Excerpts
+
+### `/modular` image paths
+
+```diff
+-const PROCESS_IMAGES: Record<string, string> = {
+-  'factory-precision': '/images/handoff/mod-factory.webp',
+-  'transport-install': '/images/handoff/mod-transport.webp',
+-  'interior-comfort': '/images/handoff/mod-interior.webp',
+-  'flexible-commercial': '/images/handoff/bsp-stay.webp',
++const PROCESS_IMAGES: Record<string, string> = {
++  'factory-precision': '/images/modular/generated/factory-precision.webp',
++  'transport-install': '/images/modular/generated/transport-install.webp',
++  'interior-comfort': '/images/modular/generated/interior-comfort.webp',
++  'flexible-commercial': '/images/modular/generated/flexible-commercial.webp',
+ };
+
+-const HERO_IMAGE = '/images/handoff/mod-hero.webp';
++const HERO_IMAGE = '/images/modular/generated/modular-hero.webp';
 ```
 
-## Relevant Diff / File Excerpts
+### Customize modal behavior
 
-### Header CTA
-
-```tsx
-// components/layout/Header.tsx
-<div className="xl:hidden absolute right-4 md:right-8 top-1/2 -translate-y-1/2 z-[60] flex items-center gap-2">
-  <Link href="/customize" className="flex h-9 items-center justify-center whitespace-nowrap rounded-sm bg-[#FEBD16] px-3.5 text-[13px] font-bold text-[#2f3432] ...">
-    {language === 'KO' ? '주문하기' : 'Order'}
-  </Link>
-  <button aria-label="Toggle mobile menu" ... />
-</div>
-
-<div className="hidden xl:flex absolute right-[64px] top-1/2 -translate-y-1/2 items-center gap-4">
-  <div className="flex items-center gap-3 text-gray-400">...</div>
-  <Link href="/customize" className="flex h-10 items-center justify-center rounded-sm bg-[#FEBD16] px-6 text-[14px] font-bold text-[#2f3432] ...">
-    {language === 'KO' ? '주문하기' : 'Order'}
-  </Link>
-</div>
+```diff
++function normalizeOptionImage(option: CustomizeOption, optionKey: string, hasFallback: boolean) {
++  if (hasFallback) return `/images/customize/options/${optionKey}.webp?v=${OPTION_IMAGE_VERSION}`;
++  if (!option.imagePath) return null;
++  return option.imagePath.startsWith('/') ? option.imagePath : `/${option.imagePath}`;
++}
 ```
 
-### Order Configurator
-
-```tsx
-// components/customize/CustomizeConfigurator.tsx
-const handleStepSelect = (step: ConfigStep) => {
-  setCurrentStep(step);
-  // 모바일/태블릿 인라인 구성에서는 단계 전환 시 도면 아래 옵션 영역으로 바로 이동한다.
-  if (typeof window !== 'undefined' && window.innerWidth < 1024) {
-    document.getElementById('customize-options')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
-};
-
-<StepperBar currentStep={currentStep} setCurrentStep={handleStepSelect} stepCounts={stepCounts} />
-
-{/* 모바일/태블릿: 드로어 없이 도면 아래에서 바로 이어지는 인라인 단계 구성 (Tesla 주문 흐름 참고) */}
-<div id="customize-options" className="scroll-mt-[120px] border-t border-[#d8d0c3] bg-[#fbfaf7] md:scroll-mt-[132px] lg:hidden">
-  <OptionsPanel ... inline />
-</div>
-
-<aside className="hidden shrink-0 border-l border-[#d8d0c3] bg-[#fbfaf7] lg:block lg:w-[400px] xl:w-[460px]">
-  <OptionsPanel ... />
-</aside>
+```diff
+-        {specs.length > 0 && (
+-          <div className="mb-3.5 flex flex-wrap gap-2">
+-            {specs.map((spec) => (
+-              <span className="... rounded-full ...">
+-                {spec}
+-              </span>
+-            ))}
+-          </div>
+-        )}
++          {imageSrc && (
++            <figure className="mb-5">
++              <div className="relative aspect-[16/9] overflow-hidden rounded-md border border-customize-shell bg-customize-linen">
++                <Image
++                  src={imageSrc}
++                  alt={guide?.imageAlt || `${option.nameKo} 상세 설명 이미지`}
++                  fill
++                  className="object-cover"
++                  data-testid="option-info-image"
++                  unoptimized
++                />
++              </div>
++            </figure>
++          )}
 ```
 
-```tsx
-// components/customize/CustomizeConfigurator.tsx OptionCard
-<button
-  type="button"
-  onClick={onToggle}
-  className="flex min-h-[44px] w-full items-center gap-2.5 rounded-lg px-2.5 py-2 pr-9 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-[#b88b26]"
-  aria-pressed={selected}
->
-  <span className={cn('flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition-colors', selected ? 'border-[#0d6e66] bg-[#0d6e66] text-white' : 'border-[#bcb2a3] bg-[#fbfaf7] group-hover:border-[#8a806f]')}>
-    {selected && <Check className="h-3 w-3" />}
-  </span>
-  <div className="min-w-0 flex-1">
-    <div className="flex items-center justify-between gap-2">
-      <span className="truncate text-sm font-bold text-[#2f3432]">{option.nameKo}</span>
-      ...
-    </div>
-    {option.shortDescriptionKo && (
-      <span className="mt-0.5 block truncate text-[11px] text-[#8a806f]">{option.shortDescriptionKo}</span>
-    )}
-  </div>
-</button>
+### Modal E2E coverage
+
+```diff
++  test('option info modal shows explanatory image and no keyword pills', async ({ page }) => {
++    await page.goto('/customize');
++    await page.waitForLoadState('networkidle');
++    await page.getByTestId('customize-step-included').click();
++    await page.getByTestId('customize-desktop-rail').getByTestId('option-info-basic-window').click();
++    const dialog = page.getByRole('dialog', { name: '기본창' });
++    await expect(dialog.getByTestId('option-info-image')).toBeVisible();
++    await expect(dialog.getByText('추천 사용:', { exact: false })).toBeVisible();
++    await expect(dialog.getByText('상담 때 확인할 점:', { exact: false })).toBeVisible();
++    await expect(dialog.getByText('상담 메모')).toBeVisible();
++    await expect(dialog.getByText('채광/환기')).toHaveCount(0);
++    await expect(dialog.getByText('단열 검토')).toHaveCount(0);
++  });
 ```
 
-### Admin Manager
+### Turbopack root fix
 
-```tsx
-// components/admin/customize/CustomizeManager.tsx
-type CustomizeTab = 'models' | 'included' | 'categories' | 'options' | 'assets';
-
-// Base UI Tabs가 이 화면에서 탭 전환(aria-selected)을 반영하지 못해 로컬 제어형 탭으로 대체한다.
-const TAB_ITEMS: { value: CustomizeTab; label: string; Icon: LucideIcon }[] = [
-  { value: 'models', label: '모델', Icon: Boxes },
-  { value: 'included', label: '기본 포함 사양', Icon: PackageCheck },
-  { value: 'categories', label: '카테고리', Icon: FolderTree },
-  { value: 'options', label: '옵션', Icon: SlidersHorizontal },
-  { value: 'assets', label: '이미지 자산', Icon: ImageIcon },
-];
-
-const [activeTab, setActiveTab] = useState<CustomizeTab>('models');
-
-<div role="tablist" aria-label="주문 구성 관리 탭" className="inline-flex min-w-max items-center rounded-lg border border-[#e5e5df] bg-[#f4f4f1] p-[3px]">
-  {TAB_ITEMS.map(({ value, label, Icon }) => {
-    const selected = activeTab === value;
-    const count = tabCounts[value];
-    return (
-      <button
-        key={value}
-        type="button"
-        role="tab"
-        id={`customize-tab-${value}`}
-        aria-selected={selected}
-        aria-controls={`customize-panel-${value}`}
-        onClick={() => setActiveTab(value)}
-        className={cn('inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-md px-3 text-sm font-medium transition-colors ...', selected ? 'bg-white text-[#111111] shadow-sm' : 'text-gray-500 hover:text-[#111111]')}
-      >
-        <Icon className="size-3.5" />
-        {label}
-        {count !== null && <TabCount value={count} />}
-      </button>
-    );
-  })}
-</div>
-
-{activeTab === 'options' && (
-  <div role="tabpanel" id="customize-panel-options" aria-labelledby="customize-tab-options">
-    <AdminSection
-      title="옵션"
-      description="카테고리별 옵션의 가격, 기본 선택, 모델 노출과 충돌 관계를 관리합니다."
-      action={
-        <button
-          className={consoleSecondaryButtonClass}
-          onClick={() => {
-            setOptionForm({ ...emptyOption, categoryId: catalog.categories.find((category) => category.key !== 'model')?.id || '' });
-            setEditingOptionId(undefined);
-          }}
-        >
-          <Plus className="h-4 w-4" /> 새 옵션
-        </button>
-      }
-    >
-      <div className="grid gap-6 xl:grid-cols-[460px_1fr]">...</div>
-    </AdminSection>
-  </div>
-)}
+```diff
+ const nextConfig: NextConfig = {
+   poweredByHeader: false,
++  turbopack: {
++    root: process.cwd(),
++  },
 ```
 
-## Test / Validation Output
+## Commands Run / Validation Output
 
-```text
-git diff --check -- . ':(exclude)test-results'
-PASS
 ```
-
-```text
-npm run lint
+$ npm run lint
 > eslint . --max-warnings=0
-PASS
+Result: passed
+
+$ npm run build
+Result: passed
+Note: existing Next middleware deprecation warning only.
+
+$ npx playwright test e2e/customize-configurator.spec.ts --grep "option info modal"
+1 passed (5.3s)
 ```
 
-```text
-npx tsc --noEmit
-PASS
-```
+Earlier E2E attempts exposed two issues that were fixed:
 
-```text
-npm test
-Test Files  3 passed (3)
-Tests       20 passed (20)
-PASS
-```
-
-```text
-npm run build
-PASS exit 0
-Notes:
-- Next.js warning: middleware file convention is deprecated in favor of proxy.
-- Existing dynamic server usage warning during static generation of `/` because cookies are used; build still completed and marked `/` dynamic.
-```
-
-```text
-npx playwright test e2e/header-navigation.spec.ts e2e/customize-configurator.spec.ts --project=chromium
-13 passed
-```
+- Turbopack inferred `/Users/zoopark-studio` as workspace root and failed to resolve `@vercel/analytics/next`. Fixed with `turbopack.root = process.cwd()`.
+- The modal test initially hit duplicate desktop/mobile info buttons and the wrong expected title. Fixed by scoping to `customize-desktop-rail` and using the actual title `기본창`.
 
 ## Browser / Visual QA Findings
 
-Screenshots and summary JSON:
+### Local QA
 
-- `.codex/qa/order-ui-admin-20260610-final/fresh-3100/home-desktop-header.png`
-- `.codex/qa/order-ui-admin-20260610-final/fresh-3100/home-mobile-header.png`
-- `.codex/qa/order-ui-admin-20260610-final/fresh-3100/customize-desktop-options.png`
-- `.codex/qa/order-ui-admin-20260610-final/fresh-3100/customize-mobile-inline-options.png`
-- `.codex/qa/order-ui-admin-20260610-final/fresh-3100/customize-mobile-smart-options.png`
-- `.codex/qa/order-ui-admin-20260610-final/fresh-3100/admin-desktop-options-new.png`
-- `.codex/qa/order-ui-admin-20260610-final/fresh-3100/admin-mobile-options.png`
-- `.codex/qa/order-ui-admin-20260610-final/fresh-3100/summary.json`
+Local Playwright visual QA covered `/customize`, `/modular`, and `/bespoke` on desktop and mobile.
 
-Fresh production-server QA used `npm run start -- --port 3100` from the latest build output:
+```
+/customize option modal:
+- image: /images/customize/options/basic-window.webp?v=20260610-0137
+- natural size: 1672x941
+- keywordPillText: false
 
-- Header desktop/mobile: `주문하기` CTA is visible, no horizontal overflow.
-- Order configurator desktop: option rail is compact; floorplan remains the primary area; no drawer button/dialog; no horizontal overflow.
-- Order configurator mobile: options are inline below the floorplan; fixed bottom bar contains only total/quote CTA; no `옵션 구성` drawer button; no dialog; no horizontal overflow.
-- Admin desktop: `옵션30` tab selects correctly, `customize-panel-options` is visible, model panel hidden, `새 옵션` defaults to `외장`, and the category select contains no `model` option.
-- Admin mobile: overview cards and horizontal tabs render without horizontal page overflow; `옵션30` can be selected.
-- Browser page errors: none. Local-only Vercel analytics script 404/MIME errors appeared under `next start` because `/_vercel/insights/script.js` is not served locally; ignored as unrelated to the UI changes.
+/modular:
+- generated modular images loaded
+- brokenImages: []
 
-## Current Failures / Risks
+/bespoke:
+- refreshed smart farm image loaded
+- brokenImages: []
 
-- No current validation failure.
-- Existing old port 3000 dev server showed stale/non-clicking admin client behavior, but fresh `next start` on port 3100 worked correctly. This is recorded because browser workflow failures should not be hidden.
-- Pre-existing diagnostics still exist outside the requested slice: lucide `Instagram` deprecation and `document.write` use in quote popup were observed earlier and left unchanged.
-- Build warning about deprecated Next `middleware` convention remains pre-existing.
-- Admin mobile tablist is horizontally scrollable by design; visual QA showed no page overflow.
+consoleErrors: []
+pageErrors: []
+mobile overflow: false
+```
+
+QA artifacts:
+
+- `.codex/qa/second-pass-local/summary.json`
+- `.codex/qa/second-pass-local/mobile-summary.json`
+- `.codex/qa/second-pass-local/modular-factory-precision.png`
+- `.codex/qa/second-pass-local/modular-transport-install.png`
+- `.codex/qa/second-pass-local/modular-flexible-commercial.png`
+
+### Live QA
+
+Live Playwright visual QA covered `https://www.we-et.com/customize`, `/modular`, and `/bespoke`.
+
+```
+/customize modal desktop:
+- image: https://www.we-et.com/images/customize/options/basic-window.webp?v=20260610-0137
+- natural size: 1672x941
+- rendered size: 724x406
+- keywordPillText: false
+
+/modular desktop:
+- overflow: false
+- brokenImages: []
+- loaded modular generated images:
+  - /images/modular/generated/modular-hero.webp
+  - /images/modular/generated/factory-precision.webp
+  - /images/modular/generated/transport-install.webp
+  - /images/modular/generated/interior-comfort.webp
+  - /images/modular/generated/flexible-commercial.webp
+
+/bespoke desktop/mobile:
+- refreshed /images/handoff/bsp-farm.webp loaded
+- brokenImages: []
+
+consoleErrors: []
+pageErrors: []
+```
+
+Live screenshot artifacts:
+
+- `.codex/qa/second-pass-live/desktop-customize-modal-painted.png`
+- `.codex/qa/second-pass-live/desktop-modular-transport.png`
+- `.codex/qa/second-pass-live/mobile-bespoke-smartfarm.png`
+- `.codex/qa/second-pass-live/summary.json`
+- `.codex/qa/second-pass-live/customize-modal-painted.json`
+
+## Production Deployment
+
+Vercel production deployment succeeded and was aliased to:
+
+- `https://www.we-et.com`
+- Deployment URL: `https://weet-homepage-exq27ro4r-weets-projects-6c7745e8.vercel.app`
+
+Production static SHA-256 checks confirmed the live files match local files for:
+
+- `/images/handoff/bsp-farm.webp`
+- `/images/modular/generated/modular-hero.webp`
+- `/images/modular/generated/factory-precision.webp`
+- `/images/modular/generated/transport-install.webp`
+- `/images/modular/generated/flexible-commercial.webp`
+
+## Known Failures / Risks
+
+- GPT-5.5 Pro review may still be blocked by account/workspace quota. A prior attempt in this task thread showed a disabled Pro option with `한도에 도달했습니다. 관리자에게 액세스를 요청하세요`.
+- Modular interior image regeneration was attempted twice through Chrome/ChatGPT i2i, but both attempts stalled at `더욱 자세한 이미지를 생성하고 있습니다`. The existing `interior-comfort.webp` remains; live QA confirms it loads correctly.
+- The new customize modal currently uses one explanatory image per option because a full set of suitable option images already exists at `/images/customize/options/*.webp`. The user's range was 1-3 images, so this satisfies the lower bound while keeping the modal compact.
 
 ## Exact Review Questions
 
-1. Is there any `MUST_FIX` regression in header CTA placement, accessible names, or responsive layout?
-2. Is the order configurator change safe after removing the mobile bottom drawer, especially with inline options plus fixed bottom quote bar?
-3. Are the denser option cards still accessible and not too cramped?
-4. Does the admin `주문 구성 관리` redesign introduce any data-management bug, tab interaction bug, or admin workflow regression?
-5. Does the manual controlled tablist need any concrete keyboard/a11y fix before shipping, or is the current click/ARIA behavior acceptable for this admin screen?
-6. Are the tests/visual QA sufficient for this change, or is there a concrete missing test that should be `MUST_FIX` before shipping?
+Please review for concrete `MUST_FIX` issues only:
+
+1. Is the customize option info modal implementation likely to regress accessibility, responsiveness, or data-driven option behavior?
+2. Is using one existing explanatory image per fallback option acceptable for the user's "1-3 images" requirement, given the images now load in the modal and the copy was expanded?
+3. Are the modular image path changes safe, including keeping `interior-comfort.webp` after the two failed regeneration attempts?
+4. Is the `turbopack.root = process.cwd()` config change safe for this repo, or could it break deployment/local dev behavior?
+5. Any concrete blocking issue visible from the code excerpts, validation output, or QA evidence above?
