@@ -2,7 +2,7 @@ import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { formatWon } from '@/lib/customize/priceCalculator';
 import type { EstimateBreakdown } from '@/lib/customize/types';
-import { COPY, STEPS, type ConfigStep } from '../lib/constants';
+import { STEPS, type ConfigStep, type CustomizeUiCopy } from '../lib/constants';
 import { nextStepCta } from '../lib/helpers';
 
 // 데스크톱 우측 레일 하단 고정 요약: 가격 분해 + 단계 이동 CTA.
@@ -10,10 +10,12 @@ export function RailSummaryFooter({
   estimate,
   stepIndex,
   goToStep,
+  copy,
 }: {
   estimate: EstimateBreakdown | null;
   stepIndex: number;
   goToStep: (step: ConfigStep) => void;
+  copy: CustomizeUiCopy;
 }) {
   const prevStep = stepIndex > 0 ? STEPS[stepIndex - 1] : null;
   const nextStep = stepIndex < STEPS.length - 1 ? STEPS[stepIndex + 1] : null;
@@ -24,17 +26,17 @@ export function RailSummaryFooter({
       {estimate && (
         <dl className="mb-3 space-y-1 text-xs">
           <div className="flex items-center justify-between gap-3">
-            <dt className="font-semibold text-customize-driftwood">{COPY.basePrice}</dt>
+            <dt className="font-semibold text-customize-driftwood">{copy.basePrice}</dt>
             <dd className="font-bold text-weet-ink">{formatWon(estimate.model.basePrice)}</dd>
           </div>
           <div className="flex items-center justify-between gap-3">
-            <dt className="font-semibold text-customize-driftwood">{COPY.optionSubtotal}</dt>
+            <dt className="font-semibold text-customize-driftwood">{copy.optionSubtotal}</dt>
             <dd className="font-bold text-weet-ink">{estimate.optionTotal > 0 ? `+${formatWon(estimate.optionTotal)}` : formatWon(0)}</dd>
           </div>
           <div className="flex items-center justify-between gap-3 border-t border-weet-line pt-1.5">
             <dt className="flex items-center gap-1.5 text-sm font-black text-weet-ink">
               <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-weet-forest" />
-              {COPY.estimatedAmount}
+              {copy.estimatedAmount}
             </dt>
             <dd className="text-[15px] font-extrabold text-weet-ink" data-testid="desktop-estimated-total" aria-live="polite" aria-atomic="true">
               {formatWon(estimate.estimatedTotal)}
@@ -44,17 +46,17 @@ export function RailSummaryFooter({
             <div className="flex items-center justify-between gap-3">
               <dt className="flex items-center gap-1.5 font-semibold text-weet-gold-deep">
                 <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-weet-gold" />
-                {COPY.consultNeeded} 항목
+                {copy.consultItemsLabel}
               </dt>
-              <dd className="font-bold text-weet-gold-deep">{estimate.consultOptionCount}개 · 견적 별도</dd>
+              <dd className="font-bold text-weet-gold-deep">{copy.quoteConsultItems(estimate.consultOptionCount)}</dd>
             </div>
           )}
         </dl>
       )}
       <p className="mb-3 text-[11px] leading-relaxed text-weet-muted">
-        {COPY.transportNote} ·{' '}
+        {copy.transportNote} ·{' '}
         <a href="/support#cost" target="_blank" rel="noopener noreferrer" className="font-bold text-weet-forest underline-offset-2 hover:underline">
-          별도 비용 안내
+          {copy.costInfoLink}
         </a>
       </p>
       <div className="flex items-center gap-2">
@@ -62,12 +64,12 @@ export function RailSummaryFooter({
           <Button
             variant="outline"
             data-testid="customize-rail-prev"
-            aria-label={`이전 단계: ${prevStep.label}`}
+            aria-label={copy.prevAria(copy.stepLabels[prevStep.id])}
             className="h-11 shrink-0 border-weet-line-2 bg-weet-surface px-3 text-weet-ink"
             onClick={() => goToStep(prevStep.id)}
           >
             <ArrowLeft className="h-4 w-4" />
-            이전
+            {copy.prevWord}
           </Button>
         )}
         {nextStep && (
@@ -76,7 +78,7 @@ export function RailSummaryFooter({
             className="h-11 flex-1 bg-weet-ink text-weet-paper hover:bg-weet-ink-deep"
             onClick={() => goToStep(nextStep.id)}
           >
-            {nextStepCta(currentStep.id)}
+            {nextStepCta(currentStep.id, copy)}
             <ArrowRight className="h-4 w-4" />
           </Button>
         )}
@@ -88,10 +90,10 @@ export function RailSummaryFooter({
           onClick={() => goToStep('review')}
           className="mt-2 w-full rounded-md px-2 py-1.5 text-center text-xs font-bold text-weet-forest underline-offset-2 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep"
         >
-          구성 검토·상담 요청으로 이동
+          {copy.skipToReview}
         </button>
       )}
-      <p className="mt-2 text-center text-[11px] text-weet-muted">{COPY.notPayment}</p>
+      <p className="mt-2 text-center text-[11px] text-weet-muted">{copy.notPayment}</p>
     </div>
   );
 }

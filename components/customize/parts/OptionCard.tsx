@@ -1,7 +1,9 @@
 import { Check, Info } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import type { Language } from '@/contexts/LanguageContext';
 import type { CustomizeOption } from '@/lib/customize/types';
-import { OPTION_SWATCH, SWATCH_CATEGORY_KEYS } from '../lib/constants';
+import { pickText } from '@/lib/customize/i18n';
+import { OPTION_SWATCH, SWATCH_CATEGORY_KEYS, type CustomizeUiCopy } from '../lib/constants';
 import { hasOptionInfo, optionPriceDisplay } from '../lib/helpers';
 
 // 시안(B안) 가격색: 상담필요 #a16207 / 유료 #18181b / 기본포함 #9ca3af.
@@ -16,11 +18,15 @@ export function OptionCard({
   selected,
   onToggle,
   onInfo,
+  copy,
+  language,
 }: {
   option: CustomizeOption;
   selected: boolean;
   onToggle: () => void;
   onInfo: () => void;
+  copy: CustomizeUiCopy;
+  language: Language;
 }) {
   const optionKey = option.key || option.id;
   const swatch = SWATCH_CATEGORY_KEYS.has(option.categoryKey)
@@ -68,9 +74,9 @@ export function OptionCard({
 
         {/* 이름 13px/700 + 가격 11px/800 */}
         <span className="min-w-0 flex-1">
-          <span className="block truncate text-[13px] font-bold leading-tight text-customize-ink">{option.nameKo}</span>
+          <span className="block truncate text-[13px] font-bold leading-tight text-customize-ink">{pickText(option.nameKo, option.nameEn, language)}</span>
           <span className={cn('mt-0.5 block text-[11px] font-extrabold leading-tight', PRICE_TONE[option.priceType])}>
-            {optionPriceDisplay(option)}
+            {optionPriceDisplay(option, copy)}
           </span>
         </span>
       </button>
@@ -84,7 +90,7 @@ export function OptionCard({
             event.stopPropagation();
             onInfo();
           }}
-          aria-label="옵션 상세 보기"
+          aria-label={copy.optionDetailAria}
           className="mr-1.5 flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-md text-customize-slate transition-colors hover:bg-customize-dune hover:text-customize-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep"
         >
           <Info className="h-3.5 w-3.5" />

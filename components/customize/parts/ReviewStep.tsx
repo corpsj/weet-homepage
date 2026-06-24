@@ -12,15 +12,17 @@ import {
   PURCHASE_TIMELINES,
 } from '@/lib/customize/config';
 import { formatModelStartPrice, formatWon } from '@/lib/customize/priceCalculator';
+import type { Language } from '@/contexts/LanguageContext';
 import type { CustomizeOption, EstimateBreakdown } from '@/lib/customize/types';
+import { pickText } from '@/lib/customize/i18n';
 import {
-  COPY,
   REQUIRED_FIELDS,
   STEPS,
   inputClass,
   selectClass,
   type ConfigStep,
   type ConsultationDraft,
+  type CustomizeUiCopy,
   type FieldRenderArgs,
   type OptionStep,
   type RequiredFieldName,
@@ -40,6 +42,8 @@ export function ReviewStep({
   onEditAfterSubmit,
   onSubmit,
   onSaveQuote,
+  copy,
+  language,
 }: {
   estimate: EstimateBreakdown;
   selectedOptions: CustomizeOption[];
@@ -51,6 +55,8 @@ export function ReviewStep({
   onEditAfterSubmit: () => void;
   onSubmit: () => void;
   onSaveQuote: () => void;
+  copy: CustomizeUiCopy;
+  language: Language;
 }) {
   const consultOptions = selectedOptions.filter((option) => option.priceType === 'consult');
   const optionSteps = STEPS.filter((step): step is (typeof STEPS)[number] & { id: OptionStep } => step.id !== 'space' && step.id !== 'review');
@@ -60,40 +66,40 @@ export function ReviewStep({
     const url = window.location.href;
     try {
       await navigator.clipboard.writeText(url);
-      toast.success('구성 링크를 복사했습니다.');
+      toast.success(copy.copyLinkSuccess);
     } catch {
-      toast.error('링크 복사에 실패했습니다. 주소창의 URL을 직접 복사해주세요.');
+      toast.error(copy.copyLinkFail);
     }
   };
 
   return (
     <div className="mx-auto w-full max-w-[1240px] px-4 pb-[max(4rem,env(safe-area-inset-bottom))] pt-6 md:px-8" data-testid="customize-review">
       <header className="mb-5">
-        <h1 className="text-2xl font-black text-weet-ink md:text-3xl">구성 검토 및 상담 요청</h1>
+        <h1 className="text-2xl font-black text-weet-ink md:text-3xl">{copy.reviewTitle}</h1>
         <p className="mt-1 text-sm leading-relaxed text-weet-sub">
-          선택하신 구성을 확인한 뒤 상담을 요청하세요. {COPY.notPayment} {COPY.finalQuote}
+          {copy.reviewIntro} {copy.notPayment} {copy.finalQuote}
         </p>
       </header>
 
       <div className="grid gap-5 lg:grid-cols-[1.15fr_1fr] lg:items-start">
-        <section aria-label="선택 구성 요약" className="space-y-4">
+        <section aria-label={copy.reviewSummaryAria} className="space-y-4">
           <div className="rounded-lg border border-weet-line bg-weet-surface p-4 md:p-5">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="text-[11px] font-bold text-weet-muted">선택 모델</p>
-                <h2 className="text-lg font-black text-weet-ink">{estimate.model.nameKo}</h2>
+                <p className="text-[11px] font-bold text-weet-muted">{copy.selectedModel}</p>
+                <h2 className="text-lg font-black text-weet-ink">{pickText(estimate.model.nameKo, estimate.model.nameEn, language)}</h2>
                 <p className="text-xs text-weet-sub">
                   {estimate.model.widthM}m × {estimate.model.lengthM}m · {estimate.model.areaSqm}m²
                 </p>
                 <p className="mt-1 text-xs font-bold text-weet-gold-deep">
-                  {COPY.basePrice} {formatModelStartPrice(estimate.model.basePrice)}
+                  {copy.basePrice} {formatModelStartPrice(estimate.model.basePrice)}
                 </p>
               </div>
-              <ReviewEditButton label="모델 수정" onClick={() => goToStep('space')} />
+              <ReviewEditButton label={copy.editModel} onClick={() => goToStep('space')} copy={copy} />
             </div>
             <details className="group mt-3 rounded-lg border border-weet-line bg-weet-paper open:bg-weet-surface">
               <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-2 px-3 py-2 text-xs font-bold text-weet-sub [&::-webkit-details-marker]:hidden">
-                평면 구성 보기
+                {copy.planView}
                 <ChevronDown className="h-4 w-4 text-weet-muted transition-transform group-open:rotate-180" />
               </summary>
               <div className="border-t border-weet-line p-2">
@@ -101,6 +107,8 @@ export function ReviewStep({
                   model={estimate.model}
                   selectedOptions={selectedOptions}
                   testId="review-floorplan-canvas"
+                  copy={copy}
+                  language={language}
                 />
               </div>
             </details>
@@ -111,27 +119,27 @@ export function ReviewStep({
             return (
               <div key={step.id} className="rounded-lg border border-weet-line bg-weet-surface p-4 md:p-5">
                 <div className="flex items-center justify-between gap-3">
-                  <h3 className="text-sm font-black text-weet-ink">{step.label}</h3>
-                  <ReviewEditButton label={`${step.label} 수정`} onClick={() => goToStep(step.id)} />
+                  <h3 className="text-sm font-black text-weet-ink">{copy.stepLabels[step.id]}</h3>
+                  <ReviewEditButton label={copy.editStep(copy.stepLabels[step.id])} onClick={() => goToStep(step.id)} copy={copy} />
                 </div>
                 {stepOptions.length > 0 ? (
                   <ul className="mt-2 divide-y divide-weet-line">
                     {stepOptions.map((option) => (
                       <li key={option.id} className="flex items-center justify-between gap-3 py-2 text-sm">
-                        <span className="min-w-0 truncate font-semibold text-weet-sub">{option.nameKo}</span>
+                        <span className="min-w-0 truncate font-semibold text-weet-sub">{pickText(option.nameKo, option.nameEn, language)}</span>
                         <span
                           className={cn(
                             'shrink-0 text-xs font-bold',
                             option.priceType === 'consult' ? 'text-weet-gold-deep' : option.priceType === 'fixed' ? 'text-weet-ink' : 'text-weet-muted'
                           )}
                         >
-                          {optionPriceDisplay(option)}
+                          {optionPriceDisplay(option, copy)}
                         </span>
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="mt-2 text-xs text-weet-muted">선택한 옵션이 없습니다. 비워두셔도 상담에서 함께 정할 수 있습니다.</p>
+                  <p className="mt-2 text-xs text-weet-muted">{copy.noStepOptions}</p>
                 )}
               </div>
             );
@@ -139,28 +147,28 @@ export function ReviewStep({
 
           {consultOptions.length > 0 && (
             <div className="rounded-lg border border-weet-gold/40 bg-weet-gold/10 p-4">
-              <p className="text-sm font-black text-weet-gold-deep">{COPY.consultNeeded} 항목 {consultOptions.length}개</p>
-              <p className="mt-1 text-xs leading-relaxed text-weet-gold-deep/90">{COPY.consultExplain} 선택한 구성은 상담 요청서에 함께 전달됩니다.</p>
+              <p className="text-sm font-black text-weet-gold-deep">{copy.consultItemsTitle(consultOptions.length)}</p>
+              <p className="mt-1 text-xs leading-relaxed text-weet-gold-deep/90">{copy.consultExplain} {copy.consultItemsBody}</p>
             </div>
           )}
         </section>
 
-        <section aria-label="가격 요약 및 상담 요청" className="space-y-4">
+        <section aria-label={copy.reviewPriceAria} className="space-y-4">
           <div className="rounded-lg border border-weet-line bg-weet-surface p-4 md:p-5">
-            <h2 className="text-sm font-black text-weet-ink">가격 요약</h2>
+            <h2 className="text-sm font-black text-weet-ink">{copy.priceSummaryTitle}</h2>
             <dl className="mt-3 space-y-1.5 text-sm">
               <div className="flex items-center justify-between gap-3">
-                <dt className="font-semibold text-weet-sub">{COPY.basePrice}</dt>
+                <dt className="font-semibold text-weet-sub">{copy.basePrice}</dt>
                 <dd className="font-bold text-weet-ink">{formatWon(estimate.model.basePrice)}</dd>
               </div>
               <div className="flex items-center justify-between gap-3">
-                <dt className="font-semibold text-weet-sub">{COPY.optionSubtotal}</dt>
+                <dt className="font-semibold text-weet-sub">{copy.optionSubtotal}</dt>
                 <dd className="font-bold text-weet-ink">{estimate.optionTotal > 0 ? `+${formatWon(estimate.optionTotal)}` : formatWon(0)}</dd>
               </div>
               <div className="flex items-center justify-between gap-3 border-t border-weet-line pt-2">
                 <dt className="flex items-center gap-1.5 text-base font-black text-weet-ink">
                   <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-weet-forest" />
-                  {COPY.estimatedAmount}
+                  {copy.estimatedAmount}
                 </dt>
                 <dd className="text-xl font-black text-weet-ink" data-testid="review-estimated-total">{formatWon(estimate.estimatedTotal)}</dd>
               </div>
@@ -168,43 +176,43 @@ export function ReviewStep({
                 <div className="flex items-center justify-between gap-3">
                   <dt className="flex items-center gap-1.5 font-semibold text-weet-gold-deep">
                     <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-weet-gold" />
-                    {COPY.consultNeeded} 항목
+                    {copy.consultItemsLabel}
                   </dt>
-                  <dd className="font-bold text-weet-gold-deep">{estimate.consultOptionCount}개 · 견적 별도</dd>
+                  <dd className="font-bold text-weet-gold-deep">{copy.quoteConsultItems(estimate.consultOptionCount)}</dd>
                 </div>
               )}
             </dl>
             <p className="mt-3 text-[11px] leading-relaxed text-weet-muted">
-              {COPY.transportNote} ·{' '}
+              {copy.transportNote} ·{' '}
               <a href="/support#cost" target="_blank" rel="noopener noreferrer" className="font-bold text-weet-forest underline-offset-2 hover:underline">
-                별도 비용 안내
+                {copy.costInfoLink}
               </a>
             </p>
             <div className="mt-3 grid gap-2 sm:grid-cols-2">
               <Button variant="outline" className="h-11 w-full border-weet-line-2 bg-weet-surface text-weet-ink" onClick={onSaveQuote}>
                 <Download className="h-4 w-4" />
-                견적 요약 저장
+                {copy.saveQuote}
               </Button>
               <Button variant="outline" className="h-11 w-full border-weet-line-2 bg-weet-surface text-weet-ink" onClick={handleCopyLink}>
                 <Link2 className="h-4 w-4" />
-                구성 링크 복사
+                {copy.copyLink}
               </Button>
             </div>
           </div>
 
           {submitted ? (
             <div className="rounded-lg border border-weet-forest/30 bg-weet-forest/10 p-5" role="status" aria-live="polite">
-              <p className="text-lg font-black text-weet-forest">상담 요청이 접수되었습니다</p>
+              <p className="text-lg font-black text-weet-forest">{copy.submittedTitle}</p>
               <p className="mt-1.5 text-sm leading-relaxed text-weet-forest/90">
-                담당자가 확인 후 입력하신 연락처로 연락드립니다. {COPY.finalQuote}
+                {copy.submittedBody} {copy.finalQuote}
               </p>
               <dl className="mt-3 rounded-md border border-weet-forest/20 bg-weet-surface/70 p-3 text-sm">
                 <div className="flex items-center justify-between gap-3">
-                  <dt className="font-semibold text-weet-sub">접수 모델</dt>
-                  <dd className="font-bold text-weet-ink">{estimate.model.nameKo}</dd>
+                  <dt className="font-semibold text-weet-sub">{copy.receivedModel}</dt>
+                  <dd className="font-bold text-weet-ink">{pickText(estimate.model.nameKo, estimate.model.nameEn, language)}</dd>
                 </div>
                 <div className="mt-1 flex items-center justify-between gap-3">
-                  <dt className="font-semibold text-weet-sub">{COPY.estimatedAmount}</dt>
+                  <dt className="font-semibold text-weet-sub">{copy.estimatedAmount}</dt>
                   <dd className="font-bold text-weet-ink">{formatWon(estimate.estimatedTotal)}</dd>
                 </div>
               </dl>
@@ -213,11 +221,11 @@ export function ReviewStep({
                 className="mt-4 h-11 w-full border-weet-line-2 bg-weet-surface text-weet-ink"
                 onClick={onEditAfterSubmit}
               >
-                새 상담 요청 작성
+                {copy.writeNewRequest}
               </Button>
             </div>
           ) : (
-            <ConsultationForm form={form} setForm={setForm} isPending={isPending} onSubmit={onSubmit} />
+            <ConsultationForm form={form} setForm={setForm} isPending={isPending} onSubmit={onSubmit} copy={copy} />
           )}
         </section>
       </div>
@@ -225,7 +233,7 @@ export function ReviewStep({
   );
 }
 
-function ReviewEditButton({ label, onClick }: { label: string; onClick: () => void }) {
+function ReviewEditButton({ label, onClick, copy }: { label: string; onClick: () => void; copy: CustomizeUiCopy }) {
   return (
     <button
       type="button"
@@ -234,7 +242,7 @@ function ReviewEditButton({ label, onClick }: { label: string; onClick: () => vo
       className="inline-flex min-h-[36px] shrink-0 items-center gap-1 rounded-md border border-weet-line bg-weet-surface px-2.5 py-1 text-xs font-bold text-weet-sub transition-colors hover:border-weet-muted hover:text-weet-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep"
     >
       <Pencil className="h-3 w-3" />
-      수정
+      {copy.editWord}
     </button>
   );
 }
@@ -244,11 +252,13 @@ function ConsultationForm({
   setForm,
   isPending,
   onSubmit,
+  copy,
 }: {
   form: ConsultationDraft;
   setForm: Dispatch<SetStateAction<ConsultationDraft>>;
   isPending: boolean;
   onSubmit: () => void;
+  copy: CustomizeUiCopy;
 }) {
   const [showOptional, setShowOptional] = useState(false);
   // 필수 필드 검증 결과 + UI 피드백(에러 표시·포커스 이동)은 ReviewStep이 단독으로 담당한다.
@@ -300,13 +310,13 @@ function ConsultationForm({
         handleSubmit();
       }}
     >
-      <h2 className="text-lg font-black text-weet-ink">상담 요청 정보</h2>
+      <h2 className="text-lg font-black text-weet-ink">{copy.formTitle}</h2>
       <p className="mt-1 text-xs leading-relaxed text-weet-muted">
-        구성 확인과 연락을 위한 최소 정보만 받습니다. {COPY.privacyUse}
+        {copy.formIntro} {copy.privacyUse}
       </p>
 
       <div className="mt-4 grid gap-4">
-        <Field label="이름" required fieldId="consultation-name" error={fieldErrors.customerName ? '이름을 입력해주세요.' : undefined}>
+        <Field label={copy.fieldName} required fieldId="consultation-name" error={fieldErrors.customerName ? copy.errName : undefined} copy={copy}>
           {({ id, describedBy, invalid }) => (
             <Input
               ref={(node) => { fieldRefs.current.customerName = node; }}
@@ -322,7 +332,7 @@ function ConsultationForm({
             />
           )}
         </Field>
-        <Field label="연락처" required fieldId="consultation-phone" error={fieldErrors.phone ? '연락처를 입력해주세요.' : undefined}>
+        <Field label={copy.fieldPhone} required fieldId="consultation-phone" error={fieldErrors.phone ? copy.errPhone : undefined} copy={copy}>
           {({ id, describedBy, invalid }) => (
             <Input
               ref={(node) => { fieldRefs.current.phone = node; }}
@@ -340,14 +350,14 @@ function ConsultationForm({
             />
           )}
         </Field>
-        <Field label="지역" required fieldId="consultation-region" error={fieldErrors.region ? '지역을 입력해주세요.' : undefined}>
+        <Field label={copy.fieldRegion} required fieldId="consultation-region" error={fieldErrors.region ? copy.errRegion : undefined} copy={copy}>
           {({ id, describedBy, invalid }) => (
             <Input
               ref={(node) => { fieldRefs.current.region = node; }}
               id={id}
               data-testid="consultation-region"
               className={inputClass}
-              placeholder="경기도 양평군"
+              placeholder={copy.fieldRegionPlaceholder}
               required
               aria-invalid={invalid}
               aria-describedby={describedBy}
@@ -365,35 +375,35 @@ function ConsultationForm({
         className="mt-5 flex min-h-[44px] w-full items-center justify-between gap-2 rounded-lg border border-weet-line bg-weet-paper px-3 py-2 text-left text-sm font-bold text-weet-sub transition-colors hover:border-weet-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep"
       >
         <span>
-          더 정확한 견적을 위한 선택 정보
-          <span className="mt-0.5 block text-[11px] font-semibold text-weet-muted">아직 정하지 못한 항목은 비워두셔도 됩니다.</span>
+          {copy.optionalToggle}
+          <span className="mt-0.5 block text-[11px] font-semibold text-weet-muted">{copy.optionalHint}</span>
         </span>
         <ChevronDown className={cn('h-4 w-4 shrink-0 text-weet-muted transition-transform', showOptional && 'rotate-180')} />
       </button>
 
       {showOptional && (
         <div className="mt-4 grid gap-4">
-          <Field label="예상 구매 시기" fieldId="consultation-timeline" helper="생산·설치 일정 제안에만 참고합니다.">
+          <Field label={copy.fieldTimeline} fieldId="consultation-timeline" helper={copy.fieldTimelineHelp} copy={copy}>
             {({ id, describedBy }) => (
-              <Select id={id} ariaDescribedBy={describedBy} value={form.purchaseTimeline} onChange={(value) => updateField('purchaseTimeline', value)} options={PURCHASE_TIMELINES} />
+              <Select id={id} ariaDescribedBy={describedBy} value={form.purchaseTimeline} onChange={(value) => updateField('purchaseTimeline', value)} options={PURCHASE_TIMELINES} copy={copy} />
             )}
           </Field>
-          <Field label="설치할 장소 지목" fieldId="consultation-landtype" helper="대지, 전·답, 임야 등 설치 조건 검토에 참고합니다.">
+          <Field label={copy.fieldLandType} fieldId="consultation-landtype" helper={copy.fieldLandTypeHelp} copy={copy}>
             {({ id, describedBy }) => (
-              <Select id={id} ariaDescribedBy={describedBy} value={form.landType} onChange={(value) => updateField('landType', value)} options={LAND_TYPES} />
+              <Select id={id} ariaDescribedBy={describedBy} value={form.landType} onChange={(value) => updateField('landType', value)} options={LAND_TYPES} copy={copy} />
             )}
           </Field>
-          <Field label="구매 예산" fieldId="consultation-budget" helper="가능한 사양 조합을 빠르게 제안하기 위한 참고값입니다.">
+          <Field label={copy.fieldBudget} fieldId="consultation-budget" helper={copy.fieldBudgetHelp} copy={copy}>
             {({ id, describedBy }) => (
-              <Select id={id} ariaDescribedBy={describedBy} value={form.budgetRange} onChange={(value) => updateField('budgetRange', value)} options={BUDGET_RANGES} />
+              <Select id={id} ariaDescribedBy={describedBy} value={form.budgetRange} onChange={(value) => updateField('budgetRange', value)} options={BUDGET_RANGES} copy={copy} />
             )}
           </Field>
-          <Field label="설치 주소" fieldId="consultation-address" helper="정확한 번지 전이라도 읍·면·동 수준이면 괜찮습니다.">
+          <Field label={copy.fieldAddress} fieldId="consultation-address" helper={copy.fieldAddressHelp} copy={copy}>
             {({ id, describedBy }) => (
               <Input id={id} aria-describedby={describedBy} className={inputClass} autoComplete="address-level2" value={form.installAddress} onChange={(event) => updateField('installAddress', event.target.value)} />
             )}
           </Field>
-          <Field label="추가 메모" fieldId="consultation-memo" helper="사용 목적, 예상 인원, 필요한 옵션을 자유롭게 적어주세요.">
+          <Field label={copy.fieldMemo} fieldId="consultation-memo" helper={copy.fieldMemoHelp} copy={copy}>
             {({ id, describedBy }) => (
               <Textarea id={id} aria-describedby={describedBy} className="min-h-24 rounded-lg border-gray-300 bg-weet-surface text-sm focus-visible:ring-weet-gold-deep" value={form.memo} onChange={(event) => updateField('memo', event.target.value)} />
             )}
@@ -403,12 +413,12 @@ function ConsultationForm({
 
       <div className="mt-5 rounded bg-weet-paper-alt/60 p-3 text-xs leading-relaxed text-weet-sub">
         <Info className="mr-1 inline-block h-3.5 w-3.5 align-[-2px] text-weet-muted" />
-        {COPY.notPayment} {COPY.finalQuote} 운반/설치는 별도이며 현장 조건에 따라 달라질 수 있습니다.
+        {copy.notPayment} {copy.finalQuote} {copy.formDisclaimer}
       </div>
 
       <Button type="submit" data-testid="consultation-submit" className="mt-4 h-12 w-full bg-weet-ink text-weet-paper hover:bg-weet-ink-deep" disabled={isPending}>
         {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-        상담·견적 요청하기
+        {copy.ctaRequest}
       </Button>
     </form>
   );
@@ -421,6 +431,7 @@ function Field({
   error,
   fieldId,
   className,
+  copy,
   children,
 }: {
   label: string;
@@ -429,6 +440,7 @@ function Field({
   error?: string;
   fieldId: string;
   className?: string;
+  copy: CustomizeUiCopy;
   children: (args: FieldRenderArgs) => ReactNode;
 }) {
   const helperId = helper ? `${fieldId}-helper` : undefined;
@@ -444,7 +456,7 @@ function Field({
           'rounded px-1.5 py-0.5 text-[10px] font-black',
           required ? 'bg-weet-ink text-weet-paper' : 'bg-weet-paper-alt text-weet-gold-deep'
         )}>
-          {required ? '필수' : '선택'}
+          {required ? copy.requiredBadge : copy.optionalBadge}
         </span>
       </Label>
       {children({ id: fieldId, describedBy, invalid: Boolean(error) })}
@@ -468,12 +480,14 @@ function Select({
   value,
   onChange,
   options,
+  copy,
 }: {
   id?: string;
   ariaDescribedBy?: string;
   value: string;
   onChange: (value: string) => void;
   options: readonly string[];
+  copy: CustomizeUiCopy;
 }) {
   return (
     <div className="relative">
@@ -484,7 +498,7 @@ function Select({
         onChange={(event) => onChange(event.target.value)}
         className={selectClass}
       >
-        <option value="">선택 안 함</option>
+        <option value="">{copy.selectNone}</option>
         {options.map((option) => (
           <option key={option} value={option}>
             {option}

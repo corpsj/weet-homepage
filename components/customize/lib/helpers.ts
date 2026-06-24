@@ -3,30 +3,34 @@ import {
   getDefaultSelections,
   optionsForModel,
 } from '@/lib/customize/priceCalculator';
+import type { Language } from '@/contexts/LanguageContext';
 import type {
   CustomizeCatalog,
   CustomizeOption,
   EstimateBreakdown,
   SelectedOptions,
 } from '@/lib/customize/types';
+import { pickText } from '@/lib/customize/i18n';
 import {
   COPY,
   FALLBACK_CATALOG,
+  UI_COPY,
   type ConfigStep,
+  type CustomizeUiCopy,
 } from './constants';
 
-export function nextStepCta(step: ConfigStep) {
-  if (step === 'space') return '다음: 공간 구성';
-  if (step === 'included') return '다음: 무드 & 소재';
-  if (step === 'mood') return '다음: 스마트 테크';
-  if (step === 'smart') return '구성 검토하기';
-  return '상담·견적 요청하기';
+export function nextStepCta(step: ConfigStep, copy: CustomizeUiCopy = COPY) {
+  if (step === 'space') return copy.ctaNextIncluded;
+  if (step === 'included') return copy.ctaNextMood;
+  if (step === 'mood') return copy.ctaNextSmart;
+  if (step === 'smart') return copy.ctaReview;
+  return copy.ctaRequest;
 }
 
 // 옵션 카드/요약에 노출하는 가격 라벨은 '기본 포함 / +₩x / 상담 필요' 세 가지로 통일한다.
-export function optionPriceDisplay(option: Pick<CustomizeOption, 'priceType' | 'price'>) {
-  if (option.priceType === 'included') return '기본 포함';
-  if (option.priceType === 'consult') return '상담 필요';
+export function optionPriceDisplay(option: Pick<CustomizeOption, 'priceType' | 'price'>, copy: CustomizeUiCopy = COPY) {
+  if (option.priceType === 'included') return copy.optionIncluded;
+  if (option.priceType === 'consult') return copy.optionConsult;
   return `+${formatWon(option.price)}`;
 }
 
@@ -71,10 +75,10 @@ export function buildSelectionsForModelChange(
   return { selections: nextSelections, removedOptions };
 }
 
-export function stepStatusText(step: ConfigStep, count: number) {
-  if (step === 'space') return '선택 완료';
-  if (step === 'review') return '최종 확인';
-  return `${count}개 선택`;
+export function stepStatusText(step: ConfigStep, count: number, copy: CustomizeUiCopy = COPY) {
+  if (step === 'space') return copy.stepStatusDone;
+  if (step === 'review') return copy.stepStatusFinal;
+  return copy.stepStatusCount(count);
 }
 
 export function hasOptionInfo(option: CustomizeOption) {
@@ -82,19 +86,24 @@ export function hasOptionInfo(option: CustomizeOption) {
   return Boolean(option.detailDescriptionKo || option.shortDescriptionKo || option.imagePath || FALLBACK_CATALOG[optionKey] || FALLBACK_CATALOG[option.id]);
 }
 
-export function buildQuoteHtml(estimate: EstimateBreakdown, selectedOptions: CustomizeOption[]) {
+export function buildQuoteHtml(
+  estimate: EstimateBreakdown,
+  selectedOptions: CustomizeOption[],
+  language: Language = 'KO'
+) {
+  const copy = UI_COPY[language];
   const optionRows = selectedOptions
-    .map((option) => `<tr><td>${escapeHtml(option.nameKo)}</td><td>${escapeHtml(optionPriceDisplay(option))}</td></tr>`)
+    .map((option) => `<tr><td>${escapeHtml(pickText(option.nameKo, option.nameEn, language))}</td><td>${escapeHtml(optionPriceDisplay(option, copy))}</td></tr>`)
     .join('');
   const consultRow = estimate.consultOptionCount > 0
-    ? `<tr><td>${escapeHtml(COPY.consultNeeded)} 항목</td><td>${estimate.consultOptionCount}개 · 견적 별도</td></tr>`
+    ? `<tr><td>${escapeHtml(copy.consultItemsLabel)}</td><td>${escapeHtml(copy.quoteConsultItems(estimate.consultOptionCount))}</td></tr>`
     : '';
 
   return `<!doctype html>
-<html lang="ko">
+<html lang="${copy.quoteDocLang}">
 <head>
   <meta charset="utf-8" />
-  <title>위트 견적 요약</title>
+  <title>${escapeHtml(copy.quoteDocTitle)}</title>
   <style>
     @page { size: A4 landscape; margin: 18mm; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif; color: #2f3432; background: #f8f4ec; }
@@ -107,17 +116,17 @@ export function buildQuoteHtml(estimate: EstimateBreakdown, selectedOptions: Cus
   </style>
 </head>
 <body>
-  <h1>위트 이동식주택 견적 요약</h1>
-  <p>상담 요청용 예상 금액 · ${escapeHtml(COPY.transportNote)}</p>
+  <h1>${escapeHtml(copy.quoteSummaryTitle)}</h1>
+  <p>${escapeHtml(copy.quoteSubheadPrefix)}${escapeHtml(copy.transportNote)}</p>
   <table>
-    <tr><th>항목</th><th>가격</th></tr>
-    <tr><td>${escapeHtml(estimate.model.nameKo)} (${escapeHtml(COPY.basePrice)})</td><td>${escapeHtml(formatWon(estimate.model.basePrice))}</td></tr>
+    <tr><th>${escapeHtml(copy.quoteColItem)}</th><th>${escapeHtml(copy.quoteColPrice)}</th></tr>
+    <tr><td>${escapeHtml(pickText(estimate.model.nameKo, estimate.model.nameEn, language))} (${escapeHtml(copy.basePrice)})</td><td>${escapeHtml(formatWon(estimate.model.basePrice))}</td></tr>
     ${optionRows}
-    <tr><td>${escapeHtml(COPY.optionSubtotal)}</td><td>${escapeHtml(estimate.optionTotal > 0 ? `+${formatWon(estimate.optionTotal)}` : formatWon(0))}</td></tr>
+    <tr><td>${escapeHtml(copy.optionSubtotal)}</td><td>${escapeHtml(estimate.optionTotal > 0 ? `+${formatWon(estimate.optionTotal)}` : formatWon(0))}</td></tr>
     ${consultRow}
   </table>
-  <div class="total">${escapeHtml(COPY.estimatedAmount)} ${escapeHtml(formatWon(estimate.estimatedTotal))}</div>
-  <p class="note">${escapeHtml(COPY.notPayment)} ${escapeHtml(COPY.finalQuote)}</p>
+  <div class="total">${escapeHtml(copy.estimatedAmount)} ${escapeHtml(formatWon(estimate.estimatedTotal))}</div>
+  <p class="note">${escapeHtml(copy.notPayment)} ${escapeHtml(copy.finalQuote)}</p>
 </body>
 </html>`;
 }

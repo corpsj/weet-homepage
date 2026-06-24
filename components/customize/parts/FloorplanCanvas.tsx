@@ -2,7 +2,10 @@
 
 import { motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import type { Language } from '@/contexts/LanguageContext';
 import type { CustomizeModel, CustomizeOption } from '@/lib/customize/types';
+import { pickText } from '@/lib/customize/i18n';
+import { UI_COPY, type CustomizeUiCopy } from '../lib/constants';
 
 // 시안: design_handoff_weet/Weet 커스터마이즈 (B안).dc.html 의 인라인 SVG(viewBox 0 0 1000 460)를 그대로 포팅.
 // 우측 벽은 x=830에 고정하고 좌측 벽만 확장한다. 동일 스케일(1m=84px) → 3×6:{x:326,w:504}, 3×9:{x:74,w:756}.
@@ -60,11 +63,15 @@ export function FloorplanCanvas({
   selectedOptions,
   testId,
   className,
+  copy = UI_COPY.KO,
+  language = 'KO',
 }: {
   model: CustomizeModel;
   selectedOptions: CustomizeOption[];
   testId: string;
   className?: string;
+  copy?: CustomizeUiCopy;
+  language?: Language;
 }) {
   const shouldReduceMotion = useReducedMotion();
   // geomFor 결과를 props에서 직접 산출한다. 모델 변경 시 framer-motion이 현재값 → 목표값을 보간(=tweenPlan).
@@ -80,13 +87,15 @@ export function FloorplanCanvas({
   const utilInk = readableInk(floorColor, '#9a8f7d', '#5f574d'); // 욕실·주방
 
   // 스크린리더용 도면 요약: 모델 치수 + 외장/바닥 선택 + 스마트락 여부.
-  const exteriorName = selectedOptions.find((option) => option.categoryKey === 'exterior')?.nameKo;
-  const flooringName = selectedOptions.find((option) => option.categoryKey === 'flooring')?.nameKo;
+  const exteriorOption = selectedOptions.find((option) => option.categoryKey === 'exterior');
+  const flooringOption = selectedOptions.find((option) => option.categoryKey === 'flooring');
+  const exteriorName = exteriorOption ? pickText(exteriorOption.nameKo, exteriorOption.nameEn, language) : undefined;
+  const flooringName = flooringOption ? pickText(flooringOption.nameKo, flooringOption.nameEn, language) : undefined;
   const planLabel = [
-    `${model.nameKo} 평면도, 가로 ${model.widthM}m 세로 ${model.lengthM}m`,
-    exteriorName && `외장 ${exteriorName}`,
-    flooringName && `바닥 ${flooringName}`,
-    doorSmart && '스마트락 현관',
+    copy.planLabel(pickText(model.nameKo, model.nameEn, language), model.widthM, model.lengthM),
+    exteriorName && copy.planExteriorLabel(exteriorName),
+    flooringName && copy.planFlooringLabel(flooringName),
+    doorSmart && copy.planSmartLock,
   ]
     .filter(Boolean)
     .join(', ');
@@ -124,9 +133,9 @@ export function FloorplanCanvas({
       {/* 설비 블록(우측 고정) */}
       <line x1="640" y1="120" x2="640" y2="364" stroke="#cbbfa9" strokeWidth="2" />
       <line x1="640" y1="244" x2="826" y2="244" stroke="#cbbfa9" strokeWidth="2" />
-      <text x="733" y="190" textAnchor="middle" fill={utilInk} fontSize="15">욕실</text>
-      <text x="733" y="312" textAnchor="middle" fill={utilInk} fontSize="15">주방</text>
-      <text x="455" y="248" textAnchor="middle" fill={roomInk} fontSize="17" fontWeight="600">거실 · 침실</text>
+      <text x="733" y="190" textAnchor="middle" fill={utilInk} fontSize="15">{copy.planBath}</text>
+      <text x="733" y="312" textAnchor="middle" fill={utilInk} fontSize="15">{copy.planKitchen}</text>
+      <text x="455" y="248" textAnchor="middle" fill={roomInk} fontSize="17" fontWeight="600">{copy.planLivingBed}</text>
 
       {/* 현관 도어(하단 벽, 고정) + 스마트락 표시 */}
       <rect x="548" y="362" width="56" height="10" fill={floorColor} />

@@ -1,6 +1,6 @@
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { STEPS, type ConfigStep } from '../lib/constants';
+import { STEPS, type ConfigStep, type CustomizeUiCopy } from '../lib/constants';
 import { stepStatusText } from '../lib/helpers';
 
 export function StepperBar({
@@ -8,11 +8,13 @@ export function StepperBar({
   furthestStepIndex,
   setCurrentStep,
   stepCounts,
+  copy,
 }: {
   currentStep: ConfigStep;
   furthestStepIndex: number;
   setCurrentStep: (step: ConfigStep) => void;
   stepCounts: Record<ConfigStep, number>;
+  copy: CustomizeUiCopy;
 }) {
   const stepIndex = STEPS.findIndex((s) => s.id === currentStep);
 
@@ -20,9 +22,9 @@ export function StepperBar({
     <div className="sticky top-14 z-30 border-b border-weet-line bg-weet-surface/95 backdrop-blur md:top-16 lg:h-[72px]">
       <div className="mx-auto max-w-[1800px] px-4 py-2 lg:flex lg:h-full lg:items-center lg:px-10 lg:py-0">
         <p className="mb-1.5 text-[11px] font-bold text-weet-muted lg:hidden">
-          {stepIndex + 1}/{STEPS.length} 단계 · {STEPS[stepIndex].label}
+          {stepIndex + 1}/{STEPS.length} {copy.stepperStepWord} · {copy.stepLabels[STEPS[stepIndex].id]}
         </p>
-        <ol className="flex w-full items-stretch gap-1 overflow-x-auto pb-0.5 lg:gap-2 lg:overflow-visible" aria-label="구성 진행 단계">
+        <ol className="flex w-full items-stretch gap-1 overflow-x-auto pb-0.5 lg:gap-2 lg:overflow-visible" aria-label={copy.stepperProgressAria}>
           {STEPS.map((step, index) => {
             const isCurrent = currentStep === step.id;
             const isComplete = !isCurrent && index < furthestStepIndex;
@@ -34,7 +36,7 @@ export function StepperBar({
                   type="button"
                   data-testid={`customize-step-${step.id}`}
                   aria-current={isCurrent ? 'step' : undefined}
-                  aria-label={`${index + 1}단계 ${step.label} · ${isComplete ? '완료' : isCurrent ? '진행 중' : '대기'}`}
+                  aria-label={copy.stepAria(index + 1, copy.stepLabels[step.id], isComplete ? copy.stepStateComplete : isCurrent ? copy.stepStateCurrent : copy.stepStateUpcoming)}
                   data-state={state}
                   onClick={() => setCurrentStep(step.id)}
                   className={cn(
@@ -56,14 +58,14 @@ export function StepperBar({
                     {isComplete ? <Check className="h-3 w-3" /> : index + 1}
                   </span>
                   <span className="min-w-0">
-                    <span className="block truncate text-xs font-bold">{step.label}</span>
+                    <span className="block truncate text-xs font-bold">{copy.stepLabels[step.id]}</span>
                     <span
                       className={cn(
                         'hidden truncate text-[10px] font-semibold lg:block',
                         isCurrent ? 'text-weet-line' : 'text-weet-muted'
                       )}
                     >
-                      {stepStatusText(step.id, stepCounts[step.id])}
+                      {stepStatusText(step.id, stepCounts[step.id], copy)}
                     </span>
                   </span>
                 </button>

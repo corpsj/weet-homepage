@@ -4,6 +4,33 @@ import Link from 'next/link';
 import { MessageCircle, MessagesSquare, Phone } from 'lucide-react';
 import type { SiteSettings } from '@/lib/site-settings';
 import { telHref } from '@/lib/site-settings';
+import { useLanguage, type Language } from '@/contexts/LanguageContext';
+
+const COPY: Record<Language, {
+  phoneConsult: string;
+  kakaoConsult: string;
+  requestConsult: string;
+  requestConsultLong: string;
+}> = {
+  KO: {
+    phoneConsult: '전화 상담',
+    kakaoConsult: '카카오톡 상담',
+    requestConsult: '상담 신청',
+    requestConsultLong: '상담 신청하기',
+  },
+  EN: {
+    phoneConsult: 'Call us',
+    kakaoConsult: 'KakaoTalk chat',
+    requestConsult: 'Get a quote',
+    requestConsultLong: 'Request a consultation',
+  },
+  ES: {
+    phoneConsult: 'Llámanos',
+    kakaoConsult: 'Chat de KakaoTalk',
+    requestConsult: 'Solicitar asesoría',
+    requestConsultLong: 'Solicitar asesoría',
+  },
+};
 
 function trackConsultClick(channel: string) {
   try {
@@ -14,6 +41,8 @@ function trackConsultClick(channel: string) {
 }
 
 export default function ConsultBar({ settings }: { settings: SiteSettings }) {
+  const { language } = useLanguage();
+  const t = COPY[language];
   const hasKakao = settings.kakao_channel_url !== '';
 
   return (
@@ -27,7 +56,7 @@ export default function ConsultBar({ settings }: { settings: SiteSettings }) {
             className="flex min-w-0 items-center justify-center gap-1.5 whitespace-nowrap active:bg-weet-ink-deep"
           >
             <Phone className="h-4 w-4 shrink-0 text-weet-gold" />
-            <span className="leading-none">전화 상담</span>
+            <span className="leading-none">{t.phoneConsult}</span>
           </a>
           {hasKakao ? (
             <a
@@ -38,7 +67,7 @@ export default function ConsultBar({ settings }: { settings: SiteSettings }) {
               className="flex min-w-0 items-center justify-center gap-1.5 whitespace-nowrap active:bg-weet-ink-deep"
             >
               <MessageCircle className="h-4 w-4 shrink-0 text-weet-gold" />
-              <span className="leading-none">카카오톡 상담</span>
+              <span className="leading-none">{t.kakaoConsult}</span>
             </a>
           ) : (
             <Link
@@ -47,7 +76,7 @@ export default function ConsultBar({ settings }: { settings: SiteSettings }) {
               className="flex min-w-0 items-center justify-center gap-1.5 whitespace-nowrap active:bg-weet-ink-deep"
             >
               <MessagesSquare className="h-4 w-4 shrink-0 text-weet-gold" />
-              <span className="leading-none">상담 신청</span>
+              <span className="leading-none">{t.requestConsult}</span>
             </Link>
           )}
         </div>
@@ -64,7 +93,7 @@ export default function ConsultBar({ settings }: { settings: SiteSettings }) {
             className="flex h-11 items-center gap-2 rounded-full border border-weet-line bg-weet-surface px-5 text-sm font-semibold text-weet-ink shadow-weet-float transition-transform hover:scale-[1.03]"
           >
             <MessageCircle className="h-4 w-4 text-weet-gold-deep" />
-            카카오톡 상담
+            {t.kakaoConsult}
           </a>
         ) : (
           <Link
@@ -73,7 +102,7 @@ export default function ConsultBar({ settings }: { settings: SiteSettings }) {
             className="flex h-11 items-center gap-2 rounded-full border border-weet-line bg-weet-surface px-5 text-sm font-semibold text-weet-ink shadow-weet-float transition-transform hover:scale-[1.03]"
           >
             <MessagesSquare className="h-4 w-4 text-weet-gold-deep" />
-            상담 신청하기
+            {t.requestConsultLong}
           </Link>
         )}
         <a
@@ -93,7 +122,7 @@ export default function ConsultBar({ settings }: { settings: SiteSettings }) {
           className="flex h-11 items-center gap-2 rounded-full bg-weet-ink px-5 text-sm font-semibold text-weet-paper shadow-weet-float transition-transform hover:scale-[1.03] hover:bg-weet-ink-deep"
         >
           <MessagesSquare className="h-4 w-4 text-weet-gold" />
-          상담 신청
+          {t.requestConsult}
         </Link>
       </div>
     </>

@@ -4,6 +4,45 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 import { PhoneCall } from 'lucide-react';
 import { SITE_SETTING_DEFAULTS, telHref } from '@/lib/site-settings';
+import { useLanguage, type Language } from '@/contexts/LanguageContext';
+
+const COPY: Record<Language, {
+  eyebrow: string;
+  title: string;
+  description: string;
+  retry: string;
+  consult: string;
+  home: string;
+  phoneConsult: string;
+}> = {
+  KO: {
+    eyebrow: 'ERROR',
+    title: '문제가 발생했습니다',
+    description: '페이지를 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요. 문제가 계속되면 고객지원으로 문의해 주세요.',
+    retry: '다시 시도',
+    consult: '상담 요청',
+    home: '홈으로',
+    phoneConsult: '전화 상담',
+  },
+  EN: {
+    eyebrow: 'ERROR',
+    title: 'Something went wrong',
+    description: 'An error occurred while loading the page. Please try again in a moment. If the problem persists, please contact our support team.',
+    retry: 'Try again',
+    consult: 'Contact us',
+    home: 'Go home',
+    phoneConsult: 'Call us',
+  },
+  ES: {
+    eyebrow: 'ERROR',
+    title: 'Algo salió mal',
+    description: 'Ocurrió un error al cargar la página. Inténtalo de nuevo en unos momentos. Si el problema continúa, comunícate con nuestro equipo de soporte.',
+    retry: 'Reintentar',
+    consult: 'Contáctanos',
+    home: 'Ir al inicio',
+    phoneConsult: 'Llámanos',
+  },
+};
 
 /**
  * Route-segment error boundary. Catches render/data errors in the page tree and

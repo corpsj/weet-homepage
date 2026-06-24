@@ -1,13 +1,16 @@
+import type { Language } from '@/contexts/LanguageContext';
+
 export const OPTION_IMAGE_VERSION = '20260610-0137';
 
 export type ConfigStep = 'space' | 'included' | 'mood' | 'smart' | 'review';
 export type OptionStep = Exclude<ConfigStep, 'review'>;
-export const STEPS: { id: ConfigStep; label: string; categories?: string[] }[] = [
-  { id: 'space', label: '모델', categories: ['model'] },
-  { id: 'included', label: '공간 구성', categories: ['windows', 'door', 'sink', 'bathroom', 'furniture'] },
-  { id: 'mood', label: '무드 & 소재', categories: ['exterior', 'interior', 'flooring'] },
-  { id: 'smart', label: '스마트 테크', categories: ['energy', 'connectivity'] },
-  { id: 'review', label: '검토·요청' },
+// STEP id/순서/카테고리 매핑은 언어무관 구조다. 사람이 읽는 라벨은 UI_COPY.stepLabels로 분리한다.
+export const STEPS: { id: ConfigStep; categories?: string[] }[] = [
+  { id: 'space', categories: ['model'] },
+  { id: 'included', categories: ['windows', 'door', 'sink', 'bathroom', 'furniture'] },
+  { id: 'mood', categories: ['exterior', 'interior', 'flooring'] },
+  { id: 'smart', categories: ['energy', 'connectivity'] },
+  { id: 'review' },
 ];
 export const SWATCH_CATEGORY_KEYS = new Set(['exterior', 'interior', 'flooring']);
 
@@ -24,18 +27,584 @@ export const OPTION_SWATCH: Record<string, string> = {
   'porcelain-tile': '#BFC0BC',
 };
 
-// 가격/신뢰 문구는 한 곳에서 관리한다. 보수적 표현만 사용한다(결제·할인·보증 약속 금지).
-export const COPY = {
-  basePrice: '기본 제품가',
-  optionSubtotal: '옵션 합계',
-  estimatedAmount: '예상 제품 금액',
-  consultNeeded: '상담 필요',
-  transportNote: '운반/설치 별도 · 현장 조건에 따라 최종 견적 확정',
-  notPayment: '상담 요청이며 결제는 진행되지 않습니다.',
-  finalQuote: '최종 견적은 상담 후 확정됩니다.',
-  privacyUse: '입력하신 정보는 견적 안내와 상담 연락을 위해 사용됩니다.',
-  consultExplain: '상담 필요 항목은 담당자가 설치 가능 여부와 금액을 확인해 안내드립니다.',
-} as const;
+// 정적 UI chrome 카피. KO는 byte-identical(e2e/SSR 기본). EN 원어민, ES 중남미 중립.
+// 가격/신뢰 문구는 보수적 표현만 사용한다(결제·할인·보증 약속 금지).
+export interface CustomizeUiCopy {
+  // 가격/신뢰
+  basePrice: string;
+  optionSubtotal: string;
+  estimatedAmount: string;
+  consultNeeded: string;
+  transportNote: string;
+  notPayment: string;
+  finalQuote: string;
+  privacyUse: string;
+  consultExplain: string;
+  // STEP 라벨 (구조적 id → 표시 라벨)
+  stepLabels: Record<ConfigStep, string>;
+  // 단계 이동 CTA (nextStepCta)
+  ctaNextIncluded: string;
+  ctaNextMood: string;
+  ctaNextSmart: string;
+  ctaReview: string;
+  ctaRequest: string;
+  // 옵션 가격 라벨
+  optionIncluded: string;
+  optionConsult: string;
+  // 단계 상태 라벨
+  stepStatusDone: string;
+  stepStatusFinal: string;
+  stepStatusCount: (count: number) => string;
+  // 견적 PDF
+  quoteDocLang: string;
+  quoteDocTitle: string;
+  quoteSummaryTitle: string;
+  quoteSubheadPrefix: string;
+  quoteColItem: string;
+  quoteColPrice: string;
+  quoteConsultItems: (count: number) => string;
+  // 충돌/모델 변경 toast
+  modelChangeRemoved: (count: number) => string;
+  conflictWithReason: (selected: string, removed: string, reason: string) => string;
+  conflictNoReason: (selected: string, removed: string) => string;
+  // 견적 저장/링크 toast
+  quotePopupBlocked: string;
+  copyLinkSuccess: string;
+  copyLinkFail: string;
+  // 빈 카탈로그
+  emptyTitle: string;
+  emptyBody: string;
+  // 모바일 고정 바
+  consultBadge: (count: number) => string;
+  transportSeparateShort: string;
+  finalQuoteShort: string;
+  // 앱바
+  homeAriaLabel: string;
+  appbarTitle: string;
+  appbarSubtitle: string;
+  appbarCallAriaLabel: string;
+  // 스테퍼
+  stepperStepWord: string;
+  stepperProgressAria: string;
+  stepStateComplete: string;
+  stepStateCurrent: string;
+  stepStateUpcoming: string;
+  stepNumberWord: string;
+  stepAria: (index: number, label: string, state: string) => string;
+  // 옵션 패널
+  panelModelHeading: string;
+  panelModelHelp: string;
+  modelTagWeekend: string;
+  modelTagPremium: string;
+  includedTitle: string;
+  includedBody: string;
+  noOptionsAvailable: string;
+  catCountWithPrice: (count: number, price: string) => string;
+  catConsultCount: (count: number) => string;
+  catIncluded: string;
+  catNone: string;
+  panelRailTitle: string;
+  panelRailStepCount: (index: number, total: number) => string;
+  optionDetailAria: string;
+  // 도면
+  floorPlanBadge: (baseM: number, lengthM: number) => string;
+  zoomOpenAria: string;
+  zoomCloseAria: string;
+  zoomTitle: string;
+  zoomAreaAria: string;
+  planBath: string;
+  planKitchen: string;
+  planLivingBed: string;
+  planLabel: (modelName: string, widthM: number, lengthM: number) => string;
+  planExteriorLabel: (name: string) => string;
+  planFlooringLabel: (name: string) => string;
+  planSmartLock: string;
+  // 레일/인라인 푸터
+  prevWord: string;
+  prevAria: (label: string) => string;
+  skipToReview: string;
+  footerSiteCondition: string;
+  // 요약 보드
+  selectedModel: string;
+  selectedOptions: string;
+  estimatedAmountWord: string;
+  noExtraOptions: string;
+  consultSeparate: (count: number) => string;
+  summaryDisclaimer: string;
+  costInfoLink: string;
+  // 검토 단계
+  reviewTitle: string;
+  reviewIntro: string;
+  reviewSummaryAria: string;
+  reviewPriceAria: string;
+  editModel: string;
+  editStep: (label: string) => string;
+  planView: string;
+  noStepOptions: string;
+  consultItemsTitle: (count: number) => string;
+  consultItemsBody: string;
+  priceSummaryTitle: string;
+  consultItemsLabel: string;
+  saveQuote: string;
+  copyLink: string;
+  submittedTitle: string;
+  submittedBody: string;
+  receivedModel: string;
+  writeNewRequest: string;
+  formTitle: string;
+  formIntro: string;
+  editWord: string;
+  fieldName: string;
+  fieldPhone: string;
+  fieldRegion: string;
+  fieldRegionPlaceholder: string;
+  errName: string;
+  errPhone: string;
+  errRegion: string;
+  optionalToggle: string;
+  optionalHint: string;
+  fieldTimeline: string;
+  fieldTimelineHelp: string;
+  fieldLandType: string;
+  fieldLandTypeHelp: string;
+  fieldBudget: string;
+  fieldBudgetHelp: string;
+  fieldAddress: string;
+  fieldAddressHelp: string;
+  fieldMemo: string;
+  fieldMemoHelp: string;
+  formDisclaimer: string;
+  selectNone: string;
+  requiredBadge: string;
+  optionalBadge: string;
+  // 옵션 상세 모달
+  detailPending: string;
+  imageAltSuffix: (name: string) => string;
+  figcaption: string;
+  consultMemoTitle: string;
+  consultMemoBody: string;
+  closeWord: string;
+}
+
+export const UI_COPY: Record<Language, CustomizeUiCopy> = {
+  KO: {
+    basePrice: '기본 제품가',
+    optionSubtotal: '옵션 합계',
+    estimatedAmount: '예상 제품 금액',
+    consultNeeded: '상담 필요',
+    transportNote: '운반/설치 별도 · 현장 조건에 따라 최종 견적 확정',
+    notPayment: '상담 요청이며 결제는 진행되지 않습니다.',
+    finalQuote: '최종 견적은 상담 후 확정됩니다.',
+    privacyUse: '입력하신 정보는 견적 안내와 상담 연락을 위해 사용됩니다.',
+    consultExplain: '상담 필요 항목은 담당자가 설치 가능 여부와 금액을 확인해 안내드립니다.',
+    stepLabels: { space: '모델', included: '공간 구성', mood: '무드 & 소재', smart: '스마트 테크', review: '검토·요청' },
+    ctaNextIncluded: '다음: 공간 구성',
+    ctaNextMood: '다음: 무드 & 소재',
+    ctaNextSmart: '다음: 스마트 테크',
+    ctaReview: '구성 검토하기',
+    ctaRequest: '상담·견적 요청하기',
+    optionIncluded: '기본 포함',
+    optionConsult: '상담 필요',
+    stepStatusDone: '선택 완료',
+    stepStatusFinal: '최종 확인',
+    stepStatusCount: (count) => `${count}개 선택`,
+    quoteDocLang: 'ko',
+    quoteDocTitle: '위트 견적 요약',
+    quoteSummaryTitle: '위트 이동식주택 견적 요약',
+    quoteSubheadPrefix: '상담 요청용 예상 금액 · ',
+    quoteColItem: '항목',
+    quoteColPrice: '가격',
+    quoteConsultItems: (count) => `${count}개 · 견적 별도`,
+    modelChangeRemoved: (count) => `새 모델에 맞지 않는 옵션 ${count}개를 제외했습니다.`,
+    conflictWithReason: (selected, removed, reason) => `‘${selected}’ 선택으로 ${removed} 옵션을 제외했습니다. ${reason}`,
+    conflictNoReason: (selected, removed) => `‘${selected}’과(와) 함께 쓸 수 없어 ${removed} 옵션을 제외했습니다.`,
+    quotePopupBlocked: '견적 창을 열 수 없습니다. 팝업 설정을 확인해주세요.',
+    copyLinkSuccess: '구성 링크를 복사했습니다.',
+    copyLinkFail: '링크 복사에 실패했습니다. 주소창의 URL을 직접 복사해주세요.',
+    emptyTitle: '주문 구성을 준비 중입니다.',
+    emptyBody: '관리자에서 모델과 옵션을 활성화하면 페이지가 표시됩니다.',
+    consultBadge: (count) => `+ 상담 ${count}건`,
+    transportSeparateShort: '운반/설치 별도',
+    finalQuoteShort: '최종 견적은 상담 후 확정됩니다.',
+    homeAriaLabel: '위트 홈으로',
+    appbarTitle: '위트 맞춤제작',
+    appbarSubtitle: '나만의 위트 만들기',
+    appbarCallAriaLabel: '전화 상담',
+    stepperStepWord: '단계',
+    stepperProgressAria: '구성 진행 단계',
+    stepStateComplete: '완료',
+    stepStateCurrent: '진행 중',
+    stepStateUpcoming: '대기',
+    stepNumberWord: '단계',
+    stepAria: (index, label, state) => `${index}단계 ${label} · ${state}`,
+    panelModelHeading: '공간 모델',
+    panelModelHelp: '설치할 공간의 크기와 목적에 맞는 모델을 선택하세요.',
+    modelTagWeekend: '소형 주말주택',
+    modelTagPremium: '프리미엄 거주',
+    includedTitle: '위트 기본 포함 내역',
+    includedBody: '골조, 단열, 내/외장재, 바닥재, 도어, 창호, 싱크대 등 생활에 필요한 필수 구성요소가 기본 가격에 포함되어 있습니다.',
+    noOptionsAvailable: '현재 선택 가능한 옵션이 없습니다.',
+    catCountWithPrice: (count, price) => `${count}개 선택 · +${price}`,
+    catConsultCount: (count) => `상담 필요 ${count}개`,
+    catIncluded: '기본 포함',
+    catNone: '선택 안 함',
+    panelRailTitle: '이동식주택 구성',
+    panelRailStepCount: (index, total) => `${index} / ${total} 단계`,
+    optionDetailAria: '옵션 상세 보기',
+    floorPlanBadge: (baseM, lengthM) => `${baseM}m 기준에서 ${lengthM}m로 확장됨`,
+    zoomOpenAria: '도면 크게 보기',
+    zoomCloseAria: '도면 확대 닫기',
+    zoomTitle: '도면 확대',
+    zoomAreaAria: '확대 도면 보기 영역',
+    planBath: '욕실',
+    planKitchen: '주방',
+    planLivingBed: '거실 · 침실',
+    planLabel: (modelName, widthM, lengthM) => `${modelName} 평면도, 가로 ${widthM}m 세로 ${lengthM}m`,
+    planExteriorLabel: (name) => `외장 ${name}`,
+    planFlooringLabel: (name) => `바닥 ${name}`,
+    planSmartLock: '스마트락 현관',
+    prevWord: '이전',
+    prevAria: (label) => `이전 단계: ${label}`,
+    skipToReview: '구성 검토·상담 요청으로 이동',
+    footerSiteCondition: '운반/설치 및 현장 조건에 따라 최종 견적이 달라질 수 있습니다.',
+    selectedModel: '선택 모델',
+    selectedOptions: '선택 옵션',
+    estimatedAmountWord: '예상 제품 금액',
+    noExtraOptions: '추가 선택 옵션 없음 · 기본 구성',
+    consultSeparate: (count) => `+ 상담 필요 ${count}개 · 견적 별도`,
+    summaryDisclaimer: '상담 요청용 예상 금액입니다. 결제 단계가 아니며, 운반/설치 및 현장 조건에 따라 최종 견적이 달라질 수 있습니다.',
+    costInfoLink: '별도 비용 안내',
+    reviewTitle: '구성 검토 및 상담 요청',
+    reviewIntro: '선택하신 구성을 확인한 뒤 상담을 요청하세요.',
+    reviewSummaryAria: '선택 구성 요약',
+    reviewPriceAria: '가격 요약 및 상담 요청',
+    editModel: '모델 수정',
+    editStep: (label) => `${label} 수정`,
+    planView: '평면 구성 보기',
+    noStepOptions: '선택한 옵션이 없습니다. 비워두셔도 상담에서 함께 정할 수 있습니다.',
+    consultItemsTitle: (count) => `상담 필요 항목 ${count}개`,
+    consultItemsBody: '선택한 구성은 상담 요청서에 함께 전달됩니다.',
+    priceSummaryTitle: '가격 요약',
+    consultItemsLabel: '상담 필요 항목',
+    saveQuote: '견적 요약 저장',
+    copyLink: '구성 링크 복사',
+    submittedTitle: '상담 요청이 접수되었습니다',
+    submittedBody: '담당자가 확인 후 입력하신 연락처로 연락드립니다.',
+    receivedModel: '접수 모델',
+    writeNewRequest: '새 상담 요청 작성',
+    formTitle: '상담 요청 정보',
+    formIntro: '구성 확인과 연락을 위한 최소 정보만 받습니다.',
+    editWord: '수정',
+    fieldName: '이름',
+    fieldPhone: '연락처',
+    fieldRegion: '지역',
+    fieldRegionPlaceholder: '경기도 양평군',
+    errName: '이름을 입력해주세요.',
+    errPhone: '연락처를 입력해주세요.',
+    errRegion: '지역을 입력해주세요.',
+    optionalToggle: '더 정확한 견적을 위한 선택 정보',
+    optionalHint: '아직 정하지 못한 항목은 비워두셔도 됩니다.',
+    fieldTimeline: '예상 구매 시기',
+    fieldTimelineHelp: '생산·설치 일정 제안에만 참고합니다.',
+    fieldLandType: '설치할 장소 지목',
+    fieldLandTypeHelp: '대지, 전·답, 임야 등 설치 조건 검토에 참고합니다.',
+    fieldBudget: '구매 예산',
+    fieldBudgetHelp: '가능한 사양 조합을 빠르게 제안하기 위한 참고값입니다.',
+    fieldAddress: '설치 주소',
+    fieldAddressHelp: '정확한 번지 전이라도 읍·면·동 수준이면 괜찮습니다.',
+    fieldMemo: '추가 메모',
+    fieldMemoHelp: '사용 목적, 예상 인원, 필요한 옵션을 자유롭게 적어주세요.',
+    formDisclaimer: '운반/설치는 별도이며 현장 조건에 따라 달라질 수 있습니다.',
+    selectNone: '선택 안 함',
+    requiredBadge: '필수',
+    optionalBadge: '선택',
+    detailPending: '상세 정보가 준비 중입니다.',
+    imageAltSuffix: (name) => `${name} 상세 설명 이미지`,
+    figcaption: '실제 선택 시 확인해야 하는 재료감, 설치 위치, 주변 설비 관계를 보여주는 참고 이미지입니다.',
+    consultMemoTitle: '상담 메모',
+    consultMemoBody: '이 이미지는 옵션 이해를 돕기 위한 예시입니다. 최종 사양은 모델 크기, 설치 위치, 현장 조건, 전기·급배수 여건을 확인한 뒤 상담 과정에서 확정됩니다.',
+    closeWord: '닫기',
+  },
+  EN: {
+    basePrice: 'Base unit price',
+    optionSubtotal: 'Options subtotal',
+    estimatedAmount: 'Estimated unit price',
+    consultNeeded: 'Consultation needed',
+    transportNote: 'Transport/installation separate · final quote confirmed by site conditions',
+    notPayment: 'This is a consultation request — no payment is processed.',
+    finalQuote: 'The final quote is confirmed after consultation.',
+    privacyUse: 'The information you enter is used to provide quotes and arrange consultation.',
+    consultExplain: 'For consultation-needed items, our team confirms feasibility and pricing and gets back to you.',
+    stepLabels: { space: 'Model', included: 'Layout', mood: 'Mood & Materials', smart: 'Smart Tech', review: 'Review & Request' },
+    ctaNextIncluded: 'Next: Layout',
+    ctaNextMood: 'Next: Mood & Materials',
+    ctaNextSmart: 'Next: Smart Tech',
+    ctaReview: 'Review configuration',
+    ctaRequest: 'Request consultation & quote',
+    optionIncluded: 'Included',
+    optionConsult: 'Consultation needed',
+    stepStatusDone: 'Selected',
+    stepStatusFinal: 'Final review',
+    stepStatusCount: (count) => `${count} selected`,
+    quoteDocLang: 'en',
+    quoteDocTitle: 'Weet quote summary',
+    quoteSummaryTitle: 'Weet modular home quote summary',
+    quoteSubheadPrefix: 'Estimated amount for consultation · ',
+    quoteColItem: 'Item',
+    quoteColPrice: 'Price',
+    quoteConsultItems: (count) => `${count} · quoted separately`,
+    modelChangeRemoved: (count) => `Removed ${count} option(s) that don't fit the new model.`,
+    conflictWithReason: (selected, removed, reason) => `Selecting "${selected}" removed the ${removed} option(s). ${reason}`,
+    conflictNoReason: (selected, removed) => `Removed the ${removed} option(s) because they can't be used with "${selected}".`,
+    quotePopupBlocked: 'Could not open the quote window. Please check your pop-up settings.',
+    copyLinkSuccess: 'Configuration link copied.',
+    copyLinkFail: 'Failed to copy the link. Please copy the URL from the address bar manually.',
+    emptyTitle: 'The order configurator is being prepared.',
+    emptyBody: 'The page appears once models and options are activated in the admin.',
+    consultBadge: (count) => `+ ${count} consultation item(s)`,
+    transportSeparateShort: 'Transport/installation separate',
+    finalQuoteShort: 'The final quote is confirmed after consultation.',
+    homeAriaLabel: 'Back to Weet home',
+    appbarTitle: 'Weet Custom Build',
+    appbarSubtitle: 'Build your own Weet',
+    appbarCallAriaLabel: 'Phone consultation',
+    stepperStepWord: 'Step',
+    stepperProgressAria: 'Configuration progress steps',
+    stepStateComplete: 'complete',
+    stepStateCurrent: 'in progress',
+    stepStateUpcoming: 'pending',
+    stepNumberWord: 'Step',
+    stepAria: (index, label, state) => `Step ${index} ${label} · ${state}`,
+    panelModelHeading: 'Space model',
+    panelModelHelp: 'Choose the model that fits the size and purpose of your space.',
+    modelTagWeekend: 'Compact weekend home',
+    modelTagPremium: 'Premium living',
+    includedTitle: "Weet's standard inclusions",
+    includedBody: 'Essential elements for daily living — frame, insulation, interior/exterior finishes, flooring, doors, windows, sink and more — are included in the base price.',
+    noOptionsAvailable: 'No options are available right now.',
+    catCountWithPrice: (count, price) => `${count} selected · +${price}`,
+    catConsultCount: (count) => `${count} consultation needed`,
+    catIncluded: 'Included',
+    catNone: 'None selected',
+    panelRailTitle: 'Modular home configuration',
+    panelRailStepCount: (index, total) => `Step ${index} / ${total}`,
+    optionDetailAria: 'View option details',
+    floorPlanBadge: (baseM, lengthM) => `Extended from ${baseM}m to ${lengthM}m`,
+    zoomOpenAria: 'Enlarge floor plan',
+    zoomCloseAria: 'Close enlarged floor plan',
+    zoomTitle: 'Enlarged floor plan',
+    zoomAreaAria: 'Enlarged floor plan viewing area',
+    planBath: 'Bath',
+    planKitchen: 'Kitchen',
+    planLivingBed: 'Living · Bedroom',
+    planLabel: (modelName, widthM, lengthM) => `${modelName} floor plan, ${widthM}m wide by ${lengthM}m long`,
+    planExteriorLabel: (name) => `Exterior ${name}`,
+    planFlooringLabel: (name) => `Flooring ${name}`,
+    planSmartLock: 'Smart-lock entrance',
+    prevWord: 'Back',
+    prevAria: (label) => `Previous step: ${label}`,
+    skipToReview: 'Go to review & consultation request',
+    footerSiteCondition: 'The final quote may vary by transport/installation and site conditions.',
+    selectedModel: 'Selected model',
+    selectedOptions: 'Selected options',
+    estimatedAmountWord: 'Estimated unit price',
+    noExtraOptions: 'No extra options · base configuration',
+    consultSeparate: (count) => `+ ${count} consultation needed · quoted separately`,
+    summaryDisclaimer: 'This is an estimated amount for consultation. It is not a payment step, and the final quote may vary by transport/installation and site conditions.',
+    costInfoLink: 'Additional cost guide',
+    reviewTitle: 'Review configuration & request consultation',
+    reviewIntro: 'Review your configuration, then request a consultation.',
+    reviewSummaryAria: 'Selected configuration summary',
+    reviewPriceAria: 'Price summary and consultation request',
+    editModel: 'Edit model',
+    editStep: (label) => `Edit ${label}`,
+    planView: 'View floor layout',
+    noStepOptions: "No options selected. You can leave it blank and decide together during consultation.",
+    consultItemsTitle: (count) => `${count} consultation-needed item(s)`,
+    consultItemsBody: 'Your selected configuration is sent along with the consultation request.',
+    priceSummaryTitle: 'Price summary',
+    consultItemsLabel: 'Consultation-needed items',
+    saveQuote: 'Save quote summary',
+    copyLink: 'Copy configuration link',
+    submittedTitle: 'Your consultation request has been received',
+    submittedBody: 'Our team will review it and contact you at the number you provided.',
+    receivedModel: 'Received model',
+    writeNewRequest: 'Write a new consultation request',
+    formTitle: 'Consultation request details',
+    formIntro: 'We only collect the minimum needed to confirm your configuration and reach you.',
+    editWord: 'Edit',
+    fieldName: 'Name',
+    fieldPhone: 'Phone',
+    fieldRegion: 'Region',
+    fieldRegionPlaceholder: 'Yangpyeong-gun, Gyeonggi-do',
+    errName: 'Please enter your name.',
+    errPhone: 'Please enter your phone number.',
+    errRegion: 'Please enter your region.',
+    optionalToggle: 'Optional details for a more accurate quote',
+    optionalHint: "You can leave items you haven't decided yet blank.",
+    fieldTimeline: 'Expected purchase timing',
+    fieldTimelineHelp: 'Used only as a reference for production/installation scheduling.',
+    fieldLandType: 'Land category for installation',
+    fieldLandTypeHelp: 'Used as a reference for reviewing site conditions (lot, farmland, forest, etc.).',
+    fieldBudget: 'Purchase budget',
+    fieldBudgetHelp: 'A reference value to quickly suggest feasible spec combinations.',
+    fieldAddress: 'Installation address',
+    fieldAddressHelp: "Before an exact lot number, eup/myeon/dong level is fine.",
+    fieldMemo: 'Additional notes',
+    fieldMemoHelp: 'Feel free to note your purpose, expected occupancy, and options you need.',
+    formDisclaimer: 'Transport/installation is separate and may vary by site conditions.',
+    selectNone: 'Not selected',
+    requiredBadge: 'Required',
+    optionalBadge: 'Optional',
+    detailPending: 'Details are being prepared.',
+    imageAltSuffix: (name) => `${name} detail image`,
+    figcaption: 'A reference image showing the material feel, installation position, and relation to nearby fixtures you should confirm before selecting.',
+    consultMemoTitle: 'Consultation note',
+    consultMemoBody: 'This image is an example to aid understanding of the option. The final spec is confirmed during consultation after checking model size, installation position, site conditions, and electrical/plumbing readiness.',
+    closeWord: 'Close',
+  },
+  ES: {
+    basePrice: 'Precio base de la unidad',
+    optionSubtotal: 'Subtotal de opciones',
+    estimatedAmount: 'Precio estimado de la unidad',
+    consultNeeded: 'Requiere asesoría',
+    transportNote: 'Transporte/instalación aparte · cotización final según condiciones del sitio',
+    notPayment: 'Esta es una solicitud de asesoría — no se procesa ningún pago.',
+    finalQuote: 'La cotización final se confirma tras la asesoría.',
+    privacyUse: 'La información que ingresa se usa para entregar cotizaciones y coordinar la asesoría.',
+    consultExplain: 'Para los ítems que requieren asesoría, nuestro equipo confirma la viabilidad y el precio y le responde.',
+    stepLabels: { space: 'Modelo', included: 'Distribución', mood: 'Ambiente y materiales', smart: 'Tecnología inteligente', review: 'Revisión y solicitud' },
+    ctaNextIncluded: 'Siguiente: Distribución',
+    ctaNextMood: 'Siguiente: Ambiente y materiales',
+    ctaNextSmart: 'Siguiente: Tecnología inteligente',
+    ctaReview: 'Revisar la configuración',
+    ctaRequest: 'Solicitar asesoría y cotización',
+    optionIncluded: 'Incluido',
+    optionConsult: 'Requiere asesoría',
+    stepStatusDone: 'Seleccionado',
+    stepStatusFinal: 'Revisión final',
+    stepStatusCount: (count) => `${count} seleccionados`,
+    quoteDocLang: 'es',
+    quoteDocTitle: 'Resumen de cotización de Weet',
+    quoteSummaryTitle: 'Resumen de cotización de casa modular Weet',
+    quoteSubheadPrefix: 'Monto estimado para asesoría · ',
+    quoteColItem: 'Ítem',
+    quoteColPrice: 'Precio',
+    quoteConsultItems: (count) => `${count} · cotizado aparte`,
+    modelChangeRemoved: (count) => `Se quitaron ${count} opción(es) que no corresponden al nuevo modelo.`,
+    conflictWithReason: (selected, removed, reason) => `Al seleccionar "${selected}" se quitó la(s) opción(es) ${removed}. ${reason}`,
+    conflictNoReason: (selected, removed) => `Se quitó la(s) opción(es) ${removed} porque no se pueden usar con "${selected}".`,
+    quotePopupBlocked: 'No se pudo abrir la ventana de cotización. Revise la configuración de ventanas emergentes.',
+    copyLinkSuccess: 'Enlace de configuración copiado.',
+    copyLinkFail: 'No se pudo copiar el enlace. Copie la URL de la barra de direcciones manualmente.',
+    emptyTitle: 'El configurador de pedidos se está preparando.',
+    emptyBody: 'La página aparece cuando se activan modelos y opciones en el panel de administración.',
+    consultBadge: (count) => `+ ${count} ítem(es) de asesoría`,
+    transportSeparateShort: 'Transporte/instalación aparte',
+    finalQuoteShort: 'La cotización final se confirma tras la asesoría.',
+    homeAriaLabel: 'Volver al inicio de Weet',
+    appbarTitle: 'Weet a medida',
+    appbarSubtitle: 'Crea tu propia Weet',
+    appbarCallAriaLabel: 'Asesoría telefónica',
+    stepperStepWord: 'Paso',
+    stepperProgressAria: 'Pasos de progreso de la configuración',
+    stepStateComplete: 'completado',
+    stepStateCurrent: 'en curso',
+    stepStateUpcoming: 'pendiente',
+    stepNumberWord: 'Paso',
+    stepAria: (index, label, state) => `Paso ${index} ${label} · ${state}`,
+    panelModelHeading: 'Modelo de espacio',
+    panelModelHelp: 'Elija el modelo que se ajuste al tamaño y propósito de su espacio.',
+    modelTagWeekend: 'Casa de fin de semana compacta',
+    modelTagPremium: 'Vivienda premium',
+    includedTitle: 'Inclusiones estándar de Weet',
+    includedBody: 'Los elementos esenciales para vivir —estructura, aislamiento, acabados interiores/exteriores, pisos, puertas, ventanas, fregadero y más— están incluidos en el precio base.',
+    noOptionsAvailable: 'No hay opciones disponibles por ahora.',
+    catCountWithPrice: (count, price) => `${count} seleccionados · +${price}`,
+    catConsultCount: (count) => `${count} requieren asesoría`,
+    catIncluded: 'Incluido',
+    catNone: 'Sin seleccionar',
+    panelRailTitle: 'Configuración de casa modular',
+    panelRailStepCount: (index, total) => `Paso ${index} / ${total}`,
+    optionDetailAria: 'Ver detalles de la opción',
+    floorPlanBadge: (baseM, lengthM) => `Ampliado de ${baseM}m a ${lengthM}m`,
+    zoomOpenAria: 'Ampliar el plano',
+    zoomCloseAria: 'Cerrar el plano ampliado',
+    zoomTitle: 'Plano ampliado',
+    zoomAreaAria: 'Área de visualización del plano ampliado',
+    planBath: 'Baño',
+    planKitchen: 'Cocina',
+    planLivingBed: 'Sala · Dormitorio',
+    planLabel: (modelName, widthM, lengthM) => `Plano de ${modelName}, ${widthM}m de ancho por ${lengthM}m de largo`,
+    planExteriorLabel: (name) => `Exterior ${name}`,
+    planFlooringLabel: (name) => `Piso ${name}`,
+    planSmartLock: 'Entrada con cerradura inteligente',
+    prevWord: 'Atrás',
+    prevAria: (label) => `Paso anterior: ${label}`,
+    skipToReview: 'Ir a revisión y solicitud de asesoría',
+    footerSiteCondition: 'La cotización final puede variar según el transporte/instalación y las condiciones del sitio.',
+    selectedModel: 'Modelo seleccionado',
+    selectedOptions: 'Opciones seleccionadas',
+    estimatedAmountWord: 'Precio estimado de la unidad',
+    noExtraOptions: 'Sin opciones adicionales · configuración base',
+    consultSeparate: (count) => `+ ${count} requieren asesoría · cotizado aparte`,
+    summaryDisclaimer: 'Este es un monto estimado para asesoría. No es un paso de pago, y la cotización final puede variar según el transporte/instalación y las condiciones del sitio.',
+    costInfoLink: 'Guía de costos adicionales',
+    reviewTitle: 'Revisar la configuración y solicitar asesoría',
+    reviewIntro: 'Revise su configuración y luego solicite una asesoría.',
+    reviewSummaryAria: 'Resumen de la configuración seleccionada',
+    reviewPriceAria: 'Resumen de precios y solicitud de asesoría',
+    editModel: 'Editar modelo',
+    editStep: (label) => `Editar ${label}`,
+    planView: 'Ver la distribución',
+    noStepOptions: 'No hay opciones seleccionadas. Puede dejarlo en blanco y decidirlo juntos durante la asesoría.',
+    consultItemsTitle: (count) => `${count} ítem(es) que requieren asesoría`,
+    consultItemsBody: 'Su configuración seleccionada se envía junto con la solicitud de asesoría.',
+    priceSummaryTitle: 'Resumen de precios',
+    consultItemsLabel: 'Ítems que requieren asesoría',
+    saveQuote: 'Guardar resumen de cotización',
+    copyLink: 'Copiar enlace de configuración',
+    submittedTitle: 'Su solicitud de asesoría ha sido recibida',
+    submittedBody: 'Nuestro equipo la revisará y lo contactará al número que proporcionó.',
+    receivedModel: 'Modelo recibido',
+    writeNewRequest: 'Escribir una nueva solicitud de asesoría',
+    formTitle: 'Datos de la solicitud de asesoría',
+    formIntro: 'Solo recopilamos lo mínimo necesario para confirmar su configuración y contactarlo.',
+    editWord: 'Editar',
+    fieldName: 'Nombre',
+    fieldPhone: 'Teléfono',
+    fieldRegion: 'Región',
+    fieldRegionPlaceholder: 'Yangpyeong-gun, Gyeonggi-do',
+    errName: 'Ingrese su nombre.',
+    errPhone: 'Ingrese su número de teléfono.',
+    errRegion: 'Ingrese su región.',
+    optionalToggle: 'Datos opcionales para una cotización más precisa',
+    optionalHint: 'Puede dejar en blanco los ítems que aún no haya decidido.',
+    fieldTimeline: 'Fecha estimada de compra',
+    fieldTimelineHelp: 'Se usa solo como referencia para programar producción/instalación.',
+    fieldLandType: 'Categoría del terreno de instalación',
+    fieldLandTypeHelp: 'Se usa como referencia para revisar las condiciones del sitio (lote, terreno agrícola, bosque, etc.).',
+    fieldBudget: 'Presupuesto de compra',
+    fieldBudgetHelp: 'Un valor de referencia para sugerir rápidamente combinaciones de especificaciones viables.',
+    fieldAddress: 'Dirección de instalación',
+    fieldAddressHelp: 'Antes de un número de lote exacto, el nivel de eup/myeon/dong está bien.',
+    fieldMemo: 'Notas adicionales',
+    fieldMemoHelp: 'Anote con libertad su propósito, la ocupación prevista y las opciones que necesita.',
+    formDisclaimer: 'El transporte/instalación es aparte y puede variar según las condiciones del sitio.',
+    selectNone: 'Sin seleccionar',
+    requiredBadge: 'Obligatorio',
+    optionalBadge: 'Opcional',
+    detailPending: 'Los detalles se están preparando.',
+    imageAltSuffix: (name) => `Imagen de detalle de ${name}`,
+    figcaption: 'Una imagen de referencia que muestra la textura del material, la posición de instalación y la relación con las instalaciones cercanas que debe confirmar antes de elegir.',
+    consultMemoTitle: 'Nota de asesoría',
+    consultMemoBody: 'Esta imagen es un ejemplo para ayudar a entender la opción. La especificación final se confirma durante la asesoría tras revisar el tamaño del modelo, la posición de instalación, las condiciones del sitio y la disponibilidad eléctrica/de agua.',
+    closeWord: 'Cerrar',
+  },
+};
+
+// 언어가 없는 순수 함수/PDF 빌더에서 쓰는 KO 기본값. 컴포넌트는 UI_COPY[language]를 사용한다.
+export const COPY = UI_COPY.KO;
 
 export type ConsultationDraft = {
   customerName: string;

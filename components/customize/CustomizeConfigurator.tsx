@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState, useTransition } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { submitCustomizeConsultation } from '@/app/actions/customize-actions';
 import { DEFAULT_MODEL_ID } from '@/lib/customize/config';
 import {
@@ -24,9 +25,10 @@ import type {
   CustomizeOption,
   SelectedOptions,
 } from '@/lib/customize/types';
+import { pickText } from '@/lib/customize/i18n';
 import {
-  COPY,
   STEPS,
+  UI_COPY,
   type ConfigStep,
   type ConsultationDraft,
 } from './lib/constants';
@@ -51,6 +53,8 @@ interface CustomizeConfiguratorProps {
 }
 
 export default function CustomizeConfigurator({ catalog, initialConfig, contactPhone }: CustomizeConfiguratorProps) {
+  const { language } = useLanguage();
+  const copy = UI_COPY[language];
   const decoded = useMemo(() => decodeConfig(initialConfig), [initialConfig]);
   const firstModelId = catalog.models[0]?.id ?? DEFAULT_MODEL_ID;
   const [modelId, setModelId] = useState(decoded?.modelId ?? firstModelId);
@@ -118,7 +122,7 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
     const { selections, removedOptions } = buildSelectionsForModelChange(catalog, selectedOptions, nextModelId);
     setSelectedOptions(selections);
     if (removedOptions.length > 0) {
-      toast.info(`새 모델에 맞지 않는 옵션 ${removedOptions.length}개를 제외했습니다.`);
+      toast.info(copy.modelChangeRemoved(removedOptions.length));
     }
   };
 
@@ -128,12 +132,14 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
     if (willSelect) {
       const removed = getRemovedConflicts(catalog, selectedOptions, option);
       if (removed.length > 0) {
-        const names = removed.map((item) => item.option.nameKo).join(', ');
-        const reason = removed.find((item) => item.reasonKo)?.reasonKo;
+        const names = removed.map((item) => pickText(item.option.nameKo, item.option.nameEn, language)).join(', ');
+        // getRemovedConflicts는 reasonKo만 반환한다(priceCalculator는 담당 밖). 사유는 ko 원문을 그대로 노출.
+        const reason = removed.find((item) => item.reasonKo)?.reasonKo ?? undefined;
+        const selectedName = pickText(option.nameKo, option.nameEn, language);
         toast.info(
           reason
-            ? `‘${option.nameKo}’ 선택으로 ${names} 옵션을 제외했습니다. ${reason}`
-            : `‘${option.nameKo}’과(와) 함께 쓸 수 없어 ${names} 옵션을 제외했습니다.`
+            ? copy.conflictWithReason(selectedName, names, reason)
+            : copy.conflictNoReason(selectedName, names)
         );
       }
     }
@@ -193,10 +199,10 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
   const handleSaveQuote = () => {
     if (!estimate) return;
 
-    const html = buildQuoteHtml(estimate, selectedOptionsList);
+    const html = buildQuoteHtml(estimate, selectedOptionsList, language);
     const popup = window.open('', '_blank', 'width=1120,height=794');
     if (!popup) {
-      toast.error('견적 창을 열 수 없습니다. 팝업 설정을 확인해주세요.');
+      toast.error(copy.quotePopupBlocked);
       return;
     }
 
@@ -209,8 +215,8 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
   if (!currentModel || catalog.models.length === 0) {
     return (
       <div className="min-h-dvh bg-weet-paper px-6 py-20 text-center text-weet-ink">
-        <p className="text-lg font-bold">주문 구성을 준비 중입니다.</p>
-        <p className="mt-3 text-sm text-weet-muted">관리자에서 모델과 옵션을 활성화하면 페이지가 표시됩니다.</p>
+        <p className="text-lg font-bold">{copy.emptyTitle}</p>
+        <p className="mt-3 text-sm text-weet-muted">{copy.emptyBody}</p>
       </div>
     );
   }
@@ -220,12 +226,13 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
 
   return (
     <div className="min-h-dvh bg-weet-paper text-weet-ink">
-      <ConfiguratorAppBar contactPhone={contactPhone} />
+      <ConfiguratorAppBar contactPhone={contactPhone} copy={copy} />
       <StepperBar
         currentStep={currentStep}
         furthestStepIndex={furthestStepIndex}
         setCurrentStep={handleStepSelect}
         stepCounts={stepCounts}
+        copy={copy}
       />
 
       <main id="main-content">
@@ -241,6 +248,8 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
           onEditAfterSubmit={() => setSubmitted(false)}
           onSubmit={handleSubmit}
           onSaveQuote={handleSaveQuote}
+          copy={copy}
+          language={language}
         />
       ) : (
         <div className="mx-auto flex max-w-[1800px] flex-col lg:h-[calc(100dvh-136px)] lg:flex-row">
@@ -251,8 +260,10 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
                 model={currentModel}
                 selectedOptions={selectedOptionsList}
                 onOpenViewer={() => setPlanViewerOpen(true)}
+                copy={copy}
+                language={language}
               />
-              {estimate && <ConfigSummaryBoard estimate={estimate} selectedOptions={selectedOptionsList} />}
+              {estimate && <ConfigSummaryBoard estimate={estimate} selectedOptions={selectedOptionsList} copy={copy} language={language} />}
             </div>
           </section>
 
@@ -269,6 +280,8 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
               currentStep={currentStep}
               setCurrentStep={handleStepSelect}
               estimate={estimate}
+              copy={copy}
+              language={language}
               inline
             />
           </div>
@@ -288,6 +301,8 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
               currentStep={currentStep}
               setCurrentStep={handleStepSelect}
               estimate={estimate}
+              copy={copy}
+              language={language}
             />
           </aside>
         </div>
@@ -299,34 +314,36 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
         <div className="fixed inset-x-0 bottom-0 z-40 border-t border-weet-line bg-weet-surface/95 px-4 pt-2.5 pb-[max(0.625rem,env(safe-area-inset-bottom))] shadow-[0_-8px_30px_rgba(55,48,39,0.12)] backdrop-blur lg:hidden">
           <div className="mx-auto flex max-w-[1800px] items-center justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-[11px] font-semibold text-weet-sub">{COPY.estimatedAmount}</p>
+              <p className="text-[11px] font-semibold text-weet-sub">{copy.estimatedAmount}</p>
               <p className="truncate text-lg font-black text-weet-ink">
                 <span data-testid="mobile-estimated-total">{estimate ? formatWon(estimate.estimatedTotal) : '-'}</span>
                 {estimate && estimate.consultOptionCount > 0 && (
-                  <span className="ml-1 text-xs font-bold text-weet-gold-deep">+ 상담 {estimate.consultOptionCount}건</span>
+                  <span className="ml-1 text-xs font-bold text-weet-gold-deep">{copy.consultBadge(estimate.consultOptionCount)}</span>
                 )}
               </p>
-              <p className="truncate text-[11px] text-weet-muted">운반/설치 별도 · {COPY.finalQuote}</p>
+              <p className="truncate text-[11px] text-weet-muted">{copy.transportSeparateShort} · {copy.finalQuoteShort}</p>
             </div>
             <Button
               data-testid="mobile-next-cta"
               className="h-12 shrink-0 bg-weet-ink px-4 text-weet-paper hover:bg-weet-ink-deep"
               onClick={() => handleStepSelect(nextStep.id)}
             >
-              {nextStepCta(currentStep)}
+              {nextStepCta(currentStep, copy)}
               <ArrowRight className="h-4 w-4" />
             </Button>
           </div>
         </div>
       )}
 
-      {activeInfo && <OptionInfoModal option={activeInfo} onClose={() => setActiveInfo(null)} />}
+      {activeInfo && <OptionInfoModal option={activeInfo} onClose={() => setActiveInfo(null)} copy={copy} language={language} />}
 
       {planViewerOpen && (
         <FloorplanZoomModal
           model={currentModel}
           selectedOptions={selectedOptionsList}
           onClose={() => setPlanViewerOpen(false)}
+          copy={copy}
+          language={language}
         />
       )}
     </div>
