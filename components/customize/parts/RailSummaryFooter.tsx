@@ -36,7 +36,7 @@ export function RailSummaryFooter({
               <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-weet-forest" />
               {COPY.estimatedAmount}
             </dt>
-            <dd className="text-[15px] font-extrabold text-weet-ink" data-testid="desktop-estimated-total">
+            <dd className="text-[15px] font-extrabold text-weet-ink" data-testid="desktop-estimated-total" aria-live="polite" aria-atomic="true">
               {formatWon(estimate.estimatedTotal)}
             </dd>
           </div>

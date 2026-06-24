@@ -34,9 +34,9 @@ const footerNav: Record<Lang, FooterCol[]> = {
       title: '지원',
       links: [
         { label: '고객지원', href: '/support' },
-        { label: '인허가 안내', href: '/support#help' },
-        { label: '비용 안내', href: '/support#process' },
-        { label: '자주 묻는 질문', href: '/support#qa' },
+        { label: '인허가 안내', href: '/support#permits' },
+        { label: '비용 안내', href: '/support#cost' },
+        { label: '자주 묻는 질문', href: '/support#faq' },
       ],
     },
   ],
@@ -63,9 +63,9 @@ const footerNav: Record<Lang, FooterCol[]> = {
       title: 'Support',
       links: [
         { label: 'Support', href: '/support' },
-        { label: 'Permits', href: '/support#help' },
-        { label: 'Costs', href: '/support#process' },
-        { label: 'FAQ', href: '/support#qa' },
+        { label: 'Permits', href: '/support#permits' },
+        { label: 'Costs', href: '/support#cost' },
+        { label: 'FAQ', href: '/support#faq' },
       ],
     },
   ],
@@ -92,9 +92,9 @@ const footerNav: Record<Lang, FooterCol[]> = {
       title: 'Soporte',
       links: [
         { label: 'Soporte', href: '/support' },
-        { label: 'Permisos', href: '/support#help' },
-        { label: 'Costos', href: '/support#process' },
-        { label: 'FAQ', href: '/support#qa' },
+        { label: 'Permisos', href: '/support#permits' },
+        { label: 'Costos', href: '/support#cost' },
+        { label: 'FAQ', href: '/support#faq' },
       ],
     },
   ],
@@ -199,10 +199,20 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
           {language === 'KO' ? (
             <p>
               {BRAND.legal} &nbsp;|&nbsp; 전남 함평군 대동면 금산길 205-27 &nbsp;|&nbsp; 사업자 등록번호 660-86-01862
+              {/* TODO(ux): 통신판매업 신고번호·대표자 (실제 값 필요) */}
               &nbsp;|&nbsp;{' '}
               <a href={telHref(settings.contact_phone)} className="transition-colors hover:text-weet-gold">
                 {settings.contact_phone}
               </a>
+              {settings.contact_email && (
+                <span>
+                  {' '}
+                  &nbsp;|&nbsp;{' '}
+                  <a href={`mailto:${settings.contact_email}`} className="transition-colors hover:text-weet-gold">
+                    {settings.contact_email}
+                  </a>
+                </span>
+              )}
               {settings.consult_hours && <span> &nbsp;|&nbsp; 상담 {settings.consult_hours}</span>}
             </p>
           ) : language === 'ES' ? (
@@ -227,11 +237,7 @@ export default function Footer({ settings }: { settings: SiteSettings }) {
         {/* 하단: 카피라이트 + 약관 */}
         <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
           <span className="font-mono text-[11.5px] text-weet-muted/70">
-            © 2026{' '}
-            <Link href="/admin" className="cursor-default text-inherit hover:no-underline">
-              WEET
-            </Link>
-            . All rights reserved.
+            © 2026 WEET. All rights reserved.
           </span>
           <div className="flex flex-wrap gap-x-5 gap-y-1 text-[12px] text-weet-muted/80">
             <Link href="/terms" className="transition-colors hover:text-weet-gold">

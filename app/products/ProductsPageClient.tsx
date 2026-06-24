@@ -13,7 +13,7 @@ interface ProductData {
     id: string;
     name: string;
     subCategory: "Private" | "Public";
-    sizeCategory: "S" | "M" | "L" | "XL" | "DESIGN";
+    sizeCategory: "S" | "M" | "L" | "XL" | "SOLUTION" | "DESIGN";
     imageUrl: string;
     subImages: string[];
     tagline: string;
@@ -63,7 +63,7 @@ const mapProductToData = (p: Product): ProductData => {
         id: p.id,
         name: p.name,
         subCategory: p.sub_category as "Private" | "Public",
-        sizeCategory: p.size_category as "S" | "M" | "L" | "XL" | "DESIGN",
+        sizeCategory: p.size_category as ProductData["sizeCategory"],
         imageUrl: p.image_url,
         tagline: p.tagline || "",
         description: p.description,
@@ -80,12 +80,22 @@ const mapProductToData = (p: Product): ProductData => {
     };
 };
 
-const sortProducts = (products: ProductData[]) => {
-    const categoryOrder = ["S", "M", "L", "XL", "DESIGN"];
+// 카테고리 정렬 순서 (사이드바 구조와 동일하게 유지). 미정의 카테고리는 맨 뒤로.
+const CATEGORY_ORDER = ["S", "M", "L", "XL", "SOLUTION", "DESIGN"];
 
+// 헤더(72px) 기준 단일 스크롤 오프셋. scroll-mt / 앵커 -top / scrollTo 보정에 공통 사용.
+const HEADER_OFFSET = 72;
+
+// /customize 구성기가 다루는 기준 모델 = 이름에 3x6 / 3x9 가 들어가는 모델.
+// 그 외(비기준) 모델은 구성/마감별로 가격이 달라 상담(/support#consult)로 안내.
+const isBaseModel = (name: string) => /3\s*[x×]\s*[69]/i.test(name);
+
+const sortProducts = (products: ProductData[]) => {
     return [...products].sort((a, b) => {
-        const idxA = categoryOrder.indexOf(a.sizeCategory);
-        const idxB = categoryOrder.indexOf(b.sizeCategory);
+        const rawA = CATEGORY_ORDER.indexOf(a.sizeCategory);
+        const rawB = CATEGORY_ORDER.indexOf(b.sizeCategory);
+        const idxA = rawA < 0 ? Infinity : rawA;
+        const idxB = rawB < 0 ? Infinity : rawB;
 
         if (idxA !== idxB) {
             return idxA - idxB;
@@ -122,7 +132,8 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
     const [products] = useState<ProductData[]>(() => sortProducts(initialProducts.map(mapProductToData)));
     const [visibleCount, setVisibleCount] = useState(() => Math.min(8, products.length));
     const visibleProducts = useMemo(() => products.slice(0, visibleCount), [products, visibleCount]);
-    const [expandedCategories, setExpandedCategories] = useState<string[]>(["S", "M", "L", "XL", "DESIGN"]);
+    const [expandedCategories, setExpandedCategories] = useState<string[]>([...CATEGORY_ORDER]);
+    const [productFilter, setProductFilter] = useState("");
     const [expandedMobileProducts, setExpandedMobileProducts] = useState<string[]>([]);
 
     const toggleMobileProduct = (id: string) => {
@@ -143,9 +154,12 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
     const sidebarRef = useRef<HTMLDivElement>(null);
     const sidebarItemRefs = useRef<{ [key: string]: HTMLLIElement | null }>({});
     const didHandleInitialHash = useRef(false);
+    // 사용자가 사이드바를 직접 스크롤/호버 중이면 auto-scroll 억제 (점프 방지).
+    const suppressSidebarAutoScroll = useRef(false);
 
     // Sidebar Auto-Scroll Logic
     useEffect(() => {
+        if (suppressSidebarAutoScroll.current) return;
         if (activeProduct && sidebarItemRefs.current[activeProduct] && sidebarRef.current) {
             const item = sidebarItemRefs.current[activeProduct];
             const container = sidebarRef.current;
@@ -204,34 +218,29 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
         Public?: string[];
     }
 
-    const sidebarStructure: Record<string, SidebarCategory> = {
-        S: {
-            label: "S",
-            subtitle: "",
-            Private: products.filter(p => p.sizeCategory === "S" && p.subCategory === "Private").map(p => p.id),
-            Public: products.filter(p => p.sizeCategory === "S" && p.subCategory === "Public").map(p => p.id),
-        },
-        M: {
-            label: "M",
-            subtitle: "",
-            items: products.filter(p => p.sizeCategory === "M").map(p => p.id),
-        },
-        L: {
-            label: "L",
-            subtitle: "",
-            items: products.filter(p => p.sizeCategory === "L").map(p => p.id),
-        },
-        XL: {
-            label: "XL",
-            subtitle: "",
-            items: products.filter(p => p.sizeCategory === "XL").map(p => p.id),
-        },
-        DESIGN: {
-            label: "DESIGN",
-            subtitle: "",
-            items: products.filter(p => p.sizeCategory === "DESIGN").map(p => p.id)
-        },
-    };
+    // 제품명 즉시 필터 (substring, 대소문자 무시). 비매칭 카테고리는 자동 숨김.
+    // ponytail: 필터는 사이드바 라인업 표시만 좁힘. 본문 리스트는 staged reveal/scroll-spy를
+    // 그대로 두고, 항목 클릭 시 scrollToProduct가 해당 제품을 펼쳐 스크롤한다.
+    const sidebarStructure = useMemo<Record<string, SidebarCategory>>(() => {
+        const q = productFilter.trim().toLowerCase();
+        const matches = (p: ProductData) => q === "" || p.name.toLowerCase().includes(q);
+        const inCat = (cat: ProductData["sizeCategory"]) =>
+            products.filter(p => p.sizeCategory === cat && matches(p));
+
+        return {
+            S: {
+                label: "S",
+                subtitle: "",
+                Private: inCat("S").filter(p => p.subCategory === "Private").map(p => p.id),
+                Public: inCat("S").filter(p => p.subCategory === "Public").map(p => p.id),
+            },
+            M: { label: "M", subtitle: "", items: inCat("M").map(p => p.id) },
+            L: { label: "L", subtitle: "", items: inCat("L").map(p => p.id) },
+            XL: { label: "XL", subtitle: "", items: inCat("XL").map(p => p.id) },
+            SOLUTION: { label: "SOLUTION", subtitle: "", items: inCat("SOLUTION").map(p => p.id) },
+            DESIGN: { label: "DESIGN", subtitle: "", items: inCat("DESIGN").map(p => p.id) },
+        };
+    }, [products, productFilter]);
 
     const handleCategoryClick = (category: string) => {
         // 1. Expand immediately
@@ -259,9 +268,8 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
             const element = productRefs.current[productId];
             if (!element) return;
 
-            const headerOffset = 100;
             const elementPosition = element.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            const offsetPosition = elementPosition + window.pageYOffset - HEADER_OFFSET;
 
             window.scrollTo({
                 top: offsetPosition,
@@ -313,9 +321,8 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                     return;
                 }
 
-                const headerOffset = 100;
                 const elementPosition = element.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                const offsetPosition = elementPosition + window.pageYOffset - HEADER_OFFSET;
 
                 window.scrollTo({
                     top: offsetPosition,
@@ -332,7 +339,11 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
     }, [products, scrollToProduct]);
 
     useEffect(() => {
-        const handleScroll = () => {
+        let rafId = 0;
+        let ticking = false;
+
+        const update = () => {
+            ticking = false;
             const currentScrollY = window.scrollY;
             lastScrollY.current = currentScrollY;
 
@@ -377,8 +388,17 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
             }
         };
 
+        const handleScroll = () => {
+            if (ticking) return;
+            ticking = true;
+            rafId = window.requestAnimationFrame(update);
+        };
+
         window.addEventListener("scroll", handleScroll, { passive: true });
-        return () => window.removeEventListener("scroll", handleScroll);
+        return () => {
+            window.removeEventListener("scroll", handleScroll);
+            if (rafId) window.cancelAnimationFrame(rafId);
+        };
     }, [visibleProducts, activeProduct]);
 
 
@@ -409,9 +429,34 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
         <div className="min-h-screen bg-weet-paper text-weet-ink">
             <div className="relative mx-auto flex max-w-[1440px] flex-col lg:flex-row">
                 {/* ===== SIDEBAR (라인업, sticky) ===== */}
-                <aside className="sticky top-[72px] z-10 hidden h-[calc(100vh-72px)] w-[260px] flex-none flex-col overflow-hidden bg-weet-paper pb-10 pl-[5vw] pt-14 lg:flex">
-                    <div className="mb-9 font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-weet-gold-deep">
+                <aside
+                    className="sticky top-[72px] z-10 hidden h-[calc(100vh-72px)] w-[260px] flex-none flex-col overflow-hidden bg-weet-paper pb-10 pl-[5vw] pt-14 lg:flex"
+                    onMouseEnter={() => { suppressSidebarAutoScroll.current = true; }}
+                    onMouseLeave={() => { suppressSidebarAutoScroll.current = false; }}
+                >
+                    <div className="mb-7 font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-weet-gold-deep">
                         Lineup · 라인업
+                    </div>
+                    {/* 제품명 즉시 필터 */}
+                    <div className="relative mb-7 pr-4">
+                        <input
+                            type="text"
+                            value={productFilter}
+                            onChange={(e) => setProductFilter(e.target.value)}
+                            placeholder={t('제품명 검색', 'Search models', 'Buscar modelos')}
+                            aria-label={t('제품명으로 라인업 필터', 'Filter lineup by model name', 'Filtrar por nombre de modelo')}
+                            className="w-full rounded-[8px] border border-weet-line-2 bg-white px-3 py-2 pr-8 text-[13px] text-weet-ink placeholder:text-weet-muted focus:border-weet-gold-deep focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep"
+                        />
+                        {productFilter && (
+                            <button
+                                type="button"
+                                aria-label={t('검색어 지우기', 'Clear search', 'Borrar búsqueda')}
+                                onClick={() => setProductFilter("")}
+                                className="absolute right-6 top-1/2 -translate-y-1/2 text-weet-muted hover:text-weet-ink"
+                            >
+                                <X className="h-4 w-4" />
+                            </button>
+                        )}
                     </div>
                     <div ref={sidebarRef} className="custom-scrollbar flex-1 space-y-8 overflow-y-auto pr-4">
                         {(Object.keys(sidebarStructure) as Array<keyof typeof sidebarStructure>).map((key) => {
@@ -431,7 +476,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                 <div key={key} className="group">
                                     <h2
                                         onClick={() => handleCategoryClick(key)}
-                                        className={`m-0 mb-3 cursor-pointer font-bold tracking-[-0.04em] transition-all duration-300 group-hover:translate-x-1.5 ${key === 'DESIGN' ? 'text-[26px] tracking-[-0.02em]' : 'text-[40px]'} ${isActiveCat ? 'text-weet-ink' : 'text-[#C9BFAE] group-hover:text-weet-muted'}`}
+                                        className={`m-0 mb-3 cursor-pointer font-bold tracking-[-0.04em] transition-all duration-300 group-hover:translate-x-1.5 ${(key === 'DESIGN' || key === 'SOLUTION') ? 'text-[26px] tracking-[-0.02em]' : 'text-[40px]'} ${isActiveCat ? 'text-weet-ink' : 'text-[#C9BFAE] group-hover:text-weet-muted'}`}
                                     >
                                         {category.label}
                                     </h2>
@@ -484,6 +529,13 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                 </div>
                             );
                         })}
+                        {productFilter.trim() !== "" && Object.values(sidebarStructure).every(
+                            c => (c.items?.length ?? 0) + (c.Private?.length ?? 0) + (c.Public?.length ?? 0) === 0
+                        ) && (
+                            <p className="pr-4 text-[13px] leading-[1.6] text-weet-muted">
+                                {t('검색 결과가 없습니다.', 'No matching models.', 'Sin resultados.')}
+                            </p>
+                        )}
                     </div>
                 </aside>
 
@@ -572,20 +624,22 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                             // Check if this is the first product of its category to render the anchor
                             const globalIndex = products.findIndex((item) => item.id === product.id);
                             const isFirstOfCategory = globalIndex === 0 || products[globalIndex - 1]?.sizeCategory !== product.sizeCategory;
-                            const categoryId = product.sizeCategory.toLowerCase(); // s, m, l, xl, design
+                            const categoryId = product.sizeCategory.toLowerCase(); // s, m, l, xl, solution, design
                             const imageCount = (product.subImages?.filter(Boolean).length || 0) + (product.imageUrl ? 1 : 0);
+                            // 기준 모델(3x6·3x9)만 /customize에서 즉시 구성 가능. 그 외는 상담으로 안내.
+                            const base = isBaseModel(product.name);
 
                             return (
                                 <div key={product.id} className="relative">
                                     {/* Anchor for Scroll */}
                                     {isFirstOfCategory && (
-                                        <div id={categoryId} className="invisible absolute -top-[140px]" />
+                                        <div id={categoryId} className="invisible absolute -top-[72px]" />
                                     )}
 
                                     <article
                                         id={product.id}
                                         ref={(el) => { productRefs.current[product.id] = el; }}
-                                        className="wt-reveal scroll-mt-[100px] overflow-hidden rounded-[12px] border border-weet-line-2 bg-weet-surface shadow-weet-card lg:overflow-visible lg:rounded-none lg:border-none lg:bg-transparent lg:p-0 lg:shadow-none"
+                                        className="wt-reveal scroll-mt-[72px] overflow-hidden rounded-[12px] border border-weet-line-2 bg-weet-surface shadow-weet-card lg:overflow-visible lg:rounded-none lg:border-none lg:bg-transparent lg:p-0 lg:shadow-none"
                                     >
                                         <div className="p-5 lg:p-0">
                                             {/* Product Header */}
@@ -633,6 +687,24 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                                     </div>
                                                 )}
                                             </div>
+
+                                            {/* Mobile: 접힌 카드에도 핵심 메타 노출 (크기 / 가격 또는 상담가) */}
+                                            <dl className="mt-1 flex flex-wrap gap-x-6 gap-y-2 px-1 lg:hidden">
+                                                {product.details.size && product.details.size !== "-" && (
+                                                    <div className="flex items-baseline gap-1.5">
+                                                        <dt className="text-[12px] font-medium text-weet-muted">{TEXT.size}</dt>
+                                                        <dd className="text-[13.5px] font-semibold text-weet-ink">{product.details.size}</dd>
+                                                    </div>
+                                                )}
+                                                <div className="flex items-baseline gap-1.5">
+                                                    <dt className="text-[12px] font-medium text-weet-muted">{TEXT.price}</dt>
+                                                    <dd className="text-[13.5px] font-semibold text-weet-ink">
+                                                        {base && product.details.price && product.details.price !== "-"
+                                                            ? product.details.price
+                                                            : t('상담가', 'On request', 'Bajo consulta')}
+                                                    </dd>
+                                                </div>
+                                            </dl>
 
                                             {/* Mobile Accordion Toggle */}
                                             <button
@@ -707,14 +779,23 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                                         )}
                                                     </div>
 
-                                                    {/* Soft CTA */}
+                                                    {/* Soft CTA — 기준 모델은 맞춤 구성, 비기준 모델은 상담 */}
                                                     <div className="mt-7 flex justify-center border-t border-weet-line-2 pt-5 lg:justify-start">
-                                                        <Link
-                                                            href="/customize"
-                                                            className="inline-flex items-center gap-2 rounded-[6px] border border-weet-line-2 bg-white px-5 py-3 text-sm font-semibold text-weet-ink transition-transform duration-150 hover:-translate-y-0.5"
-                                                        >
-                                                            {t('구성 상담 시작하기', 'Start a consultation', 'Iniciar una consulta')} →
-                                                        </Link>
+                                                        {base ? (
+                                                            <Link
+                                                                href="/customize"
+                                                                className="inline-flex items-center gap-2 rounded-[6px] bg-weet-ink px-5 py-3 text-sm font-semibold text-weet-paper transition-transform duration-150 hover:-translate-y-0.5"
+                                                            >
+                                                                {t('이 모델 구성하기', 'Configure this model', 'Configurar este modelo')} →
+                                                            </Link>
+                                                        ) : (
+                                                            <Link
+                                                                href="/support#consult"
+                                                                className="inline-flex items-center gap-2 rounded-[6px] border border-weet-line-2 bg-white px-5 py-3 text-sm font-semibold text-weet-ink transition-transform duration-150 hover:-translate-y-0.5"
+                                                            >
+                                                                {t('구성 상담 문의하기', 'Request a consultation', 'Solicitar una consulta')} →
+                                                            </Link>
+                                                        )}
                                                     </div>
                                                 </div>
                                             </div>
@@ -736,6 +817,37 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                             </div>
                         )}
                     </div>
+
+                    {/* 빈 상태: 등록된 제품이 없을 때 */}
+                    {products.length === 0 && (
+                        <div className="rounded-[12px] border border-weet-line-2 bg-weet-surface px-8 py-16 text-center">
+                            <Home className="mx-auto mb-4 h-10 w-10 text-weet-muted opacity-60" />
+                            <h2 className="mb-2.5 text-[20px] font-semibold tracking-[-0.02em] text-weet-ink">
+                                {t('아직 등록된 제품이 없습니다', 'No products yet', 'Aún no hay productos')}
+                            </h2>
+                            <p className="mx-auto mb-7 max-w-[42ch] text-[14.5px] leading-[1.7] text-weet-sub kr-balance">
+                                {t(
+                                    '라인업을 준비하고 있습니다. 기준 모델은 맞춤 구성에서 직접 구성해 보거나, 원하는 구성을 상담으로 문의해 주세요.',
+                                    'Our lineup is being prepared. Configure a base model now, or tell us what you need.',
+                                    'Estamos preparando la gama. Configure un modelo base ahora o cuéntenos lo que necesita.',
+                                )}
+                            </p>
+                            <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+                                <Link
+                                    href="/customize"
+                                    className="inline-flex h-12 items-center justify-center rounded-[8px] bg-weet-ink px-6 text-sm font-semibold text-weet-paper transition-transform duration-150 hover:-translate-y-0.5"
+                                >
+                                    {t('맞춤 구성 시작하기', 'Start configuring', 'Empezar a configurar')} →
+                                </Link>
+                                <Link
+                                    href="/support#consult"
+                                    className="inline-flex h-12 items-center justify-center rounded-[8px] border border-weet-line-2 bg-white px-6 text-sm font-semibold text-weet-ink transition-colors hover:bg-weet-surface"
+                                >
+                                    {t('상담 문의하기', 'Contact us', 'Contáctenos')}
+                                </Link>
+                            </div>
+                        </div>
+                    )}
                 </main>
             </div>
 

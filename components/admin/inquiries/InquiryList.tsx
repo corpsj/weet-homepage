@@ -145,7 +145,12 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
             setInquiries(inquiries.map(i => i.id === selectedInquiry.id ? updatedInquiry : i));
             setSelectedInquiry(updatedInquiry);
             setReplyText('');
-            toast.success('답변이 저장되었습니다.');
+            // 자동 메일 발송 인프라가 없어 저장만으로는 고객에게 전달되지 않는다.
+            // 발송은 아래 '메일 앱 열기' 버튼으로 별도 진행해야 함을 안내한다.
+            // TODO(ux): 답변 저장 시 자동 메일 발송(서버 측 메일러) 연동 — 발송 자동화는 별도 작업으로 보류.
+            toast.success('답변이 저장되었습니다.', {
+                description: '아직 고객에게 발송되지 않았습니다. 아래 ‘메일 앱 열기’로 보내주세요.',
+            });
         } catch (error) {
             console.error('Failed to save reply:', error);
             toast.error('답변 저장에 실패했습니다.');
@@ -342,9 +347,10 @@ export default function InquiryList({ initialInquiries }: { initialInquiries: In
                                     onClick={handleSaveReply}
                                     disabled={isSending || !replyText.trim()}
                                     className={consolePrimaryButtonClass}
+                                    title="답변을 저장하고 상태를 답변완료로 바꿉니다. 고객 발송은 ‘메일 앱 열기’로 별도 진행하세요."
                                 >
                                     <CheckCircle2 className="w-3.5 h-3.5 mr-1" />
-                                    {isSending ? '저장 중...' : '답변 저장 및 완료 처리'}
+                                    {isSending ? '저장 중...' : '답변 저장(고객 발송 별도)'}
                                 </button>
                             </div>
                         </div>

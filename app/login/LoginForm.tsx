@@ -1,10 +1,32 @@
 'use client';
 
 import { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
+import { useFormStatus } from 'react-dom';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { createClient } from '@/utils/supabase/client';
 import { login } from './actions';
+
+// 제출 중 상태는 form 내부에서만 읽을 수 있어 별도 컴포넌트로 분리한다.
+function LoginSubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <button
+      formAction={login}
+      disabled={pending}
+      className="mt-1.5 flex h-12 items-center justify-center gap-2 rounded-[10px] bg-weet-ink text-[15px] font-semibold text-weet-paper transition-transform duration-150 hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-70"
+    >
+      {pending ? (
+        <>
+          <Loader2 className="h-4 w-4 animate-spin" />
+          로그인 중…
+        </>
+      ) : (
+        '로그인 →'
+      )}
+    </button>
+  );
+}
 
 export default function LoginForm({ error }: { error?: string }) {
   const [showPw, setShowPw] = useState(false);
@@ -96,12 +118,7 @@ export default function LoginForm({ error }: { error?: string }) {
           </div>
         </div>
 
-        <button
-          formAction={login}
-          className="mt-1.5 flex h-12 items-center justify-center gap-2 rounded-[10px] bg-weet-ink text-[15px] font-semibold text-weet-paper transition-transform duration-150 hover:-translate-y-0.5"
-        >
-          로그인 →
-        </button>
+        <LoginSubmitButton />
       </form>
 
       {/* 구분선 */}

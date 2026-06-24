@@ -55,7 +55,7 @@ export default function ConsultBar({ settings }: { settings: SiteSettings }) {
 
       {/* 데스크톱: 우측 하단 고정 상담 버튼 */}
       <div className="fixed bottom-8 right-8 z-50 hidden flex-col items-end gap-2 lg:flex">
-        {hasKakao && (
+        {hasKakao ? (
           <a
             href={settings.kakao_channel_url}
             target="_blank"
@@ -66,6 +66,15 @@ export default function ConsultBar({ settings }: { settings: SiteSettings }) {
             <MessageCircle className="h-4 w-4 text-weet-gold-deep" />
             카카오톡 상담
           </a>
+        ) : (
+          <Link
+            href="/support#consult"
+            onClick={() => trackConsultClick('form')}
+            className="flex h-11 items-center gap-2 rounded-full border border-weet-line bg-weet-surface px-5 text-sm font-semibold text-weet-ink shadow-weet-float transition-transform hover:scale-[1.03]"
+          >
+            <MessagesSquare className="h-4 w-4 text-weet-gold-deep" />
+            상담 신청하기
+          </Link>
         )}
         <a
           href={telHref(settings.contact_phone)}

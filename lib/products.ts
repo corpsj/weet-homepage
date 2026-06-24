@@ -49,39 +49,3 @@ export async function getProductById(id: string): Promise<Product | null> {
 
   return data
 }
-
-// 사이드바 구조 생성 헬퍼
-export function buildSidebarStructure(products: Product[]) {
-  const structure: Record<string, {
-    label: string
-    subtitle: string
-    Private?: string[]
-    Public?: string[]
-    items?: string[]
-  }> = {
-    S: { label: 'S', subtitle: '', Private: [], Public: [] },
-    M: { label: 'M', subtitle: '', items: [] },
-    L: { label: 'L', subtitle: '', items: [] },
-    XL: { label: 'XL', subtitle: '', items: [] },
-    SOLUTION: { label: 'SOLUTION', subtitle: '', items: [] },
-    DESIGN: { label: 'DESIGN', subtitle: '', items: [] },
-  }
-
-  products.forEach((product) => {
-    const category = product.size_category
-
-    // S만 Private/Public 세부 카테고리 지원
-    if (category === 'S') {
-      if (product.sub_category === 'Private') {
-        structure[category].Private?.push(product.id)
-      } else {
-        structure[category].Public?.push(product.id)
-      }
-    } else if (structure[category]) {
-      // M, L, XL, SOLUTION, DESIGN은 세부 카테고리 없음
-      structure[category].items?.push(product.id)
-    }
-  })
-
-  return structure
-}

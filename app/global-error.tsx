@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect } from 'react';
+import Link from 'next/link';
+import { SITE_SETTING_DEFAULTS, telHref } from '@/lib/site-settings';
 
 /**
  * Global error boundary for errors thrown in the root layout itself. Must render
@@ -24,12 +26,28 @@ export default function GlobalError({
         <p className="max-w-md text-sm leading-6 text-gray-600">
           예기치 못한 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.
         </p>
-        <button
-          onClick={reset}
-          className="rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-gray-800"
-        >
-          다시 시도
-        </button>
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <button
+            onClick={reset}
+            className="rounded-lg bg-gray-900 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-gray-800"
+          >
+            다시 시도
+          </button>
+          <Link
+            href="/"
+            className="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-bold text-gray-700 transition-colors hover:bg-gray-50"
+          >
+            홈으로
+          </Link>
+        </div>
+        {SITE_SETTING_DEFAULTS.contact_phone && (
+          <a
+            href={telHref(SITE_SETTING_DEFAULTS.contact_phone)}
+            className="text-sm font-bold text-gray-700 underline-offset-2 hover:underline"
+          >
+            전화 상담 {SITE_SETTING_DEFAULTS.contact_phone}
+          </a>
+        )}
       </body>
     </html>
   );

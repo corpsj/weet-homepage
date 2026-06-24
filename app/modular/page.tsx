@@ -21,7 +21,7 @@ const COPY: Record<Language, {
     stats: { value: string; unit?: string; label: string }[];
   };
   processes: Array<{ id: string; step: string; title: string; description: string }>;
-  cta: { title: string; description: string; customize: string; products: string; support: string };
+  cta: { title: string; description: string; customize: string; products: string; support: string; solution: string };
 }> = {
   KO: {
     hero: {
@@ -73,6 +73,7 @@ const COPY: Record<Language, {
       products: '제품 전체 보기',
       customize: '나만의 위트 만들기',
       support: '구매 과정 알아보기',
+      solution: '테크 옵션 보기',
     },
   },
   EN: {
@@ -125,6 +126,7 @@ const COPY: Record<Language, {
       products: 'View all products',
       customize: 'Customize your weet',
       support: 'View purchase process',
+      solution: 'Explore tech options',
     },
   },
   ES: {
@@ -177,6 +179,7 @@ const COPY: Record<Language, {
       products: 'Ver todos los productos',
       customize: 'Crea tu weet',
       support: 'Ver el proceso de compra',
+      solution: 'Ver opciones tecnológicas',
     },
   },
 };
@@ -316,6 +319,12 @@ export default function ModularPage() {
               className="rounded-[6px] border border-weet-paper/40 px-[26px] py-3.5 text-[15px] font-medium text-weet-paper transition-transform duration-150 hover:-translate-y-0.5"
             >
               {copy.cta.support}
+            </Link>
+            <Link
+              href="/solution"
+              className="rounded-[6px] border border-weet-paper/40 px-[26px] py-3.5 text-[15px] font-medium text-weet-paper transition-transform duration-150 hover:-translate-y-0.5"
+            >
+              {copy.cta.solution} →
             </Link>
           </div>
         </div>

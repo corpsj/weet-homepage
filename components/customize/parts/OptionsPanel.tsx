@@ -169,7 +169,7 @@ export function OptionsPanel({
   if (inline) {
     return (
       <div ref={scrollRef} className="scroll-mt-[150px] md:scroll-mt-[162px]">
-        <div className="mx-auto w-full max-w-xl px-4 pb-40 pt-5 md:px-6">
+        <div className="mx-auto w-full max-w-xl px-4 pb-[calc(7rem+env(safe-area-inset-bottom))] pt-5 md:px-6">
           {stepBody}
         </div>
       </div>

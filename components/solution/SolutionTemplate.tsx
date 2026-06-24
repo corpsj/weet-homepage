@@ -91,10 +91,10 @@ export default function SolutionTemplate({ data }: { data: SolutionPackageData }
           >
             <ArrowLeft className="h-4 w-4" />
             {language === "KO"
-              ? "운영 옵션 전체"
+              ? "솔루션 전체 보기"
               : language === "ES"
-                ? "Todas las opciones de operación"
-                : "All operation options"}
+                ? "Todas las soluciones"
+                : "All solutions"}
           </Link>
 
           <div className="mt-9 grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(520px,1.1fr)] lg:items-end">

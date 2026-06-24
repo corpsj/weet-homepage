@@ -20,7 +20,7 @@ export default function SolutionNetworkLayout({
         items={[
           { name: "홈", path: "/" },
           { name: "솔루션", path: "/solution" },
-          { name: "끊김 없는 연결 옵션", path: "/solution/network" },
+          { name: "네트워크", path: "/solution/network" },
         ]}
       />
       {children}

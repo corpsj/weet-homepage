@@ -134,6 +134,29 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
               ))}
             </div>
           )}
+
+          <div className="rounded-2xl border border-weet-line-2 bg-weet-surface px-6 py-10 text-center sm:px-10">
+            <h2 className="text-2xl font-bold tracking-[-0.02em] text-weet-ink md:text-3xl">
+              비슷한 공간을 계획 중이신가요?
+            </h2>
+            <p className="mx-auto mt-3 max-w-xl text-[15px] leading-relaxed text-weet-sub kr-balance">
+              부지 조건과 용도를 알려주시면 목적에 맞는 구성과 예상 범위를 함께 안내해 드립니다.
+            </p>
+            <div className="mt-7 flex flex-col items-center justify-center gap-3 sm:flex-row">
+              <Link
+                href="/support#consult"
+                className="inline-flex h-12 w-full items-center justify-center rounded-lg bg-weet-gold px-6 text-[15px] font-semibold text-weet-ink transition-transform duration-150 hover:-translate-y-0.5 sm:w-auto"
+              >
+                상담 문의하기
+              </Link>
+              <Link
+                href="/customize"
+                className="inline-flex h-12 w-full items-center justify-center rounded-lg border border-weet-line-2 bg-white px-6 text-[15px] font-semibold text-weet-ink transition-transform duration-150 hover:-translate-y-0.5 sm:w-auto"
+              >
+                직접 구성해 보기
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -42,7 +42,7 @@ const COPY: Record<Language, {
         title: 'SMALL CAFE',
         quote: '"운영의 효율성과 고객의 경험을\n동시에 만족하는 공간"',
         body: "한정된 대지에서도 회전율을 높이는 바(Bar) 동선 설계, 브랜드 스토리를 담아내는 감각적인 외관 디자인. F&B 비즈니스를 위한 최적화된 설비와 인테리어를 모두 갖춘 채 현장으로 배송됩니다.",
-        cta: 'View Portfolio',
+        cta: '포트폴리오 보기',
         image: { src: '/images/handoff/bsp-cafe.webp', alt: 'Small Cafe' },
         imageOnRight: true,
       },
@@ -52,7 +52,7 @@ const COPY: Record<Language, {
         title: 'POP-UP STORE / BRAND SHOWROOM',
         quote: "'브랜드 경험'이 필요한 곳,\n그곳이 어디든 즉시 전개합니다.",
         body: '단 며칠의 이벤트를 위해 버려지는 가설 건축물이 아닙니다. 정해진 기간 동안 일관된 브랜딩을 구현하고, 이벤트 종료 후에는 다른 지역으로 신속하게 이동하여 브랜드를 반복적으로 노출하는 스마트한 솔루션입니다.',
-        cta: 'View Portfolio',
+        cta: '포트폴리오 보기',
         image: { src: '/images/handoff/bsp-popup.webp', alt: 'Pop-up Store' },
         imageOnRight: false,
       },
@@ -62,7 +62,7 @@ const COPY: Record<Language, {
         title: 'ACCOMMODATION / SITE OFFICE',
         quote: "어디서든 최고급 객실과\n쾌적한 업무 공간을 누리다",
         body: '스테이(Stay) 비즈니스를 위한 고급 숙박 시설이나 현장 인력을 위한 프리미엄 워크스페이스가 필요하신가요? 꼼꼼한 단열, 고급스러운 마감, 유틸리티 인프라가 통합된 모듈은 여러 채를 연결하여 대규모 시설로도 빠르게 확장할 수 있습니다.',
-        cta: 'View Portfolio',
+        cta: '포트폴리오 보기',
         image: { src: '/images/handoff/bsp-stay.webp', alt: 'Accommodation / Workspace' },
         imageOnRight: true,
       },
@@ -72,7 +72,7 @@ const COPY: Record<Language, {
         title: 'SMART FARM',
         quote: "정밀하게 통제되는\n미래형 연구/생산 공간",
         body: '스마트팜은 외부 환경을 차단하고 내부를 정밀하게 통제해야 하는 공간입니다. 높은 기밀성과 단열성을 갖춘 모듈 구조 내부에 환경 제어 시스템과 네트워크를 통합하여, 안정적인 스마트팜 인프라를 제공합니다.',
-        cta: 'View Portfolio',
+        cta: '포트폴리오 보기',
         image: { src: '/images/handoff/bsp-farm.webp', alt: 'Smart Farm' },
         imageOnRight: false,
       },
@@ -96,7 +96,7 @@ const COPY: Record<Language, {
         title: 'SMALL CAFE',
         quote: 'A space that satisfies both operational efficiency and customer experience.',
         body: 'Bar circulation designed to increase turnover even on limited land, and sensory exterior design that contains your brand story. It is delivered to the site fully equipped with optimized facilities and interiors for F&B businesses.',
-        cta: 'View portfolio',
+        cta: 'View Portfolio',
         image: { src: '/images/handoff/bsp-cafe.webp', alt: 'Small Cafe' },
         imageOnRight: true,
       },
@@ -106,7 +106,7 @@ const COPY: Record<Language, {
         title: 'POP-UP STORE / BRAND SHOWROOM',
         quote: 'Wherever a "brand experience" is needed, we deploy it immediately.',
         body: 'These are not temporary structures discarded after a few days. It is a smart solution that implements perfect branding for a set period and quickly moves to another area after the event to repeatedly expose the brand.',
-        cta: 'View portfolio',
+        cta: 'View Portfolio',
         image: { src: '/images/handoff/bsp-popup.webp', alt: 'Pop-up Store' },
         imageOnRight: false,
       },
@@ -116,7 +116,7 @@ const COPY: Record<Language, {
         title: 'ACCOMMODATION / SITE OFFICE',
         quote: "Enjoy luxury rooms and comfortable workspaces anywhere.",
         body: 'Do you need a luxury accommodation facility for a stay business or a premium workspace for field personnel? Modules with perfect insulation, luxurious finishes, and integrated utility infrastructure can be quickly expanded into large-scale facilities by connecting multiple units.',
-        cta: 'View portfolio',
+        cta: 'View Portfolio',
         image: { src: '/images/handoff/bsp-stay.webp', alt: 'Accommodation / Workspace' },
         imageOnRight: true,
       },
@@ -126,7 +126,7 @@ const COPY: Record<Language, {
         title: 'SMART FARM',
         quote: 'A precisely controlled futuristic research/production space.',
         body: 'A smart farm is a precise laboratory that must block external environments and perfectly control the interior. By integrating complex environmental control systems and networks within a modular structure with the highest airtightness and insulation, we provide the most stable smart farm infrastructure.',
-        cta: 'View portfolio',
+        cta: 'View Portfolio',
         image: { src: '/images/handoff/bsp-farm.webp', alt: 'Smart Farm' },
         imageOnRight: false,
       },
@@ -150,7 +150,7 @@ const COPY: Record<Language, {
         title: 'SMALL CAFE',
         quote: 'Un espacio que satisface a la vez la eficiencia operativa y la experiencia del cliente.',
         body: 'Una circulación de barra diseñada para aumentar la rotación incluso en terrenos reducidos, y un diseño exterior sensorial que recoge la historia de su marca. Se entrega en obra totalmente equipado con las instalaciones e interiores optimizados para negocios de restauración.',
-        cta: 'View portfolio',
+        cta: 'Ver portafolio',
         image: { src: '/images/handoff/bsp-cafe.webp', alt: 'Small Cafe' },
         imageOnRight: true,
       },
@@ -160,7 +160,7 @@ const COPY: Record<Language, {
         title: 'POP-UP STORE / BRAND SHOWROOM',
         quote: 'Allí donde se necesite una "experiencia de marca", la desplegamos de inmediato.',
         body: 'No son estructuras temporales que se desechan tras unos días. Es una solución inteligente que aplica un branding impecable durante un periodo determinado y se traslada rápidamente a otra zona tras el evento para exponer la marca de forma reiterada.',
-        cta: 'View portfolio',
+        cta: 'Ver portafolio',
         image: { src: '/images/handoff/bsp-popup.webp', alt: 'Pop-up Store' },
         imageOnRight: false,
       },
@@ -170,7 +170,7 @@ const COPY: Record<Language, {
         title: 'ACCOMMODATION / SITE OFFICE',
         quote: 'Disfrute de habitaciones de lujo y espacios de trabajo confortables en cualquier lugar.',
         body: '¿Necesita un alojamiento de lujo para un negocio de hospedaje o un espacio de trabajo premium para el personal de obra? Los módulos con aislamiento perfecto, acabados de lujo e infraestructura de utilidades integrada pueden ampliarse con rapidez hasta convertirse en instalaciones de gran escala conectando varias unidades.',
-        cta: 'View portfolio',
+        cta: 'Ver portafolio',
         image: { src: '/images/handoff/bsp-stay.webp', alt: 'Accommodation / Workspace' },
         imageOnRight: true,
       },
@@ -180,7 +180,7 @@ const COPY: Record<Language, {
         title: 'SMART FARM',
         quote: 'Un espacio futurista de investigación y producción controlado con precisión.',
         body: 'Una granja inteligente es un laboratorio preciso que debe aislar el entorno exterior y controlar el interior a la perfección. Al integrar complejos sistemas de control ambiental y redes dentro de una estructura modular con la máxima estanqueidad y aislamiento, ofrecemos la infraestructura de granja inteligente más estable.',
-        cta: 'View portfolio',
+        cta: 'Ver portafolio',
         image: { src: '/images/handoff/bsp-farm.webp', alt: 'Smart Farm' },
         imageOnRight: false,
       },
@@ -245,13 +245,10 @@ export default function BespokePage() {
             </div>
             <div className="flex flex-col gap-[18px]">
               {copy.features.map((feature, idx) => (
-                <motion.div
+                <div
                   key={feature.title}
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.12 * idx, duration: 0.6 }}
-                  className="border-l-2 border-weet-paper/30 py-0.5 pl-5 transition-colors duration-300 hover:border-weet-gold"
+                  style={{ animationDelay: `${0.12 * idx}s` }}
+                  className="wt-reveal border-l-2 border-weet-paper/30 py-0.5 pl-5 transition-colors duration-300 hover:border-weet-gold"
                 >
                   <strong className="mb-1.5 block text-[16px] font-semibold text-weet-paper">
                     {feature.title}
@@ -259,7 +256,7 @@ export default function BespokePage() {
                   <span className="text-[13.5px] leading-[1.65] text-weet-muted">
                     {feature.body}
                   </span>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -313,6 +310,13 @@ export default function BespokePage() {
                 <p className="m-0 max-w-[46ch] text-[15px] leading-[1.85] text-weet-sub kr-balance">
                   {section.body}
                 </p>
+                {/* TODO(ux): /projects가 ?category= 필터를 지원하면 유형별 링크로 분기 */}
+                <Link
+                  href="/projects"
+                  className="mt-6 inline-flex items-center gap-1.5 rounded-[6px] border border-weet-line-2 px-5 py-3 text-[14px] font-semibold text-weet-ink transition-colors duration-200 hover:border-weet-gold-deep hover:text-weet-gold-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep"
+                >
+                  {section.cta} →
+                </Link>
               </div>
             </div>
           </section>
@@ -339,7 +343,7 @@ export default function BespokePage() {
               B2B 상담 신청 →
             </Link>
             <Link
-              href="/products"
+              href="/projects"
               className="rounded-[6px] border border-weet-paper/40 px-7 py-3.5 text-[15px] font-medium text-weet-paper transition-transform duration-150 hover:-translate-y-0.5"
             >
               포트폴리오 보기

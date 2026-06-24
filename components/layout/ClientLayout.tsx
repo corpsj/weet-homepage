@@ -33,7 +33,7 @@ export default function ClientLayout({
 
     if (isAdmin) {
         return (
-            <div className="min-h-screen bg-gray-50 text-black">
+            <div className="min-h-screen bg-weet-paper text-weet-ink">
                 <Toaster position="top-right" richColors />
                 {children}
             </div>
@@ -53,7 +53,7 @@ export default function ClientLayout({
         <>
             <SkipLink />
             <Header />
-            <main id="main-content" className="flex-1 pb-14 lg:pb-0">{children}</main>
+            <main id="main-content" className="flex-1 pb-[calc(2.75rem+env(safe-area-inset-bottom))] lg:pb-0">{children}</main>
             <Footer settings={settings} />
             <ConsultBar settings={settings} />
             <Toaster position="top-right" richColors />

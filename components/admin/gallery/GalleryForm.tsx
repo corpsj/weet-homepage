@@ -58,6 +58,7 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
         initialData ? [initialData.image_url, ...(initialData.sub_images || [])].filter(Boolean) : []
     );
     const [uploading, setUploading] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState('');
     const [imagesDirty, setImagesDirty] = useState(false);
 
     const {
@@ -86,44 +87,62 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files?.length) return;
 
-        setUploading(true);
         const files = Array.from(e.target.files);
+
+        // Pre-upload validation: count / format / size.
+        if (files.length > 20) {
+            toast.error('한 번에 최대 20장까지 업로드할 수 있습니다.');
+            e.target.value = '';
+            return;
+        }
+        const nonImage = files.find((file) => !file.type.startsWith('image/'));
+        if (nonImage) {
+            toast.error(`이미지 파일만 업로드할 수 있습니다: ${nonImage.name}`);
+            e.target.value = '';
+            return;
+        }
+        const tooLarge = files.find((file) => file.size > 30 * 1024 * 1024);
+        if (tooLarge) {
+            toast.error(`파일이 너무 큽니다 (최대 30MB): ${tooLarge.name}`);
+            e.target.value = '';
+            return;
+        }
+
+        setUploading(true);
         const newImages: string[] = [];
 
         try {
-            for (const file of files) {
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                setUploadProgress(`${i + 1}/${files.length}`);
                 let fileToUpload = file;
 
-                if (file.type.startsWith('image/')) {
-                    const options = {
-                        maxSizeMB: 10,
-                        maxWidthOrHeight: 1600,
-                        useWebWorker: true,
-                        fileType: 'image/webp',
-                        initialQuality: 0.8,
-                    };
-                    try {
-                        const compressedFile = await imageCompression(file, options);
-                        const newFileName = file.name.replace(/\.[^/.]+$/, "") + ".webp";
-                        fileToUpload = new File([compressedFile], newFileName, { type: 'image/webp' });
-                    } catch (e) {
-                        console.warn('Compression failed, using original file', e);
-                    }
+                const options = {
+                    maxSizeMB: 10,
+                    maxWidthOrHeight: 1600,
+                    useWebWorker: true,
+                    fileType: 'image/webp',
+                    initialQuality: 0.8,
+                };
+                try {
+                    const compressedFile = await imageCompression(file, options);
+                    const newFileName = file.name.replace(/\.[^/.]+$/, "") + ".webp";
+                    fileToUpload = new File([compressedFile], newFileName, { type: 'image/webp' });
+                } catch (err) {
+                    console.warn('Compression failed, using original file', err);
                 }
 
-                const fileExt = fileToUpload.name.split('.').pop();
-                const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
-                const filePath = `gallery/${fileName}`;
-
+                // Send only the folder prefix; the final storage key is generated
+                // server-side (random UUID) so it can never overwrite a live object.
                 const formData = new FormData();
                 formData.append('file', fileToUpload);
                 formData.append('bucket', 'images');
-                formData.append('path', filePath);
+                formData.append('prefix', 'gallery');
 
                 const result = await uploadImageAction(formData);
 
                 if (!result.success || !result.url) {
-                    throw new Error(result.error || 'Upload failed');
+                    throw new Error(result.error || '업로드에 실패했습니다.');
                 }
 
                 newImages.push(result.url);
@@ -131,11 +150,15 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
 
             setImages((prev) => [...prev, ...newImages]);
             setImagesDirty(true);
+            toast.success(`${newImages.length}장 업로드 완료`);
         } catch (error) {
             console.error('Error uploading images:', error);
-            toast.error('이미지 업로드에 실패했습니다.');
+            // Surface the server-provided reason instead of a generic message.
+            const msg = error instanceof Error ? error.message : '이미지 업로드에 실패했습니다.';
+            toast.error(msg);
         } finally {
             setUploading(false);
+            setUploadProgress('');
             e.target.value = '';
         }
     };
@@ -188,7 +211,9 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
             router.refresh();
         } catch (error) {
             console.error('Error saving gallery item:', error);
-            toast.error('저장에 실패했습니다.');
+            // Surface the server-returned reason instead of a fixed message.
+            const msg = error instanceof Error ? error.message : '저장에 실패했습니다.';
+            toast.error(msg);
         } finally {
             setLoading(false);
         }
@@ -217,11 +242,16 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
                             className={`${consoleSecondaryButtonClass} flex items-center gap-2 cursor-pointer ${uploading ? 'opacity-50 cursor-not-allowed' : ''}`}
                         >
                             {uploading ? (
-                                <Loader2 className="w-4 h-4 animate-spin" />
+                                <>
+                                    <Loader2 className="w-4 h-4 animate-spin" />
+                                    {uploadProgress ? `${uploadProgress} 업로드 중...` : '이미지 업로드'}
+                                </>
                             ) : (
-                                <Upload className="w-4 h-4" />
+                                <>
+                                    <Upload className="w-4 h-4" />
+                                    이미지 업로드
+                                </>
                             )}
-                            이미지 업로드
                         </label>
                     </div>
                 </div>
@@ -256,7 +286,7 @@ export default function GalleryForm({ initialData }: GalleryFormProps) {
             <ConsolePanel className="p-6 space-y-6">
                 <ConsoleSectionTitle>기본 정보</ConsoleSectionTitle>
                 <div>
-                    <label className="block text-xs font-bold text-admin-muted mb-1">제목</label>
+                    <label className="block text-xs font-bold text-admin-muted mb-1">제목 *</label>
                     <input
                         {...register('title')}
                         className={`${consoleInputClass} w-full`}

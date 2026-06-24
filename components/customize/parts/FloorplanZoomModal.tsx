@@ -36,7 +36,7 @@ export function FloorplanZoomModal({
               data-testid="floorplan-zoom-close"
               aria-label="도면 확대 닫기"
               onClick={onClose}
-              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-weet-line text-weet-ink transition-colors hover:bg-weet-paper focus:outline-none focus:ring-2 focus:ring-weet-gold-deep/40"
+              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-weet-line text-weet-ink transition-colors hover:bg-weet-paper focus:outline-none focus:ring-2 focus:ring-weet-gold-deep/40"
             >
               <X className="h-4 w-4" />
             </button>
@@ -47,7 +47,7 @@ export function FloorplanZoomModal({
                 model={model}
                 selectedOptions={selectedOptions}
                 testId="floorplan-zoom-canvas"
-                className="min-w-[640px] md:min-w-0"
+                className="min-w-0"
               />
             </div>
           </div>

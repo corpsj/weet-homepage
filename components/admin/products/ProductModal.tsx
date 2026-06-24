@@ -1,9 +1,10 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 import { X, Loader2 } from 'lucide-react';
 import { Product } from '@/types/supabase';
+import { confirmToast } from '@/lib/ui/confirm';
 
 const ProductForm = dynamic(() => import('@/components/admin/ProductForm'), {
     loading: () => (
@@ -22,6 +23,20 @@ interface ProductModalProps {
 }
 
 export default function ProductModal({ isOpen, onClose, product }: ProductModalProps) {
+    // ProductForm owns its own isDirty state and isn't in this file's edit set, so
+    // dirtiness is tracked here by watching input/change events bubble out of the
+    // form body. A successful save calls onSuccess (handleClean) which clears the
+    // flag before closing, so save-close never trips the unsaved-changes guard.
+    // A ref (not state) is enough — nothing renders off the dirty flag.
+    const dirtyRef = useRef(false);
+
+    // Reset the dirty flag whenever the modal (re)opens.
+    useEffect(() => {
+        if (isOpen) {
+            dirtyRef.current = false;
+        }
+    }, [isOpen]);
+
     // Prevent scrolling when modal is open
     useEffect(() => {
         if (isOpen) {
@@ -34,6 +49,28 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
         };
     }, [isOpen]);
 
+    const markDirty = useCallback(() => {
+        dirtyRef.current = true;
+    }, []);
+
+    // Close without confirmation (used after a successful save).
+    const handleClean = useCallback(() => {
+        dirtyRef.current = false;
+        onClose();
+    }, [onClose]);
+
+    // Guarded close for backdrop / X: confirm if there are unsaved edits.
+    const handleRequestClose = useCallback(async () => {
+        if (dirtyRef.current) {
+            const ok = await confirmToast('저장하지 않은 변경 사항이 있습니다. 닫으시겠습니까?', {
+                confirmLabel: '닫기',
+                cancelLabel: '계속 편집',
+            });
+            if (!ok) return;
+        }
+        handleClean();
+    }, [handleClean]);
+
     if (!isOpen) return null;
 
     return (
@@ -41,7 +78,7 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
             {/* Backdrop */}
             <div
                 className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity"
-                onClick={onClose}
+                onClick={handleRequestClose}
             />
 
             {/* Modal Content */}
@@ -52,7 +89,7 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
                         {product ? '제품 수정' : '새 제품 등록'}
                     </h2>
                     <button
-                        onClick={onClose}
+                        onClick={handleRequestClose}
                         className="p-2 text-admin-muted hover:text-admin-ink hover:bg-[#f4f4f5] rounded-[9px] transition-colors"
                         aria-label="제품 모달 닫기"
                     >
@@ -60,11 +97,11 @@ export default function ProductModal({ isOpen, onClose, product }: ProductModalP
                     </button>
                 </div>
 
-                {/* Body (Scrollable) */}
-                <div className="flex-1 overflow-y-auto p-6 bg-white">
+                {/* Body (Scrollable) — input/change bubbling marks the form dirty */}
+                <div className="flex-1 overflow-y-auto p-6 bg-white" onInput={markDirty} onChange={markDirty}>
                     <ProductForm
                         initialData={product}
-                        onSuccess={onClose}
+                        onSuccess={handleClean}
                     />
                 </div>
             </div>

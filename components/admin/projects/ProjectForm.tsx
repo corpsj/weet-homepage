@@ -91,8 +91,28 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files?.length) return;
 
-        setUploading(true);
         const files = Array.from(e.target.files);
+
+        // Pre-upload validation: count / format / size.
+        if (files.length > 20) {
+            toast.error('한 번에 최대 20장까지 업로드할 수 있습니다.');
+            e.target.value = '';
+            return;
+        }
+        const nonImage = files.find((file) => !file.type.startsWith('image/'));
+        if (nonImage) {
+            toast.error(`이미지 파일만 업로드할 수 있습니다: ${nonImage.name}`);
+            e.target.value = '';
+            return;
+        }
+        const tooLarge = files.find((file) => file.size > 30 * 1024 * 1024);
+        if (tooLarge) {
+            toast.error(`파일이 너무 큽니다 (최대 30MB): ${tooLarge.name}`);
+            e.target.value = '';
+            return;
+        }
+
+        setUploading(true);
         const newImages: string[] = [];
 
         try {
@@ -197,7 +217,9 @@ export default function ProjectForm({ initialData }: ProjectFormProps) {
             router.refresh();
         } catch (error) {
             console.error('Error saving project:', error);
-            toast.error('저장에 실패했습니다.');
+            // Surface the server-returned reason instead of a fixed message.
+            const msg = error instanceof Error ? error.message : '저장에 실패했습니다.';
+            toast.error(msg);
         } finally {
             setLoading(false);
         }

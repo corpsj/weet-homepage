@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useState } from 'react';
 import { toast } from 'sonner';
-import { confirmToast } from '@/lib/ui/confirm';
+import { confirmToast, undoToast } from '@/lib/ui/confirm';
 
 /**
  * Result shape returned by the FAQ / Notice server actions.
@@ -196,24 +196,63 @@ export function useCrudDraftList<T, TCreateInput, TUpdateInput, TData>(
     const remove = useCallback(
         async (id: string) => {
             if (!(await confirmToast(messages.deleteConfirm, { confirmLabel: messages.deleteConfirmLabel }))) return;
-            setLoading(true);
-            try {
-                const result = await deleteAction(id);
-                if (result.success) {
-                    setItems(prev => prev.filter(current => getId(current) !== id));
-                    dropDraft(id);
-                    toast.success(messages.deleteSuccess);
-                } else {
-                    toast.error(result.message);
-                }
-            } catch (e) {
-                console.error(e);
-                toast.error(messages.genericError);
-            } finally {
-                setLoading(false);
-            }
+
+            // Optimistically remove now, but defer the server delete until the undo
+            // window closes so '되돌리기' can restore the row at its original spot
+            // without needing a re-create action. (review backlog: undo on delete)
+            let removed: { item: T; index: number } | undefined;
+            setItems(prev => {
+                const index = prev.findIndex(current => getId(current) === id);
+                if (index === -1) return prev;
+                removed = { item: prev[index], index };
+                return [...prev.slice(0, index), ...prev.slice(index + 1)];
+            });
+            if (!removed) return;
+
+            // ponytail: undo restores local state only; the deferred delete is fired
+            // on commit. If the page unmounts mid-window the row simply survives on
+            // next load (no data loss) — restore-after-commit would need a server
+            // re-create action, which doesn't exist yet.
+            undoToast(messages.deleteSuccess, {
+                onUndo: () => {
+                    setItems(prev => {
+                        if (!removed || prev.some(current => getId(current) === id)) return prev;
+                        const next = prev.slice();
+                        next.splice(Math.min(removed.index, next.length), 0, removed.item);
+                        return next;
+                    });
+                },
+                onCommit: () => {
+                    void (async () => {
+                        try {
+                            const result = await deleteAction(id);
+                            if (result.success) {
+                                dropDraft(id);
+                            } else {
+                                // Server rejected the delete: put the row back and surface why.
+                                setItems(prev => {
+                                    if (!removed || prev.some(current => getId(current) === id)) return prev;
+                                    const next = prev.slice();
+                                    next.splice(Math.min(removed.index, next.length), 0, removed.item);
+                                    return next;
+                                });
+                                toast.error(result.message);
+                            }
+                        } catch (e) {
+                            console.error(e);
+                            setItems(prev => {
+                                if (!removed || prev.some(current => getId(current) === id)) return prev;
+                                const next = prev.slice();
+                                next.splice(Math.min(removed.index, next.length), 0, removed.item);
+                                return next;
+                            });
+                            toast.error(messages.genericError);
+                        }
+                    })();
+                },
+            });
         },
-        [messages, setLoading, deleteAction, getId, dropDraft]
+        [messages, deleteAction, getId, dropDraft]
     );
 
     return {

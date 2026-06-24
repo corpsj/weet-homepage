@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import CrewModal from '@/components/ui/CrewModal';
 import ImageSlider from '@/components/ui/ImageSlider';
+import GallerySection from '@/components/company/GallerySection';
 import { useTranslation } from '@/hooks/useTranslation';
 
 interface CrewData {
@@ -366,6 +367,9 @@ export default function CompanyPage() {
         </div>
       </section>
 
+      {/* ===== GALLERY (id="gallery" 앵커 복구) ===== */}
+      <GallerySection />
+
       {/* ===== CTA ===== */}
       <section className="bg-weet-ink-deep text-weet-paper">
         <div className="mx-auto max-w-[1440px] px-[5vw] py-24 text-center md:py-[96px]">
@@ -381,6 +385,12 @@ export default function CompanyPage() {
               className="inline-flex items-center gap-2 rounded-[6px] bg-weet-gold px-[30px] py-[15px] text-[15px] font-semibold text-weet-ink transition-transform duration-150 hover:-translate-y-0.5"
             >
               상담 신청하기 →
+            </Link>
+            <Link
+              href="/projects"
+              className="inline-flex items-center rounded-[6px] border border-weet-paper/40 px-7 py-3.5 text-[15px] font-medium text-weet-paper transition-transform duration-150 hover:-translate-y-0.5"
+            >
+              시공 사례 보기
             </Link>
             <Link
               href="/products"

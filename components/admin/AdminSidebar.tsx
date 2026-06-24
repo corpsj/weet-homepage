@@ -32,12 +32,12 @@ const navigation: { title: string; items: NavItem[] }[] = [
         title: "작업",
         items: [
             { name: '작업실', href: '/admin', icon: Layers },
-            { name: '상담 관리', href: '/admin/consultations', icon: ClipboardList },
         ],
     },
     {
-        title: "고객",
+        title: "상담/문의",
         items: [
+            { name: '상담 관리', href: '/admin/consultations', icon: ClipboardList },
             { name: '레거시 문의', href: '/admin/inquiries', icon: MessageSquare },
         ],
     },
@@ -106,9 +106,11 @@ export default function AdminSidebar({ user, onClose }: { user?: { email?: strin
                         </h3>
                         <div className="flex flex-col gap-px">
                             {section.items.map((item) => {
+                                // Segment-boundary match so e.g. /admin/products does not
+                                // light up for an unrelated /admin/products-xyz route.
                                 const isActive = item.href === '/admin'
                                     ? pathname === '/admin'
-                                    : pathname.startsWith(item.href);
+                                    : pathname === item.href || pathname.startsWith(`${item.href}/`);
                                 return (
                                     <Link
                                         key={item.name}

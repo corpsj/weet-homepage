@@ -260,7 +260,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
-                  href="/customize"
+                  href="/support#consult"
                   className="mt-2.5 flex items-center justify-center gap-1.5 rounded-[8px] bg-weet-gold px-3 py-[13px] text-[14px] font-semibold text-weet-ink transition-transform duration-150 hover:-translate-y-0.5"
                 >
                   비슷한 공간 상담 →

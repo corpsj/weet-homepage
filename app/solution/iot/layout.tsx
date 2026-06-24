@@ -20,7 +20,7 @@ export default function SolutionIotLayout({
         items={[
           { name: "홈", path: "/" },
           { name: "솔루션", path: "/solution" },
-          { name: "IoT 옵션", path: "/solution/iot" },
+          { name: "IoT", path: "/solution/iot" },
         ]}
       />
       {children}

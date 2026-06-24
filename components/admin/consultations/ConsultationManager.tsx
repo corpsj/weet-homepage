@@ -12,6 +12,7 @@ import {
 import { formatKstDateTime } from '@/lib/date-format';
 import { formatWon } from '@/lib/customize/priceCalculator';
 import { confirmToast } from '@/lib/ui/confirm';
+import { useUnsavedChangesWarning } from '@/hooks/useUnsavedChangesWarning';
 import { cn } from '@/lib/utils';
 import type { ConsultationStatus, CustomizeConsultation } from '@/lib/customize/types';
 import {
@@ -231,6 +232,9 @@ function ConsultationDetail({
   onMemoSave: () => void;
   onDelete: () => void;
 }) {
+  const memoDirty = memo !== (consultation.internalMemo ?? '');
+  useUnsavedChangesWarning(memoDirty);
+
   return (
     <div className="overflow-hidden rounded-[12px] border border-admin-line bg-white">
       <div className="flex items-start justify-between gap-4 border-b border-[#f1f1f3] px-[22px] py-5">
@@ -300,9 +304,14 @@ function ConsultationDetail({
             className="min-h-[120px] w-full resize-y rounded-[10px] border border-admin-line-2 bg-[#fafafb] p-3 text-[13px] text-admin-ink outline-none transition-colors placeholder:text-[#a1a1aa] focus:border-admin-accent focus:ring-2 focus:ring-admin-accent/15"
           />
           <div className="mt-2.5 flex items-center justify-between gap-3">
-            <button type="button" onClick={onMemoSave} className={`${consoleSecondaryButtonClass} h-9`}>
+            <button
+              type="button"
+              onClick={onMemoSave}
+              disabled={!memoDirty}
+              className={`${consoleSecondaryButtonClass} h-9`}
+            >
               <Save className="h-4 w-4" />
-              메모 저장
+              {memoDirty ? '메모 저장 *' : '메모 저장'}
             </button>
             <button
               type="button"

@@ -21,6 +21,7 @@ import {
 import ImageUpload from '@/components/admin/media/ImageUpload';
 import { cn } from '@/lib/utils';
 import { confirmToast } from '@/lib/ui/confirm';
+import { useUnsavedChangesWarning } from '@/hooks/useUnsavedChangesWarning';
 import {
   createCustomizeOptionConflict,
   deleteCustomizeCategory,
@@ -203,6 +204,24 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
   const saveCategory = () => runAction('카테고리 저장', () => upsertCustomizeCategory({ id: editingCategoryId, ...categoryForm }));
   const saveOption = () => runAction('옵션 저장', () => upsertCustomizeOption({ id: editingOptionId, ...optionForm }));
   const saveIncluded = () => runAction('포함 사양 저장', () => upsertCustomizeIncludedSpec({ id: editingIncludedId, ...includedForm }));
+
+  // Required-field guards: disable Save until identifying fields are filled, so an
+  // empty/whitespace-only upsert can't be submitted.
+  const modelValid = Boolean(modelForm.id.trim() && modelForm.nameKo.trim());
+  const categoryValid = Boolean(categoryForm.key.trim() && categoryForm.nameKo.trim());
+  const optionValid = Boolean(optionForm.categoryId.trim() && optionForm.key.trim() && optionForm.nameKo.trim());
+  const includedValid = Boolean(includedForm.key.trim() && includedForm.nameKo.trim());
+
+  // Warn before refresh/close when any form holds in-progress edits (differs from
+  // its empty baseline, or is in edit mode). Covers the browser beforeunload path.
+  const isFormDirty =
+    JSON.stringify(modelForm) !== JSON.stringify(emptyModel) ||
+    JSON.stringify(categoryForm) !== JSON.stringify(emptyCategory) ||
+    JSON.stringify(optionForm) !== JSON.stringify(emptyOption) ||
+    JSON.stringify(includedForm) !== JSON.stringify(emptyIncludedSpec) ||
+    Boolean(editingCategoryId || editingOptionId || editingIncludedId);
+  useUnsavedChangesWarning(isFormDirty);
+
   const deleteWithConfirm = async (label: string, name: string, action: () => Promise<unknown>) => {
     if (!(await confirmToast(`${name} 항목을 삭제하시겠습니까? 이 작업은 되돌릴 수 없습니다.`, { confirmLabel: '삭제' }))) return;
     runAction(`${label} 삭제`, action);
@@ -307,7 +326,7 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
                   editLabel={`모델 수정: ${modelForm.nameKo || modelForm.id}`}
                   newLabel="새 모델 등록"
                 />
-                <ModelForm form={modelForm} setForm={setModelForm} onSave={saveModel} />
+                <ModelForm form={modelForm} setForm={setModelForm} onSave={saveModel} canSave={modelValid} />
               </ConsolePanel>
               <DataTable>
                 {catalog.models.length === 0 && (
@@ -362,7 +381,7 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
                   editLabel={`사양 수정: ${includedForm.nameKo || includedForm.key}`}
                   newLabel="새 포함 사양 등록"
                 />
-                <IncludedForm form={includedForm} setForm={setIncludedForm} models={catalog.models} onSave={saveIncluded} />
+                <IncludedForm form={includedForm} setForm={setIncludedForm} models={catalog.models} onSave={saveIncluded} canSave={includedValid} />
               </ConsolePanel>
               <DataTable>
                 {catalog.includedSpecs.length === 0 && (
@@ -412,7 +431,7 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
                   editLabel={`카테고리 수정: ${categoryForm.nameKo || categoryForm.key}`}
                   newLabel="새 카테고리 등록"
                 />
-                <CategoryForm form={categoryForm} setForm={setCategoryForm} onSave={saveCategory} />
+                <CategoryForm form={categoryForm} setForm={setCategoryForm} onSave={saveCategory} canSave={categoryValid} />
               </ConsolePanel>
               <DataTable>
                 {catalog.categories.length === 0 && (
@@ -479,6 +498,7 @@ export default function CustomizeManager({ initialCatalog }: CustomizeManagerPro
                     categories={catalog.categories}
                     models={catalog.models}
                     onSave={saveOption}
+                    canSave={optionValid}
                   />
                 </ConsolePanel>
                 <ConsolePanel className="p-5">
@@ -685,7 +705,7 @@ function modelScopeLabel(option: CustomizeOption, models: CustomizeModel[]) {
     .join(', ');
 }
 
-function ModelForm({ form, setForm, onSave }: { form: typeof emptyModel; setForm: (value: typeof emptyModel) => void; onSave: () => void }) {
+function ModelForm({ form, setForm, onSave, canSave }: { form: typeof emptyModel; setForm: (value: typeof emptyModel) => void; onSave: () => void; canSave: boolean }) {
   return (
     <FormGrid>
       <TextField label="ID" value={form.id} onChange={(value) => setForm({ ...form, id: value })} />
@@ -700,12 +720,12 @@ function ModelForm({ form, setForm, onSave }: { form: typeof emptyModel; setForm
       <TextField label="평면 오버레이" value={form.floorplanOverlayPath} onChange={(value) => setForm({ ...form, floorplanOverlayPath: value })} full />
       <NumberField label="정렬" value={form.displayOrder} onChange={(value) => setForm({ ...form, displayOrder: value })} />
       <CheckboxField label="활성" checked={form.isActive} onChange={(checked) => setForm({ ...form, isActive: checked })} />
-      <button className={`${consolePrimaryButtonClass} md:col-span-2`} onClick={onSave}><Save className="h-4 w-4" />저장</button>
+      <SaveButton onSave={onSave} canSave={canSave} hint="ID와 모델명을 입력해야 저장할 수 있습니다." />
     </FormGrid>
   );
 }
 
-function CategoryForm({ form, setForm, onSave }: { form: typeof emptyCategory; setForm: (value: typeof emptyCategory) => void; onSave: () => void }) {
+function CategoryForm({ form, setForm, onSave, canSave }: { form: typeof emptyCategory; setForm: (value: typeof emptyCategory) => void; onSave: () => void; canSave: boolean }) {
   return (
     <FormGrid>
       <TextField label="Key" value={form.key} onChange={(value) => setForm({ ...form, key: value })} />
@@ -718,7 +738,7 @@ function CategoryForm({ form, setForm, onSave }: { form: typeof emptyCategory; s
       <TextAreaField label="설명" value={form.descriptionKo} onChange={(value) => setForm({ ...form, descriptionKo: value })} full />
       <CheckboxField label="필수" checked={form.required} onChange={(checked) => setForm({ ...form, required: checked })} />
       <CheckboxField label="활성" checked={form.isActive} onChange={(checked) => setForm({ ...form, isActive: checked })} />
-      <button className={`${consolePrimaryButtonClass} md:col-span-2`} onClick={onSave}><Save className="h-4 w-4" />저장</button>
+      <SaveButton onSave={onSave} canSave={canSave} hint="Key와 카테고리명을 입력해야 저장할 수 있습니다." />
     </FormGrid>
   );
 }
@@ -729,12 +749,14 @@ function OptionForm({
   categories,
   models,
   onSave,
+  canSave,
 }: {
   form: typeof emptyOption;
   setForm: (value: typeof emptyOption) => void;
   categories: CustomizeCategory[];
   models: CustomizeModel[];
   onSave: () => void;
+  canSave: boolean;
 }) {
   const toggleModel = (modelId: string) => {
     const exists = form.availableModelIds.includes(modelId);
@@ -779,7 +801,7 @@ function OptionForm({
       </div>
       <CheckboxField label="기본 선택" checked={form.isDefault} onChange={(checked) => setForm({ ...form, isDefault: checked })} />
       <CheckboxField label="활성" checked={form.isActive} onChange={(checked) => setForm({ ...form, isActive: checked })} />
-      <button className={`${consolePrimaryButtonClass} md:col-span-2`} onClick={onSave}><Save className="h-4 w-4" />저장</button>
+      <SaveButton onSave={onSave} canSave={canSave} hint="카테고리, Key, 옵션명을 입력해야 저장할 수 있습니다." />
     </FormGrid>
   );
 }
@@ -789,11 +811,13 @@ function IncludedForm({
   setForm,
   models,
   onSave,
+  canSave,
 }: {
   form: typeof emptyIncludedSpec;
   setForm: (value: typeof emptyIncludedSpec) => void;
   models: CustomizeModel[];
   onSave: () => void;
+  canSave: boolean;
 }) {
   return (
     <FormGrid>
@@ -808,8 +832,19 @@ function IncludedForm({
       <NumberField label="정렬" value={form.displayOrder} onChange={(value) => setForm({ ...form, displayOrder: value })} />
       <TextAreaField label="설명" value={form.descriptionKo} onChange={(value) => setForm({ ...form, descriptionKo: value })} full />
       <CheckboxField label="활성" checked={form.isActive} onChange={(checked) => setForm({ ...form, isActive: checked })} />
-      <button className={`${consolePrimaryButtonClass} md:col-span-2`} onClick={onSave}><Save className="h-4 w-4" />저장</button>
+      <SaveButton onSave={onSave} canSave={canSave} hint="Key와 사양명을 입력해야 저장할 수 있습니다." />
     </FormGrid>
+  );
+}
+
+function SaveButton({ onSave, canSave, hint }: { onSave: () => void; canSave: boolean; hint: string }) {
+  return (
+    <div className="md:col-span-2">
+      <button className={`${consolePrimaryButtonClass} w-full`} onClick={onSave} disabled={!canSave}>
+        <Save className="h-4 w-4" />저장
+      </button>
+      {!canSave && <p className="mt-1.5 text-[11px] font-semibold text-[#a16207]">{hint}</p>}
+    </div>
   );
 }
 

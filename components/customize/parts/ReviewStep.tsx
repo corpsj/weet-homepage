@@ -1,5 +1,6 @@
-import { useState, type Dispatch, type ReactNode, type SetStateAction } from 'react';
-import { ChevronDown, Download, Info, Loader2, Pencil, Send } from 'lucide-react';
+import { useRef, useState, type Dispatch, type ReactNode, type SetStateAction } from 'react';
+import { ChevronDown, Download, Info, Link2, Loader2, Pencil, Send } from 'lucide-react';
+import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -53,6 +54,17 @@ export function ReviewStep({
 }) {
   const consultOptions = selectedOptions.filter((option) => option.priceType === 'consult');
   const optionSteps = STEPS.filter((step): step is (typeof STEPS)[number] & { id: OptionStep } => step.id !== 'space' && step.id !== 'review');
+
+  const handleCopyLink = async () => {
+    // 현재 URL에는 구성(?c=...)이 동기화돼 있다. 클립보드로 복사해 같은 구성을 그대로 공유한다.
+    const url = window.location.href;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success('구성 링크를 복사했습니다.');
+    } catch {
+      toast.error('링크 복사에 실패했습니다. 주소창의 URL을 직접 복사해주세요.');
+    }
+  };
 
   return (
     <div className="mx-auto w-full max-w-[1240px] px-4 pb-[max(4rem,env(safe-area-inset-bottom))] pt-6 md:px-8" data-testid="customize-review">
@@ -168,18 +180,34 @@ export function ReviewStep({
                 별도 비용 안내
               </a>
             </p>
-            <Button variant="outline" className="mt-3 h-11 w-full border-weet-line-2 bg-weet-surface text-weet-ink" onClick={onSaveQuote}>
-              <Download className="h-4 w-4" />
-              견적 요약 저장
-            </Button>
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              <Button variant="outline" className="h-11 w-full border-weet-line-2 bg-weet-surface text-weet-ink" onClick={onSaveQuote}>
+                <Download className="h-4 w-4" />
+                견적 요약 저장
+              </Button>
+              <Button variant="outline" className="h-11 w-full border-weet-line-2 bg-weet-surface text-weet-ink" onClick={handleCopyLink}>
+                <Link2 className="h-4 w-4" />
+                구성 링크 복사
+              </Button>
+            </div>
           </div>
 
           {submitted ? (
-            <div className="rounded-lg border border-weet-forest/30 bg-weet-forest/10 p-5" role="status">
+            <div className="rounded-lg border border-weet-forest/30 bg-weet-forest/10 p-5" role="status" aria-live="polite">
               <p className="text-lg font-black text-weet-forest">상담 요청이 접수되었습니다</p>
               <p className="mt-1.5 text-sm leading-relaxed text-weet-forest/90">
                 담당자가 확인 후 입력하신 연락처로 연락드립니다. {COPY.finalQuote}
               </p>
+              <dl className="mt-3 rounded-md border border-weet-forest/20 bg-weet-surface/70 p-3 text-sm">
+                <div className="flex items-center justify-between gap-3">
+                  <dt className="font-semibold text-weet-sub">접수 모델</dt>
+                  <dd className="font-bold text-weet-ink">{estimate.model.nameKo}</dd>
+                </div>
+                <div className="mt-1 flex items-center justify-between gap-3">
+                  <dt className="font-semibold text-weet-sub">{COPY.estimatedAmount}</dt>
+                  <dd className="font-bold text-weet-ink">{formatWon(estimate.estimatedTotal)}</dd>
+                </div>
+              </dl>
               <Button
                 variant="outline"
                 className="mt-4 h-11 w-full border-weet-line-2 bg-weet-surface text-weet-ink"
@@ -223,11 +251,17 @@ function ConsultationForm({
   onSubmit: () => void;
 }) {
   const [showOptional, setShowOptional] = useState(false);
-  // 필수 필드 검증 결과(토스트는 부모가 유지, 여기서는 네이티브/ARIA 시맨틱만 추가한다).
+  // 필수 필드 검증 결과 + UI 피드백(에러 표시·포커스 이동)은 ReviewStep이 단독으로 담당한다.
   const [fieldErrors, setFieldErrors] = useState<Record<RequiredFieldName, boolean>>({
     customerName: false,
     phone: false,
     region: false,
+  });
+  // 첫 invalid 필드로 포커스/스크롤하기 위한 ref 맵.
+  const fieldRefs = useRef<Record<RequiredFieldName, HTMLInputElement | null>>({
+    customerName: null,
+    phone: null,
+    region: null,
   });
   const updateField = (name: keyof ConsultationDraft, value: string) => {
     setForm((current) => ({ ...current, [name]: value }));
@@ -244,6 +278,16 @@ function ConsultationForm({
       region: !form.region.trim(),
     };
     setFieldErrors(nextErrors);
+
+    // 첫 invalid 필드로 포커스 + 스크롤. 부모(handleSubmit)는 invalid면 조용히 반환한다.
+    const firstInvalid = (REQUIRED_FIELDS as readonly RequiredFieldName[]).find((name) => nextErrors[name]);
+    if (firstInvalid) {
+      const target = fieldRefs.current[firstInvalid];
+      target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target?.focus({ preventScroll: true });
+      return;
+    }
+
     onSubmit();
   };
 
@@ -265,6 +309,7 @@ function ConsultationForm({
         <Field label="이름" required fieldId="consultation-name" error={fieldErrors.customerName ? '이름을 입력해주세요.' : undefined}>
           {({ id, describedBy, invalid }) => (
             <Input
+              ref={(node) => { fieldRefs.current.customerName = node; }}
               id={id}
               data-testid="consultation-name"
               className={inputClass}
@@ -280,10 +325,12 @@ function ConsultationForm({
         <Field label="연락처" required fieldId="consultation-phone" error={fieldErrors.phone ? '연락처를 입력해주세요.' : undefined}>
           {({ id, describedBy, invalid }) => (
             <Input
+              ref={(node) => { fieldRefs.current.phone = node; }}
               id={id}
               data-testid="consultation-phone"
               className={inputClass}
               type="tel"
+              inputMode="tel"
               autoComplete="tel"
               required
               aria-invalid={invalid}
@@ -296,6 +343,7 @@ function ConsultationForm({
         <Field label="지역" required fieldId="consultation-region" error={fieldErrors.region ? '지역을 입력해주세요.' : undefined}>
           {({ id, describedBy, invalid }) => (
             <Input
+              ref={(node) => { fieldRefs.current.region = node; }}
               id={id}
               data-testid="consultation-region"
               className={inputClass}

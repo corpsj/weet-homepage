@@ -105,7 +105,7 @@ export default async function ProjectsPage() {
             </div>
 
             <div className="mx-auto mt-10 grid max-w-5xl gap-4 lg:grid-cols-3">
-              {proofModules.map((item) => (
+              {proofModules.map((item, index) => (
                 <div
                   key={item.title}
                   className="overflow-hidden rounded-[14px] border border-weet-line-2 bg-weet-paper text-left shadow-weet-card"
@@ -116,7 +116,7 @@ export default async function ProjectsPage() {
                       alt={item.title}
                       fill
                       sizes="(max-width: 1024px) 100vw, 33vw"
-                      priority
+                      priority={index === 0}
                       className="object-cover"
                     />
                   </div>

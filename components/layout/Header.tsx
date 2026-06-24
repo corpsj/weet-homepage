@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { createPortal } from 'react-dom';
 import { cn } from '@/lib/utils';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useModalDismiss } from '@/components/customize/lib/hooks';
 
 type NavItem = { name: string; href: string; submenu: { name: string; href: string }[] };
 
@@ -72,9 +73,9 @@ const navigationKo: NavItem[] = [
     name: '고객지원',
     href: '/support',
     submenu: [
-      { name: '무엇을 도와드릴까요?', href: '/support#help' },
+      { name: '무엇을 도와드릴까요?', href: '/support#permits' },
       { name: '구매과정', href: '/support#process' },
-      { name: 'QnA', href: '/support#qa' },
+      { name: 'QnA', href: '/support#faq' },
       { name: 'A/S', href: '/support#as' },
     ],
   },
@@ -140,9 +141,9 @@ const navigationEn: NavItem[] = [
     name: 'Support',
     href: '/support',
     submenu: [
-      { name: 'How can we help?', href: '/support#help' },
+      { name: 'How can we help?', href: '/support#permits' },
       { name: 'Purchase Process', href: '/support#process' },
-      { name: 'QnA', href: '/support#qa' },
+      { name: 'QnA', href: '/support#faq' },
       { name: 'A/S', href: '/support#as' },
     ],
   },
@@ -208,15 +209,21 @@ const navigationEs: NavItem[] = [
     name: 'Soporte',
     href: '/support',
     submenu: [
-      { name: '¿Cómo podemos ayudar?', href: '/support#help' },
+      { name: '¿Cómo podemos ayudar?', href: '/support#permits' },
       { name: 'Proceso de compra', href: '/support#process' },
-      { name: 'Preguntas frecuentes', href: '/support#qa' },
+      { name: 'Preguntas frecuentes', href: '/support#faq' },
       { name: 'Servicio posventa', href: '/support#as' },
     ],
   },
 ];
 
 const orderLabel = { KO: '주문하기', EN: 'Order', ES: 'Pedir' } as const;
+
+// KO 모드에서 영문 브랜드 라벨에 한글 병기(드롭다운 캡션). 레이아웃 영향 없는 패널 안에서만 노출.
+const KO_GLOSS: Record<string, string> = {
+  BESPOKE: '비스포크',
+  SOLUTION: '솔루션',
+};
 
 function LanguageToggle({ size = 'sm' }: { size?: 'sm' | 'lg' }) {
   const { language, setLanguage } = useLanguage();
@@ -251,13 +258,37 @@ function LanguageToggle({ size = 'sm' }: { size?: 'sm' | 'lg' }) {
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [expandedMenu, setExpandedMenu] = useState<string | null>(null);
+  const [openDesktop, setOpenDesktop] = useState<string | null>(null);
+  const navRef = useRef<HTMLElement | null>(null);
   const { language } = useLanguage();
   const pathname = usePathname() ?? '/';
 
   const navigation = { KO: navigationKo, EN: navigationEn, ES: navigationEs }[language];
 
+  // 데스크톱 메가메뉴: Escape / 바깥 클릭으로 닫기 (열려 있을 때만 리스너 등록).
+  // (라우트 이동 시 닫기는 각 링크 onClick에서 setOpenDesktop(null)로 처리)
+  useEffect(() => {
+    if (!openDesktop) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpenDesktop(null);
+    };
+    const onPointer = (e: PointerEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) setOpenDesktop(null);
+    };
+    window.addEventListener('keydown', onKey);
+    window.addEventListener('pointerdown', onPointer);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('pointerdown', onPointer);
+    };
+  }, [openDesktop]);
+
   const isActive = useCallback(
-    (href: string) => (href === '/' ? pathname === '/' : pathname.startsWith(href)),
+    (href: string) => {
+      const base = href.split('#')[0]; // anchor가 붙은 href는 경로만 비교
+      if (base === '/') return pathname === '/';
+      return pathname === base || pathname.startsWith(base + '/');
+    },
     [pathname],
   );
 
@@ -280,28 +311,94 @@ export default function Header() {
             />
           </Link>
 
-          {/* 데스크톱 내비 (≤860px 숨김) */}
-          <nav className="hidden items-center gap-[clamp(20px,2.4vw,30px)] min-[861px]:flex">
+          {/* 데스크톱 내비 (<1024px 숨김) — hover/focus/클릭으로 열리는 메가메뉴 */}
+          <nav
+            ref={navRef}
+            aria-label="주 메뉴"
+            className="hidden items-center gap-[clamp(14px,1.8vw,28px)] lg:flex"
+          >
             {navigation.map((item) => {
               const active = isActive(item.href);
+              const open = openDesktop === item.name;
+              const menuId = `megamenu-${item.href.replace(/\W+/g, '-')}`;
+              const gloss = language === 'KO' ? KO_GLOSS[item.name] : undefined;
               return (
-                <Link
+                <div
                   key={item.href}
-                  href={item.href}
-                  className={cn(
-                    'whitespace-nowrap text-[14px] font-medium transition-colors hover:text-weet-gold-deep',
-                    active ? 'text-weet-gold-deep' : 'text-weet-sub',
-                  )}
-                  aria-current={active ? 'page' : undefined}
+                  className="relative"
+                  onMouseEnter={() => setOpenDesktop(item.name)}
+                  onMouseLeave={() => setOpenDesktop((cur) => (cur === item.name ? null : cur))}
+                  onFocus={() => setOpenDesktop(item.name)}
+                  onBlur={(e) => {
+                    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                      setOpenDesktop((cur) => (cur === item.name ? null : cur));
+                    }
+                  }}
                 >
-                  {item.name}
-                </Link>
+                  <div className="flex items-center gap-0.5">
+                    <Link
+                      href={item.href}
+                      onClick={() => setOpenDesktop(null)}
+                      className={cn(
+                        'whitespace-nowrap text-[14px] font-medium transition-colors hover:text-weet-gold-deep',
+                        active ? 'text-weet-gold-deep' : 'text-weet-sub',
+                      )}
+                      aria-current={active ? 'page' : undefined}
+                    >
+                      {item.name}
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => setOpenDesktop(open ? null : item.name)}
+                      aria-expanded={open}
+                      aria-controls={menuId}
+                      aria-label={`${item.name} 하위 메뉴 ${open ? '닫기' : '열기'}`}
+                      className="rounded-[4px] p-0.5 text-weet-sub transition-colors hover:text-weet-gold-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep"
+                    >
+                      <ChevronDown
+                        className={cn('h-4 w-4 transition-transform duration-200', open && 'rotate-180')}
+                      />
+                    </button>
+                  </div>
+
+                  <AnimatePresence>
+                    {open && (
+                      <motion.div
+                        id={menuId}
+                        initial={{ opacity: 0, y: 6 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 6 }}
+                        transition={{ duration: 0.16, ease: 'easeOut' }}
+                        className="absolute left-0 top-full z-50 mt-2 min-w-[200px] rounded-card border border-weet-line bg-weet-card p-2 shadow-weet-float"
+                      >
+                        {gloss && (
+                          <p className="px-3 pb-1.5 pt-1 text-[11px] font-semibold uppercase tracking-wide text-weet-muted">
+                            {gloss}
+                          </p>
+                        )}
+                        <ul className="flex flex-col">
+                          {item.submenu.map((sub) => (
+                            <li key={sub.href}>
+                              <Link
+                                href={sub.href}
+                                onClick={() => setOpenDesktop(null)}
+                                className="block whitespace-nowrap rounded-[6px] px-3 py-2 text-[13px] text-weet-sub transition-colors hover:bg-weet-paper-alt hover:text-weet-gold-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep"
+                              >
+                                {sub.name}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
               );
             })}
           </nav>
 
           {/* 데스크톱 우측: 언어 + CTA */}
-          <div className="hidden items-center gap-[18px] min-[861px]:flex">
+          <div className="hidden items-center gap-[18px] lg:flex">
             <LanguageToggle />
             <Link
               href="/customize"
@@ -312,7 +409,7 @@ export default function Header() {
           </div>
 
           {/* 모바일 우측: CTA + 햄버거 (≤860px 표시) */}
-          <div className="flex items-center gap-2 min-[861px]:hidden">
+          <div className="flex items-center gap-2 lg:hidden">
             <Link
               href="/customize"
               className="inline-flex h-9 items-center justify-center rounded-[4px] bg-weet-ink px-3.5 text-[12px] font-semibold leading-none text-weet-paper"
@@ -333,139 +430,174 @@ export default function Header() {
         </div>
       </header>
 
-      {/* ===== 모바일 풀스크린 메뉴 ===== */}
-      {typeof document !== 'undefined' &&
-        mobileMenuOpen &&
-        createPortal(
-          <div
-            id="mobile-menu"
-            className="animate-fade-in fixed inset-0 z-[100] overflow-y-auto bg-weet-paper text-weet-ink min-[861px]:hidden"
-          >
-            <div className="sticky top-0 flex items-center justify-between border-b border-weet-line bg-weet-paper px-[5vw] py-4">
-              <Link href="/" onClick={closeMobile} aria-label="위트(weet) 홈">
-                <Image
-                  src="/images/handoff/weet-wordmark.webp"
-                  alt="weet"
-                  width={406}
-                  height={123}
-                  className="h-[24px] w-auto"
-                />
-              </Link>
-              <button
-                type="button"
-                onClick={closeMobile}
-                aria-label="메뉴 닫기"
-                className="rounded-full p-2 text-weet-ink transition-colors hover:bg-weet-paper-alt"
-              >
-                <X className="h-7 w-7" />
-              </button>
-            </div>
-
-            <nav className="px-[5vw] py-8">
-              <Link
-                href="/customize"
-                onClick={closeMobile}
-                className="mb-8 flex w-full items-center justify-center rounded-[6px] bg-weet-gold py-4 text-lg font-semibold text-weet-ink transition-colors hover:bg-weet-gold-deep"
-              >
-                {orderLabel[language]}
-              </Link>
-
-              {navigation.map((item) => {
-                const open = expandedMenu === item.name;
-                return (
-                  <div key={item.href} className="mb-7 last:mb-0">
-                    <div className="flex items-center justify-between">
-                      <Link
-                        href={item.href}
-                        onClick={closeMobile}
-                        className={cn(
-                          'text-xl font-semibold transition-colors hover:text-weet-gold-deep',
-                          isActive(item.href) ? 'text-weet-gold-deep' : 'text-weet-ink',
-                        )}
-                      >
-                        {item.name}
-                      </Link>
-                      <button
-                        type="button"
-                        onClick={() => setExpandedMenu(open ? null : item.name)}
-                        aria-label={`${item.name} 하위 메뉴`}
-                        aria-expanded={open}
-                        className="p-1.5 text-weet-sub"
-                      >
-                        <ChevronDown className={cn('h-5 w-5 transition-transform duration-300', open && 'rotate-180')} />
-                      </button>
-                    </div>
-                    <AnimatePresence>
-                      {open && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: 'auto', opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3, ease: 'easeInOut' }}
-                          className="overflow-hidden"
-                        >
-                          <div className="ml-3 mt-3 flex flex-col gap-2.5 border-l border-weet-line pl-4">
-                            {item.submenu.map((sub) => (
-                              <Link
-                                key={sub.href}
-                                href={sub.href}
-                                onClick={closeMobile}
-                                className="text-[14px] text-weet-sub transition-colors hover:text-weet-gold-deep"
-                              >
-                                {sub.name}
-                              </Link>
-                            ))}
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </div>
-                );
-              })}
-            </nav>
-
-            <div className="space-y-6 px-[5vw] pb-10">
-              <LanguageToggle size="lg" />
-              <div className="flex items-center gap-5 border-t border-weet-line pt-5 text-weet-sub">
-                <Link
-                  href="https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={closeMobile}
-                  className="flex items-center gap-1.5 transition-colors hover:text-weet-gold-deep"
-                  aria-label="당근"
-                >
-                  <Carrot className="h-5 w-5" />
-                  <span className="text-[12px] font-semibold">당근</span>
-                </Link>
-                <Link
-                  href="https://blog.naver.com/we-et"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={closeMobile}
-                  className="flex items-center gap-1.5 transition-colors hover:text-weet-gold-deep"
-                  aria-label="네이버 블로그"
-                >
-                  <span className="text-lg font-bold leading-none">N</span>
-                  <span className="text-[12px] font-semibold">blog</span>
-                </Link>
-                <Link
-                  href="https://www.instagram.com/weet_kr/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={closeMobile}
-                  className="flex items-center gap-1.5 transition-colors hover:text-weet-gold-deep"
-                  aria-label="인스타그램"
-                >
-                  <Instagram className="h-5 w-5" />
-                  <span className="text-[12px] font-semibold">Instagram</span>
-                </Link>
-              </div>
-              <p className="text-[12px] text-weet-muted">WE make dreams comE True</p>
-            </div>
-          </div>,
-          document.body,
-        )}
+      {/* ===== 모바일 풀스크린 메뉴 (Escape·포커스 트랩·스크롤 락은 useModalDismiss가 처리) ===== */}
+      {mobileMenuOpen && (
+        <MobileMenu
+          navigation={navigation}
+          language={language}
+          isActive={isActive}
+          expandedMenu={expandedMenu}
+          setExpandedMenu={setExpandedMenu}
+          onClose={closeMobile}
+        />
+      )}
     </>
+  );
+}
+
+function MobileMenu({
+  navigation,
+  language,
+  isActive,
+  expandedMenu,
+  setExpandedMenu,
+  onClose,
+}: {
+  navigation: NavItem[];
+  language: 'KO' | 'EN' | 'ES';
+  isActive: (href: string) => boolean;
+  expandedMenu: string | null;
+  setExpandedMenu: (v: string | null) => void;
+  onClose: () => void;
+}) {
+  // ESC 닫기 + body 스크롤 락 + 포커스 트랩 + 초기 포커스 + 복귀. (소비처 패턴과 동일)
+  useModalDismiss(onClose);
+  if (typeof document === 'undefined') return null;
+
+  return createPortal(
+    <div
+      id="mobile-menu"
+      role="dialog"
+      aria-modal="true"
+      aria-label="주 메뉴"
+      className="animate-fade-in fixed inset-0 z-[100] overflow-y-auto bg-weet-paper text-weet-ink lg:hidden"
+    >
+      <div className="sticky top-0 flex items-center justify-between border-b border-weet-line bg-weet-paper px-[5vw] py-4">
+        <Link href="/" onClick={onClose} aria-label="위트(weet) 홈">
+          <Image
+            src="/images/handoff/weet-wordmark.webp"
+            alt="weet"
+            width={406}
+            height={123}
+            className="h-[24px] w-auto"
+          />
+        </Link>
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="메뉴 닫기"
+          className="rounded-full p-2 text-weet-ink transition-colors hover:bg-weet-paper-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep"
+        >
+          <X className="h-7 w-7" />
+        </button>
+      </div>
+
+      <nav className="px-[5vw] py-8" aria-label="모바일 메뉴">
+        <Link
+          href="/customize"
+          onClick={onClose}
+          className="mb-8 flex w-full items-center justify-center rounded-[6px] bg-weet-gold py-4 text-lg font-semibold text-weet-ink transition-colors hover:bg-weet-gold-deep"
+        >
+          {orderLabel[language]}
+        </Link>
+
+        {navigation.map((item) => {
+          const open = expandedMenu === item.name;
+          const menuId = `m-megamenu-${item.href.replace(/\W+/g, '-')}`;
+          return (
+            <div key={item.href} className="mb-7 last:mb-0">
+              <div className="flex items-center justify-between">
+                <Link
+                  href={item.href}
+                  onClick={onClose}
+                  className={cn(
+                    'text-xl font-semibold transition-colors hover:text-weet-gold-deep',
+                    isActive(item.href) ? 'text-weet-gold-deep' : 'text-weet-ink',
+                  )}
+                >
+                  {item.name}
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setExpandedMenu(open ? null : item.name)}
+                  aria-label={`${item.name} 하위 메뉴 ${open ? '닫기' : '열기'}`}
+                  aria-expanded={open}
+                  aria-controls={menuId}
+                  className="p-1.5 text-weet-sub focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep"
+                >
+                  <ChevronDown className={cn('h-5 w-5 transition-transform duration-300', open && 'rotate-180')} />
+                </button>
+              </div>
+              <AnimatePresence>
+                {open && (
+                  <motion.div
+                    id={menuId}
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="overflow-hidden"
+                  >
+                    <div className="ml-3 mt-3 flex flex-col gap-2.5 border-l border-weet-line pl-4">
+                      {item.submenu.map((sub) => (
+                        <Link
+                          key={sub.href}
+                          href={sub.href}
+                          onClick={onClose}
+                          className="text-[14px] text-weet-sub transition-colors hover:text-weet-gold-deep"
+                        >
+                          {sub.name}
+                        </Link>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          );
+        })}
+      </nav>
+
+      <div className="space-y-6 px-[5vw] pb-10">
+        <LanguageToggle size="lg" />
+        <div className="flex items-center gap-5 border-t border-weet-line pt-5 text-weet-sub">
+          <Link
+            href="https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClose}
+            className="flex items-center gap-1.5 transition-colors hover:text-weet-gold-deep"
+            aria-label="당근"
+          >
+            <Carrot className="h-5 w-5" />
+            <span className="text-[12px] font-semibold">당근</span>
+          </Link>
+          <Link
+            href="https://blog.naver.com/we-et"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClose}
+            className="flex items-center gap-1.5 transition-colors hover:text-weet-gold-deep"
+            aria-label="네이버 블로그"
+          >
+            <span className="text-lg font-bold leading-none">N</span>
+            <span className="text-[12px] font-semibold">blog</span>
+          </Link>
+          <Link
+            href="https://www.instagram.com/weet_kr/"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={onClose}
+            className="flex items-center gap-1.5 transition-colors hover:text-weet-gold-deep"
+            aria-label="인스타그램"
+          >
+            <Instagram className="h-5 w-5" />
+            <span className="text-[12px] font-semibold">Instagram</span>
+          </Link>
+        </div>
+        <p className="text-[12px] text-weet-muted">WE make dreams comE True</p>
+      </div>
+    </div>,
+    document.body,
   );
 }

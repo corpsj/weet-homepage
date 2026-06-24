@@ -12,6 +12,7 @@ import {
   encodeConfig,
   formatWon,
   getDefaultSelections,
+  getRemovedConflicts,
   optionsForModel,
   selectedOptionList,
   toggleOptionSelection,
@@ -60,10 +61,10 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
   const [activeInfo, setActiveInfo] = useState<CustomizeOption | null>(null);
   const [currentStep, setCurrentStep] = useState<ConfigStep>('space');
   // 진행 시스템: 사용자가 도달한 가장 먼 단계 이전의 단계는 '완료'로 표시한다.
-  const [furthestStepIndex, setFurthestStepIndex] = useState(0);
+  // 공유 링크로 진입(decoded)하면 이미 구성이 끝난 상태이므로 모든 단계를 완료로 둔다.
+  const [furthestStepIndex, setFurthestStepIndex] = useState(decoded ? STEPS.length - 1 : 0);
   const [submitted, setSubmitted] = useState(false);
   const [planViewerOpen, setPlanViewerOpen] = useState(false);
-  const [shouldSyncConfigUrl, setShouldSyncConfigUrl] = useState(Boolean(decoded));
   const [isPending, startTransition] = useTransition();
   const [form, setForm] = useState<ConsultationDraft>({
     customerName: '',
@@ -86,11 +87,12 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
   );
   const encodedConfig = useMemo(() => encodeConfig(modelId, selectedOptions), [modelId, selectedOptions]);
 
+  // 첫 진입부터 현재 구성을 URL에 반영해 '구성 링크 복사'가 항상 유효한 링크를 제공하도록 한다.
   useEffect(() => {
-    if (!estimate || !shouldSyncConfigUrl || typeof window === 'undefined') return;
+    if (!estimate || typeof window === 'undefined') return;
     const nextUrl = `${window.location.pathname}?c=${encodedConfig}`;
     window.history.replaceState(null, '', nextUrl);
-  }, [encodedConfig, estimate, shouldSyncConfigUrl]);
+  }, [encodedConfig, estimate]);
 
   const currentModel = estimate?.model ?? catalog.models[0];
   const visibleOptions = useMemo(() => optionsForModel(catalog.options.filter((option) => option.isActive), modelId), [catalog.options, modelId]);
@@ -109,7 +111,6 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
   }, [selectedOptions, visibleOptions, catalog]);
 
   const handleModelChange = (nextModelId: string) => {
-    setShouldSyncConfigUrl(true);
     setModelId(nextModelId);
     const { selections, removedOptions } = buildSelectionsForModelChange(catalog, selectedOptions, nextModelId);
     setSelectedOptions(selections);
@@ -119,7 +120,20 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
   };
 
   const handleOptionToggle = (category: CustomizeCategory, option: CustomizeOption) => {
-    setShouldSyncConfigUrl(true);
+    // 옵션을 켜는 경우에만(이미 선택된 옵션 해제는 제외) 충돌로 제거되는 옵션을 안내한다.
+    const willSelect = !(selectedOptions[category.id]?.includes(option.id) ?? false);
+    if (willSelect) {
+      const removed = getRemovedConflicts(catalog, selectedOptions, option);
+      if (removed.length > 0) {
+        const names = removed.map((item) => item.option.nameKo).join(', ');
+        const reason = removed.find((item) => item.reasonKo)?.reasonKo;
+        toast.info(
+          reason
+            ? `‘${option.nameKo}’ 선택으로 ${names} 옵션을 제외했습니다. ${reason}`
+            : `‘${option.nameKo}’과(와) 함께 쓸 수 없어 ${names} 옵션을 제외했습니다.`
+        );
+      }
+    }
     setSelectedOptions((current) => toggleOptionSelection({ catalog, selectedOptions: current, category, option }));
   };
 
@@ -141,10 +155,9 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
   };
 
   const handleSubmit = () => {
-    if (!form.customerName.trim() || !form.phone.trim() || !form.region.trim()) {
-      toast.error('이름, 연락처, 지역을 입력해주세요.');
-      return;
-    }
+    // 중복 제출/처리 중 재호출 방지. 필수값 검증의 UI 피드백(필드 에러·포커스)은 ReviewStep이 담당한다.
+    if (isPending || submitted) return;
+    if (!form.customerName.trim() || !form.phone.trim() || !form.region.trim()) return;
 
     const payload: ConsultationFormInput = {
       modelId,

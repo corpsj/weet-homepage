@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
@@ -410,6 +410,7 @@ export default function SolutionPage() {
   const { language } = useLanguage();
   const copy = COPY[language];
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   const active = openIndex !== null ? copy.packages[openIndex] : null;
 
@@ -421,18 +422,43 @@ export default function SolutionPage() {
     el.style.setProperty("--my", `${e.clientY - r.top}px`);
   };
 
-  // Close modal on Escape + lock body scroll while open.
+  // Close on Escape, lock body scroll, trap focus inside the dialog, and
+  // restore focus to the trigger on close.
   useEffect(() => {
     if (active === null) return;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const modal = modalRef.current;
+    const FOCUSABLE =
+      'a[href],button:not([disabled]),textarea,input,select,[tabindex]:not([tabindex="-1"])';
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setOpenIndex(null);
+      if (e.key === "Escape") {
+        setOpenIndex(null);
+        return;
+      }
+      if (e.key === "Tab" && modal) {
+        const items = Array.from(
+          modal.querySelectorAll<HTMLElement>(FOCUSABLE)
+        ).filter((el) => el.offsetParent !== null);
+        if (items.length === 0) return;
+        const first = items[0];
+        const last = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     };
     window.addEventListener("keydown", onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    modal?.focus();
     return () => {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = prev;
+      previouslyFocused?.focus?.();
     };
   }, [active]);
 
@@ -595,8 +621,13 @@ export default function SolutionPage() {
           className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-[rgba(10,8,5,0.7)] px-5 py-[5vh] backdrop-blur-sm"
         >
           <div
+            ref={modalRef}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="solution-modal-title"
+            tabIndex={-1}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-[680px] overflow-hidden rounded-[18px] border border-weet-paper/16 bg-weet-ink shadow-[0_40px_90px_-30px_rgba(0,0,0,0.8)]"
+            className="relative w-full max-w-[680px] overflow-hidden rounded-[18px] border border-weet-paper/16 bg-weet-ink shadow-[0_40px_90px_-30px_rgba(0,0,0,0.8)] focus:outline-none"
           >
             {/* modal header image */}
             <div className="relative aspect-[16/7] overflow-hidden">
@@ -611,7 +642,7 @@ export default function SolutionPage() {
               <button
                 type="button"
                 onClick={() => setOpenIndex(null)}
-                className="absolute right-4 top-4 flex h-[38px] w-[38px] items-center justify-center rounded-full bg-weet-ink-deep/70 backdrop-blur-sm transition-[transform,background] duration-200 hover:rotate-90 hover:bg-weet-paper/[0.16]"
+                className="absolute right-4 top-4 flex h-11 w-11 items-center justify-center rounded-full bg-weet-ink-deep/70 backdrop-blur-sm transition-[transform,background] duration-200 hover:rotate-90 hover:bg-weet-paper/[0.16]"
                 aria-label={copy.closeLabel}
               >
                 <X className="h-[15px] w-[15px] text-weet-paper" />
@@ -620,7 +651,7 @@ export default function SolutionPage() {
                 <div className="mb-2 font-mono text-[11px] font-semibold tracking-[0.16em] text-[#79D2B6]">
                   {active.code} · {active.tag}
                 </div>
-                <h2 className="m-0 text-[clamp(24px,3vw,30px)] font-semibold tracking-[-0.025em] text-weet-paper">
+                <h2 id="solution-modal-title" className="m-0 text-[clamp(24px,3vw,30px)] font-semibold tracking-[-0.025em] text-weet-paper">
                   {active.cat} <span className="text-weet-paper/55">— {active.tagline}</span>
                 </h2>
               </div>

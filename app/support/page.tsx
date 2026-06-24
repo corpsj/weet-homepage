@@ -280,6 +280,8 @@ export default async function SupportPage() {
         id="permits"
         className="mt-10 scroll-mt-[80px] border-y border-weet-line-2 bg-weet-paper-alt"
       >
+        {/* TODO(ux): Header/Footer still link to legacy #help — migrate those to #permits, then drop this alias. */}
+        <span id="help" aria-hidden="true" className="block scroll-mt-[80px]" />
         <div className="wt-reveal mx-auto max-w-[1440px] px-[5vw] py-20 max-[860px]:py-14">
           <div className="mb-9 max-w-[60ch]">
             <div className="mb-2.5 font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-weet-gold-deep">
@@ -391,6 +393,8 @@ export default async function SupportPage() {
       </section>
 
       {/* ===== FAQ ===== */}
+      {/* TODO(ux): Header/Footer still link to legacy #qa — migrate those to #faq, then drop this alias. */}
+      <span id="qa" aria-hidden="true" className="block scroll-mt-[80px]" />
       <section id="faq" className="wt-reveal mx-auto max-w-[1440px] scroll-mt-[80px] px-[5vw] py-20 max-[860px]:py-14">
         <div className="grid grid-cols-1 gap-10 min-[861px]:grid-cols-[0.35fr_0.65fr]">
           <div>
@@ -414,6 +418,16 @@ export default async function SupportPage() {
                 </p>
               </details>
             ))}
+            <p className="mt-1 text-[14px] leading-[1.7] text-weet-sub">
+              찾는 답이 없으신가요?{' '}
+              <Link
+                href="#consult"
+                className="wt-link inline-flex items-center gap-1 font-semibold text-weet-gold-deep hover:underline"
+              >
+                상담 신청
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </p>
           </div>
         </div>
       </section>

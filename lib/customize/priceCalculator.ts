@@ -63,6 +63,28 @@ export function getConflictingOptionIds(catalog: CustomizeCatalog, optionId: str
     .map((conflict) => conflict.conflictsWithOptionId);
 }
 
+// 옵션을 켤 때 충돌로 제외될 옵션 + 사유(reasonKo)를 미리 계산한다(토글 적용 전 안내용).
+// 현재 선택돼 있고, 새 옵션과 충돌하는 옵션만 대상으로 한다.
+export function getRemovedConflicts(
+  catalog: CustomizeCatalog,
+  selectedOptions: SelectedOptions,
+  option: CustomizeOption
+): { option: CustomizeOption; reasonKo: string | null }[] {
+  const conflicts = new Set(getConflictingOptionIds(catalog, option.id));
+  if (conflicts.size === 0) return [];
+
+  const selected = new Set(selectedOptionIds(selectedOptions));
+  const reasonByOptionId = new Map(
+    catalog.conflicts
+      .filter((conflict) => conflict.optionId === option.id)
+      .map((conflict) => [conflict.conflictsWithOptionId, conflict.reasonKo])
+  );
+
+  return catalog.options
+    .filter((candidate) => candidate.id !== option.id && conflicts.has(candidate.id) && selected.has(candidate.id))
+    .map((candidate) => ({ option: candidate, reasonKo: reasonByOptionId.get(candidate.id) ?? null }));
+}
+
 export function hasConflict(catalog: CustomizeCatalog, optionIds: string[]) {
   const selected = new Set(optionIds);
   return catalog.conflicts.some(
@@ -81,7 +103,10 @@ export function toggleOptionSelection(params: {
   const current = next[category.id] ?? [];
 
   if (category.selectionType === 'single') {
-    next[category.id] = [option.id];
+    // 필수가 아닌 단일선택 카테고리는 이미 선택된 옵션을 재클릭하면 해제할 수 있다.
+    next[category.id] = !category.required && current.length === 1 && current[0] === option.id
+      ? []
+      : [option.id];
   } else {
     next[category.id] = current.includes(option.id)
       ? current.filter((id) => id !== option.id)

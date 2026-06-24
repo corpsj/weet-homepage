@@ -79,8 +79,20 @@ export function FloorplanCanvas({
   const roomInk = readableInk(floorColor, '#7b7468', '#4f473d'); // 거실·침실
   const utilInk = readableInk(floorColor, '#9a8f7d', '#5f574d'); // 욕실·주방
 
+  // 스크린리더용 도면 요약: 모델 치수 + 외장/바닥 선택 + 스마트락 여부.
+  const exteriorName = selectedOptions.find((option) => option.categoryKey === 'exterior')?.nameKo;
+  const flooringName = selectedOptions.find((option) => option.categoryKey === 'flooring')?.nameKo;
+  const planLabel = [
+    `${model.nameKo} 평면도, 가로 ${model.widthM}m 세로 ${model.lengthM}m`,
+    exteriorName && `외장 ${exteriorName}`,
+    flooringName && `바닥 ${flooringName}`,
+    doorSmart && '스마트락 현관',
+  ]
+    .filter(Boolean)
+    .join(', ');
+
   return (
-    <svg viewBox="0 0 1000 460" className={cn('aspect-[1000/460] w-full', className)} data-testid={testId}>
+    <svg viewBox="0 0 1000 460" className={cn('aspect-[1000/460] w-full', className)} data-testid={testId} role="img" aria-label={planLabel}>
       <rect width="1000" height="460" fill="#f5f1ea" />
 
       {/* 길이 레일: 좌측 눈금만 좌측 벽을 따라 이동, 우측 눈금(x=830)은 고정 */}

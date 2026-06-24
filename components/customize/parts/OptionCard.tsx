@@ -32,7 +32,7 @@ export function OptionCard({
     // 시안 .wt-opt: 2열 컴팩트 카드. border #ded5c8 / hover #b9aa94 / 선택 #2f3432 + box-shadow 0 0 0 1px.
     <div
       className={cn(
-        'group relative flex min-h-[42px] items-center gap-2 rounded-lg border bg-customize-sand transition-[border-color,box-shadow]',
+        'group relative flex min-h-[44px] items-center gap-2 rounded-lg border bg-customize-sand transition-[border-color,box-shadow]',
         selected
           ? 'border-customize-ink shadow-[0_0_0_1px_#2f3432]'
           : 'border-customize-taupe hover:border-customize-mushroom'
@@ -43,7 +43,7 @@ export function OptionCard({
         onClick={onToggle}
         aria-pressed={selected}
         className={cn(
-          'flex flex-1 items-center gap-2 rounded-lg py-2 pl-2.5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-forest',
+          'flex flex-1 items-center gap-2 rounded-lg py-2 pl-2.5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep',
           showInfo ? 'pr-1' : 'pr-2.5'
         )}
       >
@@ -85,7 +85,7 @@ export function OptionCard({
             onInfo();
           }}
           aria-label="옵션 상세 보기"
-          className="mr-1.5 flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-md text-customize-slate transition-colors hover:bg-customize-dune hover:text-customize-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-forest"
+          className="mr-1.5 flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-md text-customize-slate transition-colors hover:bg-customize-dune hover:text-customize-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep"
         >
           <Info className="h-3.5 w-3.5" />
         </button>

@@ -47,7 +47,7 @@ export function ConfigSummaryBoard({ estimate, selectedOptions }: { estimate: Es
           </div>
           <div className="p-4">
             <p className="text-[11px] font-bold text-weet-muted">{COPY.estimatedAmount}</p>
-            <p className="mt-1 text-lg font-black text-weet-ink" data-testid="summary-estimated-total">
+            <p className="mt-1 text-lg font-black text-weet-ink" data-testid="summary-estimated-total" aria-live="polite" aria-atomic="true">
               {formatWon(estimate.estimatedTotal)}
             </p>
             {estimate.consultOptionCount > 0 && (

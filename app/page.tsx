@@ -98,7 +98,9 @@ const processSteps = [
   { title: 'A/S', text: '입주 후 불편 사항을 조치합니다.' },
 ];
 
-const MODEL_FIT_NOTES: Record<string, { badge: string; note: string }> = {
+type ModelFit = { badge: string; note: string };
+
+const MODEL_FIT_NOTES: Record<string, ModelFit> = {
   'compact-3x6': {
     badge: '농막 신고 범위',
     note: '연면적 20㎡ 이하인 농막 기준에 들어오는 크기입니다. 작업실·주말 농가에 많이 선택합니다.',
@@ -107,6 +109,11 @@ const MODEL_FIT_NOTES: Record<string, { badge: string; note: string }> = {
     badge: '농촌체류형 쉼터 검토 대상',
     note: '연면적 33㎡ 이하인 쉼터 기준에서 검토할 수 있는 크기입니다. 세컨하우스 용도로 많이 선택합니다.',
   },
+};
+
+const DEFAULT_MODEL_FIT: ModelFit = {
+  badge: '기준 모델',
+  note: '용도와 부지 조건에 맞춰 구성할 수 있는 기준 모델입니다. 자세한 인허가 기준은 상담에서 확인해 드립니다.',
 };
 
 function cleanGalleryTitle(title: string) {
@@ -122,6 +129,7 @@ export default async function HomePage() {
   ]);
 
   const models = (catalog?.models ?? []).filter((model) => model.isActive !== false).slice(0, 2);
+  const hasRealGallery = galleryItems.length > 0;
   const teaserFaqs = faqs
     .filter((faq) => faq.is_active !== false && faq.question_ko && faq.answer_ko)
     .slice(0, 4);
@@ -129,7 +137,8 @@ export default async function HomePage() {
   return (
     <div className="bg-weet-paper text-weet-ink">
       {/* 1. First Viewport: Product-led, image-led, full-bleed hero */}
-      <section className="relative flex min-h-[calc(100svh-192px)] w-full items-end overflow-hidden bg-weet-ink text-weet-paper">
+      {/* TODO(ux): 홈 i18n 연결 — useLanguage 도입은 서버 컴포넌트/데이터 패칭 구조 변경이 필요해 이번 범위에서 제외 */}
+      <section className="relative flex min-h-[calc(100svh-72px)] w-full items-end overflow-hidden bg-weet-ink text-weet-paper">
         <Image
           src="/images/hero_main.webp"
           alt="위트 이동식주택 외관"
@@ -163,42 +172,46 @@ export default async function HomePage() {
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
-                href="/support#consult"
+                href="#models"
                 className="inline-flex items-center justify-center rounded-[6px] border border-weet-paper/45 bg-weet-paper/[0.08] px-7 py-[15px] text-[15px] font-medium text-weet-paper transition-colors duration-200 hover:bg-weet-paper/[0.16]"
               >
-                상담 신청
+                대표 모델 보기
               </Link>
             </div>
           </div>
         </div>
 
         {/* Scroll Hint */}
-        <div className="wt-bounce absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 md:flex">
+        <Link
+          href="#models"
+          aria-label="다음 섹션으로 이동"
+          className="wt-bounce absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 md:flex"
+        >
           <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.34em] text-weet-paper/70">Scroll</span>
           <span className="h-[42px] w-px bg-gradient-to-b from-weet-paper/80 to-transparent" />
-        </div>
+        </Link>
       </section>
 
       {/* 2. Representative Models with real base prices */}
-      {models.length > 0 && (
-        <section className="bg-weet-paper px-[5vw] py-14 md:py-24">
-          <div className="mx-auto max-w-[1440px]">
-            <div className="mb-14 max-w-[44ch]">
-              <p className="mb-4 font-mono text-[12px] font-semibold uppercase tracking-[0.24em] text-weet-gold-deep">MODELS · 대표 모델</p>
-              <h2 className="m-0 text-[clamp(28px,3.4vw,46px)] font-semibold leading-[1.1] tracking-[-0.025em] kr-balance">
-                두 가지 기준 모델, <br className="md:hidden" />공개된 기본 가격.
-              </h2>
-              <p className="mt-[18px] text-[15px] leading-[1.7] text-weet-sub kr-balance">
-                아래 가격은 제품 본체 기준이며, 운반·설치 등 현장 비용은{' '}
-                <Link href="/support#cost" className="font-semibold text-weet-gold-deep underline underline-offset-2 transition-colors hover:text-weet-ink">
-                  비용 안내
-                </Link>
-                에서 항목별로 확인할 수 있습니다.
-              </p>
-            </div>
+      <section id="models" className="scroll-mt-24 bg-weet-paper px-[5vw] py-14 md:py-24">
+        <div className="mx-auto max-w-[1440px]">
+          <div className="mb-14 max-w-[44ch]">
+            <p className="mb-4 font-mono text-[12px] font-semibold uppercase tracking-[0.24em] text-weet-gold-deep">MODELS · 대표 모델</p>
+            <h2 className="m-0 text-[clamp(28px,3.4vw,46px)] font-semibold leading-[1.1] tracking-[-0.025em] kr-balance">
+              기준 모델과 <br className="md:hidden" />공개된 기본 가격.
+            </h2>
+            <p className="mt-[18px] text-[15px] leading-[1.7] text-weet-sub kr-balance">
+              위트는 제품 본체 기준 가격을 공개합니다. 운반·설치 등 현장 비용은{' '}
+              <Link href="/support#cost" className="font-semibold text-weet-gold-deep underline underline-offset-2 transition-colors hover:text-weet-ink">
+                비용 안내
+              </Link>
+              에서 항목별로 확인할 수 있습니다.
+            </p>
+          </div>
+          {models.length > 0 ? (
             <div className="grid gap-[22px] lg:grid-cols-2">
               {models.map((model) => {
-                const fit = MODEL_FIT_NOTES[model.id];
+                const fit = MODEL_FIT_NOTES[model.id] ?? DEFAULT_MODEL_FIT;
                 return (
                   <div
                     key={model.id}
@@ -211,13 +224,11 @@ export default async function HomePage() {
                           {model.widthM}m × {model.lengthM}m · {model.areaSqm}㎡
                         </p>
                       </div>
-                      {fit && (
-                        <span className="shrink-0 rounded-full bg-weet-forest px-3 py-1.5 text-[11px] font-semibold tracking-[0.02em] text-weet-paper">
-                          {fit.badge}
-                        </span>
-                      )}
+                      <span className="shrink-0 rounded-full bg-weet-forest px-3 py-1.5 text-[11px] font-semibold tracking-[0.02em] text-weet-paper">
+                        {fit.badge}
+                      </span>
                     </div>
-                    <p className="mt-3.5 text-[14px] leading-[1.65] text-weet-sub kr-balance">{fit?.note}</p>
+                    <p className="mt-3.5 text-[14px] leading-[1.65] text-weet-sub kr-balance">{fit.note}</p>
                     <div className="mt-6 flex items-end justify-between gap-4 border-t border-weet-line-2 pt-6">
                       <div>
                         <p className="text-[12px] font-semibold text-weet-muted">기본가</p>
@@ -236,20 +247,43 @@ export default async function HomePage() {
                 );
               })}
             </div>
-            <p className="mt-7 text-[14px] leading-[1.6] text-weet-sub">
-              더 큰 조합과 상업 공간이 필요하다면{' '}
-              <Link href="/products" className="font-semibold text-weet-ink underline underline-offset-2 transition-colors hover:text-weet-gold-deep">
-                제품 라인업
-              </Link>
-              과{' '}
-              <Link href="/bespoke" className="font-semibold text-weet-ink underline underline-offset-2 transition-colors hover:text-weet-gold-deep">
-                비스포크 제작
-              </Link>
-              을 확인하세요.
-            </p>
-          </div>
-        </section>
-      )}
+          ) : (
+            <div className="rounded-[12px] border border-weet-line bg-weet-surface p-8 md:p-10">
+              <p className="m-0 text-[16px] font-semibold text-weet-ink">대표 모델 가격을 준비하고 있습니다.</p>
+              <p className="mt-2 max-w-[52ch] text-[14px] leading-[1.7] text-weet-sub kr-balance">
+                기준 모델과 기본 가격은 곧 공개됩니다. 지금도 온라인 구성기에서 원하는 크기와 옵션으로 예상 견적을 확인하거나,
+                현장 조건에 맞춘 상담을 신청하실 수 있습니다.
+              </p>
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                <Link
+                  href="/customize"
+                  className="inline-flex items-center justify-center gap-2 rounded-[6px] bg-weet-ink px-[22px] py-3 text-[14px] font-semibold text-weet-paper transition-transform duration-150 hover:-translate-y-0.5"
+                >
+                  온라인 구성하기
+                  <ArrowRight className="h-4 w-4" />
+                </Link>
+                <Link
+                  href="/support#consult"
+                  className="inline-flex items-center justify-center gap-2 rounded-[6px] border border-weet-line bg-weet-surface px-[22px] py-3 text-[14px] font-semibold text-weet-ink transition-colors duration-200 hover:border-weet-gold-deep"
+                >
+                  상담 신청
+                </Link>
+              </div>
+            </div>
+          )}
+          <p className="mt-7 text-[14px] leading-[1.6] text-weet-sub">
+            더 큰 조합과 상업 공간이 필요하다면{' '}
+            <Link href="/products" className="font-semibold text-weet-ink underline underline-offset-2 transition-colors hover:text-weet-gold-deep">
+              제품 라인업
+            </Link>
+            과{' '}
+            <Link href="/bespoke" className="font-semibold text-weet-ink underline underline-offset-2 transition-colors hover:text-weet-gold-deep">
+              비스포크 제작
+            </Link>
+            을 확인하세요.
+          </p>
+        </div>
+      </section>
 
       {/* 3. Trust / Transparency Section */}
       <section className="bg-weet-ink px-[5vw] py-14 text-weet-paper md:py-24">
@@ -318,7 +352,7 @@ export default async function HomePage() {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               {[
                 { src: '/images/modular/generated/factory-precision.webp', label: '표준화된 제작 환경' },
-                { src: '/images/hero_main.webp', label: '최적화된 생활 동선' },
+                { src: '/images/modular/generated/interior-comfort.webp', label: '최적화된 생활 동선' },
                 { src: '/images/modular/generated/transport-install.webp', label: '안전한 현장 설치' },
               ].map((item) => (
                 <div key={item.src} className="group relative aspect-[4/3] overflow-hidden rounded-[10px] bg-weet-ink">
@@ -331,7 +365,10 @@ export default async function HomePage() {
           )}
 
           <p className="mt-6 text-[13px] font-light leading-[1.7] text-weet-muted">
-            위 사진은 위트 공장과 설치 현장에서 직접 기록한 이미지입니다. 더 많은 현장 소식은{' '}
+            {hasRealGallery
+              ? '위 사진은 위트 공장과 설치 현장에서 직접 기록한 이미지입니다.'
+              : '위 이미지는 위트의 제작·설치 과정을 보여주기 위한 예시입니다.'}{' '}
+            더 많은 현장 소식은{' '}
             <a href={settings.naver_blog_url} target="_blank" rel="noopener noreferrer" className="font-semibold text-weet-paper/75 transition-colors hover:text-weet-gold">
               네이버 블로그
             </a>
