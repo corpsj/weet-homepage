@@ -695,7 +695,7 @@ export default function HomeClient({
               </div>
             </div>
           )}
-          <p className="mt-7 text-[14px] leading-[1.6] text-weet-sub">
+          <p className="mt-7 text-[14px] leading-[1.6] text-weet-sub kr-balance">
             {copy.models.outroPre}
             <Link href="/products" className="font-semibold text-weet-ink underline underline-offset-2 transition-colors hover:text-weet-gold-deep">
               {copy.models.outroProducts}

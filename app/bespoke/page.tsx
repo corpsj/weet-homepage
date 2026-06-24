@@ -285,7 +285,7 @@ export default function BespokePage() {
                   <strong className="mb-1.5 block text-[16px] font-semibold text-weet-paper">
                     {feature.title}
                   </strong>
-                  <span className="text-[13.5px] leading-[1.65] text-weet-muted">
+                  <span className="text-[13.5px] leading-[1.65] text-weet-muted kr-balance">
                     {feature.body}
                   </span>
                 </div>

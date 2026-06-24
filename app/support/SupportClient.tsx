@@ -654,7 +654,7 @@ export default function SupportClient({
                   <h3 className="m-0 mb-4 text-[18px] font-semibold">{guide.title}</h3>
                   <ul className="m-0 flex list-none flex-col gap-[11px] p-0">
                     {guide.points.map((point) => (
-                      <li key={point} className="flex gap-2.5 text-[13.5px] leading-[1.6] text-weet-sub">
+                      <li key={point} className="flex gap-2.5 text-[13.5px] leading-[1.6] text-weet-sub break-keep">
                         <span className="mt-px text-weet-forest">•</span>
                         {point}
                       </li>
@@ -664,7 +664,7 @@ export default function SupportClient({
               );
             })}
           </div>
-          <p className="mt-6 text-[12px] leading-[1.6] text-weet-muted">
+          <p className="mt-6 text-[12px] leading-[1.6] text-weet-muted kr-balance">
             {copy.permits.disclaimer}
           </p>
         </div>
@@ -707,7 +707,7 @@ export default function SupportClient({
           ))}
         </div>
         <div className="mt-[22px] rounded-[14px] border border-[#CBDDD2] bg-[#EAF0EC] px-[30px] py-[26px]">
-          <p className="m-0 text-[14px] leading-[1.8] text-[#3A3026]">
+          <p className="m-0 text-[14px] leading-[1.8] text-[#3A3026] kr-balance">
             <strong className="font-semibold text-weet-ink">{copy.cost.noteLead}</strong>{copy.cost.noteBody}
             {settings.lead_time_note && `${copy.cost.leadTimePrefix}${settings.lead_time_note}.`}
           </p>
@@ -755,7 +755,7 @@ export default function SupportClient({
                 key={`${faq.question}-${index}`}
                 className="group overflow-hidden rounded-[12px] border border-weet-line bg-weet-card"
               >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-[22px] py-5 text-[15.5px] font-semibold text-weet-ink [&::-webkit-details-marker]:hidden">
+                <summary className="flex cursor-pointer list-none items-center justify-between gap-4 px-[22px] py-5 text-[15.5px] font-semibold text-weet-ink break-keep [&::-webkit-details-marker]:hidden">
                   {faq.question}
                   <ArrowRight className="h-4 w-4 shrink-0 text-weet-gold-deep transition-transform duration-300 group-open:rotate-90" />
                 </summary>

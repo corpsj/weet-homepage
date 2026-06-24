@@ -652,10 +652,10 @@ export default function SolutionPage() {
                 <X className="h-[15px] w-[15px] text-weet-paper" />
               </button>
               <div className="absolute inset-x-0 bottom-0 px-8 pb-7">
-                <div className="mb-2 font-mono text-[11px] font-semibold tracking-[0.16em] text-[#79D2B6]">
+                <div className="mb-2 font-mono text-[11px] font-semibold tracking-[0.16em] text-[#79D2B6] break-keep">
                   {active.code} · {active.tag}
                 </div>
-                <h2 id="solution-modal-title" className="m-0 text-[clamp(24px,3vw,30px)] font-semibold tracking-[-0.025em] text-weet-paper">
+                <h2 id="solution-modal-title" className="m-0 text-[clamp(24px,3vw,30px)] font-semibold tracking-[-0.025em] text-weet-paper break-keep">
                   {active.cat} <span className="text-weet-paper/55">— {active.tagline}</span>
                 </h2>
               </div>

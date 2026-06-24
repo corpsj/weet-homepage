@@ -576,7 +576,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                             {t('작고 단단한 내 집. 필요한 크기와 목적에 맞는 구성을 찾아보세요.', 'Find the right size and layout for your needs.', 'Encuentre el tamaño y la distribución que se ajusten a sus necesidades.')}
                         </p>
                         {products.length > visibleCount && (
-                            <p className="mb-2 text-[13.5px] font-medium text-weet-muted">
+                            <p className="mb-2 text-[13.5px] font-medium text-weet-muted kr-balance">
                                 {t(
                                     `대표 모델 ${visibleCount}개부터 확인하고 전체 ${products.length}개 라인업으로 이어집니다.`,
                                     `${visibleCount} representative models first, followed by the full ${products.length}-model lineup.`,

@@ -147,7 +147,7 @@ export default function SolutionTemplate({ data }: { data: SolutionPackageData }
                 <span className="block text-[13px] font-semibold tracking-[-0.01em] sm:text-[14px]">{item.name}</span>
                 <span
                   className={cn(
-                    "mt-0.5 block font-mono text-[11px] sm:mt-1 sm:text-[11.5px]",
+                    "mt-0.5 block break-keep font-mono text-[11px] sm:mt-1 sm:text-[11.5px]",
                     isActive ? "text-weet-gold/70" : "text-weet-paper/45",
                   )}
                 >
