@@ -1,0 +1,94 @@
+# .understandignore — patterns for files/dirs to exclude from analysis
+# Syntax: same as .gitignore. Scope chosen: full application code, excluding
+# agent scratch / design handoff / image+audit work dirs / one-off scripts.
+# Built-in defaults already exclude: node_modules/, .git/, dist/, build/, *.lock, *.min.js
+
+# --- Build / framework output & env ---
+/.next/
+/out/
+/build
+/coverage
+.vercel/
+*.tsbuildinfo
+next-env.d.ts
+.env
+.env*.local
+.DS_Store
+*.pem
+
+# --- Lockfiles & conflict copies ---
+package-lock.json
+package-lock_*Conflict.json
+*.bak
+*.backup
+*.old
+
+# --- Agent / tooling scratch dirs ---
+.claude/
+.codex/
+.kiro/
+.sisyphus/
+.yoyo/
+.understand-anything/
+.vscode/
+.cursorrules
+agent-inbox/
+scratch/
+tmp/
+docs/
+
+# --- One-off maintenance scripts (DB/image tooling, not app architecture) ---
+scripts/
+
+# --- Design handoff & static assets ---
+design_handoff_weet/
+public/
+public_backup/
+대체이미지/
+
+# --- Image / binary assets (keep code only) ---
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.svg
+*.ico
+*.pdf
+
+# --- Image / visual / audit / work dirs ---
+customize-option-image-audit-latest/
+local-product-assets-audit/
+product-all-image-audit-latest/
+product-image-i2i-work/
+site-image-continuity-audit/
+site-image-refresh-work/
+site-mobile-layout-audit/
+sitewide-image-audit-latest/
+visual-qa-latest/
+
+# --- Test output / generated test harness data ---
+test-results/
+playwright-report/
+testsprite_tests/
+
+# --- One-off root scripts & data dumps ---
+screenshot.js
+screenshot.mjs
+fix_product_names.ts
+list_products.ts
+all_products.json
+product_list.txt
+debug_list.md
+instagram_hashtags.md
+codex-loop.md
+*.log
+naver*.html
+figma_tree.json
+
+# --- SQL: keep supabase schema + migrations only ---
+*.sql
+!supabase/schema.sql
+!supabase/migrations/*.sql
+supabase/.temp/
+supabase/seed.sql

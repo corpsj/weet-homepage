@@ -1,0 +1,260 @@
+{
+  "nodes": [
+    {
+      "id": "file:app/solution/cctv/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/solution/cctv/page.tsx",
+      "summary": "시큐리티(CCTV·스마트락·동작 감지) 솔루션 페이지로, KO/EN/ES 3개 언어 카피를 담은 SolutionPackageData 상수를 정의하고 공유 SolutionTemplate에 데이터로 주입한다.",
+      "tags": ["page", "solution", "data-model", "i18n", "thin-wrapper"],
+      "complexity": "moderate",
+      "languageNotes": "데이터-주도 패턴: 페이지 콘텐츠는 전부 DATA 상수이고 렌더링은 SolutionTemplate에 위임한다."
+    },
+    {
+      "id": "file:app/solution/energy/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/solution/energy/page.tsx",
+      "summary": "에너지(태양광·ESS·EV 충전) 솔루션 페이지로, 3개 언어 카피를 담은 SolutionPackageData 상수를 정의하고 공유 SolutionTemplate에 주입한다.",
+      "tags": ["page", "solution", "data-model", "i18n", "thin-wrapper"],
+      "complexity": "moderate",
+      "languageNotes": "cctv/iot/network 페이지와 동일 구조의 데이터-주도 래퍼."
+    },
+    {
+      "id": "file:app/solution/iot/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/solution/iot/page.tsx",
+      "summary": "IoT(조명·냉난방·환기 제어) 솔루션 페이지로, 3개 언어 카피를 담은 SolutionPackageData 상수를 정의하고 공유 SolutionTemplate에 주입한다.",
+      "tags": ["page", "solution", "data-model", "i18n", "thin-wrapper"],
+      "complexity": "moderate",
+      "languageNotes": "id는 'control'이며 cctv/energy/network와 동일 구조의 데이터-주도 래퍼."
+    },
+    {
+      "id": "file:app/solution/network/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/solution/network/page.tsx",
+      "summary": "네트워크(와이파이·라우터·위성/LTE) 솔루션 페이지로, 3개 언어 카피를 담은 SolutionPackageData 상수를 정의하고 공유 SolutionTemplate에 주입한다.",
+      "tags": ["page", "solution", "data-model", "i18n", "thin-wrapper"],
+      "complexity": "moderate",
+      "languageNotes": "cctv/energy/iot 페이지와 동일 구조의 데이터-주도 래퍼."
+    },
+    {
+      "id": "file:components/solution/SolutionTemplate.tsx",
+      "type": "file",
+      "name": "SolutionTemplate.tsx",
+      "filePath": "components/solution/SolutionTemplate.tsx",
+      "summary": "4개 솔루션 서브페이지(시큐리티/네트워크/IoT/에너지)가 공유하는 프레젠테이션 템플릿으로, 주입된 SolutionPackageData를 받아 현재 언어에 맞는 히어로·패키지 네비게이션·추천 구성·구성 범위·확정 값·도입 효과 섹션을 렌더링한다.",
+      "tags": ["component", "solution", "template", "i18n", "presentation"],
+      "complexity": "complex",
+      "languageNotes": "SolutionPackageData/LocalizedSolution 타입과 PACKAGE_NAV 다국어 상수를 export하여 모든 솔루션 페이지의 공통 계약 역할을 한다."
+    },
+    {
+      "id": "function:app/solution/cctv/page.tsx:CCTVSolutionPage",
+      "type": "function",
+      "name": "CCTVSolutionPage",
+      "filePath": "app/solution/cctv/page.tsx",
+      "lineRange": [73, 75],
+      "summary": "시큐리티 페이지의 기본 export 컴포넌트로, DATA 상수를 SolutionTemplate에 전달해 렌더링한다.",
+      "tags": ["page", "solution", "thin-wrapper", "entry-point"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/solution/energy/page.tsx:EnergySolutionPage",
+      "type": "function",
+      "name": "EnergySolutionPage",
+      "filePath": "app/solution/energy/page.tsx",
+      "lineRange": [73, 75],
+      "summary": "에너지 페이지의 기본 export 컴포넌트로, DATA 상수를 SolutionTemplate에 전달해 렌더링한다.",
+      "tags": ["page", "solution", "thin-wrapper", "entry-point"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/solution/iot/page.tsx:IOTSolutionPage",
+      "type": "function",
+      "name": "IOTSolutionPage",
+      "filePath": "app/solution/iot/page.tsx",
+      "lineRange": [73, 75],
+      "summary": "IoT 페이지의 기본 export 컴포넌트로, DATA 상수를 SolutionTemplate에 전달해 렌더링한다.",
+      "tags": ["page", "solution", "thin-wrapper", "entry-point"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/solution/network/page.tsx:NetworkSolutionPage",
+      "type": "function",
+      "name": "NetworkSolutionPage",
+      "filePath": "app/solution/network/page.tsx",
+      "lineRange": [73, 75],
+      "summary": "네트워크 페이지의 기본 export 컴포넌트로, DATA 상수를 SolutionTemplate에 전달해 렌더링한다.",
+      "tags": ["page", "solution", "thin-wrapper", "entry-point"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/solution/SolutionTemplate.tsx:SolutionTemplate",
+      "type": "function",
+      "name": "SolutionTemplate",
+      "filePath": "components/solution/SolutionTemplate.tsx",
+      "lineRange": [68, 280],
+      "summary": "useLanguage로 현재 언어를 읽어 data.copy에서 해당 카피를 선택하고, 히어로·패키지 네비게이션·fit/included/decisions/outcomes 리스트를 cn() 기반 조건부 스타일로 렌더링하는 공유 솔루션 렌더러.",
+      "tags": ["component", "template", "i18n", "presentation", "service"],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:app/solution/cctv/page.tsx",
+      "target": "file:components/solution/SolutionTemplate.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/solution/energy/page.tsx",
+      "target": "file:components/solution/SolutionTemplate.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/solution/iot/page.tsx",
+      "target": "file:components/solution/SolutionTemplate.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/solution/network/page.tsx",
+      "target": "file:components/solution/SolutionTemplate.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/solution/SolutionTemplate.tsx",
+      "target": "file:contexts/LanguageContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/solution/SolutionTemplate.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/solution/cctv/page.tsx",
+      "target": "function:app/solution/cctv/page.tsx:CCTVSolutionPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:app/solution/energy/page.tsx",
+      "target": "function:app/solution/energy/page.tsx:EnergySolutionPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:app/solution/iot/page.tsx",
+      "target": "function:app/solution/iot/page.tsx:IOTSolutionPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:app/solution/network/page.tsx",
+      "target": "function:app/solution/network/page.tsx:NetworkSolutionPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:components/solution/SolutionTemplate.tsx",
+      "target": "function:components/solution/SolutionTemplate.tsx:SolutionTemplate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:app/solution/cctv/page.tsx",
+      "target": "function:app/solution/cctv/page.tsx:CCTVSolutionPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/solution/energy/page.tsx",
+      "target": "function:app/solution/energy/page.tsx:EnergySolutionPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/solution/iot/page.tsx",
+      "target": "function:app/solution/iot/page.tsx:IOTSolutionPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/solution/network/page.tsx",
+      "target": "function:app/solution/network/page.tsx:NetworkSolutionPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/solution/SolutionTemplate.tsx",
+      "target": "function:components/solution/SolutionTemplate.tsx:SolutionTemplate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/solution/cctv/page.tsx:CCTVSolutionPage",
+      "target": "function:components/solution/SolutionTemplate.tsx:SolutionTemplate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/solution/energy/page.tsx:EnergySolutionPage",
+      "target": "function:components/solution/SolutionTemplate.tsx:SolutionTemplate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/solution/iot/page.tsx:IOTSolutionPage",
+      "target": "function:components/solution/SolutionTemplate.tsx:SolutionTemplate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/solution/network/page.tsx:NetworkSolutionPage",
+      "target": "function:components/solution/SolutionTemplate.tsx:SolutionTemplate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/solution/SolutionTemplate.tsx:SolutionTemplate",
+      "target": "function:contexts/LanguageContext.tsx:useLanguage",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/solution/SolutionTemplate.tsx:SolutionTemplate",
+      "target": "function:lib/utils.ts:cn",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

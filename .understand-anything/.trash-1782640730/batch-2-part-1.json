@@ -1,0 +1,1863 @@
+{
+  "nodes": [
+    {
+      "id": "file:app/actions/gallery-actions.ts",
+      "type": "file",
+      "name": "gallery-actions.ts",
+      "filePath": "app/actions/gallery-actions.ts",
+      "summary": "갤러리 항목의 공개 조회 및 관리자 CRUD를 담당하는 Next.js Server Action 모음. zod 검증과 requireAdmin 가드를 거쳐 Supabase gallery 테이블을 다룬다.",
+      "tags": [
+        "server-action",
+        "data-model",
+        "validation",
+        "api-handler",
+        "supabase"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/actions/product-actions.ts",
+      "type": "file",
+      "name": "product-actions.ts",
+      "filePath": "app/actions/product-actions.ts",
+      "summary": "제품 생성/수정/삭제/노출토글/순서변경을 처리하는 관리자 전용 Server Action. requireAdmin 인증과 zod 스키마 검증 후 products 테이블을 갱신하고 경로를 revalidate한다.",
+      "tags": [
+        "server-action",
+        "validation",
+        "api-handler",
+        "supabase",
+        "admin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/actions/project-actions.ts",
+      "type": "file",
+      "name": "project-actions.ts",
+      "filePath": "app/actions/project-actions.ts",
+      "summary": "프로젝트(시공 사례) 조회 및 CRUD를 담당하는 관리자 Server Action. zod 검증과 requireAdmin 가드를 통과한 뒤 projects 테이블을 조작한다.",
+      "tags": [
+        "server-action",
+        "validation",
+        "api-handler",
+        "supabase",
+        "admin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/actions/submit-inquiry.ts",
+      "type": "file",
+      "name": "submit-inquiry.ts",
+      "filePath": "app/actions/submit-inquiry.ts",
+      "summary": "공개 문의/상담 폼 제출을 처리하는 Server Action. 레이트리밋 가드(assertPublicSubmissionAllowed)와 zod 검증을 거쳐 inquiries 테이블에 저장한다.",
+      "tags": [
+        "server-action",
+        "validation",
+        "form-handler",
+        "public",
+        "rate-limit"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/admin/gallery/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/admin/gallery/page.tsx",
+      "summary": "관리자 갤러리 페이지 서버 컴포넌트. getGalleryItemsForAdmin으로 데이터를 받아 GalleryList 클라이언트 컴포넌트에 전달하는 얇은 래퍼.",
+      "tags": [
+        "page",
+        "server-component",
+        "admin",
+        "entry-point"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/admin/products/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/admin/products/page.tsx",
+      "summary": "관리자 제품 목록 페이지 서버 컴포넌트. requireAdmin 검증 후 검색/카테고리/상태/페이지 쿼리로 products를 조회해 ProductGrid에 페이지네이션 데이터를 넘긴다.",
+      "tags": [
+        "page",
+        "server-component",
+        "admin",
+        "pagination",
+        "supabase"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/admin/projects/AdminProjectsClient.tsx",
+      "type": "file",
+      "name": "AdminProjectsClient.tsx",
+      "filePath": "app/admin/projects/AdminProjectsClient.tsx",
+      "summary": "관리자 프로젝트 관리 콘솔 클라이언트 컴포넌트. 상태 필터/검색, 공개 준비도(readiness) 지표, 삭제 등을 다루며 ConsolePrimitives UI와 낙관적 갱신을 사용한다.",
+      "tags": [
+        "component",
+        "client-component",
+        "admin",
+        "console",
+        "state-management"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:app/admin/projects/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/admin/projects/page.tsx",
+      "summary": "관리자 프로젝트 페이지 서버 컴포넌트. getProjects로 초기 데이터를 받아 AdminProjectsClient에 전달하는 얇은 래퍼.",
+      "tags": [
+        "page",
+        "server-component",
+        "admin",
+        "entry-point"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/products/ProductsPageClient.tsx",
+      "type": "file",
+      "name": "ProductsPageClient.tsx",
+      "filePath": "app/products/ProductsPageClient.tsx",
+      "summary": "공개 제품 카탈로그의 핵심 클라이언트 컴포넌트. 고정 사이드바 필터(S/M/L/XL/DESIGN), 스크롤 동기화, 이미지 갤러리 모달, 다국어(useLanguage)를 구현한 대형 인터랙션 화면.",
+      "tags": [
+        "component",
+        "client-component",
+        "catalog",
+        "sidebar",
+        "i18n"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:app/products/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/products/page.tsx",
+      "summary": "공개 제품 페이지 서버 컴포넌트. lib/products의 getProducts로 데이터를 받아 ProductsPageClient에 전달하며 ISR revalidate를 설정한다.",
+      "tags": [
+        "page",
+        "server-component",
+        "entry-point",
+        "catalog",
+        "isr"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/projects/ProjectsGallery.tsx",
+      "type": "file",
+      "name": "ProjectsGallery.tsx",
+      "filePath": "app/projects/ProjectsGallery.tsx",
+      "summary": "공개 프로젝트(시공 사례) 갤러리 클라이언트 컴포넌트. 카테고리 분류와 사양 요약을 구성해 카드 그리드로 시공 사례를 보여준다.",
+      "tags": [
+        "component",
+        "client-component",
+        "gallery",
+        "portfolio"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:app/projects/[id]/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/projects/[id]/page.tsx",
+      "summary": "프로젝트 상세 페이지 서버 컴포넌트. id로 단일 프로젝트를 조회하고 generateMetadata로 SEO 메타데이터와 BreadcrumbJsonLd 구조화 데이터를 생성한다.",
+      "tags": [
+        "page",
+        "server-component",
+        "detail",
+        "seo",
+        "dynamic-route"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/projects/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/projects/page.tsx",
+      "summary": "공개 프로젝트 목록 페이지 서버 컴포넌트. 공개 준비된 프로젝트와 갤러리 항목을 조합하고 사이트 설정을 반영해 ProjectsGallery에 전달한다.",
+      "tags": [
+        "page",
+        "server-component",
+        "entry-point",
+        "portfolio",
+        "supabase"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/sitemap.ts",
+      "type": "file",
+      "name": "sitemap.ts",
+      "filePath": "app/sitemap.ts",
+      "summary": "Next.js sitemap.xml 생성기. 정적 경로와 게시된 프로젝트 상세 경로를 합쳐 검색엔진용 사이트맵 엔트리를 반환한다.",
+      "tags": [
+        "sitemap",
+        "seo",
+        "route-handler",
+        "supabase"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/admin/gallery/GalleryList.tsx",
+      "type": "file",
+      "name": "GalleryList.tsx",
+      "filePath": "components/admin/gallery/GalleryList.tsx",
+      "summary": "관리자 갤러리 목록 클라이언트 컴포넌트. ConsolePrimitives UI로 갤러리 항목을 나열하고 confirmToast 확인 후 삭제 액션을 호출한다.",
+      "tags": [
+        "component",
+        "client-component",
+        "admin",
+        "console",
+        "crud"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/gallery-actions.ts:getPublicGalleryItems",
+      "type": "function",
+      "name": "getPublicGalleryItems",
+      "filePath": "app/actions/gallery-actions.ts",
+      "lineRange": [
+        31,
+        47
+      ],
+      "summary": "공개 노출용 활성 갤러리 항목을 정렬·제한하여 조회한다.",
+      "tags": [
+        "server-action",
+        "query",
+        "public"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/gallery-actions.ts:getGalleryItemsForAdmin",
+      "type": "function",
+      "name": "getGalleryItemsForAdmin",
+      "filePath": "app/actions/gallery-actions.ts",
+      "lineRange": [
+        49,
+        65
+      ],
+      "summary": "관리자용 전체 갤러리 항목을 정렬해 조회한다(requireAdmin).",
+      "tags": [
+        "server-action",
+        "query",
+        "admin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/gallery-actions.ts:getGalleryItemForAdmin",
+      "type": "function",
+      "name": "getGalleryItemForAdmin",
+      "filePath": "app/actions/gallery-actions.ts",
+      "lineRange": [
+        67,
+        84
+      ],
+      "summary": "id로 단일 갤러리 항목을 관리자 권한으로 조회한다.",
+      "tags": [
+        "server-action",
+        "query",
+        "admin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/gallery-actions.ts:saveGalleryItem",
+      "type": "function",
+      "name": "saveGalleryItem",
+      "filePath": "app/actions/gallery-actions.ts",
+      "lineRange": [
+        86,
+        105
+      ],
+      "summary": "갤러리 항목을 zod 검증 후 upsert(있으면 update, 없으면 insert)한다.",
+      "tags": [
+        "server-action",
+        "mutation",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/gallery-actions.ts:deleteGalleryItem",
+      "type": "function",
+      "name": "deleteGalleryItem",
+      "filePath": "app/actions/gallery-actions.ts",
+      "lineRange": [
+        107,
+        121
+      ],
+      "summary": "id 검증 후 갤러리 항목을 삭제하고 경로를 revalidate한다.",
+      "tags": [
+        "server-action",
+        "mutation",
+        "delete"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/product-actions.ts:createProduct",
+      "type": "function",
+      "name": "createProduct",
+      "filePath": "app/actions/product-actions.ts",
+      "lineRange": [
+        42,
+        77
+      ],
+      "summary": "zod 검증 후 신규 제품을 products 테이블에 생성한다(requireAdmin).",
+      "tags": [
+        "server-action",
+        "mutation",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/product-actions.ts:updateProduct",
+      "type": "function",
+      "name": "updateProduct",
+      "filePath": "app/actions/product-actions.ts",
+      "lineRange": [
+        79,
+        117
+      ],
+      "summary": "부분 스키마 검증 후 기존 제품을 갱신하고 관련 경로를 revalidate한다.",
+      "tags": [
+        "server-action",
+        "mutation",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/product-actions.ts:deleteProduct",
+      "type": "function",
+      "name": "deleteProduct",
+      "filePath": "app/actions/product-actions.ts",
+      "lineRange": [
+        119,
+        134
+      ],
+      "summary": "제품을 삭제하고 목록/관리 경로를 revalidate한다.",
+      "tags": [
+        "server-action",
+        "mutation",
+        "delete"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/product-actions.ts:toggleProductStatus",
+      "type": "function",
+      "name": "toggleProductStatus",
+      "filePath": "app/actions/product-actions.ts",
+      "lineRange": [
+        136,
+        151
+      ],
+      "summary": "제품의 is_active 노출 상태를 토글한다.",
+      "tags": [
+        "server-action",
+        "mutation",
+        "toggle"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/product-actions.ts:reorderProducts",
+      "type": "function",
+      "name": "reorderProducts",
+      "filePath": "app/actions/product-actions.ts",
+      "lineRange": [
+        153,
+        176
+      ],
+      "summary": "전달된 id 순서대로 display_order를 일괄 갱신한다.",
+      "tags": [
+        "server-action",
+        "mutation",
+        "reorder"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/project-actions.ts:getProjects",
+      "type": "function",
+      "name": "getProjects",
+      "filePath": "app/actions/project-actions.ts",
+      "lineRange": [
+        35,
+        55
+      ],
+      "summary": "상태 필터를 적용해 프로젝트 목록을 관리자 권한으로 조회한다.",
+      "tags": [
+        "server-action",
+        "query",
+        "admin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/project-actions.ts:getProject",
+      "type": "function",
+      "name": "getProject",
+      "filePath": "app/actions/project-actions.ts",
+      "lineRange": [
+        57,
+        72
+      ],
+      "summary": "id로 단일 프로젝트를 조회한다(requireAdmin).",
+      "tags": [
+        "server-action",
+        "query",
+        "admin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/project-actions.ts:createProject",
+      "type": "function",
+      "name": "createProject",
+      "filePath": "app/actions/project-actions.ts",
+      "lineRange": [
+        74,
+        100
+      ],
+      "summary": "zod 검증 후 신규 프로젝트를 생성한다.",
+      "tags": [
+        "server-action",
+        "mutation",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/project-actions.ts:updateProject",
+      "type": "function",
+      "name": "updateProject",
+      "filePath": "app/actions/project-actions.ts",
+      "lineRange": [
+        102,
+        131
+      ],
+      "summary": "부분 검증 후 프로젝트를 갱신하고 경로를 revalidate한다.",
+      "tags": [
+        "server-action",
+        "mutation",
+        "validation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/project-actions.ts:deleteProject",
+      "type": "function",
+      "name": "deleteProject",
+      "filePath": "app/actions/project-actions.ts",
+      "lineRange": [
+        133,
+        148
+      ],
+      "summary": "프로젝트를 삭제하고 관련 경로를 revalidate한다.",
+      "tags": [
+        "server-action",
+        "mutation",
+        "delete"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/submit-inquiry.ts:submitInquiry",
+      "type": "function",
+      "name": "submitInquiry",
+      "filePath": "app/actions/submit-inquiry.ts",
+      "lineRange": [
+        32,
+        76
+      ],
+      "summary": "공개 문의 폼을 검증·레이트리밋한 뒤 inquiries 테이블에 저장한다.",
+      "tags": [
+        "server-action",
+        "form-handler",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/submit-inquiry.ts:submitConsultation",
+      "type": "function",
+      "name": "submitConsultation",
+      "filePath": "app/actions/submit-inquiry.ts",
+      "lineRange": [
+        91,
+        142
+      ],
+      "summary": "상담 요청 폼을 검증·레이트리밋하고 메시지를 조립해 inquiries에 저장한다.",
+      "tags": [
+        "server-action",
+        "form-handler",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/admin/gallery/page.tsx:AdminGalleryPage",
+      "type": "function",
+      "name": "AdminGalleryPage",
+      "filePath": "app/admin/gallery/page.tsx",
+      "lineRange": [
+        6,
+        10
+      ],
+      "summary": "갤러리 데이터를 받아 GalleryList에 전달하는 관리자 페이지 서버 컴포넌트.",
+      "tags": [
+        "page",
+        "server-component",
+        "admin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/admin/products/page.tsx:AdminProductsPage",
+      "type": "function",
+      "name": "AdminProductsPage",
+      "filePath": "app/admin/products/page.tsx",
+      "lineRange": [
+        18,
+        72
+      ],
+      "summary": "검색/필터/페이지 쿼리로 제품을 조회해 ProductGrid에 넘기는 관리자 페이지.",
+      "tags": [
+        "page",
+        "server-component",
+        "admin",
+        "pagination"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/admin/projects/AdminProjectsClient.tsx:AdminProjectsClient",
+      "type": "function",
+      "name": "AdminProjectsClient",
+      "filePath": "app/admin/projects/AdminProjectsClient.tsx",
+      "lineRange": [
+        41,
+        303
+      ],
+      "summary": "필터·검색·공개 준비도 지표·삭제를 다루는 관리자 프로젝트 콘솔 클라이언트 컴포넌트.",
+      "tags": [
+        "component",
+        "client-component",
+        "admin",
+        "console"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:app/admin/projects/page.tsx:AdminProjectsPage",
+      "type": "function",
+      "name": "AdminProjectsPage",
+      "filePath": "app/admin/projects/page.tsx",
+      "lineRange": [
+        6,
+        10
+      ],
+      "summary": "초기 프로젝트를 받아 AdminProjectsClient에 전달하는 관리자 페이지 서버 컴포넌트.",
+      "tags": [
+        "page",
+        "server-component",
+        "admin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/products/ProductsPageClient.tsx:parseFloorPlan",
+      "type": "function",
+      "name": "parseFloorPlan",
+      "filePath": "app/products/ProductsPageClient.tsx",
+      "lineRange": [
+        41,
+        56
+      ],
+      "summary": "평면도 이미지 URL의 쿼리 파라미터에서 면적/방 정보를 파싱한다.",
+      "tags": [
+        "utility",
+        "parsing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/products/ProductsPageClient.tsx:mapProductToData",
+      "type": "function",
+      "name": "mapProductToData",
+      "filePath": "app/products/ProductsPageClient.tsx",
+      "lineRange": [
+        59,
+        81
+      ],
+      "summary": "Supabase 제품 레코드를 화면용 데이터 형태로 매핑한다.",
+      "tags": [
+        "utility",
+        "mapping",
+        "serialization"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/products/ProductsPageClient.tsx:sortProducts",
+      "type": "function",
+      "name": "sortProducts",
+      "filePath": "app/products/ProductsPageClient.tsx",
+      "lineRange": [
+        83,
+        101
+      ],
+      "summary": "카테고리 우선순위 기준으로 제품 배열을 정렬한다.",
+      "tags": [
+        "utility",
+        "sorting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/products/ProductsPageClient.tsx:ProductsPageClient",
+      "type": "function",
+      "name": "ProductsPageClient",
+      "filePath": "app/products/ProductsPageClient.tsx",
+      "lineRange": [
+        107,
+        833
+      ],
+      "summary": "고정 사이드바·스크롤 동기화·갤러리 모달·다국어를 갖춘 공개 제품 카탈로그 클라이언트 컴포넌트.",
+      "tags": [
+        "component",
+        "client-component",
+        "catalog",
+        "sidebar"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:app/products/page.tsx:ProductsPage",
+      "type": "function",
+      "name": "ProductsPage",
+      "filePath": "app/products/page.tsx",
+      "lineRange": [
+        9,
+        13
+      ],
+      "summary": "getProducts 결과를 ProductsPageClient에 전달하는 공개 제품 페이지 서버 컴포넌트.",
+      "tags": [
+        "page",
+        "server-component",
+        "catalog"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/projects/ProjectsGallery.tsx:ProjectsGallery",
+      "type": "function",
+      "name": "ProjectsGallery",
+      "filePath": "app/projects/ProjectsGallery.tsx",
+      "lineRange": [
+        37,
+        275
+      ],
+      "summary": "카테고리 분류와 사양 요약으로 시공 사례를 카드 그리드로 보여주는 클라이언트 컴포넌트.",
+      "tags": [
+        "component",
+        "client-component",
+        "gallery",
+        "portfolio"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:app/projects/[id]/page.tsx:generateMetadata",
+      "type": "function",
+      "name": "generateMetadata",
+      "filePath": "app/projects/[id]/page.tsx",
+      "lineRange": [
+        14,
+        36
+      ],
+      "summary": "프로젝트 id로 조회해 SEO 메타데이터(title/description/OG)를 생성한다.",
+      "tags": [
+        "seo",
+        "metadata",
+        "server-component"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/projects/[id]/page.tsx:ProjectDetailPage",
+      "type": "function",
+      "name": "ProjectDetailPage",
+      "filePath": "app/projects/[id]/page.tsx",
+      "lineRange": [
+        38,
+        141
+      ],
+      "summary": "단일 프로젝트를 조회해 상세 화면과 BreadcrumbJsonLd 구조화 데이터를 렌더링한다.",
+      "tags": [
+        "page",
+        "server-component",
+        "detail",
+        "seo"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/projects/page.tsx:ProjectsPage",
+      "type": "function",
+      "name": "ProjectsPage",
+      "filePath": "app/projects/page.tsx",
+      "lineRange": [
+        57,
+        216
+      ],
+      "summary": "공개 준비된 프로젝트와 갤러리 항목을 조합해 ProjectsGallery에 전달하는 목록 페이지.",
+      "tags": [
+        "page",
+        "server-component",
+        "portfolio"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:app/sitemap.ts:getPublishedProjectEntries",
+      "type": "function",
+      "name": "getPublishedProjectEntries",
+      "filePath": "app/sitemap.ts",
+      "lineRange": [
+        7,
+        32
+      ],
+      "summary": "게시된 프로젝트를 조회해 sitemap 엔트리 배열로 변환한다.",
+      "tags": [
+        "sitemap",
+        "seo",
+        "query"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/sitemap.ts:sitemap",
+      "type": "function",
+      "name": "sitemap",
+      "filePath": "app/sitemap.ts",
+      "lineRange": [
+        34,
+        73
+      ],
+      "summary": "정적 경로와 프로젝트 경로를 합쳐 Next.js 사이트맵을 반환한다.",
+      "tags": [
+        "sitemap",
+        "seo",
+        "route-handler"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/admin/gallery/GalleryList.tsx:GalleryList",
+      "type": "function",
+      "name": "GalleryList",
+      "filePath": "components/admin/gallery/GalleryList.tsx",
+      "lineRange": [
+        19,
+        119
+      ],
+      "summary": "갤러리 항목을 콘솔 UI로 나열하고 confirmToast 확인 후 삭제하는 관리자 클라이언트 컴포넌트.",
+      "tags": [
+        "component",
+        "client-component",
+        "admin",
+        "crud"
+      ],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:app/actions/gallery-actions.ts",
+      "target": "function:app/actions/gallery-actions.ts:getPublicGalleryItems",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/gallery-actions.ts",
+      "target": "function:app/actions/gallery-actions.ts:getPublicGalleryItems",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/gallery-actions.ts",
+      "target": "function:app/actions/gallery-actions.ts:getGalleryItemsForAdmin",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/gallery-actions.ts",
+      "target": "function:app/actions/gallery-actions.ts:getGalleryItemsForAdmin",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/gallery-actions.ts",
+      "target": "function:app/actions/gallery-actions.ts:getGalleryItemForAdmin",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/gallery-actions.ts",
+      "target": "function:app/actions/gallery-actions.ts:getGalleryItemForAdmin",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/gallery-actions.ts",
+      "target": "function:app/actions/gallery-actions.ts:saveGalleryItem",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/gallery-actions.ts",
+      "target": "function:app/actions/gallery-actions.ts:saveGalleryItem",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/gallery-actions.ts",
+      "target": "function:app/actions/gallery-actions.ts:deleteGalleryItem",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/gallery-actions.ts",
+      "target": "function:app/actions/gallery-actions.ts:deleteGalleryItem",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/product-actions.ts",
+      "target": "function:app/actions/product-actions.ts:createProduct",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/product-actions.ts",
+      "target": "function:app/actions/product-actions.ts:createProduct",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/product-actions.ts",
+      "target": "function:app/actions/product-actions.ts:updateProduct",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/product-actions.ts",
+      "target": "function:app/actions/product-actions.ts:updateProduct",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/product-actions.ts",
+      "target": "function:app/actions/product-actions.ts:deleteProduct",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/product-actions.ts",
+      "target": "function:app/actions/product-actions.ts:deleteProduct",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/product-actions.ts",
+      "target": "function:app/actions/product-actions.ts:toggleProductStatus",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/product-actions.ts",
+      "target": "function:app/actions/product-actions.ts:toggleProductStatus",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/product-actions.ts",
+      "target": "function:app/actions/product-actions.ts:reorderProducts",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/product-actions.ts",
+      "target": "function:app/actions/product-actions.ts:reorderProducts",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/project-actions.ts",
+      "target": "function:app/actions/project-actions.ts:getProjects",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/project-actions.ts",
+      "target": "function:app/actions/project-actions.ts:getProjects",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/project-actions.ts",
+      "target": "function:app/actions/project-actions.ts:getProject",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/project-actions.ts",
+      "target": "function:app/actions/project-actions.ts:getProject",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/project-actions.ts",
+      "target": "function:app/actions/project-actions.ts:createProject",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/project-actions.ts",
+      "target": "function:app/actions/project-actions.ts:createProject",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/project-actions.ts",
+      "target": "function:app/actions/project-actions.ts:updateProject",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/project-actions.ts",
+      "target": "function:app/actions/project-actions.ts:updateProject",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/project-actions.ts",
+      "target": "function:app/actions/project-actions.ts:deleteProject",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/project-actions.ts",
+      "target": "function:app/actions/project-actions.ts:deleteProject",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/submit-inquiry.ts",
+      "target": "function:app/actions/submit-inquiry.ts:submitInquiry",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/submit-inquiry.ts",
+      "target": "function:app/actions/submit-inquiry.ts:submitInquiry",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/submit-inquiry.ts",
+      "target": "function:app/actions/submit-inquiry.ts:submitConsultation",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/submit-inquiry.ts",
+      "target": "function:app/actions/submit-inquiry.ts:submitConsultation",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/admin/gallery/page.tsx",
+      "target": "function:app/admin/gallery/page.tsx:AdminGalleryPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/admin/gallery/page.tsx",
+      "target": "function:app/admin/gallery/page.tsx:AdminGalleryPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/admin/products/page.tsx",
+      "target": "function:app/admin/products/page.tsx:AdminProductsPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/admin/products/page.tsx",
+      "target": "function:app/admin/products/page.tsx:AdminProductsPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/admin/projects/AdminProjectsClient.tsx",
+      "target": "function:app/admin/projects/AdminProjectsClient.tsx:AdminProjectsClient",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/admin/projects/AdminProjectsClient.tsx",
+      "target": "function:app/admin/projects/AdminProjectsClient.tsx:AdminProjectsClient",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/admin/projects/page.tsx",
+      "target": "function:app/admin/projects/page.tsx:AdminProjectsPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/admin/projects/page.tsx",
+      "target": "function:app/admin/projects/page.tsx:AdminProjectsPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/products/ProductsPageClient.tsx",
+      "target": "function:app/products/ProductsPageClient.tsx:parseFloorPlan",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/products/ProductsPageClient.tsx",
+      "target": "function:app/products/ProductsPageClient.tsx:mapProductToData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/products/ProductsPageClient.tsx",
+      "target": "function:app/products/ProductsPageClient.tsx:sortProducts",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/products/ProductsPageClient.tsx",
+      "target": "function:app/products/ProductsPageClient.tsx:ProductsPageClient",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/products/ProductsPageClient.tsx",
+      "target": "function:app/products/ProductsPageClient.tsx:ProductsPageClient",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/products/page.tsx",
+      "target": "function:app/products/page.tsx:ProductsPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/products/page.tsx",
+      "target": "function:app/products/page.tsx:ProductsPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/projects/ProjectsGallery.tsx",
+      "target": "function:app/projects/ProjectsGallery.tsx:ProjectsGallery",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/projects/ProjectsGallery.tsx",
+      "target": "function:app/projects/ProjectsGallery.tsx:ProjectsGallery",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/projects/[id]/page.tsx",
+      "target": "function:app/projects/[id]/page.tsx:generateMetadata",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/projects/[id]/page.tsx",
+      "target": "function:app/projects/[id]/page.tsx:generateMetadata",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/projects/[id]/page.tsx",
+      "target": "function:app/projects/[id]/page.tsx:ProjectDetailPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/projects/[id]/page.tsx",
+      "target": "function:app/projects/[id]/page.tsx:ProjectDetailPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/projects/page.tsx",
+      "target": "function:app/projects/page.tsx:ProjectsPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/projects/page.tsx",
+      "target": "function:app/projects/page.tsx:ProjectsPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/sitemap.ts",
+      "target": "function:app/sitemap.ts:getPublishedProjectEntries",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/sitemap.ts",
+      "target": "function:app/sitemap.ts:sitemap",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/sitemap.ts",
+      "target": "function:app/sitemap.ts:sitemap",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/admin/gallery/GalleryList.tsx",
+      "target": "function:components/admin/gallery/GalleryList.tsx:GalleryList",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/admin/gallery/GalleryList.tsx",
+      "target": "function:components/admin/gallery/GalleryList.tsx:GalleryList",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/gallery-actions.ts",
+      "target": "file:lib/admin-auth.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/gallery-actions.ts",
+      "target": "file:lib/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/gallery-actions.ts",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/product-actions.ts",
+      "target": "file:lib/admin-auth.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/product-actions.ts",
+      "target": "file:lib/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/product-actions.ts",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/project-actions.ts",
+      "target": "file:lib/admin-auth.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/project-actions.ts",
+      "target": "file:lib/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/project-actions.ts",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/submit-inquiry.ts",
+      "target": "file:lib/public-submission-guard.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/submit-inquiry.ts",
+      "target": "file:lib/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/gallery/page.tsx",
+      "target": "file:app/actions/gallery-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/gallery/page.tsx",
+      "target": "file:components/admin/gallery/GalleryList.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/products/page.tsx",
+      "target": "file:components/admin/products/ProductGrid.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/products/page.tsx",
+      "target": "file:lib/admin-auth.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/products/page.tsx",
+      "target": "file:lib/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/products/page.tsx",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/projects/AdminProjectsClient.tsx",
+      "target": "file:app/actions/project-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/projects/AdminProjectsClient.tsx",
+      "target": "file:components/admin/ConsolePrimitives.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/projects/AdminProjectsClient.tsx",
+      "target": "file:lib/date-format.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/projects/AdminProjectsClient.tsx",
+      "target": "file:lib/projects/publicProjects.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/projects/AdminProjectsClient.tsx",
+      "target": "file:lib/ui/confirm.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/projects/AdminProjectsClient.tsx",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/projects/page.tsx",
+      "target": "file:app/actions/project-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/projects/page.tsx",
+      "target": "file:app/admin/projects/AdminProjectsClient.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/products/ProductsPageClient.tsx",
+      "target": "file:contexts/LanguageContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/products/ProductsPageClient.tsx",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/products/page.tsx",
+      "target": "file:app/products/ProductsPageClient.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/products/page.tsx",
+      "target": "file:lib/products.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/projects/ProjectsGallery.tsx",
+      "target": "file:lib/projects/publicProjects.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/projects/ProjectsGallery.tsx",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/projects/[id]/page.tsx",
+      "target": "file:components/seo/BreadcrumbJsonLd.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/projects/[id]/page.tsx",
+      "target": "file:lib/projects/publicProjects.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/projects/[id]/page.tsx",
+      "target": "file:lib/seo.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/projects/[id]/page.tsx",
+      "target": "file:lib/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/projects/[id]/page.tsx",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/projects/page.tsx",
+      "target": "file:app/actions/gallery-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/projects/page.tsx",
+      "target": "file:app/projects/ProjectsGallery.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/projects/page.tsx",
+      "target": "file:lib/projects/publicProjects.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/projects/page.tsx",
+      "target": "file:lib/site-settings.server.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/projects/page.tsx",
+      "target": "file:lib/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/projects/page.tsx",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/sitemap.ts",
+      "target": "file:lib/projects/publicProjects.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/sitemap.ts",
+      "target": "file:lib/site.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/sitemap.ts",
+      "target": "file:lib/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/sitemap.ts",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/gallery/GalleryList.tsx",
+      "target": "file:app/actions/gallery-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/gallery/GalleryList.tsx",
+      "target": "file:components/admin/ConsolePrimitives.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/gallery/GalleryList.tsx",
+      "target": "file:lib/date-format.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/gallery/GalleryList.tsx",
+      "target": "file:lib/ui/confirm.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/gallery/GalleryList.tsx",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:app/actions/gallery-actions.ts:getGalleryItemsForAdmin",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/gallery-actions.ts:getGalleryItemsForAdmin",
+      "target": "function:lib/supabase.ts:getSupabaseAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/gallery-actions.ts:getGalleryItemForAdmin",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/gallery-actions.ts:getGalleryItemForAdmin",
+      "target": "function:lib/supabase.ts:getSupabaseAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/gallery-actions.ts:saveGalleryItem",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/gallery-actions.ts:saveGalleryItem",
+      "target": "function:lib/supabase.ts:getSupabaseAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/gallery-actions.ts:deleteGalleryItem",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/gallery-actions.ts:deleteGalleryItem",
+      "target": "function:lib/supabase.ts:getSupabaseAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/product-actions.ts:createProduct",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/product-actions.ts:updateProduct",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/product-actions.ts:deleteProduct",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/product-actions.ts:toggleProductStatus",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/product-actions.ts:reorderProducts",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/project-actions.ts:getProjects",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/project-actions.ts:getProject",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/project-actions.ts:createProject",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/project-actions.ts:updateProject",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/project-actions.ts:deleteProject",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/submit-inquiry.ts:submitInquiry",
+      "target": "function:lib/public-submission-guard.ts:assertPublicSubmissionAllowed",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/submit-inquiry.ts:submitInquiry",
+      "target": "function:lib/supabase.ts:getSupabaseAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/submit-inquiry.ts:submitConsultation",
+      "target": "function:lib/public-submission-guard.ts:assertPublicSubmissionAllowed",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/submit-inquiry.ts:submitConsultation",
+      "target": "function:lib/supabase.ts:getSupabaseAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/admin/gallery/page.tsx:AdminGalleryPage",
+      "target": "function:app/actions/gallery-actions.ts:getGalleryItemsForAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/admin/products/page.tsx:AdminProductsPage",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/admin/projects/AdminProjectsClient.tsx:AdminProjectsClient",
+      "target": "function:lib/projects/publicProjects.ts:getProjectHeroImage",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/admin/projects/AdminProjectsClient.tsx:AdminProjectsClient",
+      "target": "function:lib/projects/publicProjects.ts:getProjectPublicIssues",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/admin/projects/AdminProjectsClient.tsx:AdminProjectsClient",
+      "target": "function:app/actions/project-actions.ts:getProjects",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/admin/projects/AdminProjectsClient.tsx:AdminProjectsClient",
+      "target": "function:lib/date-format.ts:formatKstDate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/admin/projects/page.tsx:AdminProjectsPage",
+      "target": "function:app/actions/project-actions.ts:getProjects",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/products/ProductsPageClient.tsx:ProductsPageClient",
+      "target": "function:contexts/LanguageContext.tsx:useLanguage",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/products/page.tsx:ProductsPage",
+      "target": "function:lib/products.ts:getProducts",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/projects/ProjectsGallery.tsx:ProjectsGallery",
+      "target": "function:lib/projects/publicProjects.ts:getProjectHeroImage",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/projects/[id]/page.tsx:generateMetadata",
+      "target": "function:lib/projects/publicProjects.ts:isPublicReadyProject",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/projects/[id]/page.tsx:generateMetadata",
+      "target": "function:lib/projects/publicProjects.ts:getProjectHeroImage",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/projects/[id]/page.tsx:generateMetadata",
+      "target": "function:lib/seo.ts:buildPageMetadata",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/projects/[id]/page.tsx:ProjectDetailPage",
+      "target": "function:lib/projects/publicProjects.ts:getProjectHeroImage",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/projects/[id]/page.tsx:ProjectDetailPage",
+      "target": "function:lib/projects/publicProjects.ts:isPublicReadyProject",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/projects/page.tsx:ProjectsPage",
+      "target": "function:app/actions/gallery-actions.ts:getPublicGalleryItems",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/projects/page.tsx:ProjectsPage",
+      "target": "function:lib/site-settings.server.ts:getSiteSettings",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/gallery/GalleryList.tsx:GalleryList",
+      "target": "function:lib/date-format.ts:formatKstDate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

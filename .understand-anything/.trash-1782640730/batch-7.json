@@ -1,0 +1,519 @@
+{
+  "nodes": [
+    {
+      "id": "file:app/actions/faq-actions.ts",
+      "type": "file",
+      "name": "faq-actions.ts",
+      "filePath": "app/actions/faq-actions.ts",
+      "summary": "FAQ CRUD를 담당하는 Server Action 모듈. 공개 조회(getFaqs/getFaq)는 일반 supabase 클라이언트로, 쓰기 작업(생성/수정/삭제/순서변경)은 requireAdmin 인증 + zod 스키마 검증 후 관리자 클라이언트로 처리하고 고객지원 페이지를 revalidate한다.",
+      "tags": ["server-action", "api-handler", "validation", "crud", "supabase"],
+      "complexity": "moderate",
+      "languageNotes": "Next.js 'use server' Server Action. buildFaqPayload로 zod 파싱 결과를 DB 페이로드로 정규화하는 패턴."
+    },
+    {
+      "id": "file:app/actions/migration-actions.ts",
+      "type": "file",
+      "name": "migration-actions.ts",
+      "filePath": "app/actions/migration-actions.ts",
+      "summary": "하드코딩된 products 시드 데이터(약 260줄)를 Supabase products 테이블로 일괄 적재하는 일회성 마이그레이션 Server Action. 관리자 설정 페이지의 마이그레이션 버튼에서 호출된다.",
+      "tags": ["server-action", "migration", "data-pipeline", "seed-data", "supabase"],
+      "complexity": "complex",
+      "languageNotes": "파일 대부분이 인라인 productsData 배열 리터럴이며 실제 로직은 migrateProducts 한 함수뿐인 시드 스크립트 형태."
+    },
+    {
+      "id": "file:app/actions/notice-actions.ts",
+      "type": "file",
+      "name": "notice-actions.ts",
+      "filePath": "app/actions/notice-actions.ts",
+      "summary": "공지사항 CRUD Server Action 모듈. is_pinned 우선 정렬로 공개 조회하고, 생성/수정/삭제는 requireAdmin 인증과 zod 검증을 거쳐 관리자 클라이언트로 수행한 뒤 관련 경로를 revalidate한다.",
+      "tags": ["server-action", "api-handler", "validation", "crud", "supabase"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/admin/layout.tsx",
+      "type": "file",
+      "name": "layout.tsx",
+      "filePath": "app/admin/layout.tsx",
+      "summary": "관리자 영역 전체를 감싸는 서버 layout. requireAdmin으로 세션을 검증해 비인가 사용자를 /login으로 redirect한 뒤 AdminShell로 자식을 렌더링하여 미들웨어와 이중 보안을 형성한다.",
+      "tags": ["layout", "authentication", "guard", "admin", "server-component"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/admin/settings/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/admin/settings/page.tsx",
+      "summary": "관리자 설정 페이지(클라이언트 컴포넌트). 현재 로그인 계정 표시, Supabase Auth 기반 비밀번호 변경, 그리고 products 시드 마이그레이션 실행 UI를 제공한다.",
+      "tags": ["admin", "page", "settings", "client-component", "form"],
+      "complexity": "complex",
+      "languageNotes": "비밀번호 변경은 supabase.auth.updateUser, 마이그레이션은 confirmToast 확인 후 migrateProducts 호출하는 클라이언트 사이드 오케스트레이션."
+    },
+    {
+      "id": "file:app/admin/support/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/admin/support/page.tsx",
+      "summary": "고객지원 CMS 서버 페이지. getFaqs/getNotices를 Promise.all로 병렬 로드하여 초기 데이터와 DB 오류를 SupportEditor 클라이언트 컴포넌트로 전달한다.",
+      "tags": ["admin", "page", "cms", "server-component", "data-fetching"],
+      "complexity": "simple",
+      "languageNotes": "export const dynamic로 동적 렌더링을 강제하는 Next.js App Router 패턴."
+    },
+    {
+      "id": "file:components/admin/AdminShell.tsx",
+      "type": "file",
+      "name": "AdminShell.tsx",
+      "filePath": "components/admin/AdminShell.tsx",
+      "summary": "관리자 레이아웃 셸 클라이언트 컴포넌트. 반응형 사이드바(모바일 슬라이드/데스크톱 고정) 열림 상태를 관리하며 AdminSidebar와 메인 콘텐츠 영역을 배치한다.",
+      "tags": ["admin", "layout", "component", "client-component", "navigation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/admin/AdminSidebar.tsx",
+      "type": "file",
+      "name": "AdminSidebar.tsx",
+      "filePath": "components/admin/AdminSidebar.tsx",
+      "summary": "관리자 네비게이션 사이드바. 섹션별 메뉴를 렌더링하고 현재 경로 활성 표시, 사용자 정보 아바타, Supabase signOut 기반 로그아웃을 처리한다.",
+      "tags": ["admin", "navigation", "component", "client-component", "sidebar"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/admin/cms/SupportEditor.tsx",
+      "type": "file",
+      "name": "SupportEditor.tsx",
+      "filePath": "components/admin/cms/SupportEditor.tsx",
+      "summary": "고객지원 CMS 편집기. FAQ와 공지사항 탭을 useCrudDraftList 훅으로 드래프트 기반 인라인 편집(추가/수정/삭제/저장)하며 미저장 이탈 경고와 KST 날짜 포맷팅을 제공한다.",
+      "tags": ["admin", "cms", "editor", "client-component", "crud"],
+      "complexity": "complex",
+      "languageNotes": "652줄 대형 편집기. faqList/noticeList 두 개의 useCrudDraftList 인스턴스로 낙관적 드래프트 상태를 관리하는 패턴."
+    },
+    {
+      "id": "file:components/company/GallerySection.tsx",
+      "type": "file",
+      "name": "GallerySection.tsx",
+      "filePath": "components/company/GallerySection.tsx",
+      "summary": "회사소개 갤러리 섹션. Supabase gallery 테이블에서 활성 항목을 조회해 페이지네이션 그리드로 표시하고, 항목 클릭 시 ImageModal로 라이트박스 뷰(이전/다음 이동)를 연다.",
+      "tags": ["component", "gallery", "client-component", "pagination", "data-fetching"],
+      "complexity": "complex",
+      "languageNotes": "useLanguage 다국어 컨텍스트를 사용하며 페이지 변경 시 섹션 위치로 스크롤 보정하는 UX 디테일 포함."
+    },
+    {
+      "id": "file:components/ui/ImageModal.tsx",
+      "type": "file",
+      "name": "ImageModal.tsx",
+      "filePath": "components/ui/ImageModal.tsx",
+      "summary": "재사용 가능한 접근성 이미지 라이트박스 모달. createPortal로 렌더링하며 ESC 닫기, 포커스 트랩, 화살표 키 네비게이션, 포커스 복원 등 a11y 동작을 갖춘 다중 이미지 뷰어다.",
+      "tags": ["component", "ui", "modal", "accessibility", "client-component"],
+      "complexity": "complex",
+      "languageNotes": "FOCUSABLE_SELECTOR 기반 Tab 포커스 트랩과 useId/useRef를 활용한 완전 제어형 모달 구현."
+    },
+    {
+      "id": "file:lib/__tests__/admin-permissions.test.ts",
+      "type": "file",
+      "name": "admin-permissions.test.ts",
+      "filePath": "lib/__tests__/admin-permissions.test.ts",
+      "summary": "admin-permissions 모듈의 vitest 단위 테스트. 빈 allowlist에서의 @weet.com 폴백 허용(프로덕션 회귀 케이스), 비인가 도메인 차단, allowlist 정규화 동작을 검증한다.",
+      "tags": ["test", "security", "validation", "vitest", "unit-test"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:lib/admin-auth.ts",
+      "type": "file",
+      "name": "admin-auth.ts",
+      "filePath": "lib/admin-auth.ts",
+      "summary": "서버 사이드 관리자 인증 가드. Supabase 세션에서 사용자를 가져와 isAdminEmailAllowed로 이메일 허용 여부를 검사하고, 통과한 사용자만 반환하는 requireAdmin을 제공한다.",
+      "tags": ["authentication", "security", "guard", "utility", "supabase"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:lib/admin-permissions.ts",
+      "type": "file",
+      "name": "admin-permissions.ts",
+      "filePath": "lib/admin-permissions.ts",
+      "summary": "관리자 이메일 권한 판정 순수 로직. 콤마 구분 allowlist를 정규화하고, allowlist 우선·@weet.com 도메인 폴백(환경변수로 토글) 규칙으로 이메일 허용 여부를 결정한다.",
+      "tags": ["security", "validation", "utility", "authorization", "pure-function"],
+      "complexity": "simple",
+      "languageNotes": "I/O 의존성 없는 순수 함수로 분리되어 단위 테스트가 용이한 구조."
+    },
+    {
+      "id": "file:utils/supabase/client.ts",
+      "type": "file",
+      "name": "client.ts",
+      "filePath": "utils/supabase/client.ts",
+      "summary": "브라우저용 Supabase 클라이언트 팩토리. @supabase/ssr의 createBrowserClient를 환경변수로 구성해 반환하는 한 줄짜리 래퍼다.",
+      "tags": ["supabase", "factory", "utility", "client", "ssr"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/faq-actions.ts:buildFaqPayload",
+      "type": "function",
+      "name": "buildFaqPayload",
+      "filePath": "app/actions/faq-actions.ts",
+      "lineRange": [34, 47],
+      "summary": "zod로 파싱된 FAQ 입력을 DB 컬럼 형태(question/answer/category/order_index 등)로 정규화하는 페이로드 빌더.",
+      "tags": ["serialization", "helper", "validation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/faq-actions.ts:createFaq",
+      "type": "function",
+      "name": "createFaq",
+      "filePath": "app/actions/faq-actions.ts",
+      "lineRange": [79, 100],
+      "summary": "requireAdmin 인증과 zod 검증을 거쳐 새 FAQ를 관리자 클라이언트로 삽입하고 고객지원 경로를 revalidate하는 Server Action.",
+      "tags": ["server-action", "create", "validation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/faq-actions.ts:updateFaq",
+      "type": "function",
+      "name": "updateFaq",
+      "filePath": "app/actions/faq-actions.ts",
+      "lineRange": [102, 125],
+      "summary": "기존 FAQ를 부분 스키마로 검증 후 업데이트하고 관련 경로를 revalidate하는 Server Action.",
+      "tags": ["server-action", "update", "validation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/faq-actions.ts:deleteFaq",
+      "type": "function",
+      "name": "deleteFaq",
+      "filePath": "app/actions/faq-actions.ts",
+      "lineRange": [127, 144],
+      "summary": "관리자 인증 후 지정 FAQ를 삭제하고 고객지원 경로를 revalidate하는 Server Action.",
+      "tags": ["server-action", "delete"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/faq-actions.ts:updateFaqOrder",
+      "type": "function",
+      "name": "updateFaqOrder",
+      "filePath": "app/actions/faq-actions.ts",
+      "lineRange": [146, 163],
+      "summary": "드래그 앤 드롭 재정렬 결과를 받아 각 FAQ의 order_index를 일괄 갱신하는 Server Action.",
+      "tags": ["server-action", "reorder", "batch"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/faq-actions.ts:getFaqs",
+      "type": "function",
+      "name": "getFaqs",
+      "filePath": "app/actions/faq-actions.ts",
+      "lineRange": [49, 62],
+      "summary": "order_index 오름차순으로 정렬된 전체 FAQ 목록을 공개 supabase 클라이언트로 조회하는 Server Action.",
+      "tags": ["server-action", "read", "query"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/faq-actions.ts:getFaq",
+      "type": "function",
+      "name": "getFaq",
+      "filePath": "app/actions/faq-actions.ts",
+      "lineRange": [64, 77],
+      "summary": "id로 단일 FAQ를 조회하는 Server Action.",
+      "tags": ["server-action", "read", "query"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/migration-actions.ts:migrateProducts",
+      "type": "function",
+      "name": "migrateProducts",
+      "filePath": "app/actions/migration-actions.ts",
+      "lineRange": [270, 306],
+      "summary": "관리자 인증 후 기존 products 적재 여부를 확인하고, 비어 있으면 하드코딩된 productsData 배열을 일괄 insert하는 일회성 시드 마이그레이션.",
+      "tags": ["server-action", "migration", "seed-data"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/notice-actions.ts:getNotices",
+      "type": "function",
+      "name": "getNotices",
+      "filePath": "app/actions/notice-actions.ts",
+      "lineRange": [32, 45],
+      "summary": "고정(is_pinned) 공지를 우선 정렬해 전체 공지 목록을 공개 클라이언트로 조회하는 Server Action.",
+      "tags": ["server-action", "read", "query"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/notice-actions.ts:createNotice",
+      "type": "function",
+      "name": "createNotice",
+      "filePath": "app/actions/notice-actions.ts",
+      "lineRange": [47, 73],
+      "summary": "requireAdmin과 zod 검증을 거쳐 새 공지를 삽입하고 관련 경로를 revalidate하는 Server Action.",
+      "tags": ["server-action", "create", "validation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/notice-actions.ts:updateNotice",
+      "type": "function",
+      "name": "updateNotice",
+      "filePath": "app/actions/notice-actions.ts",
+      "lineRange": [75, 103],
+      "summary": "기존 공지를 부분 스키마로 검증 후 업데이트하고 경로를 revalidate하는 Server Action.",
+      "tags": ["server-action", "update", "validation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/notice-actions.ts:deleteNotice",
+      "type": "function",
+      "name": "deleteNotice",
+      "filePath": "app/actions/notice-actions.ts",
+      "lineRange": [105, 122],
+      "summary": "관리자 인증 후 지정 공지를 삭제하고 경로를 revalidate하는 Server Action.",
+      "tags": ["server-action", "delete"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/admin/layout.tsx:AdminLayout",
+      "type": "function",
+      "name": "AdminLayout",
+      "filePath": "app/admin/layout.tsx",
+      "lineRange": [5, 22],
+      "summary": "requireAdmin으로 인증을 검증해 실패 시 redirect하고, 통과하면 AdminShell로 관리자 자식 트리를 렌더링하는 서버 레이아웃.",
+      "tags": ["layout", "authentication", "guard", "server-component"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/admin/settings/page.tsx:AdminSettingsPage",
+      "type": "function",
+      "name": "AdminSettingsPage",
+      "filePath": "app/admin/settings/page.tsx",
+      "lineRange": [11, 207],
+      "summary": "계정 정보 표시, Supabase Auth 비밀번호 변경, products 시드 마이그레이션 실행을 묶은 관리자 설정 클라이언트 페이지 컴포넌트.",
+      "tags": ["admin", "page", "client-component", "form"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:app/admin/support/page.tsx:CMSSupportPage",
+      "type": "function",
+      "name": "CMSSupportPage",
+      "filePath": "app/admin/support/page.tsx",
+      "lineRange": [13, 29],
+      "summary": "FAQ와 공지를 Promise.all로 병렬 로드해 SupportEditor에 초기 데이터와 오류 상태를 전달하는 서버 페이지 컴포넌트.",
+      "tags": ["admin", "page", "server-component", "data-fetching"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/admin/AdminShell.tsx:AdminShell",
+      "type": "function",
+      "name": "AdminShell",
+      "filePath": "components/admin/AdminShell.tsx",
+      "lineRange": [8, 52],
+      "summary": "사이드바 열림 상태를 관리하며 AdminSidebar와 반응형 메인 영역을 배치하는 관리자 셸 컴포넌트.",
+      "tags": ["admin", "layout", "client-component"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/admin/AdminSidebar.tsx:AdminSidebar",
+      "type": "function",
+      "name": "AdminSidebar",
+      "filePath": "components/admin/AdminSidebar.tsx",
+      "lineRange": [75, 156],
+      "summary": "섹션별 네비게이션 메뉴, 활성 경로 하이라이트, 사용자 아바타, signOut 로그아웃을 렌더링하는 관리자 사이드바 컴포넌트.",
+      "tags": ["admin", "navigation", "client-component"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/admin/cms/SupportEditor.tsx:SupportEditor",
+      "type": "function",
+      "name": "SupportEditor",
+      "filePath": "components/admin/cms/SupportEditor.tsx",
+      "lineRange": [47, 652],
+      "summary": "FAQ/공지 탭을 useCrudDraftList 드래프트 상태로 인라인 편집(생성/수정/삭제/저장)하고 미저장 이탈 경고를 거는 고객지원 CMS 편집기 컴포넌트.",
+      "tags": ["admin", "cms", "editor", "client-component", "crud"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:components/admin/cms/SupportEditor.tsx:formatKstDate",
+      "type": "function",
+      "name": "formatKstDate",
+      "filePath": "components/admin/cms/SupportEditor.tsx",
+      "lineRange": [37, 45],
+      "summary": "UTC 타임스탬프를 KST(+9)로 보정해 YYYY-MM-DD 문자열로 변환하는 날짜 포맷 헬퍼.",
+      "tags": ["utility", "date", "formatting"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/company/GallerySection.tsx:GallerySection",
+      "type": "function",
+      "name": "GallerySection",
+      "filePath": "components/company/GallerySection.tsx",
+      "lineRange": [13, 227],
+      "summary": "Supabase에서 활성 갤러리 항목을 불러와 페이지네이션 그리드로 렌더링하고 ImageModal 라이트박스를 제어하는 회사소개 갤러리 섹션 컴포넌트.",
+      "tags": ["component", "gallery", "client-component", "pagination"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:components/ui/ImageModal.tsx:ImageModal",
+      "type": "function",
+      "name": "ImageModal",
+      "filePath": "components/ui/ImageModal.tsx",
+      "lineRange": [27, 265],
+      "summary": "포커스 트랩·ESC 닫기·키보드 네비게이션을 갖춘 포털 기반 접근성 이미지 라이트박스 모달 컴포넌트.",
+      "tags": ["component", "ui", "modal", "accessibility"],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "function",
+      "name": "requireAdmin",
+      "filePath": "lib/admin-auth.ts",
+      "lineRange": [4, 25],
+      "summary": "Supabase 세션 사용자를 가져와 isAdminEmailAllowed로 권한을 검사하고, 비인가 시 차단·통과 시 사용자를 반환하는 서버 인증 가드.",
+      "tags": ["authentication", "security", "guard"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/admin-permissions.ts:isAdminEmailAllowed",
+      "type": "function",
+      "name": "isAdminEmailAllowed",
+      "filePath": "lib/admin-permissions.ts",
+      "lineRange": [17, 33],
+      "summary": "allowlist 우선·@weet.com 도메인 폴백(환경변수 토글) 규칙으로 이메일의 관리자 허용 여부를 판정하는 순수 함수.",
+      "tags": ["security", "authorization", "validation", "pure-function"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/admin-permissions.ts:parseAdminEmailAllowlist",
+      "type": "function",
+      "name": "parseAdminEmailAllowlist",
+      "filePath": "lib/admin-permissions.ts",
+      "lineRange": [3, 8],
+      "summary": "콤마 구분 이메일 문자열을 트림·소문자화하고 빈 항목을 제거해 정규화된 allowlist 배열로 변환하는 순수 함수.",
+      "tags": ["utility", "parsing", "pure-function"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:utils/supabase/client.ts:createClient",
+      "type": "function",
+      "name": "createClient",
+      "filePath": "utils/supabase/client.ts",
+      "lineRange": [4, 9],
+      "summary": "환경변수로 구성된 브라우저용 Supabase 클라이언트를 생성해 반환하는 팩토리 함수.",
+      "tags": ["supabase", "factory", "client"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {"source": "file:app/actions/faq-actions.ts", "target": "file:lib/admin-auth.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:app/actions/faq-actions.ts", "target": "file:lib/supabase.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:app/actions/faq-actions.ts", "target": "file:types/supabase.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:app/actions/migration-actions.ts", "target": "file:lib/admin-auth.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:app/actions/migration-actions.ts", "target": "file:lib/supabase.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:app/actions/notice-actions.ts", "target": "file:lib/admin-auth.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:app/actions/notice-actions.ts", "target": "file:lib/supabase.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:app/actions/notice-actions.ts", "target": "file:types/supabase.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:app/admin/layout.tsx", "target": "file:components/admin/AdminShell.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:app/admin/layout.tsx", "target": "file:lib/admin-auth.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:app/admin/settings/page.tsx", "target": "file:app/actions/migration-actions.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:app/admin/settings/page.tsx", "target": "file:components/admin/ConsolePrimitives.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:app/admin/settings/page.tsx", "target": "file:components/admin/SiteSettingsPanel.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:app/admin/settings/page.tsx", "target": "file:lib/ui/confirm.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:app/admin/settings/page.tsx", "target": "file:utils/supabase/client.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:app/admin/support/page.tsx", "target": "file:app/actions/faq-actions.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:app/admin/support/page.tsx", "target": "file:app/actions/notice-actions.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:app/admin/support/page.tsx", "target": "file:components/admin/cms/SupportEditor.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:components/admin/AdminShell.tsx", "target": "file:components/admin/AdminSidebar.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:components/admin/AdminShell.tsx", "target": "file:lib/utils.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:components/admin/AdminSidebar.tsx", "target": "file:lib/utils.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:components/admin/AdminSidebar.tsx", "target": "file:utils/supabase/client.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:components/admin/cms/SupportEditor.tsx", "target": "file:app/actions/faq-actions.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:components/admin/cms/SupportEditor.tsx", "target": "file:app/actions/notice-actions.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:components/admin/cms/SupportEditor.tsx", "target": "file:components/admin/cms/useCrudDraftList.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:components/admin/cms/SupportEditor.tsx", "target": "file:components/admin/ConsolePrimitives.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:components/admin/cms/SupportEditor.tsx", "target": "file:hooks/useUnsavedChangesWarning.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:components/company/GallerySection.tsx", "target": "file:components/ui/ImageModal.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:components/company/GallerySection.tsx", "target": "file:contexts/LanguageContext.tsx", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:components/company/GallerySection.tsx", "target": "file:types/supabase.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:components/company/GallerySection.tsx", "target": "file:utils/supabase/client.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:lib/__tests__/admin-permissions.test.ts", "target": "file:lib/admin-permissions.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:lib/admin-auth.ts", "target": "file:lib/admin-permissions.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:lib/admin-auth.ts", "target": "file:utils/supabase/server.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+    {"source": "file:utils/supabase/client.ts", "target": "file:types/supabase.ts", "type": "imports", "direction": "forward", "weight": 0.7},
+
+    {"source": "file:app/actions/faq-actions.ts", "target": "function:app/actions/faq-actions.ts:buildFaqPayload", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:app/actions/faq-actions.ts", "target": "function:app/actions/faq-actions.ts:getFaqs", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:app/actions/faq-actions.ts", "target": "function:app/actions/faq-actions.ts:getFaq", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:app/actions/faq-actions.ts", "target": "function:app/actions/faq-actions.ts:createFaq", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:app/actions/faq-actions.ts", "target": "function:app/actions/faq-actions.ts:updateFaq", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:app/actions/faq-actions.ts", "target": "function:app/actions/faq-actions.ts:deleteFaq", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:app/actions/faq-actions.ts", "target": "function:app/actions/faq-actions.ts:updateFaqOrder", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:app/actions/faq-actions.ts", "target": "function:app/actions/faq-actions.ts:getFaqs", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:app/actions/faq-actions.ts", "target": "function:app/actions/faq-actions.ts:getFaq", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:app/actions/faq-actions.ts", "target": "function:app/actions/faq-actions.ts:createFaq", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:app/actions/faq-actions.ts", "target": "function:app/actions/faq-actions.ts:updateFaq", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:app/actions/faq-actions.ts", "target": "function:app/actions/faq-actions.ts:deleteFaq", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:app/actions/faq-actions.ts", "target": "function:app/actions/faq-actions.ts:updateFaqOrder", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:app/actions/migration-actions.ts", "target": "function:app/actions/migration-actions.ts:migrateProducts", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:app/actions/migration-actions.ts", "target": "function:app/actions/migration-actions.ts:migrateProducts", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:app/actions/notice-actions.ts", "target": "function:app/actions/notice-actions.ts:getNotices", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:app/actions/notice-actions.ts", "target": "function:app/actions/notice-actions.ts:createNotice", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:app/actions/notice-actions.ts", "target": "function:app/actions/notice-actions.ts:updateNotice", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:app/actions/notice-actions.ts", "target": "function:app/actions/notice-actions.ts:deleteNotice", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:app/actions/notice-actions.ts", "target": "function:app/actions/notice-actions.ts:getNotices", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:app/actions/notice-actions.ts", "target": "function:app/actions/notice-actions.ts:createNotice", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:app/actions/notice-actions.ts", "target": "function:app/actions/notice-actions.ts:updateNotice", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:app/actions/notice-actions.ts", "target": "function:app/actions/notice-actions.ts:deleteNotice", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:app/admin/layout.tsx", "target": "function:app/admin/layout.tsx:AdminLayout", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:app/admin/layout.tsx", "target": "function:app/admin/layout.tsx:AdminLayout", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:app/admin/settings/page.tsx", "target": "function:app/admin/settings/page.tsx:AdminSettingsPage", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:app/admin/settings/page.tsx", "target": "function:app/admin/settings/page.tsx:AdminSettingsPage", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:app/admin/support/page.tsx", "target": "function:app/admin/support/page.tsx:CMSSupportPage", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:app/admin/support/page.tsx", "target": "function:app/admin/support/page.tsx:CMSSupportPage", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:components/admin/AdminShell.tsx", "target": "function:components/admin/AdminShell.tsx:AdminShell", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:components/admin/AdminShell.tsx", "target": "function:components/admin/AdminShell.tsx:AdminShell", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:components/admin/AdminSidebar.tsx", "target": "function:components/admin/AdminSidebar.tsx:AdminSidebar", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:components/admin/AdminSidebar.tsx", "target": "function:components/admin/AdminSidebar.tsx:AdminSidebar", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:components/admin/cms/SupportEditor.tsx", "target": "function:components/admin/cms/SupportEditor.tsx:SupportEditor", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:components/admin/cms/SupportEditor.tsx", "target": "function:components/admin/cms/SupportEditor.tsx:formatKstDate", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:components/admin/cms/SupportEditor.tsx", "target": "function:components/admin/cms/SupportEditor.tsx:SupportEditor", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:components/company/GallerySection.tsx", "target": "function:components/company/GallerySection.tsx:GallerySection", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:components/company/GallerySection.tsx", "target": "function:components/company/GallerySection.tsx:GallerySection", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:components/ui/ImageModal.tsx", "target": "function:components/ui/ImageModal.tsx:ImageModal", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:components/ui/ImageModal.tsx", "target": "function:components/ui/ImageModal.tsx:ImageModal", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:lib/admin-auth.ts", "target": "function:lib/admin-auth.ts:requireAdmin", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:lib/admin-auth.ts", "target": "function:lib/admin-auth.ts:requireAdmin", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:lib/admin-permissions.ts", "target": "function:lib/admin-permissions.ts:parseAdminEmailAllowlist", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:lib/admin-permissions.ts", "target": "function:lib/admin-permissions.ts:isAdminEmailAllowed", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:lib/admin-permissions.ts", "target": "function:lib/admin-permissions.ts:parseAdminEmailAllowlist", "type": "exports", "direction": "forward", "weight": 0.8},
+    {"source": "file:lib/admin-permissions.ts", "target": "function:lib/admin-permissions.ts:isAdminEmailAllowed", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:utils/supabase/client.ts", "target": "function:utils/supabase/client.ts:createClient", "type": "contains", "direction": "forward", "weight": 1.0},
+    {"source": "file:utils/supabase/client.ts", "target": "function:utils/supabase/client.ts:createClient", "type": "exports", "direction": "forward", "weight": 0.8},
+
+    {"source": "function:lib/admin-auth.ts:requireAdmin", "target": "function:lib/admin-permissions.ts:isAdminEmailAllowed", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:lib/admin-permissions.ts:isAdminEmailAllowed", "target": "function:lib/admin-permissions.ts:parseAdminEmailAllowlist", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:app/actions/faq-actions.ts:createFaq", "target": "function:lib/admin-auth.ts:requireAdmin", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:app/actions/faq-actions.ts:updateFaq", "target": "function:lib/admin-auth.ts:requireAdmin", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:app/actions/faq-actions.ts:deleteFaq", "target": "function:lib/admin-auth.ts:requireAdmin", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:app/actions/faq-actions.ts:updateFaqOrder", "target": "function:lib/admin-auth.ts:requireAdmin", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:app/actions/faq-actions.ts:createFaq", "target": "function:app/actions/faq-actions.ts:buildFaqPayload", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:app/actions/faq-actions.ts:updateFaq", "target": "function:app/actions/faq-actions.ts:buildFaqPayload", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:app/actions/notice-actions.ts:createNotice", "target": "function:lib/admin-auth.ts:requireAdmin", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:app/actions/notice-actions.ts:updateNotice", "target": "function:lib/admin-auth.ts:requireAdmin", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:app/actions/notice-actions.ts:deleteNotice", "target": "function:lib/admin-auth.ts:requireAdmin", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:app/actions/migration-actions.ts:migrateProducts", "target": "function:lib/admin-auth.ts:requireAdmin", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:app/admin/layout.tsx:AdminLayout", "target": "function:lib/admin-auth.ts:requireAdmin", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:app/admin/settings/page.tsx:AdminSettingsPage", "target": "function:app/actions/migration-actions.ts:migrateProducts", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:app/admin/settings/page.tsx:AdminSettingsPage", "target": "function:utils/supabase/client.ts:createClient", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:app/admin/support/page.tsx:CMSSupportPage", "target": "function:app/actions/faq-actions.ts:getFaqs", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:app/admin/support/page.tsx:CMSSupportPage", "target": "function:app/actions/notice-actions.ts:getNotices", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:components/admin/AdminSidebar.tsx:AdminSidebar", "target": "function:utils/supabase/client.ts:createClient", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:components/company/GallerySection.tsx:GallerySection", "target": "function:utils/supabase/client.ts:createClient", "type": "calls", "direction": "forward", "weight": 0.8},
+    {"source": "function:lib/admin-auth.ts:requireAdmin", "target": "function:utils/supabase/server.ts:createClient", "type": "calls", "direction": "forward", "weight": 0.8},
+
+    {"source": "file:lib/admin-permissions.ts", "target": "file:lib/__tests__/admin-permissions.test.ts", "type": "tested_by", "direction": "forward", "weight": 0.5}
+  ]
+}

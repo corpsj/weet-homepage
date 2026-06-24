@@ -1,0 +1,1118 @@
+{
+  "nodes": [
+    {
+      "id": "file:components/customize/CustomizeConfigurator.tsx",
+      "type": "file",
+      "name": "CustomizeConfigurator.tsx",
+      "filePath": "components/customize/CustomizeConfigurator.tsx",
+      "summary": "커스터마이즈 컨피규레이터의 최상위 클라이언트 컴포넌트로, 스텝/선택 옵션/견적 상태를 관리하고 URL 동기화, 견적서 출력, 상담 신청 제출을 오케스트레이션한다.",
+      "tags": [
+        "component",
+        "configurator",
+        "entry-point",
+        "state",
+        "client"
+      ],
+      "complexity": "complex",
+      "languageNotes": "useState/useMemo/useTransition 다수와 window.history.replaceState 기반 URL 동기화를 사용하는 대형 클라이언트 컴포넌트."
+    },
+    {
+      "id": "function:components/customize/CustomizeConfigurator.tsx:CustomizeConfigurator",
+      "type": "function",
+      "name": "CustomizeConfigurator",
+      "filePath": "components/customize/CustomizeConfigurator.tsx",
+      "lineRange": [
+        52,
+        318
+      ],
+      "summary": "카탈로그/초기 설정/연락처를 받아 전체 컨피규레이터 UI를 렌더링하고, 모델 변경·옵션 토글·스텝 이동·견적서 저장·상담 제출 핸들러를 제공한다.",
+      "tags": [
+        "component",
+        "configurator",
+        "state",
+        "event-handler"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:components/customize/__tests__/FloorplanCanvas.test.tsx",
+      "type": "file",
+      "name": "FloorplanCanvas.test.tsx",
+      "filePath": "components/customize/__tests__/FloorplanCanvas.test.tsx",
+      "summary": "FloorplanCanvas 컴포넌트의 SVG 렌더링(평면 크기, 외장 스와치 색상)을 검증하는 테스트로, 모델/옵션 픽스처를 생성해 DOM 결과를 단언한다.",
+      "tags": [
+        "test",
+        "floorplan",
+        "svg",
+        "fixture"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/customize/__tests__/FloorplanCanvas.test.tsx:makeModel",
+      "type": "function",
+      "name": "makeModel",
+      "filePath": "components/customize/__tests__/FloorplanCanvas.test.tsx",
+      "lineRange": [
+        6,
+        22
+      ],
+      "summary": "테스트용 커스터마이즈 모델 객체를 기본값과 오버라이드를 병합해 생성하는 픽스처 팩토리.",
+      "tags": [
+        "test",
+        "fixture",
+        "factory"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/customize/__tests__/FloorplanCanvas.test.tsx:makeOption",
+      "type": "function",
+      "name": "makeOption",
+      "filePath": "components/customize/__tests__/FloorplanCanvas.test.tsx",
+      "lineRange": [
+        24,
+        48
+      ],
+      "summary": "테스트용 커스터마이즈 옵션 객체를 기본값과 오버라이드를 병합해 생성하는 픽스처 팩토리.",
+      "tags": [
+        "test",
+        "fixture",
+        "factory"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/customize/lib/constants.ts",
+      "type": "file",
+      "name": "constants.ts",
+      "filePath": "components/customize/lib/constants.ts",
+      "summary": "컨피규레이터 전반의 상수 모음으로, 스텝 정의(STEPS)·UI 카피(COPY)·옵션 스와치/상세 가이드·폴백 카탈로그·필수 입력 필드를 export한다.",
+      "tags": [
+        "constants",
+        "configurator",
+        "config",
+        "data-model"
+      ],
+      "complexity": "complex",
+      "languageNotes": "런타임 폴백 카탈로그(FALLBACK_CATALOG)와 다국어성 한국어 카피 텍스트를 포함하는 대형 상수 파일."
+    },
+    {
+      "id": "file:components/customize/lib/helpers.ts",
+      "type": "file",
+      "name": "helpers.ts",
+      "filePath": "components/customize/lib/helpers.ts",
+      "summary": "컨피규레이터 UI 보조 함수 모음으로, 다음 스텝 CTA 문구·옵션 가격 표시·모델 변경 시 선택 재계산·견적서 HTML 생성 등을 제공한다.",
+      "tags": [
+        "utility",
+        "configurator",
+        "helpers",
+        "serialization"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/customize/lib/helpers.ts:nextStepCta",
+      "type": "function",
+      "name": "nextStepCta",
+      "filePath": "components/customize/lib/helpers.ts",
+      "lineRange": [
+        18,
+        24
+      ],
+      "summary": "현재 스텝 인덱스에 맞는 다음 단계 CTA 라벨을 반환한다.",
+      "tags": [
+        "utility",
+        "configurator",
+        "helpers"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/customize/lib/helpers.ts:buildSelectionsForModelChange",
+      "type": "function",
+      "name": "buildSelectionsForModelChange",
+      "filePath": "components/customize/lib/helpers.ts",
+      "lineRange": [
+        33,
+        72
+      ],
+      "summary": "모델 변경 시 현재 선택을 새 모델에서 사용 가능한 옵션으로 보존·재계산하고 제거된 옵션 목록을 함께 반환한다.",
+      "tags": [
+        "configurator",
+        "configurator",
+        "helpers"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/customize/lib/helpers.ts:stepStatusText",
+      "type": "function",
+      "name": "stepStatusText",
+      "filePath": "components/customize/lib/helpers.ts",
+      "lineRange": [
+        74,
+        78
+      ],
+      "summary": "스텝과 선택 개수를 받아 스텝 상태 표시 텍스트를 생성한다.",
+      "tags": [
+        "utility",
+        "configurator",
+        "helpers"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/customize/lib/helpers.ts:hasOptionInfo",
+      "type": "function",
+      "name": "hasOptionInfo",
+      "filePath": "components/customize/lib/helpers.ts",
+      "lineRange": [
+        80,
+        83
+      ],
+      "summary": "옵션에 상세 정보(이미지/설명)가 있는지 여부를 판단한다.",
+      "tags": [
+        "utility",
+        "configurator",
+        "helpers"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/customize/lib/helpers.ts:buildQuoteHtml",
+      "type": "function",
+      "name": "buildQuoteHtml",
+      "filePath": "components/customize/lib/helpers.ts",
+      "lineRange": [
+        85,
+        123
+      ],
+      "summary": "견적 결과와 선택 옵션으로 인쇄용 견적서 HTML 문자열을 생성한다.",
+      "tags": [
+        "serialization",
+        "configurator",
+        "helpers"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/customize/lib/helpers.ts:escapeHtml",
+      "type": "function",
+      "name": "escapeHtml",
+      "filePath": "components/customize/lib/helpers.ts",
+      "lineRange": [
+        125,
+        133
+      ],
+      "summary": "문자열을 HTML 엔티티로 이스케이프해 견적서 출력 시 인젝션을 방지한다.",
+      "tags": [
+        "validation",
+        "configurator",
+        "helpers"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/customize/lib/hooks.ts",
+      "type": "file",
+      "name": "hooks.ts",
+      "filePath": "components/customize/lib/hooks.ts",
+      "summary": "모달 닫기 동작을 캡슐화한 useModalDismiss 훅을 제공하며, Escape 키 입력 시 onClose를 호출하도록 이벤트 리스너를 등록/해제한다.",
+      "tags": [
+        "hook",
+        "modal",
+        "utility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/customize/lib/hooks.ts:useModalDismiss",
+      "type": "function",
+      "name": "useModalDismiss",
+      "filePath": "components/customize/lib/hooks.ts",
+      "lineRange": [
+        4,
+        17
+      ],
+      "summary": "Escape 키 입력을 감지해 전달받은 onClose 콜백을 실행하는 모달 닫기 커스텀 훅.",
+      "tags": [
+        "hook",
+        "modal",
+        "event-handler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/customize/parts/CategoryHeading.tsx",
+      "type": "file",
+      "name": "CategoryHeading.tsx",
+      "filePath": "components/customize/parts/CategoryHeading.tsx",
+      "summary": "옵션 카테고리 섹션의 제목·상태·아이콘을 표시하는 소형 프레젠테이션 컴포넌트.",
+      "tags": [
+        "component",
+        "configurator",
+        "presentational"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/customize/parts/CategoryHeading.tsx:CategoryHeading",
+      "type": "function",
+      "name": "CategoryHeading",
+      "filePath": "components/customize/parts/CategoryHeading.tsx",
+      "lineRange": [
+        3,
+        15
+      ],
+      "summary": "제목/상태/아이콘 props를 받아 카테고리 헤딩을 렌더링한다.",
+      "tags": [
+        "component",
+        "presentational"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/customize/parts/ConfigSummaryBoard.tsx",
+      "type": "file",
+      "name": "ConfigSummaryBoard.tsx",
+      "filePath": "components/customize/parts/ConfigSummaryBoard.tsx",
+      "summary": "선택한 모델과 옵션, 합계 견적을 요약해 보여주는 보드 컴포넌트로, 옵션 가격 표시와 원화 포맷팅을 활용한다.",
+      "tags": [
+        "component",
+        "configurator",
+        "summary",
+        "presentational"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/customize/parts/ConfigSummaryBoard.tsx:ConfigSummaryBoard",
+      "type": "function",
+      "name": "ConfigSummaryBoard",
+      "filePath": "components/customize/parts/ConfigSummaryBoard.tsx",
+      "lineRange": [
+        8,
+        65
+      ],
+      "summary": "견적/선택 옵션을 받아 모델 시작가와 결정 옵션 목록, 총액을 요약 렌더링한다.",
+      "tags": [
+        "component",
+        "summary",
+        "presentational"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/customize/parts/ConfiguratorAppBar.tsx",
+      "type": "file",
+      "name": "ConfiguratorAppBar.tsx",
+      "filePath": "components/customize/parts/ConfiguratorAppBar.tsx",
+      "summary": "컨피규레이터 상단 앱바로, 브랜드 영역과 전화 연결(tel:) CTA를 표시한다.",
+      "tags": [
+        "component",
+        "configurator",
+        "navigation",
+        "presentational"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/customize/parts/ConfiguratorAppBar.tsx:ConfiguratorAppBar",
+      "type": "function",
+      "name": "ConfiguratorAppBar",
+      "filePath": "components/customize/parts/ConfiguratorAppBar.tsx",
+      "lineRange": [
+        4,
+        32
+      ],
+      "summary": "연락처 전화번호를 받아 상단 앱바와 전화 연결 버튼을 렌더링한다.",
+      "tags": [
+        "component",
+        "presentational"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/customize/parts/FloorplanCanvas.tsx",
+      "type": "file",
+      "name": "FloorplanCanvas.tsx",
+      "filePath": "components/customize/parts/FloorplanCanvas.tsx",
+      "summary": "선택한 모델과 옵션을 인라인 SVG 평면도로 시각화하는 컴포넌트로, 외장/내장 스와치 색상과 가독 잉크 색을 계산해 그린다.",
+      "tags": [
+        "component",
+        "floorplan",
+        "svg",
+        "visualization"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "framer-motion useReducedMotion과 hex 색 파싱으로 명도 기반 텍스트 색을 고르는 인라인 SVG 렌더러."
+    },
+    {
+      "id": "function:components/customize/parts/FloorplanCanvas.tsx:FloorplanCanvas",
+      "type": "function",
+      "name": "FloorplanCanvas",
+      "filePath": "components/customize/parts/FloorplanCanvas.tsx",
+      "lineRange": [
+        58,
+        125
+      ],
+      "summary": "모델/선택 옵션을 받아 치수와 스와치 색을 반영한 평면도 SVG를 렌더링한다.",
+      "tags": [
+        "component",
+        "svg",
+        "visualization"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/customize/parts/FloorplanCanvas.tsx:readableInk",
+      "type": "function",
+      "name": "readableInk",
+      "filePath": "components/customize/parts/FloorplanCanvas.tsx",
+      "lineRange": [
+        48,
+        56
+      ],
+      "summary": "배경 hex 색의 명도를 계산해 가독성이 좋은 밝은/어두운 텍스트 색을 선택한다.",
+      "tags": [
+        "utility",
+        "color",
+        "accessibility"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/customize/parts/FloorplanPreview.tsx",
+      "type": "file",
+      "name": "FloorplanPreview.tsx",
+      "filePath": "components/customize/parts/FloorplanPreview.tsx",
+      "summary": "평면도 미리보기 카드로, FloorplanCanvas를 작은 크기로 표시하고 확대 뷰어를 여는 진입점을 제공한다.",
+      "tags": [
+        "component",
+        "floorplan",
+        "preview",
+        "presentational"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/customize/parts/FloorplanPreview.tsx:FloorplanPreview",
+      "type": "function",
+      "name": "FloorplanPreview",
+      "filePath": "components/customize/parts/FloorplanPreview.tsx",
+      "lineRange": [
+        7,
+        62
+      ],
+      "summary": "모델/선택 옵션과 뷰어 열기 콜백을 받아 평면도 미리보기와 시작가를 렌더링한다.",
+      "tags": [
+        "component",
+        "preview",
+        "presentational"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/customize/parts/FloorplanZoomModal.tsx",
+      "type": "file",
+      "name": "FloorplanZoomModal.tsx",
+      "filePath": "components/customize/parts/FloorplanZoomModal.tsx",
+      "summary": "평면도를 전체 화면 모달로 확대해 보여주며, useModalDismiss로 Escape 닫기를 처리하는 컴포넌트.",
+      "tags": [
+        "component",
+        "floorplan",
+        "modal",
+        "presentational"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/customize/parts/FloorplanZoomModal.tsx:FloorplanZoomModal",
+      "type": "function",
+      "name": "FloorplanZoomModal",
+      "filePath": "components/customize/parts/FloorplanZoomModal.tsx",
+      "lineRange": [
+        7,
+        58
+      ],
+      "summary": "모델/선택 옵션/닫기 콜백을 받아 확대된 평면도 모달을 렌더링한다.",
+      "tags": [
+        "component",
+        "modal",
+        "presentational"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/customize/parts/InlineStepFooter.tsx",
+      "type": "file",
+      "name": "InlineStepFooter.tsx",
+      "filePath": "components/customize/parts/InlineStepFooter.tsx",
+      "summary": "인라인(모바일) 레이아웃에서 스텝 간 이전/다음 이동 버튼을 제공하는 푸터 컴포넌트.",
+      "tags": [
+        "component",
+        "configurator",
+        "navigation",
+        "presentational"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/customize/parts/InlineStepFooter.tsx:InlineStepFooter",
+      "type": "function",
+      "name": "InlineStepFooter",
+      "filePath": "components/customize/parts/InlineStepFooter.tsx",
+      "lineRange": [
+        6,
+        39
+      ],
+      "summary": "현재 스텝 인덱스와 이동 콜백을 받아 이전/다음 단계 버튼을 렌더링한다.",
+      "tags": [
+        "component",
+        "navigation",
+        "presentational"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:components/customize/CustomizeConfigurator.tsx",
+      "target": "function:components/customize/CustomizeConfigurator.tsx:CustomizeConfigurator",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/CustomizeConfigurator.tsx",
+      "target": "function:components/customize/CustomizeConfigurator.tsx:CustomizeConfigurator",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/__tests__/FloorplanCanvas.test.tsx",
+      "target": "function:components/customize/__tests__/FloorplanCanvas.test.tsx:makeModel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/__tests__/FloorplanCanvas.test.tsx",
+      "target": "function:components/customize/__tests__/FloorplanCanvas.test.tsx:makeOption",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/FloorplanCanvas.tsx",
+      "target": "file:components/customize/__tests__/FloorplanCanvas.test.tsx",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:components/customize/lib/helpers.ts",
+      "target": "function:components/customize/lib/helpers.ts:nextStepCta",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/lib/helpers.ts",
+      "target": "function:components/customize/lib/helpers.ts:nextStepCta",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/lib/helpers.ts",
+      "target": "function:components/customize/lib/helpers.ts:buildSelectionsForModelChange",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/lib/helpers.ts",
+      "target": "function:components/customize/lib/helpers.ts:buildSelectionsForModelChange",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/lib/helpers.ts",
+      "target": "function:components/customize/lib/helpers.ts:stepStatusText",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/lib/helpers.ts",
+      "target": "function:components/customize/lib/helpers.ts:stepStatusText",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/lib/helpers.ts",
+      "target": "function:components/customize/lib/helpers.ts:hasOptionInfo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/lib/helpers.ts",
+      "target": "function:components/customize/lib/helpers.ts:hasOptionInfo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/lib/helpers.ts",
+      "target": "function:components/customize/lib/helpers.ts:buildQuoteHtml",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/lib/helpers.ts",
+      "target": "function:components/customize/lib/helpers.ts:buildQuoteHtml",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/lib/helpers.ts",
+      "target": "function:components/customize/lib/helpers.ts:escapeHtml",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/lib/helpers.ts",
+      "target": "function:components/customize/lib/helpers.ts:escapeHtml",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/lib/helpers.ts:buildQuoteHtml",
+      "target": "function:lib/customize/priceCalculator.ts:formatWon",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/lib/helpers.ts:buildSelectionsForModelChange",
+      "target": "function:lib/customize/priceCalculator.ts:getDefaultSelections",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/lib/helpers.ts:buildSelectionsForModelChange",
+      "target": "function:lib/customize/priceCalculator.ts:optionsForModel",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/lib/hooks.ts",
+      "target": "function:components/customize/lib/hooks.ts:useModalDismiss",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/lib/hooks.ts",
+      "target": "function:components/customize/lib/hooks.ts:useModalDismiss",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/parts/CategoryHeading.tsx",
+      "target": "function:components/customize/parts/CategoryHeading.tsx:CategoryHeading",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/CategoryHeading.tsx",
+      "target": "function:components/customize/parts/CategoryHeading.tsx:CategoryHeading",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/parts/ConfigSummaryBoard.tsx",
+      "target": "function:components/customize/parts/ConfigSummaryBoard.tsx:ConfigSummaryBoard",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/ConfigSummaryBoard.tsx",
+      "target": "function:components/customize/parts/ConfigSummaryBoard.tsx:ConfigSummaryBoard",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/parts/ConfigSummaryBoard.tsx:ConfigSummaryBoard",
+      "target": "function:lib/customize/priceCalculator.ts:formatModelStartPrice",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/parts/ConfigSummaryBoard.tsx:ConfigSummaryBoard",
+      "target": "function:lib/customize/priceCalculator.ts:formatWon",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/parts/ConfigSummaryBoard.tsx:ConfigSummaryBoard",
+      "target": "function:components/customize/lib/helpers.ts:optionPriceDisplay",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/parts/ConfiguratorAppBar.tsx",
+      "target": "function:components/customize/parts/ConfiguratorAppBar.tsx:ConfiguratorAppBar",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/ConfiguratorAppBar.tsx",
+      "target": "function:components/customize/parts/ConfiguratorAppBar.tsx:ConfiguratorAppBar",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/parts/FloorplanCanvas.tsx",
+      "target": "function:components/customize/parts/FloorplanCanvas.tsx:FloorplanCanvas",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/FloorplanCanvas.tsx",
+      "target": "function:components/customize/parts/FloorplanCanvas.tsx:readableInk",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/FloorplanCanvas.tsx",
+      "target": "function:components/customize/parts/FloorplanCanvas.tsx:FloorplanCanvas",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/parts/FloorplanPreview.tsx",
+      "target": "function:components/customize/parts/FloorplanPreview.tsx:FloorplanPreview",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/FloorplanPreview.tsx",
+      "target": "function:components/customize/parts/FloorplanPreview.tsx:FloorplanPreview",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/parts/FloorplanPreview.tsx:FloorplanPreview",
+      "target": "function:lib/customize/priceCalculator.ts:formatModelStartPrice",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/parts/FloorplanZoomModal.tsx",
+      "target": "function:components/customize/parts/FloorplanZoomModal.tsx:FloorplanZoomModal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/FloorplanZoomModal.tsx",
+      "target": "function:components/customize/parts/FloorplanZoomModal.tsx:FloorplanZoomModal",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/parts/FloorplanZoomModal.tsx:FloorplanZoomModal",
+      "target": "function:components/customize/lib/hooks.ts:useModalDismiss",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/parts/FloorplanZoomModal.tsx:FloorplanZoomModal",
+      "target": "function:lib/customize/priceCalculator.ts:formatModelStartPrice",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/parts/InlineStepFooter.tsx",
+      "target": "function:components/customize/parts/InlineStepFooter.tsx:InlineStepFooter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/InlineStepFooter.tsx",
+      "target": "function:components/customize/parts/InlineStepFooter.tsx:InlineStepFooter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/CustomizeConfigurator.tsx",
+      "target": "file:app/actions/customize-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/CustomizeConfigurator.tsx",
+      "target": "file:components/customize/lib/constants.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/CustomizeConfigurator.tsx",
+      "target": "file:components/customize/lib/helpers.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/CustomizeConfigurator.tsx",
+      "target": "file:components/customize/parts/ConfigSummaryBoard.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/CustomizeConfigurator.tsx",
+      "target": "file:components/customize/parts/ConfiguratorAppBar.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/CustomizeConfigurator.tsx",
+      "target": "file:components/customize/parts/FloorplanPreview.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/CustomizeConfigurator.tsx",
+      "target": "file:components/customize/parts/FloorplanZoomModal.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/CustomizeConfigurator.tsx",
+      "target": "file:components/customize/parts/OptionInfoModal.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/CustomizeConfigurator.tsx",
+      "target": "file:components/customize/parts/OptionsPanel.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/CustomizeConfigurator.tsx",
+      "target": "file:components/customize/parts/ReviewStep.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/CustomizeConfigurator.tsx",
+      "target": "file:components/customize/parts/StepperBar.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/CustomizeConfigurator.tsx",
+      "target": "file:components/ui/button.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/CustomizeConfigurator.tsx",
+      "target": "file:lib/customize/config.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/CustomizeConfigurator.tsx",
+      "target": "file:lib/customize/priceCalculator.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/CustomizeConfigurator.tsx",
+      "target": "file:lib/customize/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/__tests__/FloorplanCanvas.test.tsx",
+      "target": "file:components/customize/parts/FloorplanCanvas.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/__tests__/FloorplanCanvas.test.tsx",
+      "target": "file:lib/customize/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/lib/helpers.ts",
+      "target": "file:components/customize/lib/constants.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/lib/helpers.ts",
+      "target": "file:lib/customize/priceCalculator.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/lib/helpers.ts",
+      "target": "file:lib/customize/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/ConfigSummaryBoard.tsx",
+      "target": "file:components/customize/lib/constants.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/ConfigSummaryBoard.tsx",
+      "target": "file:components/customize/lib/helpers.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/ConfigSummaryBoard.tsx",
+      "target": "file:lib/customize/priceCalculator.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/ConfigSummaryBoard.tsx",
+      "target": "file:lib/customize/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/ConfigSummaryBoard.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/FloorplanCanvas.tsx",
+      "target": "file:lib/customize/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/FloorplanCanvas.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/FloorplanPreview.tsx",
+      "target": "file:components/customize/lib/constants.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/FloorplanPreview.tsx",
+      "target": "file:components/customize/parts/FloorplanCanvas.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/FloorplanPreview.tsx",
+      "target": "file:lib/customize/priceCalculator.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/FloorplanPreview.tsx",
+      "target": "file:lib/customize/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/FloorplanZoomModal.tsx",
+      "target": "file:components/customize/lib/hooks.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/FloorplanZoomModal.tsx",
+      "target": "file:components/customize/parts/FloorplanCanvas.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/FloorplanZoomModal.tsx",
+      "target": "file:lib/customize/priceCalculator.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/FloorplanZoomModal.tsx",
+      "target": "file:lib/customize/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/InlineStepFooter.tsx",
+      "target": "file:components/customize/lib/constants.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/InlineStepFooter.tsx",
+      "target": "file:components/ui/button.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:components/customize/CustomizeConfigurator.tsx:CustomizeConfigurator",
+      "target": "function:lib/customize/priceCalculator.ts:calculateEstimate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/CustomizeConfigurator.tsx:CustomizeConfigurator",
+      "target": "function:lib/customize/priceCalculator.ts:decodeConfig",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/CustomizeConfigurator.tsx:CustomizeConfigurator",
+      "target": "function:lib/customize/priceCalculator.ts:encodeConfig",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/CustomizeConfigurator.tsx:CustomizeConfigurator",
+      "target": "function:lib/customize/priceCalculator.ts:getDefaultSelections",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/CustomizeConfigurator.tsx:CustomizeConfigurator",
+      "target": "function:lib/customize/priceCalculator.ts:toggleOptionSelection",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/CustomizeConfigurator.tsx:CustomizeConfigurator",
+      "target": "function:lib/customize/priceCalculator.ts:selectedOptionList",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/CustomizeConfigurator.tsx:CustomizeConfigurator",
+      "target": "function:lib/customize/priceCalculator.ts:formatWon",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/CustomizeConfigurator.tsx:CustomizeConfigurator",
+      "target": "function:components/customize/lib/helpers.ts:buildSelectionsForModelChange",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/CustomizeConfigurator.tsx:CustomizeConfigurator",
+      "target": "function:components/customize/lib/helpers.ts:buildQuoteHtml",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/CustomizeConfigurator.tsx:CustomizeConfigurator",
+      "target": "function:components/customize/lib/helpers.ts:nextStepCta",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/CustomizeConfigurator.tsx:CustomizeConfigurator",
+      "target": "function:app/actions/customize-actions.ts:submitCustomizeConsultation",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

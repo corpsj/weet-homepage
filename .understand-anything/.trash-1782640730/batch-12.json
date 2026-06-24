@@ -1,0 +1,840 @@
+{
+  "nodes": [
+    {
+      "id": "file:.vercelignore",
+      "type": "file",
+      "name": ".vercelignore",
+      "filePath": ".vercelignore",
+      "summary": "Vercel 배포 시 업로드에서 제외할 경로를 지정하는 ignore 파일로, 테스트/문서/스크래치 산출물이 프로덕션 번들에 포함되지 않도록 한다.",
+      "tags": ["deployment", "configuration", "vercel"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/customize/layout.tsx",
+      "type": "file",
+      "name": "layout.tsx",
+      "filePath": "app/customize/layout.tsx",
+      "summary": "/customize 컨피규레이터 라우트 전용 패스스루 layout으로, 자식만 그대로 렌더링하여 루트 layout과 분리된 세그먼트 경계를 만든다.",
+      "tags": ["layout", "app-router", "customize"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/error.tsx",
+      "type": "file",
+      "name": "error.tsx",
+      "filePath": "app/error.tsx",
+      "summary": "App Router 라우트 세그먼트 error boundary로, 렌더링 중 발생한 오류를 잡아 콘솔에 기록하고 reset 핸들러가 있는 재시도 UI를 보여준다.",
+      "tags": ["error-boundary", "app-router", "client-component"],
+      "complexity": "simple",
+      "languageNotes": "Next.js error.tsx는 'use client' 클라이언트 컴포넌트로서 error/reset prop을 받는 규약을 따른다."
+    },
+    {
+      "id": "file:app/global-error.tsx",
+      "type": "file",
+      "name": "global-error.tsx",
+      "filePath": "app/global-error.tsx",
+      "summary": "루트 layout 자체가 깨졌을 때를 대비한 최상위 global error boundary로, 자체 html/body를 렌더링하며 전역 치명적 오류를 처리한다.",
+      "tags": ["error-boundary", "app-router", "client-component"],
+      "complexity": "simple",
+      "languageNotes": "global-error는 루트 layout을 대체하므로 자체적으로 html/body 태그를 포함해야 한다."
+    },
+    {
+      "id": "file:app/globals.css",
+      "type": "file",
+      "name": "globals.css",
+      "filePath": "app/globals.css",
+      "summary": "Tailwind 지시어와 전역 CSS 변수, 기본 타이포그래피/리셋, customize 컨피규레이터 전용 토큰 및 커스텀 애니메이션을 정의하는 사이트 전역 스타일시트.",
+      "tags": ["global-styles", "tailwind", "css-variables", "styling"],
+      "complexity": "moderate",
+      "languageNotes": "@tailwind base/components/utilities 레이어 위에 :root 커스텀 프로퍼티와 keyframe 애니메이션을 얹은 구조."
+    },
+    {
+      "id": "file:app/loading.tsx",
+      "type": "file",
+      "name": "loading.tsx",
+      "filePath": "app/loading.tsx",
+      "summary": "App Router 라우트 전환 중 Suspense 폴백으로 표시되는 전역 로딩 인디케이터 컴포넌트.",
+      "tags": ["loading", "app-router", "suspense"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/not-found.tsx",
+      "type": "file",
+      "name": "not-found.tsx",
+      "filePath": "app/not-found.tsx",
+      "summary": "존재하지 않는 라우트 접근 시 표시되는 404 페이지로, 안내 메시지와 홈으로 돌아가는 링크를 제공한다.",
+      "tags": ["not-found", "app-router", "404"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/support/layout.tsx",
+      "type": "file",
+      "name": "layout.tsx",
+      "filePath": "app/support/layout.tsx",
+      "summary": "/support 고객지원 섹션 전용 layout으로, 해당 세그먼트의 SEO metadata를 설정하고 자식 페이지를 감싼다.",
+      "tags": ["layout", "app-router", "metadata", "seo"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/admin/AdminHeader.tsx",
+      "type": "file",
+      "name": "AdminHeader.tsx",
+      "filePath": "components/admin/AdminHeader.tsx",
+      "summary": "관리자 패널 상단 헤더 컴포넌트로, 현재 pathname을 분해해 브레드크럼/페이지 제목을 동적으로 생성해 표시한다.",
+      "tags": ["component", "admin", "header", "breadcrumb"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/admin/insights/InsightsDashboard.tsx",
+      "type": "file",
+      "name": "InsightsDashboard.tsx",
+      "filePath": "components/admin/insights/InsightsDashboard.tsx",
+      "summary": "관리자 인사이트 대시보드 컴포넌트로, 총 문의 수·월별 추이·상태 분포를 차트와 카드로 시각화한다.",
+      "tags": ["component", "admin", "dashboard", "data-visualization"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/customize/__tests__/sample.test.tsx",
+      "type": "file",
+      "name": "sample.test.tsx",
+      "filePath": "components/customize/__tests__/sample.test.tsx",
+      "summary": "customize 컴포넌트 디렉터리의 테스트 환경 동작을 확인하는 샘플 단위 테스트로, 간단한 컴포넌트 렌더링을 검증한다.",
+      "tags": ["test", "unit-test", "customize"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/sections/PartnersBanner.tsx",
+      "type": "file",
+      "name": "PartnersBanner.tsx",
+      "filePath": "components/sections/PartnersBanner.tsx",
+      "summary": "홈페이지 등에서 사용되는 파트너 로고 배너 섹션 컴포넌트로, 파트너 로고 목록을 순회하며 가로로 나열해 표시한다.",
+      "tags": ["component", "section", "banner", "partners"],
+      "complexity": "simple"
+    },
+    {
+      "id": "document:design/figma_design.md",
+      "type": "document",
+      "name": "figma_design.md",
+      "filePath": "design/figma_design.md",
+      "summary": "각 페이지의 Figma 디자인 참조 링크를 정리한 디자인 인덱스 문서로, UI 구현 시 따라야 할 시안 출처를 안내한다.",
+      "tags": ["documentation", "design", "figma"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:e2e/admin-functional.spec.ts",
+      "type": "file",
+      "name": "admin-functional.spec.ts",
+      "filePath": "e2e/admin-functional.spec.ts",
+      "summary": "관리자 패널의 핵심 CRUD 기능을 검증하는 Playwright E2E 테스트로, 서비스 클라이언트로 임시 관리자 계정을 만들고 로그인 후 레코드 생성·삭제 흐름을 확인한다.",
+      "tags": ["test", "e2e", "playwright", "admin"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:e2e/customize-configurator.spec.ts",
+      "type": "file",
+      "name": "customize-configurator.spec.ts",
+      "filePath": "e2e/customize-configurator.spec.ts",
+      "summary": "/customize 컨피규레이터의 모델·옵션 선택과 견적 계산 흐름을 검증하는 Playwright E2E 테스트.",
+      "tags": ["test", "e2e", "playwright", "customize"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:e2e/header-navigation.spec.ts",
+      "type": "file",
+      "name": "header-navigation.spec.ts",
+      "filePath": "e2e/header-navigation.spec.ts",
+      "summary": "헤더 메가 메뉴와 페이지 간 네비게이션 인터랙션을 검증하는 Playwright E2E 테스트.",
+      "tags": ["test", "e2e", "playwright", "navigation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:e2e/public-pages.spec.ts",
+      "type": "file",
+      "name": "public-pages.spec.ts",
+      "filePath": "e2e/public-pages.spec.ts",
+      "summary": "공개 페이지(제품·솔루션 등)의 렌더링과 데이터 노출을 검증하는 Playwright E2E 테스트로, 제품 픽스처 정렬 및 임시 관리자 시드 헬퍼를 포함한다.",
+      "tags": ["test", "e2e", "playwright", "public-pages"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:eslint.config.mjs",
+      "type": "file",
+      "name": "eslint.config.mjs",
+      "filePath": "eslint.config.mjs",
+      "summary": "Next.js core-web-vitals/TypeScript 규칙을 확장하는 ESLint flat config로, 프로젝트 전반의 린트 규칙을 정의한다.",
+      "tags": ["configuration", "eslint", "linting", "build-system"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:lib/image/supabase-loader.ts",
+      "type": "file",
+      "name": "supabase-loader.ts",
+      "filePath": "lib/image/supabase-loader.ts",
+      "summary": "전역 next/image 로더로, Vercel 이미지 최적화기(쿼터 초과 시 402 반환)를 우회하고 Supabase Storage 객체를 Supabase render/image transform URL로 변환한다.",
+      "tags": ["utility", "image", "supabase", "next-image"],
+      "complexity": "simple",
+      "languageNotes": "next.config의 images.loaderFile로 등록되어 모든 <Image>의 src 변환을 가로채는 커스텀 로더."
+    },
+    {
+      "id": "file:middleware.ts",
+      "type": "file",
+      "name": "middleware.ts",
+      "filePath": "middleware.ts",
+      "summary": "Next.js 전역 미들웨어로, 정적/이미지 경로를 제외한 모든 요청에서 Supabase 세션을 갱신하여 인증 상태를 유지하는 보안 게이트 역할을 한다.",
+      "tags": ["middleware", "authentication", "supabase", "security"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:next.config.ts",
+      "type": "file",
+      "name": "next.config.ts",
+      "filePath": "next.config.ts",
+      "summary": "Next.js 핵심 설정으로 CSP를 포함한 보안 헤더, 커스텀 이미지 로더, 원격 이미지 호스트 허용, 서버 액션 한도, 리다이렉트 규칙을 정의한다.",
+      "tags": ["configuration", "build-system", "security", "next-config"],
+      "complexity": "moderate",
+      "languageNotes": "환경 변수(VERCEL/NODE_ENV)에 따라 CSP script-src와 HSTS 헤더를 조건부로 구성한다."
+    },
+    {
+      "id": "file:playwright.config.ts",
+      "type": "file",
+      "name": "playwright.config.ts",
+      "filePath": "playwright.config.ts",
+      "summary": "Playwright E2E 테스트 러너 설정으로, 테스트 디렉터리·베이스 URL·웹 서버 기동 방식 등을 정의한다.",
+      "tags": ["configuration", "testing", "playwright", "e2e"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:postcss.config.mjs",
+      "type": "file",
+      "name": "postcss.config.mjs",
+      "filePath": "postcss.config.mjs",
+      "summary": "Tailwind/Autoprefixer 플러그인을 등록하는 PostCSS 설정으로, CSS 빌드 파이프라인을 구성한다.",
+      "tags": ["configuration", "postcss", "tailwind", "build-system"],
+      "complexity": "simple"
+    },
+    {
+      "id": "schema:supabase/schema.sql",
+      "type": "schema",
+      "name": "schema.sql",
+      "filePath": "supabase/schema.sql",
+      "summary": "Supabase PostgreSQL 데이터베이스의 전체 스키마 덤프로, 제품·솔루션·문의·커스터마이즈 컨피규레이터·보도자료 크롤링 등 20개 테이블과 인덱스, RLS 정책을 정의한다.",
+      "tags": ["database", "schema-definition", "supabase", "postgresql"],
+      "complexity": "complex",
+      "languageNotes": "pgvector embedding 컬럼과 HNSW 인덱스, 다국어(ko/en) 컬럼 쌍, RLS 정책을 포함한 대규모 스키마."
+    },
+    {
+      "id": "table:supabase/schema.sql:articles",
+      "type": "table",
+      "name": "articles",
+      "summary": "크롤링/보도자료에서 가공된 기사 콘텐츠를 저장하는 테이블로 제목·본문·이미지·카테고리·상태를 보관한다.",
+      "tags": ["database", "table", "content"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/schema.sql:clients",
+      "type": "table",
+      "name": "clients",
+      "summary": "외부 API 연동 클라이언트를 관리하는 테이블로 API 키 해시·웹훅 URL·사용량·활성 상태를 저장한다.",
+      "tags": ["database", "table", "api", "integration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/schema.sql:crawl_logs",
+      "type": "table",
+      "name": "crawl_logs",
+      "summary": "사이트별 크롤링 실행 이력을 기록하는 로그 테이블로 수집 건수·오류 메시지·시작/완료 시각을 저장한다.",
+      "tags": ["database", "table", "logging", "crawler"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/schema.sql:crawl_settings",
+      "type": "table",
+      "name": "crawl_settings",
+      "summary": "크롤러 동작 설정을 보관하는 테이블로 활성화된 사이트 목록과 스케줄 주기를 저장한다.",
+      "tags": ["database", "table", "configuration", "crawler"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/schema.sql:customize_categories",
+      "type": "table",
+      "name": "customize_categories",
+      "summary": "커스터마이즈 컨피규레이터의 옵션 카테고리를 정의하는 테이블로 다국어 명칭·선택 유형·필수 여부·노출 순서를 저장한다.",
+      "tags": ["database", "table", "customize"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/schema.sql:customize_consultations",
+      "type": "table",
+      "name": "customize_consultations",
+      "summary": "커스터마이즈 견적 상담 신청을 저장하는 테이블로 고객 정보·선택 모델/옵션·예상 견적·구성 스냅샷을 보관한다.",
+      "tags": ["database", "table", "customize", "lead"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/schema.sql:customize_included_specs",
+      "type": "table",
+      "name": "customize_included_specs",
+      "summary": "모델에 기본 포함되는 사양 항목을 정의하는 테이블로 다국어 명칭·카테고리·아이콘·노출 순서를 저장한다.",
+      "tags": ["database", "table", "customize"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/schema.sql:customize_models",
+      "type": "table",
+      "name": "customize_models",
+      "summary": "커스터마이즈 컨피규레이터의 기준 모델을 정의하는 테이블로 코드·치수·면적·기본 가격·평면도 이미지 경로를 저장한다.",
+      "tags": ["database", "table", "customize", "product"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/schema.sql:customize_option_conflicts",
+      "type": "table",
+      "name": "customize_option_conflicts",
+      "summary": "동시에 선택할 수 없는 옵션 간 충돌 관계를 정의하는 테이블로 충돌 옵션 쌍과 다국어 사유를 저장한다.",
+      "tags": ["database", "table", "customize", "constraint"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/schema.sql:customize_options",
+      "type": "table",
+      "name": "customize_options",
+      "summary": "커스터마이즈 컨피규레이터의 선택 가능한 개별 옵션을 정의하는 테이블로 가격·기본 선택 여부·적용 가능 모델·오버레이 이미지를 저장한다.",
+      "tags": ["database", "table", "customize", "pricing"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/schema.sql:delivery_logs",
+      "type": "table",
+      "name": "delivery_logs",
+      "summary": "외부 클라이언트로의 콘텐츠 전송 이력을 기록하는 테이블로 전송된 기사 목록·건수·상태·전송 시각을 저장한다.",
+      "tags": ["database", "table", "logging", "integration"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/schema.sql:faqs",
+      "type": "table",
+      "name": "faqs",
+      "summary": "고객지원 FAQ 항목을 저장하는 테이블로 다국어 질문/답변·카테고리·정렬 순서·활성 상태를 보관한다.",
+      "tags": ["database", "table", "support", "content"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/schema.sql:gallery",
+      "type": "table",
+      "name": "gallery",
+      "summary": "갤러리/SNS 이미지 항목을 저장하는 테이블로 제목·설명·이미지 URL·서브 이미지·노출 순서를 보관한다.",
+      "tags": ["database", "table", "media", "content"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/schema.sql:hero_slides",
+      "type": "table",
+      "name": "hero_slides",
+      "summary": "홈 히어로 캐러셀 슬라이드를 저장하는 테이블로 제목·부제·이미지·링크 URL·정렬 순서·활성 상태를 보관한다.",
+      "tags": ["database", "table", "cms", "content"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/schema.sql:inquiries",
+      "type": "table",
+      "name": "inquiries",
+      "summary": "고객 문의를 저장하는 테이블로 이름·연락처·메시지·처리 상태·답변 내용·카테고리를 보관한다.",
+      "tags": ["database", "table", "support", "lead"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/schema.sql:notices",
+      "type": "table",
+      "name": "notices",
+      "summary": "공지사항을 저장하는 테이블로 제목·내용·상단 고정 여부·조회수·활성 상태를 보관한다.",
+      "tags": ["database", "table", "cms", "content"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/schema.sql:press_releases",
+      "type": "table",
+      "name": "press_releases",
+      "summary": "수집된 원본 보도자료를 저장하는 테이블로 출처·본문·첨부·발행일과 벡터 검색용 embedding 컬럼을 포함한다.",
+      "tags": ["database", "table", "content", "vector-search"],
+      "complexity": "simple",
+      "languageNotes": "pgvector embedding 컬럼에 HNSW 인덱스가 걸려 있어 의미 기반 유사 검색을 지원한다."
+    },
+    {
+      "id": "table:supabase/schema.sql:products",
+      "type": "table",
+      "name": "products",
+      "summary": "제품 카탈로그를 저장하는 핵심 테이블로 모델명·사이즈/서브 카테고리·이미지·가격·구조/마감 사양·시그니처 여부를 보관한다.",
+      "tags": ["database", "table", "product", "catalog"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/schema.sql:projects",
+      "type": "table",
+      "name": "projects",
+      "summary": "시공/레퍼런스 프로젝트 사례를 저장하는 테이블로 제목·클라이언트·위치·완공일·이미지·태그를 보관한다.",
+      "tags": ["database", "table", "content", "portfolio"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/schema.sql:solutions",
+      "type": "table",
+      "name": "solutions",
+      "summary": "솔루션 소개 항목을 저장하는 테이블로 제목·설명·이미지·정렬 순서·활성 상태를 보관한다.",
+      "tags": ["database", "table", "cms", "content"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:tailwind.config.ts",
+      "type": "file",
+      "name": "tailwind.config.ts",
+      "filePath": "tailwind.config.ts",
+      "summary": "Tailwind 디자인 토큰 설정으로 위트 옐로우 primary 컬러, customize 컨피규레이터 전용 색/그림자 토큰, 커스텀 spacing·max-width·폰트를 정의한다.",
+      "tags": ["configuration", "tailwind", "design-system", "styling"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/error.tsx:Error",
+      "type": "function",
+      "name": "Error",
+      "filePath": "app/error.tsx",
+      "lineRange": [10, 44],
+      "summary": "라우트 세그먼트 오류를 useEffect로 콘솔에 기록하고 reset 콜백으로 재시도 가능한 오류 UI를 렌더링하는 error boundary 컴포넌트.",
+      "tags": ["error-boundary", "component", "client-component"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/global-error.tsx:GlobalError",
+      "type": "function",
+      "name": "GlobalError",
+      "filePath": "app/global-error.tsx",
+      "lineRange": [9, 36],
+      "summary": "루트 layout 수준의 치명적 오류를 자체 html/body로 렌더링하고 reset으로 복구를 시도하는 최상위 error boundary 컴포넌트.",
+      "tags": ["error-boundary", "component", "client-component"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/not-found.tsx:NotFound",
+      "type": "function",
+      "name": "NotFound",
+      "filePath": "app/not-found.tsx",
+      "lineRange": [4, 31],
+      "summary": "404 안내 메시지와 홈으로 이동하는 링크를 렌더링하는 not-found 페이지 컴포넌트.",
+      "tags": ["not-found", "component", "404"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/admin/AdminHeader.tsx:AdminHeader",
+      "type": "function",
+      "name": "AdminHeader",
+      "filePath": "components/admin/AdminHeader.tsx",
+      "lineRange": [6, 75],
+      "summary": "usePathname으로 현재 경로를 분해하고 세그먼트를 사람이 읽기 좋은 제목으로 변환해 브레드크럼/타이틀을 렌더링하는 관리자 헤더 컴포넌트.",
+      "tags": ["component", "admin", "breadcrumb"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/admin/insights/InsightsDashboard.tsx:InsightsDashboard",
+      "type": "function",
+      "name": "InsightsDashboard",
+      "filePath": "components/admin/insights/InsightsDashboard.tsx",
+      "lineRange": [31, 120],
+      "summary": "총 문의 수·월별 추이·상태 분포 데이터를 받아 카드와 차트로 시각화하는 관리자 인사이트 대시보드 컴포넌트.",
+      "tags": ["component", "admin", "data-visualization"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/sections/PartnersBanner.tsx:PartnersBanner",
+      "type": "function",
+      "name": "PartnersBanner",
+      "filePath": "components/sections/PartnersBanner.tsx",
+      "lineRange": [12, 38],
+      "summary": "파트너 로고 목록을 순회하며 배너 형태로 나열해 렌더링하는 섹션 컴포넌트.",
+      "tags": ["component", "section", "banner"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/image/supabase-loader.ts:supabaseImageLoader",
+      "type": "function",
+      "name": "supabaseImageLoader",
+      "filePath": "lib/image/supabase-loader.ts",
+      "lineRange": [21, 41],
+      "summary": "이미지 src를 검사해 Supabase Storage 객체는 render/image transform URL로 변환하고 그 외 소스는 그대로 반환하는 커스텀 next/image 로더.",
+      "tags": ["utility", "image", "supabase"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:middleware.ts:middleware",
+      "type": "function",
+      "name": "middleware",
+      "filePath": "middleware.ts",
+      "lineRange": [4, 6],
+      "summary": "들어오는 요청에 대해 updateSession을 호출하여 Supabase 세션 쿠키를 갱신하는 Next.js 미들웨어 진입점.",
+      "tags": ["middleware", "authentication", "supabase"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:e2e/admin-functional.spec.ts:createE2EAdminCredentials",
+      "type": "function",
+      "name": "createE2EAdminCredentials",
+      "filePath": "e2e/admin-functional.spec.ts",
+      "lineRange": [16, 48],
+      "summary": "Supabase service client로 임의의 임시 관리자 계정을 생성하고 테스트 종료 시 삭제하는 E2E 셋업 헬퍼.",
+      "tags": ["test", "e2e", "fixture"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:e2e/admin-functional.spec.ts:waitForRecordId",
+      "type": "function",
+      "name": "waitForRecordId",
+      "filePath": "e2e/admin-functional.spec.ts",
+      "lineRange": [70, 89],
+      "summary": "특정 조건에 맞는 DB 레코드가 생성될 때까지 expect.poll로 폴링하여 해당 레코드 ID를 반환하는 E2E 동기화 헬퍼.",
+      "tags": ["test", "e2e", "polling"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:e2e/public-pages.spec.ts:sortProductFixtures",
+      "type": "function",
+      "name": "sortProductFixtures",
+      "filePath": "e2e/public-pages.spec.ts",
+      "lineRange": [23, 39],
+      "summary": "카테고리 순서를 기준으로 제품 픽스처 배열을 정렬해 화면 노출 순서와 일치시키는 E2E 헬퍼.",
+      "tags": ["test", "e2e", "fixture"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:e2e/public-pages.spec.ts:createE2EAdminCredentials",
+      "type": "function",
+      "name": "createE2EAdminCredentials",
+      "filePath": "e2e/public-pages.spec.ts",
+      "lineRange": [41, 73],
+      "summary": "공개 페이지 데이터 시드를 위해 Supabase service client로 임시 관리자 계정을 생성·정리하는 E2E 셋업 헬퍼.",
+      "tags": ["test", "e2e", "fixture"],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:middleware.ts",
+      "target": "file:utils/supabase/middleware.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:middleware.ts",
+      "target": "function:middleware.ts:middleware",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:middleware.ts",
+      "target": "function:middleware.ts:middleware",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:middleware.ts:middleware",
+      "target": "function:utils/supabase/middleware.ts:updateSession",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/error.tsx",
+      "target": "function:app/error.tsx:Error",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:app/error.tsx",
+      "target": "function:app/error.tsx:Error",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/global-error.tsx",
+      "target": "function:app/global-error.tsx:GlobalError",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:app/global-error.tsx",
+      "target": "function:app/global-error.tsx:GlobalError",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/not-found.tsx",
+      "target": "function:app/not-found.tsx:NotFound",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:app/not-found.tsx",
+      "target": "function:app/not-found.tsx:NotFound",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/admin/AdminHeader.tsx",
+      "target": "function:components/admin/AdminHeader.tsx:AdminHeader",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:components/admin/AdminHeader.tsx",
+      "target": "function:components/admin/AdminHeader.tsx:AdminHeader",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/admin/insights/InsightsDashboard.tsx",
+      "target": "function:components/admin/insights/InsightsDashboard.tsx:InsightsDashboard",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:components/admin/insights/InsightsDashboard.tsx",
+      "target": "function:components/admin/insights/InsightsDashboard.tsx:InsightsDashboard",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/sections/PartnersBanner.tsx",
+      "target": "function:components/sections/PartnersBanner.tsx:PartnersBanner",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:components/sections/PartnersBanner.tsx",
+      "target": "function:components/sections/PartnersBanner.tsx:PartnersBanner",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/image/supabase-loader.ts",
+      "target": "function:lib/image/supabase-loader.ts:supabaseImageLoader",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:lib/image/supabase-loader.ts",
+      "target": "function:lib/image/supabase-loader.ts:supabaseImageLoader",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:e2e/admin-functional.spec.ts",
+      "target": "function:e2e/admin-functional.spec.ts:createE2EAdminCredentials",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:e2e/admin-functional.spec.ts",
+      "target": "function:e2e/admin-functional.spec.ts:waitForRecordId",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:e2e/public-pages.spec.ts",
+      "target": "function:e2e/public-pages.spec.ts:sortProductFixtures",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:e2e/public-pages.spec.ts",
+      "target": "function:e2e/public-pages.spec.ts:createE2EAdminCredentials",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:articles",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:clients",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:crawl_logs",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:crawl_settings",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:customize_categories",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:customize_consultations",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:customize_included_specs",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:customize_models",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:customize_option_conflicts",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:customize_options",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:delivery_logs",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:faqs",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:gallery",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:hero_slides",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:inquiries",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:notices",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:press_releases",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:products",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:projects",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "schema:supabase/schema.sql",
+      "target": "table:supabase/schema.sql:solutions",
+      "type": "defines_schema",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:next.config.ts",
+      "target": "file:lib/image/supabase-loader.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:next.config.ts",
+      "target": "file:middleware.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:tailwind.config.ts",
+      "target": "file:app/globals.css",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "file:postcss.config.mjs",
+      "target": "file:app/globals.css",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

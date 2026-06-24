@@ -1,0 +1,9 @@
+(node:99419) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+  🔑  Dashboard URL: http://127.0.0.1:5173/?token=c2c019b2cfcec017675c45085e089f24
+
+
+  VITE v6.4.3  ready in 1405 ms
+
+  ➜  Local:   http://127.0.0.1:5173/

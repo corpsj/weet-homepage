@@ -1,0 +1,100 @@
+[
+  {
+    "order": 1,
+    "title": "프로젝트 개요",
+    "description": "모듈러 건축 기업 위트(weet)의 공식 홈페이지 투어를 README에서 시작합니다. 이 문서는 기술 스택(Next.js App Router + TypeScript + Tailwind + Supabase), 디렉터리 구조, 8개 주요 공개 페이지, 환경 변수와 배포 절차를 한눈에 정리해 투어 전체의 지도 역할을 합니다. 여기서 잡은 큰 그림을 들고 다음 단계부터 실제 코드 구조로 들어갑니다.",
+    "nodeIds": ["document:README.md"]
+  },
+  {
+    "order": 2,
+    "title": "애플리케이션 진입점 (부트)",
+    "description": "app/layout.tsx는 App Router의 루트 셸로, 모든 페이지를 감싸는 최상위 진입점입니다. 전역 메타데이터·폰트·글로벌 CSS를 설정하고 LanguageProvider와 ClientLayout으로 화면을 감싼 뒤 조직 JSON-LD를 주입합니다. 그 안의 app/page.tsx가 홈으로, 커스터마이즈 카탈로그·갤러리·FAQ·사이트 설정을 서버에서 병렬 조회해 여러 섹션을 조합하는 서버 컴포넌트입니다.",
+    "nodeIds": ["file:app/layout.tsx", "file:app/page.tsx"],
+    "languageLesson": "Next.js App Router에서 layout.tsx는 자식 라우트를 감싸는 영속 셸이고 page.tsx가 실제 화면입니다. 기본이 React Server Component라 await로 데이터를 직접 조회할 수 있고, 'use client' 선언이 있어야 브라우저 상호작용(useState 등)이 가능합니다."
+  },
+  {
+    "order": 3,
+    "title": "공유 레이아웃: Header·Footer",
+    "description": "2단계의 ClientLayout이 실제로 렌더링하는 공통 레이아웃 컴포넌트들입니다. Header.tsx는 호버로 펼쳐지는 메가 메뉴 드롭다운과 모바일 햄버거 메뉴, 활성 경로 하이라이트, 다국어 토글을 갖춘 메인 네비게이션이고, Footer.tsx는 사이트 하단을 구성합니다. 모든 공개 페이지가 이 두 컴포넌트를 공유하므로 사이트의 뼈대에 해당합니다.",
+    "nodeIds": ["file:components/layout/ClientLayout.tsx", "file:components/layout/Header.tsx", "file:components/layout/Footer.tsx"]
+  },
+  {
+    "order": 4,
+    "title": "다국어(i18n) 기반",
+    "description": "3단계 Header의 언어 토글이 실제로 동작하는 방식입니다. LanguageContext가 전역 언어 상태(KR/EN/ES)를 localStorage에 저장하며 관리하고, useTranslation 훅이 현재 언어 컨텍스트를 읽어 dictionaries.ts의 해당 언어 사전을 반환합니다. 컴포넌트는 이 훅 하나로 번역 문구를 가져오므로, 앞으로 만나는 거의 모든 화면이 이 3개 파일에 의존합니다.",
+    "nodeIds": ["file:contexts/LanguageContext.tsx", "file:hooks/useTranslation.ts", "file:constants/dictionaries.ts"],
+    "languageLesson": "React Context + 커스텀 훅 패턴: Context가 전역 상태를 들고, useTranslation 같은 훅이 useContext를 감싸 '현재 언어의 번역만' 반환하는 깔끔한 소비 API를 만듭니다. 이렇게 하면 컴포넌트가 Context 내부 구조를 몰라도 됩니다."
+  },
+  {
+    "order": 5,
+    "title": "홈 섹션 컴포넌트",
+    "description": "홈페이지(2단계)가 조합하는 핵심 섹션들로, 위트의 섹션 합성 패턴을 잘 보여줍니다. HeroCarousel은 Supabase에서 활성 hero_slides를, SignatureLine은 시그니처 제품을, SNSGallery는 인스타그램 피드를 각각 서버에서 조회해 짝이 되는 Client 컴포넌트에 초기 데이터로 넘깁니다. '서버에서 데이터를 가져오고 클라이언트는 상호작용만 담당'하는 분리가 반복되는 핵심 관용구입니다.",
+    "nodeIds": ["file:components/sections/HeroCarousel.tsx", "file:components/sections/SignatureLine.tsx", "file:components/sections/SNSGallery.tsx"],
+    "languageLesson": "Server/Client 컴포넌트 분리 패턴: XxxSection.tsx(서버)가 데이터를 조회해 XxxClient.tsx(클라이언트)에 props로 주입합니다. 데이터 페칭은 서버에서, swiper 캐러셀 같은 브라우저 상호작용은 클라이언트에서 처리해 번들 크기와 보안을 함께 챙깁니다."
+  },
+  {
+    "order": 6,
+    "title": "제품 페이지: 고정 사이드바 필터",
+    "description": "프로젝트의 대표 인터랙션 패턴인 /products 화면입니다. app/products/page.tsx는 lib/products의 getProducts로 활성 제품과 사이드바 카테고리 구조를 조회해 ProductsPageClient에 넘기는 얇은 서버 래퍼이고(ISR revalidate 설정), ProductsPageClient.tsx가 항상 따라다니는 고정 사이드바 필터(S/M/L/XL/DESIGN)·스크롤 동기화·이미지 갤러리 모달·다국어를 구현한 대형 클라이언트 화면입니다. 이 '지속 필터' 패턴은 다른 페이지에도 재사용됩니다.",
+    "nodeIds": ["file:app/products/page.tsx", "file:app/products/ProductsPageClient.tsx", "file:lib/products.ts"]
+  },
+  {
+    "order": 7,
+    "title": "솔루션 템플릿 패턴",
+    "description": "솔루션 영역은 화면마다 코드를 복제하지 않고 하나의 템플릿을 재사용합니다. SolutionTemplate.tsx는 4개 서브페이지(시큐리티/네트워크/IoT/에너지)가 공유하는 프레젠테이션 컴포넌트로, 주입된 SolutionPackageData를 받아 현재 언어에 맞는 히어로·패키지 네비게이션·추천 구성·도입 효과 섹션을 렌더링합니다. 데이터만 바꿔 끼우면 새 솔루션 페이지가 만들어지는 데이터 주도 설계입니다.",
+    "nodeIds": ["file:components/solution/SolutionTemplate.tsx"]
+  },
+  {
+    "order": 8,
+    "title": "커스터마이즈 Configurator",
+    "description": "사이트에서 가장 복잡한 기능인 /customize 맞춤 견적 도구입니다. app/customize/page.tsx가 공개 카탈로그와 사이트 설정을 서버에서 조회해 CustomizeConfigurator에 넘기면, 이 최상위 클라이언트 컴포넌트가 스텝·선택 옵션·견적 상태를 관리하고 URL 동기화·견적서 출력·상담 신청 제출을 오케스트레이션합니다. lib/customize/types.ts가 모델·옵션·카테고리·견적 등 이 도메인 전체의 타입 어휘를 정의합니다.",
+    "nodeIds": ["file:app/customize/page.tsx", "file:components/customize/CustomizeConfigurator.tsx", "file:lib/customize/types.ts"]
+  },
+  {
+    "order": 9,
+    "title": "가격 계산 로직",
+    "description": "Configurator의 두뇌에 해당하는 순수 로직 모듈입니다. priceCalculator.ts는 원화(₩) 포맷팅, 기본 선택 계산, 옵션 충돌 토글, 최종 견적 산출, 그리고 설정을 URL로 인코딩/디코딩하는 함수를 제공합니다. UI(8단계)와 분리된 순수 함수라 단위 테스트가 쉽고, fan-in이 높아 커스터마이즈 곳곳에서 재사용됩니다.",
+    "nodeIds": ["file:lib/customize/priceCalculator.ts"],
+    "languageLesson": "UI에서 분리된 순수 함수(같은 입력 → 같은 출력, 부수효과 없음)는 견적·충돌 같은 비즈니스 규칙을 담기에 이상적입니다. React 상태와 얽히지 않아 테스트하기 쉽고(11단계에서 검증), 서버·클라이언트 어디서든 재사용됩니다."
+  },
+  {
+    "order": 10,
+    "title": "Server Action 데이터 계층",
+    "description": "공개 화면과 데이터베이스를 잇는 서버 측 쓰기 계층입니다. customize-actions.ts는 모델/카테고리/옵션 카탈로그 로드와 공개 상담 접수·관리자 CRUD를 모두 처리하고, submit-inquiry.ts는 레이트리밋 가드와 zod 검증을 거쳐 문의를 저장하며, cms-actions.ts는 홈 히어로 슬라이드·시그니처 제품을 관리하고 변경 시 revalidatePath로 캐시를 무효화합니다. 앞서 본 폼과 CMS의 '제출' 버튼들이 결국 여기로 모입니다.",
+    "nodeIds": ["file:app/actions/customize-actions.ts", "file:app/actions/submit-inquiry.ts", "file:app/actions/cms-actions.ts"],
+    "languageLesson": "Server Action('use server')은 클라이언트가 직접 호출하지만 서버에서만 실행되는 함수로, 별도 API 라우트 없이 폼 제출과 DB 변경을 처리합니다. 신뢰 경계이므로 zod 검증과 레이트리밋 가드를 반드시 통과시켜야 합니다."
+  },
+  {
+    "order": 11,
+    "title": "Supabase 클라이언트 & 데이터 접근",
+    "description": "모든 Server Action이 데이터에 닿기 위해 거치는 공유 기반입니다. lib/supabase.ts는 공개용 anon 클라이언트와 service-role 관리자 클라이언트를 만드는 팩토리이고, types/supabase.ts는 DB 스키마에서 생성된 타입으로 fan-in이 가장 높아 쿼리 전체에 타입 안전성을 부여합니다. site-settings.server.ts는 site_settings 테이블을 unstable_cache로 캐싱하며 값을 검증해 읽어 옵니다.",
+    "nodeIds": ["file:lib/supabase.ts", "file:types/supabase.ts", "file:lib/site-settings.server.ts"]
+  },
+  {
+    "order": 12,
+    "title": "데이터베이스 스키마 & RLS",
+    "description": "지금까지의 모든 조회·저장이 최종적으로 안착하는 데이터 모델입니다. supabase/schema.sql은 PostgreSQL 전체 스키마 덤프로, 제품·솔루션·문의·커스터마이즈 컨피규레이터·보도자료 등 20개 테이블과 인덱스, 그리고 RLS(Row Level Security) 정책을 정의합니다. 11단계의 anon/admin 클라이언트가 어떤 데이터에 접근할 수 있는지는 바로 이 RLS 정책이 결정합니다.",
+    "nodeIds": ["schema:supabase/schema.sql"],
+    "languageLesson": "Supabase RLS는 테이블 행 단위 접근 제어를 DB 자체에서 강제합니다. anon 키로는 공개 데이터만 읽히고, service-role 키는 정책을 우회합니다 — 그래서 service-role 클라이언트는 절대 브라우저에 노출하면 안 됩니다."
+  },
+  {
+    "order": 13,
+    "title": "관리자 CMS 패널",
+    "description": "공개 사이트의 콘텐츠를 운영하는 /admin 영역입니다. app/admin/layout.tsx는 requireAdmin으로 세션을 검증해 비인가 사용자를 /login으로 보낸 뒤 AdminShell로 자식을 감싸고, AdminSidebar.tsx가 섹션별 메뉴·활성 표시·로그아웃을 제공합니다. DashboardContainer.tsx는 analytics Server Action들을 Promise.all로 병렬 호출해 인사이트 대시보드 데이터를 로드합니다. 여기서 바꾼 제품·갤러리·슬라이드가 앞 단계의 공개 화면에 반영됩니다.",
+    "nodeIds": ["file:app/admin/layout.tsx", "file:components/admin/AdminSidebar.tsx", "file:app/admin/DashboardContainer.tsx"]
+  },
+  {
+    "order": 14,
+    "title": "인증 & 미들웨어 (이중 보안)",
+    "description": "관리자 영역을 지키는 보안 게이트입니다. 루트 middleware.ts가 정적 경로를 제외한 모든 요청에서 Supabase 세션을 갱신하고, utils/supabase/middleware.ts 헬퍼가 쿠키를 동기화하며 비로그인 상태로 /admin/* 접근 시 /login으로 리다이렉트합니다(1차 방어). 13단계의 admin layout이 requireAdmin(lib/admin-auth.ts)으로 다시 검증해 2차 방어를 이루고, admin-permissions.ts가 allowlist·@weet.com 도메인 규칙으로 허용 이메일을 판정합니다.",
+    "nodeIds": ["file:middleware.ts", "file:utils/supabase/middleware.ts", "file:lib/admin-auth.ts", "file:lib/admin-permissions.ts"],
+    "languageLesson": "Next.js middleware는 라우트 도달 전 Edge에서 실행돼 세션 갱신·리다이렉트에 적합하지만, 우회 가능성을 고려해 단독 의존하지 않습니다. 미들웨어(1차)와 서버 layout의 requireAdmin(2차)을 겹치는 다층 방어(defense-in-depth)가 핵심입니다."
+  },
+  {
+    "order": 15,
+    "title": "테스트 & 설정 (캡스톤)",
+    "description": "투어를 마무리하며 코드 품질과 빌드 구성을 확인합니다. priceCalculator.test.ts는 9단계 가격 로직(견적·충돌·인코딩)을 Vitest 단위 테스트로 검증하고, customize-configurator.spec.ts는 8단계 Configurator의 모델·옵션 선택과 견적 흐름을 Playwright E2E로 검증합니다. package.json은 dev/build/start/lint/test 스크립트와 Next.js 16·React 19·Supabase 등 의존성을 정의하며, 모든 변경은 push 시 Vercel로 자동 배포됩니다.",
+    "nodeIds": ["file:lib/customize/__tests__/priceCalculator.test.ts", "file:e2e/customize-configurator.spec.ts", "config:package.json"],
+    "languageLesson": "테스트 피라미드: 빠르고 좁은 단위 테스트(Vitest)로 순수 로직을, 느리지만 넓은 E2E(Playwright)로 사용자 흐름 전체를 검증합니다. 순수 함수(priceCalculator)는 단위 테스트가 쉬워, 로직과 UI를 분리한 9단계 설계의 실익이 여기서 드러납니다."
+  }
+]

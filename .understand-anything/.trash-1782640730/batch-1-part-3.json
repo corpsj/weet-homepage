@@ -1,0 +1,680 @@
+{
+  "nodes": [
+    {
+      "id": "file:components/ui/radio-group.tsx",
+      "type": "file",
+      "name": "radio-group.tsx",
+      "filePath": "components/ui/radio-group.tsx",
+      "summary": "Radix 기반 RadioGroup과 RadioGroupItem UI 프리미티브.",
+      "tags": [
+        "component",
+        "ui",
+        "input",
+        "presentational"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/ui/scroll-area.tsx",
+      "type": "file",
+      "name": "scroll-area.tsx",
+      "filePath": "components/ui/scroll-area.tsx",
+      "summary": "Radix 기반 ScrollArea와 ScrollBar UI 프리미티브.",
+      "tags": [
+        "component",
+        "ui",
+        "scroll",
+        "presentational"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/ui/separator.tsx",
+      "type": "file",
+      "name": "separator.tsx",
+      "filePath": "components/ui/separator.tsx",
+      "summary": "수평/수직 방향을 지원하는 Separator UI 프리미티브.",
+      "tags": [
+        "component",
+        "ui",
+        "presentational"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/ui/sheet.tsx",
+      "type": "file",
+      "name": "sheet.tsx",
+      "filePath": "components/ui/sheet.tsx",
+      "summary": "Radix Dialog 기반 Sheet UI 프리미티브 집합으로, 측면 슬라이드 패널과 합성 파트를 export한다.",
+      "tags": [
+        "component",
+        "ui",
+        "sheet",
+        "presentational"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/ui/tabs.tsx",
+      "type": "file",
+      "name": "tabs.tsx",
+      "filePath": "components/ui/tabs.tsx",
+      "summary": "variant를 지원하는 Radix 기반 Tabs UI 프리미티브 집합.",
+      "tags": [
+        "component",
+        "ui",
+        "tabs",
+        "presentational"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/ui/textarea.tsx",
+      "type": "file",
+      "name": "textarea.tsx",
+      "filePath": "components/ui/textarea.tsx",
+      "summary": "공통 스타일이 적용된 재사용 Textarea UI 프리미티브.",
+      "tags": [
+        "component",
+        "ui",
+        "input",
+        "presentational"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/ui/sheet.tsx:SheetContent",
+      "type": "function",
+      "name": "SheetContent",
+      "filePath": "components/ui/sheet.tsx",
+      "lineRange": [
+        39,
+        81
+      ],
+      "summary": "방향(side)과 닫기 버튼 옵션을 받아 측면 슬라이드 시트 본문을 렌더링하는 합성 파트.",
+      "tags": [
+        "component",
+        "ui",
+        "sheet"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/customize/__tests__/priceCalculator.test.ts",
+      "type": "file",
+      "name": "priceCalculator.test.ts",
+      "filePath": "lib/customize/__tests__/priceCalculator.test.ts",
+      "summary": "가격 계산 로직(견적 산출, 옵션 충돌 토글, 설정 인코딩/디코딩 등)을 검증하는 단위 테스트 모음.",
+      "tags": [
+        "test",
+        "pricing",
+        "unit-test"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/customize/config.ts",
+      "type": "file",
+      "name": "config.ts",
+      "filePath": "lib/customize/config.ts",
+      "summary": "커스터마이즈 도메인의 정적 설정값으로, 모델 ID·카테고리 순서/메타·구매 일정·토지 유형·예산 범위 등을 정의한다.",
+      "tags": [
+        "config",
+        "constants",
+        "configurator",
+        "data-model"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/customize/priceCalculator.ts",
+      "type": "file",
+      "name": "priceCalculator.ts",
+      "filePath": "lib/customize/priceCalculator.ts",
+      "summary": "커스터마이즈 핵심 가격/선택 로직 모듈로, 원화 포맷팅·기본 선택 계산·옵션 충돌 토글·견적 산출·설정 URL 인코딩/디코딩을 제공한다.",
+      "tags": [
+        "pricing",
+        "utility",
+        "serialization",
+        "core",
+        "configurator"
+      ],
+      "complexity": "complex",
+      "languageNotes": "순수 함수 위주의 도메인 로직 모듈로 Buffer/btoa 양쪽을 지원하는 base64url 인코딩을 포함한다."
+    },
+    {
+      "id": "function:lib/customize/priceCalculator.ts:formatWon",
+      "type": "function",
+      "name": "formatWon",
+      "filePath": "lib/customize/priceCalculator.ts",
+      "lineRange": [
+        12,
+        14
+      ],
+      "summary": "숫자 금액을 음수 방지 처리 후 ₩ 접두 원화 문자열로 포맷한다.",
+      "tags": [
+        "pricing",
+        "configurator",
+        "pricing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/customize/priceCalculator.ts:formatModelStartPrice",
+      "type": "function",
+      "name": "formatModelStartPrice",
+      "filePath": "lib/customize/priceCalculator.ts",
+      "lineRange": [
+        16,
+        18
+      ],
+      "summary": "모델 시작가를 원화 문자열로 포맷한다.",
+      "tags": [
+        "pricing",
+        "configurator",
+        "pricing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/customize/priceCalculator.ts:optionsForModel",
+      "type": "function",
+      "name": "optionsForModel",
+      "filePath": "lib/customize/priceCalculator.ts",
+      "lineRange": [
+        30,
+        32
+      ],
+      "summary": "특정 모델에서 사용 가능한 옵션만 필터링한다.",
+      "tags": [
+        "utility",
+        "configurator",
+        "pricing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/customize/priceCalculator.ts:getDefaultSelections",
+      "type": "function",
+      "name": "getDefaultSelections",
+      "filePath": "lib/customize/priceCalculator.ts",
+      "lineRange": [
+        34,
+        49
+      ],
+      "summary": "카탈로그와 모델 ID로 카테고리별 기본 선택 옵션 맵을 생성한다.",
+      "tags": [
+        "configurator",
+        "configurator",
+        "pricing"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:lib/customize/priceCalculator.ts:selectedOptionList",
+      "type": "function",
+      "name": "selectedOptionList",
+      "filePath": "lib/customize/priceCalculator.ts",
+      "lineRange": [
+        55,
+        58
+      ],
+      "summary": "선택 상태를 해당 모델의 실제 옵션 객체 목록으로 변환한다.",
+      "tags": [
+        "utility",
+        "configurator",
+        "pricing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/customize/priceCalculator.ts:hasConflict",
+      "type": "function",
+      "name": "hasConflict",
+      "filePath": "lib/customize/priceCalculator.ts",
+      "lineRange": [
+        66,
+        71
+      ],
+      "summary": "선택된 옵션 집합 내에 상호 충돌하는 옵션이 있는지 검사한다.",
+      "tags": [
+        "validation",
+        "configurator",
+        "pricing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/customize/priceCalculator.ts:toggleOptionSelection",
+      "type": "function",
+      "name": "toggleOptionSelection",
+      "filePath": "lib/customize/priceCalculator.ts",
+      "lineRange": [
+        73,
+        99
+      ],
+      "summary": "옵션 선택을 토글하면서 충돌 옵션을 자동 제거해 일관된 선택 상태를 반환한다.",
+      "tags": [
+        "configurator",
+        "configurator",
+        "pricing"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:lib/customize/priceCalculator.ts:calculateEstimate",
+      "type": "function",
+      "name": "calculateEstimate",
+      "filePath": "lib/customize/priceCalculator.ts",
+      "lineRange": [
+        101,
+        115
+      ],
+      "summary": "모델과 선택 옵션으로 기본가·옵션 합계·총 견적을 산출한다.",
+      "tags": [
+        "pricing",
+        "configurator",
+        "pricing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/customize/priceCalculator.ts:encodeBase64Url",
+      "type": "function",
+      "name": "encodeBase64Url",
+      "filePath": "lib/customize/priceCalculator.ts",
+      "lineRange": [
+        125,
+        134
+      ],
+      "summary": "문자열을 URL 안전 base64로 인코딩한다(Node/브라우저 양쪽 지원).",
+      "tags": [
+        "serialization",
+        "configurator",
+        "pricing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/customize/priceCalculator.ts:decodeBase64Url",
+      "type": "function",
+      "name": "decodeBase64Url",
+      "filePath": "lib/customize/priceCalculator.ts",
+      "lineRange": [
+        136,
+        145
+      ],
+      "summary": "URL 안전 base64 문자열을 원래 문자열로 디코딩한다.",
+      "tags": [
+        "serialization",
+        "configurator",
+        "pricing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/customize/priceCalculator.ts:encodeConfig",
+      "type": "function",
+      "name": "encodeConfig",
+      "filePath": "lib/customize/priceCalculator.ts",
+      "lineRange": [
+        147,
+        155
+      ],
+      "summary": "모델 ID와 선택 옵션을 URL 공유용 인코딩 문자열로 직렬화한다.",
+      "tags": [
+        "serialization",
+        "configurator",
+        "pricing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/customize/priceCalculator.ts:decodeConfig",
+      "type": "function",
+      "name": "decodeConfig",
+      "filePath": "lib/customize/priceCalculator.ts",
+      "lineRange": [
+        157,
+        169
+      ],
+      "summary": "인코딩된 설정 문자열을 모델 ID와 선택 옵션으로 복원한다.",
+      "tags": [
+        "serialization",
+        "configurator",
+        "pricing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:lib/customize/types.ts",
+      "type": "file",
+      "name": "types.ts",
+      "filePath": "lib/customize/types.ts",
+      "summary": "커스터마이즈 도메인의 TypeScript 타입/인터페이스 정의 모음(모델·옵션·카테고리·카탈로그·견적·선택 상태 등).",
+      "tags": [
+        "type-definition",
+        "configurator",
+        "data-model"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/utils.ts",
+      "type": "file",
+      "name": "utils.ts",
+      "filePath": "lib/utils.ts",
+      "summary": "clsx와 tailwind-merge를 결합해 Tailwind 클래스명을 병합하는 cn() 헬퍼를 제공하는 공용 유틸리티.",
+      "tags": [
+        "utility",
+        "tailwind",
+        "helpers"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:components/ui/sheet.tsx",
+      "target": "function:components/ui/sheet.tsx:SheetContent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/ui/sheet.tsx",
+      "target": "function:components/ui/sheet.tsx:SheetContent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "file:lib/customize/__tests__/priceCalculator.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:formatWon",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:formatWon",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:formatModelStartPrice",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:formatModelStartPrice",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:optionsForModel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:optionsForModel",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:getDefaultSelections",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:getDefaultSelections",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:selectedOptionList",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:selectedOptionList",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:hasConflict",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:hasConflict",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:toggleOptionSelection",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:toggleOptionSelection",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:calculateEstimate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:calculateEstimate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:encodeBase64Url",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:encodeBase64Url",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:decodeBase64Url",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:decodeBase64Url",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:encodeConfig",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:encodeConfig",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:decodeConfig",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "function:lib/customize/priceCalculator.ts:decodeConfig",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:lib/customize/priceCalculator.ts:calculateEstimate",
+      "target": "function:lib/customize/priceCalculator.ts:selectedOptionList",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:lib/customize/priceCalculator.ts:toggleOptionSelection",
+      "target": "function:lib/customize/priceCalculator.ts:getDefaultSelections",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:lib/customize/priceCalculator.ts:getDefaultSelections",
+      "target": "function:lib/customize/priceCalculator.ts:optionsForModel",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:lib/customize/priceCalculator.ts:selectedOptionList",
+      "target": "function:lib/customize/priceCalculator.ts:optionsForModel",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:lib/customize/priceCalculator.ts:encodeConfig",
+      "target": "function:lib/customize/priceCalculator.ts:encodeBase64Url",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:lib/customize/priceCalculator.ts:decodeConfig",
+      "target": "function:lib/customize/priceCalculator.ts:decodeBase64Url",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/ui/radio-group.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/ui/scroll-area.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/ui/separator.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/ui/sheet.tsx",
+      "target": "file:components/ui/button.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/ui/sheet.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/ui/tabs.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/ui/textarea.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:lib/customize/__tests__/priceCalculator.test.ts",
+      "target": "file:lib/customize/priceCalculator.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:lib/customize/__tests__/priceCalculator.test.ts",
+      "target": "file:lib/customize/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:lib/customize/priceCalculator.ts",
+      "target": "file:lib/customize/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

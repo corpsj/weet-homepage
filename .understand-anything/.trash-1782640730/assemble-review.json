@@ -1,0 +1,20 @@
+{
+  "fixedSectionOk": true,
+  "nodesRecovered": 4,
+  "edgesRestored": 6,
+  "crossBatchEdgesAdded": 0,
+  "typesRemapped": 0,
+  "complexityRemapped": 0,
+  "notes": [
+    "Fixed 섹션 정상: func:→function: 170건 등은 LLM 출력의 체계적 패턴으로 예상 범위. importMap 219개 항목 중 imports 엣지 복구 0건 = 분석기가 import를 모두 정확히 방출함.",
+    "기계적 병합 결과 무결성 양호: dangling 엣지 0, id 누락 0, 중복 노드/엣지 0, complexity는 simple/moderate/complex 3종으로 완전 정규화, 노드 타입 모두 유효(function/file/table/document/config/schema).",
+    "filePath 없는 노드 20개는 모두 table 노드(table:supabase/schema.sql:<name>). 출처가 id에 인코딩되는 정상 규약이라 조치 불필요.",
+    "Step3 cross-batch imports 검증: importMap 393개 관계 = 기존 imports 엣지 393개로 100% 일치. 추가할 누락 엣지 없음.",
+    "Dropped calls 엣지 9건 중 6건 복구: optionPriceDisplay(3 caller), absoluteUrl, selectedOptionIds, deleteCustomizeIncludedSpec. 각 대상 함수는 실제 소스에 존재하고 의미가 있음.",
+    "중요 발견: optionPriceDisplay 3건의 dropped 엣지는 LLM이 target 경로를 잘못 적은 케이스(lib/customize/helpers.ts). 실제 파일은 components/customize/lib/helpers.ts이며 이 파일 노드와 형제 함수 6개(hasOptionInfo 등)는 이미 그래프에 존재. 같은 import 라인에서 함께 import되는 hasOptionInfo는 이미 calls 엣지가 있어, 올바른 경로에 노드 생성 후 재연결함.",
+    "복구한 4개 함수 노드에는 형제 규약대로 file→fn contains(weight 1)·exports(weight 0.8) 엣지를, caller→fn calls(weight 0.8) 엣지를 추가함.",
+    "Dropped 엣지 3건은 의도적으로 유지: cn(lib/utils.ts, RootLayout·SolutionTemplate) 및 telHref(lib/site-settings.ts) — className 병합/tel: href 변환용 사소한 one-liner로 significance 필터 하위. 파일 단위 imports 엣지가 이미 존재해 의존성 손실 없음(프로토콜·병합 리포트 가이드 준수).",
+    "의미가 뒤집힌(inverted) 엣지나 잘못된 방향의 엣지는 발견되지 않음.",
+    "최종: nodes 530→534, edges 1197→1211. JSON 유효성 확인 완료."
+  ]
+}

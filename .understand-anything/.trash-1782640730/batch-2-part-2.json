@@ -1,0 +1,1038 @@
+{
+  "nodes": [
+    {
+      "id": "file:components/admin/products/DeleteProductButton.tsx",
+      "type": "file",
+      "name": "DeleteProductButton.tsx",
+      "filePath": "components/admin/products/DeleteProductButton.tsx",
+      "summary": "제품 삭제 버튼 클라이언트 컴포넌트. confirmToast로 확인을 받은 뒤 deleteProduct Server Action을 호출한다.",
+      "tags": [
+        "component",
+        "client-component",
+        "admin",
+        "delete-action"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/admin/products/Pagination.tsx",
+      "type": "file",
+      "name": "Pagination.tsx",
+      "filePath": "components/admin/products/Pagination.tsx",
+      "summary": "재사용 가능한 페이지네이션 클라이언트 컴포넌트. 총 항목수/페이지당 항목수/현재 페이지로 페이지 버튼을 렌더링한다.",
+      "tags": [
+        "component",
+        "client-component",
+        "pagination",
+        "ui",
+        "utility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/admin/products/ProductGrid.tsx",
+      "type": "file",
+      "name": "ProductGrid.tsx",
+      "filePath": "components/admin/products/ProductGrid.tsx",
+      "summary": "관리자 제품 그리드/리스트 뷰 클라이언트 컴포넌트. 그리드 카드와 리스트 행, 공개 준비도 점수, 카테고리/상태 필터, 페이지네이션, 모달 편집을 조합한다.",
+      "tags": [
+        "component",
+        "client-component",
+        "admin",
+        "grid",
+        "console"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:components/admin/products/ProductModal.tsx",
+      "type": "file",
+      "name": "ProductModal.tsx",
+      "filePath": "components/admin/products/ProductModal.tsx",
+      "summary": "제품 생성/편집 모달 래퍼 클라이언트 컴포넌트. 열림 상태에 따라 폼을 표시하는 다이얼로그 컨테이너.",
+      "tags": [
+        "component",
+        "client-component",
+        "admin",
+        "modal"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/admin/products/ProductStatusToggle.tsx",
+      "type": "file",
+      "name": "ProductStatusToggle.tsx",
+      "filePath": "components/admin/products/ProductStatusToggle.tsx",
+      "summary": "제품 노출 상태 토글 클라이언트 컴포넌트. toggleProductStatus Server Action을 호출하며 낙관적으로 활성 상태를 전환한다.",
+      "tags": [
+        "component",
+        "client-component",
+        "admin",
+        "toggle"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/sections/SignatureLine.tsx",
+      "type": "file",
+      "name": "SignatureLine.tsx",
+      "filePath": "components/sections/SignatureLine.tsx",
+      "summary": "홈 시그니처 제품 라인 서버 컴포넌트. getSignatureProducts로 활성 시그니처 제품을 조회해 SignatureLineClient에 전달한다.",
+      "tags": [
+        "component",
+        "server-component",
+        "section",
+        "supabase"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/sections/SignatureLineClient.tsx",
+      "type": "file",
+      "name": "SignatureLineClient.tsx",
+      "filePath": "components/sections/SignatureLineClient.tsx",
+      "summary": "시그니처 제품 라인 클라이언트 컴포넌트. useTranslation으로 다국어 카피를 적용해 시그니처 제품들을 렌더링한다.",
+      "tags": [
+        "component",
+        "client-component",
+        "section",
+        "i18n"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/date-format.ts",
+      "type": "file",
+      "name": "date-format.ts",
+      "filePath": "lib/date-format.ts",
+      "summary": "한국 시간(KST) 기준 날짜/날짜시간 포맷 유틸리티. 관리자 콘솔 등에서 created_at 등의 ISO 문자열을 사람이 읽는 형식으로 변환한다.",
+      "tags": [
+        "utility",
+        "date",
+        "formatting",
+        "i18n"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:lib/products.ts",
+      "type": "file",
+      "name": "products.ts",
+      "filePath": "lib/products.ts",
+      "summary": "공개 제품 데이터 접근 헬퍼. Supabase products 테이블에서 활성 제품을 조회하고 사이드바 카테고리 구조를 빌드하는 함수들을 제공한다.",
+      "tags": [
+        "data-access",
+        "supabase",
+        "utility",
+        "catalog"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/projects/__tests__/publicProjects.test.ts",
+      "type": "file",
+      "name": "publicProjects.test.ts",
+      "filePath": "lib/projects/__tests__/publicProjects.test.ts",
+      "summary": "publicProjects 모듈의 공개 노출 판정 로직을 검증하는 vitest 테스트. 제목/이미지/위치/완료일/상태 등 공개 준비 조건을 케이스별로 확인한다.",
+      "tags": [
+        "test",
+        "vitest",
+        "validation",
+        "projects"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/projects/publicProjects.ts",
+      "type": "file",
+      "name": "publicProjects.ts",
+      "filePath": "lib/projects/publicProjects.ts",
+      "summary": "프로젝트가 공개 포트폴리오에 노출 가능한지 판정하는 순수 함수 모음. 유효한 대표 이미지, 의미있는 텍스트, 합리적 완료일, 게시 상태 등을 검사한다.",
+      "tags": [
+        "utility",
+        "validation",
+        "projects",
+        "pure-function"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/public-submission-guard.ts",
+      "type": "file",
+      "name": "public-submission-guard.ts",
+      "filePath": "lib/public-submission-guard.ts",
+      "summary": "공개 폼 제출에 대한 레이트리밋/남용 방지 가드. 클라이언트 식별자 정규화와 인메모리 버킷 및 내구성 한도 검사로 과도한 제출을 차단한다.",
+      "tags": [
+        "security",
+        "rate-limit",
+        "validation",
+        "utility",
+        "supabase"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:lib/supabase.ts",
+      "type": "file",
+      "name": "supabase.ts",
+      "filePath": "lib/supabase.ts",
+      "summary": "Supabase 클라이언트 팩토리. 공개용 anon 클라이언트와 service-role 관리자 클라이언트(getSupabaseAdmin/supabaseAdmin)를 생성·노출한다.",
+      "tags": [
+        "supabase",
+        "client",
+        "singleton",
+        "data-access"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:types/supabase.ts",
+      "type": "file",
+      "name": "supabase.ts",
+      "filePath": "types/supabase.ts",
+      "summary": "Supabase가 생성한 데이터베이스 타입 정의 파일. 모든 테이블의 Row/Insert/Update 타입과 편의 별칭(Project 등) 및 Constants를 export한다.",
+      "tags": [
+        "type-definition",
+        "supabase",
+        "generated",
+        "data-model"
+      ],
+      "complexity": "complex",
+      "languageNotes": "Supabase CLI가 자동 생성한 Database 제네릭 타입. 직접 수정하지 말고 재생성하는 것이 원칙이다."
+    },
+    {
+      "id": "function:components/admin/products/DeleteProductButton.tsx:DeleteProductButton",
+      "type": "function",
+      "name": "DeleteProductButton",
+      "filePath": "components/admin/products/DeleteProductButton.tsx",
+      "lineRange": [
+        14,
+        51
+      ],
+      "summary": "confirmToast 확인 후 deleteProduct 액션을 호출하는 삭제 버튼 컴포넌트.",
+      "tags": [
+        "component",
+        "client-component",
+        "delete-action"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/admin/products/Pagination.tsx:Pagination",
+      "type": "function",
+      "name": "Pagination",
+      "filePath": "components/admin/products/Pagination.tsx",
+      "lineRange": [
+        13,
+        114
+      ],
+      "summary": "총 항목/페이지당 항목/현재 페이지로 페이지 버튼을 렌더링하는 재사용 컴포넌트.",
+      "tags": [
+        "component",
+        "client-component",
+        "pagination",
+        "ui"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/admin/products/ProductGrid.tsx:getProductReadinessScore",
+      "type": "function",
+      "name": "getProductReadinessScore",
+      "filePath": "components/admin/products/ProductGrid.tsx",
+      "lineRange": [
+        38,
+        48
+      ],
+      "summary": "제품의 필수 필드 충족도를 점수화해 공개 준비도를 계산한다.",
+      "tags": [
+        "utility",
+        "validation",
+        "scoring"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/admin/products/ProductGrid.tsx:GridCard",
+      "type": "function",
+      "name": "GridCard",
+      "filePath": "components/admin/products/ProductGrid.tsx",
+      "lineRange": [
+        51,
+        135
+      ],
+      "summary": "제품 한 건을 카드 형태로 렌더링하는 그리드 셀 컴포넌트.",
+      "tags": [
+        "component",
+        "client-component",
+        "card"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/admin/products/ProductGrid.tsx:ListRow",
+      "type": "function",
+      "name": "ListRow",
+      "filePath": "components/admin/products/ProductGrid.tsx",
+      "lineRange": [
+        138,
+        212
+      ],
+      "summary": "제품 한 건을 행 형태로 렌더링하는 리스트 뷰 컴포넌트.",
+      "tags": [
+        "component",
+        "client-component",
+        "list"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/admin/products/ProductGrid.tsx:ProductGrid",
+      "type": "function",
+      "name": "ProductGrid",
+      "filePath": "components/admin/products/ProductGrid.tsx",
+      "lineRange": [
+        214,
+        407
+      ],
+      "summary": "그리드/리스트 전환·필터·페이지네이션·모달 편집을 조합한 관리자 제품 그리드.",
+      "tags": [
+        "component",
+        "client-component",
+        "admin",
+        "grid"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:components/admin/products/ProductModal.tsx:ProductModal",
+      "type": "function",
+      "name": "ProductModal",
+      "filePath": "components/admin/products/ProductModal.tsx",
+      "lineRange": [
+        24,
+        73
+      ],
+      "summary": "열림 상태에 따라 제품 폼을 표시하는 모달 다이얼로그 컨테이너.",
+      "tags": [
+        "component",
+        "client-component",
+        "modal"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/admin/products/ProductStatusToggle.tsx:ProductStatusToggle",
+      "type": "function",
+      "name": "ProductStatusToggle",
+      "filePath": "components/admin/products/ProductStatusToggle.tsx",
+      "lineRange": [
+        13,
+        62
+      ],
+      "summary": "toggleProductStatus를 호출해 제품 노출 상태를 낙관적으로 전환하는 토글.",
+      "tags": [
+        "component",
+        "client-component",
+        "toggle"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/sections/SignatureLine.tsx:getSignatureProducts",
+      "type": "function",
+      "name": "getSignatureProducts",
+      "filePath": "components/sections/SignatureLine.tsx",
+      "lineRange": [
+        5,
+        20
+      ],
+      "summary": "활성 시그니처 제품을 Supabase에서 조회한다.",
+      "tags": [
+        "server-component",
+        "query",
+        "supabase"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/sections/SignatureLineClient.tsx:SignatureLineClient",
+      "type": "function",
+      "name": "SignatureLineClient",
+      "filePath": "components/sections/SignatureLineClient.tsx",
+      "lineRange": [
+        12,
+        79
+      ],
+      "summary": "useTranslation 다국어 카피로 시그니처 제품을 렌더링하는 섹션 클라이언트 컴포넌트.",
+      "tags": [
+        "component",
+        "client-component",
+        "section",
+        "i18n"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:lib/date-format.ts:formatKstDate",
+      "type": "function",
+      "name": "formatKstDate",
+      "filePath": "lib/date-format.ts",
+      "lineRange": [
+        1,
+        13
+      ],
+      "summary": "ISO 문자열을 KST 기준 날짜 문자열로 포맷한다.",
+      "tags": [
+        "utility",
+        "date",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/date-format.ts:formatKstDateTime",
+      "type": "function",
+      "name": "formatKstDateTime",
+      "filePath": "lib/date-format.ts",
+      "lineRange": [
+        15,
+        29
+      ],
+      "summary": "ISO 문자열을 KST 기준 날짜시간 문자열로 포맷한다.",
+      "tags": [
+        "utility",
+        "date",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/products.ts:getProducts",
+      "type": "function",
+      "name": "getProducts",
+      "filePath": "lib/products.ts",
+      "lineRange": [
+        5,
+        18
+      ],
+      "summary": "활성 제품 전체를 표시 순서대로 조회한다.",
+      "tags": [
+        "data-access",
+        "query",
+        "supabase"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/products.ts:getProductsByCategory",
+      "type": "function",
+      "name": "getProductsByCategory",
+      "filePath": "lib/products.ts",
+      "lineRange": [
+        21,
+        35
+      ],
+      "summary": "사이즈 카테고리별 활성 제품을 조회한다.",
+      "tags": [
+        "data-access",
+        "query",
+        "supabase"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/products.ts:getProductById",
+      "type": "function",
+      "name": "getProductById",
+      "filePath": "lib/products.ts",
+      "lineRange": [
+        38,
+        51
+      ],
+      "summary": "id로 단일 제품을 조회한다.",
+      "tags": [
+        "data-access",
+        "query",
+        "supabase"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/products.ts:buildSidebarStructure",
+      "type": "function",
+      "name": "buildSidebarStructure",
+      "filePath": "lib/products.ts",
+      "lineRange": [
+        54,
+        87
+      ],
+      "summary": "제품 목록으로부터 사이드바 카테고리 트리 구조를 빌드한다.",
+      "tags": [
+        "utility",
+        "transform",
+        "catalog"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/projects/publicProjects.ts:getProjectHeroImage",
+      "type": "function",
+      "name": "getProjectHeroImage",
+      "filePath": "lib/projects/publicProjects.ts",
+      "lineRange": [
+        29,
+        33
+      ],
+      "summary": "유효한 대표 이미지 URL을 반환하거나 없으면 null을 반환한다.",
+      "tags": [
+        "utility",
+        "validation",
+        "pure-function"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/projects/publicProjects.ts:getProjectPublicIssues",
+      "type": "function",
+      "name": "getProjectPublicIssues",
+      "filePath": "lib/projects/publicProjects.ts",
+      "lineRange": [
+        35,
+        50
+      ],
+      "summary": "프로젝트가 공개 노출되지 못하는 사유(이미지/위치/완료일 등)를 배열로 수집한다.",
+      "tags": [
+        "utility",
+        "validation",
+        "pure-function"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/projects/publicProjects.ts:isPublicReadyProject",
+      "type": "function",
+      "name": "isPublicReadyProject",
+      "filePath": "lib/projects/publicProjects.ts",
+      "lineRange": [
+        52,
+        54
+      ],
+      "summary": "프로젝트가 공개 포트폴리오에 노출 가능한지 종합 판정한다.",
+      "tags": [
+        "utility",
+        "validation",
+        "pure-function"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/public-submission-guard.ts:durableLimitExceeded",
+      "type": "function",
+      "name": "durableLimitExceeded",
+      "filePath": "lib/public-submission-guard.ts",
+      "lineRange": [
+        46,
+        64
+      ],
+      "summary": "기준 시각 이후 제출 수를 집계해 내구성 레이트리밋 초과 여부를 판정한다.",
+      "tags": [
+        "security",
+        "rate-limit",
+        "query"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/public-submission-guard.ts:assertPublicSubmissionAllowed",
+      "type": "function",
+      "name": "assertPublicSubmissionAllowed",
+      "filePath": "lib/public-submission-guard.ts",
+      "lineRange": [
+        66,
+        105
+      ],
+      "summary": "클라이언트 식별자 기준 인메모리·내구성 한도를 검사해 과도한 공개 제출을 차단한다.",
+      "tags": [
+        "security",
+        "rate-limit",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:lib/supabase.ts:getSupabaseAdmin",
+      "type": "function",
+      "name": "getSupabaseAdmin",
+      "filePath": "lib/supabase.ts",
+      "lineRange": [
+        22,
+        40
+      ],
+      "summary": "service-role 키로 관리자 권한 Supabase 클라이언트를 생성한다.",
+      "tags": [
+        "supabase",
+        "factory",
+        "admin"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:components/admin/products/DeleteProductButton.tsx",
+      "target": "function:components/admin/products/DeleteProductButton.tsx:DeleteProductButton",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/admin/products/DeleteProductButton.tsx",
+      "target": "function:components/admin/products/DeleteProductButton.tsx:DeleteProductButton",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/admin/products/Pagination.tsx",
+      "target": "function:components/admin/products/Pagination.tsx:Pagination",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/admin/products/Pagination.tsx",
+      "target": "function:components/admin/products/Pagination.tsx:Pagination",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/admin/products/ProductGrid.tsx",
+      "target": "function:components/admin/products/ProductGrid.tsx:getProductReadinessScore",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/admin/products/ProductGrid.tsx",
+      "target": "function:components/admin/products/ProductGrid.tsx:GridCard",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/admin/products/ProductGrid.tsx",
+      "target": "function:components/admin/products/ProductGrid.tsx:ListRow",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/admin/products/ProductGrid.tsx",
+      "target": "function:components/admin/products/ProductGrid.tsx:ProductGrid",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/admin/products/ProductGrid.tsx",
+      "target": "function:components/admin/products/ProductGrid.tsx:ProductGrid",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/admin/products/ProductModal.tsx",
+      "target": "function:components/admin/products/ProductModal.tsx:ProductModal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/admin/products/ProductModal.tsx",
+      "target": "function:components/admin/products/ProductModal.tsx:ProductModal",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/admin/products/ProductStatusToggle.tsx",
+      "target": "function:components/admin/products/ProductStatusToggle.tsx:ProductStatusToggle",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/admin/products/ProductStatusToggle.tsx",
+      "target": "function:components/admin/products/ProductStatusToggle.tsx:ProductStatusToggle",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/sections/SignatureLine.tsx",
+      "target": "function:components/sections/SignatureLine.tsx:getSignatureProducts",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/sections/SignatureLineClient.tsx",
+      "target": "function:components/sections/SignatureLineClient.tsx:SignatureLineClient",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/sections/SignatureLineClient.tsx",
+      "target": "function:components/sections/SignatureLineClient.tsx:SignatureLineClient",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/date-format.ts",
+      "target": "function:lib/date-format.ts:formatKstDate",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/date-format.ts",
+      "target": "function:lib/date-format.ts:formatKstDate",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/date-format.ts",
+      "target": "function:lib/date-format.ts:formatKstDateTime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/date-format.ts",
+      "target": "function:lib/date-format.ts:formatKstDateTime",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/products.ts",
+      "target": "function:lib/products.ts:getProducts",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/products.ts",
+      "target": "function:lib/products.ts:getProducts",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/products.ts",
+      "target": "function:lib/products.ts:getProductsByCategory",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/products.ts",
+      "target": "function:lib/products.ts:getProductsByCategory",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/products.ts",
+      "target": "function:lib/products.ts:getProductById",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/products.ts",
+      "target": "function:lib/products.ts:getProductById",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/products.ts",
+      "target": "function:lib/products.ts:buildSidebarStructure",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/products.ts",
+      "target": "function:lib/products.ts:buildSidebarStructure",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/projects/publicProjects.ts",
+      "target": "function:lib/projects/publicProjects.ts:getProjectHeroImage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/projects/publicProjects.ts",
+      "target": "function:lib/projects/publicProjects.ts:getProjectHeroImage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/projects/publicProjects.ts",
+      "target": "function:lib/projects/publicProjects.ts:getProjectPublicIssues",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/projects/publicProjects.ts",
+      "target": "function:lib/projects/publicProjects.ts:getProjectPublicIssues",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/projects/publicProjects.ts",
+      "target": "function:lib/projects/publicProjects.ts:isPublicReadyProject",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/projects/publicProjects.ts",
+      "target": "function:lib/projects/publicProjects.ts:isPublicReadyProject",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/public-submission-guard.ts",
+      "target": "function:lib/public-submission-guard.ts:durableLimitExceeded",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/public-submission-guard.ts",
+      "target": "function:lib/public-submission-guard.ts:assertPublicSubmissionAllowed",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/public-submission-guard.ts",
+      "target": "function:lib/public-submission-guard.ts:assertPublicSubmissionAllowed",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/supabase.ts",
+      "target": "function:lib/supabase.ts:getSupabaseAdmin",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/supabase.ts",
+      "target": "function:lib/supabase.ts:getSupabaseAdmin",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/admin/products/DeleteProductButton.tsx",
+      "target": "file:app/actions/product-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/products/DeleteProductButton.tsx",
+      "target": "file:lib/ui/confirm.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/products/ProductGrid.tsx",
+      "target": "file:components/admin/ConsolePrimitives.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/products/ProductGrid.tsx",
+      "target": "file:components/admin/products/DeleteProductButton.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/products/ProductGrid.tsx",
+      "target": "file:components/admin/products/Pagination.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/products/ProductGrid.tsx",
+      "target": "file:components/admin/products/ProductModal.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/products/ProductGrid.tsx",
+      "target": "file:components/admin/products/ProductStatusToggle.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/products/ProductGrid.tsx",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/products/ProductModal.tsx",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/products/ProductStatusToggle.tsx",
+      "target": "file:app/actions/product-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/sections/SignatureLine.tsx",
+      "target": "file:components/sections/SignatureLineClient.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/sections/SignatureLine.tsx",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/sections/SignatureLine.tsx",
+      "target": "file:utils/supabase/server.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/sections/SignatureLineClient.tsx",
+      "target": "file:hooks/useTranslation.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/sections/SignatureLineClient.tsx",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:lib/products.ts",
+      "target": "file:lib/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:lib/products.ts",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:lib/projects/__tests__/publicProjects.test.ts",
+      "target": "file:lib/projects/publicProjects.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:lib/projects/__tests__/publicProjects.test.ts",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:lib/projects/publicProjects.ts",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:lib/public-submission-guard.ts",
+      "target": "file:lib/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:lib/supabase.ts",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:components/sections/SignatureLine.tsx:getSignatureProducts",
+      "target": "function:utils/supabase/server.ts:createClient",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/sections/SignatureLineClient.tsx:SignatureLineClient",
+      "target": "function:hooks/useTranslation.ts:useTranslation",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:lib/public-submission-guard.ts:durableLimitExceeded",
+      "target": "function:lib/supabase.ts:getSupabaseAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/projects/publicProjects.ts",
+      "target": "file:lib/projects/__tests__/publicProjects.test.ts",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    }
+  ]
+}

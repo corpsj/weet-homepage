@@ -1,0 +1,2111 @@
+{
+  "name": "weet-homepage",
+  "description": "모듈러 건축 전문 기업 위트(weet)의 공식 기업 웹사이트로, Next.js 16 App Router와 TypeScript로 구축되었습니다. 홈/제품/모듈러건축/비스포크/솔루션/회사소개/고객지원 등 공개 페이지와 Supabase 기반 CMS 관리자 패널(Auth, Database, Storage)을 포함하며, KR/EN/ES 다국어와 Figma 디자인의 정밀 구현에 중점을 둡니다. Note: this project has over 100 source files; consider scoping analysis to a subdirectory for faster results.",
+  "languages": [
+    "css",
+    "javascript",
+    "json",
+    "markdown",
+    "sql",
+    "typescript"
+  ],
+  "frameworks": [
+    "Next.js",
+    "React",
+    "Tailwind CSS",
+    "Framer Motion",
+    "Zustand",
+    "Supabase",
+    "React Hook Form",
+    "Zod",
+    "Vitest",
+    "Playwright",
+    "Testing Library",
+    "ESLint",
+    "PostCSS"
+  ],
+  "files": [
+    {
+      "path": ".vercelignore",
+      "language": "unknown",
+      "sizeLines": 14,
+      "fileCategory": "code"
+    },
+    {
+      "path": "AGENTS.md",
+      "language": "markdown",
+      "sizeLines": 115,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "app/actions/analytics-actions.ts",
+      "language": "typescript",
+      "sizeLines": 131,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/actions/cms-actions.ts",
+      "language": "typescript",
+      "sizeLines": 313,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/actions/customize-actions.ts",
+      "language": "typescript",
+      "sizeLines": 719,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/actions/faq-actions.ts",
+      "language": "typescript",
+      "sizeLines": 163,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/actions/gallery-actions.ts",
+      "language": "typescript",
+      "sizeLines": 121,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/actions/inquiry-actions.ts",
+      "language": "typescript",
+      "sizeLines": 114,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/actions/migration-actions.ts",
+      "language": "typescript",
+      "sizeLines": 306,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/actions/notice-actions.ts",
+      "language": "typescript",
+      "sizeLines": 122,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/actions/product-actions.ts",
+      "language": "typescript",
+      "sizeLines": 176,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/actions/project-actions.ts",
+      "language": "typescript",
+      "sizeLines": 148,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/actions/settings-actions.ts",
+      "language": "typescript",
+      "sizeLines": 63,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/actions/storage-actions.ts",
+      "language": "typescript",
+      "sizeLines": 156,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/actions/submit-inquiry.ts",
+      "language": "typescript",
+      "sizeLines": 142,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/consultations/page.tsx",
+      "language": "typescript",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/customize/page.tsx",
+      "language": "typescript",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/DashboardContainer.tsx",
+      "language": "typescript",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/gallery/[id]/page.tsx",
+      "language": "typescript",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/gallery/new/page.tsx",
+      "language": "typescript",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/gallery/page.tsx",
+      "language": "typescript",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/inquiries/page.tsx",
+      "language": "typescript",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/insights/page.tsx",
+      "language": "typescript",
+      "sizeLines": 74,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/layout.tsx",
+      "language": "typescript",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/main/page.tsx",
+      "language": "typescript",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/page.tsx",
+      "language": "typescript",
+      "sizeLines": 298,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/products/[id]/page.tsx",
+      "language": "typescript",
+      "sizeLines": 39,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/products/new/page.tsx",
+      "language": "typescript",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/products/page.tsx",
+      "language": "typescript",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/projects/[id]/page.tsx",
+      "language": "typescript",
+      "sizeLines": 66,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/projects/AdminProjectsClient.tsx",
+      "language": "typescript",
+      "sizeLines": 303,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/projects/new/page.tsx",
+      "language": "typescript",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/projects/page.tsx",
+      "language": "typescript",
+      "sizeLines": 10,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/settings/page.tsx",
+      "language": "typescript",
+      "sizeLines": 207,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/support/page.tsx",
+      "language": "typescript",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/admin/utm/page.tsx",
+      "language": "typescript",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/auth/callback/route.ts",
+      "language": "typescript",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/bespoke/layout.tsx",
+      "language": "typescript",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/bespoke/page.tsx",
+      "language": "typescript",
+      "sizeLines": 400,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/company/layout.tsx",
+      "language": "typescript",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/company/page.tsx",
+      "language": "typescript",
+      "sizeLines": 402,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/customize/layout.tsx",
+      "language": "typescript",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/customize/page.tsx",
+      "language": "typescript",
+      "sizeLines": 54,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/error.tsx",
+      "language": "typescript",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/global-error.tsx",
+      "language": "typescript",
+      "sizeLines": 36,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/globals.css",
+      "language": "css",
+      "sizeLines": 219,
+      "fileCategory": "markup"
+    },
+    {
+      "path": "app/layout.tsx",
+      "language": "typescript",
+      "sizeLines": 200,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/loading.tsx",
+      "language": "typescript",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/login/actions.ts",
+      "language": "typescript",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/login/LoginForm.tsx",
+      "language": "typescript",
+      "sizeLines": 134,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/login/page.tsx",
+      "language": "typescript",
+      "sizeLines": 72,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/modular/layout.tsx",
+      "language": "typescript",
+      "sizeLines": 16,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/modular/page.tsx",
+      "language": "typescript",
+      "sizeLines": 325,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/not-found.tsx",
+      "language": "typescript",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/page.tsx",
+      "language": "typescript",
+      "sizeLines": 465,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/privacy/page.tsx",
+      "language": "typescript",
+      "sizeLines": 111,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/products/layout.tsx",
+      "language": "typescript",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/products/page.tsx",
+      "language": "typescript",
+      "sizeLines": 13,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/products/ProductsPageClient.tsx",
+      "language": "typescript",
+      "sizeLines": 833,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/projects/[id]/page.tsx",
+      "language": "typescript",
+      "sizeLines": 141,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/projects/layout.tsx",
+      "language": "typescript",
+      "sizeLines": 31,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/projects/page.tsx",
+      "language": "typescript",
+      "sizeLines": 216,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/projects/ProjectsGallery.tsx",
+      "language": "typescript",
+      "sizeLines": 275,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/robots.ts",
+      "language": "typescript",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/sitemap.ts",
+      "language": "typescript",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/solution/cctv/layout.tsx",
+      "language": "typescript",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/solution/cctv/page.tsx",
+      "language": "typescript",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/solution/energy/layout.tsx",
+      "language": "typescript",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/solution/energy/page.tsx",
+      "language": "typescript",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/solution/iot/layout.tsx",
+      "language": "typescript",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/solution/iot/page.tsx",
+      "language": "typescript",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/solution/layout.tsx",
+      "language": "typescript",
+      "sizeLines": 23,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/solution/network/layout.tsx",
+      "language": "typescript",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/solution/network/page.tsx",
+      "language": "typescript",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/solution/page.tsx",
+      "language": "typescript",
+      "sizeLines": 712,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/support/layout.tsx",
+      "language": "typescript",
+      "sizeLines": 27,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/support/page.tsx",
+      "language": "typescript",
+      "sizeLines": 505,
+      "fileCategory": "code"
+    },
+    {
+      "path": "app/terms/page.tsx",
+      "language": "typescript",
+      "sizeLines": 99,
+      "fileCategory": "code"
+    },
+    {
+      "path": "CLAUDE.md",
+      "language": "markdown",
+      "sizeLines": 158,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "components.json",
+      "language": "json",
+      "sizeLines": 25,
+      "fileCategory": "config"
+    },
+    {
+      "path": "components/a11y/SkipLink.tsx",
+      "language": "typescript",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/AdminCommandSearch.tsx",
+      "language": "typescript",
+      "sizeLines": 128,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/AdminHeader.tsx",
+      "language": "typescript",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/AdminShell.tsx",
+      "language": "typescript",
+      "sizeLines": 52,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/AdminSidebar.tsx",
+      "language": "typescript",
+      "sizeLines": 156,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/cms/MainCmsClient.tsx",
+      "language": "typescript",
+      "sizeLines": 676,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/cms/SupportEditor.tsx",
+      "language": "typescript",
+      "sizeLines": 652,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/cms/useCrudDraftList.ts",
+      "language": "typescript",
+      "sizeLines": 231,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/ConsolePrimitives.tsx",
+      "language": "typescript",
+      "sizeLines": 137,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/consultations/ConsultationManager.tsx",
+      "language": "typescript",
+      "sizeLines": 329,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/customize/CustomizeManager.tsx",
+      "language": "typescript",
+      "sizeLines": 982,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/gallery/GalleryForm.tsx",
+      "language": "typescript",
+      "sizeLines": 385,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/gallery/GalleryList.tsx",
+      "language": "typescript",
+      "sizeLines": 119,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/inquiries/InquiryList.tsx",
+      "language": "typescript",
+      "sizeLines": 361,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/insights/AnalyticsDashboard.tsx",
+      "language": "typescript",
+      "sizeLines": 384,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/insights/InsightsDashboard.tsx",
+      "language": "typescript",
+      "sizeLines": 120,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/media/ImageUpload.tsx",
+      "language": "typescript",
+      "sizeLines": 187,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/media/MultiImageUpload.tsx",
+      "language": "typescript",
+      "sizeLines": 147,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/ProductForm.tsx",
+      "language": "typescript",
+      "sizeLines": 376,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/products/DeleteProductButton.tsx",
+      "language": "typescript",
+      "sizeLines": 51,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/products/Pagination.tsx",
+      "language": "typescript",
+      "sizeLines": 114,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/products/ProductGrid.tsx",
+      "language": "typescript",
+      "sizeLines": 407,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/products/ProductModal.tsx",
+      "language": "typescript",
+      "sizeLines": 73,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/products/ProductStatusToggle.tsx",
+      "language": "typescript",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/projects/ProjectForm.tsx",
+      "language": "typescript",
+      "sizeLines": 444,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/SiteSettingsPanel.tsx",
+      "language": "typescript",
+      "sizeLines": 86,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/admin/utm/UtmBuilder.tsx",
+      "language": "typescript",
+      "sizeLines": 319,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/company/GallerySection.tsx",
+      "language": "typescript",
+      "sizeLines": 227,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/__tests__/FloorplanCanvas.test.tsx",
+      "language": "typescript",
+      "sizeLines": 140,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/__tests__/sample.test.tsx",
+      "language": "typescript",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/CustomizeConfigurator.tsx",
+      "language": "typescript",
+      "sizeLines": 318,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/lib/constants.ts",
+      "language": "typescript",
+      "sizeLines": 243,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/lib/helpers.ts",
+      "language": "typescript",
+      "sizeLines": 133,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/lib/hooks.ts",
+      "language": "typescript",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/parts/CategoryHeading.tsx",
+      "language": "typescript",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/parts/ConfigSummaryBoard.tsx",
+      "language": "typescript",
+      "sizeLines": 65,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/parts/ConfiguratorAppBar.tsx",
+      "language": "typescript",
+      "sizeLines": 32,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/parts/FloorplanCanvas.tsx",
+      "language": "typescript",
+      "sizeLines": 125,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/parts/FloorplanPreview.tsx",
+      "language": "typescript",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/parts/FloorplanZoomModal.tsx",
+      "language": "typescript",
+      "sizeLines": 58,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/parts/InlineStepFooter.tsx",
+      "language": "typescript",
+      "sizeLines": 39,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/parts/OptionCard.tsx",
+      "language": "typescript",
+      "sizeLines": 95,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/parts/OptionInfoModal.tsx",
+      "language": "typescript",
+      "sizeLines": 113,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/parts/OptionsPanel.tsx",
+      "language": "typescript",
+      "sizeLines": 195,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/parts/RailSummaryFooter.tsx",
+      "language": "typescript",
+      "sizeLines": 97,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/parts/ReviewStep.tsx",
+      "language": "typescript",
+      "sizeLines": 449,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/customize/parts/StepperBar.tsx",
+      "language": "typescript",
+      "sizeLines": 80,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/layout/ClientLayout.tsx",
+      "language": "typescript",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/layout/ConsultBar.tsx",
+      "language": "typescript",
+      "sizeLines": 92,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/layout/Footer.tsx",
+      "language": "typescript",
+      "sizeLines": 251,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/layout/Header.tsx",
+      "language": "typescript",
+      "sizeLines": 471,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/sections/__tests__/HeroCarouselClientComponent.test.tsx",
+      "language": "typescript",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/sections/HeroCarousel.tsx",
+      "language": "typescript",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/sections/HeroCarouselClientComponent.tsx",
+      "language": "typescript",
+      "sizeLines": 258,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/sections/PartnersBanner.tsx",
+      "language": "typescript",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/sections/SignatureLine.tsx",
+      "language": "typescript",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/sections/SignatureLineClient.tsx",
+      "language": "typescript",
+      "sizeLines": 79,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/sections/SNSGallery.tsx",
+      "language": "typescript",
+      "sizeLines": 19,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/sections/SNSGalleryClient.tsx",
+      "language": "typescript",
+      "sizeLines": 82,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/seo/BreadcrumbJsonLd.tsx",
+      "language": "typescript",
+      "sizeLines": 32,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/solution/FeatureModal.tsx",
+      "language": "typescript",
+      "sizeLines": 113,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/solution/SolutionTemplate.tsx",
+      "language": "typescript",
+      "sizeLines": 280,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/support/ConsultForm.tsx",
+      "language": "typescript",
+      "sizeLines": 108,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/ui/badge.tsx",
+      "language": "typescript",
+      "sizeLines": 28,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/ui/button.tsx",
+      "language": "typescript",
+      "sizeLines": 45,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/ui/card.tsx",
+      "language": "typescript",
+      "sizeLines": 75,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/ui/CrewModal.tsx",
+      "language": "typescript",
+      "sizeLines": 254,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/ui/drawer.tsx",
+      "language": "typescript",
+      "sizeLines": 134,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/ui/ImageModal.tsx",
+      "language": "typescript",
+      "sizeLines": 265,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/ui/ImageSlider.tsx",
+      "language": "typescript",
+      "sizeLines": 91,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/ui/input.tsx",
+      "language": "typescript",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/ui/label.tsx",
+      "language": "typescript",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/ui/radio-group.tsx",
+      "language": "typescript",
+      "sizeLines": 38,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/ui/scroll-area.tsx",
+      "language": "typescript",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/ui/separator.tsx",
+      "language": "typescript",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/ui/sheet.tsx",
+      "language": "typescript",
+      "sizeLines": 138,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/ui/tabs.tsx",
+      "language": "typescript",
+      "sizeLines": 82,
+      "fileCategory": "code"
+    },
+    {
+      "path": "components/ui/textarea.tsx",
+      "language": "typescript",
+      "sizeLines": 18,
+      "fileCategory": "code"
+    },
+    {
+      "path": "constants/dictionaries.ts",
+      "language": "typescript",
+      "sizeLines": 331,
+      "fileCategory": "code"
+    },
+    {
+      "path": "contexts/LanguageContext.tsx",
+      "language": "typescript",
+      "sizeLines": 64,
+      "fileCategory": "code"
+    },
+    {
+      "path": "design/figma_design.md",
+      "language": "markdown",
+      "sizeLines": 11,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "e2e/admin-functional.spec.ts",
+      "language": "typescript",
+      "sizeLines": 382,
+      "fileCategory": "code"
+    },
+    {
+      "path": "e2e/customize-configurator.spec.ts",
+      "language": "typescript",
+      "sizeLines": 271,
+      "fileCategory": "code"
+    },
+    {
+      "path": "e2e/header-navigation.spec.ts",
+      "language": "typescript",
+      "sizeLines": 76,
+      "fileCategory": "code"
+    },
+    {
+      "path": "e2e/public-pages.spec.ts",
+      "language": "typescript",
+      "sizeLines": 381,
+      "fileCategory": "code"
+    },
+    {
+      "path": "eslint.config.mjs",
+      "language": "javascript",
+      "sizeLines": 15,
+      "fileCategory": "code"
+    },
+    {
+      "path": "hooks/useTranslation.ts",
+      "language": "typescript",
+      "sizeLines": 7,
+      "fileCategory": "code"
+    },
+    {
+      "path": "hooks/useUnsavedChangesWarning.ts",
+      "language": "typescript",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/__tests__/admin-permissions.test.ts",
+      "language": "typescript",
+      "sizeLines": 48,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/__tests__/site-settings.test.ts",
+      "language": "typescript",
+      "sizeLines": 22,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/admin-auth.ts",
+      "language": "typescript",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/admin-permissions.ts",
+      "language": "typescript",
+      "sizeLines": 33,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/analytics.ts",
+      "language": "typescript",
+      "sizeLines": 142,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/analytics/acquisition.ts",
+      "language": "typescript",
+      "sizeLines": 255,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/customize/__tests__/priceCalculator.test.ts",
+      "language": "typescript",
+      "sizeLines": 179,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/customize/config.ts",
+      "language": "typescript",
+      "sizeLines": 62,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/customize/priceCalculator.ts",
+      "language": "typescript",
+      "sizeLines": 174,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/customize/types.ts",
+      "language": "typescript",
+      "sizeLines": 134,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/date-format.ts",
+      "language": "typescript",
+      "sizeLines": 29,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/image/supabase-loader.ts",
+      "language": "typescript",
+      "sizeLines": 41,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/instagram.ts",
+      "language": "typescript",
+      "sizeLines": 99,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/json-ld.ts",
+      "language": "typescript",
+      "sizeLines": 17,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/products.ts",
+      "language": "typescript",
+      "sizeLines": 87,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/projects/__tests__/publicProjects.test.ts",
+      "language": "typescript",
+      "sizeLines": 55,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/projects/publicProjects.ts",
+      "language": "typescript",
+      "sizeLines": 54,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/public-submission-guard.ts",
+      "language": "typescript",
+      "sizeLines": 105,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/seo.ts",
+      "language": "typescript",
+      "sizeLines": 57,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/site-settings.server.ts",
+      "language": "typescript",
+      "sizeLines": 47,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/site-settings.ts",
+      "language": "typescript",
+      "sizeLines": 119,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/site.ts",
+      "language": "typescript",
+      "sizeLines": 52,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/supabase.ts",
+      "language": "typescript",
+      "sizeLines": 47,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/ui/confirm.ts",
+      "language": "typescript",
+      "sizeLines": 44,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/utils.ts",
+      "language": "typescript",
+      "sizeLines": 6,
+      "fileCategory": "code"
+    },
+    {
+      "path": "lib/utm/builder.ts",
+      "language": "typescript",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "middleware.ts",
+      "language": "typescript",
+      "sizeLines": 21,
+      "fileCategory": "code"
+    },
+    {
+      "path": "next.config.ts",
+      "language": "typescript",
+      "sizeLines": 128,
+      "fileCategory": "code"
+    },
+    {
+      "path": "package.json",
+      "language": "json",
+      "sizeLines": 76,
+      "fileCategory": "config"
+    },
+    {
+      "path": "playwright.config.ts",
+      "language": "typescript",
+      "sizeLines": 25,
+      "fileCategory": "code"
+    },
+    {
+      "path": "postcss.config.mjs",
+      "language": "javascript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "README.md",
+      "language": "markdown",
+      "sizeLines": 197,
+      "fileCategory": "docs"
+    },
+    {
+      "path": "supabase/migrations/20260212000000_initial_schema.sql",
+      "language": "sql",
+      "sizeLines": 118,
+      "fileCategory": "data"
+    },
+    {
+      "path": "supabase/migrations/20260219000000_rename_gwangju_source.sql",
+      "language": "sql",
+      "sizeLines": 4,
+      "fileCategory": "data"
+    },
+    {
+      "path": "supabase/migrations/20260219100000_crawl_settings.sql",
+      "language": "sql",
+      "sizeLines": 19,
+      "fileCategory": "data"
+    },
+    {
+      "path": "supabase/migrations/20260220000000_client_enhancements.sql",
+      "language": "sql",
+      "sizeLines": 8,
+      "fileCategory": "data"
+    },
+    {
+      "path": "supabase/migrations/202606060002_customize_configurator.sql",
+      "language": "sql",
+      "sizeLines": 389,
+      "fileCategory": "data"
+    },
+    {
+      "path": "supabase/migrations/202606060003_lock_customize_admin_policies.sql",
+      "language": "sql",
+      "sizeLines": 17,
+      "fileCategory": "data"
+    },
+    {
+      "path": "supabase/migrations/202606100001_site_settings.sql",
+      "language": "sql",
+      "sizeLines": 30,
+      "fileCategory": "data"
+    },
+    {
+      "path": "supabase/migrations/202606100002_lock_legacy_admin_policies.sql",
+      "language": "sql",
+      "sizeLines": 67,
+      "fileCategory": "data"
+    },
+    {
+      "path": "supabase/migrations/202606170001_rate_limit_events.sql",
+      "language": "sql",
+      "sizeLines": 18,
+      "fileCategory": "data"
+    },
+    {
+      "path": "supabase/migrations/202606170002_lock_crawler_tables.sql",
+      "language": "sql",
+      "sizeLines": 14,
+      "fileCategory": "data"
+    },
+    {
+      "path": "supabase/schema.sql",
+      "language": "sql",
+      "sizeLines": 1021,
+      "fileCategory": "data"
+    },
+    {
+      "path": "tailwind.config.ts",
+      "language": "typescript",
+      "sizeLines": 182,
+      "fileCategory": "code"
+    },
+    {
+      "path": "test/setup.ts",
+      "language": "typescript",
+      "sizeLines": 1,
+      "fileCategory": "code"
+    },
+    {
+      "path": "tsconfig.json",
+      "language": "json",
+      "sizeLines": 41,
+      "fileCategory": "config"
+    },
+    {
+      "path": "types/supabase.ts",
+      "language": "typescript",
+      "sizeLines": 1123,
+      "fileCategory": "code"
+    },
+    {
+      "path": "utils/supabase/client.ts",
+      "language": "typescript",
+      "sizeLines": 9,
+      "fileCategory": "code"
+    },
+    {
+      "path": "utils/supabase/middleware.ts",
+      "language": "typescript",
+      "sizeLines": 47,
+      "fileCategory": "code"
+    },
+    {
+      "path": "utils/supabase/server.ts",
+      "language": "typescript",
+      "sizeLines": 30,
+      "fileCategory": "code"
+    },
+    {
+      "path": "vitest.config.ts",
+      "language": "typescript",
+      "sizeLines": 20,
+      "fileCategory": "code"
+    }
+  ],
+  "totalFiles": 219,
+  "filteredByIgnore": 351,
+  "estimatedComplexity": "large",
+  "importMap": {
+    ".vercelignore": [],
+    "AGENTS.md": [],
+    "app/actions/analytics-actions.ts": [
+      "lib/admin-auth.ts",
+      "lib/analytics.ts"
+    ],
+    "app/actions/cms-actions.ts": [
+      "lib/admin-auth.ts",
+      "lib/supabase.ts",
+      "types/supabase.ts"
+    ],
+    "app/actions/customize-actions.ts": [
+      "lib/admin-auth.ts",
+      "lib/customize/priceCalculator.ts",
+      "lib/customize/types.ts",
+      "lib/public-submission-guard.ts",
+      "lib/supabase.ts"
+    ],
+    "app/actions/faq-actions.ts": [
+      "lib/admin-auth.ts",
+      "lib/supabase.ts",
+      "types/supabase.ts"
+    ],
+    "app/actions/gallery-actions.ts": [
+      "lib/admin-auth.ts",
+      "lib/supabase.ts",
+      "types/supabase.ts"
+    ],
+    "app/actions/inquiry-actions.ts": [
+      "lib/admin-auth.ts",
+      "lib/supabase.ts",
+      "types/supabase.ts"
+    ],
+    "app/actions/migration-actions.ts": [
+      "lib/admin-auth.ts",
+      "lib/supabase.ts"
+    ],
+    "app/actions/notice-actions.ts": [
+      "lib/admin-auth.ts",
+      "lib/supabase.ts",
+      "types/supabase.ts"
+    ],
+    "app/actions/product-actions.ts": [
+      "lib/admin-auth.ts",
+      "lib/supabase.ts",
+      "types/supabase.ts"
+    ],
+    "app/actions/project-actions.ts": [
+      "lib/admin-auth.ts",
+      "lib/supabase.ts",
+      "types/supabase.ts"
+    ],
+    "app/actions/settings-actions.ts": [
+      "lib/admin-auth.ts",
+      "lib/site-settings.ts",
+      "lib/supabase.ts"
+    ],
+    "app/actions/storage-actions.ts": [
+      "lib/admin-auth.ts",
+      "lib/supabase.ts"
+    ],
+    "app/actions/submit-inquiry.ts": [
+      "lib/public-submission-guard.ts",
+      "lib/supabase.ts"
+    ],
+    "app/admin/consultations/page.tsx": [
+      "app/actions/customize-actions.ts",
+      "components/admin/consultations/ConsultationManager.tsx"
+    ],
+    "app/admin/customize/page.tsx": [
+      "app/actions/customize-actions.ts",
+      "components/admin/customize/CustomizeManager.tsx"
+    ],
+    "app/admin/DashboardContainer.tsx": [
+      "app/actions/analytics-actions.ts",
+      "components/admin/insights/AnalyticsDashboard.tsx"
+    ],
+    "app/admin/gallery/[id]/page.tsx": [
+      "app/actions/gallery-actions.ts",
+      "components/admin/ConsolePrimitives.tsx",
+      "components/admin/gallery/GalleryForm.tsx"
+    ],
+    "app/admin/gallery/new/page.tsx": [
+      "components/admin/ConsolePrimitives.tsx",
+      "components/admin/gallery/GalleryForm.tsx"
+    ],
+    "app/admin/gallery/page.tsx": [
+      "app/actions/gallery-actions.ts",
+      "components/admin/gallery/GalleryList.tsx"
+    ],
+    "app/admin/inquiries/page.tsx": [
+      "app/actions/inquiry-actions.ts",
+      "components/admin/inquiries/InquiryList.tsx"
+    ],
+    "app/admin/insights/page.tsx": [
+      "app/actions/analytics-actions.ts",
+      "components/admin/ConsolePrimitives.tsx",
+      "components/admin/insights/AnalyticsDashboard.tsx"
+    ],
+    "app/admin/layout.tsx": [
+      "components/admin/AdminShell.tsx",
+      "lib/admin-auth.ts"
+    ],
+    "app/admin/main/page.tsx": [
+      "app/actions/cms-actions.ts",
+      "components/admin/cms/MainCmsClient.tsx"
+    ],
+    "app/admin/page.tsx": [
+      "components/admin/AdminCommandSearch.tsx",
+      "components/admin/ConsolePrimitives.tsx",
+      "lib/admin-auth.ts",
+      "lib/supabase.ts"
+    ],
+    "app/admin/products/[id]/page.tsx": [
+      "components/admin/ConsolePrimitives.tsx",
+      "components/admin/ProductForm.tsx",
+      "lib/admin-auth.ts",
+      "lib/supabase.ts"
+    ],
+    "app/admin/products/new/page.tsx": [
+      "components/admin/ConsolePrimitives.tsx",
+      "components/admin/ProductForm.tsx"
+    ],
+    "app/admin/products/page.tsx": [
+      "components/admin/products/ProductGrid.tsx",
+      "lib/admin-auth.ts",
+      "lib/supabase.ts",
+      "types/supabase.ts"
+    ],
+    "app/admin/projects/[id]/page.tsx": [
+      "app/actions/project-actions.ts",
+      "components/admin/ConsolePrimitives.tsx",
+      "components/admin/projects/ProjectForm.tsx",
+      "types/supabase.ts"
+    ],
+    "app/admin/projects/AdminProjectsClient.tsx": [
+      "app/actions/project-actions.ts",
+      "components/admin/ConsolePrimitives.tsx",
+      "lib/date-format.ts",
+      "lib/projects/publicProjects.ts",
+      "lib/ui/confirm.ts",
+      "types/supabase.ts"
+    ],
+    "app/admin/projects/new/page.tsx": [
+      "components/admin/ConsolePrimitives.tsx",
+      "components/admin/projects/ProjectForm.tsx"
+    ],
+    "app/admin/projects/page.tsx": [
+      "app/actions/project-actions.ts",
+      "app/admin/projects/AdminProjectsClient.tsx"
+    ],
+    "app/admin/settings/page.tsx": [
+      "app/actions/migration-actions.ts",
+      "components/admin/ConsolePrimitives.tsx",
+      "components/admin/SiteSettingsPanel.tsx",
+      "lib/ui/confirm.ts",
+      "utils/supabase/client.ts"
+    ],
+    "app/admin/support/page.tsx": [
+      "app/actions/faq-actions.ts",
+      "app/actions/notice-actions.ts",
+      "components/admin/cms/SupportEditor.tsx"
+    ],
+    "app/admin/utm/page.tsx": [
+      "components/admin/ConsolePrimitives.tsx",
+      "components/admin/utm/UtmBuilder.tsx"
+    ],
+    "app/auth/callback/route.ts": [
+      "utils/supabase/server.ts"
+    ],
+    "app/bespoke/layout.tsx": [
+      "lib/seo.ts"
+    ],
+    "app/bespoke/page.tsx": [
+      "contexts/LanguageContext.tsx"
+    ],
+    "app/company/layout.tsx": [
+      "lib/seo.ts"
+    ],
+    "app/company/page.tsx": [
+      "components/ui/CrewModal.tsx",
+      "components/ui/ImageSlider.tsx",
+      "hooks/useTranslation.ts"
+    ],
+    "app/customize/layout.tsx": [],
+    "app/customize/page.tsx": [
+      "app/actions/customize-actions.ts",
+      "components/customize/CustomizeConfigurator.tsx",
+      "lib/json-ld.ts",
+      "lib/seo.ts",
+      "lib/site-settings.server.ts"
+    ],
+    "app/error.tsx": [],
+    "app/global-error.tsx": [],
+    "app/globals.css": [],
+    "app/layout.tsx": [
+      "app/globals.css",
+      "components/layout/ClientLayout.tsx",
+      "contexts/LanguageContext.tsx",
+      "lib/json-ld.ts",
+      "lib/site-settings.server.ts",
+      "lib/site.ts",
+      "lib/utils.ts"
+    ],
+    "app/loading.tsx": [],
+    "app/login/actions.ts": [
+      "utils/supabase/server.ts"
+    ],
+    "app/login/LoginForm.tsx": [
+      "app/login/actions.ts",
+      "utils/supabase/client.ts"
+    ],
+    "app/login/page.tsx": [
+      "app/login/LoginForm.tsx"
+    ],
+    "app/modular/layout.tsx": [
+      "lib/seo.ts"
+    ],
+    "app/modular/page.tsx": [
+      "contexts/LanguageContext.tsx"
+    ],
+    "app/not-found.tsx": [],
+    "app/page.tsx": [
+      "app/actions/customize-actions.ts",
+      "app/actions/faq-actions.ts",
+      "app/actions/gallery-actions.ts",
+      "lib/customize/priceCalculator.ts",
+      "lib/seo.ts",
+      "lib/site-settings.server.ts",
+      "lib/site-settings.ts"
+    ],
+    "app/privacy/page.tsx": [
+      "lib/seo.ts"
+    ],
+    "app/products/layout.tsx": [
+      "lib/seo.ts"
+    ],
+    "app/products/page.tsx": [
+      "app/products/ProductsPageClient.tsx",
+      "lib/products.ts"
+    ],
+    "app/products/ProductsPageClient.tsx": [
+      "contexts/LanguageContext.tsx",
+      "types/supabase.ts"
+    ],
+    "app/projects/[id]/page.tsx": [
+      "components/seo/BreadcrumbJsonLd.tsx",
+      "lib/projects/publicProjects.ts",
+      "lib/seo.ts",
+      "lib/supabase.ts",
+      "types/supabase.ts"
+    ],
+    "app/projects/layout.tsx": [
+      "lib/seo.ts"
+    ],
+    "app/projects/page.tsx": [
+      "app/actions/gallery-actions.ts",
+      "app/projects/ProjectsGallery.tsx",
+      "lib/projects/publicProjects.ts",
+      "lib/site-settings.server.ts",
+      "lib/supabase.ts",
+      "types/supabase.ts"
+    ],
+    "app/projects/ProjectsGallery.tsx": [
+      "lib/projects/publicProjects.ts",
+      "types/supabase.ts"
+    ],
+    "app/robots.ts": [
+      "lib/site.ts"
+    ],
+    "app/sitemap.ts": [
+      "lib/projects/publicProjects.ts",
+      "lib/site.ts",
+      "lib/supabase.ts",
+      "types/supabase.ts"
+    ],
+    "app/solution/cctv/layout.tsx": [
+      "components/seo/BreadcrumbJsonLd.tsx",
+      "lib/seo.ts"
+    ],
+    "app/solution/cctv/page.tsx": [
+      "components/solution/SolutionTemplate.tsx"
+    ],
+    "app/solution/energy/layout.tsx": [
+      "components/seo/BreadcrumbJsonLd.tsx",
+      "lib/seo.ts"
+    ],
+    "app/solution/energy/page.tsx": [
+      "components/solution/SolutionTemplate.tsx"
+    ],
+    "app/solution/iot/layout.tsx": [
+      "components/seo/BreadcrumbJsonLd.tsx",
+      "lib/seo.ts"
+    ],
+    "app/solution/iot/page.tsx": [
+      "components/solution/SolutionTemplate.tsx"
+    ],
+    "app/solution/layout.tsx": [
+      "lib/seo.ts"
+    ],
+    "app/solution/network/layout.tsx": [
+      "components/seo/BreadcrumbJsonLd.tsx",
+      "lib/seo.ts"
+    ],
+    "app/solution/network/page.tsx": [
+      "components/solution/SolutionTemplate.tsx"
+    ],
+    "app/solution/page.tsx": [
+      "contexts/LanguageContext.tsx"
+    ],
+    "app/support/layout.tsx": [],
+    "app/support/page.tsx": [
+      "app/actions/faq-actions.ts",
+      "components/support/ConsultForm.tsx",
+      "lib/json-ld.ts",
+      "lib/seo.ts",
+      "lib/site-settings.server.ts",
+      "lib/site-settings.ts"
+    ],
+    "app/terms/page.tsx": [
+      "lib/seo.ts"
+    ],
+    "CLAUDE.md": [],
+    "components.json": [],
+    "components/a11y/SkipLink.tsx": [],
+    "components/admin/AdminCommandSearch.tsx": [
+      "components/admin/ConsolePrimitives.tsx"
+    ],
+    "components/admin/AdminHeader.tsx": [],
+    "components/admin/AdminShell.tsx": [
+      "components/admin/AdminSidebar.tsx",
+      "lib/utils.ts"
+    ],
+    "components/admin/AdminSidebar.tsx": [
+      "lib/utils.ts",
+      "utils/supabase/client.ts"
+    ],
+    "components/admin/cms/MainCmsClient.tsx": [
+      "app/actions/cms-actions.ts",
+      "components/admin/ConsolePrimitives.tsx",
+      "components/admin/media/ImageUpload.tsx",
+      "hooks/useUnsavedChangesWarning.ts",
+      "lib/ui/confirm.ts",
+      "types/supabase.ts"
+    ],
+    "components/admin/cms/SupportEditor.tsx": [
+      "app/actions/faq-actions.ts",
+      "app/actions/notice-actions.ts",
+      "components/admin/cms/useCrudDraftList.ts",
+      "components/admin/ConsolePrimitives.tsx",
+      "hooks/useUnsavedChangesWarning.ts"
+    ],
+    "components/admin/cms/useCrudDraftList.ts": [
+      "lib/ui/confirm.ts"
+    ],
+    "components/admin/ConsolePrimitives.tsx": [
+      "lib/utils.ts"
+    ],
+    "components/admin/consultations/ConsultationManager.tsx": [
+      "app/actions/customize-actions.ts",
+      "components/admin/ConsolePrimitives.tsx",
+      "lib/customize/priceCalculator.ts",
+      "lib/customize/types.ts",
+      "lib/date-format.ts",
+      "lib/ui/confirm.ts",
+      "lib/utils.ts"
+    ],
+    "components/admin/customize/CustomizeManager.tsx": [
+      "app/actions/customize-actions.ts",
+      "components/admin/ConsolePrimitives.tsx",
+      "components/admin/media/ImageUpload.tsx",
+      "lib/customize/types.ts",
+      "lib/ui/confirm.ts",
+      "lib/utils.ts"
+    ],
+    "components/admin/gallery/GalleryForm.tsx": [
+      "app/actions/gallery-actions.ts",
+      "app/actions/storage-actions.ts",
+      "components/admin/ConsolePrimitives.tsx",
+      "hooks/useUnsavedChangesWarning.ts",
+      "types/supabase.ts"
+    ],
+    "components/admin/gallery/GalleryList.tsx": [
+      "app/actions/gallery-actions.ts",
+      "components/admin/ConsolePrimitives.tsx",
+      "lib/date-format.ts",
+      "lib/ui/confirm.ts",
+      "types/supabase.ts"
+    ],
+    "components/admin/inquiries/InquiryList.tsx": [
+      "app/actions/inquiry-actions.ts",
+      "components/admin/ConsolePrimitives.tsx",
+      "lib/ui/confirm.ts"
+    ],
+    "components/admin/insights/AnalyticsDashboard.tsx": [
+      "components/admin/ConsolePrimitives.tsx"
+    ],
+    "components/admin/insights/InsightsDashboard.tsx": [],
+    "components/admin/media/ImageUpload.tsx": [
+      "app/actions/storage-actions.ts"
+    ],
+    "components/admin/media/MultiImageUpload.tsx": [
+      "app/actions/storage-actions.ts"
+    ],
+    "components/admin/ProductForm.tsx": [
+      "app/actions/product-actions.ts",
+      "components/admin/ConsolePrimitives.tsx",
+      "components/admin/media/ImageUpload.tsx",
+      "components/admin/media/MultiImageUpload.tsx",
+      "hooks/useUnsavedChangesWarning.ts",
+      "types/supabase.ts"
+    ],
+    "components/admin/products/DeleteProductButton.tsx": [
+      "app/actions/product-actions.ts",
+      "lib/ui/confirm.ts"
+    ],
+    "components/admin/products/Pagination.tsx": [],
+    "components/admin/products/ProductGrid.tsx": [
+      "components/admin/ConsolePrimitives.tsx",
+      "components/admin/products/DeleteProductButton.tsx",
+      "components/admin/products/Pagination.tsx",
+      "components/admin/products/ProductModal.tsx",
+      "components/admin/products/ProductStatusToggle.tsx",
+      "types/supabase.ts"
+    ],
+    "components/admin/products/ProductModal.tsx": [
+      "types/supabase.ts"
+    ],
+    "components/admin/products/ProductStatusToggle.tsx": [
+      "app/actions/product-actions.ts"
+    ],
+    "components/admin/projects/ProjectForm.tsx": [
+      "app/actions/project-actions.ts",
+      "app/actions/storage-actions.ts",
+      "components/admin/ConsolePrimitives.tsx",
+      "hooks/useUnsavedChangesWarning.ts",
+      "types/supabase.ts"
+    ],
+    "components/admin/SiteSettingsPanel.tsx": [
+      "app/actions/settings-actions.ts",
+      "components/admin/ConsolePrimitives.tsx",
+      "lib/site-settings.ts"
+    ],
+    "components/admin/utm/UtmBuilder.tsx": [
+      "components/admin/ConsolePrimitives.tsx",
+      "lib/analytics/acquisition.ts",
+      "lib/utils.ts",
+      "lib/utm/builder.ts"
+    ],
+    "components/company/GallerySection.tsx": [
+      "components/ui/ImageModal.tsx",
+      "contexts/LanguageContext.tsx",
+      "types/supabase.ts",
+      "utils/supabase/client.ts"
+    ],
+    "components/customize/__tests__/FloorplanCanvas.test.tsx": [
+      "components/customize/parts/FloorplanCanvas.tsx",
+      "lib/customize/types.ts"
+    ],
+    "components/customize/__tests__/sample.test.tsx": [],
+    "components/customize/CustomizeConfigurator.tsx": [
+      "app/actions/customize-actions.ts",
+      "components/customize/lib/constants.ts",
+      "components/customize/lib/helpers.ts",
+      "components/customize/parts/ConfigSummaryBoard.tsx",
+      "components/customize/parts/ConfiguratorAppBar.tsx",
+      "components/customize/parts/FloorplanPreview.tsx",
+      "components/customize/parts/FloorplanZoomModal.tsx",
+      "components/customize/parts/OptionInfoModal.tsx",
+      "components/customize/parts/OptionsPanel.tsx",
+      "components/customize/parts/ReviewStep.tsx",
+      "components/customize/parts/StepperBar.tsx",
+      "components/ui/button.tsx",
+      "lib/customize/config.ts",
+      "lib/customize/priceCalculator.ts",
+      "lib/customize/types.ts"
+    ],
+    "components/customize/lib/constants.ts": [],
+    "components/customize/lib/helpers.ts": [
+      "components/customize/lib/constants.ts",
+      "lib/customize/priceCalculator.ts",
+      "lib/customize/types.ts"
+    ],
+    "components/customize/lib/hooks.ts": [],
+    "components/customize/parts/CategoryHeading.tsx": [],
+    "components/customize/parts/ConfigSummaryBoard.tsx": [
+      "components/customize/lib/constants.ts",
+      "components/customize/lib/helpers.ts",
+      "lib/customize/priceCalculator.ts",
+      "lib/customize/types.ts",
+      "lib/utils.ts"
+    ],
+    "components/customize/parts/ConfiguratorAppBar.tsx": [],
+    "components/customize/parts/FloorplanCanvas.tsx": [
+      "lib/customize/types.ts",
+      "lib/utils.ts"
+    ],
+    "components/customize/parts/FloorplanPreview.tsx": [
+      "components/customize/lib/constants.ts",
+      "components/customize/parts/FloorplanCanvas.tsx",
+      "lib/customize/priceCalculator.ts",
+      "lib/customize/types.ts"
+    ],
+    "components/customize/parts/FloorplanZoomModal.tsx": [
+      "components/customize/lib/hooks.ts",
+      "components/customize/parts/FloorplanCanvas.tsx",
+      "lib/customize/priceCalculator.ts",
+      "lib/customize/types.ts"
+    ],
+    "components/customize/parts/InlineStepFooter.tsx": [
+      "components/customize/lib/constants.ts",
+      "components/ui/button.tsx"
+    ],
+    "components/customize/parts/OptionCard.tsx": [
+      "components/customize/lib/constants.ts",
+      "components/customize/lib/helpers.ts",
+      "lib/customize/types.ts",
+      "lib/utils.ts"
+    ],
+    "components/customize/parts/OptionInfoModal.tsx": [
+      "components/customize/lib/constants.ts",
+      "components/customize/lib/helpers.ts",
+      "components/customize/lib/hooks.ts",
+      "components/ui/button.tsx",
+      "lib/customize/types.ts",
+      "lib/utils.ts"
+    ],
+    "components/customize/parts/OptionsPanel.tsx": [
+      "components/customize/lib/constants.ts",
+      "components/customize/parts/CategoryHeading.tsx",
+      "components/customize/parts/InlineStepFooter.tsx",
+      "components/customize/parts/OptionCard.tsx",
+      "components/customize/parts/RailSummaryFooter.tsx",
+      "lib/customize/priceCalculator.ts",
+      "lib/customize/types.ts",
+      "lib/utils.ts"
+    ],
+    "components/customize/parts/RailSummaryFooter.tsx": [
+      "components/customize/lib/constants.ts",
+      "components/customize/lib/helpers.ts",
+      "components/ui/button.tsx",
+      "lib/customize/priceCalculator.ts",
+      "lib/customize/types.ts"
+    ],
+    "components/customize/parts/ReviewStep.tsx": [
+      "components/customize/lib/constants.ts",
+      "components/customize/lib/helpers.ts",
+      "components/customize/parts/FloorplanCanvas.tsx",
+      "components/ui/button.tsx",
+      "components/ui/input.tsx",
+      "components/ui/label.tsx",
+      "components/ui/textarea.tsx",
+      "lib/customize/config.ts",
+      "lib/customize/priceCalculator.ts",
+      "lib/customize/types.ts",
+      "lib/utils.ts"
+    ],
+    "components/customize/parts/StepperBar.tsx": [
+      "components/customize/lib/constants.ts",
+      "components/customize/lib/helpers.ts",
+      "lib/utils.ts"
+    ],
+    "components/layout/ClientLayout.tsx": [
+      "components/a11y/SkipLink.tsx",
+      "components/layout/ConsultBar.tsx",
+      "components/layout/Footer.tsx",
+      "components/layout/Header.tsx",
+      "lib/site-settings.ts"
+    ],
+    "components/layout/ConsultBar.tsx": [
+      "lib/site-settings.ts"
+    ],
+    "components/layout/Footer.tsx": [
+      "contexts/LanguageContext.tsx",
+      "lib/site-settings.ts",
+      "lib/site.ts"
+    ],
+    "components/layout/Header.tsx": [
+      "contexts/LanguageContext.tsx",
+      "lib/utils.ts"
+    ],
+    "components/sections/__tests__/HeroCarouselClientComponent.test.tsx": [
+      "components/sections/HeroCarouselClientComponent.tsx"
+    ],
+    "components/sections/HeroCarousel.tsx": [
+      "components/sections/HeroCarouselClientComponent.tsx",
+      "utils/supabase/server.ts"
+    ],
+    "components/sections/HeroCarouselClientComponent.tsx": [
+      "hooks/useTranslation.ts"
+    ],
+    "components/sections/PartnersBanner.tsx": [],
+    "components/sections/SignatureLine.tsx": [
+      "components/sections/SignatureLineClient.tsx",
+      "types/supabase.ts",
+      "utils/supabase/server.ts"
+    ],
+    "components/sections/SignatureLineClient.tsx": [
+      "hooks/useTranslation.ts",
+      "types/supabase.ts"
+    ],
+    "components/sections/SNSGallery.tsx": [
+      "components/sections/SNSGalleryClient.tsx",
+      "lib/instagram.ts"
+    ],
+    "components/sections/SNSGalleryClient.tsx": [
+      "hooks/useTranslation.ts"
+    ],
+    "components/seo/BreadcrumbJsonLd.tsx": [
+      "lib/json-ld.ts",
+      "lib/site.ts"
+    ],
+    "components/solution/FeatureModal.tsx": [
+      "contexts/LanguageContext.tsx"
+    ],
+    "components/solution/SolutionTemplate.tsx": [
+      "contexts/LanguageContext.tsx",
+      "lib/utils.ts"
+    ],
+    "components/support/ConsultForm.tsx": [
+      "app/actions/submit-inquiry.ts"
+    ],
+    "components/ui/badge.tsx": [
+      "lib/utils.ts"
+    ],
+    "components/ui/button.tsx": [
+      "lib/utils.ts"
+    ],
+    "components/ui/card.tsx": [
+      "lib/utils.ts"
+    ],
+    "components/ui/CrewModal.tsx": [],
+    "components/ui/drawer.tsx": [
+      "lib/utils.ts"
+    ],
+    "components/ui/ImageModal.tsx": [],
+    "components/ui/ImageSlider.tsx": [],
+    "components/ui/input.tsx": [
+      "lib/utils.ts"
+    ],
+    "components/ui/label.tsx": [
+      "lib/utils.ts"
+    ],
+    "components/ui/radio-group.tsx": [
+      "lib/utils.ts"
+    ],
+    "components/ui/scroll-area.tsx": [
+      "lib/utils.ts"
+    ],
+    "components/ui/separator.tsx": [
+      "lib/utils.ts"
+    ],
+    "components/ui/sheet.tsx": [
+      "components/ui/button.tsx",
+      "lib/utils.ts"
+    ],
+    "components/ui/tabs.tsx": [
+      "lib/utils.ts"
+    ],
+    "components/ui/textarea.tsx": [
+      "lib/utils.ts"
+    ],
+    "constants/dictionaries.ts": [],
+    "contexts/LanguageContext.tsx": [],
+    "design/figma_design.md": [],
+    "e2e/admin-functional.spec.ts": [],
+    "e2e/customize-configurator.spec.ts": [],
+    "e2e/header-navigation.spec.ts": [],
+    "e2e/public-pages.spec.ts": [],
+    "eslint.config.mjs": [],
+    "hooks/useTranslation.ts": [
+      "constants/dictionaries.ts",
+      "contexts/LanguageContext.tsx"
+    ],
+    "hooks/useUnsavedChangesWarning.ts": [],
+    "lib/__tests__/admin-permissions.test.ts": [
+      "lib/admin-permissions.ts"
+    ],
+    "lib/__tests__/site-settings.test.ts": [
+      "lib/site-settings.ts"
+    ],
+    "lib/admin-auth.ts": [
+      "lib/admin-permissions.ts",
+      "utils/supabase/server.ts"
+    ],
+    "lib/admin-permissions.ts": [],
+    "lib/analytics.ts": [],
+    "lib/analytics/acquisition.ts": [],
+    "lib/customize/__tests__/priceCalculator.test.ts": [
+      "lib/customize/priceCalculator.ts",
+      "lib/customize/types.ts"
+    ],
+    "lib/customize/config.ts": [],
+    "lib/customize/priceCalculator.ts": [
+      "lib/customize/types.ts"
+    ],
+    "lib/customize/types.ts": [],
+    "lib/date-format.ts": [],
+    "lib/image/supabase-loader.ts": [],
+    "lib/instagram.ts": [],
+    "lib/json-ld.ts": [],
+    "lib/products.ts": [
+      "lib/supabase.ts",
+      "types/supabase.ts"
+    ],
+    "lib/projects/__tests__/publicProjects.test.ts": [
+      "lib/projects/publicProjects.ts",
+      "types/supabase.ts"
+    ],
+    "lib/projects/publicProjects.ts": [
+      "types/supabase.ts"
+    ],
+    "lib/public-submission-guard.ts": [
+      "lib/supabase.ts"
+    ],
+    "lib/seo.ts": [
+      "lib/site.ts"
+    ],
+    "lib/site-settings.server.ts": [
+      "lib/site-settings.ts",
+      "lib/supabase.ts"
+    ],
+    "lib/site-settings.ts": [],
+    "lib/site.ts": [],
+    "lib/supabase.ts": [
+      "types/supabase.ts"
+    ],
+    "lib/ui/confirm.ts": [],
+    "lib/utils.ts": [],
+    "lib/utm/builder.ts": [
+      "lib/analytics/acquisition.ts"
+    ],
+    "middleware.ts": [
+      "utils/supabase/middleware.ts"
+    ],
+    "next.config.ts": [],
+    "package.json": [],
+    "playwright.config.ts": [],
+    "postcss.config.mjs": [],
+    "README.md": [],
+    "supabase/migrations/20260212000000_initial_schema.sql": [],
+    "supabase/migrations/20260219000000_rename_gwangju_source.sql": [],
+    "supabase/migrations/20260219100000_crawl_settings.sql": [],
+    "supabase/migrations/20260220000000_client_enhancements.sql": [],
+    "supabase/migrations/202606060002_customize_configurator.sql": [],
+    "supabase/migrations/202606060003_lock_customize_admin_policies.sql": [],
+    "supabase/migrations/202606100001_site_settings.sql": [],
+    "supabase/migrations/202606100002_lock_legacy_admin_policies.sql": [],
+    "supabase/migrations/202606170001_rate_limit_events.sql": [],
+    "supabase/migrations/202606170002_lock_crawler_tables.sql": [],
+    "supabase/schema.sql": [],
+    "tailwind.config.ts": [],
+    "test/setup.ts": [],
+    "tsconfig.json": [],
+    "types/supabase.ts": [],
+    "utils/supabase/client.ts": [
+      "types/supabase.ts"
+    ],
+    "utils/supabase/middleware.ts": [],
+    "utils/supabase/server.ts": [
+      "types/supabase.ts"
+    ],
+    "vitest.config.ts": []
+  }
+}

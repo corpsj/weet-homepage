@@ -1,0 +1,67 @@
+{
+  "nodes": [
+    {
+      "id": "file:test/setup.ts",
+      "type": "file",
+      "name": "setup.ts",
+      "filePath": "test/setup.ts",
+      "summary": "Vitest 전역 test setup 파일로, @testing-library/jest-dom 매처를 등록하여 모든 테스트에서 toBeInTheDocument 같은 DOM 단언을 사용할 수 있게 합니다.",
+      "tags": ["test", "test-setup", "configuration", "jsdom"],
+      "complexity": "simple",
+      "languageNotes": "vitest.config.ts의 setupFiles에 의해 매 테스트 실행 전 한 번 로드되는 부수효과 전용 import 모듈입니다."
+    },
+    {
+      "id": "file:utils/supabase/middleware.ts",
+      "type": "file",
+      "name": "middleware.ts",
+      "filePath": "utils/supabase/middleware.ts",
+      "summary": "Supabase SSR 세션을 갱신하는 미들웨어 헬퍼로, 쿠키를 동기화하여 인증 상태를 유지하고 /admin/* 경로에 비로그인 접근 시 /login으로 리다이렉트합니다. 루트 middleware.ts에서 호출됩니다.",
+      "tags": ["middleware", "authentication", "supabase", "session", "security"],
+      "complexity": "simple",
+      "languageNotes": "@supabase/ssr의 createServerClient에 getAll/setAll 쿠키 핸들러를 주입해 요청·응답 양쪽 쿠키를 동기화하는 Next.js SSR 인증 패턴입니다."
+    },
+    {
+      "id": "function:utils/supabase/middleware.ts:updateSession",
+      "type": "function",
+      "name": "updateSession",
+      "filePath": "utils/supabase/middleware.ts",
+      "lineRange": [4, 47],
+      "summary": "NextRequest를 받아 Supabase 서버 클라이언트로 세션 쿠키를 갱신하고, 인증된 사용자가 없는 상태에서 /admin/* 접근 시 /login으로 리다이렉트하는 NextResponse를 반환합니다.",
+      "tags": ["middleware", "authentication", "session", "route-guard", "validation"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:vitest.config.ts",
+      "type": "config",
+      "name": "vitest.config.ts",
+      "filePath": "vitest.config.ts",
+      "summary": "Vitest 테스트 구성으로, jsdom 환경과 globals를 활성화하고 test/setup.ts를 setupFile로 등록하며 @ 경로 별칭과 React 플러그인을 설정하고 e2e 디렉터리를 제외합니다.",
+      "tags": ["configuration", "test", "build-system", "vitest"],
+      "complexity": "simple",
+      "languageNotes": "include 패턴으로 *.test/*.spec 파일만 단위 테스트로 수집하고 e2e는 별도 Playwright로 분리합니다."
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:utils/supabase/middleware.ts",
+      "target": "function:utils/supabase/middleware.ts:updateSession",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:utils/supabase/middleware.ts",
+      "target": "function:utils/supabase/middleware.ts:updateSession",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "config:vitest.config.ts",
+      "target": "file:test/setup.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

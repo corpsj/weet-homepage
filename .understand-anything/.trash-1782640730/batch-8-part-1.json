@@ -1,0 +1,1028 @@
+{
+  "nodes": [
+    {
+      "id": "file:app/actions/customize-actions.ts",
+      "type": "file",
+      "name": "customize-actions.ts",
+      "filePath": "app/actions/customize-actions.ts",
+      "summary": "커스터마이즈(맞춤 견적) 도메인의 핵심 Server Action 모음으로, Supabase에서 모델/카테고리/옵션/포함사양/충돌 카탈로그를 로드하고 공개 상담 신청 접수 및 관리자용 CRUD를 모두 처리한다.",
+      "tags": [
+        "server-action",
+        "api-handler",
+        "validation",
+        "supabase",
+        "customize"
+      ],
+      "complexity": "complex",
+      "languageNotes": "'use server' 파일로 zod 스키마 검증과 requireAdmin 게이트를 거쳐 Supabase admin 클라이언트로 DB를 다룬다. row→도메인 매핑 헬퍼(mapModel 등)와 revalidatePath 캐시 무효화를 일관되게 사용한다."
+    },
+    {
+      "id": "function:app/actions/customize-actions.ts:loadCatalog",
+      "type": "function",
+      "name": "loadCatalog",
+      "filePath": "app/actions/customize-actions.ts",
+      "lineRange": [
+        236,
+        273
+      ],
+      "summary": "Supabase에서 모델/카테고리/옵션/포함사양/충돌 6개 테이블을 Promise.all로 병렬 조회하고 row를 도메인 객체로 매핑해 카탈로그 전체를 구성한다. includeInactive 플래그로 공개/관리자 범위를 분기한다.",
+      "tags": [
+        "data-fetching",
+        "supabase",
+        "mapping",
+        "customize"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/customize-actions.ts:getPublicCustomizeCatalog",
+      "type": "function",
+      "name": "getPublicCustomizeCatalog",
+      "filePath": "app/actions/customize-actions.ts",
+      "lineRange": [
+        275,
+        282
+      ],
+      "summary": "공개 커스터마이즈 페이지용 활성 카탈로그만 반환하는 Server Action으로, 인증 없이 활성 항목만 loadCatalog로 가져온다.",
+      "tags": [
+        "server-action",
+        "data-fetching",
+        "customize",
+        "public"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/customize-actions.ts:getCustomizeAdminData",
+      "type": "function",
+      "name": "getCustomizeAdminData",
+      "filePath": "app/actions/customize-actions.ts",
+      "lineRange": [
+        284,
+        304
+      ],
+      "summary": "관리자 인증 후 비활성 항목을 포함한 전체 카탈로그와 최근 상담 목록을 함께 반환하는 Server Action으로, 관리자 커스터마이즈 페이지의 초기 데이터를 공급한다.",
+      "tags": [
+        "server-action",
+        "data-fetching",
+        "admin",
+        "customize"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/customize-actions.ts:getAdminConsultations",
+      "type": "function",
+      "name": "getAdminConsultations",
+      "filePath": "app/actions/customize-actions.ts",
+      "lineRange": [
+        306,
+        324
+      ],
+      "summary": "관리자용 상담 신청 목록을 페이지네이션과 상태 필터로 조회해 매핑된 결과와 전체 건수를 반환하는 Server Action이다.",
+      "tags": [
+        "server-action",
+        "data-fetching",
+        "admin",
+        "pagination"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/customize-actions.ts:submitCustomizeConsultation",
+      "type": "function",
+      "name": "submitCustomizeConsultation",
+      "filePath": "app/actions/customize-actions.ts",
+      "lineRange": [
+        326,
+        404
+      ],
+      "summary": "공개 사용자의 맞춤 견적 상담 신청을 접수하는 Server Action으로, zod 검증·스팸 가드·견적 재계산·충돌 검사 후 정규화된 스냅샷을 customize_consultations 테이블에 저장한다.",
+      "tags": [
+        "server-action",
+        "validation",
+        "submission",
+        "customize"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:app/actions/customize-actions.ts:upsertCustomizeModel",
+      "type": "function",
+      "name": "upsertCustomizeModel",
+      "filePath": "app/actions/customize-actions.ts",
+      "lineRange": [
+        406,
+        429
+      ],
+      "summary": "관리자 인증과 zod 검증을 거쳐 customize_models 행을 upsert하고 커스터마이즈 경로 캐시를 무효화하는 Server Action이다.",
+      "tags": [
+        "server-action",
+        "crud",
+        "admin",
+        "customize"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/customize-actions.ts:upsertCustomizeCategory",
+      "type": "function",
+      "name": "upsertCustomizeCategory",
+      "filePath": "app/actions/customize-actions.ts",
+      "lineRange": [
+        431,
+        455
+      ],
+      "summary": "옵션 카테고리를 신규 생성 또는 수정(update/insert 분기)하는 관리자 Server Action으로, 검증 후 캐시를 갱신한다.",
+      "tags": [
+        "server-action",
+        "crud",
+        "admin",
+        "customize"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/customize-actions.ts:upsertCustomizeOption",
+      "type": "function",
+      "name": "upsertCustomizeOption",
+      "filePath": "app/actions/customize-actions.ts",
+      "lineRange": [
+        457,
+        490
+      ],
+      "summary": "커스터마이즈 옵션(가격·이미지·적용 모델 범위 포함)을 생성/수정하는 관리자 Server Action으로, 검증된 페이로드를 update 또는 insert한다.",
+      "tags": [
+        "server-action",
+        "crud",
+        "admin",
+        "customize"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/customize-actions.ts:upsertCustomizeIncludedSpec",
+      "type": "function",
+      "name": "upsertCustomizeIncludedSpec",
+      "filePath": "app/actions/customize-actions.ts",
+      "lineRange": [
+        492,
+        517
+      ],
+      "summary": "기본 포함 사양(included spec)을 생성/수정하는 관리자 Server Action으로, 검증 후 update/insert 분기 처리한다.",
+      "tags": [
+        "server-action",
+        "crud",
+        "admin",
+        "customize"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/customize-actions.ts:setCustomizeEntityActive",
+      "type": "function",
+      "name": "setCustomizeEntityActive",
+      "filePath": "app/actions/customize-actions.ts",
+      "lineRange": [
+        519,
+        534
+      ],
+      "summary": "엔티티 종류와 id를 받아 해당 customize 테이블의 is_active 플래그를 토글하는 관리자 Server Action으로, 활성/비활성 전환을 일원화한다.",
+      "tags": [
+        "server-action",
+        "admin",
+        "customize",
+        "toggle"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/customize-actions.ts:deleteCustomizeModel",
+      "type": "function",
+      "name": "deleteCustomizeModel",
+      "filePath": "app/actions/customize-actions.ts",
+      "lineRange": [
+        536,
+        563
+      ],
+      "summary": "모델 삭제 전 연결된 옵션의 available_model_ids에서 해당 모델을 정리한 뒤 customize_models 행을 삭제하는 관리자 Server Action이다.",
+      "tags": [
+        "server-action",
+        "crud",
+        "admin",
+        "customize"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/customize-actions.ts:deleteCustomizeCategory",
+      "type": "function",
+      "name": "deleteCustomizeCategory",
+      "filePath": "app/actions/customize-actions.ts",
+      "lineRange": [
+        565,
+        586
+      ],
+      "summary": "카테고리에 속한 옵션이 없는지 확인한 뒤에만 customize_categories 행을 삭제하는 관리자 Server Action으로, 참조 무결성을 보호한다.",
+      "tags": [
+        "server-action",
+        "crud",
+        "admin",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/customize-actions.ts:deleteCustomizeOption",
+      "type": "function",
+      "name": "deleteCustomizeOption",
+      "filePath": "app/actions/customize-actions.ts",
+      "lineRange": [
+        588,
+        613
+      ],
+      "summary": "옵션 삭제 시 연관된 옵션 충돌(양방향)을 먼저 제거한 뒤 customize_options 행을 삭제하는 관리자 Server Action이다.",
+      "tags": [
+        "server-action",
+        "crud",
+        "admin",
+        "customize"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/customize-actions.ts:createCustomizeOptionConflict",
+      "type": "function",
+      "name": "createCustomizeOptionConflict",
+      "filePath": "app/actions/customize-actions.ts",
+      "lineRange": [
+        628,
+        653
+      ],
+      "summary": "두 옵션 간 상호 배타(충돌) 관계를 사유와 함께 customize_option_conflicts에 upsert하는 관리자 Server Action이다.",
+      "tags": [
+        "server-action",
+        "crud",
+        "admin",
+        "customize"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/customize-actions.ts:deleteCustomizeOptionConflict",
+      "type": "function",
+      "name": "deleteCustomizeOptionConflict",
+      "filePath": "app/actions/customize-actions.ts",
+      "lineRange": [
+        655,
+        676
+      ],
+      "summary": "두 옵션 사이의 충돌 관계를 양방향으로 삭제하는 관리자 Server Action이다.",
+      "tags": [
+        "server-action",
+        "crud",
+        "admin",
+        "customize"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/customize-actions.ts:updateCustomizeConsultationStatus",
+      "type": "function",
+      "name": "updateCustomizeConsultationStatus",
+      "filePath": "app/actions/customize-actions.ts",
+      "lineRange": [
+        678,
+        690
+      ],
+      "summary": "상담 신청의 처리 상태(status)를 갱신하고 관리자/공개 경로 캐시를 무효화하는 Server Action이다.",
+      "tags": [
+        "server-action",
+        "admin",
+        "customize",
+        "status"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/customize-actions.ts:updateCustomizeConsultationMemo",
+      "type": "function",
+      "name": "updateCustomizeConsultationMemo",
+      "filePath": "app/actions/customize-actions.ts",
+      "lineRange": [
+        692,
+        703
+      ],
+      "summary": "상담 신청에 대한 내부 메모를 길이 제한과 함께 저장하는 관리자 Server Action이다.",
+      "tags": [
+        "server-action",
+        "admin",
+        "customize"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/customize-actions.ts:deleteCustomizeConsultation",
+      "type": "function",
+      "name": "deleteCustomizeConsultation",
+      "filePath": "app/actions/customize-actions.ts",
+      "lineRange": [
+        705,
+        714
+      ],
+      "summary": "상담 신청 행을 삭제하고 관련 경로 캐시를 무효화하는 관리자 Server Action이다.",
+      "tags": [
+        "server-action",
+        "crud",
+        "admin",
+        "customize"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/actions/inquiry-actions.ts",
+      "type": "file",
+      "name": "inquiry-actions.ts",
+      "filePath": "app/actions/inquiry-actions.ts",
+      "summary": "고객 문의(inquiries) 관리용 Server Action 모음으로, 관리자 인증 후 문의 목록 조회·단건 조회·상태 변경·답변 등록·삭제를 Supabase로 처리한다.",
+      "tags": [
+        "server-action",
+        "api-handler",
+        "supabase",
+        "admin",
+        "inquiry"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "'use server' 파일. 모든 액션이 requireAdmin으로 보호되고 변경 후 /admin/inquiries 경로를 revalidatePath로 갱신한다."
+    },
+    {
+      "id": "function:app/actions/inquiry-actions.ts:getInquiries",
+      "type": "function",
+      "name": "getInquiries",
+      "filePath": "app/actions/inquiry-actions.ts",
+      "lineRange": [
+        8,
+        35
+      ],
+      "summary": "관리자 인증 후 문의 목록을 상태 필터와 페이지네이션(range)으로 조회해 데이터와 전체 건수를 반환하는 Server Action이다.",
+      "tags": [
+        "server-action",
+        "data-fetching",
+        "admin",
+        "pagination"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/inquiry-actions.ts:getInquiry",
+      "type": "function",
+      "name": "getInquiry",
+      "filePath": "app/actions/inquiry-actions.ts",
+      "lineRange": [
+        37,
+        53
+      ],
+      "summary": "id로 단일 문의를 조회하는 관리자 Server Action이다.",
+      "tags": [
+        "server-action",
+        "data-fetching",
+        "admin",
+        "inquiry"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/inquiry-actions.ts:updateInquiryStatus",
+      "type": "function",
+      "name": "updateInquiryStatus",
+      "filePath": "app/actions/inquiry-actions.ts",
+      "lineRange": [
+        55,
+        71
+      ],
+      "summary": "문의의 처리 상태를 갱신하고 관리자 문의 경로 캐시를 무효화하는 Server Action이다.",
+      "tags": [
+        "server-action",
+        "admin",
+        "inquiry",
+        "status"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/inquiry-actions.ts:replyToInquiry",
+      "type": "function",
+      "name": "replyToInquiry",
+      "filePath": "app/actions/inquiry-actions.ts",
+      "lineRange": [
+        73,
+        96
+      ],
+      "summary": "문의에 답변 내용을 기록하고 상태를 replied로 전환한 뒤 관련 경로를 갱신하는 관리자 Server Action이다.",
+      "tags": [
+        "server-action",
+        "admin",
+        "inquiry",
+        "reply"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/inquiry-actions.ts:deleteInquiry",
+      "type": "function",
+      "name": "deleteInquiry",
+      "filePath": "app/actions/inquiry-actions.ts",
+      "lineRange": [
+        98,
+        114
+      ],
+      "summary": "문의 행을 삭제하고 관리자 문의 경로 캐시를 무효화하는 Server Action이다.",
+      "tags": [
+        "server-action",
+        "crud",
+        "admin",
+        "inquiry"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/admin/consultations/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/admin/consultations/page.tsx",
+      "summary": "관리자 상담 신청 페이지의 서버 컴포넌트로, getAdminConsultations로 초기 데이터를 받아 ConsultationManager에 전달한다.",
+      "tags": [
+        "page",
+        "admin",
+        "server-component",
+        "consultations"
+      ],
+      "complexity": "simple",
+      "languageNotes": "force-dynamic으로 동적 렌더링되는 Next.js App Router 페이지."
+    },
+    {
+      "id": "file:app/admin/customize/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/admin/customize/page.tsx",
+      "summary": "관리자 커스터마이즈 관리 페이지의 서버 컴포넌트로, getCustomizeAdminData로 카탈로그를 받아 CustomizeManager에 넘긴다.",
+      "tags": [
+        "page",
+        "admin",
+        "server-component",
+        "customize"
+      ],
+      "complexity": "simple",
+      "languageNotes": "force-dynamic으로 동적 렌더링되는 Next.js App Router 페이지."
+    },
+    {
+      "id": "file:app/admin/inquiries/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/admin/inquiries/page.tsx",
+      "summary": "관리자 문의 관리 페이지의 서버 컴포넌트로, getInquiries 결과를 정규화해 InquiryList에 전달한다.",
+      "tags": [
+        "page",
+        "admin",
+        "server-component",
+        "inquiry"
+      ],
+      "complexity": "simple",
+      "languageNotes": "force-dynamic 페이지로, normalizeInquiryStatus 헬퍼로 상태 값을 클라이언트 타입에 맞게 보정한다."
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "file:lib/admin-auth.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "file:lib/customize/priceCalculator.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "file:lib/customize/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "file:lib/public-submission-guard.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "file:lib/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/inquiry-actions.ts",
+      "target": "file:lib/admin-auth.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/inquiry-actions.ts",
+      "target": "file:lib/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/inquiry-actions.ts",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/consultations/page.tsx",
+      "target": "file:app/actions/customize-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/consultations/page.tsx",
+      "target": "file:components/admin/consultations/ConsultationManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/customize/page.tsx",
+      "target": "file:app/actions/customize-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/customize/page.tsx",
+      "target": "file:components/admin/customize/CustomizeManager.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/inquiries/page.tsx",
+      "target": "file:app/actions/inquiry-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/inquiries/page.tsx",
+      "target": "file:components/admin/inquiries/InquiryList.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:loadCatalog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:getPublicCustomizeCatalog",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:getCustomizeAdminData",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:getAdminConsultations",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:submitCustomizeConsultation",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:upsertCustomizeModel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:upsertCustomizeCategory",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:upsertCustomizeOption",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:upsertCustomizeIncludedSpec",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:setCustomizeEntityActive",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:deleteCustomizeModel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:deleteCustomizeCategory",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:deleteCustomizeOption",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:createCustomizeOptionConflict",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:deleteCustomizeOptionConflict",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:updateCustomizeConsultationStatus",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:updateCustomizeConsultationMemo",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:deleteCustomizeConsultation",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:getPublicCustomizeCatalog",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:getCustomizeAdminData",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:getAdminConsultations",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:submitCustomizeConsultation",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:upsertCustomizeModel",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:upsertCustomizeCategory",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:upsertCustomizeOption",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:upsertCustomizeIncludedSpec",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:setCustomizeEntityActive",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:deleteCustomizeModel",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:deleteCustomizeCategory",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:deleteCustomizeOption",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:createCustomizeOptionConflict",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:deleteCustomizeOptionConflict",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:updateCustomizeConsultationStatus",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:updateCustomizeConsultationMemo",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/customize-actions.ts",
+      "target": "function:app/actions/customize-actions.ts:deleteCustomizeConsultation",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/customize-actions.ts:getCustomizeAdminData",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/customize-actions.ts:getCustomizeAdminData",
+      "target": "function:lib/supabase.ts:getSupabaseAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/customize-actions.ts:getAdminConsultations",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/customize-actions.ts:submitCustomizeConsultation",
+      "target": "function:lib/public-submission-guard.ts:assertPublicSubmissionAllowed",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/customize-actions.ts:submitCustomizeConsultation",
+      "target": "function:lib/customize/priceCalculator.ts:calculateEstimate",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/customize-actions.ts:submitCustomizeConsultation",
+      "target": "function:lib/customize/priceCalculator.ts:encodeConfig",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/customize-actions.ts:submitCustomizeConsultation",
+      "target": "function:lib/customize/priceCalculator.ts:selectedOptionIds",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/customize-actions.ts:submitCustomizeConsultation",
+      "target": "function:lib/customize/priceCalculator.ts:hasConflict",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/inquiry-actions.ts",
+      "target": "function:app/actions/inquiry-actions.ts:getInquiries",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/inquiry-actions.ts",
+      "target": "function:app/actions/inquiry-actions.ts:getInquiry",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/inquiry-actions.ts",
+      "target": "function:app/actions/inquiry-actions.ts:updateInquiryStatus",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/inquiry-actions.ts",
+      "target": "function:app/actions/inquiry-actions.ts:replyToInquiry",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/inquiry-actions.ts",
+      "target": "function:app/actions/inquiry-actions.ts:deleteInquiry",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/inquiry-actions.ts",
+      "target": "function:app/actions/inquiry-actions.ts:getInquiries",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/inquiry-actions.ts",
+      "target": "function:app/actions/inquiry-actions.ts:getInquiry",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/inquiry-actions.ts",
+      "target": "function:app/actions/inquiry-actions.ts:updateInquiryStatus",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/inquiry-actions.ts",
+      "target": "function:app/actions/inquiry-actions.ts:replyToInquiry",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/inquiry-actions.ts",
+      "target": "function:app/actions/inquiry-actions.ts:deleteInquiry",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/inquiry-actions.ts:getInquiries",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/inquiry-actions.ts:getInquiries",
+      "target": "function:lib/supabase.ts:getSupabaseAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/inquiry-actions.ts:getInquiry",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/inquiry-actions.ts:updateInquiryStatus",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/inquiry-actions.ts:replyToInquiry",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/inquiry-actions.ts:deleteInquiry",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/admin/consultations/page.tsx",
+      "target": "function:app/actions/customize-actions.ts:getAdminConsultations",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/admin/customize/page.tsx",
+      "target": "function:app/actions/customize-actions.ts:getCustomizeAdminData",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/admin/inquiries/page.tsx",
+      "target": "function:app/actions/inquiry-actions.ts:getInquiries",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

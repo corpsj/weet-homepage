@@ -1,0 +1,760 @@
+{
+  "nodes": [
+    {
+      "id": "file:app/auth/callback/route.ts",
+      "type": "file",
+      "name": "route.ts",
+      "filePath": "app/auth/callback/route.ts",
+      "summary": "Supabase OAuth 콜백을 처리하는 Route Handler로, 인증 코드를 세션으로 교환한 뒤 안전한 내부 경로로 리디렉션합니다.",
+      "tags": ["api-handler", "auth", "route", "supabase", "oauth"],
+      "complexity": "simple",
+      "languageNotes": "Next.js App Router의 GET Route Handler. open redirect 방지를 위해 next 파라미터가 '/'로 시작하는지 검증합니다."
+    },
+    {
+      "id": "function:app/auth/callback/route.ts:GET",
+      "type": "function",
+      "name": "GET",
+      "filePath": "app/auth/callback/route.ts",
+      "lineRange": [6, 23],
+      "summary": "OAuth 콜백 요청에서 code를 받아 exchangeCodeForSession으로 세션을 발급하고 검증된 next 경로로 리디렉션합니다.",
+      "tags": ["api-handler", "auth", "oauth", "redirect"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/company/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/company/page.tsx",
+      "summary": "회사소개 페이지로, 크루 카드 그리드와 모달, 이미지 슬라이더를 조합하고 다국어 번역을 적용해 기업 정보를 렌더링합니다.",
+      "tags": ["component", "page", "company", "i18n"],
+      "complexity": "complex",
+      "languageNotes": "useState로 모달 열림/선택 크루 상태를 로컬 관리하는 클라이언트 컴포넌트."
+    },
+    {
+      "id": "function:app/company/page.tsx:CompanyPage",
+      "type": "function",
+      "name": "CompanyPage",
+      "filePath": "app/company/page.tsx",
+      "lineRange": [28, 402],
+      "summary": "회사소개 페이지 본문 컴포넌트로, 크루 목록을 매핑해 카드로 출력하고 카드 클릭 시 CrewModal을 여는 인터랙션을 관리합니다.",
+      "tags": ["component", "page", "i18n", "modal"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:app/login/LoginForm.tsx",
+      "type": "file",
+      "name": "LoginForm.tsx",
+      "filePath": "app/login/LoginForm.tsx",
+      "summary": "관리자 로그인 폼 컴포넌트로, 아이디/비밀번호 입력과 Google OAuth 로그인 버튼을 제공하고 에러 토스트를 표시합니다.",
+      "tags": ["component", "auth", "login", "form"],
+      "complexity": "moderate",
+      "languageNotes": "Server Action(login)으로 폼을 제출하고, Google 로그인은 client Supabase로 signInWithOAuth를 호출하는 하이브리드 인증 폼."
+    },
+    {
+      "id": "function:app/login/LoginForm.tsx:LoginForm",
+      "type": "function",
+      "name": "LoginForm",
+      "filePath": "app/login/LoginForm.tsx",
+      "lineRange": [9, 134],
+      "summary": "로그인 입력 필드와 비밀번호 표시 토글, Google OAuth 로딩 상태를 관리하며 인증 실패 시 토스트로 피드백을 제공합니다.",
+      "tags": ["component", "auth", "form", "oauth"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/login/actions.ts",
+      "type": "file",
+      "name": "actions.ts",
+      "filePath": "app/login/actions.ts",
+      "summary": "로그인 Server Action으로, 아이디 형식을 검증한 뒤 Supabase 비밀번호 인증을 수행하고 성공 시 관리자 페이지로 리디렉션합니다.",
+      "tags": ["service", "auth", "server-action", "validation"],
+      "complexity": "simple",
+      "languageNotes": "'use server' Server Action. 아이디는 정규식으로 검증하고 실패 시 query string으로 에러를 전달하는 redirect 패턴을 사용합니다."
+    },
+    {
+      "id": "function:app/login/actions.ts:login",
+      "type": "function",
+      "name": "login",
+      "filePath": "app/login/actions.ts",
+      "lineRange": [7, 31],
+      "summary": "FormData에서 아이디/비밀번호를 추출해 정규식 검증 후 signInWithPassword로 인증하고, 결과에 따라 redirect 및 revalidatePath를 호출합니다.",
+      "tags": ["service", "auth", "server-action", "validation"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/login/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/login/page.tsx",
+      "summary": "관리자 로그인 페이지로, 메타데이터를 정의하고 searchParams의 에러를 LoginForm에 전달하는 서버 컴포넌트 래퍼입니다.",
+      "tags": ["page", "auth", "login", "entry-point"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/login/page.tsx:LoginPage",
+      "type": "function",
+      "name": "LoginPage",
+      "filePath": "app/login/page.tsx",
+      "lineRange": [21, 72],
+      "summary": "로그인 페이지 레이아웃을 렌더링하고 URL searchParams에서 받은 인증 에러를 LoginForm 컴포넌트로 전달합니다.",
+      "tags": ["page", "auth", "component"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/sections/HeroCarousel.tsx",
+      "type": "file",
+      "name": "HeroCarousel.tsx",
+      "filePath": "components/sections/HeroCarousel.tsx",
+      "summary": "홈 히어로 캐러셀의 서버 컴포넌트로, Supabase에서 활성 hero_slides를 조회해 클라이언트 캐러셀 컴포넌트에 초기 데이터로 전달합니다.",
+      "tags": ["component", "section", "carousel", "supabase", "server-component"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/sections/HeroCarousel.tsx:getHeroSlides",
+      "type": "function",
+      "name": "getHeroSlides",
+      "filePath": "components/sections/HeroCarousel.tsx",
+      "lineRange": [4, 24],
+      "summary": "Supabase의 hero_slides 테이블에서 활성 슬라이드를 순서대로 조회해 캐러셀용 데이터 형태로 매핑하는 서버 사이드 페치 함수입니다.",
+      "tags": ["data-fetch", "supabase", "server-component"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/sections/HeroCarousel.tsx:HeroCarousel",
+      "type": "function",
+      "name": "HeroCarousel",
+      "filePath": "components/sections/HeroCarousel.tsx",
+      "lineRange": [26, 38],
+      "summary": "슬라이드 데이터를 비동기로 가져와 HeroCarouselClient에 초기 슬라이드로 주입하는 async 서버 컴포넌트입니다.",
+      "tags": ["component", "section", "carousel", "server-component"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/sections/HeroCarouselClientComponent.tsx",
+      "type": "file",
+      "name": "HeroCarouselClientComponent.tsx",
+      "filePath": "components/sections/HeroCarouselClientComponent.tsx",
+      "summary": "홈 히어로 캐러셀의 클라이언트 컴포넌트로, 자동 재생/일시정지, 슬라이드 전환, 모션 감소 대응, 다국어 자막을 처리합니다.",
+      "tags": ["component", "section", "carousel", "animation", "i18n"],
+      "complexity": "complex",
+      "languageNotes": "useReducedMotion으로 접근성을 고려하고 useCallback/useEffect/setInterval로 자동 재생 타이머를 관리하는 클라이언트 컴포넌트."
+    },
+    {
+      "id": "function:components/sections/HeroCarouselClientComponent.tsx:HeroCarouselClient",
+      "type": "function",
+      "name": "HeroCarouselClient",
+      "filePath": "components/sections/HeroCarouselClientComponent.tsx",
+      "lineRange": [16, 258],
+      "summary": "초기 슬라이드를 받아 현재 슬라이드 상태, 자동 재생 인터벌, 호버 일시정지, 모션 감소 처리를 통합 관리하는 인터랙티브 캐러셀 컴포넌트입니다.",
+      "tags": ["component", "carousel", "animation", "event-handler"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:components/sections/SNSGallery.tsx",
+      "type": "file",
+      "name": "SNSGallery.tsx",
+      "filePath": "components/sections/SNSGallery.tsx",
+      "summary": "인스타그램 피드를 서버에서 가져와 SNSGalleryClient에 전달하는 SNS 갤러리 섹션의 서버 컴포넌트 래퍼입니다.",
+      "tags": ["component", "section", "social", "server-component"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/sections/SNSGallery.tsx:SNSGallery",
+      "type": "function",
+      "name": "SNSGallery",
+      "filePath": "components/sections/SNSGallery.tsx",
+      "lineRange": [4, 19],
+      "summary": "getInstagramFeed로 인스타그램 게시물을 조회하고 부족한 항목은 placeholder로 채워 SNSGalleryClient에 넘기는 async 서버 컴포넌트입니다.",
+      "tags": ["component", "section", "social", "data-fetch"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/sections/SNSGalleryClient.tsx",
+      "type": "file",
+      "name": "SNSGalleryClient.tsx",
+      "filePath": "components/sections/SNSGalleryClient.tsx",
+      "summary": "인스타그램 게시물 항목을 그리드로 렌더링하고 프로필 링크와 다국어 라벨을 표시하는 SNS 갤러리 클라이언트 컴포넌트입니다.",
+      "tags": ["component", "section", "social", "i18n"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/sections/SNSGalleryClient.tsx:SNSGalleryClient",
+      "type": "function",
+      "name": "SNSGalleryClient",
+      "filePath": "components/sections/SNSGalleryClient.tsx",
+      "lineRange": [21, 82],
+      "summary": "전달받은 인스타그램 항목들을 매핑해 이미지 카드 그리드로 출력하고 useTranslation으로 섹션 문구를 현지화합니다.",
+      "tags": ["component", "social", "i18n"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/sections/__tests__/HeroCarouselClientComponent.test.tsx",
+      "type": "file",
+      "name": "HeroCarouselClientComponent.test.tsx",
+      "filePath": "components/sections/__tests__/HeroCarouselClientComponent.test.tsx",
+      "summary": "HeroCarouselClient 컴포넌트의 렌더링 동작을 검증하는 테스트 파일입니다.",
+      "tags": ["test", "carousel", "component"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/ui/CrewModal.tsx",
+      "type": "file",
+      "name": "CrewModal.tsx",
+      "filePath": "components/ui/CrewModal.tsx",
+      "summary": "크루 상세 정보를 보여주는 접근성 모달 컴포넌트로, 이미지 캐러셀, 포커스 트랩, ESC 닫기, 섹션 데이터 렌더링을 제공합니다.",
+      "tags": ["component", "modal", "ui", "accessibility"],
+      "complexity": "complex",
+      "languageNotes": "useId, focus trap(Tab 순환), ESC 핸들러, 이전 포커스 복원 등 접근성 모달 패턴을 직접 구현한 컴포넌트."
+    },
+    {
+      "id": "function:components/ui/CrewModal.tsx:CrewModal",
+      "type": "function",
+      "name": "CrewModal",
+      "filePath": "components/ui/CrewModal.tsx",
+      "lineRange": [24, 254],
+      "summary": "모달 열림 시 포커스 트랩과 키보드 핸들링을 설정하고 이미지 인덱스 전환 및 크루 섹션 데이터를 렌더링하는 접근성 모달 본문입니다.",
+      "tags": ["component", "modal", "accessibility", "event-handler"],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:components/ui/ImageSlider.tsx",
+      "type": "file",
+      "name": "ImageSlider.tsx",
+      "filePath": "components/ui/ImageSlider.tsx",
+      "summary": "여러 이미지를 좌우 화살표로 전환하는 재사용 가능한 이미지 슬라이더 UI 컴포넌트입니다.",
+      "tags": ["component", "ui", "slider", "image"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/ui/ImageSlider.tsx:ImageSlider",
+      "type": "function",
+      "name": "ImageSlider",
+      "filePath": "components/ui/ImageSlider.tsx",
+      "lineRange": [16, 91],
+      "summary": "이미지 배열과 종횡비/sizes 옵션을 받아 현재 인덱스 상태로 슬라이드를 전환하고 next/prev 컨트롤을 렌더링하는 슬라이더 컴포넌트입니다.",
+      "tags": ["component", "ui", "slider", "image"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:constants/dictionaries.ts",
+      "type": "file",
+      "name": "dictionaries.ts",
+      "filePath": "constants/dictionaries.ts",
+      "summary": "KR/EN/ES 3개 언어의 UI 문구를 담은 다국어 사전 상수로, useTranslation 훅이 참조하는 번역 데이터 소스입니다.",
+      "tags": ["data-model", "i18n", "constants", "dictionary"],
+      "complexity": "complex",
+      "languageNotes": "DICTIONARY 객체 하나만 export하는 대형 번역 데이터 파일. 코드 로직보다 콘텐츠 데이터 중심이라 라인 수에 비해 구조 복잡도는 낮습니다."
+    },
+    {
+      "id": "file:hooks/useTranslation.ts",
+      "type": "file",
+      "name": "useTranslation.ts",
+      "filePath": "hooks/useTranslation.ts",
+      "summary": "현재 언어 컨텍스트를 읽어 해당 언어의 DICTIONARY 번역 객체를 반환하는 다국어 번역 커스텀 훅입니다.",
+      "tags": ["hook", "i18n", "utility"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:hooks/useTranslation.ts:useTranslation",
+      "type": "function",
+      "name": "useTranslation",
+      "filePath": "hooks/useTranslation.ts",
+      "lineRange": [4, 7],
+      "summary": "useLanguage로 선택된 언어를 받아 소문자 키로 DICTIONARY에서 해당 언어의 번역 사전을 조회해 반환합니다.",
+      "tags": ["hook", "i18n"],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:lib/instagram.ts",
+      "type": "file",
+      "name": "instagram.ts",
+      "filePath": "lib/instagram.ts",
+      "summary": "Instagram Graph API에서 최신 게시물을 가져와 캡션을 정규화하고 갤러리용 항목 형태로 변환하는 인스타그램 연동 유틸리티입니다.",
+      "tags": ["service", "social", "api-client", "data-fetch"],
+      "complexity": "moderate",
+      "languageNotes": "환경변수 토큰이 없으면 console.warn 후 빈 배열을 반환하는 graceful degradation 패턴을 사용합니다."
+    },
+    {
+      "id": "function:lib/instagram.ts:getInstagramEndpoint",
+      "type": "function",
+      "name": "getInstagramEndpoint",
+      "filePath": "lib/instagram.ts",
+      "lineRange": [33, 47],
+      "summary": "조회 필드와 limit, 액세스 토큰을 조합해 Instagram Graph API 요청 URL을 생성하는 헬퍼 함수입니다.",
+      "tags": ["utility", "api-client", "social"],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:lib/instagram.ts:getInstagramFeed",
+      "type": "function",
+      "name": "getInstagramFeed",
+      "filePath": "lib/instagram.ts",
+      "lineRange": [55, 99],
+      "summary": "Instagram API를 호출해 게시물을 받아 이미지 URL과 캡션을 정규화하고 갤러리용 항목 배열로 매핑하며, 실패 시 빈 배열을 반환합니다.",
+      "tags": ["service", "social", "data-fetch", "api-client"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:utils/supabase/server.ts",
+      "type": "file",
+      "name": "server.ts",
+      "filePath": "utils/supabase/server.ts",
+      "summary": "Next.js cookies를 사용해 서버 사이드 Supabase 클라이언트를 생성하는 SSR 인증 유틸리티로, 인증 라우트와 서버 컴포넌트 전반에서 사용됩니다.",
+      "tags": ["utility", "supabase", "auth", "ssr"],
+      "complexity": "simple",
+      "languageNotes": "@supabase/ssr의 createServerClient에 cookie getAll/setAll 핸들러를 연결하는 표준 SSR 패턴."
+    },
+    {
+      "id": "function:utils/supabase/server.ts:createClient",
+      "type": "function",
+      "name": "createClient",
+      "filePath": "utils/supabase/server.ts",
+      "lineRange": [5, 30],
+      "summary": "Next.js cookie store를 기반으로 getAll/setAll 핸들러를 구성해 서버용 Supabase 클라이언트 인스턴스를 생성합니다.",
+      "tags": ["utility", "supabase", "auth", "ssr"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:app/auth/callback/route.ts",
+      "target": "function:app/auth/callback/route.ts:GET",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:app/auth/callback/route.ts",
+      "target": "function:app/auth/callback/route.ts:GET",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/auth/callback/route.ts",
+      "target": "file:utils/supabase/server.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:app/auth/callback/route.ts:GET",
+      "target": "function:utils/supabase/server.ts:createClient",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/company/page.tsx",
+      "target": "function:app/company/page.tsx:CompanyPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:app/company/page.tsx",
+      "target": "function:app/company/page.tsx:CompanyPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/company/page.tsx",
+      "target": "file:components/ui/CrewModal.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/company/page.tsx",
+      "target": "file:components/ui/ImageSlider.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/company/page.tsx",
+      "target": "file:hooks/useTranslation.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:app/company/page.tsx:CompanyPage",
+      "target": "function:hooks/useTranslation.ts:useTranslation",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/login/LoginForm.tsx",
+      "target": "function:app/login/LoginForm.tsx:LoginForm",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:app/login/LoginForm.tsx",
+      "target": "function:app/login/LoginForm.tsx:LoginForm",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/login/LoginForm.tsx",
+      "target": "file:app/login/actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/login/LoginForm.tsx",
+      "target": "file:utils/supabase/client.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:app/login/LoginForm.tsx:LoginForm",
+      "target": "function:app/login/actions.ts:login",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/login/LoginForm.tsx:LoginForm",
+      "target": "function:utils/supabase/client.ts:createClient",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/login/actions.ts",
+      "target": "function:app/login/actions.ts:login",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:app/login/actions.ts",
+      "target": "function:app/login/actions.ts:login",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/login/actions.ts",
+      "target": "file:utils/supabase/server.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:app/login/actions.ts:login",
+      "target": "function:utils/supabase/server.ts:createClient",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/login/page.tsx",
+      "target": "function:app/login/page.tsx:LoginPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:app/login/page.tsx",
+      "target": "function:app/login/page.tsx:LoginPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/login/page.tsx",
+      "target": "file:app/login/LoginForm.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:app/login/page.tsx:LoginPage",
+      "target": "function:app/login/LoginForm.tsx:LoginForm",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/sections/HeroCarousel.tsx",
+      "target": "function:components/sections/HeroCarousel.tsx:getHeroSlides",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:components/sections/HeroCarousel.tsx",
+      "target": "function:components/sections/HeroCarousel.tsx:HeroCarousel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:components/sections/HeroCarousel.tsx",
+      "target": "function:components/sections/HeroCarousel.tsx:HeroCarousel",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/sections/HeroCarousel.tsx",
+      "target": "file:components/sections/HeroCarouselClientComponent.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/sections/HeroCarousel.tsx",
+      "target": "file:utils/supabase/server.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:components/sections/HeroCarousel.tsx:getHeroSlides",
+      "target": "function:utils/supabase/server.ts:createClient",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/sections/HeroCarousel.tsx:HeroCarousel",
+      "target": "function:components/sections/HeroCarouselClientComponent.tsx:HeroCarouselClient",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/sections/HeroCarouselClientComponent.tsx",
+      "target": "function:components/sections/HeroCarouselClientComponent.tsx:HeroCarouselClient",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:components/sections/HeroCarouselClientComponent.tsx",
+      "target": "function:components/sections/HeroCarouselClientComponent.tsx:HeroCarouselClient",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/sections/HeroCarouselClientComponent.tsx",
+      "target": "file:hooks/useTranslation.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:components/sections/HeroCarouselClientComponent.tsx:HeroCarouselClient",
+      "target": "function:hooks/useTranslation.ts:useTranslation",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/sections/SNSGallery.tsx",
+      "target": "function:components/sections/SNSGallery.tsx:SNSGallery",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:components/sections/SNSGallery.tsx",
+      "target": "function:components/sections/SNSGallery.tsx:SNSGallery",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/sections/SNSGallery.tsx",
+      "target": "file:components/sections/SNSGalleryClient.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/sections/SNSGallery.tsx",
+      "target": "file:lib/instagram.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:components/sections/SNSGallery.tsx:SNSGallery",
+      "target": "function:lib/instagram.ts:getInstagramFeed",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/sections/SNSGallery.tsx:SNSGallery",
+      "target": "function:components/sections/SNSGalleryClient.tsx:SNSGalleryClient",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/sections/SNSGalleryClient.tsx",
+      "target": "function:components/sections/SNSGalleryClient.tsx:SNSGalleryClient",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:components/sections/SNSGalleryClient.tsx",
+      "target": "function:components/sections/SNSGalleryClient.tsx:SNSGalleryClient",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/sections/SNSGalleryClient.tsx",
+      "target": "file:hooks/useTranslation.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:components/sections/SNSGalleryClient.tsx:SNSGalleryClient",
+      "target": "function:hooks/useTranslation.ts:useTranslation",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/sections/__tests__/HeroCarouselClientComponent.test.tsx",
+      "target": "file:components/sections/HeroCarouselClientComponent.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/sections/HeroCarouselClientComponent.tsx",
+      "target": "file:components/sections/__tests__/HeroCarouselClientComponent.test.tsx",
+      "type": "tested_by",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "file:components/ui/CrewModal.tsx",
+      "target": "function:components/ui/CrewModal.tsx:CrewModal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:components/ui/CrewModal.tsx",
+      "target": "function:components/ui/CrewModal.tsx:CrewModal",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/ui/ImageSlider.tsx",
+      "target": "function:components/ui/ImageSlider.tsx:ImageSlider",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:components/ui/ImageSlider.tsx",
+      "target": "function:components/ui/ImageSlider.tsx:ImageSlider",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:hooks/useTranslation.ts",
+      "target": "function:hooks/useTranslation.ts:useTranslation",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:hooks/useTranslation.ts",
+      "target": "function:hooks/useTranslation.ts:useTranslation",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:hooks/useTranslation.ts",
+      "target": "file:constants/dictionaries.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:hooks/useTranslation.ts",
+      "target": "file:contexts/LanguageContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:hooks/useTranslation.ts:useTranslation",
+      "target": "function:contexts/LanguageContext.tsx:useLanguage",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/instagram.ts",
+      "target": "function:lib/instagram.ts:getInstagramEndpoint",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:lib/instagram.ts",
+      "target": "function:lib/instagram.ts:getInstagramFeed",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:lib/instagram.ts",
+      "target": "function:lib/instagram.ts:getInstagramFeed",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:lib/instagram.ts:getInstagramFeed",
+      "target": "function:lib/instagram.ts:getInstagramEndpoint",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:utils/supabase/server.ts",
+      "target": "function:utils/supabase/server.ts:createClient",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1.0
+    },
+    {
+      "source": "file:utils/supabase/server.ts",
+      "target": "function:utils/supabase/server.ts:createClient",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:utils/supabase/server.ts",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

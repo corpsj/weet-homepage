@@ -1,0 +1,861 @@
+{
+  "nodes": [
+    {
+      "id": "file:components/customize/parts/OptionCard.tsx",
+      "type": "file",
+      "name": "OptionCard.tsx",
+      "filePath": "components/customize/parts/OptionCard.tsx",
+      "summary": "단일 옵션을 선택 가능한 카드로 표시하는 컴포넌트로, 선택 토글·스와치·가격 표시·상세 정보 열기를 처리한다.",
+      "tags": [
+        "component",
+        "configurator",
+        "option",
+        "presentational"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/customize/parts/OptionCard.tsx:OptionCard",
+      "type": "function",
+      "name": "OptionCard",
+      "filePath": "components/customize/parts/OptionCard.tsx",
+      "lineRange": [
+        14,
+        95
+      ],
+      "summary": "옵션/선택여부/토글·정보 콜백을 받아 스와치와 가격을 포함한 옵션 카드를 렌더링한다.",
+      "tags": [
+        "component",
+        "option",
+        "event-handler"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/customize/parts/OptionInfoModal.tsx",
+      "type": "file",
+      "name": "OptionInfoModal.tsx",
+      "filePath": "components/customize/parts/OptionInfoModal.tsx",
+      "summary": "옵션 상세 정보를 모달로 표시하는 컴포넌트로, 옵션 이미지 경로 정규화와 상세 설명 문단 구성을 수행한다.",
+      "tags": [
+        "component",
+        "configurator",
+        "modal",
+        "option"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/customize/parts/OptionInfoModal.tsx:OptionInfoModal",
+      "type": "function",
+      "name": "OptionInfoModal",
+      "filePath": "components/customize/parts/OptionInfoModal.tsx",
+      "lineRange": [
+        43,
+        113
+      ],
+      "summary": "옵션/닫기 콜백을 받아 이미지와 상세 설명 문단을 포함한 옵션 정보 모달을 렌더링한다.",
+      "tags": [
+        "component",
+        "modal",
+        "option"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/customize/parts/OptionInfoModal.tsx:paragraphsFor",
+      "type": "function",
+      "name": "paragraphsFor",
+      "filePath": "components/customize/parts/OptionInfoModal.tsx",
+      "lineRange": [
+        27,
+        41
+      ],
+      "summary": "옵션 상세 설명과 폴백·가이드 텍스트를 조합해 표시할 문단 배열을 구성한다.",
+      "tags": [
+        "utility",
+        "option",
+        "text"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/customize/parts/OptionsPanel.tsx",
+      "type": "file",
+      "name": "OptionsPanel.tsx",
+      "filePath": "components/customize/parts/OptionsPanel.tsx",
+      "summary": "현재 스텝의 모델 선택과 카테고리별 옵션 목록을 구성하는 메인 옵션 패널로, 옵션 카드 그리드와 스텝 내 이동을 조율한다.",
+      "tags": [
+        "component",
+        "configurator",
+        "option",
+        "panel"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:components/customize/parts/OptionsPanel.tsx:OptionsPanel",
+      "type": "function",
+      "name": "OptionsPanel",
+      "filePath": "components/customize/parts/OptionsPanel.tsx",
+      "lineRange": [
+        18,
+        195
+      ],
+      "summary": "카탈로그/선택 상태/스텝 정보를 받아 모델 선택과 카테고리별 옵션 카드 목록을 렌더링하고 스텝 이동을 처리한다.",
+      "tags": [
+        "component",
+        "option",
+        "panel",
+        "state"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:components/customize/parts/RailSummaryFooter.tsx",
+      "type": "file",
+      "name": "RailSummaryFooter.tsx",
+      "filePath": "components/customize/parts/RailSummaryFooter.tsx",
+      "summary": "데스크톱 사이드 레일 하단의 견적 요약 푸터로, 총 견적과 다음 스텝 이동 CTA를 표시한다.",
+      "tags": [
+        "component",
+        "configurator",
+        "summary",
+        "navigation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/customize/parts/RailSummaryFooter.tsx:RailSummaryFooter",
+      "type": "function",
+      "name": "RailSummaryFooter",
+      "filePath": "components/customize/parts/RailSummaryFooter.tsx",
+      "lineRange": [
+        9,
+        97
+      ],
+      "summary": "견적/스텝 인덱스/이동 콜백을 받아 합계 견적과 다음 단계 CTA가 있는 요약 푸터를 렌더링한다.",
+      "tags": [
+        "component",
+        "summary",
+        "navigation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/customize/parts/ReviewStep.tsx",
+      "type": "file",
+      "name": "ReviewStep.tsx",
+      "filePath": "components/customize/parts/ReviewStep.tsx",
+      "summary": "마지막 검토 스텝 화면으로, 선택 요약·평면도·견적 합계와 상담 신청 폼(이름/연락처/지역 등)을 검증과 함께 제출한다.",
+      "tags": [
+        "component",
+        "configurator",
+        "review",
+        "validation",
+        "form"
+      ],
+      "complexity": "complex",
+      "languageNotes": "검토 요약, 상담 폼, 필드/셀렉트 보조 컴포넌트가 한 파일에 모인 대형 클라이언트 컴포넌트."
+    },
+    {
+      "id": "function:components/customize/parts/ReviewStep.tsx:ReviewStep",
+      "type": "function",
+      "name": "ReviewStep",
+      "filePath": "components/customize/parts/ReviewStep.tsx",
+      "lineRange": [
+        31,
+        198
+      ],
+      "summary": "견적/선택 옵션과 폼 상태를 받아 스텝별 선택 요약과 평면도, 견적 합계, 상담 폼을 렌더링한다.",
+      "tags": [
+        "component",
+        "review",
+        "summary"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:components/customize/parts/ReviewStep.tsx:ConsultationForm",
+      "type": "function",
+      "name": "ConsultationForm",
+      "filePath": "components/customize/parts/ReviewStep.tsx",
+      "lineRange": [
+        214,
+        367
+      ],
+      "summary": "상담 신청 입력 폼으로, 필수 필드 검증과 필드별 오류 상태를 관리하고 제출 시 onSubmit을 호출한다.",
+      "tags": [
+        "component",
+        "form",
+        "validation",
+        "event-handler"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:components/customize/parts/ReviewStep.tsx:Field",
+      "type": "function",
+      "name": "Field",
+      "filePath": "components/customize/parts/ReviewStep.tsx",
+      "lineRange": [
+        369,
+        415
+      ],
+      "summary": "라벨/필수표시/도움말/오류를 포함한 접근성 속성을 갖춘 폼 필드 래퍼 컴포넌트.",
+      "tags": [
+        "component",
+        "form",
+        "accessibility"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/customize/parts/ReviewStep.tsx:Select",
+      "type": "function",
+      "name": "Select",
+      "filePath": "components/customize/parts/ReviewStep.tsx",
+      "lineRange": [
+        417,
+        449
+      ],
+      "summary": "옵션 목록을 받아 접근성 속성이 적용된 셀렉트 입력을 렌더링하는 폼 컴포넌트.",
+      "tags": [
+        "component",
+        "form",
+        "input"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/customize/parts/StepperBar.tsx",
+      "type": "file",
+      "name": "StepperBar.tsx",
+      "filePath": "components/customize/parts/StepperBar.tsx",
+      "summary": "컨피규레이터 진행 스텝을 표시하는 스테퍼 바로, 도달 가능한 스텝까지 클릭 이동과 상태 텍스트를 보여준다.",
+      "tags": [
+        "component",
+        "configurator",
+        "stepper",
+        "navigation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/customize/parts/StepperBar.tsx:StepperBar",
+      "type": "function",
+      "name": "StepperBar",
+      "filePath": "components/customize/parts/StepperBar.tsx",
+      "lineRange": [
+        6,
+        80
+      ],
+      "summary": "현재/최대 도달 스텝과 스텝별 선택 개수를 받아 진행 스테퍼 UI를 렌더링하고 스텝 전환을 처리한다.",
+      "tags": [
+        "component",
+        "stepper",
+        "navigation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/ui/badge.tsx",
+      "type": "file",
+      "name": "badge.tsx",
+      "filePath": "components/ui/badge.tsx",
+      "summary": "variant 스타일을 지원하는 재사용 Badge UI 프리미티브.",
+      "tags": [
+        "component",
+        "ui",
+        "presentational"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/ui/button.tsx",
+      "type": "file",
+      "name": "button.tsx",
+      "filePath": "components/ui/button.tsx",
+      "summary": "variant/size를 지원하는 shadcn 스타일 Button UI 프리미티브로 컨피규레이터 전반에서 재사용된다.",
+      "tags": [
+        "component",
+        "ui",
+        "button",
+        "presentational"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/ui/card.tsx",
+      "type": "file",
+      "name": "card.tsx",
+      "filePath": "components/ui/card.tsx",
+      "summary": "Card 및 헤더/푸터/타이틀/콘텐츠 등 합성 가능한 카드 UI 프리미티브 집합.",
+      "tags": [
+        "component",
+        "ui",
+        "presentational",
+        "barrel"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/ui/drawer.tsx",
+      "type": "file",
+      "name": "drawer.tsx",
+      "filePath": "components/ui/drawer.tsx",
+      "summary": "vaul 기반 Drawer UI 프리미티브 집합으로, 오버레이/콘텐츠/헤더/푸터 등 합성 파트를 export한다.",
+      "tags": [
+        "component",
+        "ui",
+        "drawer",
+        "presentational"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/ui/input.tsx",
+      "type": "file",
+      "name": "input.tsx",
+      "filePath": "components/ui/input.tsx",
+      "summary": "공통 스타일이 적용된 재사용 Input UI 프리미티브.",
+      "tags": [
+        "component",
+        "ui",
+        "input",
+        "presentational"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:components/ui/label.tsx",
+      "type": "file",
+      "name": "label.tsx",
+      "filePath": "components/ui/label.tsx",
+      "summary": "Radix 기반 접근성 Label UI 프리미티브.",
+      "tags": [
+        "component",
+        "ui",
+        "label",
+        "presentational"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:components/ui/drawer.tsx:DrawerContent",
+      "type": "function",
+      "name": "DrawerContent",
+      "filePath": "components/ui/drawer.tsx",
+      "lineRange": [
+        48,
+        69
+      ],
+      "summary": "오버레이와 포털을 포함해 드로어 본문을 렌더링하는 합성 파트.",
+      "tags": [
+        "component",
+        "ui",
+        "drawer"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:components/customize/parts/OptionCard.tsx",
+      "target": "function:components/customize/parts/OptionCard.tsx:OptionCard",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/OptionCard.tsx",
+      "target": "function:components/customize/parts/OptionCard.tsx:OptionCard",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/parts/OptionCard.tsx:OptionCard",
+      "target": "function:components/customize/lib/helpers.ts:hasOptionInfo",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/parts/OptionCard.tsx:OptionCard",
+      "target": "function:components/customize/lib/helpers.ts:optionPriceDisplay",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/parts/OptionInfoModal.tsx",
+      "target": "function:components/customize/parts/OptionInfoModal.tsx:OptionInfoModal",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/OptionInfoModal.tsx",
+      "target": "function:components/customize/parts/OptionInfoModal.tsx:paragraphsFor",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/OptionInfoModal.tsx",
+      "target": "function:components/customize/parts/OptionInfoModal.tsx:OptionInfoModal",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/parts/OptionInfoModal.tsx:OptionInfoModal",
+      "target": "function:components/customize/lib/hooks.ts:useModalDismiss",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/parts/OptionInfoModal.tsx:OptionInfoModal",
+      "target": "function:components/customize/lib/helpers.ts:optionPriceDisplay",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/parts/OptionsPanel.tsx",
+      "target": "function:components/customize/parts/OptionsPanel.tsx:OptionsPanel",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/OptionsPanel.tsx",
+      "target": "function:components/customize/parts/OptionsPanel.tsx:OptionsPanel",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/parts/OptionsPanel.tsx:OptionsPanel",
+      "target": "function:lib/customize/priceCalculator.ts:formatWon",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/parts/RailSummaryFooter.tsx",
+      "target": "function:components/customize/parts/RailSummaryFooter.tsx:RailSummaryFooter",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/RailSummaryFooter.tsx",
+      "target": "function:components/customize/parts/RailSummaryFooter.tsx:RailSummaryFooter",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/parts/RailSummaryFooter.tsx:RailSummaryFooter",
+      "target": "function:lib/customize/priceCalculator.ts:formatWon",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/parts/RailSummaryFooter.tsx:RailSummaryFooter",
+      "target": "function:components/customize/lib/helpers.ts:nextStepCta",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/parts/ReviewStep.tsx",
+      "target": "function:components/customize/parts/ReviewStep.tsx:ReviewStep",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/ReviewStep.tsx",
+      "target": "function:components/customize/parts/ReviewStep.tsx:ConsultationForm",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/ReviewStep.tsx",
+      "target": "function:components/customize/parts/ReviewStep.tsx:Field",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/ReviewStep.tsx",
+      "target": "function:components/customize/parts/ReviewStep.tsx:Select",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/ReviewStep.tsx",
+      "target": "function:components/customize/parts/ReviewStep.tsx:ReviewStep",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/parts/ReviewStep.tsx:ReviewStep",
+      "target": "function:lib/customize/priceCalculator.ts:formatModelStartPrice",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/parts/ReviewStep.tsx:ReviewStep",
+      "target": "function:lib/customize/priceCalculator.ts:formatWon",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/parts/StepperBar.tsx",
+      "target": "function:components/customize/parts/StepperBar.tsx:StepperBar",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/customize/parts/StepperBar.tsx",
+      "target": "function:components/customize/parts/StepperBar.tsx:StepperBar",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/customize/parts/StepperBar.tsx:StepperBar",
+      "target": "function:components/customize/lib/helpers.ts:stepStatusText",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/ui/drawer.tsx",
+      "target": "function:components/ui/drawer.tsx:DrawerContent",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/ui/drawer.tsx",
+      "target": "function:components/ui/drawer.tsx:DrawerContent",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/customize/parts/OptionCard.tsx",
+      "target": "file:components/customize/lib/constants.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/OptionCard.tsx",
+      "target": "file:components/customize/lib/helpers.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/OptionCard.tsx",
+      "target": "file:lib/customize/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/OptionCard.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/OptionInfoModal.tsx",
+      "target": "file:components/customize/lib/constants.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/OptionInfoModal.tsx",
+      "target": "file:components/customize/lib/helpers.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/OptionInfoModal.tsx",
+      "target": "file:components/customize/lib/hooks.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/OptionInfoModal.tsx",
+      "target": "file:components/ui/button.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/OptionInfoModal.tsx",
+      "target": "file:lib/customize/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/OptionInfoModal.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/OptionsPanel.tsx",
+      "target": "file:components/customize/lib/constants.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/OptionsPanel.tsx",
+      "target": "file:components/customize/parts/CategoryHeading.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/OptionsPanel.tsx",
+      "target": "file:components/customize/parts/InlineStepFooter.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/OptionsPanel.tsx",
+      "target": "file:components/customize/parts/OptionCard.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/OptionsPanel.tsx",
+      "target": "file:components/customize/parts/RailSummaryFooter.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/OptionsPanel.tsx",
+      "target": "file:lib/customize/priceCalculator.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/OptionsPanel.tsx",
+      "target": "file:lib/customize/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/OptionsPanel.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/RailSummaryFooter.tsx",
+      "target": "file:components/customize/lib/constants.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/RailSummaryFooter.tsx",
+      "target": "file:components/customize/lib/helpers.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/RailSummaryFooter.tsx",
+      "target": "file:components/ui/button.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/RailSummaryFooter.tsx",
+      "target": "file:lib/customize/priceCalculator.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/RailSummaryFooter.tsx",
+      "target": "file:lib/customize/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/ReviewStep.tsx",
+      "target": "file:components/customize/lib/constants.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/ReviewStep.tsx",
+      "target": "file:components/customize/lib/helpers.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/ReviewStep.tsx",
+      "target": "file:components/customize/parts/FloorplanCanvas.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/ReviewStep.tsx",
+      "target": "file:components/ui/button.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/ReviewStep.tsx",
+      "target": "file:components/ui/input.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/ReviewStep.tsx",
+      "target": "file:components/ui/label.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/ReviewStep.tsx",
+      "target": "file:components/ui/textarea.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/ReviewStep.tsx",
+      "target": "file:lib/customize/config.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/ReviewStep.tsx",
+      "target": "file:lib/customize/priceCalculator.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/ReviewStep.tsx",
+      "target": "file:lib/customize/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/ReviewStep.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/StepperBar.tsx",
+      "target": "file:components/customize/lib/constants.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/StepperBar.tsx",
+      "target": "file:components/customize/lib/helpers.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/customize/parts/StepperBar.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/ui/badge.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/ui/button.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/ui/card.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/ui/drawer.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/ui/input.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/ui/label.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

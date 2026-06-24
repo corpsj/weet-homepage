@@ -1,0 +1,1037 @@
+{
+  "nodes": [
+    {
+      "id": "file:app/actions/settings-actions.ts",
+      "type": "file",
+      "name": "settings-actions.ts",
+      "filePath": "app/actions/settings-actions.ts",
+      "summary": "사이트 전역 설정(site_settings)을 조회/저장하는 Next.js Server Action 모듈로, 관리자 권한 검증과 캐시 무효화를 포함합니다.",
+      "tags": [
+        "server-action",
+        "api-handler",
+        "validation",
+        "admin",
+        "supabase"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "'use server' 지시문으로 선언된 Server Action. revalidateTag/revalidatePath로 ISR 캐시를 무효화합니다."
+    },
+    {
+      "id": "function:app/actions/settings-actions.ts:getSiteSettingRows",
+      "type": "function",
+      "name": "getSiteSettingRows",
+      "filePath": "app/actions/settings-actions.ts",
+      "lineRange": [
+        8,
+        20
+      ],
+      "summary": "site_settings 테이블에서 key/value/label 행을 정렬 조회하여 반환하는 읽기 액션입니다.",
+      "tags": [
+        "server-action",
+        "data-access",
+        "supabase"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/settings-actions.ts:updateSiteSettings",
+      "type": "function",
+      "name": "updateSiteSettings",
+      "filePath": "app/actions/settings-actions.ts",
+      "lineRange": [
+        22,
+        63
+      ],
+      "summary": "관리자 권한을 확인한 뒤 허용된 키만 sanitize하여 site_settings에 upsert하고 관련 캐시를 무효화하는 쓰기 액션입니다.",
+      "tags": [
+        "server-action",
+        "validation",
+        "admin",
+        "supabase",
+        "cache-invalidation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/bespoke/layout.tsx",
+      "type": "file",
+      "name": "layout.tsx",
+      "filePath": "app/bespoke/layout.tsx",
+      "summary": "비스포크 라우트의 App Router 레이아웃으로, buildPageMetadata로 SEO 메타데이터를 생성하고 children을 그대로 렌더합니다.",
+      "tags": [
+        "layout",
+        "app-router",
+        "seo",
+        "metadata"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/bespoke/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/bespoke/page.tsx",
+      "summary": "비스포크 맞춤 서비스 소개 페이지로, 다국어 카피와 이미지 데이터를 기반으로 features/sections를 렌더하고 선택 가능한 카드 인터랙션을 제공하는 클라이언트 컴포넌트입니다.",
+      "tags": [
+        "page",
+        "app-router",
+        "client-component",
+        "i18n",
+        "component"
+      ],
+      "complexity": "complex",
+      "languageNotes": "useState/useEffect 기반 클라이언트 컴포넌트. 키보드 이벤트로 선택 상태를 닫는 인터랙션을 포함합니다."
+    },
+    {
+      "id": "function:app/bespoke/page.tsx:BespokePage",
+      "type": "function",
+      "name": "BespokePage",
+      "filePath": "app/bespoke/page.tsx",
+      "lineRange": [
+        199,
+        400
+      ],
+      "summary": "비스포크 페이지의 루트 클라이언트 컴포넌트로, 언어별 카피를 선택하고 선택된 카드 상태와 키보드 핸들러를 관리합니다.",
+      "tags": [
+        "page",
+        "client-component",
+        "i18n",
+        "event-handler"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:app/company/layout.tsx",
+      "type": "file",
+      "name": "layout.tsx",
+      "filePath": "app/company/layout.tsx",
+      "summary": "회사소개 라우트의 App Router 레이아웃으로, buildPageMetadata로 SEO 메타데이터를 생성하고 children을 렌더합니다.",
+      "tags": [
+        "layout",
+        "app-router",
+        "seo",
+        "metadata"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/customize/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/customize/page.tsx",
+      "summary": "커스터마이즈 설정 페이지로, 공개 카탈로그와 사이트 설정을 서버에서 병렬 조회해 CustomizeConfigurator에 전달하고 JSON-LD 구조화 데이터를 주입하는 서버 컴포넌트입니다.",
+      "tags": [
+        "page",
+        "app-router",
+        "server-component",
+        "seo",
+        "data-fetching"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "export const dynamic로 동적 렌더링을 지정하고 Promise.all로 데이터를 병렬 페칭합니다."
+    },
+    {
+      "id": "function:app/customize/page.tsx:CustomizePage",
+      "type": "function",
+      "name": "CustomizePage",
+      "filePath": "app/customize/page.tsx",
+      "lineRange": [
+        16,
+        54
+      ],
+      "summary": "커스터마이즈 카탈로그와 사이트 설정을 병렬 조회하여 구성기 컴포넌트와 JSON-LD를 렌더하는 비동기 서버 컴포넌트입니다.",
+      "tags": [
+        "page",
+        "server-component",
+        "data-fetching"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/layout.tsx",
+      "type": "file",
+      "name": "layout.tsx",
+      "filePath": "app/layout.tsx",
+      "summary": "애플리케이션 루트 레이아웃으로, 전역 메타데이터/폰트/글로벌 CSS를 설정하고 LanguageProvider와 ClientLayout으로 전체 페이지를 감싸며 조직 JSON-LD를 주입합니다.",
+      "tags": [
+        "entry-point",
+        "layout",
+        "app-router",
+        "seo",
+        "i18n"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "루트 RootLayout이 getSiteSettings로 서버 측 설정을 읽고 jsonLdHtml로 구조화 데이터를 head에 삽입합니다."
+    },
+    {
+      "id": "function:app/layout.tsx:RootLayout",
+      "type": "function",
+      "name": "RootLayout",
+      "filePath": "app/layout.tsx",
+      "lineRange": [
+        106,
+        200
+      ],
+      "summary": "사이트 설정을 조회하고 언어 컨텍스트와 클라이언트 레이아웃으로 children을 감싸는 루트 레이아웃 컴포넌트입니다.",
+      "tags": [
+        "layout",
+        "server-component",
+        "i18n",
+        "seo"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/modular/layout.tsx",
+      "type": "file",
+      "name": "layout.tsx",
+      "filePath": "app/modular/layout.tsx",
+      "summary": "모듈러 건축 라우트의 App Router 레이아웃으로, buildPageMetadata로 SEO 메타데이터를 생성하고 children을 렌더합니다.",
+      "tags": [
+        "layout",
+        "app-router",
+        "seo",
+        "metadata"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/modular/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/modular/page.tsx",
+      "summary": "모듈러 건축 소개 페이지로, 다국어 카피를 기반으로 intro 통계와 공정(process) 단계를 렌더하는 클라이언트 컴포넌트입니다.",
+      "tags": [
+        "page",
+        "app-router",
+        "client-component",
+        "i18n",
+        "component"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:app/modular/page.tsx:ModularPage",
+      "type": "function",
+      "name": "ModularPage",
+      "filePath": "app/modular/page.tsx",
+      "lineRange": [
+        186,
+        325
+      ],
+      "summary": "언어별 카피를 받아 모듈러 건축의 통계와 공정 단계를 매핑 렌더하는 클라이언트 페이지 컴포넌트입니다.",
+      "tags": [
+        "page",
+        "client-component",
+        "i18n"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:app/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/page.tsx",
+      "summary": "사이트 홈페이지로, 커스터마이즈 카탈로그/갤러리/FAQ/사이트 설정을 서버에서 병렬 조회하여 모델 목록·투명성·갤러리·공정·FAQ 등 다수 섹션을 조합하는 서버 컴포넌트입니다.",
+      "tags": [
+        "entry-point",
+        "page",
+        "app-router",
+        "server-component",
+        "data-fetching"
+      ],
+      "complexity": "complex",
+      "languageNotes": "export const revalidate로 ISR 주기를 지정하고 Promise.all + .catch 폴백으로 여러 데이터 소스를 안전하게 페칭합니다."
+    },
+    {
+      "id": "function:app/page.tsx:HomePage",
+      "type": "function",
+      "name": "HomePage",
+      "filePath": "app/page.tsx",
+      "lineRange": [
+        116,
+        465
+      ],
+      "summary": "여러 데이터 소스를 병렬 조회한 뒤 홈페이지의 모든 섹션을 조합·렌더하는 비동기 서버 컴포넌트입니다.",
+      "tags": [
+        "page",
+        "server-component",
+        "data-fetching",
+        "composition"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:app/page.tsx:cleanGalleryTitle",
+      "type": "function",
+      "name": "cleanGalleryTitle",
+      "filePath": "app/page.tsx",
+      "lineRange": [
+        112,
+        114
+      ],
+      "summary": "갤러리 제목 끝의 ':)' 이모티콘과 공백을 제거하는 문자열 정리 헬퍼입니다.",
+      "tags": [
+        "utility",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/privacy/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/privacy/page.tsx",
+      "summary": "개인정보처리방침 정적 페이지로, 약관 조항을 마크업으로 렌더하는 서버 컴포넌트입니다.",
+      "tags": [
+        "page",
+        "app-router",
+        "legal",
+        "static-content"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/privacy/page.tsx:PrivacyPage",
+      "type": "function",
+      "name": "PrivacyPage",
+      "filePath": "app/privacy/page.tsx",
+      "lineRange": [
+        11,
+        111
+      ],
+      "summary": "개인정보처리방침 본문 조항을 정적으로 렌더하는 페이지 컴포넌트입니다.",
+      "tags": [
+        "page",
+        "legal",
+        "static-content"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/products/layout.tsx",
+      "type": "file",
+      "name": "layout.tsx",
+      "filePath": "app/products/layout.tsx",
+      "summary": "제품 소개 라우트의 App Router 레이아웃으로, buildPageMetadata로 SEO 메타데이터를 생성하고 children을 렌더합니다.",
+      "tags": [
+        "layout",
+        "app-router",
+        "seo",
+        "metadata"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/projects/layout.tsx",
+      "type": "file",
+      "name": "layout.tsx",
+      "filePath": "app/projects/layout.tsx",
+      "summary": "프로젝트(사례) 라우트의 App Router 레이아웃으로, SEO 메타데이터를 구성하고 children을 렌더합니다.",
+      "tags": [
+        "layout",
+        "app-router",
+        "seo",
+        "metadata"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/robots.ts",
+      "type": "file",
+      "name": "robots.ts",
+      "filePath": "app/robots.ts",
+      "summary": "검색엔진 크롤러용 robots.txt를 동적으로 생성하는 Next.js 메타데이터 라우트로, 사이트맵과 호스트를 SITE_URL 기준으로 지정합니다.",
+      "tags": [
+        "seo",
+        "metadata-route",
+        "robots",
+        "crawler"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/robots.ts:robots",
+      "type": "function",
+      "name": "robots",
+      "filePath": "app/robots.ts",
+      "lineRange": [
+        4,
+        16
+      ],
+      "summary": "허용 규칙과 사이트맵·호스트를 담은 robots 메타데이터 객체를 반환하는 함수입니다.",
+      "tags": [
+        "seo",
+        "robots",
+        "metadata-route"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/solution/cctv/layout.tsx",
+      "type": "file",
+      "name": "layout.tsx",
+      "filePath": "app/solution/cctv/layout.tsx",
+      "summary": "솔루션 CCTV 세부 라우트의 레이아웃으로, SEO 메타데이터와 BreadcrumbJsonLd 구조화 데이터를 함께 렌더합니다.",
+      "tags": [
+        "layout",
+        "app-router",
+        "seo",
+        "breadcrumb"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/solution/energy/layout.tsx",
+      "type": "file",
+      "name": "layout.tsx",
+      "filePath": "app/solution/energy/layout.tsx",
+      "summary": "솔루션 에너지 세부 라우트의 레이아웃으로, SEO 메타데이터와 BreadcrumbJsonLd 구조화 데이터를 함께 렌더합니다.",
+      "tags": [
+        "layout",
+        "app-router",
+        "seo",
+        "breadcrumb"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/solution/iot/layout.tsx",
+      "type": "file",
+      "name": "layout.tsx",
+      "filePath": "app/solution/iot/layout.tsx",
+      "summary": "솔루션 IoT 세부 라우트의 레이아웃으로, SEO 메타데이터와 BreadcrumbJsonLd 구조화 데이터를 함께 렌더합니다.",
+      "tags": [
+        "layout",
+        "app-router",
+        "seo",
+        "breadcrumb"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/solution/layout.tsx",
+      "type": "file",
+      "name": "layout.tsx",
+      "filePath": "app/solution/layout.tsx",
+      "summary": "솔루션 섹션의 상위 App Router 레이아웃으로, SEO 메타데이터를 구성하고 children을 렌더합니다.",
+      "tags": [
+        "layout",
+        "app-router",
+        "seo",
+        "metadata"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/solution/network/layout.tsx",
+      "type": "file",
+      "name": "layout.tsx",
+      "filePath": "app/solution/network/layout.tsx",
+      "summary": "솔루션 네트워크 세부 라우트의 레이아웃으로, SEO 메타데이터와 BreadcrumbJsonLd 구조화 데이터를 함께 렌더합니다.",
+      "tags": [
+        "layout",
+        "app-router",
+        "seo",
+        "breadcrumb"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/solution/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/solution/page.tsx",
+      "summary": "솔루션 메인 페이지로, 다국어 카피 기반의 패키지·공정·세부 솔루션을 아코디언과 마우스 글로우 등 인터랙션과 함께 렌더하는 대형 클라이언트 컴포넌트입니다.",
+      "tags": [
+        "page",
+        "app-router",
+        "client-component",
+        "i18n",
+        "component"
+      ],
+      "complexity": "complex",
+      "languageNotes": "마우스 위치를 CSS 커스텀 프로퍼티로 설정하는 글로우 효과와 키보드로 닫히는 아코디언 인터랙션을 포함합니다."
+    },
+    {
+      "id": "function:app/solution/page.tsx:SolutionPage",
+      "type": "function",
+      "name": "SolutionPage",
+      "filePath": "app/solution/page.tsx",
+      "lineRange": [
+        409,
+        712
+      ],
+      "summary": "언어별 카피로 솔루션 패키지·공정·세부 항목을 렌더하고 아코디언 열림 상태와 글로우/키보드 핸들러를 관리하는 클라이언트 페이지 컴포넌트입니다.",
+      "tags": [
+        "page",
+        "client-component",
+        "i18n",
+        "event-handler"
+      ],
+      "complexity": "complex"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:app/actions/settings-actions.ts",
+      "target": "function:app/actions/settings-actions.ts:getSiteSettingRows",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/settings-actions.ts",
+      "target": "function:app/actions/settings-actions.ts:updateSiteSettings",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/settings-actions.ts",
+      "target": "function:app/actions/settings-actions.ts:getSiteSettingRows",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/settings-actions.ts",
+      "target": "function:app/actions/settings-actions.ts:updateSiteSettings",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/settings-actions.ts",
+      "target": "file:lib/admin-auth.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/settings-actions.ts",
+      "target": "file:lib/site-settings.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/settings-actions.ts",
+      "target": "file:lib/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:app/actions/settings-actions.ts:updateSiteSettings",
+      "target": "function:lib/admin-auth.ts:requireAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/settings-actions.ts:updateSiteSettings",
+      "target": "function:lib/site-settings.ts:sanitizeSiteSetting",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/bespoke/layout.tsx",
+      "target": "file:lib/seo.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/bespoke/page.tsx",
+      "target": "function:app/bespoke/page.tsx:BespokePage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/bespoke/page.tsx",
+      "target": "function:app/bespoke/page.tsx:BespokePage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/bespoke/page.tsx",
+      "target": "file:contexts/LanguageContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:app/bespoke/page.tsx:BespokePage",
+      "target": "function:contexts/LanguageContext.tsx:useLanguage",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/company/layout.tsx",
+      "target": "file:lib/seo.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/customize/page.tsx",
+      "target": "function:app/customize/page.tsx:CustomizePage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/customize/page.tsx",
+      "target": "function:app/customize/page.tsx:CustomizePage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/customize/page.tsx",
+      "target": "file:app/actions/customize-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/customize/page.tsx",
+      "target": "file:components/customize/CustomizeConfigurator.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/customize/page.tsx",
+      "target": "file:lib/json-ld.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/customize/page.tsx",
+      "target": "file:lib/seo.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/customize/page.tsx",
+      "target": "file:lib/site-settings.server.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:app/customize/page.tsx:CustomizePage",
+      "target": "function:app/actions/customize-actions.ts:getPublicCustomizeCatalog",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/customize/page.tsx:CustomizePage",
+      "target": "function:lib/site-settings.server.ts:getSiteSettings",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/customize/page.tsx:CustomizePage",
+      "target": "function:lib/json-ld.ts:jsonLdHtml",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/layout.tsx",
+      "target": "function:app/layout.tsx:RootLayout",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/layout.tsx",
+      "target": "function:app/layout.tsx:RootLayout",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/layout.tsx",
+      "target": "file:app/globals.css",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/layout.tsx",
+      "target": "file:components/layout/ClientLayout.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/layout.tsx",
+      "target": "file:contexts/LanguageContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/layout.tsx",
+      "target": "file:lib/json-ld.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/layout.tsx",
+      "target": "file:lib/site-settings.server.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/layout.tsx",
+      "target": "file:lib/site.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/layout.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:app/layout.tsx:RootLayout",
+      "target": "function:lib/site-settings.server.ts:getSiteSettings",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/layout.tsx:RootLayout",
+      "target": "function:lib/utils.ts:cn",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/layout.tsx:RootLayout",
+      "target": "function:lib/json-ld.ts:jsonLdHtml",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/modular/layout.tsx",
+      "target": "file:lib/seo.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/modular/page.tsx",
+      "target": "function:app/modular/page.tsx:ModularPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/modular/page.tsx",
+      "target": "function:app/modular/page.tsx:ModularPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/modular/page.tsx",
+      "target": "file:contexts/LanguageContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:app/modular/page.tsx:ModularPage",
+      "target": "function:contexts/LanguageContext.tsx:useLanguage",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/page.tsx",
+      "target": "function:app/page.tsx:HomePage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/page.tsx",
+      "target": "function:app/page.tsx:cleanGalleryTitle",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/page.tsx",
+      "target": "function:app/page.tsx:HomePage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/page.tsx",
+      "target": "file:app/actions/customize-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/page.tsx",
+      "target": "file:app/actions/faq-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/page.tsx",
+      "target": "file:app/actions/gallery-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/page.tsx",
+      "target": "file:lib/customize/priceCalculator.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/page.tsx",
+      "target": "file:lib/seo.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/page.tsx",
+      "target": "file:lib/site-settings.server.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/page.tsx",
+      "target": "file:lib/site-settings.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:app/page.tsx:HomePage",
+      "target": "function:app/page.tsx:cleanGalleryTitle",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/page.tsx:HomePage",
+      "target": "function:app/actions/customize-actions.ts:getPublicCustomizeCatalog",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/page.tsx:HomePage",
+      "target": "function:app/actions/gallery-actions.ts:getPublicGalleryItems",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/page.tsx:HomePage",
+      "target": "function:app/actions/faq-actions.ts:getFaqs",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/page.tsx:HomePage",
+      "target": "function:lib/site-settings.server.ts:getSiteSettings",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/page.tsx:HomePage",
+      "target": "function:lib/customize/priceCalculator.ts:formatModelStartPrice",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/page.tsx:HomePage",
+      "target": "function:lib/site-settings.ts:telHref",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/privacy/page.tsx",
+      "target": "function:app/privacy/page.tsx:PrivacyPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/privacy/page.tsx",
+      "target": "function:app/privacy/page.tsx:PrivacyPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/privacy/page.tsx",
+      "target": "file:lib/seo.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/products/layout.tsx",
+      "target": "file:lib/seo.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/projects/layout.tsx",
+      "target": "file:lib/seo.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/robots.ts",
+      "target": "function:app/robots.ts:robots",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/robots.ts",
+      "target": "function:app/robots.ts:robots",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/robots.ts",
+      "target": "file:lib/site.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/solution/cctv/layout.tsx",
+      "target": "file:components/seo/BreadcrumbJsonLd.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/solution/cctv/layout.tsx",
+      "target": "file:lib/seo.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/solution/energy/layout.tsx",
+      "target": "file:components/seo/BreadcrumbJsonLd.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/solution/energy/layout.tsx",
+      "target": "file:lib/seo.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/solution/iot/layout.tsx",
+      "target": "file:components/seo/BreadcrumbJsonLd.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/solution/iot/layout.tsx",
+      "target": "file:lib/seo.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/solution/layout.tsx",
+      "target": "file:lib/seo.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/solution/network/layout.tsx",
+      "target": "file:components/seo/BreadcrumbJsonLd.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/solution/network/layout.tsx",
+      "target": "file:lib/seo.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/solution/page.tsx",
+      "target": "function:app/solution/page.tsx:SolutionPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/solution/page.tsx",
+      "target": "function:app/solution/page.tsx:SolutionPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/solution/page.tsx",
+      "target": "file:contexts/LanguageContext.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:app/solution/page.tsx:SolutionPage",
+      "target": "function:contexts/LanguageContext.tsx:useLanguage",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

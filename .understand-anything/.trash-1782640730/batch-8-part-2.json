@@ -1,0 +1,651 @@
+{
+  "nodes": [
+    {
+      "id": "file:components/admin/cms/useCrudDraftList.ts",
+      "type": "file",
+      "name": "useCrudDraftList.ts",
+      "filePath": "components/admin/cms/useCrudDraftList.ts",
+      "summary": "관리자 CMS 목록의 생성/수정/삭제를 일반화한 커스텀 React 훅으로, 드래프트 편집·dirty 추적·낙관적 업데이트·토스트 피드백을 제네릭하게 제공한다.",
+      "tags": [
+        "hook",
+        "crud",
+        "admin",
+        "cms",
+        "optimistic-update"
+      ],
+      "complexity": "complex",
+      "languageNotes": "제네릭 타입 매개변수로 임의 엔티티에 재사용 가능. useState/useCallback/useMemo로 드래프트 상태를 관리하고 confirmToast로 삭제 확인을 받는다."
+    },
+    {
+      "id": "function:components/admin/cms/useCrudDraftList.ts:useCrudDraftList",
+      "type": "function",
+      "name": "useCrudDraftList",
+      "filePath": "components/admin/cms/useCrudDraftList.ts",
+      "lineRange": [
+        86,
+        231
+      ],
+      "summary": "초기 아이템과 CRUD 액션 설정을 받아 드래프트 편집·저장·삭제 핸들러와 dirty/saving 상태를 반환하는 제네릭 CMS 목록 훅이다.",
+      "tags": [
+        "hook",
+        "crud",
+        "optimistic-update",
+        "cms"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:components/admin/consultations/ConsultationManager.tsx",
+      "type": "file",
+      "name": "ConsultationManager.tsx",
+      "filePath": "components/admin/consultations/ConsultationManager.tsx",
+      "summary": "맞춤 견적 상담 신청을 관리하는 클라이언트 컴포넌트로, 상태별 필터·SLA 경과시간 표시·상세 패널에서 상태 변경/메모 저장/삭제를 Server Action과 연결한다.",
+      "tags": [
+        "component",
+        "admin",
+        "client-component",
+        "consultations"
+      ],
+      "complexity": "complex",
+      "languageNotes": "'use client' 컴포넌트로 useTransition으로 Server Action 호출을 감싸고 router.refresh로 갱신한다. 한글 상태 키(신규/진행중/완료)로 요약 통계를 집계한다."
+    },
+    {
+      "id": "function:components/admin/consultations/ConsultationManager.tsx:ConsultationManager",
+      "type": "function",
+      "name": "ConsultationManager",
+      "filePath": "components/admin/consultations/ConsultationManager.tsx",
+      "lineRange": [
+        62,
+        217
+      ],
+      "summary": "상담 목록·요약 카드·상태 필터를 렌더링하고 선택된 상담의 상세 작업을 Server Action으로 위임하는 메인 클라이언트 컴포넌트다.",
+      "tags": [
+        "component",
+        "admin",
+        "client-component",
+        "consultations"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:components/admin/consultations/ConsultationManager.tsx:ConsultationDetail",
+      "type": "function",
+      "name": "ConsultationDetail",
+      "filePath": "components/admin/consultations/ConsultationManager.tsx",
+      "lineRange": [
+        219,
+        320
+      ],
+      "summary": "선택된 상담의 고객 정보·견적 스냅샷·내부 메모를 보여주고 상태 변경·메모 저장·삭제 콜백을 노출하는 상세 패널 컴포넌트다.",
+      "tags": [
+        "component",
+        "admin",
+        "detail-panel",
+        "consultations"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:components/admin/customize/CustomizeManager.tsx",
+      "type": "file",
+      "name": "CustomizeManager.tsx",
+      "filePath": "components/admin/customize/CustomizeManager.tsx",
+      "summary": "커스터마이즈 카탈로그(모델·카테고리·옵션·포함사양·옵션충돌) 전체를 탭 기반으로 편집하는 대형 관리자 클라이언트 컴포넌트로, 각 폼을 해당 upsert/delete Server Action에 연결한다.",
+      "tags": [
+        "component",
+        "admin",
+        "client-component",
+        "customize",
+        "crud"
+      ],
+      "complexity": "complex",
+      "languageNotes": "'use client' 982줄 컴포넌트. 다수의 useState 폼 상태와 useTransition·router.refresh로 Server Action 흐름을 관리하고, 내부에 다수의 프레젠테이션 서브컴포넌트(폼/테이블/필드)를 동봉한다."
+    },
+    {
+      "id": "function:components/admin/customize/CustomizeManager.tsx:CustomizeManager",
+      "type": "function",
+      "name": "CustomizeManager",
+      "filePath": "components/admin/customize/CustomizeManager.tsx",
+      "lineRange": [
+        136,
+        637
+      ],
+      "summary": "탭별로 모델/카테고리/옵션/포함사양/충돌 목록과 편집 폼을 렌더링하고 각 저장·토글·삭제를 Server Action으로 위임하는 메인 관리자 컴포넌트다.",
+      "tags": [
+        "component",
+        "admin",
+        "client-component",
+        "customize"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:components/admin/customize/CustomizeManager.tsx:OptionForm",
+      "type": "function",
+      "name": "OptionForm",
+      "filePath": "components/admin/customize/CustomizeManager.tsx",
+      "lineRange": [
+        726,
+        785
+      ],
+      "summary": "옵션 생성/수정 폼 컴포넌트로, 카테고리·가격·이미지·적용 모델 범위 토글 입력을 받아 onSave로 전달한다.",
+      "tags": [
+        "component",
+        "form",
+        "customize",
+        "admin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:components/admin/customize/CustomizeManager.tsx:RowActions",
+      "type": "function",
+      "name": "RowActions",
+      "filePath": "components/admin/customize/CustomizeManager.tsx",
+      "lineRange": [
+        875,
+        913
+      ],
+      "summary": "목록 행의 편집·활성토글·삭제 액션 버튼 묶음을 렌더링하는 재사용 프레젠테이션 컴포넌트다.",
+      "tags": [
+        "component",
+        "ui",
+        "customize",
+        "admin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:components/admin/inquiries/InquiryList.tsx",
+      "type": "file",
+      "name": "InquiryList.tsx",
+      "filePath": "components/admin/inquiries/InquiryList.tsx",
+      "summary": "고객 문의 목록을 검색·상태 필터·상세 보기로 관리하는 클라이언트 컴포넌트로, 상태 변경/삭제/답변 등록을 낙관적 업데이트와 함께 Server Action에 연결한다.",
+      "tags": [
+        "component",
+        "admin",
+        "client-component",
+        "inquiry",
+        "optimistic-update"
+      ],
+      "complexity": "complex",
+      "languageNotes": "'use client' 컴포넌트. 로컬 formatKstDateTime으로 KST 시각을 직접 포맷하고, 액션 실패 시 이전 상태로 롤백하는 낙관적 업데이트 패턴을 사용한다."
+    },
+    {
+      "id": "function:components/admin/inquiries/InquiryList.tsx:InquiryList",
+      "type": "function",
+      "name": "InquiryList",
+      "filePath": "components/admin/inquiries/InquiryList.tsx",
+      "lineRange": [
+        51,
+        361
+      ],
+      "summary": "문의 검색·필터·상세 패널을 렌더링하고 상태 변경·삭제·답변 저장·메일 보내기 핸들러를 제공하는 메인 클라이언트 컴포넌트다.",
+      "tags": [
+        "component",
+        "admin",
+        "client-component",
+        "inquiry"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:components/admin/inquiries/InquiryList.tsx:formatKstDateTime",
+      "type": "function",
+      "name": "formatKstDateTime",
+      "filePath": "components/admin/inquiries/InquiryList.tsx",
+      "lineRange": [
+        33,
+        49
+      ],
+      "summary": "ISO 문자열을 KST 기준 날짜/일시 문자열로 변환하는 로컬 포맷 헬퍼다.",
+      "tags": [
+        "utility",
+        "date",
+        "formatting"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:lib/ui/confirm.ts",
+      "type": "file",
+      "name": "confirm.ts",
+      "filePath": "lib/ui/confirm.ts",
+      "summary": "브라우저 confirm() 대신 sonner 토스트로 확인/취소 버튼을 띄워 Promise<boolean>을 반환하는 확인 다이얼로그 유틸이다.",
+      "tags": [
+        "utility",
+        "ui",
+        "toast",
+        "confirmation"
+      ],
+      "complexity": "simple",
+      "languageNotes": "sonner의 toast를 Promise로 감싸 비동기 확인 흐름을 제공한다. 관리자 전반의 삭제 확인에 공유 사용된다."
+    },
+    {
+      "id": "function:lib/ui/confirm.ts:confirmToast",
+      "type": "function",
+      "name": "confirmToast",
+      "filePath": "lib/ui/confirm.ts",
+      "lineRange": [
+        20,
+        44
+      ],
+      "summary": "확인/취소 액션 버튼이 있는 sonner 토스트를 띄우고 사용자의 선택을 Promise<boolean>으로 반환하는 함수다.",
+      "tags": [
+        "utility",
+        "ui",
+        "toast",
+        "confirmation"
+      ],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:components/admin/cms/useCrudDraftList.ts",
+      "target": "file:lib/ui/confirm.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/consultations/ConsultationManager.tsx",
+      "target": "file:app/actions/customize-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/consultations/ConsultationManager.tsx",
+      "target": "file:components/admin/ConsolePrimitives.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/consultations/ConsultationManager.tsx",
+      "target": "file:lib/customize/priceCalculator.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/consultations/ConsultationManager.tsx",
+      "target": "file:lib/customize/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/consultations/ConsultationManager.tsx",
+      "target": "file:lib/date-format.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/consultations/ConsultationManager.tsx",
+      "target": "file:lib/ui/confirm.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/consultations/ConsultationManager.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/customize/CustomizeManager.tsx",
+      "target": "file:app/actions/customize-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/customize/CustomizeManager.tsx",
+      "target": "file:components/admin/ConsolePrimitives.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/customize/CustomizeManager.tsx",
+      "target": "file:components/admin/media/ImageUpload.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/customize/CustomizeManager.tsx",
+      "target": "file:lib/customize/types.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/customize/CustomizeManager.tsx",
+      "target": "file:lib/ui/confirm.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/customize/CustomizeManager.tsx",
+      "target": "file:lib/utils.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/inquiries/InquiryList.tsx",
+      "target": "file:app/actions/inquiry-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/inquiries/InquiryList.tsx",
+      "target": "file:components/admin/ConsolePrimitives.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/inquiries/InquiryList.tsx",
+      "target": "file:lib/ui/confirm.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:components/admin/cms/useCrudDraftList.ts",
+      "target": "function:components/admin/cms/useCrudDraftList.ts:useCrudDraftList",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/admin/cms/useCrudDraftList.ts",
+      "target": "function:components/admin/cms/useCrudDraftList.ts:useCrudDraftList",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/cms/useCrudDraftList.ts:useCrudDraftList",
+      "target": "function:lib/ui/confirm.ts:confirmToast",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/admin/consultations/ConsultationManager.tsx",
+      "target": "function:components/admin/consultations/ConsultationManager.tsx:ConsultationManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/admin/consultations/ConsultationManager.tsx",
+      "target": "function:components/admin/consultations/ConsultationManager.tsx:ConsultationDetail",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/admin/consultations/ConsultationManager.tsx",
+      "target": "function:components/admin/consultations/ConsultationManager.tsx:ConsultationManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/consultations/ConsultationManager.tsx:ConsultationManager",
+      "target": "function:components/admin/consultations/ConsultationManager.tsx:ConsultationDetail",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "function:components/admin/consultations/ConsultationManager.tsx:ConsultationManager",
+      "target": "function:app/actions/customize-actions.ts:updateCustomizeConsultationStatus",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/consultations/ConsultationManager.tsx:ConsultationManager",
+      "target": "function:app/actions/customize-actions.ts:updateCustomizeConsultationMemo",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/consultations/ConsultationManager.tsx:ConsultationManager",
+      "target": "function:app/actions/customize-actions.ts:deleteCustomizeConsultation",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/consultations/ConsultationManager.tsx:ConsultationManager",
+      "target": "function:lib/ui/confirm.ts:confirmToast",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/consultations/ConsultationManager.tsx:ConsultationDetail",
+      "target": "function:lib/customize/priceCalculator.ts:formatWon",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/consultations/ConsultationManager.tsx:ConsultationDetail",
+      "target": "function:lib/date-format.ts:formatKstDateTime",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/admin/customize/CustomizeManager.tsx",
+      "target": "function:components/admin/customize/CustomizeManager.tsx:CustomizeManager",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/admin/customize/CustomizeManager.tsx",
+      "target": "function:components/admin/customize/CustomizeManager.tsx:OptionForm",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/admin/customize/CustomizeManager.tsx",
+      "target": "function:components/admin/customize/CustomizeManager.tsx:RowActions",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/admin/customize/CustomizeManager.tsx",
+      "target": "function:components/admin/customize/CustomizeManager.tsx:CustomizeManager",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/customize/CustomizeManager.tsx:CustomizeManager",
+      "target": "function:components/admin/customize/CustomizeManager.tsx:OptionForm",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "function:components/admin/customize/CustomizeManager.tsx:CustomizeManager",
+      "target": "function:components/admin/customize/CustomizeManager.tsx:RowActions",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "function:components/admin/customize/CustomizeManager.tsx:CustomizeManager",
+      "target": "function:app/actions/customize-actions.ts:upsertCustomizeModel",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/customize/CustomizeManager.tsx:CustomizeManager",
+      "target": "function:app/actions/customize-actions.ts:upsertCustomizeCategory",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/customize/CustomizeManager.tsx:CustomizeManager",
+      "target": "function:app/actions/customize-actions.ts:upsertCustomizeOption",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/customize/CustomizeManager.tsx:CustomizeManager",
+      "target": "function:app/actions/customize-actions.ts:upsertCustomizeIncludedSpec",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/customize/CustomizeManager.tsx:CustomizeManager",
+      "target": "function:app/actions/customize-actions.ts:setCustomizeEntityActive",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/customize/CustomizeManager.tsx:CustomizeManager",
+      "target": "function:app/actions/customize-actions.ts:deleteCustomizeModel",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/customize/CustomizeManager.tsx:CustomizeManager",
+      "target": "function:app/actions/customize-actions.ts:deleteCustomizeCategory",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/customize/CustomizeManager.tsx:CustomizeManager",
+      "target": "function:app/actions/customize-actions.ts:deleteCustomizeOption",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/customize/CustomizeManager.tsx:CustomizeManager",
+      "target": "function:app/actions/customize-actions.ts:deleteCustomizeIncludedSpec",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/customize/CustomizeManager.tsx:CustomizeManager",
+      "target": "function:app/actions/customize-actions.ts:createCustomizeOptionConflict",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/customize/CustomizeManager.tsx:CustomizeManager",
+      "target": "function:app/actions/customize-actions.ts:deleteCustomizeOptionConflict",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/customize/CustomizeManager.tsx:CustomizeManager",
+      "target": "function:lib/ui/confirm.ts:confirmToast",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:components/admin/inquiries/InquiryList.tsx",
+      "target": "function:components/admin/inquiries/InquiryList.tsx:InquiryList",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/admin/inquiries/InquiryList.tsx",
+      "target": "function:components/admin/inquiries/InquiryList.tsx:formatKstDateTime",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:components/admin/inquiries/InquiryList.tsx",
+      "target": "function:components/admin/inquiries/InquiryList.tsx:InquiryList",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/inquiries/InquiryList.tsx:InquiryList",
+      "target": "function:app/actions/inquiry-actions.ts:updateInquiryStatus",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/inquiries/InquiryList.tsx:InquiryList",
+      "target": "function:app/actions/inquiry-actions.ts:deleteInquiry",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/inquiries/InquiryList.tsx:InquiryList",
+      "target": "function:app/actions/inquiry-actions.ts:replyToInquiry",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/inquiries/InquiryList.tsx:InquiryList",
+      "target": "function:lib/ui/confirm.ts:confirmToast",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:components/admin/inquiries/InquiryList.tsx:InquiryList",
+      "target": "function:components/admin/inquiries/InquiryList.tsx:formatKstDateTime",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:lib/ui/confirm.ts",
+      "target": "function:lib/ui/confirm.ts:confirmToast",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:lib/ui/confirm.ts",
+      "target": "function:lib/ui/confirm.ts:confirmToast",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

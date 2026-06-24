@@ -1,0 +1,244 @@
+{
+  "nodes": [
+    {
+      "id": "document:AGENTS.md",
+      "type": "document",
+      "name": "AGENTS.md",
+      "filePath": "AGENTS.md",
+      "summary": "로컬 구현 에이전트(Codex)의 작업 루프 지침서로, git 상태 점검·리뷰 패킷 작성·Chrome에서의 GPT-5.5 Pro 리뷰·MUST_FIX 피드백 적용 절차와 Claude 앱에 프론트엔드 구현을 위임하는 역할 분담을 정의합니다.",
+      "tags": ["documentation", "agent-workflow", "code-review", "automation"],
+      "complexity": "moderate",
+      "languageNotes": "코드 컴포넌트가 아닌 AI 에이전트 협업 워크플로를 기술하는 운영 문서로, 코드베이스의 실제 파일을 직접 참조하지 않고 .codex/ 및 agent-inbox/ 작업 산출물만 다룹니다."
+    },
+    {
+      "id": "document:CLAUDE.md",
+      "type": "document",
+      "name": "CLAUDE.md",
+      "filePath": "CLAUDE.md",
+      "summary": "Claude Code가 이 저장소에서 작업할 때 따라야 할 프로젝트 가이드로, 페이지 라우트 구조·섹션/레이아웃 컴포넌트 구성·Tailwind 스타일링 규칙·관리자 패널(Supabase 인증/DB/스토리지) 아키텍처를 설명합니다.",
+      "tags": ["documentation", "entry-point", "architecture", "app-router"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "document:README.md",
+      "type": "document",
+      "name": "README.md",
+      "filePath": "README.md",
+      "summary": "위트(weet) 기업 홈페이지의 프로젝트 개요 문서로, 기술 스택·디렉터리 구조·8개 주요 페이지 설명·환경 변수 설정·개발/빌드/배포 절차·디자인 시스템(컬러 팔레트, 타이포그래피)을 종합적으로 안내합니다.",
+      "tags": ["documentation", "entry-point", "overview", "getting-started"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:components.json",
+      "type": "config",
+      "name": "components.json",
+      "filePath": "components.json",
+      "summary": "shadcn/ui CLI 설정 파일로 base-nova 스타일·RSC/TSX 활성화·lucide 아이콘 라이브러리와 @/components, @/lib/utils 등 경로 별칭, Tailwind 설정 위치(tailwind.config.ts, app/globals.css)를 지정합니다.",
+      "tags": ["configuration", "shadcn-ui", "component-library", "build-system"],
+      "complexity": "simple"
+    },
+    {
+      "id": "config:package.json",
+      "type": "config",
+      "name": "package.json",
+      "filePath": "package.json",
+      "summary": "프로젝트 매니페스트로 dev/build/start/lint/test npm 스크립트와 Next.js 16·React 19·Supabase·Framer Motion·Zustand 등 런타임 의존성 및 Vitest/Playwright/ESLint/TypeScript 개발 의존성을 정의합니다.",
+      "tags": ["configuration", "build-system", "dependencies", "entry-point"],
+      "complexity": "moderate",
+      "languageNotes": "Turbopack 기반 dev 스크립트와 next/postcss override를 사용하며, Next.js 16 및 React 19 메이저 버전을 채택했습니다."
+    },
+    {
+      "id": "config:tsconfig.json",
+      "type": "config",
+      "name": "tsconfig.json",
+      "filePath": "tsconfig.json",
+      "summary": "TypeScript 컴파일러 설정으로 strict 모드·bundler moduleResolution·react-jsx 변환·@/* 경로 별칭과 Next.js 플러그인을 활성화하여 프로젝트 전체 .ts/.tsx 파일의 타입 검사를 구성합니다.",
+      "tags": ["configuration", "typescript", "build-system", "app-router"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "document:README.md",
+      "target": "file:app/layout.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:app/page.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:app/products/page.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:app/modular/page.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:app/bespoke/page.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:app/solution/page.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:app/support/page.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:app/admin/layout.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:README.md",
+      "target": "file:app/login/page.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CLAUDE.md",
+      "target": "file:components/layout/Header.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CLAUDE.md",
+      "target": "file:components/layout/Footer.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CLAUDE.md",
+      "target": "file:components/admin/AdminSidebar.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CLAUDE.md",
+      "target": "file:app/products/page.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CLAUDE.md",
+      "target": "file:app/admin/layout.tsx",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CLAUDE.md",
+      "target": "file:middleware.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CLAUDE.md",
+      "target": "file:lib/utils.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "document:CLAUDE.md",
+      "target": "file:next.config.ts",
+      "type": "documents",
+      "direction": "forward",
+      "weight": 0.5
+    },
+    {
+      "source": "config:package.json",
+      "target": "file:app/layout.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:package.json",
+      "target": "file:app/page.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:package.json",
+      "target": "file:next.config.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:tsconfig.json",
+      "target": "file:app/layout.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:tsconfig.json",
+      "target": "file:app/page.tsx",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:tsconfig.json",
+      "target": "file:middleware.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:components.json",
+      "target": "file:lib/utils.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:components.json",
+      "target": "file:app/globals.css",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    },
+    {
+      "source": "config:components.json",
+      "target": "file:tailwind.config.ts",
+      "type": "configures",
+      "direction": "forward",
+      "weight": 0.6
+    }
+  ]
+}

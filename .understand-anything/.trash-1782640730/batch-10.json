@@ -1,0 +1,464 @@
+{
+  "nodes": [
+    {
+      "id": "table:supabase/migrations/20260212000000_initial_schema.sql",
+      "type": "table",
+      "name": "20260212000000_initial_schema.sql",
+      "filePath": "supabase/migrations/20260212000000_initial_schema.sql",
+      "summary": "레거시 뉴스 크롤러 시스템의 초기 스키마로, 보도자료/기사/클라이언트/크롤 로그/전송 로그 5개 테이블과 pgvector HNSW 임베딩 인덱스를 정의한다. 위트 홈페이지 앱에서는 사용되지 않으며 이후 RLS로 잠금 처리된다.",
+      "tags": ["database", "migration", "initial-schema", "pgvector", "crawler"],
+      "complexity": "moderate",
+      "languageNotes": "press_releases.embedding은 vector 타입이며 idx_press_releases_embedding_hnsw로 HNSW 근사 최근접 인덱스를 건다. UUID PK + gen_random_uuid() 패턴 사용."
+    },
+    {
+      "id": "table:supabase/migrations/20260219000000_rename_gwangju_source.sql",
+      "type": "table",
+      "name": "20260219000000_rename_gwangju_source.sql",
+      "filePath": "supabase/migrations/20260219000000_rename_gwangju_source.sql",
+      "summary": "기존 데이터의 출처 표기 '광주광역시'를 '광주시'로 일괄 변경하는 데이터 정정 마이그레이션으로, press_releases·articles·crawl_logs 세 테이블의 행을 UPDATE한다.",
+      "tags": ["database", "migration", "data-fix", "crawler"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/migrations/20260219100000_crawl_settings.sql",
+      "type": "table",
+      "name": "20260219100000_crawl_settings.sql",
+      "filePath": "supabase/migrations/20260219100000_crawl_settings.sql",
+      "summary": "크롤러 동작 설정을 담는 단일 행(id=1 CHECK) crawl_settings 테이블을 생성하고, 광주·전남 지자체 사이트 ID 목록과 기본 스케줄(6/12/18시)을 시드한다.",
+      "tags": ["database", "migration", "configuration", "crawler", "seed-data"],
+      "complexity": "simple",
+      "languageNotes": "id int PK DEFAULT 1 CHECK (id = 1) 패턴으로 단일 행만 허용하는 싱글톤 설정 테이블. text[]/int[] 배열 컬럼 사용."
+    },
+    {
+      "id": "table:supabase/migrations/20260220000000_client_enhancements.sql",
+      "type": "table",
+      "name": "20260220000000_client_enhancements.sql",
+      "filePath": "supabase/migrations/20260220000000_client_enhancements.sql",
+      "summary": "clients 테이블에 API 키 메타데이터(prefix/last4), 설명, 사용 통계(last_used_at/request_count), 소프트 삭제(deleted_at) 컬럼을 추가하고 관련 부분 인덱스를 생성한다.",
+      "tags": ["database", "migration", "alter-table", "soft-delete", "crawler"],
+      "complexity": "simple",
+      "languageNotes": "WHERE 조건이 달린 부분 인덱스(partial index)로 활성 키와 미삭제 행만 색인한다."
+    },
+    {
+      "id": "table:supabase/migrations/202606060002_customize_configurator.sql",
+      "type": "table",
+      "name": "202606060002_customize_configurator.sql",
+      "filePath": "supabase/migrations/202606060002_customize_configurator.sql",
+      "summary": "비스포크 커스터마이즈 컨피규레이터의 핵심 스키마로, 모델·옵션 카테고리·옵션·옵션 충돌·기본 포함 사양·상담 신청 6개 테이블과 RLS 정책, 인덱스, 초기 시드 데이터를 정의한다.",
+      "tags": ["database", "migration", "customize-configurator", "rls-policy", "seed-data"],
+      "complexity": "complex",
+      "languageNotes": "다국어(name_ko/name_en) 컬럼, GIN 인덱스(available_model_ids), ON CONFLICT UPSERT 시드, anon은 활성 행 읽기·상담 INSERT만 허용하는 RLS 정책 구성."
+    },
+    {
+      "id": "table:supabase/migrations/202606060003_lock_customize_admin_policies.sql",
+      "type": "table",
+      "name": "202606060003_lock_customize_admin_policies.sql",
+      "filePath": "supabase/migrations/202606060003_lock_customize_admin_policies.sql",
+      "summary": "커스터마이즈 6개 테이블에서 모든 인증 사용자를 관리자로 취급하던 레거시 정책을 제거하고, 관리 작업을 requireAdmin 서버 액션(service role)으로 일원화한다. included_specs의 전역 사양용 부분 유니크 인덱스도 추가한다.",
+      "tags": ["database", "migration", "security", "rls-policy", "customize-configurator"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/migrations/202606100001_site_settings.sql",
+      "type": "table",
+      "name": "202606100001_site_settings.sql",
+      "filePath": "supabase/migrations/202606100001_site_settings.sql",
+      "summary": "운영자가 편집하는 사이트 전역 설정(연락처·상담시간·SNS 링크·신뢰 지표)을 key-value로 저장하는 site_settings 테이블을 생성하고 공개 읽기 RLS와 기본값 10건을 시드한다.",
+      "tags": ["database", "migration", "site-settings", "rls-policy", "seed-data"],
+      "complexity": "simple",
+      "languageNotes": "key text PK의 단순 KV 모델. 빈 문자열은 미설정(UI에서 숨김)을 의미하며 쓰기는 service role 서버 액션으로만 수행."
+    },
+    {
+      "id": "table:supabase/migrations/202606100002_lock_legacy_admin_policies.sql",
+      "type": "table",
+      "name": "202606100002_lock_legacy_admin_policies.sql",
+      "filePath": "supabase/migrations/202606100002_lock_legacy_admin_policies.sql",
+      "summary": "gallery·faqs·hero_slides·notices·solutions·inquiries·projects·products 등 기존 테이블에서 인증 사용자를 관리자로 간주하던 정책을 제거하고, 공개 사용자는 활성/완료 행만 읽도록 RLS 정책을 재정의하는 보안 강화 마이그레이션이다.",
+      "tags": ["database", "migration", "security", "rls-policy"],
+      "complexity": "moderate",
+      "languageNotes": "anon·authenticated에는 SELECT(활성/완료 조건)만 부여하고 모든 변경은 requireAdmin service role 서버 액션으로 이전. 각 테이블에 COMMENT로 접근 정책을 문서화."
+    },
+    {
+      "id": "table:supabase/migrations/202606170001_rate_limit_events.sql",
+      "type": "table",
+      "name": "202606170001_rate_limit_events.sql",
+      "filePath": "supabase/migrations/202606170001_rate_limit_events.sql",
+      "summary": "Vercel 서버리스에서 인스턴스별 인메모리 throttle이 무력화되는 문제(F30)를 해결하기 위해, 공개 폼 제출의 슬라이딩 윈도우 레이트 리밋을 인스턴스 간 공유하는 rate_limit_events 테이블과 인덱스를 생성한다.",
+      "tags": ["database", "migration", "rate-limiting", "security", "serverless"],
+      "complexity": "simple",
+      "languageNotes": "RLS는 활성화하되 정책을 두지 않아 anon/authenticated 접근을 전면 차단하고 service role(서버 가드)만 RLS를 우회한다."
+    },
+    {
+      "id": "table:supabase/migrations/202606170002_lock_crawler_tables.sql",
+      "type": "table",
+      "name": "202606170002_lock_crawler_tables.sql",
+      "filePath": "supabase/migrations/202606170002_lock_crawler_tables.sql",
+      "summary": "RLS 없이 생성되어 공개 anon 키로 노출되던 레거시 크롤러 테이블(clients·press_releases·articles·crawl_logs·delivery_logs·crawl_settings)에 RLS를 활성화하는 긴급 보안 수정으로, 정책을 두지 않아 service role만 접근 가능하게 한다.",
+      "tags": ["database", "migration", "security", "rls-policy", "crawler"],
+      "complexity": "simple",
+      "languageNotes": "clients가 api_key_hash·webhook_secret을 보관하므로 공개 노출이 치명적. ALTER TABLE IF EXISTS ... ENABLE ROW LEVEL SECURITY로 정책 없는 잠금 적용."
+    },
+
+    {
+      "id": "table:supabase/migrations/20260212000000_initial_schema.sql:press_releases",
+      "type": "table",
+      "name": "press_releases",
+      "filePath": "supabase/migrations/20260212000000_initial_schema.sql",
+      "lineRange": [3, 17],
+      "summary": "크롤링한 보도자료 원문을 저장하는 테이블로, 출처/제목/본문/링크/첨부와 pgvector 임베딩, 처리 상태(status)를 보관한다.",
+      "tags": ["database", "table", "press-release", "pgvector", "crawler"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/migrations/20260212000000_initial_schema.sql:articles",
+      "type": "table",
+      "name": "articles",
+      "filePath": "supabase/migrations/20260212000000_initial_schema.sql",
+      "lineRange": [18, 30],
+      "summary": "보도자료(press_releases)에서 가공된 기사 콘텐츠를 저장하는 테이블로, 제목/부제/본문/이미지/카테고리/출처와 상태를 가진다.",
+      "tags": ["database", "table", "article", "crawler"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/migrations/20260212000000_initial_schema.sql:clients",
+      "type": "table",
+      "name": "clients",
+      "filePath": "supabase/migrations/20260212000000_initial_schema.sql",
+      "lineRange": [31, 40],
+      "summary": "기사 전송 대상 클라이언트를 관리하는 테이블로, API 키 해시·웹훅 URL·웹훅 시크릿 등 민감 정보를 보관한다. 이후 RLS로 잠금된다.",
+      "tags": ["database", "table", "client", "credentials", "crawler"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/migrations/20260212000000_initial_schema.sql:crawl_logs",
+      "type": "table",
+      "name": "crawl_logs",
+      "filePath": "supabase/migrations/20260212000000_initial_schema.sql",
+      "lineRange": [41, 51],
+      "summary": "크롤링 작업 실행 이력을 기록하는 테이블로, 사이트명/URL/상태/발견·신규 기사 수/오류 메시지/시작·완료 시각을 저장한다.",
+      "tags": ["database", "table", "log", "crawler"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/migrations/20260212000000_initial_schema.sql:delivery_logs",
+      "type": "table",
+      "name": "delivery_logs",
+      "filePath": "supabase/migrations/20260212000000_initial_schema.sql",
+      "lineRange": [52, 60],
+      "summary": "클라이언트에게 기사를 전송한 이력을 기록하는 테이블로, 클라이언트 ID·기사 ID 배열·건수·상태·전송 시각을 보관한다.",
+      "tags": ["database", "table", "log", "delivery", "crawler"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/migrations/20260219100000_crawl_settings.sql:crawl_settings",
+      "type": "table",
+      "name": "crawl_settings",
+      "filePath": "supabase/migrations/20260219100000_crawl_settings.sql",
+      "lineRange": [1, 6],
+      "summary": "크롤러 전역 설정을 담는 단일 행(id=1 강제) 싱글톤 테이블로, 활성 사이트 ID 배열과 실행 스케줄 시각 배열을 저장한다.",
+      "tags": ["database", "table", "configuration", "singleton", "crawler"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_models",
+      "type": "table",
+      "name": "customize_models",
+      "filePath": "supabase/migrations/202606060002_customize_configurator.sql",
+      "lineRange": [11, 26],
+      "summary": "커스터마이즈 컨피규레이터의 기준 모듈러 모델을 정의하는 테이블로, 코드/다국어 이름/치수/면적/기본가/평면도 이미지 경로와 노출 순서를 가진다.",
+      "tags": ["database", "table", "customize-configurator", "product-model", "i18n"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_categories",
+      "type": "table",
+      "name": "customize_categories",
+      "filePath": "supabase/migrations/202606060002_customize_configurator.sql",
+      "lineRange": [28, 41],
+      "summary": "커스터마이즈 옵션을 묶는 카테고리 테이블로, 다국어 이름/설명, 선택 방식(selection_type), 필수 여부, 노출 순서를 정의한다.",
+      "tags": ["database", "table", "customize-configurator", "category", "i18n"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_options",
+      "type": "table",
+      "name": "customize_options",
+      "filePath": "supabase/migrations/202606060002_customize_configurator.sql",
+      "lineRange": [43, 66],
+      "summary": "카테고리에 속한 개별 커스터마이즈 옵션을 정의하는 테이블로, 다국어 설명·가격 방식/금액·기본값·적용 가능 모델 배열·오버레이 이미지 정보를 보관한다.",
+      "tags": ["database", "table", "customize-configurator", "option", "pricing"],
+      "complexity": "moderate",
+      "languageNotes": "available_model_ids TEXT[]에 GIN 인덱스를 걸어 모델별 옵션 필터링을 가속한다."
+    },
+    {
+      "id": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_option_conflicts",
+      "type": "table",
+      "name": "customize_option_conflicts",
+      "filePath": "supabase/migrations/202606060002_customize_configurator.sql",
+      "lineRange": [68, 76],
+      "summary": "동시에 선택할 수 없는 옵션 쌍을 정의하는 충돌 매핑 테이블로, 옵션 ID 쌍과 다국어 충돌 사유를 보관한다.",
+      "tags": ["database", "table", "customize-configurator", "constraint", "conflict"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_included_specs",
+      "type": "table",
+      "name": "customize_included_specs",
+      "filePath": "supabase/migrations/202606060002_customize_configurator.sql",
+      "lineRange": [78, 93],
+      "summary": "모델에 기본 포함되는 사양을 정의하는 테이블로, 모델 ID(전역은 NULL)·다국어 이름/설명·카테고리 키·아이콘과 노출 순서를 가진다.",
+      "tags": ["database", "table", "customize-configurator", "spec", "i18n"],
+      "complexity": "simple",
+      "languageNotes": "UNIQUE(model_id, key)에 더해 model_id IS NULL 행에 대한 부분 유니크 인덱스로 전역 사양 키 중복을 방지한다."
+    },
+    {
+      "id": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_consultations",
+      "type": "table",
+      "name": "customize_consultations",
+      "filePath": "supabase/migrations/202606060002_customize_configurator.sql",
+      "lineRange": [95, 114],
+      "summary": "커스터마이즈 견적 기반 상담 신청을 저장하는 테이블로, 고객 정보·선택 모델/옵션·예상 총액·설정 스냅샷과 처리 상태를 보관한다. 공개 사용자는 INSERT만 가능하다.",
+      "tags": ["database", "table", "customize-configurator", "consultation", "lead"],
+      "complexity": "moderate"
+    },
+    {
+      "id": "table:supabase/migrations/202606100001_site_settings.sql:site_settings",
+      "type": "table",
+      "name": "site_settings",
+      "filePath": "supabase/migrations/202606100001_site_settings.sql",
+      "lineRange": [3, 8],
+      "summary": "운영자 편집 가능한 사이트 전역 설정을 key-value로 저장하는 테이블로, 연락처·상담시간·SNS 링크·신뢰 지표 등을 값/라벨 쌍으로 보관한다.",
+      "tags": ["database", "table", "site-settings", "key-value", "cms"],
+      "complexity": "simple"
+    },
+    {
+      "id": "table:supabase/migrations/202606170001_rate_limit_events.sql:rate_limit_events",
+      "type": "table",
+      "name": "rate_limit_events",
+      "filePath": "supabase/migrations/202606170001_rate_limit_events.sql",
+      "lineRange": [6, 10],
+      "summary": "공개 폼 제출의 슬라이딩 윈도우 레이트 리밋을 인스턴스 간 공유하기 위한 영속 이벤트 저장 테이블로, scope_key와 생성 시각을 기록한다.",
+      "tags": ["database", "table", "rate-limiting", "security", "serverless"],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "table:supabase/migrations/20260212000000_initial_schema.sql",
+      "target": "table:supabase/migrations/20260212000000_initial_schema.sql:press_releases",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/20260212000000_initial_schema.sql",
+      "target": "table:supabase/migrations/20260212000000_initial_schema.sql:articles",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/20260212000000_initial_schema.sql",
+      "target": "table:supabase/migrations/20260212000000_initial_schema.sql:clients",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/20260212000000_initial_schema.sql",
+      "target": "table:supabase/migrations/20260212000000_initial_schema.sql:crawl_logs",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/20260212000000_initial_schema.sql",
+      "target": "table:supabase/migrations/20260212000000_initial_schema.sql:delivery_logs",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/20260219000000_rename_gwangju_source.sql",
+      "target": "table:supabase/migrations/20260212000000_initial_schema.sql:press_releases",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/20260219000000_rename_gwangju_source.sql",
+      "target": "table:supabase/migrations/20260212000000_initial_schema.sql:articles",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/20260219000000_rename_gwangju_source.sql",
+      "target": "table:supabase/migrations/20260212000000_initial_schema.sql:crawl_logs",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/20260219100000_crawl_settings.sql",
+      "target": "table:supabase/migrations/20260219100000_crawl_settings.sql:crawl_settings",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/20260220000000_client_enhancements.sql",
+      "target": "table:supabase/migrations/20260212000000_initial_schema.sql:clients",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606060002_customize_configurator.sql",
+      "target": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_models",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606060002_customize_configurator.sql",
+      "target": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_categories",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606060002_customize_configurator.sql",
+      "target": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_options",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606060002_customize_configurator.sql",
+      "target": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_option_conflicts",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606060002_customize_configurator.sql",
+      "target": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_included_specs",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606060002_customize_configurator.sql",
+      "target": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_consultations",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606060003_lock_customize_admin_policies.sql",
+      "target": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_models",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606060003_lock_customize_admin_policies.sql",
+      "target": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_categories",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606060003_lock_customize_admin_policies.sql",
+      "target": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_options",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606060003_lock_customize_admin_policies.sql",
+      "target": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_option_conflicts",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606060003_lock_customize_admin_policies.sql",
+      "target": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_included_specs",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606060003_lock_customize_admin_policies.sql",
+      "target": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_consultations",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606100001_site_settings.sql",
+      "target": "table:supabase/migrations/202606100001_site_settings.sql:site_settings",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606170001_rate_limit_events.sql",
+      "target": "table:supabase/migrations/202606170001_rate_limit_events.sql:rate_limit_events",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606170002_lock_crawler_tables.sql",
+      "target": "table:supabase/migrations/20260212000000_initial_schema.sql:clients",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606170002_lock_crawler_tables.sql",
+      "target": "table:supabase/migrations/20260212000000_initial_schema.sql:press_releases",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606170002_lock_crawler_tables.sql",
+      "target": "table:supabase/migrations/20260212000000_initial_schema.sql:articles",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606170002_lock_crawler_tables.sql",
+      "target": "table:supabase/migrations/20260212000000_initial_schema.sql:crawl_logs",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606170002_lock_crawler_tables.sql",
+      "target": "table:supabase/migrations/20260212000000_initial_schema.sql:delivery_logs",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606170002_lock_crawler_tables.sql",
+      "target": "table:supabase/migrations/20260219100000_crawl_settings.sql:crawl_settings",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "table:supabase/migrations/202606100002_lock_legacy_admin_policies.sql",
+      "target": "table:supabase/migrations/202606060002_customize_configurator.sql:customize_consultations",
+      "type": "migrates",
+      "direction": "forward",
+      "weight": 0.7
+    }
+  ]
+}

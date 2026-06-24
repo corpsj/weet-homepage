@@ -1,0 +1,1286 @@
+{
+  "nodes": [
+    {
+      "id": "file:app/actions/analytics-actions.ts",
+      "type": "file",
+      "name": "analytics-actions.ts",
+      "filePath": "app/actions/analytics-actions.ts",
+      "summary": "GA4 분석 데이터를 관리자에게 노출하는 Server Action 모음. requireAdmin 인증 후 트래픽·인구통계·유입경로·인기페이지를 모듈 레벨 캐시로 감싸 반환하며, fetchAnalyticsDashboard는 Promise.race 타임아웃으로 전체 대시보드 데이터를 한 번에 로드한다.",
+      "tags": [
+        "server-action",
+        "analytics",
+        "api-handler",
+        "caching"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "Promise.allSettled로 부분 실패를 허용하고 Promise.race로 타임아웃을 거는 방어적 패턴."
+    },
+    {
+      "id": "file:app/actions/cms-actions.ts",
+      "type": "file",
+      "name": "cms-actions.ts",
+      "filePath": "app/actions/cms-actions.ts",
+      "summary": "홈 메인 CMS(히어로 슬라이드, 시그니처 제품)를 관리하는 Server Action 모음. 히어로 슬라이드 CRUD·정렬·활성화와 제품 시그니처 토글을 Supabase admin 클라이언트로 처리하고, 변경 시 revalidatePath로 캐시를 무효화한다.",
+      "tags": [
+        "server-action",
+        "cms",
+        "api-handler",
+        "validation"
+      ],
+      "complexity": "complex",
+      "languageNotes": "URL 정규화·마지막 활성 슬라이드 비활성 방지 등 입력 검증 로직 다수."
+    },
+    {
+      "id": "file:app/actions/storage-actions.ts",
+      "type": "file",
+      "name": "storage-actions.ts",
+      "filePath": "app/actions/storage-actions.ts",
+      "summary": "이미지 업로드를 처리하는 Server Action. 버킷·MIME·경로 prefix 화이트리스트와 매직바이트 검증으로 안전한 파일만 받아 Supabase Storage에 업로드하고 public URL을 반환한다.",
+      "tags": [
+        "server-action",
+        "storage",
+        "security",
+        "validation"
+      ],
+      "complexity": "moderate",
+      "languageNotes": "매직바이트(시그니처) 검사로 확장자 위조 업로드를 차단하는 보안 패턴."
+    },
+    {
+      "id": "file:app/admin/DashboardContainer.tsx",
+      "type": "file",
+      "name": "DashboardContainer.tsx",
+      "filePath": "app/admin/DashboardContainer.tsx",
+      "summary": "관리자 인사이트 대시보드의 데이터 로딩 컨테이너. analytics-actions의 fetch 함수들을 Promise.all로 병렬 호출해 AnalyticsDashboard에 props로 전달한다.",
+      "tags": [
+        "component",
+        "container",
+        "analytics",
+        "data-fetching"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/admin/gallery/[id]/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/admin/gallery/[id]/page.tsx",
+      "summary": "갤러리 항목 수정 페이지(동적 라우트). gallery-actions로 항목을 조회해 없으면 notFound, 있으면 GalleryForm에 초기값을 전달한다.",
+      "tags": [
+        "page",
+        "admin",
+        "gallery",
+        "dynamic-route"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/admin/gallery/new/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/admin/gallery/new/page.tsx",
+      "summary": "갤러리 신규 등록 페이지. ConsolePrimitives 헤더와 빈 GalleryForm을 렌더링한다.",
+      "tags": [
+        "page",
+        "admin",
+        "gallery"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/admin/insights/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/admin/insights/page.tsx",
+      "summary": "관리자 분석 인사이트 페이지. fetchAnalyticsDashboard로 GA4 데이터를 받아 AnalyticsDashboard에 전달하며, 데이터 미연동 시 안내 상태를 표시한다.",
+      "tags": [
+        "page",
+        "admin",
+        "analytics"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/admin/main/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/admin/main/page.tsx",
+      "summary": "홈 메인 CMS 페이지. getHeroSlides·getSignatureProducts로 초기 데이터를 받아 MainCmsClient에 전달한다.",
+      "tags": [
+        "page",
+        "admin",
+        "cms"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/admin/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/admin/page.tsx",
+      "summary": "관리자 메인 대시보드 페이지. Supabase에서 활성 제품·신규 상담·프로젝트·옵션 카운트를 집계해 메트릭 카드·준비도 링·빠른 작업 링크로 콘솔 홈을 구성한다.",
+      "tags": [
+        "page",
+        "admin",
+        "dashboard",
+        "entry-point"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "file:app/admin/products/[id]/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/admin/products/[id]/page.tsx",
+      "summary": "제품 수정 페이지(동적 라우트). requireAdmin 후 Supabase admin으로 제품을 조회해 ProductForm에 초기값을 전달한다.",
+      "tags": [
+        "page",
+        "admin",
+        "product",
+        "dynamic-route"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/admin/products/new/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/admin/products/new/page.tsx",
+      "summary": "제품 신규 등록 페이지. ConsolePrimitives 헤더와 빈 ProductForm을 렌더링한다.",
+      "tags": [
+        "page",
+        "admin",
+        "product"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/admin/projects/[id]/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/admin/projects/[id]/page.tsx",
+      "summary": "프로젝트 수정 페이지(클라이언트 컴포넌트). useParams로 id를 읽어 project-actions의 getProject로 데이터를 로드하고 ProjectForm을 렌더링한다.",
+      "tags": [
+        "page",
+        "admin",
+        "project",
+        "dynamic-route"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "file:app/admin/projects/new/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/admin/projects/new/page.tsx",
+      "summary": "프로젝트 신규 등록 페이지. ConsolePrimitives 헤더와 빈 ProjectForm을 렌더링한다.",
+      "tags": [
+        "page",
+        "admin",
+        "project"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "file:app/admin/utm/page.tsx",
+      "type": "file",
+      "name": "page.tsx",
+      "filePath": "app/admin/utm/page.tsx",
+      "summary": "UTM 캠페인 링크 빌더 페이지. ConsolePrimitives 헤더와 UtmBuilder 컴포넌트를 렌더링한다.",
+      "tags": [
+        "page",
+        "admin",
+        "utm",
+        "marketing"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/analytics-actions.ts:fetchAnalyticsDashboard",
+      "type": "function",
+      "name": "fetchAnalyticsDashboard",
+      "filePath": "app/actions/analytics-actions.ts",
+      "lineRange": [
+        96,
+        131
+      ],
+      "summary": "관리자 인증 후 5개 GA4 리포트를 병렬 로드해 단일 대시보드 객체로 반환하는 Server Action. Promise.race 타임아웃으로 응답 지연을 방어한다.",
+      "tags": [
+        "server-action",
+        "analytics",
+        "aggregation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/cms-actions.ts:normalizeHeroUrl",
+      "type": "function",
+      "name": "normalizeHeroUrl",
+      "filePath": "app/actions/cms-actions.ts",
+      "lineRange": [
+        20,
+        42
+      ],
+      "summary": "히어로 슬라이드 URL 입력을 trim·상대경로 허용 여부에 따라 정규화·검증하는 헬퍼.",
+      "tags": [
+        "validation",
+        "url",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/cms-actions.ts:assertCanDeactivateHeroSlide",
+      "type": "function",
+      "name": "assertCanDeactivateHeroSlide",
+      "filePath": "app/actions/cms-actions.ts",
+      "lineRange": [
+        60,
+        79
+      ],
+      "summary": "마지막 활성 히어로 슬라이드 비활성화를 차단하는 가드. 활성 슬라이드 수를 세어 0이 되는 변경을 막는다.",
+      "tags": [
+        "validation",
+        "guard",
+        "cms"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/cms-actions.ts:getHeroSlides",
+      "type": "function",
+      "name": "getHeroSlides",
+      "filePath": "app/actions/cms-actions.ts",
+      "lineRange": [
+        83,
+        98
+      ],
+      "summary": "관리자용 히어로 슬라이드 전체를 정렬 순서대로 조회하는 Server Action.",
+      "tags": [
+        "server-action",
+        "cms",
+        "query"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/cms-actions.ts:createHeroSlide",
+      "type": "function",
+      "name": "createHeroSlide",
+      "filePath": "app/actions/cms-actions.ts",
+      "lineRange": [
+        100,
+        141
+      ],
+      "summary": "히어로 슬라이드를 정규화·검증 후 마지막 sort_order 다음 위치로 삽입하는 Server Action.",
+      "tags": [
+        "server-action",
+        "cms",
+        "create"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/cms-actions.ts:updateHeroSlide",
+      "type": "function",
+      "name": "updateHeroSlide",
+      "filePath": "app/actions/cms-actions.ts",
+      "lineRange": [
+        143,
+        172
+      ],
+      "summary": "히어로 슬라이드를 정규화·비활성 가드 검사 후 업데이트하고 캐시를 무효화하는 Server Action.",
+      "tags": [
+        "server-action",
+        "cms",
+        "update"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/cms-actions.ts:deleteHeroSlide",
+      "type": "function",
+      "name": "deleteHeroSlide",
+      "filePath": "app/actions/cms-actions.ts",
+      "lineRange": [
+        174,
+        191
+      ],
+      "summary": "히어로 슬라이드를 삭제하고 관련 경로를 revalidate하는 Server Action.",
+      "tags": [
+        "server-action",
+        "cms",
+        "delete"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/cms-actions.ts:setHeroSlideActive",
+      "type": "function",
+      "name": "setHeroSlideActive",
+      "filePath": "app/actions/cms-actions.ts",
+      "lineRange": [
+        193,
+        219
+      ],
+      "summary": "히어로 슬라이드 활성 상태를 토글하는 Server Action. 비활성화 시 마지막 활성 가드를 적용한다.",
+      "tags": [
+        "server-action",
+        "cms",
+        "update"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/cms-actions.ts:reorderHeroSlides",
+      "type": "function",
+      "name": "reorderHeroSlides",
+      "filePath": "app/actions/cms-actions.ts",
+      "lineRange": [
+        221,
+        249
+      ],
+      "summary": "전달받은 id 순서대로 히어로 슬라이드 sort_order를 일괄 갱신하는 Server Action.",
+      "tags": [
+        "server-action",
+        "cms",
+        "reorder"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/cms-actions.ts:getSignatureProducts",
+      "type": "function",
+      "name": "getSignatureProducts",
+      "filePath": "app/actions/cms-actions.ts",
+      "lineRange": [
+        253,
+        269
+      ],
+      "summary": "시그니처 라인 후보 제품 전체를 표시 순서대로 조회하는 Server Action.",
+      "tags": [
+        "server-action",
+        "cms",
+        "query"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/cms-actions.ts:updateSignatureStatus",
+      "type": "function",
+      "name": "updateSignatureStatus",
+      "filePath": "app/actions/cms-actions.ts",
+      "lineRange": [
+        271,
+        313
+      ],
+      "summary": "제품의 시그니처 지정 여부를 토글하는 Server Action. 활성 제품 수 제한 등을 검증한다.",
+      "tags": [
+        "server-action",
+        "cms",
+        "update",
+        "validation"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/actions/storage-actions.ts:hasValidImageMagicBytes",
+      "type": "function",
+      "name": "hasValidImageMagicBytes",
+      "filePath": "app/actions/storage-actions.ts",
+      "lineRange": [
+        31,
+        53
+      ],
+      "summary": "버퍼의 매직바이트를 검사해 선언된 MIME과 실제 이미지 포맷이 일치하는지 확인하는 보안 헬퍼.",
+      "tags": [
+        "security",
+        "validation",
+        "helper"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/actions/storage-actions.ts:uploadImageAction",
+      "type": "function",
+      "name": "uploadImageAction",
+      "filePath": "app/actions/storage-actions.ts",
+      "lineRange": [
+        55,
+        156
+      ],
+      "summary": "버킷·MIME·경로 화이트리스트와 매직바이트 검증을 거쳐 이미지를 Supabase Storage에 업로드하고 public URL을 반환하는 Server Action.",
+      "tags": [
+        "server-action",
+        "storage",
+        "security",
+        "upload"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:app/admin/DashboardContainer.tsx:DashboardContainer",
+      "type": "function",
+      "name": "DashboardContainer",
+      "filePath": "app/admin/DashboardContainer.tsx",
+      "lineRange": [
+        10,
+        28
+      ],
+      "summary": "analytics fetch 함수들을 Promise.all로 병렬 호출해 AnalyticsDashboard에 데이터를 주입하는 컨테이너 컴포넌트.",
+      "tags": [
+        "component",
+        "container",
+        "data-fetching"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/admin/gallery/[id]/page.tsx:EditGalleryPage",
+      "type": "function",
+      "name": "EditGalleryPage",
+      "filePath": "app/admin/gallery/[id]/page.tsx",
+      "lineRange": [
+        8,
+        31
+      ],
+      "summary": "갤러리 항목을 id로 조회해 없으면 notFound, 있으면 GalleryForm을 렌더링하는 수정 페이지.",
+      "tags": [
+        "page",
+        "gallery",
+        "admin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/admin/gallery/new/page.tsx:NewGalleryPage",
+      "type": "function",
+      "name": "NewGalleryPage",
+      "filePath": "app/admin/gallery/new/page.tsx",
+      "lineRange": [
+        6,
+        18
+      ],
+      "summary": "빈 GalleryForm을 렌더링하는 갤러리 신규 등록 페이지.",
+      "tags": [
+        "page",
+        "gallery",
+        "admin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/admin/insights/page.tsx:InsightsPage",
+      "type": "function",
+      "name": "InsightsPage",
+      "filePath": "app/admin/insights/page.tsx",
+      "lineRange": [
+        8,
+        74
+      ],
+      "summary": "GA4 대시보드 데이터를 조회해 AnalyticsDashboard에 전달하고 미연동 상태를 처리하는 인사이트 페이지.",
+      "tags": [
+        "page",
+        "analytics",
+        "admin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/admin/main/page.tsx:CMSMainPage",
+      "type": "function",
+      "name": "CMSMainPage",
+      "filePath": "app/admin/main/page.tsx",
+      "lineRange": [
+        6,
+        16
+      ],
+      "summary": "히어로 슬라이드·시그니처 제품 초기 데이터를 받아 MainCmsClient에 전달하는 홈 CMS 페이지.",
+      "tags": [
+        "page",
+        "cms",
+        "admin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/admin/page.tsx:getCount",
+      "type": "function",
+      "name": "getCount",
+      "filePath": "app/admin/page.tsx",
+      "lineRange": [
+        33,
+        47
+      ],
+      "summary": "Supabase 테이블의 행 수를 필터 적용해 집계하는 헬퍼.",
+      "tags": [
+        "helper",
+        "query",
+        "aggregation"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/admin/page.tsx:AdminPage",
+      "type": "function",
+      "name": "AdminPage",
+      "filePath": "app/admin/page.tsx",
+      "lineRange": [
+        61,
+        298
+      ],
+      "summary": "활성 제품·신규 상담·프로젝트·옵션 카운트를 집계해 메트릭 카드·준비도 링·빠른 작업으로 관리자 홈을 렌더링하는 페이지.",
+      "tags": [
+        "page",
+        "dashboard",
+        "admin",
+        "entry-point"
+      ],
+      "complexity": "complex"
+    },
+    {
+      "id": "function:app/admin/products/[id]/page.tsx:EditProductPage",
+      "type": "function",
+      "name": "EditProductPage",
+      "filePath": "app/admin/products/[id]/page.tsx",
+      "lineRange": [
+        14,
+        39
+      ],
+      "summary": "requireAdmin 후 제품을 조회해 ProductForm에 초기값을 전달하는 수정 페이지.",
+      "tags": [
+        "page",
+        "product",
+        "admin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/admin/products/new/page.tsx:NewProductPage",
+      "type": "function",
+      "name": "NewProductPage",
+      "filePath": "app/admin/products/new/page.tsx",
+      "lineRange": [
+        4,
+        15
+      ],
+      "summary": "빈 ProductForm을 렌더링하는 제품 신규 등록 페이지.",
+      "tags": [
+        "page",
+        "product",
+        "admin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/admin/projects/[id]/page.tsx:EditProjectPage",
+      "type": "function",
+      "name": "EditProjectPage",
+      "filePath": "app/admin/projects/[id]/page.tsx",
+      "lineRange": [
+        11,
+        66
+      ],
+      "summary": "useParams로 id를 읽어 getProject로 프로젝트를 로드하고 ProjectForm을 렌더링하는 클라이언트 수정 페이지.",
+      "tags": [
+        "page",
+        "project",
+        "admin"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "function:app/admin/projects/new/page.tsx:NewProjectPage",
+      "type": "function",
+      "name": "NewProjectPage",
+      "filePath": "app/admin/projects/new/page.tsx",
+      "lineRange": [
+        6,
+        18
+      ],
+      "summary": "빈 ProjectForm을 렌더링하는 프로젝트 신규 등록 페이지.",
+      "tags": [
+        "page",
+        "project",
+        "admin"
+      ],
+      "complexity": "simple"
+    },
+    {
+      "id": "function:app/admin/utm/page.tsx:AdminUtmPage",
+      "type": "function",
+      "name": "AdminUtmPage",
+      "filePath": "app/admin/utm/page.tsx",
+      "lineRange": [
+        6,
+        18
+      ],
+      "summary": "UtmBuilder를 렌더링하는 UTM 링크 빌더 페이지.",
+      "tags": [
+        "page",
+        "utm",
+        "admin"
+      ],
+      "complexity": "simple"
+    }
+  ],
+  "edges": [
+    {
+      "source": "file:app/actions/analytics-actions.ts",
+      "target": "function:app/actions/analytics-actions.ts:fetchAnalyticsDashboard",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/analytics-actions.ts",
+      "target": "function:app/actions/analytics-actions.ts:fetchAnalyticsDashboard",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "function:app/actions/cms-actions.ts:normalizeHeroUrl",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "function:app/actions/cms-actions.ts:assertCanDeactivateHeroSlide",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "function:app/actions/cms-actions.ts:getHeroSlides",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "function:app/actions/cms-actions.ts:getHeroSlides",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "function:app/actions/cms-actions.ts:createHeroSlide",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "function:app/actions/cms-actions.ts:createHeroSlide",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "function:app/actions/cms-actions.ts:updateHeroSlide",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "function:app/actions/cms-actions.ts:updateHeroSlide",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "function:app/actions/cms-actions.ts:deleteHeroSlide",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "function:app/actions/cms-actions.ts:deleteHeroSlide",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "function:app/actions/cms-actions.ts:setHeroSlideActive",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "function:app/actions/cms-actions.ts:setHeroSlideActive",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "function:app/actions/cms-actions.ts:reorderHeroSlides",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "function:app/actions/cms-actions.ts:reorderHeroSlides",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "function:app/actions/cms-actions.ts:getSignatureProducts",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "function:app/actions/cms-actions.ts:getSignatureProducts",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "function:app/actions/cms-actions.ts:updateSignatureStatus",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "function:app/actions/cms-actions.ts:updateSignatureStatus",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/storage-actions.ts",
+      "target": "function:app/actions/storage-actions.ts:hasValidImageMagicBytes",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/storage-actions.ts",
+      "target": "function:app/actions/storage-actions.ts:uploadImageAction",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/actions/storage-actions.ts",
+      "target": "function:app/actions/storage-actions.ts:uploadImageAction",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/admin/DashboardContainer.tsx",
+      "target": "function:app/admin/DashboardContainer.tsx:DashboardContainer",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/admin/DashboardContainer.tsx",
+      "target": "function:app/admin/DashboardContainer.tsx:DashboardContainer",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/admin/gallery/[id]/page.tsx",
+      "target": "function:app/admin/gallery/[id]/page.tsx:EditGalleryPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/admin/gallery/[id]/page.tsx",
+      "target": "function:app/admin/gallery/[id]/page.tsx:EditGalleryPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/admin/gallery/new/page.tsx",
+      "target": "function:app/admin/gallery/new/page.tsx:NewGalleryPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/admin/gallery/new/page.tsx",
+      "target": "function:app/admin/gallery/new/page.tsx:NewGalleryPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/admin/insights/page.tsx",
+      "target": "function:app/admin/insights/page.tsx:InsightsPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/admin/insights/page.tsx",
+      "target": "function:app/admin/insights/page.tsx:InsightsPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/admin/main/page.tsx",
+      "target": "function:app/admin/main/page.tsx:CMSMainPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/admin/main/page.tsx",
+      "target": "function:app/admin/main/page.tsx:CMSMainPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/admin/page.tsx",
+      "target": "function:app/admin/page.tsx:getCount",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/admin/page.tsx",
+      "target": "function:app/admin/page.tsx:AdminPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/admin/page.tsx",
+      "target": "function:app/admin/page.tsx:AdminPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/admin/products/[id]/page.tsx",
+      "target": "function:app/admin/products/[id]/page.tsx:EditProductPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/admin/products/[id]/page.tsx",
+      "target": "function:app/admin/products/[id]/page.tsx:EditProductPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/admin/products/new/page.tsx",
+      "target": "function:app/admin/products/new/page.tsx:NewProductPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/admin/products/new/page.tsx",
+      "target": "function:app/admin/products/new/page.tsx:NewProductPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/admin/projects/[id]/page.tsx",
+      "target": "function:app/admin/projects/[id]/page.tsx:EditProjectPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/admin/projects/[id]/page.tsx",
+      "target": "function:app/admin/projects/[id]/page.tsx:EditProjectPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/admin/projects/new/page.tsx",
+      "target": "function:app/admin/projects/new/page.tsx:NewProjectPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/admin/projects/new/page.tsx",
+      "target": "function:app/admin/projects/new/page.tsx:NewProjectPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/admin/utm/page.tsx",
+      "target": "function:app/admin/utm/page.tsx:AdminUtmPage",
+      "type": "contains",
+      "direction": "forward",
+      "weight": 1
+    },
+    {
+      "source": "file:app/admin/utm/page.tsx",
+      "target": "function:app/admin/utm/page.tsx:AdminUtmPage",
+      "type": "exports",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "file:app/actions/analytics-actions.ts",
+      "target": "file:lib/admin-auth.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/analytics-actions.ts",
+      "target": "file:lib/analytics.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "file:lib/admin-auth.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "file:lib/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/cms-actions.ts",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/storage-actions.ts",
+      "target": "file:lib/admin-auth.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/actions/storage-actions.ts",
+      "target": "file:lib/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/DashboardContainer.tsx",
+      "target": "file:app/actions/analytics-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/DashboardContainer.tsx",
+      "target": "file:components/admin/insights/AnalyticsDashboard.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/gallery/[id]/page.tsx",
+      "target": "file:app/actions/gallery-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/gallery/[id]/page.tsx",
+      "target": "file:components/admin/ConsolePrimitives.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/gallery/[id]/page.tsx",
+      "target": "file:components/admin/gallery/GalleryForm.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/gallery/new/page.tsx",
+      "target": "file:components/admin/ConsolePrimitives.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/gallery/new/page.tsx",
+      "target": "file:components/admin/gallery/GalleryForm.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/insights/page.tsx",
+      "target": "file:app/actions/analytics-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/insights/page.tsx",
+      "target": "file:components/admin/ConsolePrimitives.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/insights/page.tsx",
+      "target": "file:components/admin/insights/AnalyticsDashboard.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/main/page.tsx",
+      "target": "file:app/actions/cms-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/main/page.tsx",
+      "target": "file:components/admin/cms/MainCmsClient.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/page.tsx",
+      "target": "file:components/admin/AdminCommandSearch.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/page.tsx",
+      "target": "file:components/admin/ConsolePrimitives.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/page.tsx",
+      "target": "file:lib/admin-auth.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/page.tsx",
+      "target": "file:lib/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/products/[id]/page.tsx",
+      "target": "file:components/admin/ConsolePrimitives.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/products/[id]/page.tsx",
+      "target": "file:components/admin/ProductForm.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/products/[id]/page.tsx",
+      "target": "file:lib/admin-auth.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/products/[id]/page.tsx",
+      "target": "file:lib/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/products/new/page.tsx",
+      "target": "file:components/admin/ConsolePrimitives.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/products/new/page.tsx",
+      "target": "file:components/admin/ProductForm.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/projects/[id]/page.tsx",
+      "target": "file:app/actions/project-actions.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/projects/[id]/page.tsx",
+      "target": "file:components/admin/ConsolePrimitives.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/projects/[id]/page.tsx",
+      "target": "file:components/admin/projects/ProjectForm.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/projects/[id]/page.tsx",
+      "target": "file:types/supabase.ts",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/projects/new/page.tsx",
+      "target": "file:components/admin/ConsolePrimitives.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/projects/new/page.tsx",
+      "target": "file:components/admin/projects/ProjectForm.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/utm/page.tsx",
+      "target": "file:components/admin/ConsolePrimitives.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "file:app/admin/utm/page.tsx",
+      "target": "file:components/admin/utm/UtmBuilder.tsx",
+      "type": "imports",
+      "direction": "forward",
+      "weight": 0.7
+    },
+    {
+      "source": "function:app/actions/analytics-actions.ts:fetchAnalyticsDashboard",
+      "target": "function:lib/analytics.ts:getTrafficStats",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/analytics-actions.ts:fetchAnalyticsDashboard",
+      "target": "function:lib/analytics.ts:getUserDemographics",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/analytics-actions.ts:fetchAnalyticsDashboard",
+      "target": "function:lib/analytics.ts:getAcquisitionSources",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/analytics-actions.ts:fetchAnalyticsDashboard",
+      "target": "function:lib/analytics.ts:getTopPages",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/actions/analytics-actions.ts:fetchAnalyticsDashboard",
+      "target": "function:lib/analytics.ts:getCityDemographics",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/admin/DashboardContainer.tsx:DashboardContainer",
+      "target": "function:app/actions/analytics-actions.ts:fetchAnalyticsDashboard",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/admin/insights/page.tsx:InsightsPage",
+      "target": "function:app/actions/analytics-actions.ts:fetchAnalyticsDashboard",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/admin/main/page.tsx:CMSMainPage",
+      "target": "function:app/actions/cms-actions.ts:getHeroSlides",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/admin/main/page.tsx:CMSMainPage",
+      "target": "function:app/actions/cms-actions.ts:getSignatureProducts",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/admin/gallery/[id]/page.tsx:EditGalleryPage",
+      "target": "function:app/actions/gallery-actions.ts:getGalleryItemForAdmin",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    },
+    {
+      "source": "function:app/admin/projects/[id]/page.tsx:EditProjectPage",
+      "target": "function:app/actions/project-actions.ts:getProject",
+      "type": "calls",
+      "direction": "forward",
+      "weight": 0.8
+    }
+  ]
+}

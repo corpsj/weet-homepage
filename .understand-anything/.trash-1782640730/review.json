@@ -1,0 +1,41 @@
+{
+  "issues": [],
+  "warnings": [
+    "Node 'document:AGENTS.md' has no edges (orphan)",
+    "Node 'file:.vercelignore' has no edges (orphan)",
+    "Node 'file:app/customize/layout.tsx' has no edges (orphan)",
+    "Node 'file:app/loading.tsx' has no edges (orphan)",
+    "Node 'file:app/support/layout.tsx' has no edges (orphan)",
+    "Node 'file:components/customize/__tests__/sample.test.tsx' has no edges (orphan)",
+    "Node 'document:design/figma_design.md' has no edges (orphan)",
+    "Node 'file:e2e/customize-configurator.spec.ts' has no edges (orphan)",
+    "Node 'file:e2e/header-navigation.spec.ts' has no edges (orphan)",
+    "Node 'file:eslint.config.mjs' has no edges (orphan)",
+    "Node 'file:playwright.config.ts' has no edges (orphan)"
+  ],
+  "stats": {
+    "totalNodes": 534,
+    "totalEdges": 1211,
+    "totalLayers": 8,
+    "tourSteps": 15,
+    "nodeTypes": {
+      "file": 200,
+      "function": 281,
+      "table": 44,
+      "document": 4,
+      "config": 4,
+      "schema": 1
+    },
+    "edgeTypes": {
+      "contains": 284,
+      "exports": 228,
+      "calls": 218,
+      "imports": 393,
+      "tested_by": 6,
+      "migrates": 31,
+      "documents": 17,
+      "configures": 14,
+      "defines_schema": 20
+    }
+  }
+}
