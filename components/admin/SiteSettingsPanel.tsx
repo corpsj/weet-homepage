@@ -18,6 +18,8 @@ const FIELD_ORDER: (keyof SiteSettings)[] = [
   'trust_founded_year',
   'trust_units_built',
   'lead_time_note',
+  'business_representative',
+  'mail_order_sales_number',
 ];
 
 export default function SiteSettingsPanel() {
