@@ -182,11 +182,14 @@ test.describe('Public page transition', () => {
     // 오인 전환 방지: 제품별 /customize?product= 딥링크 없음.
     await expect(page.locator('a[href*="/customize?product="]')).toHaveCount(0);
     // 기준 모델(3x6·3x9)은 /customize, 비기준 모델은 /support#consult 로 분기(오인 방지).
-    const configureLinks = page.getByRole('link', { name: /이 모델 구성하기|Configure this model/ });
-    const consultLinks = page.getByRole('link', { name: /구성 상담 문의하기|Request a consultation/ });
-    expect((await configureLinks.count()) + (await consultLinks.count())).toBeGreaterThan(0);
-    if ((await configureLinks.count()) > 0) await expect(configureLinks.first()).toHaveAttribute('href', '/customize');
-    if ((await consultLinks.count()) > 0) await expect(consultLinks.first()).toHaveAttribute('href', '/support#consult');
+    // ProductsPageClient는 client 렌더이므로 CTA가 나타날 때까지 auto-wait 후 검증한다.
+    const configureLink = page.getByRole('link', { name: /이 모델 구성하기|Configure this model/ }).first();
+    await expect(configureLink).toBeVisible();
+    await expect(configureLink).toHaveAttribute('href', '/customize');
+    const consultLink = page.getByRole('link', { name: /구성 상담 문의하기|Request a consultation/ }).first();
+    if ((await consultLink.count()) > 0) {
+      await expect(consultLink).toHaveAttribute('href', '/support#consult');
+    }
 
     await page.goto('/projects');
 
