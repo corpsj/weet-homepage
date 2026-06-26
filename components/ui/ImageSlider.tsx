@@ -9,6 +9,7 @@ interface ImageSliderProps {
     images: string[];
     alt: string;
     className?: string;
+    imgClassName?: string;
     aspectRatio?: string;
     sizes?: string;
 }
@@ -17,6 +18,7 @@ export default function ImageSlider({
     images,
     alt,
     className = '',
+    imgClassName = '',
     aspectRatio = 'aspect-[541/422]',
     sizes = '(max-width: 1024px) 100vw, 44vw',
 }: ImageSliderProps) {
@@ -50,7 +52,7 @@ export default function ImageSlider({
                         alt={`${alt} - Image ${currentIndex + 1}`}
                         fill
                         sizes={sizes}
-                        className="object-cover"
+                        className={`object-cover ${imgClassName}`}
                         priority={currentIndex === 0}
                     />
                 </motion.div>

@@ -78,7 +78,7 @@ export default function CompanyPage() {
           fill
           priority
           sizes="100vw"
-          className="heroimg scale-[1.06] object-cover"
+          className="heroimg origin-bottom scale-[1.06] object-cover object-bottom"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-weet-ink/[0.86] via-weet-ink/[0.28] to-weet-ink/[0.12]" />
         <div className="absolute inset-x-0 bottom-0 px-[5vw] pb-16">
@@ -326,6 +326,7 @@ export default function CompanyPage() {
             <div className="wt-fcard overflow-hidden rounded-[14px] border border-weet-line bg-weet-surface">
               <div className="relative overflow-hidden">
                 <ImageSlider
+                  imgClassName="object-bottom"
                   images={t.company.factory.lab.images}
                   alt={t.company.factory.lab.title}
                   aspectRatio="aspect-[4/3]"
@@ -345,6 +346,7 @@ export default function CompanyPage() {
             <div className="wt-fcard overflow-hidden rounded-[14px] border border-weet-line bg-weet-surface">
               <div className="relative overflow-hidden">
                 <ImageSlider
+                  imgClassName="object-bottom"
                   images={t.company.factory.workshop.images}
                   alt={t.company.factory.workshop.title}
                   aspectRatio="aspect-[4/3]"
