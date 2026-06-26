@@ -115,12 +115,12 @@ export const DICTIONARY = {
                 lab: {
                     title: 'LAB',
                     desc: '당신의 꿈을 연구하는곳',
-                    images: ['/images/modular/generated/factory-precision.webp']
+                    images: ['/images/company/lab_new.webp']
                 },
                 workshop: {
                     title: 'WORKSHOP',
                     desc: '당신의 꿈을 짓는곳',
-                    images: ['/images/modular/generated/transport-install.webp']
+                    images: ['/images/company/workshop.webp']
                 }
             }
         },
@@ -265,12 +265,12 @@ export const DICTIONARY = {
                 lab: {
                     title: 'LAB',
                     desc: 'Where your dreams are researched',
-                    images: ['/images/modular/generated/factory-precision.webp']
+                    images: ['/images/company/lab_new.webp']
                 },
                 workshop: {
                     title: 'WORKSHOP',
                     desc: 'Where your dreams are built',
-                    images: ['/images/modular/generated/transport-install.webp']
+                    images: ['/images/company/workshop.webp']
                 }
             }
         },
@@ -415,12 +415,12 @@ export const DICTIONARY = {
                 lab: {
                     title: 'LAB',
                     desc: 'Donde investigamos tu sueño',
-                    images: ['/images/modular/generated/factory-precision.webp']
+                    images: ['/images/company/lab_new.webp']
                 },
                 workshop: {
                     title: 'WORKSHOP',
                     desc: 'Donde construimos tu sueño',
-                    images: ['/images/modular/generated/transport-install.webp']
+                    images: ['/images/company/workshop.webp']
                 }
             }
         },
