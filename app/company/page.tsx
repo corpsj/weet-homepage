@@ -17,7 +17,7 @@ interface CrewData {
 }
 
 // 데코 이미지는 언어 무관 — 시안(co-*) 자산으로 고정.
-const HERO_IMAGE = '/images/modular/generated/factory-precision.webp';
+const HERO_IMAGE = '/images/handoff/co-lab.webp';
 const SLOGAN_IMAGE = '/images/handoff/co-slogan.webp';
 const CI_LOGO_IMAGE = '/images/handoff/co-ci-logo.webp';
 
