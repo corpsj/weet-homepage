@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState, useTransition } from 'react';
+import { useEffect, useMemo, useState, useTransition } from 'react';
 import { ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -97,16 +97,32 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
     [catalog, modelId, selectedOptions]
   );
   const encodedConfig = useMemo(() => encodeConfig(modelId, selectedOptions), [modelId, selectedOptions]);
-  // 진입 시점의 구성(기본값 또는 공유 링크로 디코딩된 값)의 인코딩. 이와 달라질 때만 URL에 반영한다.
-  const initialEncodedConfigRef = useRef(encodedConfig);
+  // 순정 기본 구성(첫 모델 + 기본 선택)의 인코딩. 이 상태에서는 URL을 깨끗하게 유지한다.
+  const pristineEncoded = useMemo(
+    () => encodeConfig(firstModelId, getDefaultSelections(catalog, firstModelId)),
+    [catalog, firstModelId]
+  );
 
-  // 구성이 진입 기본값과 달라지면 ?c= 로 동기화(공유/복원). 기본 상태에서는 URL을 깨끗하게 유지한다.
+  // URL을 항상 현재 구성과 일치시킨다(공유/새로고침 복원 정합성).
+  // utm 등 기존 쿼리는 보존하고, 300ms debounce + try/catch로 Safari replaceState 제한을 방어한다.
   useEffect(() => {
     if (!estimate || typeof window === 'undefined') return;
-    if (encodedConfig === initialEncodedConfigRef.current) return;
-    const nextUrl = `${window.location.pathname}?c=${encodedConfig}`;
-    window.history.replaceState(null, '', nextUrl);
-  }, [encodedConfig, estimate]);
+    const timer = window.setTimeout(() => {
+      try {
+        const params = new URLSearchParams(window.location.search);
+        if (encodedConfig === pristineEncoded) {
+          params.delete('c');
+        } else {
+          params.set('c', encodedConfig);
+        }
+        const query = params.toString();
+        window.history.replaceState(null, '', `${window.location.pathname}${query ? `?${query}` : ''}`);
+      } catch {
+        // Safari replaceState 호출 제한(SecurityError) — 이번 동기화만 건너뛴다.
+      }
+    }, 300);
+    return () => window.clearTimeout(timer);
+  }, [encodedConfig, estimate, pristineEncoded]);
 
   const currentModel = estimate?.model ?? catalog.models[0];
   const visibleOptions = useMemo(() => optionsForModel(catalog.options.filter((option) => option.isActive), modelId), [catalog.options, modelId]);
