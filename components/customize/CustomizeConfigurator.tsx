@@ -23,6 +23,7 @@ import type {
   ConsultationFormInput,
   CustomizeCatalog,
   CustomizeCategory,
+  CustomizeModel,
   CustomizeOption,
   SelectedOptions,
 } from '@/lib/customize/types';
@@ -74,7 +75,8 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
   // 진행 시스템: 사용자가 도달한 가장 먼 단계 이전의 단계는 '완료'로 표시한다.
   // 공유 링크로 진입(decoded)하면 이미 구성이 끝난 상태이므로 모든 단계를 완료로 둔다.
   const [furthestStepIndex, setFurthestStepIndex] = useState(decoded ? STEPS.length - 1 : 0);
-  const [submitted, setSubmitted] = useState(false);
+  // 제출 시점 견적 스냅샷. 구성이 스냅샷과 달라지면 submitted가 자동 해제된다(파생).
+  const [submittedSnapshot, setSubmittedSnapshot] = useState<{ model: CustomizeModel; estimatedTotal: number; encodedConfig: string } | null>(null);
   const [planViewerOpen, setPlanViewerOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [form, setForm] = useState<ConsultationDraft>({
@@ -97,6 +99,9 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
     [catalog, modelId, selectedOptions]
   );
   const encodedConfig = useMemo(() => encodeConfig(modelId, selectedOptions), [modelId, selectedOptions]);
+  // submitted는 파생값: 스냅샷이 있고 그 스냅샷이 현재 구성과 일치할 때만 true.
+  // 제출 후 구성을 바꾸면 encodedConfig가 달라져 자동으로 false가 되어 재제출이 열린다.
+  const submitted = submittedSnapshot !== null && submittedSnapshot.encodedConfig === encodedConfig;
   // 순정 기본 구성(첫 모델 + 기본 선택)의 인코딩. 이 상태에서는 URL을 깨끗하게 유지한다.
   const pristineEncoded = useMemo(
     () => encodeConfig(firstModelId, getDefaultSelections(catalog, firstModelId)),
@@ -202,7 +207,7 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
       const result = await submitCustomizeConsultation(payload);
       if (result.success) {
         toast.success(result.message);
-        setSubmitted(true);
+        if (estimate) setSubmittedSnapshot({ model: estimate.model, estimatedTotal: estimate.estimatedTotal, encodedConfig });
         setForm({
           customerName: '',
           phone: '',
@@ -268,7 +273,8 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
           setForm={setForm}
           isPending={isPending}
           submitted={submitted}
-          onEditAfterSubmit={() => setSubmitted(false)}
+          submittedSnapshot={submittedSnapshot}
+          onEditAfterSubmit={() => setSubmittedSnapshot(null)}
           onSubmit={handleSubmit}
           onSaveQuote={handleSaveQuote}
           copy={copy}

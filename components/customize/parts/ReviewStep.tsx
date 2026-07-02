@@ -14,7 +14,7 @@ import {
 } from '@/lib/customize/config';
 import { formatModelStartPrice, formatWon } from '@/lib/customize/priceCalculator';
 import type { Language } from '@/contexts/LanguageContext';
-import type { CustomizeOption, EstimateBreakdown } from '@/lib/customize/types';
+import type { CustomizeModel, CustomizeOption, EstimateBreakdown } from '@/lib/customize/types';
 import { pickText } from '@/lib/customize/i18n';
 import {
   REQUIRED_FIELDS,
@@ -40,6 +40,7 @@ export function ReviewStep({
   setForm,
   isPending,
   submitted,
+  submittedSnapshot,
   onEditAfterSubmit,
   onSubmit,
   onSaveQuote,
@@ -53,6 +54,7 @@ export function ReviewStep({
   setForm: Dispatch<SetStateAction<ConsultationDraft>>;
   isPending: boolean;
   submitted: boolean;
+  submittedSnapshot: { model: CustomizeModel; estimatedTotal: number; encodedConfig: string } | null;
   onEditAfterSubmit: () => void;
   onSubmit: () => void;
   onSaveQuote: () => void;
@@ -201,7 +203,7 @@ export function ReviewStep({
             </div>
           </div>
 
-          {submitted ? (
+          {submitted && submittedSnapshot ? (
             <div className="rounded-lg border border-weet-forest/30 bg-weet-forest/10 p-5" role="status" aria-live="polite">
               <p className="text-lg font-black text-weet-forest">{copy.submittedTitle}</p>
               <p className="mt-1.5 text-sm leading-relaxed text-weet-forest/90">
@@ -210,11 +212,11 @@ export function ReviewStep({
               <dl className="mt-3 rounded-md border border-weet-forest/20 bg-weet-surface/70 p-3 text-sm">
                 <div className="flex items-center justify-between gap-3">
                   <dt className="font-semibold text-weet-sub">{copy.receivedModel}</dt>
-                  <dd className="font-bold text-weet-ink">{pickText(estimate.model.nameKo, estimate.model.nameEn, language)}</dd>
+                  <dd className="font-bold text-weet-ink">{pickText(submittedSnapshot.model.nameKo, submittedSnapshot.model.nameEn, language)}</dd>
                 </div>
                 <div className="mt-1 flex items-center justify-between gap-3">
                   <dt className="font-semibold text-weet-sub">{copy.estimatedAmount}</dt>
-                  <dd className="font-bold text-weet-ink">{formatWon(estimate.estimatedTotal)}</dd>
+                  <dd className="font-bold text-weet-ink">{formatWon(submittedSnapshot.estimatedTotal)}</dd>
                 </div>
               </dl>
               <Button
