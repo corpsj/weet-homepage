@@ -80,10 +80,19 @@ export function FloorplanCanvas({
   // geomFor 결과를 props에서 직접 산출한다. 모델 변경 시 framer-motion이 현재값 → 목표값을 보간(=tweenPlan).
   const geom = geomFor(model.lengthM);
   const railMidX = Math.round((geom.x + PLAN_RIGHT_EDGE) / 2);
-  // 기본창은 거실 구간(좌측 벽 ~ 욕실 칸막이 x=696)의 상단 벽 중앙에 둔다.
-  const windowX = Math.round((geom.x + 696) / 2) - 55;
+  // 창호 옵션 → 도면 반영: 기본창(상단 벽), 와이드 픽처창(상단 벽 확대), 추가창(좌측 벽).
+  const windowOptions = selectedOptions.filter((option) => option.categoryKey === 'windows');
+  const hasWindow = (key: string) => windowOptions.some((option) => (option.key || option.id) === key);
+  const wideWindow = hasWindow('wide-window');
+  const showTopWindow = hasWindow('basic-window') || wideWindow;
+  const extraWindow = hasWindow('extra-window');
+  const topWindowW = wideWindow ? 190 : 110;
+  // 상단 창은 거실 구간(좌측 벽 ~ 욕실 칸막이 x=696)의 중앙에 둔다.
+  const windowX = Math.round((geom.x + 696) / 2) - topWindowW / 2;
   // applyGeom 대응: 단일 좌측 벽 x로부터 벽/스킨/레일 좌표가 모두 파생된다.
   const tween = { duration: shouldReduceMotion ? 0 : PLAN_TWEEN_S, ease: easeOutCubic };
+  // 바닥/외장 색 변경은 CSS 트랜지션으로 부드럽게 넘긴다(즉시 교체 → 크로스페이드).
+  const colorTransition = shouldReduceMotion ? undefined : { transition: 'fill 450ms ease, stroke 450ms ease' };
 
   const floorColor = swatchColor(selectedOptions, 'flooring') ?? DEFAULT_FLOOR_FILL;
   const exteriorColor = swatchColor(selectedOptions, 'exterior') ?? DEFAULT_WALL_INK;
@@ -132,15 +141,23 @@ export function FloorplanCanvas({
         fill={floorColor}
         stroke={DEFAULT_WALL_INK}
         strokeWidth="10"
+        style={colorTransition}
       />
-      <motion.rect initial={false} animate={{ x: geom.x, width: geom.w }} transition={tween} y="116" height="252" rx="4" fill="none" stroke={exteriorColor} strokeWidth="6" />
+      <motion.rect initial={false} animate={{ x: geom.x, width: geom.w }} transition={tween} y="116" height="252" rx="4" fill="none" stroke={exteriorColor} strokeWidth="6" style={colorTransition} />
 
-      {/* 기본창: 상단 벽, 거실 구간 중앙 — 모델 확장 시 거실 중앙을 따라 이동 */}
-      <g data-testid="floorplan-window">
-        <motion.rect initial={false} animate={{ x: windowX }} transition={tween} y="109" width="110" height="14" fill="#f5f1ea" />
-        <motion.rect initial={false} animate={{ x: windowX }} transition={tween} y="111" width="110" height="10" fill="#ffffff" stroke={FIXTURE_STROKE} strokeWidth="2" />
-        <motion.line initial={false} animate={{ x1: windowX, x2: windowX + 110 }} transition={tween} y1="116" y2="116" stroke={FIXTURE_STROKE} strokeWidth="1.5" />
-      </g>
+      {/* 기본창/와이드 픽처창: 상단 벽 거실 중앙 — 와이드 선택 시 폭이 넓어지고, 해제 시 페이드 아웃 */}
+      <motion.g data-testid="floorplan-window" initial={false} animate={{ opacity: showTopWindow ? 1 : 0 }} transition={{ duration: shouldReduceMotion ? 0 : 0.3 }}>
+        <motion.rect initial={false} animate={{ x: windowX, width: topWindowW }} transition={tween} y="109" height="14" fill="#f5f1ea" />
+        <motion.rect initial={false} animate={{ x: windowX, width: topWindowW }} transition={tween} y="111" height="10" fill="#ffffff" stroke={FIXTURE_STROKE} strokeWidth="2" />
+        <motion.line initial={false} animate={{ x1: windowX, x2: windowX + topWindowW }} transition={tween} y1="116" y2="116" stroke={FIXTURE_STROKE} strokeWidth="1.5" />
+      </motion.g>
+
+      {/* 추가창: 좌측 벽(세로) — 좌측 벽 확장을 따라 함께 이동 */}
+      <motion.g data-testid="floorplan-window-extra" initial={false} animate={{ opacity: extraWindow ? 1 : 0 }} transition={{ duration: shouldReduceMotion ? 0 : 0.3 }}>
+        <motion.rect initial={false} animate={{ x: geom.x - 7 }} transition={tween} y="176" width="14" height="96" fill="#f5f1ea" />
+        <motion.rect initial={false} animate={{ x: geom.x - 5 }} transition={tween} y="178" width="10" height="92" fill="#ffffff" stroke={FIXTURE_STROKE} strokeWidth="2" />
+        <motion.line initial={false} animate={{ x1: geom.x, x2: geom.x }} transition={tween} y1="181" y2="267" stroke={FIXTURE_STROKE} strokeWidth="1.5" />
+      </motion.g>
 
       {/* ponytail: 우측 고정 설비(싱크대·현관·욕실)는 실측 6m 도면 기준 좌표 — 6m 미만 모델이 생기면 좌표 재검토 */}
       {/* 싱크대: 하단 벽면 일자형 카운터 + 싱크볼/수전/배수구 */}
@@ -193,7 +210,7 @@ export function FloorplanCanvas({
       </g>
 
       {/* 현관(주출입구): 싱크대와 욕실 사이 하단 벽, 바깥으로 열리는 외개형 도어 */}
-      <rect x="618" y="362" width="56" height="12" fill={floorColor} />
+      <rect x="618" y="362" width="56" height="12" fill={floorColor} style={colorTransition} />
       <path d="M618 368 A56 56 0 0 0 674 424" fill="none" stroke="#b9aa94" strokeWidth="2" />
       <line x1="674" y1="368" x2="674" y2="424" stroke="#b9aa94" strokeWidth="2" />
       <text x="646" y="348" textAnchor="middle" fill={roomInk} fontSize="12">{copy.planEntrance}</text>

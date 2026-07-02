@@ -15,10 +15,22 @@ import { pickText } from '@/lib/customize/i18n';
 import {
   COPY,
   FALLBACK_CATALOG,
+  OPTION_IMAGE_VERSION,
   UI_COPY,
   type ConfigStep,
   type CustomizeUiCopy,
 } from './constants';
+
+// 옵션 실사 이미지 경로: 시드 옵션은 번들 webp, 관리자 등록 옵션은 imagePath를 쓴다.
+// (OptionInfoModal·MaterialPreviewStrip 공용)
+export function optionImageSrc(option: CustomizeOption): string | null {
+  const optionKey = option.key || option.id;
+  if (FALLBACK_CATALOG[optionKey] || FALLBACK_CATALOG[option.id]) {
+    return `/images/customize/options/${optionKey}.webp?v=${OPTION_IMAGE_VERSION}`;
+  }
+  if (!option.imagePath) return null;
+  return option.imagePath.startsWith('/') ? option.imagePath : `/${option.imagePath}`;
+}
 
 export function nextStepCta(step: ConfigStep, copy: CustomizeUiCopy = COPY) {
   if (step === 'space') return copy.ctaNextIncluded;

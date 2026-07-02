@@ -1,10 +1,11 @@
 import { cn } from '@/lib/utils';
-import { formatModelStartPrice, formatWon } from '@/lib/customize/priceCalculator';
+import { formatModelStartPrice } from '@/lib/customize/priceCalculator';
 import type { Language } from '@/contexts/LanguageContext';
 import type { CustomizeOption, EstimateBreakdown } from '@/lib/customize/types';
 import { pickText } from '@/lib/customize/i18n';
 import type { CustomizeUiCopy } from '../lib/constants';
 import { optionPriceDisplay } from '../lib/helpers';
+import { AnimatedPrice } from './AnimatedPrice';
 
 // 데스크톱 도면 아래 상시 구성 요약: 모델·선택 옵션·금액을 주문서처럼 한눈에 보여준다.
 export function ConfigSummaryBoard({ estimate, selectedOptions, copy, language }: { estimate: EstimateBreakdown; selectedOptions: CustomizeOption[]; copy: CustomizeUiCopy; language: Language }) {
@@ -49,8 +50,8 @@ export function ConfigSummaryBoard({ estimate, selectedOptions, copy, language }
           </div>
           <div className="p-4">
             <p className="text-[11px] font-bold text-weet-muted">{copy.estimatedAmount}</p>
-            <p className="mt-1 text-lg font-black text-weet-ink" data-testid="summary-estimated-total" aria-live="polite" aria-atomic="true">
-              {formatWon(estimate.estimatedTotal)}
+            <p className="mt-1 text-lg font-black text-weet-ink" aria-live="polite" aria-atomic="true">
+              <AnimatedPrice value={estimate.estimatedTotal} testId="summary-estimated-total" />
             </p>
             {estimate.consultOptionCount > 0 && (
               <p className="text-xs font-bold text-weet-gold-deep">{copy.consultSeparate(estimate.consultOptionCount)}</p>

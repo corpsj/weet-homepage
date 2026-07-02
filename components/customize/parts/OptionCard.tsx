@@ -1,4 +1,5 @@
 import { Check, Info } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import type { Language } from '@/contexts/LanguageContext';
 import type { CustomizeOption } from '@/lib/customize/types';
@@ -21,6 +22,7 @@ export function OptionCard({
   copy: CustomizeUiCopy;
   language: Language;
 }) {
+  const shouldReduceMotion = useReducedMotion();
   const optionKey = option.key || option.id;
   const swatch = SWATCH_CATEGORY_KEYS.has(option.categoryKey)
     ? OPTION_SWATCH[optionKey] ?? OPTION_SWATCH[option.id]
@@ -46,15 +48,18 @@ export function OptionCard({
           showInfo ? 'pr-1' : 'pr-2.5'
         )}
       >
-        {/* 라디오 16px: 선택 시 border/bg = forest(--acc) #2E4A3F */}
-        <span
+        {/* 라디오 16px: 선택 시 border/bg = forest(--acc) #2E4A3F + 살짝 튀는 스케일 팝 */}
+        <motion.span
+          initial={false}
+          animate={selected && !shouldReduceMotion ? { scale: [1, 1.25, 1] } : { scale: 1 }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
           className={cn(
             'flex h-4 w-4 shrink-0 items-center justify-center rounded-full border transition-colors',
             selected ? 'border-weet-forest bg-weet-forest text-white' : 'border-customize-ash bg-customize-sand'
           )}
         >
           {selected && <Check className="h-2.5 w-2.5" strokeWidth={3} />}
-        </span>
+        </motion.span>
 
         {/* 색상 스와치 22px (mood 카테고리만) */}
         {swatch && (

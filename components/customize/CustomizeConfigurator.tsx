@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState, useTransition } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -11,7 +12,6 @@ import {
   calculateEstimate,
   decodeConfig,
   encodeConfig,
-  formatWon,
   getDefaultSelections,
   getRemovedConflicts,
   optionsForModel,
@@ -41,6 +41,7 @@ import {
   scrollBehavior,
 } from './lib/helpers';
 import { useIsDesktop } from './lib/hooks';
+import { AnimatedPrice } from './parts/AnimatedPrice';
 import { ConfiguratorAppBar } from './parts/ConfiguratorAppBar';
 import { ConfigSummaryBoard } from './parts/ConfigSummaryBoard';
 import { FloorplanPreview } from './parts/FloorplanPreview';
@@ -59,6 +60,7 @@ interface CustomizeConfiguratorProps {
 export default function CustomizeConfigurator({ catalog, initialConfig, contactPhone }: CustomizeConfiguratorProps) {
   const { language } = useLanguage();
   const isDesktop = useIsDesktop();
+  const prefersReducedMotion = useReducedMotion();
   const copy = UI_COPY[language];
   const decoded = useMemo(() => decodeConfig(initialConfig), [initialConfig]);
   const firstModelId = catalog.models[0]?.id ?? DEFAULT_MODEL_ID;
@@ -307,6 +309,12 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
 
       <main id="main-content">
       {currentStep === 'review' && estimate ? (
+        <motion.div
+          key="review"
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+        >
         <ReviewStep
           estimate={estimate}
           selectedOptions={selectedOptionsList}
@@ -322,8 +330,15 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
           copy={copy}
           language={language}
         />
+        </motion.div>
       ) : (
-        <div className="mx-auto flex max-w-[1800px] flex-col lg:h-[calc(100dvh-136px)] lg:flex-row">
+        <motion.div
+          key="configure"
+          initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+          className="mx-auto flex max-w-[1800px] flex-col lg:h-[calc(100dvh-136px)] lg:flex-row"
+        >
           {/* 데스크톱: 앱바(64px)+스테퍼(72px)를 제외한 높이에 도면/레일을 고정해 CTA가 항상 보이게 한다. */}
           <section className="flex flex-col lg:h-full lg:flex-1 lg:overflow-y-auto">
             <div className="flex flex-col items-center justify-center gap-5 px-4 py-5 md:px-8 md:py-8 lg:flex-1 lg:px-10 lg:py-6">
@@ -381,7 +396,7 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
               />
             </aside>
           )}
-        </div>
+        </motion.div>
       )}
       </main>
 
@@ -392,7 +407,11 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
             <div className="min-w-0">
               <p className="text-[11px] font-semibold text-weet-sub">{copy.estimatedAmount}</p>
               <p className="flex flex-wrap items-baseline gap-x-1.5 text-lg font-black text-weet-ink" aria-live="polite" aria-atomic="true">
-                <span data-testid="mobile-estimated-total" className="whitespace-nowrap">{estimate ? formatWon(estimate.estimatedTotal) : '-'}</span>
+                {estimate ? (
+                  <AnimatedPrice value={estimate.estimatedTotal} testId="mobile-estimated-total" className="whitespace-nowrap" />
+                ) : (
+                  <span data-testid="mobile-estimated-total" className="whitespace-nowrap">-</span>
+                )}
                 {estimate && estimate.consultOptionCount > 0 && (
                   <span className="whitespace-nowrap text-xs font-bold text-weet-gold-deep">{copy.consultBadge(estimate.consultOptionCount)}</span>
                 )}

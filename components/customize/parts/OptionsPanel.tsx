@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { Check, Layers, ShieldCheck } from 'lucide-react';
+import { motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import type { Language } from '@/contexts/LanguageContext';
 import { formatWon } from '@/lib/customize/priceCalculator';
@@ -11,8 +12,9 @@ import type {
   SelectedOptions,
 } from '@/lib/customize/types';
 import { pickText } from '@/lib/customize/i18n';
-import { STEPS, type ConfigStep, type CustomizeUiCopy } from '../lib/constants';
+import { STEPS, SWATCH_CATEGORY_KEYS, type ConfigStep, type CustomizeUiCopy } from '../lib/constants';
 import { CategoryHeading } from './CategoryHeading';
+import { MaterialPreviewStrip } from './MaterialPreviewStrip';
 import { OptionCard } from './OptionCard';
 import { InlineStepFooter } from './InlineStepFooter';
 import { RailSummaryFooter } from './RailSummaryFooter';
@@ -49,6 +51,7 @@ export function OptionsPanel({
   const currentStepData = STEPS.find((s) => s.id === currentStep)!;
   const stepIndex = STEPS.findIndex((s) => s.id === currentStep);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
 
   const goToStep = (step: ConfigStep) => {
     // 모바일 인라인 스크롤 복귀는 부모 handleStepSelect가 처리하므로 데스크톱 레일만 직접 올린다.
@@ -59,7 +62,13 @@ export function OptionsPanel({
   };
 
   const stepBody = (
-    <>
+    // 단계 전환 시 새 단계 콘텐츠가 살짝 아래에서 페이드 인 (키 변경 = 재마운트)
+    <motion.div
+      key={currentStep}
+      initial={shouldReduceMotion ? false : { opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25, ease: 'easeOut' }}
+    >
       {currentStep === 'space' && (
         <section className="mb-6">
           <CategoryHeading title={copy.panelModelHeading} status="" icon={<Layers className="h-4 w-4" />} />
@@ -102,6 +111,14 @@ export function OptionsPanel({
 
       {(currentStep === 'included' || currentStep === 'mood' || currentStep === 'smart') && (
         <>
+          {currentStep === 'mood' && (
+            <MaterialPreviewStrip
+              categories={catalog.categories.filter((category) => SWATCH_CATEGORY_KEYS.has(category.key))}
+              visibleOptions={visibleOptions}
+              selectedOptions={selectedOptions}
+              language={language}
+            />
+          )}
           {currentStep === 'included' && (
             <div className="mb-5 rounded-lg bg-weet-paper-alt/60 p-3">
               <div className="mb-1.5 flex items-center gap-2">
@@ -172,7 +189,7 @@ export function OptionsPanel({
       )}
 
       {inline && <InlineStepFooter stepIndex={stepIndex} goToStep={goToStep} copy={copy} />}
-    </>
+    </motion.div>
   );
 
   if (inline) {

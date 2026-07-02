@@ -7,18 +7,11 @@ import { pickText } from '@/lib/customize/i18n';
 import {
   FALLBACK_CATALOG,
   OPTION_DETAIL_GUIDE,
-  OPTION_IMAGE_VERSION,
   PRICE_TONE,
   type CustomizeUiCopy,
 } from '../lib/constants';
-import { optionPriceDisplay } from '../lib/helpers';
+import { optionImageSrc, optionPriceDisplay } from '../lib/helpers';
 import { useModalDismiss } from '../lib/hooks';
-
-function normalizeOptionImage(option: CustomizeOption, optionKey: string, hasFallback: boolean) {
-  if (hasFallback) return `/images/customize/options/${optionKey}.webp?v=${OPTION_IMAGE_VERSION}`;
-  if (!option.imagePath) return null;
-  return option.imagePath.startsWith('/') ? option.imagePath : `/${option.imagePath}`;
-}
 
 function paragraphsFor(
   option: CustomizeOption,
@@ -56,7 +49,7 @@ export function OptionInfoModal({ option, onClose, copy, language }: { option: C
   const fallback = FALLBACK_CATALOG[optionKey] || FALLBACK_CATALOG[option.id];
   const guide = OPTION_DETAIL_GUIDE[optionKey] || OPTION_DETAIL_GUIDE[option.id];
   const titleId = `option-info-title-${optionKey}`;
-  const imageSrc = normalizeOptionImage(option, optionKey, Boolean(fallback));
+  const imageSrc = optionImageSrc(option);
   const paragraphs = paragraphsFor(option, fallback?.desc, guide, language, copy);
   const optionName = pickText(option.nameKo, option.nameEn, language);
 
