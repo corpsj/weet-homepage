@@ -54,7 +54,7 @@ export function FloorplanZoomModal({
                 model={model}
                 selectedOptions={selectedOptions}
                 testId="floorplan-zoom-canvas"
-                className="min-w-0"
+                className="min-w-[720px] md:min-w-0"
                 copy={copy}
                 language={language}
               />

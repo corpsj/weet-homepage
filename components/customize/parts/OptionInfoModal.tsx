@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import { X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
 import type { Language } from '@/contexts/LanguageContext';
 import type { CustomizeOption } from '@/lib/customize/types';
 import { pickText } from '@/lib/customize/i18n';
@@ -68,7 +67,7 @@ export function OptionInfoModal({ option, onClose, copy, language }: { option: C
   const optionName = pickText(option.nameKo, option.nameEn, language);
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-customize-ink/35 p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-weet-ink/55 p-4 backdrop-blur-sm" onClick={onClose}>
       <div
         role="dialog"
         aria-modal="true"
@@ -83,9 +82,14 @@ export function OptionInfoModal({ option, onClose, copy, language }: { option: C
             </p>
             <h3 id={titleId} className="text-xl font-black text-customize-ink">{optionName}</h3>
           </div>
-          <Button variant="ghost" size="icon-sm" onClick={onClose} aria-label={copy.closeWord}>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label={copy.closeWord}
+            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-customize-taupe text-customize-ink transition-colors hover:bg-customize-dune focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep"
+          >
             <X className="h-4 w-4" />
-          </Button>
+          </button>
         </div>
 
         <div className="overflow-y-auto px-5 py-5">
