@@ -2,6 +2,7 @@ import {
   formatWon,
   getDefaultSelections,
   optionsForModel,
+  sanitizeConfig,
 } from '@/lib/customize/priceCalculator';
 import type { Language } from '@/contexts/LanguageContext';
 import type {
@@ -72,7 +73,7 @@ export function buildSelectionsForModelChange(
     }
   }
 
-  return { selections: nextSelections, removedOptions };
+  return { selections: sanitizeConfig(catalog, nextModelId, nextSelections).selections, removedOptions };
 }
 
 export function stepStatusText(step: ConfigStep, count: number, copy: CustomizeUiCopy = COPY) {

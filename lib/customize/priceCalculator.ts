@@ -197,3 +197,56 @@ export const calculateTotalPrice = (model: CustomizeModel, options: CustomizeOpt
   model.basePrice + options.reduce((sum, option) => sum + optionPriceValue(option), 0);
 
 export const formatPrice = formatWon;
+
+// ?c= 디코드/모델 변경 등 신뢰할 수 없는 선택 상태를 카탈로그 기준으로 정규화한다.
+// 규칙: 없는 옵션 제거 → 실제 categoryId로 재매핑 → single은 첫 항목만 →
+// 충돌 쌍은 기본(isDefault) 옵션을 제거(둘 다/둘 다 아니면 conflictsWith 쪽 제거) →
+// 모델이 비활성/부재면 첫 활성 모델 + 기본 선택으로 폴백.
+export function sanitizeConfig(
+  catalog: CustomizeCatalog,
+  modelId: string,
+  selections: SelectedOptions
+): { modelId: string; selections: SelectedOptions } {
+  const model = catalog.models.find((item) => item.id === modelId && item.isActive);
+  if (!model) {
+    const fallbackId = catalog.models.find((item) => item.isActive)?.id ?? modelId;
+    return { modelId: fallbackId, selections: getDefaultSelections(catalog, fallbackId) };
+  }
+
+  const available = new Map(
+    optionsForModel(catalog.options.filter((option) => option.isActive), model.id).map((option) => [option.id, option])
+  );
+  const categories = new Map(catalog.categories.filter((category) => category.isActive).map((category) => [category.id, category]));
+
+  const next: SelectedOptions = {};
+  const seen = new Set<string>();
+  for (const optionId of Object.values(selections).flat()) {
+    const option = available.get(optionId);
+    if (!option || seen.has(optionId)) continue;
+    const category = categories.get(option.categoryId);
+    if (!category) continue;
+    const current = next[option.categoryId] ?? [];
+    if (category.selectionType === 'single' && current.length >= 1) continue;
+    seen.add(optionId);
+    next[option.categoryId] = [...current, optionId];
+  }
+
+  for (const conflict of catalog.conflicts) {
+    const ids = new Set(Object.values(next).flat());
+    if (!ids.has(conflict.optionId) || !ids.has(conflict.conflictsWithOptionId)) continue;
+    const a = available.get(conflict.optionId);
+    const b = available.get(conflict.conflictsWithOptionId);
+    const dropId = a?.isDefault && !b?.isDefault ? conflict.optionId
+      : b?.isDefault && !a?.isDefault ? conflict.conflictsWithOptionId
+      : conflict.conflictsWithOptionId;
+    for (const [categoryId, optionIds] of Object.entries(next)) {
+      next[categoryId] = optionIds.filter((id) => id !== dropId);
+    }
+  }
+
+  for (const [categoryId, optionIds] of Object.entries(next)) {
+    if (optionIds.length === 0) delete next[categoryId];
+  }
+
+  return { modelId: model.id, selections: next };
+}

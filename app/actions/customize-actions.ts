@@ -10,6 +10,7 @@ import {
   calculateEstimate,
   encodeConfig,
   hasConflict,
+  sanitizeConfig,
   selectedOptionIds,
 } from '@/lib/customize/priceCalculator';
 import type {
@@ -337,20 +338,21 @@ export async function submitCustomizeConsultation(input: ConsultationFormInput) 
 
   try {
     const catalog = await loadCatalog(supabase, false);
-    const estimate = calculateEstimate(catalog, parsed.data.modelId, parsed.data.selectedOptions);
+    const safe = sanitizeConfig(catalog, parsed.data.modelId, parsed.data.selectedOptions);
+    const estimate = calculateEstimate(catalog, safe.modelId, safe.selections);
 
     if (!estimate) {
       return { success: false, message: '선택한 모델을 확인해주세요.' };
     }
 
-    const ids = selectedOptionIds(parsed.data.selectedOptions);
+    const ids = selectedOptionIds(safe.selections);
     if (hasConflict(catalog, ids)) {
       return { success: false, message: '동시에 선택할 수 없는 옵션이 포함되어 있습니다.' };
     }
 
     const validOptionIds = estimate.selectedOptions.map((option) => option.id);
     const selectedOptions: SelectedOptions = Object.fromEntries(
-      Object.entries(parsed.data.selectedOptions).map(([categoryId, optionIds]) => [
+      Object.entries(safe.selections).map(([categoryId, optionIds]) => [
         categoryId,
         optionIds.filter((id) => validOptionIds.includes(id)),
       ])

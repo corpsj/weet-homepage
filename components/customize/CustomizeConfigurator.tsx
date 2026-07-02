@@ -15,6 +15,7 @@ import {
   getDefaultSelections,
   getRemovedConflicts,
   optionsForModel,
+  sanitizeConfig,
   selectedOptionList,
   toggleOptionSelection,
 } from '@/lib/customize/priceCalculator';
@@ -57,11 +58,17 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
   const copy = UI_COPY[language];
   const decoded = useMemo(() => decodeConfig(initialConfig), [initialConfig]);
   const firstModelId = catalog.models[0]?.id ?? DEFAULT_MODEL_ID;
-  const [modelId, setModelId] = useState(decoded?.modelId ?? firstModelId);
-  const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>(() => {
-    if (decoded?.selectedOptions) return decoded.selectedOptions;
-    return getDefaultSelections(catalog, decoded?.modelId ?? firstModelId);
-  });
+  // 외부 입력(?c=)·기본값 모두 카탈로그 기준으로 정규화해서 시작한다.
+  const initial = useMemo(
+    () => sanitizeConfig(
+      catalog,
+      decoded?.modelId ?? firstModelId,
+      decoded?.selectedOptions ?? getDefaultSelections(catalog, decoded?.modelId ?? firstModelId)
+    ),
+    [catalog, decoded, firstModelId]
+  );
+  const [modelId, setModelId] = useState(initial.modelId);
+  const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>(initial.selections);
   const [activeInfo, setActiveInfo] = useState<CustomizeOption | null>(null);
   const [currentStep, setCurrentStep] = useState<ConfigStep>('space');
   // 진행 시스템: 사용자가 도달한 가장 먼 단계 이전의 단계는 '완료'로 표시한다.
