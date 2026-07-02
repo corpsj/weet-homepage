@@ -40,6 +40,7 @@ import {
   nextStepCta,
   scrollBehavior,
 } from './lib/helpers';
+import { useIsDesktop } from './lib/hooks';
 import { ConfiguratorAppBar } from './parts/ConfiguratorAppBar';
 import { ConfigSummaryBoard } from './parts/ConfigSummaryBoard';
 import { FloorplanPreview } from './parts/FloorplanPreview';
@@ -57,6 +58,7 @@ interface CustomizeConfiguratorProps {
 
 export default function CustomizeConfigurator({ catalog, initialConfig, contactPhone }: CustomizeConfiguratorProps) {
   const { language } = useLanguage();
+  const isDesktop = useIsDesktop();
   const copy = UI_COPY[language];
   const decoded = useMemo(() => decodeConfig(initialConfig), [initialConfig]);
   const firstModelId = catalog.models[0]?.id ?? DEFAULT_MODEL_ID;
@@ -337,43 +339,48 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
           </section>
 
           {/* 모바일/태블릿: 드로어 없이 도면 아래에서 바로 이어지는 인라인 단계 구성 (Tesla 주문 흐름 참고) */}
-          <div id="customize-options" className="scroll-mt-[150px] border-t border-weet-line bg-weet-surface md:scroll-mt-[162px] lg:hidden">
-            <OptionsPanel
-              catalog={catalog}
-              modelId={modelId}
-              selectedOptions={selectedOptions}
-              visibleOptions={visibleOptions}
-              onModelChange={handleModelChange}
-              onOptionToggle={handleOptionToggle}
-              onInfo={setActiveInfo}
-              currentStep={currentStep}
-              setCurrentStep={handleStepSelect}
-              estimate={estimate}
-              copy={copy}
-              language={language}
-              inline
-            />
-          </div>
+          {/* isDesktop: SSR/hydration 첫 렌더는 null → 인라인+레일 양쪽 렌더(플래시 방지), mount 후 한 벌만 남는다 */}
+          {isDesktop !== true && (
+            <div id="customize-options" className="scroll-mt-[150px] border-t border-weet-line bg-weet-surface md:scroll-mt-[162px] lg:hidden">
+              <OptionsPanel
+                catalog={catalog}
+                modelId={modelId}
+                selectedOptions={selectedOptions}
+                visibleOptions={visibleOptions}
+                onModelChange={handleModelChange}
+                onOptionToggle={handleOptionToggle}
+                onInfo={setActiveInfo}
+                currentStep={currentStep}
+                setCurrentStep={handleStepSelect}
+                estimate={estimate}
+                copy={copy}
+                language={language}
+                inline
+              />
+            </div>
+          )}
 
-          <aside
-            data-testid="customize-desktop-rail"
-            className="hidden shrink-0 border-l border-customize-stone bg-customize-sand lg:block lg:w-[430px]"
-          >
-            <OptionsPanel
-              catalog={catalog}
-              modelId={modelId}
-              selectedOptions={selectedOptions}
-              visibleOptions={visibleOptions}
-              onModelChange={handleModelChange}
-              onOptionToggle={handleOptionToggle}
-              onInfo={setActiveInfo}
-              currentStep={currentStep}
-              setCurrentStep={handleStepSelect}
-              estimate={estimate}
-              copy={copy}
-              language={language}
-            />
-          </aside>
+          {isDesktop !== false && (
+            <aside
+              data-testid="customize-desktop-rail"
+              className="hidden shrink-0 border-l border-customize-stone bg-customize-sand lg:block lg:w-[430px]"
+            >
+              <OptionsPanel
+                catalog={catalog}
+                modelId={modelId}
+                selectedOptions={selectedOptions}
+                visibleOptions={visibleOptions}
+                onModelChange={handleModelChange}
+                onOptionToggle={handleOptionToggle}
+                onInfo={setActiveInfo}
+                currentStep={currentStep}
+                setCurrentStep={handleStepSelect}
+                estimate={estimate}
+                copy={copy}
+                language={language}
+              />
+            </aside>
+          )}
         </div>
       )}
       </main>

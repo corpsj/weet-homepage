@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 
 const FOCUSABLE_SELECTOR =
   'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])';
@@ -62,4 +62,22 @@ export function useModalDismiss(onClose: () => void) {
       previouslyFocused?.focus?.();
     };
   }, [onClose]);
+}
+
+const DESKTOP_QUERY = '(min-width: 1024px)';
+
+function subscribeDesktop(callback: () => void) {
+  const mql = window.matchMedia(DESKTOP_QUERY);
+  mql.addEventListener('change', callback);
+  return () => mql.removeEventListener('change', callback);
+}
+
+// SSR/hydration 첫 렌더에서는 null(인라인+레일 양쪽 렌더 → 플래시 없음),
+// mount 후 실제 뷰포트로 확정되어 한 벌만 남는다.
+export function useIsDesktop(): boolean | null {
+  return useSyncExternalStore(
+    subscribeDesktop,
+    () => window.matchMedia(DESKTOP_QUERY).matches as boolean | null,
+    () => null
+  );
 }
