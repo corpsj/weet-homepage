@@ -128,7 +128,7 @@ describe('FloorplanCanvas 스마트락 표시', () => {
         testId="t"
       />
     );
-    expect(container.querySelector('circle')?.getAttribute('fill')).toBe('#2E4A3F');
+    expect(container.querySelector('[data-testid="smart-lock-dot"]')?.getAttribute('fill')).toBe('#2E4A3F');
   });
 
   it('기본 도어락이면 점이 없다', () => {
@@ -139,6 +139,6 @@ describe('FloorplanCanvas 스마트락 표시', () => {
         testId="t"
       />
     );
-    expect(container.querySelector('circle')).toBeNull();
+    expect(container.querySelector('[data-testid="smart-lock-dot"]')).toBeNull();
   });
 });

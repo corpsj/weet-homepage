@@ -131,17 +131,46 @@ export function FloorplanCanvas({
       />
       <motion.rect initial={false} animate={{ x: geom.x, width: geom.w }} transition={tween} y="116" height="252" rx="4" fill="none" stroke={exteriorColor} strokeWidth="6" />
 
-      {/* 설비 블록(우측 고정) */}
-      <line x1="640" y1="120" x2="640" y2="364" stroke="#cbbfa9" strokeWidth="2" />
-      <line x1="640" y1="244" x2="826" y2="244" stroke="#cbbfa9" strokeWidth="2" />
-      <text x="733" y="190" textAnchor="middle" fill={utilInk} fontSize="15">{copy.planBath}</text>
-      <text x="733" y="312" textAnchor="middle" fill={utilInk} fontSize="15">{copy.planKitchen}</text>
-      <text x="455" y="248" textAnchor="middle" fill={roomInk} fontSize="17" fontWeight="600">{copy.planLivingBed}</text>
+      {/* 침대(좌측 벽 기준): 모델이 길어져도 침대는 좌측 벽을 따라 함께 이동한다 */}
+      <g data-testid="floorplan-bed">
+        <motion.rect initial={false} animate={{ x: geom.x + 12 }} transition={tween} y="128" width="92" height="170" rx="3" fill="none" stroke="#8a806f" strokeWidth="2" />
+        <motion.line initial={false} animate={{ x1: geom.x + 22, x2: geom.x + 94 }} transition={tween} y1="162" y2="162" stroke="#b9aa94" strokeWidth="2" />
+        <motion.text initial={false} animate={{ x: geom.x + 58 }} transition={tween} y="238" textAnchor="middle" fill={roomInk} fontSize="14" fontWeight="600">
+          {copy.planBed}
+        </motion.text>
+      </g>
 
-      {/* 현관 도어(하단 벽, 고정) + 스마트락 표시 */}
-      <rect x="548" y="362" width="56" height="10" fill={floorColor} />
-      <path d="M548 367 A56 56 0 0 0 604 367" fill="none" stroke="#b9aa94" strokeWidth="2" />
-      {doorSmart && <circle cx="542" cy="367" r="6" fill={SMART_ACCENT} />}
+      {/* ponytail: 우측 고정 설비(싱크대·현관·욕실)는 실측 6m 도면 기준 좌표 — 6m 미만 모델이 생기면 좌표 재검토 */}
+      {/* 싱크대: 하단 벽면 중앙(일자형 주방) */}
+      <rect x="468" y="316" width="142" height="46" rx="3" fill="none" stroke="#8a806f" strokeWidth="2" />
+      <circle cx="492" cy="339" r="9" fill="none" stroke="#9a8f7d" strokeWidth="2" />
+      <text x="548" y="344" textAnchor="middle" fill={roomInk} fontSize="13" fontWeight="600">{copy.planSink}</text>
+
+      {/* 욕실 칸막이벽(우측 끝 전체가 욕실) — 중간에 슬라이딩 도어 개구부 */}
+      <line x1="696" y1="121" x2="696" y2="206" stroke={DEFAULT_WALL_INK} strokeWidth="4" />
+      <line x1="696" y1="268" x2="696" y2="363" stroke={DEFAULT_WALL_INK} strokeWidth="4" />
+      {/* 슬라이딩 도어: 도면 기준 위쪽으로 밀려 열린다(점선 = 슬라이드 경로) */}
+      <line x1="702" y1="150" x2="702" y2="202" stroke="#b9aa94" strokeWidth="2" strokeDasharray="4 4" />
+      <rect x="698" y="206" width="8" height="62" rx="2" fill="#8a806f" />
+
+      {/* 욕실 내부: 위에서부터 샤워 → 변기 → 세면대 */}
+      <rect x="712" y="132" width="104" height="74" rx="4" fill="none" stroke="#cbbfa9" strokeWidth="2" />
+      <circle cx="726" cy="146" r="4" fill="none" stroke="#9a8f7d" strokeWidth="2" />
+      <text x="764" y="176" textAnchor="middle" fill={utilInk} fontSize="13">{copy.planShower}</text>
+      <rect x="800" y="228" width="22" height="38" rx="3" fill="none" stroke="#cbbfa9" strokeWidth="2" />
+      <ellipse cx="782" cy="247" rx="14" ry="18" fill="none" stroke="#cbbfa9" strokeWidth="2" />
+      <text x="736" y="252" textAnchor="middle" fill={utilInk} fontSize="13">{copy.planToilet}</text>
+      <line x1="696" y1="300" x2="826" y2="300" stroke="#cbbfa9" strokeWidth="2" />
+      <rect x="700" y="312" width="122" height="46" fill="none" stroke="#cbbfa9" strokeWidth="2" />
+      <circle cx="726" cy="335" r="10" fill="none" stroke="#9a8f7d" strokeWidth="2" />
+      <text x="776" y="340" textAnchor="middle" fill={utilInk} fontSize="13">{copy.planBasin}</text>
+
+      {/* 현관(주출입구): 싱크대와 욕실 사이 하단 벽, 바깥으로 열리는 외개형 도어 */}
+      <rect x="618" y="362" width="56" height="12" fill={floorColor} />
+      <path d="M618 368 A56 56 0 0 0 674 424" fill="none" stroke="#b9aa94" strokeWidth="2" />
+      <line x1="674" y1="368" x2="674" y2="424" stroke="#b9aa94" strokeWidth="2" />
+      <text x="646" y="348" textAnchor="middle" fill={roomInk} fontSize="12">{copy.planEntrance}</text>
+      {doorSmart && <circle data-testid="smart-lock-dot" cx="608" cy="368" r="6" fill={SMART_ACCENT} />}
     </svg>
   );
 }

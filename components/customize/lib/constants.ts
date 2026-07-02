@@ -120,9 +120,12 @@ export interface CustomizeUiCopy {
   zoomCloseAria: string;
   zoomTitle: string;
   zoomAreaAria: string;
-  planBath: string;
-  planKitchen: string;
-  planLivingBed: string;
+  planShower: string;
+  planToilet: string;
+  planBasin: string;
+  planBed: string;
+  planSink: string;
+  planEntrance: string;
   planLabel: (modelName: string, widthM: number, lengthM: number) => string;
   planExteriorLabel: (name: string) => string;
   planFlooringLabel: (name: string) => string;
@@ -264,9 +267,12 @@ export const UI_COPY: Record<Language, CustomizeUiCopy> = {
     zoomCloseAria: '도면 확대 닫기',
     zoomTitle: '도면 확대',
     zoomAreaAria: '확대 도면 보기 영역',
-    planBath: '욕실',
-    planKitchen: '주방',
-    planLivingBed: '거실 · 침실',
+    planShower: '샤워',
+    planToilet: '변기',
+    planBasin: '세면대',
+    planBed: '침대',
+    planSink: '싱크대',
+    planEntrance: '현관',
     planLabel: (modelName, widthM, lengthM) => `${modelName} 평면도, 가로 ${widthM}m 세로 ${lengthM}m`,
     planExteriorLabel: (name) => `외장 ${name}`,
     planFlooringLabel: (name) => `바닥 ${name}`,
@@ -402,9 +408,12 @@ export const UI_COPY: Record<Language, CustomizeUiCopy> = {
     zoomCloseAria: 'Close enlarged floor plan',
     zoomTitle: 'Enlarged floor plan',
     zoomAreaAria: 'Enlarged floor plan viewing area',
-    planBath: 'Bath',
-    planKitchen: 'Kitchen',
-    planLivingBed: 'Living · Bedroom',
+    planShower: 'Shower',
+    planToilet: 'WC',
+    planBasin: 'Basin',
+    planBed: 'Bed',
+    planSink: 'Kitchen',
+    planEntrance: 'Entry',
     planLabel: (modelName, widthM, lengthM) => `${modelName} floor plan, ${widthM}m wide by ${lengthM}m long`,
     planExteriorLabel: (name) => `Exterior ${name}`,
     planFlooringLabel: (name) => `Flooring ${name}`,
@@ -540,9 +549,12 @@ export const UI_COPY: Record<Language, CustomizeUiCopy> = {
     zoomCloseAria: 'Cerrar el plano ampliado',
     zoomTitle: 'Plano ampliado',
     zoomAreaAria: 'Área de visualización del plano ampliado',
-    planBath: 'Baño',
-    planKitchen: 'Cocina',
-    planLivingBed: 'Sala · Dormitorio',
+    planShower: 'Ducha',
+    planToilet: 'WC',
+    planBasin: 'Lavabo',
+    planBed: 'Cama',
+    planSink: 'Cocina',
+    planEntrance: 'Entrada',
     planLabel: (modelName, widthM, lengthM) => `Plano de ${modelName}, ${widthM}m de ancho por ${lengthM}m de largo`,
     planExteriorLabel: (name) => `Exterior ${name}`,
     planFlooringLabel: (name) => `Piso ${name}`,
