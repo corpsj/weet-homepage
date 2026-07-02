@@ -383,10 +383,10 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
           <div className="mx-auto flex max-w-[1800px] items-center justify-between gap-3">
             <div className="min-w-0">
               <p className="text-[11px] font-semibold text-weet-sub">{copy.estimatedAmount}</p>
-              <p className="truncate text-lg font-black text-weet-ink">
-                <span data-testid="mobile-estimated-total">{estimate ? formatWon(estimate.estimatedTotal) : '-'}</span>
+              <p className="flex flex-wrap items-baseline gap-x-1.5 text-lg font-black text-weet-ink" aria-live="polite" aria-atomic="true">
+                <span data-testid="mobile-estimated-total" className="whitespace-nowrap">{estimate ? formatWon(estimate.estimatedTotal) : '-'}</span>
                 {estimate && estimate.consultOptionCount > 0 && (
-                  <span className="ml-1 text-xs font-bold text-weet-gold-deep">{copy.consultBadge(estimate.consultOptionCount)}</span>
+                  <span className="whitespace-nowrap text-xs font-bold text-weet-gold-deep">{copy.consultBadge(estimate.consultOptionCount)}</span>
                 )}
               </p>
               <p className="truncate text-[11px] text-weet-muted">{copy.transportSeparateShort} · {copy.finalQuoteShort}</p>

@@ -22,13 +22,13 @@ export function FloorplanPreview({
   return (
     <div className="w-full max-w-[1100px]">
       <div className="mb-4 flex items-end justify-between gap-4">
-        <div>
+        <div className="min-w-0">
           <p className="text-sm font-bold text-weet-muted">{copy.selectedModel}</p>
           <h1 className="text-2xl font-black text-weet-ink md:text-3xl">{pickText(model.nameKo, model.nameEn, language)}</h1>
         </div>
-        <div className="text-right">
+        <div className="shrink-0 text-right">
           <p className="text-sm font-bold text-weet-muted">{copy.basePrice}</p>
-          <p className="text-lg font-black text-weet-gold-deep">{formatModelStartPrice(model.basePrice)}</p>
+          <p className="whitespace-nowrap text-lg font-black text-weet-gold-deep">{formatModelStartPrice(model.basePrice)}</p>
         </div>
       </div>
 
