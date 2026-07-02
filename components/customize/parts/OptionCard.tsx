@@ -49,7 +49,7 @@ export function OptionCard({
         onClick={onToggle}
         aria-pressed={selected}
         className={cn(
-          'flex flex-1 items-center gap-2 rounded-lg py-2 pl-2.5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep',
+          'flex min-w-0 flex-1 items-center gap-2 rounded-lg py-2 pl-2.5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep',
           showInfo ? 'pr-1' : 'pr-2.5'
         )}
       >
@@ -91,7 +91,7 @@ export function OptionCard({
             onInfo();
           }}
           aria-label={copy.optionDetailAria}
-          className="mr-1.5 flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-md text-customize-slate transition-colors hover:bg-customize-dune hover:text-customize-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep"
+          className="relative mr-1.5 flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-md text-customize-slate transition-colors before:absolute before:-inset-[11px] before:content-[''] hover:bg-customize-dune hover:text-customize-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep"
         >
           <Info className="h-3.5 w-3.5" />
         </button>
