@@ -174,12 +174,12 @@ export function FloorplanCanvas({
         <text x="734" y="178" textAnchor="middle" fill={utilInk} fontSize="12">{copy.planShower}</text>
       </g>
 
-      {/* 변기: 탱크(우측 벽) + 보울 이중 타원 */}
+      {/* 변기: 우측 벽에 밀착한 탱크 + 탱크에 붙어 왼쪽을 향하는 보울(가로 타원) */}
       <g data-testid="floorplan-toilet">
-        <rect x="796" y="226" width="26" height="40" rx="4" fill={FIXTURE_FILL} stroke={FIXTURE_STROKE} strokeWidth="2" />
-        <ellipse cx="772" cy="246" rx="17" ry="21" fill={FIXTURE_FILL} stroke={FIXTURE_STROKE} strokeWidth="2" />
-        <ellipse cx="772" cy="246" rx="10.5" ry="14" fill="none" stroke={FIXTURE_STROKE} strokeWidth="1.2" />
-        <text x="728" y="250" textAnchor="middle" fill={utilInk} fontSize="12">{copy.planToilet}</text>
+        <rect x="805" y="230" width="20" height="44" rx="3" fill={FIXTURE_FILL} stroke={FIXTURE_STROKE} strokeWidth="2" />
+        <ellipse cx="785" cy="252" rx="21" ry="16" fill={FIXTURE_FILL} stroke={FIXTURE_STROKE} strokeWidth="2" />
+        <ellipse cx="782" cy="252" rx="13" ry="10" fill="none" stroke={FIXTURE_STROKE} strokeWidth="1.2" />
+        <text x="728" y="256" textAnchor="middle" fill={utilInk} fontSize="12">{copy.planToilet}</text>
       </g>
 
       {/* 세면대: 하단 카운터 + 보울 이중 타원 + 수전(벽 측) */}
