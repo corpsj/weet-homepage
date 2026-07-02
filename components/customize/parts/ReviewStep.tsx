@@ -28,7 +28,7 @@ import {
   type OptionStep,
   type RequiredFieldName,
 } from '../lib/constants';
-import { optionPriceDisplay } from '../lib/helpers';
+import { optionPriceDisplay, scrollBehavior } from '../lib/helpers';
 import { FloorplanCanvas } from './FloorplanCanvas';
 
 // 마지막 단계: 구성 검토 + 상담 요청. 모달 대신 전용 화면으로 'Configure → Review → Request' 흐름을 만든다.
@@ -298,7 +298,7 @@ function ConsultationForm({
     const firstInvalid = (REQUIRED_FIELDS as readonly RequiredFieldName[]).find((name) => nextErrors[name]);
     if (firstInvalid) {
       const target = fieldRefs.current[firstInvalid];
-      target?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target?.scrollIntoView({ behavior: scrollBehavior(), block: 'center' });
       target?.focus({ preventScroll: true });
       return;
     }

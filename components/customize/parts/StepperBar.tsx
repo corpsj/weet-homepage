@@ -1,7 +1,8 @@
+import { useEffect, useRef } from 'react';
 import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { STEPS, type ConfigStep, type CustomizeUiCopy } from '../lib/constants';
-import { stepStatusText } from '../lib/helpers';
+import { scrollBehavior, stepStatusText } from '../lib/helpers';
 
 export function StepperBar({
   currentStep,
@@ -17,6 +18,11 @@ export function StepperBar({
   copy: CustomizeUiCopy;
 }) {
   const stepIndex = STEPS.findIndex((s) => s.id === currentStep);
+  const activeButtonRef = useRef<HTMLButtonElement | null>(null);
+  // 390px에서 스테퍼가 가로로 넘칠 때 현재 단계 버튼이 항상 보이게 한다(보이면 no-op).
+  useEffect(() => {
+    activeButtonRef.current?.scrollIntoView({ behavior: scrollBehavior(), inline: 'nearest', block: 'nearest' });
+  }, [currentStep]);
 
   return (
     <div className="sticky top-14 z-30 border-b border-weet-line bg-weet-surface/95 backdrop-blur md:top-16 lg:h-[72px]">
@@ -34,6 +40,7 @@ export function StepperBar({
               <li key={step.id} className="flex min-w-0 shrink-0 items-center gap-1 lg:flex-1 lg:gap-2">
                 <button
                   type="button"
+                  ref={isCurrent ? activeButtonRef : null}
                   data-testid={`customize-step-${step.id}`}
                   aria-current={isCurrent ? 'step' : undefined}
                   aria-label={copy.stepAria(index + 1, copy.stepLabels[step.id], isComplete ? copy.stepStateComplete : isCurrent ? copy.stepStateCurrent : copy.stepStateUpcoming)}

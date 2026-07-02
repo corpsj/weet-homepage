@@ -132,6 +132,12 @@ export function buildQuoteHtml(
 </html>`;
 }
 
+// OS '동작 줄이기' 설정 시 스크롤 애니메이션을 끈다.
+export function scrollBehavior(): ScrollBehavior {
+  if (typeof window === 'undefined') return 'auto';
+  return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+}
+
 export function escapeHtml(value: string) {
   return value.replace(/[&<>"']/g, (char) => ({
     '&': '&amp;',

@@ -38,6 +38,7 @@ import {
   buildSelectionsForModelChange,
   buildQuoteHtml,
   nextStepCta,
+  scrollBehavior,
 } from './lib/helpers';
 import { ConfiguratorAppBar } from './parts/ConfiguratorAppBar';
 import { ConfigSummaryBoard } from './parts/ConfigSummaryBoard';
@@ -218,14 +219,14 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
     setFurthestStepIndex((current) => Math.max(current, STEPS.findIndex((s) => s.id === step)));
     if (typeof window === 'undefined') return;
     if (step === 'review') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      window.scrollTo({ top: 0, behavior: scrollBehavior() });
       return;
     }
     // 모바일/태블릿 인라인 구성에서는 단계 전환 시 도면 아래 옵션 영역으로 바로 이동한다.
     // (검토 단계에서 돌아오는 경우 영역이 다시 마운트된 뒤 스크롤되도록 rAF로 미룬다.)
     if (window.innerWidth < 1024) {
       requestAnimationFrame(() => {
-        document.getElementById('customize-options')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        document.getElementById('customize-options')?.scrollIntoView({ behavior: scrollBehavior(), block: 'start' });
       });
     }
   };
