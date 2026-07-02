@@ -16,6 +16,8 @@ const PLAN_TWEEN_S = 0.62; // 시안 tweenPlan(600ms)을 기대 사양(620ms eas
 const DEFAULT_WALL_INK = '#2f3432'; // 시안 planWall stroke(구조선)
 const DEFAULT_FLOOR_FILL = '#f1ece1'; // 시안 floorFill(filled) 기본값
 const SMART_ACCENT = '#2E4A3F'; // weet-forest = 시안 --acc 대응
+const FIXTURE_STROKE = '#6f6754'; // 설비 심볼 외곽선 — 어떤 바닥색 위에서도 읽히는 중간 잉크
+const FIXTURE_FILL = '#fbf8f0'; // 설비 심볼 내부 — 도기/카운터 톤(바닥색과 분리)
 
 // 시안 ease: 1-(1-p)^3 (ease-out cubic). framer-motion transition으로 tweenPlan을 표현한다.
 const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
@@ -78,6 +80,8 @@ export function FloorplanCanvas({
   // geomFor 결과를 props에서 직접 산출한다. 모델 변경 시 framer-motion이 현재값 → 목표값을 보간(=tweenPlan).
   const geom = geomFor(model.lengthM);
   const railMidX = Math.round((geom.x + PLAN_RIGHT_EDGE) / 2);
+  // 기본창은 거실 구간(좌측 벽 ~ 욕실 칸막이 x=696)의 상단 벽 중앙에 둔다.
+  const windowX = Math.round((geom.x + 696) / 2) - 55;
   // applyGeom 대응: 단일 좌측 벽 x로부터 벽/스킨/레일 좌표가 모두 파생된다.
   const tween = { duration: shouldReduceMotion ? 0 : PLAN_TWEEN_S, ease: easeOutCubic };
 
@@ -131,20 +135,23 @@ export function FloorplanCanvas({
       />
       <motion.rect initial={false} animate={{ x: geom.x, width: geom.w }} transition={tween} y="116" height="252" rx="4" fill="none" stroke={exteriorColor} strokeWidth="6" />
 
-      {/* 침대(좌측 벽 기준): 모델이 길어져도 침대는 좌측 벽을 따라 함께 이동한다 */}
-      <g data-testid="floorplan-bed">
-        <motion.rect initial={false} animate={{ x: geom.x + 12 }} transition={tween} y="128" width="92" height="170" rx="3" fill="none" stroke="#8a806f" strokeWidth="2" />
-        <motion.line initial={false} animate={{ x1: geom.x + 22, x2: geom.x + 94 }} transition={tween} y1="162" y2="162" stroke="#b9aa94" strokeWidth="2" />
-        <motion.text initial={false} animate={{ x: geom.x + 58 }} transition={tween} y="238" textAnchor="middle" fill={roomInk} fontSize="14" fontWeight="600">
-          {copy.planBed}
-        </motion.text>
+      {/* 기본창: 상단 벽, 거실 구간 중앙 — 모델 확장 시 거실 중앙을 따라 이동 */}
+      <g data-testid="floorplan-window">
+        <motion.rect initial={false} animate={{ x: windowX }} transition={tween} y="109" width="110" height="14" fill="#f5f1ea" />
+        <motion.rect initial={false} animate={{ x: windowX }} transition={tween} y="111" width="110" height="10" fill="#ffffff" stroke={FIXTURE_STROKE} strokeWidth="2" />
+        <motion.line initial={false} animate={{ x1: windowX, x2: windowX + 110 }} transition={tween} y1="116" y2="116" stroke={FIXTURE_STROKE} strokeWidth="1.5" />
       </g>
 
       {/* ponytail: 우측 고정 설비(싱크대·현관·욕실)는 실측 6m 도면 기준 좌표 — 6m 미만 모델이 생기면 좌표 재검토 */}
-      {/* 싱크대: 하단 벽면 중앙(일자형 주방) */}
-      <rect x="468" y="316" width="142" height="46" rx="3" fill="none" stroke="#8a806f" strokeWidth="2" />
-      <circle cx="492" cy="339" r="9" fill="none" stroke="#9a8f7d" strokeWidth="2" />
-      <text x="548" y="344" textAnchor="middle" fill={roomInk} fontSize="13" fontWeight="600">{copy.planSink}</text>
+      {/* 싱크대: 하단 벽면 일자형 카운터 + 싱크볼/수전/배수구 */}
+      <g data-testid="floorplan-sink">
+        <rect x="468" y="316" width="142" height="46" rx="4" fill={FIXTURE_FILL} stroke={FIXTURE_STROKE} strokeWidth="2" />
+        <rect x="480" y="324" width="46" height="30" rx="6" fill="none" stroke={FIXTURE_STROKE} strokeWidth="2" />
+        <rect x="486" y="329" width="34" height="20" rx="4" fill="none" stroke={FIXTURE_STROKE} strokeWidth="1.2" />
+        <circle cx="503" cy="321" r="2.5" fill={FIXTURE_STROKE} />
+        <circle cx="503" cy="339" r="2" fill="none" stroke={FIXTURE_STROKE} strokeWidth="1.2" />
+        <text x="568" y="344" textAnchor="middle" fill={roomInk} fontSize="13" fontWeight="600">{copy.planSink}</text>
+      </g>
 
       {/* 욕실 칸막이벽(우측 끝 전체가 욕실) — 중간에 슬라이딩 도어 개구부 */}
       <line x1="696" y1="121" x2="696" y2="206" stroke={DEFAULT_WALL_INK} strokeWidth="4" />
@@ -153,17 +160,37 @@ export function FloorplanCanvas({
       <line x1="702" y1="150" x2="702" y2="202" stroke="#b9aa94" strokeWidth="2" strokeDasharray="4 4" />
       <rect x="698" y="206" width="8" height="62" rx="2" fill="#8a806f" />
 
-      {/* 욕실 내부: 위에서부터 샤워 → 변기 → 세면대 */}
-      <rect x="712" y="132" width="104" height="74" rx="4" fill="none" stroke="#cbbfa9" strokeWidth="2" />
-      <circle cx="726" cy="146" r="4" fill="none" stroke="#9a8f7d" strokeWidth="2" />
-      <text x="764" y="176" textAnchor="middle" fill={utilInk} fontSize="13">{copy.planShower}</text>
-      <rect x="800" y="228" width="22" height="38" rx="3" fill="none" stroke="#cbbfa9" strokeWidth="2" />
-      <ellipse cx="782" cy="247" rx="14" ry="18" fill="none" stroke="#cbbfa9" strokeWidth="2" />
-      <text x="736" y="252" textAnchor="middle" fill={utilInk} fontSize="13">{copy.planToilet}</text>
-      <line x1="696" y1="300" x2="826" y2="300" stroke="#cbbfa9" strokeWidth="2" />
-      <rect x="700" y="312" width="122" height="46" fill="none" stroke="#cbbfa9" strokeWidth="2" />
-      <circle cx="726" cy="335" r="10" fill="none" stroke="#9a8f7d" strokeWidth="2" />
-      <text x="776" y="340" textAnchor="middle" fill={utilInk} fontSize="13">{copy.planBasin}</text>
+      {/* 샤워: 트레이 이중선 + 배수구(X) + 샤워헤드/스프레이 */}
+      <g data-testid="floorplan-shower">
+        <rect x="706" y="130" width="112" height="78" rx="6" fill={FIXTURE_FILL} stroke={FIXTURE_STROKE} strokeWidth="2" />
+        <rect x="713" y="137" width="98" height="64" rx="4" fill="none" stroke={FIXTURE_STROKE} strokeWidth="1.2" />
+        <circle cx="778" cy="182" r="4.5" fill="none" stroke={FIXTURE_STROKE} strokeWidth="1.5" />
+        <line x1="774.8" y1="178.8" x2="781.2" y2="185.2" stroke={FIXTURE_STROKE} strokeWidth="1" />
+        <line x1="781.2" y1="178.8" x2="774.8" y2="185.2" stroke={FIXTURE_STROKE} strokeWidth="1" />
+        <circle cx="802" cy="146" r="4" fill={FIXTURE_STROKE} />
+        <line x1="797" y1="151" x2="791" y2="157" stroke={FIXTURE_STROKE} strokeWidth="1.2" />
+        <line x1="801" y1="153" x2="798" y2="160" stroke={FIXTURE_STROKE} strokeWidth="1.2" />
+        <line x1="794" y1="148" x2="787" y2="152" stroke={FIXTURE_STROKE} strokeWidth="1.2" />
+        <text x="734" y="178" textAnchor="middle" fill={utilInk} fontSize="12">{copy.planShower}</text>
+      </g>
+
+      {/* 변기: 탱크(우측 벽) + 보울 이중 타원 */}
+      <g data-testid="floorplan-toilet">
+        <rect x="796" y="226" width="26" height="40" rx="4" fill={FIXTURE_FILL} stroke={FIXTURE_STROKE} strokeWidth="2" />
+        <ellipse cx="772" cy="246" rx="17" ry="21" fill={FIXTURE_FILL} stroke={FIXTURE_STROKE} strokeWidth="2" />
+        <ellipse cx="772" cy="246" rx="10.5" ry="14" fill="none" stroke={FIXTURE_STROKE} strokeWidth="1.2" />
+        <text x="728" y="250" textAnchor="middle" fill={utilInk} fontSize="12">{copy.planToilet}</text>
+      </g>
+
+      {/* 세면대: 하단 카운터 + 보울 이중 타원 + 수전(벽 측) */}
+      <g data-testid="floorplan-basin">
+        <line x1="696" y1="300" x2="826" y2="300" stroke="#cbbfa9" strokeWidth="2" />
+        <rect x="700" y="310" width="122" height="48" rx="3" fill={FIXTURE_FILL} stroke={FIXTURE_STROKE} strokeWidth="2" />
+        <ellipse cx="784" cy="334" rx="20" ry="13" fill="none" stroke={FIXTURE_STROKE} strokeWidth="2" />
+        <ellipse cx="784" cy="334" rx="13.5" ry="8" fill="none" stroke={FIXTURE_STROKE} strokeWidth="1.2" />
+        <circle cx="784" cy="352" r="2.5" fill={FIXTURE_STROKE} />
+        <text x="732" y="338" textAnchor="middle" fill={utilInk} fontSize="12">{copy.planBasin}</text>
+      </g>
 
       {/* 현관(주출입구): 싱크대와 욕실 사이 하단 벽, 바깥으로 열리는 외개형 도어 */}
       <rect x="618" y="362" width="56" height="12" fill={floorColor} />

@@ -123,7 +123,6 @@ export interface CustomizeUiCopy {
   planShower: string;
   planToilet: string;
   planBasin: string;
-  planBed: string;
   planSink: string;
   planEntrance: string;
   planLabel: (modelName: string, widthM: number, lengthM: number) => string;
@@ -270,7 +269,6 @@ export const UI_COPY: Record<Language, CustomizeUiCopy> = {
     planShower: '샤워',
     planToilet: '변기',
     planBasin: '세면대',
-    planBed: '침대',
     planSink: '싱크대',
     planEntrance: '현관',
     planLabel: (modelName, widthM, lengthM) => `${modelName} 평면도, 가로 ${widthM}m 세로 ${lengthM}m`,
@@ -411,7 +409,6 @@ export const UI_COPY: Record<Language, CustomizeUiCopy> = {
     planShower: 'Shower',
     planToilet: 'WC',
     planBasin: 'Basin',
-    planBed: 'Bed',
     planSink: 'Kitchen',
     planEntrance: 'Entry',
     planLabel: (modelName, widthM, lengthM) => `${modelName} floor plan, ${widthM}m wide by ${lengthM}m long`,
@@ -552,7 +549,6 @@ export const UI_COPY: Record<Language, CustomizeUiCopy> = {
     planShower: 'Ducha',
     planToilet: 'WC',
     planBasin: 'Lavabo',
-    planBed: 'Cama',
     planSink: 'Cocina',
     planEntrance: 'Entrada',
     planLabel: (modelName, widthM, lengthM) => `Plano de ${modelName}, ${widthM}m de ancho por ${lengthM}m de largo`,
