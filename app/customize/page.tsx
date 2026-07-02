@@ -4,8 +4,6 @@ import { getSiteSettings } from '@/lib/site-settings.server';
 import { buildPageMetadata } from '@/lib/seo';
 import { jsonLdHtml } from '@/lib/json-ld';
 
-export const dynamic = 'force-dynamic';
-
 export const metadata = buildPageMetadata({
   title: '이동식주택 맞춤 구성·예상 견적',
   description:

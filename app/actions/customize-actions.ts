@@ -1,7 +1,7 @@
 'use server';
 
 import { randomUUID } from 'crypto';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag, unstable_cache } from 'next/cache';
 import { z } from 'zod';
 import { requireAdmin } from '@/lib/admin-auth';
 import { getSupabaseAdmin, supabase } from '@/lib/supabase';
@@ -273,9 +273,16 @@ async function loadCatalog(client: any, includeInactive = false): Promise<Custom
   };
 }
 
+// 공개 카탈로그는 관리자만 수정하는 준정적 데이터 — site-settings와 동일 패턴으로 캐시한다.
+const fetchPublicCatalog = unstable_cache(
+  async () => loadCatalog(supabase, false),
+  ['customize-catalog'],
+  { tags: ['customize-catalog'], revalidate: 300 }
+);
+
 export async function getPublicCustomizeCatalog() {
   try {
-    return await loadCatalog(supabase, false);
+    return await fetchPublicCatalog();
   } catch (error) {
     console.error('Error loading public customize catalog:', error);
     return { models: [], categories: [], options: [], includedSpecs: [], conflicts: [] } satisfies CustomizeCatalog;
@@ -718,4 +725,5 @@ export async function deleteCustomizeConsultation(id: string) {
 function revalidateCustomizePaths() {
   revalidatePath('/customize');
   revalidatePath('/admin/customize');
+  revalidateTag('customize-catalog', 'max');
 }
