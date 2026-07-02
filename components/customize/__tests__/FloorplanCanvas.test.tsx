@@ -60,6 +60,10 @@ describe('geomFor (시안 좌표: 우변 x=830 고정, 동일 스케일)', () =>
     expect(geomFor(9)).toEqual({ x: 74, w: 756 });
     expect(geomFor(9).x + geomFor(9).w).toBe(830);
   });
+
+  it('9.8m 초과 모델은 좌측 여백 40px에서 clamp된다', () => {
+    expect(geomFor(12)).toEqual({ x: 40, w: 790 });
+  });
 });
 
 describe('FloorplanCanvas geometry', () => {

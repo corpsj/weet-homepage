@@ -11,6 +11,7 @@ import { UI_COPY, type CustomizeUiCopy } from '../lib/constants';
 // 우측 벽은 x=830에 고정하고 좌측 벽만 확장한다. 동일 스케일(1m=84px) → 3×6:{x:326,w:504}, 3×9:{x:74,w:756}.
 const PLAN_RIGHT_EDGE = 830;
 const PLAN_SCALE = 84;
+const PLAN_MIN_LEFT = 40; // 관리자가 긴 모델을 추가해도 도면이 viewBox 밖으로 나가지 않게 하는 하한
 const PLAN_TWEEN_S = 0.62; // 시안 tweenPlan(600ms)을 기대 사양(620ms ease-out)에 맞춤
 const DEFAULT_WALL_INK = '#2f3432'; // 시안 planWall stroke(구조선)
 const DEFAULT_FLOOR_FILL = '#f1ece1'; // 시안 floorFill(filled) 기본값
@@ -23,7 +24,7 @@ type PlanGeom = { x: number; w: number };
 
 // geomFor: 모델 길이(m)로 좌측 벽 x와 폭 w 산출 (시안 geomFor 포팅 — 우변 고정·동일 스케일로 일반화).
 export function geomFor(lengthM: number): PlanGeom {
-  const w = Math.round(lengthM * PLAN_SCALE);
+  const w = Math.min(Math.round(lengthM * PLAN_SCALE), PLAN_RIGHT_EDGE - PLAN_MIN_LEFT);
   return { x: PLAN_RIGHT_EDGE - w, w };
 }
 
