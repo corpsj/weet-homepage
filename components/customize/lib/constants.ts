@@ -625,8 +625,8 @@ export type ConsultationDraft = {
   memo: string;
 };
 
-export const inputClass = 'h-11 rounded-lg border-gray-300 bg-weet-surface text-sm focus-visible:ring-weet-gold-deep';
-export const selectClass = 'h-11 w-full rounded-lg border border-gray-300 bg-weet-surface px-3 text-sm outline-none focus:ring-2 focus:ring-weet-gold-deep/30';
+export const inputClass = 'h-11 rounded-lg border-weet-line-2 bg-weet-surface text-sm focus-visible:ring-weet-gold-deep aria-[invalid=true]:border-customize-error aria-[invalid=true]:ring-1 aria-[invalid=true]:ring-customize-error/40';
+export const selectClass = 'h-11 w-full rounded-lg border border-weet-line-2 bg-weet-surface px-3 text-sm outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep';
 
 export const FALLBACK_CATALOG: Record<string, { desc: string; specs: string[] }> = {
   'ribbed-steel-white': { desc: '화이트 리브 강판은 가장 기본적인 외장 레이어입니다. 밝은 색으로 작은 공간을 가볍게 보이게 하고, 세로 골 패턴이 빗물 흐름과 표면 오염을 정돈해 주기 때문에 유지관리 부담이 낮습니다.', specs: ['세로 리브 패턴', '밝은 외장 톤', '기본 외피'] },

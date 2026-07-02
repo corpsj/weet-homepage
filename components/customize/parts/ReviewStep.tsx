@@ -410,7 +410,7 @@ function ConsultationForm({
           </Field>
           <Field label={copy.fieldMemo} fieldId="consultation-memo" helper={copy.fieldMemoHelp} copy={copy}>
             {({ id, describedBy }) => (
-              <Textarea id={id} aria-describedby={describedBy} className="min-h-24 rounded-lg border-gray-300 bg-weet-surface text-sm focus-visible:ring-weet-gold-deep" value={form.memo} onChange={(event) => updateField('memo', event.target.value)} />
+              <Textarea id={id} aria-describedby={describedBy} className="min-h-24 rounded-lg border-weet-line-2 bg-weet-surface text-sm focus-visible:ring-weet-gold-deep" value={form.memo} onChange={(event) => updateField('memo', event.target.value)} />
             )}
           </Field>
         </div>

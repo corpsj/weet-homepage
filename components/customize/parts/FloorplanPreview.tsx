@@ -43,7 +43,7 @@ export function FloorplanPreview({
             data-testid="floorplan-zoom-open"
             aria-label={copy.zoomOpenAria}
             onClick={onOpenViewer}
-            className="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-md border border-weet-line bg-weet-surface/95 text-weet-ink shadow-weet-card backdrop-blur transition-colors hover:border-weet-muted hover:bg-white focus:outline-none focus:ring-2 focus:ring-weet-gold-deep/40"
+            className="absolute right-3 top-3 z-10 inline-flex h-9 w-9 items-center justify-center rounded-md border border-weet-line bg-weet-surface/95 text-weet-ink shadow-weet-card backdrop-blur transition-colors hover:border-weet-muted hover:bg-white focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep"
           >
             <Maximize2 className="h-4 w-4" />
           </button>

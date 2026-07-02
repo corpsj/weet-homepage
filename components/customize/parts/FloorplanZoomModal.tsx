@@ -43,7 +43,7 @@ export function FloorplanZoomModal({
               data-testid="floorplan-zoom-close"
               aria-label={copy.zoomCloseAria}
               onClick={onClose}
-              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-weet-line text-weet-ink transition-colors hover:bg-weet-paper focus:outline-none focus:ring-2 focus:ring-weet-gold-deep/40"
+              className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-md border border-weet-line text-weet-ink transition-colors hover:bg-weet-paper focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep"
             >
               <X className="h-4 w-4" />
             </button>
