@@ -3,15 +3,8 @@ import { cn } from '@/lib/utils';
 import type { Language } from '@/contexts/LanguageContext';
 import type { CustomizeOption } from '@/lib/customize/types';
 import { pickText } from '@/lib/customize/i18n';
-import { OPTION_SWATCH, SWATCH_CATEGORY_KEYS, type CustomizeUiCopy } from '../lib/constants';
+import { OPTION_SWATCH, PRICE_TONE, SWATCH_CATEGORY_KEYS, type CustomizeUiCopy } from '../lib/constants';
 import { hasOptionInfo, optionPriceDisplay } from '../lib/helpers';
-
-// 시안(B안) 가격색: 상담필요 #a16207 / 유료 #18181b / 기본포함 #9ca3af.
-const PRICE_TONE: Record<CustomizeOption['priceType'], string> = {
-  consult: 'text-[#a16207]',
-  fixed: 'text-[#18181b]',
-  included: 'text-[#9ca3af]',
-};
 
 export function OptionCard({
   option,

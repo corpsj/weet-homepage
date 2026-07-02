@@ -27,6 +27,14 @@ export const OPTION_SWATCH: Record<string, string> = {
   'porcelain-tile': '#BFC0BC',
 };
 
+// 시안(B안) 가격색. 상담 #a16207 / 유료 #18181b 은 시안 그대로,
+// 기본포함은 시안 #9ca3af가 대비 2.43:1(AA 미달)이라 사용자 승인 하에 #6b7280(4.6:1)으로 보정(2026-07-02).
+export const PRICE_TONE: Record<'consult' | 'fixed' | 'included', string> = {
+  consult: 'text-[#a16207]',
+  fixed: 'text-[#18181b]',
+  included: 'text-[#6b7280]',
+};
+
 // 정적 UI chrome 카피. KO는 byte-identical(e2e/SSR 기본). EN 원어민, ES 중남미 중립.
 // 가격/신뢰 문구는 보수적 표현만 사용한다(결제·할인·보증 약속 금지).
 export interface CustomizeUiCopy {

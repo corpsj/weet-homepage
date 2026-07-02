@@ -8,17 +8,11 @@ import {
   FALLBACK_CATALOG,
   OPTION_DETAIL_GUIDE,
   OPTION_IMAGE_VERSION,
+  PRICE_TONE,
   type CustomizeUiCopy,
 } from '../lib/constants';
 import { optionPriceDisplay } from '../lib/helpers';
 import { useModalDismiss } from '../lib/hooks';
-
-// 시안 infoColor: 가격은 priceType별 단일 색 텍스트 한 줄로 노출.
-const PRICE_TONE: Record<CustomizeOption['priceType'], string> = {
-  consult: 'text-[#a16207]',
-  fixed: 'text-[#18181b]',
-  included: 'text-[#9ca3af]',
-};
 
 function normalizeOptionImage(option: CustomizeOption, optionKey: string, hasFallback: boolean) {
   if (hasFallback) return `/images/customize/options/${optionKey}.webp?v=${OPTION_IMAGE_VERSION}`;

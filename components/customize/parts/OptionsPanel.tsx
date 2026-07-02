@@ -189,7 +189,7 @@ export function OptionsPanel({
       <div className="border-b border-customize-stone bg-customize-sand px-5 py-3.5">
         <div className="flex items-center justify-between">
           <h2 className="text-[17px] font-extrabold text-customize-ink">{copy.panelRailTitle}</h2>
-          <span className="text-xs font-bold text-customize-slate">{copy.panelRailStepCount(stepIndex + 1, STEPS.length)}</span>
+          <span className="text-xs font-bold text-customize-ink/70">{copy.panelRailStepCount(stepIndex + 1, STEPS.length)}</span>
         </div>
       </div>
 
