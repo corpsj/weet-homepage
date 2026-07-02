@@ -52,10 +52,10 @@ export default function CustomizeLoading() {
       <div className="mx-auto flex max-w-[1800px] flex-col lg:h-[calc(100dvh-136px)] lg:flex-row">
         <section className="flex flex-col lg:h-full lg:flex-1 lg:overflow-y-auto">
           <div className="flex flex-col items-center justify-center gap-5 px-4 py-5 md:px-8 md:py-8 lg:flex-1 lg:px-10 lg:py-6">
-            {/* 도면 미리보기 placeholder */}
-            <div className="aspect-[4/3] w-full max-w-[640px] animate-pulse rounded-card border border-weet-line bg-weet-surface" />
+            {/* 도면 미리보기 placeholder: 실제 FloorplanPreview(max-w-[1100px], viewBox 1000x460)와 동일 비율 */}
+            <div className="aspect-[1000/460] w-full max-w-[1100px] animate-pulse rounded-lg border border-weet-line bg-weet-surface" />
             {/* 요약 보드 placeholder */}
-            <div className="w-full max-w-[640px] animate-pulse rounded-card border border-weet-line bg-weet-surface p-5">
+            <div className="w-full max-w-[1100px] animate-pulse rounded-lg border border-weet-line bg-weet-surface p-5">
               <div className="h-3 w-24 rounded bg-weet-line-2" />
               <div className="mt-3 h-7 w-40 rounded bg-weet-line-2" />
               <div className="mt-5 space-y-2.5">
