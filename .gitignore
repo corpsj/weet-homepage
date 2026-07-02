@@ -83,3 +83,6 @@ site-mobile-layout-audit/
 sitewide-image-audit-latest/
 tmp/
 visual-qa-latest/
+
+# Subagent-driven-development scratch (briefs, diffs, ledger)
+.superpowers/
