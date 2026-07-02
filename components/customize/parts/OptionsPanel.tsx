@@ -70,11 +70,12 @@ export function OptionsPanel({
                 key={model.id}
                 type="button"
                 onClick={() => onModelChange(model.id)}
+                aria-pressed={model.id === modelId}
                 className={cn(
-                  'rounded-lg border p-3 text-left transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep',
+                  'rounded-lg border p-3 text-left transition-[border-color,box-shadow] focus:outline-none focus-visible:ring-2 focus-visible:ring-weet-gold-deep',
                   model.id === modelId
-                    ? 'border-weet-ink bg-weet-paper-alt shadow-weet-card'
-                    : 'border-weet-line-2 bg-weet-surface hover:border-weet-muted'
+                    ? 'border-customize-ink bg-customize-sand shadow-[0_0_0_1px_#2f3432]'
+                    : 'border-customize-taupe bg-customize-sand hover:border-customize-mushroom'
                 )}
               >
                 <div className="flex items-start justify-between gap-3">
