@@ -4,6 +4,7 @@ import { formatWon } from '@/lib/customize/priceCalculator';
 import type { EstimateBreakdown } from '@/lib/customize/types';
 import { STEPS, type ConfigStep, type CustomizeUiCopy } from '../lib/constants';
 import { nextStepCta } from '../lib/helpers';
+import { AnimatedPrice } from './AnimatedPrice';
 
 // 데스크톱 우측 레일 하단 고정 요약: 가격 분해 + 단계 이동 CTA.
 export function RailSummaryFooter({
@@ -38,8 +39,8 @@ export function RailSummaryFooter({
               <span aria-hidden="true" className="h-2 w-2 shrink-0 rounded-full bg-weet-forest" />
               {copy.estimatedAmount}
             </dt>
-            <dd className="text-[15px] font-extrabold text-weet-ink" data-testid="desktop-estimated-total" aria-live="polite" aria-atomic="true">
-              {formatWon(estimate.estimatedTotal)}
+            <dd className="text-[15px] font-extrabold text-weet-ink" aria-live="polite" aria-atomic="true">
+              <AnimatedPrice value={estimate.estimatedTotal} testId="desktop-estimated-total" />
             </dd>
           </div>
           {estimate.consultOptionCount > 0 && (
