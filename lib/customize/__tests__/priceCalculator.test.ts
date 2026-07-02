@@ -3,7 +3,6 @@ import {
   calculateEstimate,
   decodeConfig,
   encodeConfig,
-  formatOptionPrice,
   formatWon,
   getDefaultSelections,
   toggleOptionSelection,
@@ -133,11 +132,8 @@ const catalog: CustomizeCatalog = {
 };
 
 describe('customize price calculator', () => {
-  it('formats won values and option price labels', () => {
+  it('formats won values', () => {
     expect(formatWon(27900000)).toBe('₩27,900,000');
-    expect(formatOptionPrice(catalog.options[0])).toBe('포함');
-    expect(formatOptionPrice(catalog.options[1])).toBe('₩2,200,000');
-    expect(formatOptionPrice(catalog.options[2])).toBe('협의');
   });
 
   it('builds default selections and calculates consult options as 0', () => {

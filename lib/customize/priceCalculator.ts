@@ -2,7 +2,6 @@ import type {
   ConfigShareState,
   CustomizeCatalog,
   CustomizeCategory,
-  CustomizeModel,
   CustomizeOption,
   EstimateBreakdown,
   SelectedOptions,
@@ -15,12 +14,6 @@ export function formatWon(value: number) {
 
 export function formatModelStartPrice(value: number) {
   return `${formatWon(value)}부터`;
-}
-
-export function formatOptionPrice(option: Pick<CustomizeOption, 'priceType' | 'price'>) {
-  if (option.priceType === 'included') return '포함';
-  if (option.priceType === 'consult') return '협의';
-  return formatWon(option.price);
 }
 
 export function optionPriceValue(option: Pick<CustomizeOption, 'priceType' | 'price'>) {
@@ -139,14 +132,6 @@ export function calculateEstimate(catalog: CustomizeCatalog, modelId: string, se
   };
 }
 
-export function floorplanSize(model: CustomizeModel) {
-  const width = model.id === 'standard-3x9' || model.lengthM >= 9 ? 900 : 600;
-  // 우측 고정(우변 x=950) · 좌측 확장. 3×6 → 3×9 시 오른쪽 벽은 그대로, 왼쪽 벽만 바깥으로 확장된다.
-  // 3×9는 기존과 동일한 x=50, 3×6만 x=350으로 우측 정렬되어 동일 스케일(100px/m) 비교가 된다.
-  const RIGHT_EDGE = 950;
-  return { x: RIGHT_EDGE - width, y: 60, width, height: 300 };
-}
-
 function encodeBase64Url(value: string) {
   const base64 = typeof Buffer !== 'undefined' && typeof window === 'undefined'
     ? Buffer.from(value, 'utf8').toString('base64')
@@ -192,11 +177,6 @@ export function decodeConfig(value: string | null): ConfigShareState | null {
     return null;
   }
 }
-
-export const calculateTotalPrice = (model: CustomizeModel, options: CustomizeOption[]) =>
-  model.basePrice + options.reduce((sum, option) => sum + optionPriceValue(option), 0);
-
-export const formatPrice = formatWon;
 
 // ?c= 디코드/모델 변경 등 신뢰할 수 없는 선택 상태를 카탈로그 기준으로 정규화한다.
 // 규칙: 없는 옵션 제거 → 실제 categoryId로 재매핑 → single은 첫 항목만 →
