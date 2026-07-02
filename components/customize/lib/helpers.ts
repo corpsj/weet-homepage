@@ -107,7 +107,7 @@ export function buildQuoteHtml(
   <title>${escapeHtml(copy.quoteDocTitle)}</title>
   <style>
     @page { size: A4 landscape; margin: 18mm; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif; color: #2f3432; background: #f8f4ec; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif; color: #2f3432; background: #f8f4ec; word-break: keep-all; }
     h1 { margin: 0 0 8px; font-size: 28px; }
     p { margin: 0; color: #6f6658; }
     table { width: 100%; margin-top: 24px; border-collapse: collapse; background: #fffaf2; }

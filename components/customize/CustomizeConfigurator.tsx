@@ -292,7 +292,7 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
   const nextStep = currentStepIndex < STEPS.length - 1 ? STEPS[currentStepIndex + 1] : null;
 
   return (
-    <div className="min-h-dvh bg-weet-paper text-weet-ink">
+    <div className="min-h-dvh break-keep bg-weet-paper text-weet-ink">
       <ConfiguratorAppBar contactPhone={contactPhone} copy={copy} />
       <StepperBar
         currentStep={currentStep}
