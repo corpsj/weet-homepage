@@ -75,6 +75,28 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
   // 진행 시스템: 사용자가 도달한 가장 먼 단계 이전의 단계는 '완료'로 표시한다.
   // 공유 링크로 진입(decoded)하면 이미 구성이 끝난 상태이므로 모든 단계를 완료로 둔다.
   const [furthestStepIndex, setFurthestStepIndex] = useState(decoded ? STEPS.length - 1 : 0);
+
+  // 새로고침 시 보던 단계/진행도 복원용. 구성(c)이 다르면(다른 공유 링크 진입) 무시한다.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const raw = window.sessionStorage.getItem('customize-progress');
+      if (!raw) return;
+      const saved = JSON.parse(raw) as { step?: string; furthest?: number; c?: string | null };
+      if ((saved.c ?? null) !== (initialConfig ?? null)) return;
+      const savedIndex = STEPS.findIndex((s) => s.id === saved.step);
+      if (savedIndex < 0) return;
+      // 마운트 1회 외부 저장소 복원 — hydration 이후에만 실행해야 해서 effect가 맞다.
+      setCurrentStep(STEPS[savedIndex].id);
+      if (typeof saved.furthest === 'number') {
+        setFurthestStepIndex(Math.min(Math.max(saved.furthest, savedIndex), STEPS.length - 1));
+      }
+    } catch {
+      // 저장값 파손 시 조용히 무시
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // 제출 시점 견적 스냅샷. 구성이 스냅샷과 달라지면 submitted가 자동 해제된다(파생).
   const [submittedSnapshot, setSubmittedSnapshot] = useState<{ model: CustomizeModel; estimatedTotal: number; encodedConfig: string } | null>(null);
   const [planViewerOpen, setPlanViewerOpen] = useState(false);
@@ -107,6 +129,23 @@ export default function CustomizeConfigurator({ catalog, initialConfig, contactP
     () => encodeConfig(firstModelId, getDefaultSelections(catalog, firstModelId)),
     [catalog, firstModelId]
   );
+
+  // 새로고침 시 보던 단계/진행도 복원용 저장. 구성(c)이 순정 상태면 null로 저장해 다음 첫 진입과 구분한다.
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      window.sessionStorage.setItem(
+        'customize-progress',
+        JSON.stringify({
+          step: currentStep,
+          furthest: furthestStepIndex,
+          c: encodedConfig === pristineEncoded ? null : encodedConfig,
+        })
+      );
+    } catch {
+      // 프라이빗 모드 등 저장 불가 시 무시
+    }
+  }, [currentStep, furthestStepIndex, encodedConfig, pristineEncoded]);
 
   // URL을 항상 현재 구성과 일치시킨다(공유/새로고침 복원 정합성).
   // utm 등 기존 쿼리는 보존하고, 300ms debounce + try/catch로 Safari replaceState 제한을 방어한다.
