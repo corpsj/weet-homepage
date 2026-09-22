@@ -123,13 +123,14 @@ export default async function RootLayout({
       url: siteOrigin,
       logo: `${siteOrigin}/images/company/weet-logo.webp`,
       sameAs: [
-        "https://www.instagram.com/weet_kr/",
-        "https://www.daangn.com/kr/local-profile/%EC%9C%84%ED%8A%B8weet-kihpx4ctggn6/",
-      ],
+        siteSettings.instagram_url,
+        siteSettings.naver_blog_url,
+        siteSettings.daangn_url,
+      ].filter(Boolean),
       contactPoint: [
         {
           "@type": "ContactPoint",
-          telephone: "+82-10-9645-2348",
+          telephone: siteSettings.contact_phone,
           contactType: "customer service",
           areaServed: "KR",
           availableLanguage: ["ko", "en"],
@@ -153,7 +154,7 @@ export default async function RootLayout({
       name: "위트(weet)",
       description: "이동식주택·모듈러주택 제작 전문 기업",
       url: siteOrigin,
-      telephone: "+82-10-9645-2348",
+      telephone: siteSettings.contact_phone,
       address: {
         "@type": "PostalAddress",
         streetAddress: "대동면 금산길 205-27",

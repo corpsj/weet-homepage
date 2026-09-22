@@ -1,47 +1,27 @@
+import HeroCarousel from '@/components/sections/HeroCarousel';
+import PartnersBanner from '@/components/sections/PartnersBanner';
+import SignatureLine from '@/components/sections/SignatureLine';
+import GallerySection from '@/components/company/GallerySection';
+import ModelLinks from '@/components/products/ModelLinks';
 import { getPublicCustomizeCatalog } from '@/app/actions/customize-actions';
-import { getPublicGalleryItems } from '@/app/actions/gallery-actions';
-import { getFaqs } from '@/app/actions/faq-actions';
-import { getSiteSettings } from '@/lib/site-settings.server';
 import { buildPageMetadata } from '@/lib/seo';
-import type { Metadata } from 'next';
-import HomeClient from './HomeClient';
 
 export const revalidate = 300;
-
-export const metadata: Metadata = {
-  ...buildPageMetadata({
-    title: '이동식주택·농막·세컨하우스 제작 전문',
-    description:
-      '공장에서 제작해 현장에 설치하는 이동식주택 전문 위트(weet). 3x6(18㎡)·3x9(27㎡) 모델의 기본 가격을 공개하고, 운반·설치·인허가까지 투명하게 안내합니다.',
-    path: '/',
-  }),
-  // Home is the root segment's own page, so the root title template does not
-  // apply — bake the brand suffix into the document title explicitly. (og:title
-  // stays unsuffixed via buildPageMetadata's openGraph.)
-  title: '이동식주택·농막·세컨하우스 제작 전문 | 위트(weet)',
+export const metadata = {
+  ...buildPageMetadata({ title: '이동식주택·모듈러 건축', description: '전남 함평에서 이동식주택과 모듈러 공간을 제작하는 위트(weet). 제품 사진과 규격, 기본 가격을 확인하고 모델·옵션을 직접 구성해 보세요.', path: '/' }),
+  title: '위트(weet) | 이동식주택·모듈러 건축',
 };
 
 export default async function HomePage() {
-  const [catalog, galleryItems, faqs, settings] = await Promise.all([
-    getPublicCustomizeCatalog().catch(() => null),
-    getPublicGalleryItems(6),
-    getFaqs().catch(() => []),
-    getSiteSettings(),
-  ]);
-
-  const models = (catalog?.models ?? []).filter((model) => model.isActive !== false).slice(0, 2);
-  const hasRealGallery = galleryItems.length > 0;
-  const teaserFaqs = faqs
-    .filter((faq) => faq.is_active !== false && faq.question_ko && faq.answer_ko)
-    .slice(0, 4);
-
+  const catalog = await getPublicCustomizeCatalog();
   return (
-    <HomeClient
-      models={models}
-      galleryItems={galleryItems}
-      hasRealGallery={hasRealGallery}
-      teaserFaqs={teaserFaqs}
-      settings={settings}
-    />
+    <div className="bg-white text-black">
+      <h1 className="sr-only">위트(weet) 이동식주택·모듈러 건축</h1>
+      <HeroCarousel />
+      <PartnersBanner />
+      <SignatureLine />
+      <ModelLinks models={catalog.models} />
+      <GallerySection />
+    </div>
   );
 }

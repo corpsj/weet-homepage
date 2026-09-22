@@ -48,14 +48,14 @@ export default function ConsultBar({ settings }: { settings: SiteSettings }) {
   return (
     <>
       {/* 모바일·태블릿: 하단 고정 상담 바 (웜 잉크) */}
-      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-weet-ink-deep bg-weet-ink pb-[env(safe-area-inset-bottom)] lg:hidden">
-        <div className="grid h-11 grid-cols-2 divide-x divide-weet-paper/15 text-[13px] font-semibold leading-none text-weet-paper">
+      <div className="fixed inset-x-0 bottom-0 z-50 border-t border-black bg-black pb-[env(safe-area-inset-bottom)] lg:hidden">
+        <div className="grid h-11 grid-cols-2 divide-x divide-white/15 text-[13px] font-semibold leading-none text-white">
           <a
             href={telHref(settings.contact_phone)}
             onClick={() => trackConsultClick('tel')}
-            className="flex min-w-0 items-center justify-center gap-1.5 whitespace-nowrap active:bg-weet-ink-deep"
+            className="flex min-w-0 items-center justify-center gap-1.5 whitespace-nowrap active:bg-gray-800"
           >
-            <Phone className="h-4 w-4 shrink-0 text-weet-gold" />
+            <Phone className="h-4 w-4 shrink-0 text-yellow-700" />
             <span className="leading-none">{t.phoneConsult}</span>
           </a>
           {hasKakao ? (
@@ -64,18 +64,18 @@ export default function ConsultBar({ settings }: { settings: SiteSettings }) {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackConsultClick('kakao')}
-              className="flex min-w-0 items-center justify-center gap-1.5 whitespace-nowrap active:bg-weet-ink-deep"
+              className="flex min-w-0 items-center justify-center gap-1.5 whitespace-nowrap active:bg-gray-800"
             >
-              <MessageCircle className="h-4 w-4 shrink-0 text-weet-gold" />
+              <MessageCircle className="h-4 w-4 shrink-0 text-yellow-700" />
               <span className="leading-none">{t.kakaoConsult}</span>
             </a>
           ) : (
             <Link
               href="/support#consult"
               onClick={() => trackConsultClick('form')}
-              className="flex min-w-0 items-center justify-center gap-1.5 whitespace-nowrap active:bg-weet-ink-deep"
+              className="flex min-w-0 items-center justify-center gap-1.5 whitespace-nowrap active:bg-gray-800"
             >
-              <MessagesSquare className="h-4 w-4 shrink-0 text-weet-gold" />
+              <MessagesSquare className="h-4 w-4 shrink-0 text-yellow-700" />
               <span className="leading-none">{t.requestConsult}</span>
             </Link>
           )}
@@ -90,38 +90,38 @@ export default function ConsultBar({ settings }: { settings: SiteSettings }) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => trackConsultClick('kakao')}
-            className="flex h-11 items-center gap-2 rounded-full border border-weet-line bg-weet-surface px-5 text-sm font-semibold text-weet-ink shadow-weet-float transition-transform hover:scale-[1.03]"
+            className="flex h-11 items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-5 text-sm font-semibold text-gray-900 shadow-sm transition-transform hover:scale-[1.03]"
           >
-            <MessageCircle className="h-4 w-4 text-weet-gold-deep" />
+            <MessageCircle className="h-4 w-4 text-gray-700" />
             {t.kakaoConsult}
           </a>
         ) : (
           <Link
             href="/support#consult"
             onClick={() => trackConsultClick('form')}
-            className="flex h-11 items-center gap-2 rounded-full border border-weet-line bg-weet-surface px-5 text-sm font-semibold text-weet-ink shadow-weet-float transition-transform hover:scale-[1.03]"
+            className="flex h-11 items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-5 text-sm font-semibold text-gray-900 shadow-sm transition-transform hover:scale-[1.03]"
           >
-            <MessagesSquare className="h-4 w-4 text-weet-gold-deep" />
+            <MessagesSquare className="h-4 w-4 text-gray-700" />
             {t.requestConsultLong}
           </Link>
         )}
         <a
           href={telHref(settings.contact_phone)}
           onClick={() => trackConsultClick('tel')}
-          className="flex h-11 items-center gap-2 rounded-full border border-weet-line bg-weet-surface px-5 text-sm font-semibold text-weet-ink shadow-weet-float transition-transform hover:scale-[1.03]"
+          className="flex h-11 items-center gap-2 rounded-full border border-gray-200 bg-gray-50 px-5 text-sm font-semibold text-gray-900 shadow-sm transition-transform hover:scale-[1.03]"
         >
-          <Phone className="h-4 w-4 text-weet-gold-deep" />
+          <Phone className="h-4 w-4 text-gray-700" />
           {settings.contact_phone}
           {settings.consult_hours && (
-            <span className="text-xs font-medium text-weet-muted">{settings.consult_hours}</span>
+            <span className="text-xs font-medium text-gray-500">{settings.consult_hours}</span>
           )}
         </a>
         <Link
           href="/support#consult"
           onClick={() => trackConsultClick('form')}
-          className="flex h-11 items-center gap-2 rounded-full bg-weet-ink px-5 text-sm font-semibold text-weet-paper shadow-weet-float transition-transform hover:scale-[1.03] hover:bg-weet-ink-deep"
+          className="flex h-11 items-center gap-2 rounded-full bg-black px-5 text-sm font-semibold text-white shadow-sm transition-transform hover:scale-[1.03] hover:bg-gray-800"
         >
-          <MessagesSquare className="h-4 w-4 text-weet-gold" />
+          <MessagesSquare className="h-4 w-4 text-yellow-700" />
           {t.requestConsult}
         </Link>
       </div>

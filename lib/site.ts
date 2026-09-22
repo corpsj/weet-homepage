@@ -8,7 +8,7 @@
  * indexed host consistent with the served host. (review backlog F03)
  */
 function normalizeOrigin(raw: string | undefined): string {
-  const fallback = "http://localhost:3000";
+  const fallback = "https://www.we-et.com";
   let url: URL;
   try {
     url = new URL(raw ?? fallback);

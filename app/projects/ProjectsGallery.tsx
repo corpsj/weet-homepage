@@ -180,7 +180,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                 'rounded-full border px-4 py-2 text-[13.5px] font-semibold transition-colors duration-150',
                 on
                   ? 'border-weet-ink bg-weet-ink text-weet-paper'
-                  : 'border-weet-line-2 bg-weet-surface text-weet-sub hover:border-weet-ink/40',
+                  : 'border-gray-300 bg-gray-50 text-gray-600 hover:border-weet-ink/40',
               ].join(' ')}
             >
               {cat === ALL ? copy.all : cat}
@@ -196,7 +196,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
             key={card.project.id}
             type="button"
             onClick={() => openCard(card.project.id)}
-            className="group block overflow-hidden rounded-[14px] border border-weet-line bg-weet-surface text-left shadow-weet-card transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(.2,.7,.2,1)] hover:-translate-y-1 hover:shadow-weet-float"
+            className="group block overflow-hidden rounded-[14px] border border-gray-200 bg-gray-50 text-left shadow-weet-card transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(.2,.7,.2,1)] hover:-translate-y-1 hover:shadow-weet-float"
           >
             <div className="relative aspect-[4/3] overflow-hidden">
               {card.hero && (
@@ -213,15 +213,15 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                 {card.cat}
               </span>
               <div className="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-weet-ink/70 to-transparent to-[55%] p-[18px] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                <span className="font-mono text-[12px] font-semibold text-weet-gold">{copy.viewDetail}</span>
+                <span className="font-mono text-[12px] font-semibold text-yellow-700">{copy.viewDetail}</span>
               </div>
             </div>
             <div className="px-[18px] py-4">
-              <strong className="text-[16px] font-semibold tracking-[-0.01em] text-weet-ink">
+              <strong className="text-[16px] font-semibold tracking-[-0.01em] text-gray-900">
                 {card.project.title}
               </strong>
               {card.meta && (
-                <span className="mt-[3px] block text-[13px] text-weet-muted">{card.meta}</span>
+                <span className="mt-[3px] block text-[13px] text-gray-500">{card.meta}</span>
               )}
             </div>
           </button>
@@ -229,7 +229,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
       </div>
 
       {filtered.length === 0 && (
-        <p className="mt-10 text-center text-[14px] text-weet-muted">
+        <p className="mt-10 text-center text-[14px] text-gray-500">
           {copy.noCases}
         </p>
       )}
@@ -245,13 +245,13 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-[1000px] overflow-hidden rounded-[16px] bg-weet-paper shadow-weet-float"
+            className="relative w-full max-w-[1000px] overflow-hidden rounded-[16px] bg-white shadow-weet-float"
           >
             <button
               type="button"
               onClick={close}
               aria-label={copy.close}
-              className="absolute right-4 top-4 z-[5] flex h-10 w-10 items-center justify-center rounded-full bg-weet-ink/[0.55] text-weet-paper backdrop-blur-sm transition-colors hover:bg-weet-paper/20"
+              className="absolute right-4 top-4 z-[5] flex h-10 w-10 items-center justify-center rounded-full bg-weet-ink/[0.55] text-weet-paper backdrop-blur-sm transition-colors hover:bg-white/20"
             >
               <X className="h-4 w-4" strokeWidth={1.8} />
             </button>
@@ -266,21 +266,21 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                   className="object-cover"
                 />
               )}
-              <span className="absolute left-4 top-4 rounded-full bg-weet-ink/[0.62] px-3 py-1.5 font-mono text-[11px] font-semibold text-weet-gold backdrop-blur-sm">
+              <span className="absolute left-4 top-4 rounded-full bg-weet-ink/[0.62] px-3 py-1.5 font-mono text-[11px] font-semibold text-yellow-700 backdrop-blur-sm">
                 {selected.cat}
               </span>
             </div>
 
             <div className="grid grid-cols-1 gap-8 px-[34px] pb-9 pt-[30px] min-[861px]:grid-cols-[1.4fr_1fr]">
               <div>
-                <h2 className="m-0 mb-1.5 text-[clamp(24px,2.6vw,32px)] font-semibold tracking-[-0.025em] text-weet-ink">
+                <h2 className="m-0 mb-1.5 text-[clamp(24px,2.6vw,32px)] font-semibold tracking-[-0.025em] text-gray-900">
                   {selected.project.title}
                 </h2>
                 {selected.meta && (
-                  <p className="m-0 mb-5 text-[13.5px] text-weet-muted">{selected.meta}</p>
+                  <p className="m-0 mb-5 text-[13.5px] text-gray-500">{selected.meta}</p>
                 )}
                 {selected.project.description && (
-                  <p className="m-0 mb-6 whitespace-pre-wrap text-[15px] leading-[1.85] text-weet-sub kr-balance">
+                  <p className="m-0 mb-6 whitespace-pre-wrap text-[15px] leading-[1.85] text-gray-600 kr-balance">
                     {selected.project.description}
                   </p>
                 )}
@@ -293,7 +293,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                         onClick={() => setThumbIdx(i)}
                         aria-label={copy.imageAria(i + 1)}
                         className={[
-                          'relative h-[54px] w-[72px] overflow-hidden rounded-[7px] border border-weet-line-2 outline outline-2 outline-offset-2 transition-opacity hover:opacity-85',
+                          'relative h-[54px] w-[72px] overflow-hidden rounded-[7px] border border-gray-300 outline outline-2 outline-offset-2 transition-opacity hover:opacity-85',
                           i === thumbIdx ? 'outline-weet-gold' : 'outline-transparent',
                         ].join(' ')}
                       >
@@ -304,8 +304,8 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                 )}
               </div>
 
-              <div className="border-weet-line-2 min-[861px]:border-l min-[861px]:pl-8">
-                <h4 className="m-0 mb-4 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-weet-muted">
+              <div className="border-gray-300 min-[861px]:border-l min-[861px]:pl-8">
+                <h4 className="m-0 mb-4 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-gray-500">
                   {copy.projectInfo}
                 </h4>
                 <div className="flex flex-col gap-[13px]">
@@ -314,22 +314,22 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                       key={s.k}
                       className="flex justify-between gap-3 border-b border-weet-paper-alt pb-[11px] text-[13.5px]"
                     >
-                      <span className="font-medium text-weet-muted">{s.k}</span>
-                      <span className="font-semibold text-weet-ink">{s.v}</span>
+                      <span className="font-medium text-gray-500">{s.k}</span>
+                      <span className="font-semibold text-gray-900">{s.v}</span>
                     </div>
                   ))}
                 </div>
 
                 <Link
                   href={`/projects/${selected.project.id}`}
-                  className="mt-6 flex items-center justify-center gap-1.5 rounded-[8px] border border-weet-line-2 bg-weet-surface px-3 py-3 text-[14px] font-semibold text-weet-ink transition-transform duration-150 hover:-translate-y-0.5"
+                  className="mt-6 flex items-center justify-center gap-1.5 rounded-[8px] border border-gray-300 bg-gray-50 px-3 py-3 text-[14px] font-semibold text-gray-900 transition-transform duration-150 hover:-translate-y-0.5"
                 >
                   {copy.viewFullPage}
                   <ArrowRight className="h-4 w-4" />
                 </Link>
                 <Link
                   href="/support#consult"
-                  className="mt-2.5 flex items-center justify-center gap-1.5 rounded-[8px] bg-weet-gold px-3 py-[13px] text-[14px] font-semibold text-weet-ink transition-transform duration-150 hover:-translate-y-0.5"
+                  className="mt-2.5 flex items-center justify-center gap-1.5 rounded-[8px] bg-primary px-3 py-[13px] text-[14px] font-semibold text-gray-900 transition-transform duration-150 hover:-translate-y-0.5"
                 >
                   {copy.consult}
                 </Link>

@@ -3,10 +3,12 @@ import { SITE_URL } from "@/lib/site";
 import { supabase } from "@/lib/supabase";
 import type { Project } from "@/types/supabase";
 import { isPublicReadyProject } from "@/lib/projects/publicProjects";
+import { getPublicCustomizeCatalog } from "@/app/actions/customize-actions";
+import { COST_GUIDE_PATH, COST_GUIDE_UPDATED, modelPath } from "@/lib/model-pages";
 
-async function getPublishedProjectEntries(
-  lastModified: Date,
-): Promise<MetadataRoute.Sitemap> {
+export const revalidate = 300;
+
+async function getPublishedProjectEntries(): Promise<MetadataRoute.Sitemap> {
   const { data } = await supabase
     .from("projects")
     .select("*")
@@ -23,8 +25,7 @@ async function getPublishedProjectEntries(
 
     return {
       url: `${SITE_URL}/projects/${project.id}`,
-      lastModified:
-        parsed && !Number.isNaN(parsed.getTime()) ? parsed : lastModified,
+      ...(parsed && !Number.isNaN(parsed.getTime()) ? { lastModified: parsed } : {}),
       changeFrequency: "monthly",
       priority: 0.6,
     };
@@ -32,7 +33,6 @@ async function getPublishedProjectEntries(
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const lastModified = new Date();
 
   const routes: Array<{
     path: string;
@@ -58,16 +58,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticEntries: MetadataRoute.Sitemap = routes.map((route) => ({
     url: `${SITE_URL}${route.path}`,
-    lastModified,
     changeFrequency: route.changeFrequency,
     priority: route.priority,
   }));
 
   try {
-    const projectEntries = await getPublishedProjectEntries(lastModified);
-    return [...staticEntries, ...projectEntries];
+    const [projectEntries, catalog] = await Promise.all([getPublishedProjectEntries(), getPublicCustomizeCatalog()]);
+    const modelEntries: MetadataRoute.Sitemap = catalog.models.filter((model) => model.isActive).map((model) => ({ url: `${SITE_URL}${modelPath(model)}`, changeFrequency: 'weekly', priority: 0.8 }));
+    return [...staticEntries, ...modelEntries, { url: `${SITE_URL}${COST_GUIDE_PATH}`, lastModified: COST_GUIDE_UPDATED, changeFrequency: 'monthly', priority: 0.7 }, ...projectEntries];
   } catch {
     // The sitemap must never throw; fall back to the static routes only.
-    return staticEntries;
+    return [...staticEntries, { url: `${SITE_URL}${COST_GUIDE_PATH}`, lastModified: COST_GUIDE_UPDATED }];
   }
 }

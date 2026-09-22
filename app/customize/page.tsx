@@ -3,6 +3,8 @@ import { getPublicCustomizeCatalog } from '@/app/actions/customize-actions';
 import { getSiteSettings } from '@/lib/site-settings.server';
 import { buildPageMetadata } from '@/lib/seo';
 import { jsonLdHtml } from '@/lib/json-ld';
+import { absoluteUrl } from '@/lib/site';
+import { modelPath } from '@/lib/model-pages';
 
 export const metadata = buildPageMetadata({
   title: '이동식주택 맞춤 구성·예상 견적',
@@ -24,23 +26,16 @@ export default async function CustomizePage({
 
   const productJsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'ItemList',
-    itemListElement: catalog.models
-      .filter((model) => model.isActive !== false)
-      .map((model, index) => ({
-        '@type': 'Product',
-        position: index + 1,
-        name: `위트 이동식주택 ${model.nameKo}`,
-        description: `${model.widthM}m × ${model.lengthM}m, ${model.areaSqm}㎡ 이동식주택 (운반·설치 별도)`,
-        brand: { '@type': 'Brand', name: '위트(weet)' },
-        offers: {
-          '@type': 'Offer',
-          price: model.basePrice,
-          priceCurrency: 'KRW',
-          availability: 'https://schema.org/InStock',
-          url: 'https://www.we-et.com/customize',
-        },
+    '@type': 'CollectionPage',
+    name: '위트 이동식주택 맞춤 구성',
+    url: absoluteUrl('/customize'),
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: catalog.models.filter((model) => model.isActive).map((model, index) => ({
+        '@type': 'ListItem', position: index + 1,
+        name: model.nameKo, url: absoluteUrl(modelPath(model)),
       })),
+    },
   };
 
   return (

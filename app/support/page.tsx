@@ -4,14 +4,15 @@ import { getSiteSettings } from '@/lib/site-settings.server';
 import { buildPageMetadata } from '@/lib/seo';
 import { jsonLdHtml } from '@/lib/json-ld';
 import SupportClient from './SupportClient';
+import { reviewedPublicAnswers } from '@/lib/public-answers';
 
 // ISR: cache + revalidate every 5 minutes rather than force-dynamic. (F12)
 export const revalidate = 300;
 
 export const metadata: Metadata = buildPageMetadata({
-  title: '고객지원 — 인허가·비용·진행 과정 안내',
+  title: '고객지원 — 구매 과정·비용·상담 안내',
   description:
-    '이동식주택을 처음 준비해도 막막하지 않도록 — 농막·쉼터·주거 인허가 구분, 운반·설치 비용 구성, 진행 과정과 A/S까지 위트(weet)가 가장 많이 받는 질문을 기준으로 정리했습니다.',
+    '위트 이동식주택의 구매 과정, 제품 가격 외 비용과 A/S 확인 방법을 안내합니다. 설치 예정 지역과 원하는 구성을 남겨 상담을 신청하세요.',
   path: '/support',
 });
 
@@ -37,9 +38,11 @@ const fallbackFaqs = [
 export default async function SupportPage() {
   const [dbFaqs, settings] = await Promise.all([getFaqs(), getSiteSettings()]);
   const activeDbFaqs = dbFaqs.filter((faq) => faq.is_active !== false && faq.question_ko && faq.answer_ko);
-  const faqs = activeDbFaqs.length > 0
+  const rawFaqs = activeDbFaqs.length > 0
     ? activeDbFaqs.map((faq) => ({ question: faq.question_ko as string, answer: faq.answer_ko as string }))
     : fallbackFaqs;
+
+  const faqs = reviewedPublicAnswers(rawFaqs);
 
   const faqJsonLd = {
     '@context': 'https://schema.org',

@@ -54,7 +54,7 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
             <section className="relative flex w-full aspect-[2/3] items-center overflow-hidden bg-[#111111] px-8 text-white md:aspect-[16/9] md:px-16 lg:h-[calc(100vh-110px)] lg:aspect-auto lg:px-24">
                 <div className="max-w-3xl">
                     <p className="mb-4 text-sm font-bold uppercase tracking-[0.2em] text-white/60">WEET</p>
-                    <h1 className="text-4xl font-bold leading-tight md:text-6xl lg:text-7xl">공간의 가능성을 설계합니다</h1>
+                    <h2 className="text-4xl font-bold leading-tight md:text-6xl lg:text-7xl">공간의 가능성을 설계합니다</h2>
                     <p className="mt-6 max-w-2xl text-lg font-light leading-8 text-white/75 md:text-2xl">
                         관리자에서 공개된 히어로 슬라이드가 준비되면 이 영역에 자동으로 표시됩니다.
                     </p>
@@ -139,14 +139,14 @@ export default function HeroCarouselClient({ initialSlides }: { initialSlides: S
                             {/* Text Content */}
                             <div className="absolute inset-0 flex flex-col justify-center items-start text-left text-white px-8 md:px-16 lg:px-24">
                                 {activeSlide.title && (
-                                    <motion.h1
+                                    <motion.h2
                                         initial={prefersReducedMotion ? false : { y: 20, opacity: 0 }}
                                         animate={{ y: 0, opacity: 1 }}
                                         transition={prefersReducedMotion ? { duration: 0 } : { delay: 0.3, duration: 0.8 }}
                                         className="text-4xl md:text-6xl lg:text-7xl font-bold mb-4 drop-shadow-lg"
                                     >
                                         {activeSlide.title}
-                                    </motion.h1>
+                                    </motion.h2>
                                 )}
                                 {activeSlide.subtitle && (
                                     <motion.p
