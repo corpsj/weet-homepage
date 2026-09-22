@@ -13,6 +13,15 @@ export function modelConfigurePath(catalog: CustomizeCatalog, model: CustomizeMo
   return `/customize?c=${encodeConfig(model.id, getDefaultSelections(catalog, model.id))}`;
 }
 
+// The legacy product library has no catalog foreign key. Link a named footprint
+// only when it identifies one active model; never guess between variants.
+export function modelForProductName(models: CustomizeModel[], name: string) {
+  const footprint = name.match(/(?:^|[^\d.])(\d+(?:\.\d+)?)\s*[x×]\s*(\d+(?:\.\d+)?)(?![\d.])/i);
+  if (!footprint) return null;
+  const matches = models.filter((model) => model.isActive && model.widthM === Number(footprint[1]) && model.lengthM === Number(footprint[2]));
+  return matches.length === 1 ? matches[0] : null;
+}
+
 export function modelSummary(model: CustomizeModel) {
   return `위트 ${model.nameKo}는 ${model.widthM}m × ${model.lengthM}m, ${model.areaSqm}㎡ 이동식주택입니다. 기본 제품가는 ${model.basePrice.toLocaleString('ko-KR')}원이며, 유상 옵션과 운반·설치·현장 공사 비용은 별도입니다.`;
 }

@@ -2,6 +2,7 @@ import ProductsPageClient from './ProductsPageClient';
 import { getProducts } from '@/lib/products';
 import { getPublicCustomizeCatalog } from '@/app/actions/customize-actions';
 import ModelLinks from '@/components/products/ModelLinks';
+import { modelConfigurePath, modelForProductName } from '@/lib/model-pages';
 
 // ISR: cache the page and revalidate every 5 minutes instead of rendering
 // fully dynamically on every request. Product data is admin-managed and changes
@@ -10,6 +11,11 @@ export const revalidate = 300;
 
 export default async function ProductsPage() {
   const [products, catalog] = await Promise.all([getProducts(), getPublicCustomizeCatalog()]);
+  const configurePaths: Record<string, string> = {};
+  for (const product of products) {
+    const model = modelForProductName(catalog.models, product.name);
+    if (model) configurePaths[product.id] = modelConfigurePath(catalog, model);
+  }
 
-  return <><ModelLinks models={catalog.models} /><ProductsPageClient initialProducts={products} /></>;
+  return <><ModelLinks models={catalog.models} /><ProductsPageClient initialProducts={products} configurePaths={configurePaths} /></>;
 }

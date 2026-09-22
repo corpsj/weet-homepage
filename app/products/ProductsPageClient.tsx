@@ -112,9 +112,10 @@ const sortProducts = (products: ProductData[]) => {
 
 interface ProductsPageClientProps {
     initialProducts: Product[];
+    configurePaths: Record<string, string>;
 }
 
-export default function ProductsPageClient({ initialProducts }: ProductsPageClientProps) {
+export default function ProductsPageClient({ initialProducts, configurePaths }: ProductsPageClientProps) {
     const { language } = useLanguage();
     const t = (ko: string, en: string, es: string) => ({ KO: ko, EN: en, ES: es }[language]);
     const TEXT = {
@@ -592,7 +593,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                         맞춤 구성
                                     </Link>
                                     에서 바로 확인할 수 있고, 운반·설치 등 추가로 드는 비용은{' '}
-                                    <Link href="/support#cost" className="font-semibold text-gray-700 underline underline-offset-2">
+                                    <Link href="/guides/mobile-home-cost" className="font-semibold text-gray-700 underline underline-offset-2">
                                         비용 안내
                                     </Link>
                                     에 정리되어 있습니다.
@@ -779,9 +780,9 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
 
                                                     {/* Soft CTA — 기준 모델은 맞춤 구성, 비기준 모델은 상담 */}
                                                     <div className="mt-7 flex justify-center border-t border-gray-300 pt-5 lg:justify-start">
-                                                        {base ? (
+                                                        {configurePaths[product.id] ? (
                                                             <Link
-                                                                href="/customize"
+                                                                href={configurePaths[product.id]}
                                                                 className="inline-flex items-center gap-2 rounded-[6px] bg-black px-5 py-3 text-sm font-semibold text-white transition-transform duration-150 hover:-translate-y-0.5"
                                                             >
                                                                 {t('이 모델 구성하기', 'Configure this model', 'Configurar este modelo')} →

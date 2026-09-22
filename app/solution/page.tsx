@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { Shield, Globe, Smartphone, PenTool, ArrowRight } from 'lucide-react';
+import { Shield, Globe, Smartphone, Zap, ArrowRight } from 'lucide-react';
 import { useLanguage } from '@/contexts/LanguageContext';
 
 type Lang = 'KO' | 'EN';
@@ -23,7 +23,7 @@ const COPY: Record<Lang, {
 }> = {
   KO: {
     title: 'SOLUTION',
-    description: '위트가 제안하는 통합 라이프스타일 솔루션. 안전하고 편리한 일상을 만드는 기술과 경험을 확인해 보세요.',
+    description: '사용 목적과 설치 조건에 맞춰 보안, 통신, 제어와 에너지 설비를 검토합니다.',
     cta: '자세히보기',
     cards: [
       {
@@ -31,7 +31,7 @@ const COPY: Record<Lang, {
         icon: <Shield strokeWidth={1.5} />,
         title: '시큐리티',
         subtitle: 'Security',
-        desc: '24시간 스마트 보안 서비스로 자산과 공간을 안전하게 지킵니다.',
+        desc: '감시 구역과 현장 조건을 확인해 CCTV·출입 감지 구성을 상담합니다.',
         detail: 'CCTV · 출입 감시',
         href: '/solution/cctv',
       },
@@ -40,8 +40,8 @@ const COPY: Record<Lang, {
         icon: <Globe strokeWidth={1.5} />,
         title: '네트워크 솔루션',
         subtitle: 'Network Solution',
-        desc: '어디서든 끊김 없는 고성능 인터넷과 와이파이를 제공합니다.',
-        detail: '고성능 인터넷 · 메시 Wi-Fi',
+        desc: '현장의 회선·수신 상태와 사용량에 맞춰 인터넷 연결 방식을 검토합니다.',
+        detail: '인터넷 연결 · Wi-Fi 구성',
         href: '/solution/network',
       },
       {
@@ -49,24 +49,24 @@ const COPY: Record<Lang, {
         icon: <Smartphone strokeWidth={1.5} />,
         title: 'IoT 솔루션',
         subtitle: 'Smart Home IoT',
-        desc: '조명·환경을 스마트하게 제어해 편리한 생활을 완성합니다.',
-        detail: '스마트 조명 · 실시간 제어',
+        desc: '조명과 냉난방 등 제어할 장치의 호환성과 설치 조건을 확인합니다.',
+        detail: '조명 · 환경 제어',
         href: '/solution/iot',
       },
       {
         id: 4,
-        icon: <PenTool strokeWidth={1.5} />,
-        title: '디자인 컨설팅',
-        subtitle: 'Interior Design',
-        desc: '브랜드와 라이프스타일에 맞춘 맞춤형 공간 설계를 제안합니다.',
-        detail: '인테리어 · 조경 디자인',
-        href: '/bespoke',
+        icon: <Zap strokeWidth={1.5} />,
+        title: '에너지',
+        subtitle: 'Energy',
+        desc: '태양광·저장장치·충전 설비의 적용 가능성과 전기 공사 범위를 검토합니다.',
+        detail: '태양광 · ESS · 전기차 충전',
+        href: '/solution/energy',
       },
     ],
   },
   EN: {
     title: 'SOLUTION',
-    description: 'Integrated lifestyle solutions from WEET. Explore the tech and expertise that make life safer and more convenient.',
+    description: 'Review security, connectivity, controls and energy equipment for your use and site conditions.',
     cta: 'View details',
     cards: [
       {
@@ -74,7 +74,7 @@ const COPY: Record<Lang, {
         icon: <Shield strokeWidth={1.5} />,
         title: 'Security',
         subtitle: 'Security',
-        desc: '24/7 smart security to protect your assets and spaces.',
+        desc: 'Discuss cameras and entry sensors after checking coverage and site conditions.',
         detail: 'CCTV · Access monitoring',
         href: '/solution/cctv',
       },
@@ -83,8 +83,8 @@ const COPY: Record<Lang, {
         icon: <Globe strokeWidth={1.5} />,
         title: 'Network Solution',
         subtitle: 'Network Solution',
-        desc: 'Seamless, high-performance internet and Wi-Fi anywhere.',
-        detail: 'High-speed internet · Mesh Wi-Fi',
+        desc: 'Review connection options against local service, signal and usage.',
+        detail: 'Internet access · Wi-Fi',
         href: '/solution/network',
       },
       {
@@ -92,18 +92,18 @@ const COPY: Record<Lang, {
         icon: <Smartphone strokeWidth={1.5} />,
         title: 'IoT Solution',
         subtitle: 'Smart Home IoT',
-        desc: 'Smart control of lighting and environment for daily comfort.',
-        detail: 'Smart lighting · Real-time control',
+        desc: 'Check compatibility and installation requirements for lighting and climate controls.',
+        detail: 'Lighting · Climate controls',
         href: '/solution/iot',
       },
       {
         id: 4,
-        icon: <PenTool strokeWidth={1.5} />,
-        title: 'Design Consulting',
-        subtitle: 'Interior Design',
-        desc: 'Tailored spatial design that fits your brand and lifestyle.',
-        detail: 'Interior · Landscape design',
-        href: '/bespoke',
+        icon: <Zap strokeWidth={1.5} />,
+        title: 'Energy',
+        subtitle: 'Energy',
+        desc: 'Assess solar, storage and charging equipment and the required electrical work.',
+        detail: 'Solar · ESS · EV charging',
+        href: '/solution/energy',
       },
     ],
   },

@@ -1,92 +1,79 @@
- "use client";
+"use client";
 
 import SolutionTemplate from "@/components/solution/ClassicSolutionTemplate";
 import { useLanguage } from "@/contexts/LanguageContext";
 
-type Lang = 'KO' | 'EN';
-
-const COPY: Record<Lang, {
-  title: string;
-  subtitle: string;
-  description: string;
-  features: {
-    id: string;
-    title: string;
-    image: string;
-    description: string;
-    detailContent?: string;
-  }[];
-}> = {
-  KO: {
-    title: "IoT",
-    subtitle: "Smart Home IoT",
-    description: "조명, 환경, 보안을 하나의 플랫폼에서 제어해 편리하고 안전한 생활을 만듭니다.",
-    features: [
+const COPY = {
+  "KO": {
+    "title": "IoT",
+    "subtitle": "Smart Home IoT",
+    "description": "조명, 냉난방과 출입 장치의 제어 방식을 상담합니다. 기존 설비와의 호환성, 통신과 전원 조건을 확인한 뒤 구성을 정합니다.",
+    "features": [
       {
-        id: "smart-lighting",
-        title: "스마트 조명",
-        image: "/images/solution/iot_lighting.webp",
-        description: "밝기·색온도·스케줄을 자유롭게 설정하고, 음성으로 제어합니다.",
-        detailContent: "· 밝기/색온도 조절\n· 일정/장면 프리셋\n· 음성 제어(Google/Alexa)\n· 존재 감지 기반 자동 on/off",
+        "id": "smart-lighting",
+        "title": "스마트 조명",
+        "image": "/images/solution/iot_lighting.webp",
+        "description": "스위치와 조명 기구의 사양을 확인하고 필요한 제어 방식을 정합니다.",
+        "detailContent": "밝기·색온도 조절, 예약 작동과 센서 연동은 호환 장비에서 가능한지 확인합니다. 배선과 전원 공사 범위도 함께 상담합니다."
       },
       {
-        id: "climate-control",
-        title: "환경 제어",
-        image: "/images/solution/iot_climate.webp",
-        description: "난방/냉방/환기를 자동으로 최적화해 쾌적함과 에너지 절약을 동시에 달성합니다.",
-        detailContent: "· 온습도 센서 기반 제어\n· 위치 기반 귀가/외출 모드\n· 창문 열림 감지 연동\n· 에너지 사용 리포트",
+        "id": "climate-control",
+        "title": "환경 제어",
+        "image": "/images/solution/iot_climate.webp",
+        "description": "온도·습도 확인과 냉난방 제어에 필요한 센서와 장비를 검토합니다.",
+        "detailContent": "현재 냉난방 설비, 지원 제어 방식과 센서 위치를 확인합니다. 자동화 범위와 사용 기록 제공 여부는 장비별로 다르며, 일정한 에너지 절감량을 보장하지 않습니다."
       },
       {
-        id: "smart-lock",
-        title: "스마트 도어락",
-        image: "/images/solution/iot_lock.webp",
-        description: "비밀번호·모바일키·원격 제어로 안전하게 출입을 관리합니다.",
-        detailContent: "· 모바일키/일회용 비밀번호\n· 방문 기록 확인 알림\n· 원격 잠금/해제\n· 경보 및 알림 연동",
+        "id": "smart-lock",
+        "title": "스마트 도어락",
+        "image": "/images/solution/iot_lock.webp",
+        "description": "문과 잠금장치의 규격을 확인하고 출입 관리에 필요한 기능을 검토합니다.",
+        "detailContent": "비밀번호, 모바일 키, 출입 기록과 원격 제어 지원 여부를 장비별로 확인합니다. 통신·전원 장애 시 사용 방법도 상담합니다."
       },
       {
-        id: "voice-assistant",
-        title: "음성 비서",
-        image: "/images/solution/iot_voice.webp",
-        description: "조명, 온도, 보안 장치를 음성으로 제어하고 정보를 확인합니다.",
-        detailContent: "· 주요 음성 비서 연동\n· 장치 제어/자동화 실행\n· 정보 조회 및 알림\n· 멀티 디바이스 그룹 제어",
-      },
-    ],
+        "id": "voice-assistant",
+        "title": "음성 제어 연동",
+        "image": "/images/solution/iot_voice.webp",
+        "description": "음성 제어가 필요한 경우 사용할 기기와 서비스의 호환성을 확인합니다.",
+        "detailContent": "지원 언어, 계정·인터넷 연결, 제어 가능한 장치와 기능을 확인합니다. 특정 음성 비서나 모든 장치와의 호환을 일괄 보장하지 않습니다."
+      }
+    ]
   },
-  EN: {
-    title: "IoT",
-    subtitle: "Smart Home IoT",
-    description: "Control lighting, climate, and security from one platform for a safer, easier life.",
-    features: [
+  "EN": {
+    "title": "IoT",
+    "subtitle": "Smart Home IoT",
+    "description": "Discuss controls for lighting, climate and entry equipment. Confirm compatibility, connectivity and power before selecting a configuration.",
+    "features": [
       {
-        id: "smart-lighting",
-        title: "Smart Lighting",
-        image: "/images/solution/iot_lighting.webp",
-        description: "Set brightness, color temperature, schedules, and control by voice.",
-        detailContent: "· Dimming and CCT control\n· Schedules and scenes\n· Voice control (Google/Alexa)\n· Presence-based auto on/off",
+        "id": "smart-lighting",
+        "title": "Smart Lighting",
+        "image": "/images/solution/iot_lighting.webp",
+        "description": "Review switch and fixture specifications before choosing lighting controls.",
+        "detailContent": "Confirm whether compatible equipment supports dimming, color temperature, schedules or sensors. Discuss wiring and electrical work as part of the scope."
       },
       {
-        id: "climate-control",
-        title: "Climate Control",
-        image: "/images/solution/iot_climate.webp",
-        description: "Automate heating/cooling/ventilation for comfort and energy savings.",
-        detailContent: "· Temp/humidity sensor control\n· Geofenced home/away modes\n· Window-open detection link\n· Energy usage reports",
+        "id": "climate-control",
+        "title": "Climate Control",
+        "image": "/images/solution/iot_climate.webp",
+        "description": "Review sensors and controls for temperature, humidity and climate equipment.",
+        "detailContent": "Check existing heating and cooling devices, control methods and sensor locations. Automation and usage records depend on equipment; fixed energy savings are not guaranteed."
       },
       {
-        id: "smart-lock",
-        title: "Smart Lock",
-        image: "/images/solution/iot_lock.webp",
-        description: "Manage entry with PINs, mobile keys, and remote control.",
-        detailContent: "· Mobile/one-time PINs\n· Entry logs and alerts\n· Remote lock/unlock\n· Alarms and notifications",
+        "id": "smart-lock",
+        "title": "Smart Lock",
+        "image": "/images/solution/iot_lock.webp",
+        "description": "Check door and lock dimensions before choosing entry-management functions.",
+        "detailContent": "Confirm PINs, mobile keys, entry logs and remote-control support for the selected device. Discuss operation during power or connection failures."
       },
       {
-        id: "voice-assistant",
-        title: "Voice Assistant",
-        image: "/images/solution/iot_voice.webp",
-        description: "Control devices and get information hands-free.",
-        detailContent: "· Works with major assistants\n· Device control/automation\n· Info queries and alerts\n· Multi-device group control",
-      },
-    ],
-  },
+        "id": "voice-assistant",
+        "title": "Voice Control",
+        "image": "/images/solution/iot_voice.webp",
+        "description": "If voice control is needed, check device and service compatibility.",
+        "detailContent": "Confirm language, account and internet requirements, controllable devices and supported functions. Compatibility with any particular assistant or every device is not guaranteed."
+      }
+    ]
+  }
 };
 
 export default function IOTSolutionPage() {
