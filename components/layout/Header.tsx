@@ -132,7 +132,7 @@ const navigationEn = [
       { name: 'Security', href: '/solution/cctv' },
       { name: 'Network Solution', href: '/solution/network' },
       { name: 'Smart Home (IoT)', href: '/solution/iot' },
-      { name: 'Design Consulting', href: '/solution/design' },
+      { name: 'Energy', href: '/solution/energy' },
     ],
   },
   {

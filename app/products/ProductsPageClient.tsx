@@ -83,7 +83,7 @@ const mapProductToData = (p: Product): ProductData => {
 // 카테고리 정렬 순서 (사이드바 구조와 동일하게 유지). 미정의 카테고리는 맨 뒤로.
 const CATEGORY_ORDER = ["S", "M", "L", "XL", "SOLUTION", "DESIGN"];
 
-// 헤더(72px) 기준 단일 스크롤 오프셋. scroll-mt / 앵커 -top / scrollTo 보정에 공통 사용.
+// 헤더(110px) 기준 단일 스크롤 오프셋. scroll-mt / 앵커 -top / scrollTo 보정에 공통 사용.
 const HEADER_OFFSET = 110;
 
 // /customize 구성기가 다루는 기준 모델 = 이름에 3x6 / 3x9 가 들어가는 모델.
@@ -637,7 +637,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                     <article
                                         id={product.id}
                                         ref={(el) => { productRefs.current[product.id] = el; }}
-                                        className="wt-reveal scroll-mt-[72px] overflow-hidden rounded-[12px] border border-gray-300 bg-gray-50 shadow-weet-card lg:overflow-visible lg:rounded-none lg:border-none lg:bg-transparent lg:p-0 lg:shadow-none"
+                                        className="wt-reveal scroll-mt-[110px] overflow-hidden rounded-[12px] border border-gray-300 bg-gray-50 shadow-weet-card lg:overflow-visible lg:rounded-none lg:border-none lg:bg-transparent lg:p-0 lg:shadow-none"
                                     >
                                         <div className="p-5 lg:p-0">
                                             {/* Product Header */}
@@ -673,13 +673,13 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                                         </div>
                                                         {/* Image count indicator if multiple */}
                                                         {imageCount > 1 && (
-                                                            <div className="pointer-events-none absolute bottom-4 right-4 rounded-full bg-weet-ink/60 px-3 py-1.5 text-[12px] font-semibold text-weet-paper backdrop-blur-sm">
+                                                            <div className="pointer-events-none absolute bottom-4 right-4 rounded-full bg-black/60 px-3 py-1.5 text-[12px] font-semibold text-white backdrop-blur-sm">
                                                                 + {imageCount}
                                                             </div>
                                                         )}
                                                     </>
                                                 ) : (
-                                                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-white-alt text-gray-500">
+                                                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-gray-100 text-gray-500">
                                                         <Home className="mb-2 h-8 w-8 opacity-50" />
                                                         <span className="text-sm font-semibold">{t('제품 사진 준비 중', 'Photo coming soon', 'Foto próximamente')}</span>
                                                     </div>
@@ -782,7 +782,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                                         {base ? (
                                                             <Link
                                                                 href="/customize"
-                                                                className="inline-flex items-center gap-2 rounded-[6px] bg-weet-ink px-5 py-3 text-sm font-semibold text-weet-paper transition-transform duration-150 hover:-translate-y-0.5"
+                                                                className="inline-flex items-center gap-2 rounded-[6px] bg-black px-5 py-3 text-sm font-semibold text-white transition-transform duration-150 hover:-translate-y-0.5"
                                                             >
                                                                 {t('이 모델 구성하기', 'Configure this model', 'Configurar este modelo')} →
                                                             </Link>
@@ -833,7 +833,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                             <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
                                 <Link
                                     href="/customize"
-                                    className="inline-flex h-12 items-center justify-center rounded-[8px] bg-weet-ink px-6 text-sm font-semibold text-weet-paper transition-transform duration-150 hover:-translate-y-0.5"
+                                    className="inline-flex h-12 items-center justify-center rounded-[8px] bg-black px-6 text-sm font-semibold text-white transition-transform duration-150 hover:-translate-y-0.5"
                                 >
                                     {t('맞춤 구성 시작하기', 'Start configuring', 'Empezar a configurar')} →
                                 </Link>
@@ -857,13 +857,13 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setGalleryOpen(false)}
-                        className="fixed inset-0 z-[100] flex items-center justify-center bg-weet-ink-deep/95 p-4 md:p-10"
+                        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 p-4 md:p-10"
                     >
                         {/* Close Button */}
                         <button
                             type="button"
                             aria-label={t('갤러리 닫기', 'Close gallery', 'Cerrar galería')}
-                            className="absolute right-4 top-4 z-50 p-2 text-weet-paper/60 transition-colors hover:text-weet-paper md:right-8 md:top-8"
+                            className="absolute right-4 top-4 z-50 p-2 text-white/60 transition-colors hover:text-white md:right-8 md:top-8"
                             onClick={() => setGalleryOpen(false)}
                         >
                             <X className="h-8 w-8 md:h-10 md:w-10" />
@@ -882,7 +882,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                         onError={() => markImageFailed(currentGalleryImages[currentImageIndex])}
                                     />
                                 ) : (
-                                    <div className="absolute inset-0 flex flex-col items-center justify-center text-weet-paper/60">
+                                    <div className="absolute inset-0 flex flex-col items-center justify-center text-white/60">
                                         <Home className="mb-2 h-8 w-8 opacity-50" />
                                         <span className="text-sm font-semibold">{t('이미지 점검 필요', 'Image unavailable', 'Imagen no disponible')}</span>
                                     </div>
@@ -892,7 +892,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                 <button
                                     type="button"
                                     aria-label={t('이전 이미지', 'Previous image', 'Imagen anterior')}
-                                    className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-weet-paper backdrop-blur-md transition-all hover:bg-white/20"
+                                    className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur-md transition-all hover:bg-white/20"
                                     onClick={prevImage}
                                 >
                                     <ChevronDown className="h-8 w-8 rotate-90" />
@@ -900,7 +900,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                 <button
                                     type="button"
                                     aria-label={t('다음 이미지', 'Next image', 'Imagen siguiente')}
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-weet-paper backdrop-blur-md transition-all hover:bg-white/20"
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/10 p-3 text-white backdrop-blur-md transition-all hover:bg-white/20"
                                     onClick={nextImage}
                                 >
                                     <ChevronDown className="h-8 w-8 -rotate-90" />
@@ -918,7 +918,7 @@ export default function ProductsPageClient({ initialProducts }: ProductsPageClie
                                         className={`relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border-2 transition-all md:h-24 md:w-24 ${currentImageIndex === idx ? 'border-weet-gold opacity-100' : 'border-transparent opacity-50 hover:opacity-100'}`}
                                     >
                                         {failedImages.has(img) ? (
-                                            <div className="absolute inset-0 flex items-center justify-center bg-weet-ink text-gray-500">
+                                            <div className="absolute inset-0 flex items-center justify-center bg-black text-gray-500">
                                                 <Home className="h-5 w-5 opacity-50" />
                                             </div>
                                         ) : (

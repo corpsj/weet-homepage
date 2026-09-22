@@ -171,6 +171,7 @@ export default function BespokePage() {
         </div>
       </section>
 
+      <div id="examples" className="scroll-mt-[110px]" />
       {copy.sections.map((section) => {
         const imageBlock = (
           <motion.div
@@ -241,7 +242,6 @@ export default function BespokePage() {
         );
       })}
 
-      <span id="examples" />
       <AnimatePresence>
         {selectedId && (
           <motion.div

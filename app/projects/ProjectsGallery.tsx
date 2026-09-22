@@ -179,8 +179,8 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
               className={[
                 'rounded-full border px-4 py-2 text-[13.5px] font-semibold transition-colors duration-150',
                 on
-                  ? 'border-weet-ink bg-weet-ink text-weet-paper'
-                  : 'border-gray-300 bg-gray-50 text-gray-600 hover:border-weet-ink/40',
+                  ? 'border-black bg-black text-white'
+                  : 'border-gray-300 bg-gray-50 text-gray-600 hover:border-black/40',
               ].join(' ')}
             >
               {cat === ALL ? copy.all : cat}
@@ -209,10 +209,10 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                   className="object-cover transition-transform duration-700 ease-[cubic-bezier(.2,.7,.2,1)] group-hover:scale-[1.06]"
                 />
               )}
-              <span className="absolute left-3.5 top-3.5 rounded-full bg-weet-ink/[0.62] px-[11px] py-[5px] font-mono text-[11px] font-semibold text-weet-paper backdrop-blur-sm">
+              <span className="absolute left-3.5 top-3.5 rounded-full bg-black/[0.62] px-[11px] py-[5px] font-mono text-[11px] font-semibold text-white backdrop-blur-sm">
                 {card.cat}
               </span>
-              <div className="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-weet-ink/70 to-transparent to-[55%] p-[18px] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              <div className="pointer-events-none absolute inset-0 flex items-end bg-gradient-to-t from-black/70 to-transparent to-[55%] p-[18px] opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <span className="font-mono text-[12px] font-semibold text-yellow-700">{copy.viewDetail}</span>
               </div>
             </div>
@@ -238,7 +238,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
       {selected && (
         <div
           onClick={close}
-          className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-weet-ink-deep/[0.82] px-6 py-[5vh] backdrop-blur-sm"
+          className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-black/[0.82] px-6 py-[5vh] backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-label={selected.project.title}
@@ -251,12 +251,12 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
               type="button"
               onClick={close}
               aria-label={copy.close}
-              className="absolute right-4 top-4 z-[5] flex h-10 w-10 items-center justify-center rounded-full bg-weet-ink/[0.55] text-weet-paper backdrop-blur-sm transition-colors hover:bg-white/20"
+              className="absolute right-4 top-4 z-[5] flex h-10 w-10 items-center justify-center rounded-full bg-black/[0.55] text-white backdrop-blur-sm transition-colors hover:bg-white/20"
             >
               <X className="h-4 w-4" strokeWidth={1.8} />
             </button>
 
-            <div className="relative aspect-video overflow-hidden bg-weet-ink">
+            <div className="relative aspect-video overflow-hidden bg-black">
               {selMain && (
                 <Image
                   src={selMain}
@@ -266,7 +266,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                   className="object-cover"
                 />
               )}
-              <span className="absolute left-4 top-4 rounded-full bg-weet-ink/[0.62] px-3 py-1.5 font-mono text-[11px] font-semibold text-yellow-700 backdrop-blur-sm">
+              <span className="absolute left-4 top-4 rounded-full bg-black/[0.62] px-3 py-1.5 font-mono text-[11px] font-semibold text-yellow-700 backdrop-blur-sm">
                 {selected.cat}
               </span>
             </div>
@@ -312,7 +312,7 @@ export default function ProjectsGallery({ projects }: { projects: Project[] }) {
                   {selSpecs.map((s) => (
                     <div
                       key={s.k}
-                      className="flex justify-between gap-3 border-b border-weet-paper-alt pb-[11px] text-[13.5px]"
+                      className="flex justify-between gap-3 border-b border-gray-100 pb-[11px] text-[13.5px]"
                     >
                       <span className="font-medium text-gray-500">{s.k}</span>
                       <span className="font-semibold text-gray-900">{s.v}</span>

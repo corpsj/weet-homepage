@@ -5,7 +5,7 @@ import { COST_GUIDE_PATH, modelPath } from '@/lib/model-pages';
 export default function ModelLinks({ models }: { models: CustomizeModel[] }) {
   const activeModels = models.filter((model) => model.isActive);
   return (
-    <section aria-labelledby="model-prices" className="border-y border-gray-200 bg-white px-5 py-10 md:px-8 md:py-14">
+    <section lang="ko" aria-labelledby="model-prices" className="border-y border-gray-200 bg-white px-5 py-10 md:px-8 md:py-14">
       <div className="mx-auto max-w-[1200px]">
         <div className="mb-6 flex flex-wrap items-end justify-between gap-4">
           <div>
